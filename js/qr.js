@@ -39,6 +39,7 @@ $(document).ready(function(){
 		.css("background-color", "grey")
 		.css("top", 0)
 		.css("right", 0)
+		.css("padding", "2px 0")
 		.css("min-width", "300px")
 		.hide()
 		.appendTo(document.body);
@@ -103,6 +104,37 @@ $(document).ready(function(){
 		.css("min-height", "120px")
 		.css("min-width", "100%")
 		.appendTo($commentarea);
+
+	var $QRCaptchaDiv = $("<div/>")
+		.appendTo($QRForm);
+	var $QRCaptchaPuzzleDiv = $("<div/>")
+		.attr("id", "qrCaptchaPuzzle")
+		.css("background", "rgb(255,255,255)")
+		.css("width", "100%")
+		.attr("title", "Reload CAPTCHA")
+		.appendTo($QRCaptchaDiv);
+	var $QRCaptchaPuzzleImage = $("<img/>")
+		.css("width", "300px")
+		.css("height", "57px")
+		.css("margin", "0px")
+		.css("padding", "0px")
+		.css("float", "none")
+		.appendTo($QRCaptchaPuzzleDiv);
+	var $QRCaptchaAnswerDiv = $("<div/>").appendTo($QRCaptchaDiv);
+	var $QRCaptchaAnswer = $("<input/>")
+		.attr("id", "qrCaptchaAnswer")
+		.attr("placeholder", "Verification")
+		.attr("name", "recaptcha_response_field")
+		.css("box-sizing", "border-box")
+		.css("-moz-box-sizing", "border-box")
+		.attr("size", 1)
+		.css("width", "100%")
+		.appendTo($QRCaptchaAnswerDiv);
+
+	var $captchaPuzzle = $("#recaptcha_image");
+	if($captchaPuzzle.length == 0)
+		$QRCaptchaDiv.hide();
+	
 	var $filerow = $("<div/>").appendTo($QRForm);
 	var $file = $("<input/>")
 		.attr("id", "qrfile")
@@ -139,66 +171,74 @@ $(document).ready(function(){
 		.val( $("form[name='postcontrols'] input#password").val() )
 		.appendTo($QRForm);
 
-	$("input[type='text'], textarea", $QRForm)
+	$("input[type='text'], textarea, #qrCaptchaPuzzle", $QRForm)
 		.css("margin", "0px")
 		.css("padding", "2px 4px 3px")
-		.css("border", "1px solid black");
-
+		.css("border", "1px solid rgb(128,128,128)");
 
 	$oldForm
 		.find("input, textarea")
 		.filter(":hidden")
 		.clone()
+		.addClass("QRhiddenInputs")
 		.appendTo($QRForm)
 		.hide();
 
 	// DOM setup over.
 
-	var useQR = true;
-	if(localStorage.useQR != null)
-		useQR = (localStorage.useQR == "true");
-	
-	var saveSettings = function() {
-		localStorage.useQR = useQR ? "true" : "false";
-	}
+	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting");
+	settings.bindPropCheckbox($QRToggleCheckbox, "use_QR");
 
-	displayQR = function() {
+	var use_QR;
+
+	QR = {};
+
+	QR.isEnabled = function() {
+		return use_QR;
+	};
+
+	QR.open = function() {
+		if(!use_QR) {
+			console.error("QR.open called when use_QR was false");
+			return;
+		}
 		if($QR.is(":hidden")) {
 			$QR.show();
 		}
 	};
 
-	closeQR = function() {
+	QR.close = function() {
 		$QR.hide();
 		$comment.val("");
 	};
 
 	$QRButton.click(function() {
-		displayQR();
+		QR.open();
 		return false;
 	});
 
 	$(document).keydown(function(event) {
 		if(event.which == 27) {
-			closeQR();
+			QR.close();
 			return false;
 		}
 
 		if(/TEXTAREA|INPUT/.test(event.target.nodeName))
 			return true;
 
-		if(event.which == 73 && event.shiftKey) {
-			displayQR();
+		if(event.which == 73 && event.shiftKey && use_QR) {
+			QR.open();
 			return false;
 		}
 	});
 
 	var oldCiteReply = citeReply;
 	var qrCiteReply = function(id) {
-		displayQR();
+		QR.open();
 
 		var body = document.getElementById('qrbody');
 		
+		body.focus();
 		if (document.selection) {
 			// IE
 			var sel = document.selection.createRange();
@@ -212,38 +252,42 @@ $(document).ready(function(){
 			// ???
 			body.value += '>>' + id + '\n';
 		}
-		body.focus();
 	};
 
-
-	var enable = function() {
-		$oldForm.hide();
-		$QRButton.show();
-		citeReply = qrCiteReply;
+	var stealCaptcha = function() {
+		$QRCaptchaPuzzleImage.attr("src", $captchaPuzzle.find("img").attr("src"));
+		$("#recaptcha_challenge_field", $QRForm).val( $("#recaptcha_challenge_field", $oldForm).val() );
+		$QRCaptchaAnswer.val("");
 	}
 
-	var disable = function() {
-		closeQR();
-		$oldForm.show();
-		$QRButton.hide();
-		citeReply = oldCiteReply;
+	$("#recaptcha_image", $oldForm).on("DOMNodeInserted", function() {
+		stealCaptcha();
+	});
+
+	$QRCaptchaPuzzleDiv.click(function() {
+		Recaptcha.reload();
+	});
+
+	var QRInit = function() {
+		use_QR = settings.getProp("use_QR", "bool");
+		if (use_QR) {
+			$oldForm.hide();
+			$QRButton.show();
+			citeReply = qrCiteReply;
+			if($captchaPuzzle.length)
+				stealCaptcha();
+		} else {
+			QR.close();
+			$oldForm.show();
+			$QRButton.hide();
+			citeReply = oldCiteReply;
+		}
 	}
 
-	$QRToggleCheckbox
-		.attr("checked", useQR)
-		.change(function() {
-			useQR = Boolean($(this).attr("checked"));
-			if(useQR)
-				enable();
-			else
-				disable();
-			
-			saveSettings();
-		});
-
-	if(useQR)
-		enable();
-	else
-		disable();
+	QRInit();
+	$(document).on("setting_change", function(e, setting) {
+		if (setting != "use_QR")
+			return;
+		QRInit();
+	});
 });
-
