@@ -8,16 +8,24 @@
  */
 
 $(document).ready(function(){
+	settings.newProp("image_hover_enabled", "bool", true, "Expand image on hover");
+
+	var image_hover_enabled = settings.getProp("image_hover_enabled", "bool");
+	$(document).on("setting_change", function(e, setting) {
+		if (setting == "image_hover_enabled")
+			image_hover_enabled = settings.getProp("image_hover_enabled", "bool");
+	});
+
 	init_image_hover = function() {
 		var $image = $(this);
 		var imageurl = $image.parent().attr("href");
-		var hovering = false;
 		var hovered_at;
 		$image.hover(function(e) {
+			if(!image_hover_enabled)
+				return;
 			if($image.parent()[0].tag)
 				return;
 
-			hovering = true;
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
 			
 			var $newImage = $("<img/>");
@@ -33,7 +41,6 @@ $(document).ready(function(){
 				});
 			$image.trigger('mousemove');
 		}, function() {
-			hovering = false;
 			$('.image-hover').remove();
 		}).mousemove(function(e) {
 			var $hover = $('.image-hover');

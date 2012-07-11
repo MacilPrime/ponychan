@@ -124,10 +124,13 @@ $(document).ready(function(){
 			value = settings.setProp(name, type, defval);
 		}
 
+		var settingDiv = $("<div/>")
+			.appendTo(settingsScreen);
+
 		var label = $("<label/>")
 			.attr("for", id)
 			.text(" "+description)
-			.appendTo(settingsScreen);
+			.appendTo(settingDiv);
 		var checkbox = $("<input/>")
 			.attr("type", "checkbox")
 			.attr("id", id)
