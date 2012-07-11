@@ -125,10 +125,14 @@ $(document).ready(function(){
 			url: document.location,
 			success: function(data) {
 				var postsAddedCount = 0;
-				$(data).find('div.post.reply').each(function() {
+				$(data).find('div.post.reply').each(function(index) {
 					var id = $(this).attr('id');
 					if($('#' + id).length == 0) {
-						$(this).insertAfter($('div.post:last').next()).after('<br class="clear">');
+						if(index == 0 && $(".post.reply").length == 0) {
+							$(this).insertAfter($('div.post:last')).after('<br/>');
+						} else {
+							$(this).insertAfter($('div.post:last').next()).after('<br/>');
+						}
 						$(document).trigger('new_post', this);
 						postsAddedCount++;
 					}
