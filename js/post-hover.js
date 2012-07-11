@@ -30,25 +30,17 @@ onready(function(){
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
 			
 			var start_hover = function($link) {
-				if($post.is(':visible') &&
-						$post.offset().top + $post.height() >= $(window).scrollTop() &&
-						$post.offset().top <= $(window).scrollTop() + $(window).height()
-						) {
-					// post is in view
-					$post.attr('style', 'border-style: none dashed dashed none; background: ' + $post.css('border-right-color'));
-				} else {
-					var $newPost = $post.clone();
-					$newPost.find('span.mentioned').remove();
-					$newPost
-						.attr('id', 'post-hover-' + id)
-						.addClass('post-hover')
-						.css('position', 'absolute')
-						.css('border-style', 'solid')
-						.css('box-shadow', '1px 1px 1px #999')
-						.css('display', 'block')
-						.insertAfter($link.parent());
-					$link.trigger('mousemove');
-				}
+				var $newPost = $post.clone();
+				$newPost.find('span.mentioned').remove();
+				$newPost
+					.attr('id', 'post-hover-' + id)
+					.addClass('post-hover')
+					.css('position', 'absolute')
+					.css('border-style', 'solid')
+					.css('box-shadow', '1px 1px 1px #999')
+					.css('display', 'block')
+					.insertAfter($link.parent());
+				$link.trigger('mousemove');
 			};
 			
 			$post = $('div.post#reply_' + id);
