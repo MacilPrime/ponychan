@@ -46,5 +46,8 @@ onready(function(){
 	};
 	
 	$('div.post.reply').each(showBackLinks);
+	$(document).bind('new_post', function(e, post) {
+		$(post).each(showBackLinks);
+	});
 });
 

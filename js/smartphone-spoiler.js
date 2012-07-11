@@ -6,18 +6,22 @@
  * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
  *
  * Usage:
+ *   $config['additional_javascript'][] = 'js/jquery.min.js';
  *   $config['additional_javascript'][] = 'js/smartphone-spoiler.js';
  *
  */
 
-onready(function(){
+$(document).ready(function(){
 	if(navigator.userAgent.match(/iPhone|iPod|iPad|Android|Opera Mini|Blackberry|PlayBook/i)) {
-		var spoilers = document.getElementsByClassName('spoiler');
-		for(var i = 0; i < spoilers.length; i++) {
-			spoilers[i].onmousedown = function() {
-				this.style.color = 'white';
-			};
-		}
+		var init_spoiler_show = function() {
+			$(this).mousedown(function() {
+				$(this).css("color", "white");
+			});
+		};
+		$(".spoiler").each(init_spoiler_show);
+		$(document).bind('new_post', function(e, post) {
+			$(post).find(".spoiler").each(init_spoiler_show);
+		});
 	}
 });
 

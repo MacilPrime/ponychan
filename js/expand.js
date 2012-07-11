@@ -33,6 +33,7 @@ $(document).ready(function(){
 								} else {
 									$(this).addClass('expanded').insertAfter(thread.find('div.post:first')).after('<br class="expanded">');
 								}
+								$(document).trigger('new_post', this);
 								last_expanded = $(this);
 								
 							}
