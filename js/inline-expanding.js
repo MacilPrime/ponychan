@@ -21,7 +21,8 @@ $(document).ready(function(){
 				this.tag = this.childNodes[0].src;
 				this.childNodes[0].src = this.href;
 				this.childNodes[0].style.width = 'auto';
-				this.childNodes[0].style.maxWidth = '100%';
+				this.childNodes[0].style.maxWidth = '95%';
+				this.childNodes[0].style.maxHeight = '95%';
 				this.childNodes[0].style.height = 'auto';
 				this.childNodes[0].style.opacity = '0.4';
 				this.childNodes[0].style.filter = 'alpha(opacity=40)';
@@ -38,7 +39,7 @@ $(document).ready(function(){
 			return false;
 		});
 	};
-	$('div.threadblock>a:not([class="file"])>img').each(init_expand_image);
+	$('form[name="postcontrols"]>div>a:not([class="file"])>img').each(init_expand_image);
 	$('div.post>a:not([class="file"])>img').each(init_expand_image);
 	$(document).bind('new_post', function(e, post) {
 		$(post).find('>a:not([class="file"])>img').each(init_expand_image);
