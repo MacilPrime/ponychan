@@ -112,29 +112,11 @@ $(document).ready(function(){
 		return value;
 	}
 
-	settings.newProp = function(name, type, defval, description) {
-		if (type != "bool")
-			return;
-
-		var id = "setting_"+name;
+	settings.bindPropCheckbox = function($checkbox, name) {
 		var changeGuard = false;
-
-		var value = settings.getProp(name, type);
-		if (value === undefined) {
-			value = settings.setProp(name, type, defval);
-		}
-
-		var $settingDiv = $("<div/>")
-			.appendTo($settingsScreen);
-
-		var $label = $("<label/>")
-			.attr("for", id)
-			.text(" "+description)
-			.appendTo($settingDiv);
-		var $checkbox = $("<input/>")
-			.attr("type", "checkbox")
-			.attr("id", id)
-			.prependTo($label)
+		var value = settings.getProp(name, "bool");
+		
+		$checkbox
 			.attr("checked", value)
 			.change(function() {
 				if(!changeGuard) {
@@ -151,5 +133,30 @@ $(document).ready(function(){
 				changeGuard = false;
 			}
 		});
-	}
+	};
+
+	settings.newProp = function(name, type, defval, description) {
+		if (type != "bool")
+			return;
+
+		var id = "setting_"+name;
+
+		if (settings.getProp(name, type) === undefined) {
+			settings.setProp(name, type, defval);
+		}
+
+		var $settingDiv = $("<div/>")
+			.appendTo($settingsScreen);
+
+		var $label = $("<label/>")
+			.attr("for", id)
+			.text(" "+description)
+			.appendTo($settingDiv);
+		var $checkbox = $("<input/>")
+			.attr("type", "checkbox")
+			.attr("id", id)
+			.prependTo($label);
+
+		settings.bindPropCheckbox($checkbox, name);
+	};
 });
