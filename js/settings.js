@@ -8,7 +8,7 @@
  */
 
 $(document).ready(function(){
-	var settingsScreen = $("<div/>")
+	var $settingsScreen = $("<div/>")
 		.attr("id", "settingsScreen")
 		.css("z-index", 1)
 		.css("color", "black")
@@ -24,35 +24,35 @@ $(document).ready(function(){
 		.appendTo(document.body)
 		.hide();
 
-	var settingsTitle = $("<h1/>")
+	var $settingsTitle = $("<h1/>")
 		.text("Board Settings")
-		.appendTo(settingsScreen);
+		.appendTo($settingsScreen);
 
-	var settingsCloseButton = $("<a/>")
+	var $settingsCloseButton = $("<a/>")
 		.css("float", "right")
 		.css("margin", "2px")
 		.css("text-decoration", "none")
 		.text("X")
 		.attr("href", "javascript:;")
-		.appendTo(settingsTitle);
+		.appendTo($settingsTitle);
 
-	$("<hr/>").appendTo(settingsScreen);
+	$("<hr/>").appendTo($settingsScreen);
 
 	$(".styles").css("float", "right");
 
-	var settingsDiv = $("<div/>")
+	var $settingsDiv = $("<div/>")
 		.addClass("settingsButton")
 		.css("float", "right")
 		.css("clear", "left")
 		.css("margin", "0px 15px")
 		.insertAfter( $(".styles") );
 
-	var settingsButton = $("<a/>")
+	var $settingsButton = $("<a/>")
 		.text("[ Settings ]")
 		.attr("href", "javascript:;")
-		.appendTo(settingsDiv);
+		.appendTo($settingsDiv);
 
-	var settingsOverlay = $("<div/>")
+	var $settingsOverlay = $("<div/>")
 		.css("background-color", "black")
 		.css("opacity", 0.5)
 		.css("z-index", 0)
@@ -69,18 +69,18 @@ $(document).ready(function(){
 	settings = {};
 
 	settings.showWindow = function() {
-		settingsOverlay.show();
-		settingsScreen.fadeIn("fast");		
+		$settingsOverlay.show();
+		$settingsScreen.fadeIn("fast");		
 	};
 
 	settings.hideWindow = function() {
-		settingsScreen.hide();
-		settingsOverlay.hide();
+		$settingsScreen.hide();
+		$settingsOverlay.hide();
 	};
 
-	settingsButton.click(settings.showWindow);
-	settingsOverlay.click(settings.hideWindow);
-	settingsCloseButton.click(settings.hideWindow);
+	$settingsButton.click(settings.showWindow);
+	$settingsOverlay.click(settings.hideWindow);
+	$settingsCloseButton.click(settings.hideWindow);
 
 	settings.getProp = function(name, type) {
 		var id = "setting_"+name;
@@ -124,17 +124,17 @@ $(document).ready(function(){
 			value = settings.setProp(name, type, defval);
 		}
 
-		var settingDiv = $("<div/>")
-			.appendTo(settingsScreen);
+		var $settingDiv = $("<div/>")
+			.appendTo($settingsScreen);
 
-		var label = $("<label/>")
+		var $label = $("<label/>")
 			.attr("for", id)
 			.text(" "+description)
-			.appendTo(settingDiv);
-		var checkbox = $("<input/>")
+			.appendTo($settingDiv);
+		var $checkbox = $("<input/>")
 			.attr("type", "checkbox")
 			.attr("id", id)
-			.prependTo(label)
+			.prependTo($label)
 			.attr("checked", value)
 			.change(function() {
 				if(!changeGuard) {
@@ -147,7 +147,7 @@ $(document).ready(function(){
 		$(document).on("setting_change", function(e, setting) {
 			if (!changeGuard && name == setting) {
 				changeGuard = true;
-				checkbox.attr("checked", settings.getProp(name, "bool"));
+				$checkbox.attr("checked", settings.getProp(name, "bool"));
 				changeGuard = false;
 			}
 		});
