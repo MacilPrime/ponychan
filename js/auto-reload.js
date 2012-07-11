@@ -17,42 +17,109 @@ $(document).ready(function(){
 	if($('div.banner').length == 0)
 		return; // not index
 
-	var $statusBox = $("<div/>")
-		.attr("id", "updateStatus")
+	var $statusContainer = $("<div/>")
 		.css("position", "fixed")
 		.css("bottom", 0)
 		.css("right", 0)
 		.appendTo(document.body);
 
-	var $postsAdded = $("<span/>").text("+0");
-	var $countDown = $("<span/>");
-	$statusBox.append($postsAdded, " ", $countDown);
-	
-	var updateInterval = 30;
-	var retryInterval = 10;
+	var updateEnabled = true;
+	if(localStorage.updateEnabled != null)
+		updateEnabled = (localStorage.updateEnabled == "true");
 
 	var tickTimer = null;
-	var query = null;
-	var timeUntilUpdate = updateInterval+1;
 
-	var tick = function() {
-		timeUntilUpdate--;
-		if(timeUntilUpdate > 0) {
-			$countDown.text("-"+timeUntilUpdate);
-			tickTimer = setTimeout(tick, 1000);
-		} else {
-			downloadNewPosts();
+	var updateInterval = 30;
+	if(localStorage.updateInterval != null)
+		updateInterval = parseInt(localStorage.updateInterval);
+
+	var timeUntilUpdate;
+	var prepareDelayedUpdate = function() {
+		if(updateEnabled) {
+			timeUntilUpdate = updateInterval;
+			tick();
 		}
-	};
+	}
+
+	var saveSettings = function() {
+		localStorage.updateEnabled = updateEnabled ? "true" : "false";
+		localStorage.updateInterval = updateInterval;
+	}
+
+	var $statusSettings = $("<div/>")
+		.attr("id", "updateSettings")
+		.css("background-color", "grey")
+		.css("text-align", "right")
+		.appendTo($statusContainer)
+		.hide();
+	var $updateCheckboxLabel = $("<label/>")
+		.text("Auto-update threads ")
+		.attr("for", "updateCheckbox")
+		.appendTo($statusSettings);
+	var $updateCheckbox = $("<input/>")
+		.attr("id", "updateCheckbox")
+		.attr("type", "checkbox")
+		.attr("checked", updateEnabled)
+		.change(function() {
+			updateEnabled = Boolean($(this).attr("checked"));
+			if(updateEnabled) {
+				prepareDelayedUpdate();
+			} else {
+				if(tickTimer)
+					clearTimeout(tickTimer);
+			}
+			saveSettings();
+		})
+		.appendTo($updateCheckboxLabel);
+	$statusSettings.append("<br/>");
+	$("<span/>")
+		.text("Update interval")
+		.appendTo($statusSettings);
+	$statusSettings.append(" ");
+	var $updateIntervalField = $("<input/>")
+		.attr("id", "updateIntervalField")
+		.attr("type", "text")
+		.css("width", "3em")
+		.val(updateInterval)
+		.blur(function() {
+			var newVal = parseInt($(this).val());
+			if(isNaN(newVal) || newVal < 1) {
+				alert("Update interval must be a positive number!");
+				return;
+			}
+			updateInterval = newVal;
+			saveSettings();
+		}).appendTo($statusSettings);
+	$statusSettings.append("<br/>");
+	$("<input/>")
+		.attr("type", "button")
+		.val("Update Now")
+		.click(function() {
+			updateThreadNow();
+		})
+		.appendTo($statusSettings);
+
+	var $statusBox = $("<div/>")
+		.attr("id", "updateStatus")
+		.appendTo($statusContainer);
+	var $postsAdded = $("<span/>").addClass("updatePostsAdded").text("+0");
+	var $countDown = $("<span/>").addClass("updateCountDown").text("-");
+	$statusBox.append($postsAdded, " ", $countDown);
+
+	$statusContainer.hover(function() {
+		$statusSettings.show();
+		$statusSettings.prepend($statusBox);
+	}, function() {
+		$statusContainer.prepend($statusBox);
+		$statusSettings.hide();
+	});
 	
-	var downloadNewPosts = function() {
-		if(tickTimer)
-			clearTimeout(tickTimer);
-
-		$countDown.text("-0");
-
+	var query = null;
+	var updateThread = function() {
 		if(query)
 			query.abort();
+
+		$postsAdded.text("...");
 
 		query = $.ajax({
 			url: document.location,
@@ -67,8 +134,8 @@ $(document).ready(function(){
 					}
 				});
 				$postsAdded.text("+"+postsAddedCount);
-				timeUntilUpdate = updateInterval+1;
-				tick();
+				$countDown.text("-");
+				prepareDelayedUpdate();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				if(textStatus == "abort")
@@ -77,26 +144,49 @@ $(document).ready(function(){
 					$statusBox.css('color', 'red').text('404');
 					return;
 				}
-				$postsAdded.text("Retrying");
-				timeUntilUpdate = retryInterval+1;
-				tick();
+				if(updateEnabled) {
+					$postsAdded.text("Retrying");
+					prepareDelayedUpdate();
+				} else {
+					$postsAdded.text("Failed");
+					$countDown.text("-");
+				}
 			},
 			complete: function() {
 				query = null;
 			}
 		});
+	}
+
+	var tick = function() {
+		if(tickTimer) {
+			clearTimeout(tickTimer);
+			tickTimer = null;
+		}
+
+		$countDown.text("-"+timeUntilUpdate);
+		if(timeUntilUpdate > 0) {
+			timeUntilUpdate--;
+			tickTimer = setTimeout(tick, 1000);
+		} else {
+			updateThread();
+		}
 	};
+
+	updateThreadNow = function() {
+		timeUntilUpdate = 0;
+		tick();
+	}
 
 	$(document).keydown(function(event) {
 		if(/TEXTAREA|INPUT/.test(event.target.nodeName))
 			return;
 
 		if(event.which == 85) {
-			if(timeUntilUpdate < updateInterval)
-				downloadNewPosts();
+			updateThreadNow();
 		}
 	});
 
-	tick();
+	prepareDelayedUpdate();
 });
 
