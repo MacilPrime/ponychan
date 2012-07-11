@@ -6,11 +6,12 @@
  * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
  *
  * Usage:
+ *   $config['additional_javascript'][] = 'js/jquery.min.js';
  *   $config['additional_javascript'][] = 'js/local-time.js';
  *
  */
 
-onready(function(){
+$(document).ready(function(){
 	var iso8601 = function(s) {
 		s = s.replace(/\.\d\d\d+/,""); // remove milliseconds
 		s = s.replace(/-/,"/").replace(/-/,"/");
@@ -22,22 +23,26 @@ onready(function(){
 		return [Math.pow(10, count - num.toString().length), num].join('').substr(1);
 	};
 	
-	var times = document.getElementsByTagName('time');
-	
-	for(var i = 0; i < times.length; i++) {
-		if(!times[i].innerHTML.match(/^\d+\/\d+\/\d+ \(\w+\) \d+:\d+:\d+$/))
-			continue;
+	var makeLocalTime = function() {
+		if(!$(this).text().match(/^\d+\/\d+\/\d+ \(\w+\) \d+:\d+:\d+$/))
+			return;
 		
-		var t = iso8601(times[i].getAttribute('datetime'));
+		var t = iso8601($(this).attr('datetime'));
 		
-		
-		
-		times[i].innerHTML =
+		$(this).text(
 			// date
 			zeropad(t.getMonth() + 1, 2) + "/" + zeropad(t.getDate(), 2) + "/" + t.getFullYear().toString().substring(2) +
 			" (" + ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][t.getDay()]  + ") " +
 			// time
-			zeropad(t.getHours(), 2) + ":" + zeropad(t.getMinutes(), 2) + ":" + zeropad(t.getSeconds(), 2);
+			zeropad(t.getHours(), 2) + ":" + zeropad(t.getMinutes(), 2) + ":" + zeropad(t.getSeconds(), 2)
+		);
 	};
+
+	$('time').each(makeLocalTime);
+
+	// allow to work with auto-reload.js, etc.
+	$(document).bind('new_post', function(e, post) {
+		$('time', post).each(makeLocalTime);
+	});
 });
 
