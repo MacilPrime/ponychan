@@ -43,18 +43,25 @@ $(document).ready(function(){
 		.css("min-width", "300px")
 		.hide()
 		.appendTo(document.body);
-	$("<div/>")
+
+	var $QRmove = $("<div/>")
 		.text("Quick Reply")
 		.appendTo($QR);
+	var $QRCloseButton = $("<a/>")
+		.attr("href", "javascript:;")
+		.text("X")
+		.css("float", "right")
+		.css("color", "blue")
+		.css("text-decoration", "none")
+		.css("margin", "0 3px")
+		.appendTo($QRmove);
+
 	var $QRForm = $("<form/>")
 		.attr("id", "qrform")
 		.attr("method", "post")
 		.attr("action", $oldForm.attr("action") )
 		.attr("enctype", "multipart/form-data")
 		.css("margin", 0)
-		.submit(function() {
-			return dopost(this);
-		})
 		.appendTo($QR);
 	var $namerow = $("<div/>").appendTo($QRForm);
 	var $name = $("<input/>")
@@ -121,8 +128,14 @@ $(document).ready(function(){
 		.css("float", "none")
 		.appendTo($QRCaptchaPuzzleDiv);
 	var $QRCaptchaAnswerDiv = $("<div/>").appendTo($QRCaptchaDiv);
+	var $QRCaptchaChallengeField = $("<input/>")
+		.attr("id", "qrCaptchaChallenge")
+		.attr("name", "recaptcha_challenge_field")
+		.attr("type", "hidden")
+		.appendTo($QRCaptchaAnswerDiv);
 	var $QRCaptchaAnswer = $("<input/>")
 		.attr("id", "qrCaptchaAnswer")
+		.attr("type", "text")
 		.attr("placeholder", "Verification")
 		.attr("name", "recaptcha_response_field")
 		.css("box-sizing", "border-box")
@@ -140,13 +153,14 @@ $(document).ready(function(){
 		.attr("id", "qrfile")
 		.attr("type", "file")
 		.attr("name", "file")
+		.css("width", "70%")
 		.appendTo($filerow);
 	var $submit = $("<input/>")
 		.attr("id", "qrsubmit")
 		.attr("type", "submit")
 		.attr("name", "post")
 		.attr("accesskey", "s")
-		.val( $oldForm.find("input[type='submit']").val() )
+		.css("width", "30%")
 		.appendTo($filerow);
 	var $spoilerrow = $("<div/>")
 		.css("padding", "2px")
@@ -171,18 +185,22 @@ $(document).ready(function(){
 		.val( $("form[name='postcontrols'] input#password").val() )
 		.appendTo($QRForm);
 
+	var $QRwarning = $("<div/>")
+		.addClass("qrWarning")
+		.css("color", "red")
+		.appendTo($QRForm);
+
 	$("input[type='text'], textarea, #qrCaptchaPuzzle", $QRForm)
 		.css("margin", "0px")
 		.css("padding", "2px 4px 3px")
 		.css("border", "1px solid rgb(128,128,128)");
 
-	$oldForm
-		.find("input, textarea")
-		.filter(":hidden")
-		.clone()
-		.addClass("QRhiddenInputs")
-		.appendTo($QRForm)
-		.hide();
+	var QRInputNames = {};
+	$("input, textarea", $QRForm).each(function() {
+		var name = $(this).attr("name");
+		if (name)
+			QRInputNames[name] = true;
+	});
 
 	// DOM setup over.
 
@@ -190,6 +208,8 @@ $(document).ready(function(){
 	settings.bindPropCheckbox($QRToggleCheckbox, "use_QR");
 
 	var use_QR;
+	var query = null;
+	var oldFormBad = false;
 
 	QR = {};
 
@@ -210,10 +230,22 @@ $(document).ready(function(){
 	QR.close = function() {
 		$QR.hide();
 		$comment.val("");
+		$file.val("");
+		$QRwarning.text("");
+		if (query) {
+			query.abort();
+			query = null;
+			QRrepair();
+		}
 	};
 
 	$QRButton.click(function() {
 		QR.open();
+		return false;
+	});
+
+	$QRCloseButton.click(function() {
+		QR.close();
 		return false;
 	});
 
@@ -236,36 +268,190 @@ $(document).ready(function(){
 	var qrCiteReply = function(id) {
 		QR.open();
 
-		var body = document.getElementById('qrbody');
-		
-		body.focus();
-		if (document.selection) {
-			// IE
-			var sel = document.selection.createRange();
-			sel.text = '>>' + id + '\n';
-		} else if (body.selectionStart || body.selectionStart == '0') {
-			// Mozilla
-			var start = body.selectionStart;
-			var end = body.selectionEnd;
-			body.value = body.value.substring(0, start) + '>>' + id + '\n' + body.value.substring(end, body.value.length);
-		} else {
-			// ???
-			body.value += '>>' + id + '\n';
+		var body = $('#qrbody');
+
+		var cited = ">>"+id+"\n";
+
+		if(typeof window.getSelection != "undefined" && window.getSelection != null) {
+			var sel = window.getSelection();
+			var startPostNo = $(sel.anchorNode).parents(".post").first().find(">.intro>.post_no").last().text();
+			var endPostNo = $(sel.focusNode).parents(".post").first().find(">.intro>.post_no").last().text();
+			if(id == startPostNo && id == endPostNo) {
+				var text = sel.toString().trim();
+				if(text.length) {
+					var lines = text.split("\n");
+					var hasStarted = false;
+					for(i in lines) {
+						var line = lines[i].trim();
+						if(!hasStarted && line == "")
+							continue;
+						hasStarted = true;
+						cited += ">" + line + "\n";
+					}
+				}
+			}
 		}
+
+		body.val( body.val() + cited );
+		body.focus();
+	};
+
+	var fixSubmitButton = function() {
+		$submit.val( $oldForm.find("input[type='submit']").val() ).prop("disabled", false);
 	};
 
 	var stealCaptcha = function() {
-		$QRCaptchaPuzzleImage.attr("src", $captchaPuzzle.find("img").attr("src"));
-		$("#recaptcha_challenge_field", $QRForm).val( $("#recaptcha_challenge_field", $oldForm).val() );
-		$QRCaptchaAnswer.val("");
-	}
+		$QRCaptchaPuzzleImage
+			.css("visibility", "visible")
+			.attr("src", $captchaPuzzle.find("img").attr("src"));
+		$QRCaptchaChallengeField.val( $("#recaptcha_challenge_field").val() );
+		$QRCaptchaAnswer.val("").prop("disabled", false);
+	};
 
-	$("#recaptcha_image", $oldForm).on("DOMNodeInserted", function() {
+	var stealFormHiddenInputs = function(context) {
+		$(".QRhiddenInputs", $QRForm).remove();
+
+		$("input, textarea", context)
+			.filter(function() {
+				return !QRInputNames[$(this).attr("name")];
+			})
+			.clone()
+			.addClass("QRhiddenInputs")
+			.hide()
+			.appendTo($QRForm);
+
+		fixSubmitButton();
+	};
+
+	stealFormHiddenInputs($oldForm);
+
+	var QRhiddenFieldRepair = function(newpage) {
+		if (newpage == null)
+			newpage = $("");
+
+		var $thisBannerDiv = $("div.banner").first();
+		var $newBannerDiv = $(newpage)
+			.filter("div.banner")
+			.add( $(newpage).find("div.banner") )
+			.first();
+		var $newForm = $(newpage)
+			.filter("form[name='post']")
+			.add( $(newpage).find("form[name='post']") )
+			.first();
+
+		if (($thisBannerDiv.length == $newBannerDiv.length) && $newForm.length) {
+			stealFormHiddenInputs($newForm);
+		} else {
+			setTimeout(function() {
+				$.ajax({
+					url: document.location,
+					success: function(data) {
+						QRhiddenFieldRepair(data);
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						QRhiddenFieldRepair(null);
+					}
+				});
+			}, 5000);
+		}
+	};
+
+	var QRrepair = function(newpage) {
+		oldFormBad = true;
+		$submit.val("...").prop("disabled", true);
+		QRhiddenFieldRepair(newpage);
+
+		if($captchaPuzzle.length) {
+			$QRCaptchaPuzzleImage.css("visibility", "hidden");
+			$QRCaptchaAnswer.val("").prop("disabled", true);
+			Recaptcha.reload();
+		}
+	};
+
+	if($captchaPuzzle.length) {
 		stealCaptcha();
-	});
+		$("#recaptcha_image", $oldForm).on("DOMNodeInserted", function() {
+			stealCaptcha();
+		});
+	}
 
 	$QRCaptchaPuzzleDiv.click(function() {
 		Recaptcha.reload();
+	});
+
+	var setQRFormDisabled = function(disabled) {
+		$("input, textarea", $QRForm).prop("disabled", disabled);
+	}
+
+	$QRForm.submit(function(event) {
+		if (!dopost(this)) {
+			$QRwarning.text("Your post must have an image or a comment!");
+			return false;
+		}
+
+		if ($captchaPuzzle.length && $QRCaptchaAnswer.val().trim().length == 0) {
+			$QRwarning.text("You forgot to do the CAPTCHA!");
+			return false;
+		}
+
+		$QRwarning.text("");
+
+		if (typeof FormData === "undefined" || FormData == null)
+			return true;
+
+		var data = new FormData(this);
+		data.append("post", $submit.val());
+
+		$submit.val("Sending...");
+		setQRFormDisabled(true);
+
+		query = $.ajax({
+			url: $(this).attr("action"),
+			data: data,
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'POST',
+			success: function(data) {
+				var title1 = $("h1", data).first().text().trim();
+				if (title1 == "Error") {
+					var title2 = $("h2", data).first().text().trim();
+					$QRwarning.text(title2);
+				} else {
+					QR.close();
+				}
+
+				if ($("div.banner").length == 0) {
+					var newThreadNumber = parseInt($(".post.op .post_no", data).last().text());
+					if (isNaN(newThreadNumber)) {
+						console.error("Could not read new thread number!");
+					} else {
+						var newThreadURL = /^.*\//.exec(document.location) + "res/"+newThreadNumber+".html";
+						window.location.href = newThreadURL;
+					}
+				} else {
+					var $newBannerDiv = $(data)
+						.filter("div.banner")
+						.add( $(data).find("div.banner") )
+						.first();
+
+					if ($newBannerDiv.length) {
+						updateThreadNowWithData(data);
+					} else {
+						setTimeout(updateThreadNow, 1000);
+					}
+				}
+
+				setQRFormDisabled(false);
+				QRrepair(data);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.log("Ajax Error");
+				console.log(errorThrown);
+				setQRFormDisabled(false);
+			}
+		});
+		return false;
 	});
 
 	var QRInit = function() {
@@ -277,6 +463,9 @@ $(document).ready(function(){
 			if($captchaPuzzle.length)
 				stealCaptcha();
 		} else {
+			if(oldFormBad)
+				window.location.reload();
+
 			QR.close();
 			$oldForm.show();
 			$QRButton.hide();

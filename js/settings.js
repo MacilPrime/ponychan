@@ -10,16 +10,12 @@
 $(document).ready(function(){
 	var $settingsScreen = $("<div/>")
 		.attr("id", "settingsScreen")
-		.css("z-index", 1)
+		.css("z-index", 20)
+		.css("clear", "both")
 		.css("color", "black")
 		.css("border", "1px solid black")
 		.css("height", "400px")
 		.css("width", "400px")
-		.css("position", "fixed")
-		.css("top", "50%")
-		.css("left", "50%")
-		.css("margin-top", "-200px")
-		.css("margin-left", "-200px")
 		.css("background-color", "rgb(128,150,150)")
 		.appendTo(document.body)
 		.hide();
@@ -55,7 +51,7 @@ $(document).ready(function(){
 	var $settingsOverlay = $("<div/>")
 		.css("background-color", "black")
 		.css("opacity", 0.5)
-		.css("z-index", 0)
+		.css("z-index", 19)
 		.css("position", "fixed")
 		.css("top", "0px")
 		.css("left", "0px")
@@ -69,8 +65,25 @@ $(document).ready(function(){
 	settings = {};
 
 	settings.showWindow = function() {
-		$settingsOverlay.show();
-		$settingsScreen.fadeIn("fast");		
+		if( $(window).height() < $settingsScreen.height()
+		    || $(window).width() < $settingsScreen.width()) {
+			$settingsScreen
+				.css("position", "static")
+				.css("top", "")
+				.css("left", "")
+				.css("margin-top", "")
+				.css("margin-left", "")
+		} else {
+			$settingsScreen
+				.css("position", "fixed")
+				.css("top", "50%")
+				.css("left", "50%")
+				.css("margin-top", "-200px")
+				.css("margin-left", "-200px")
+
+			$settingsOverlay.show();
+		}
+		$settingsScreen.fadeIn("fast");
 	};
 
 	settings.hideWindow = function() {

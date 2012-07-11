@@ -114,6 +114,24 @@ $(document).ready(function(){
 		$statusSettings.hide();
 	});
 	
+	var loadPosts = function(data) {
+		var postsAddedCount = 0;
+		$(data).find('div.post.reply').each(function(index) {
+			var id = $(this).attr('id');
+			if($('#' + id).length == 0) {
+				if(index == 0 && $(".post.reply").length == 0) {
+					$(this).insertAfter($('div.post:last')).after('<br/>');
+				} else {
+					$(this).insertAfter($('div.post:last').next()).after('<br/>');
+				}
+				$(document).trigger('new_post', this);
+				postsAddedCount++;
+			}
+		});
+		$postsAdded.text("+"+postsAddedCount);
+		$countDown.text("-");
+	};
+
 	var query = null;
 	var updateThread = function() {
 		if(query)
@@ -124,21 +142,7 @@ $(document).ready(function(){
 		query = $.ajax({
 			url: document.location,
 			success: function(data) {
-				var postsAddedCount = 0;
-				$(data).find('div.post.reply').each(function(index) {
-					var id = $(this).attr('id');
-					if($('#' + id).length == 0) {
-						if(index == 0 && $(".post.reply").length == 0) {
-							$(this).insertAfter($('div.post:last')).after('<br/>');
-						} else {
-							$(this).insertAfter($('div.post:last').next()).after('<br/>');
-						}
-						$(document).trigger('new_post', this);
-						postsAddedCount++;
-					}
-				});
-				$postsAdded.text("+"+postsAddedCount);
-				$countDown.text("-");
+				loadPosts(data);
 				prepareDelayedUpdate();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
@@ -180,14 +184,25 @@ $(document).ready(function(){
 	updateThreadNow = function() {
 		timeUntilUpdate = 0;
 		tick();
-	}
+	};
+
+	updateThreadNowWithData = function(data) {
+		if(query) {
+			query.abort();
+			query = null;
+		}
+
+		loadPosts(data);
+		prepareDelayedUpdate();
+	};
 
 	$(document).keydown(function(event) {
 		if(/TEXTAREA|INPUT/.test(event.target.nodeName))
-			return;
+			return true;
 
 		if(event.which == 85) {
 			updateThreadNow();
+			return false;
 		}
 	});
 
