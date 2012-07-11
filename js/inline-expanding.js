@@ -12,8 +12,19 @@
  *
  */
 $(document).ready(function(){
+	settings.newProp("image_expand_enabled", "bool", true, "Expand image on click");
+
+	var image_expand_enabled = settings.getProp("image_expand_enabled", "bool");
+	$(document).on("setting_change", function(e, setting) {
+		if (setting == "image_expand_enabled")
+			image_expand_enabled = settings.getProp("image_expand_enabled", "bool");
+	});
+
 	var init_expand_image = function() {
 		$(this).parent().click(function(e) {
+			if(!image_expand_enabled)
+				return true;
+
 			if(e.which == 2) {
 				return true;
 			}
