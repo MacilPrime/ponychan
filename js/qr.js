@@ -9,6 +9,7 @@
 
 $(document).ready(function(){
 	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting");
+	settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)");
 
 	var $oldForm = $("form[name='post']");
 
@@ -238,8 +239,7 @@ $(document).ready(function(){
 		}
 	};
 
-	QR.close = function() {
-		$QR.hide();
+	QR.clear = function() {
 		$comment.val("");
 		$file.val("");
 		$QRwarning.text("");
@@ -248,6 +248,11 @@ $(document).ready(function(){
 			query = null;
 			QRrepair();
 		}
+	}
+
+	QR.close = function() {
+		$QR.hide();
+		QR.clear();
 	};
 
 	$QRButton.click(function() {
@@ -435,7 +440,10 @@ $(document).ready(function(){
 					window.history.pushState({}, newPageTitle, url);
 					return;
 				} else {
-					QR.close();
+					if (settings.getProp("QR_persistent", "bool"))
+						QR.clear();
+					else
+						QR.close();
 				}
 
 				if ($("div.banner").length == 0) {
@@ -479,6 +487,8 @@ $(document).ready(function(){
 			citeReply = qrCiteReply;
 			if($captchaPuzzle.length)
 				stealCaptcha();
+			if (settings.getProp("QR_persistent", "bool"))
+				QR.open();
 		} else {
 			if(oldFormBad)
 				window.location.reload();
