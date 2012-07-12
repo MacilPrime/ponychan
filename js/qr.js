@@ -8,7 +8,12 @@
  */
 
 $(document).ready(function(){
+	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting");
+
 	var $oldForm = $("form[name='post']");
+
+	if ($oldForm.length == 0)
+		return;
 
 	var $QRToggleOptions = $("<div/>")
 		.css("text-align", "center")
@@ -204,7 +209,6 @@ $(document).ready(function(){
 
 	// DOM setup over.
 
-	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting");
 	settings.bindPropCheckbox($QRToggleCheckbox, "use_QR");
 
 	var use_QR;
