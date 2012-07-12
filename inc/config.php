@@ -129,6 +129,9 @@
 	// Used to salt secure tripcodes (##trip) and poster IDs (if enabled)
 	$config['secure_trip_salt'] = ')(*&^%$#@!98765432190zyxwvutsrqponmlkjihgfedcba';
 
+	// Used for simple access-control
+	$config['cookies']['mod_secret'] = 'lmnopqrstuvwxyz09123456789!@#$%^&*()';
+
 /*
  * ====================
  *  Flood/spam settings

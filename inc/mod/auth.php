@@ -65,6 +65,10 @@ function setCookies() {
 			':' .
 			$mod['hash'][1], // salt
 		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
+	
+	setcookie('mod_secret',
+		$config['cookies']['mod_secret'],
+		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
 }
 
 function destroyCookies() {
@@ -113,7 +117,7 @@ if (isset($_COOKIE[$config['cookies']['mod']])) {
 		destroyCookies();
 		error($config['error']['malformed']);
 	}
-	
+		
 	$mod = Array(
 		'id' => $user['id'],
 		'type' => $user['type'],
