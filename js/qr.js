@@ -405,8 +405,9 @@ $(document).ready(function(){
 		$submit.val("Sending...");
 		setQRFormDisabled(true);
 
+		var url = $(this).attr("action");
 		query = $.ajax({
-			url: $(this).attr("action"),
+			url: url,
 			data: data,
 			cache: false,
 			contentType: false,
@@ -417,6 +418,11 @@ $(document).ready(function(){
 				if (title1 == "Error") {
 					var title2 = $("h2", data).first().text().trim();
 					$QRwarning.text(title2);
+				} else if (title1 == "Banned!") {
+					document.write(data);
+					var newPageTitle = $("title", data).text();
+					window.history.pushState({}, newPageTitle, url);
+					return;
 				} else {
 					QR.close();
 				}
