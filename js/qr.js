@@ -159,6 +159,13 @@ $(document).ready(function(){
 		.attr("type", "file")
 		.attr("name", "file")
 		.css("width", "70%")
+		.attr("title", "Shift+Click to remove the selected file")
+		.click(function(event) {
+			if (event.shiftKey) {
+				$(this).val("");
+				event.preventDefault();
+			}
+		})
 		.appendTo($filerow);
 	var $submit = $("<input/>")
 		.attr("id", "qrsubmit")
