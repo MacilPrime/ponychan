@@ -31,7 +31,7 @@ onready(function(){
 			
 			var start_hover = function($link) {
 				var $newPost = $post.clone();
-				$newPost.find('span.mentioned').remove();
+				$newPost.find('span.mentioned').off('mouseenter').off('mouseleave').off('mousemove');
 				$newPost
 					.attr('id', 'post-hover-' + id)
 					.addClass('post-hover')
