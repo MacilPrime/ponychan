@@ -989,8 +989,6 @@ function mod_deletefile($board, $post) {
 	deleteFile($post);
 	// Record the action
 	modLog("Deleted file from post #{$post}");
-	// Rebuild thread
-	buildThread($post);
 	// Rebuild board
 	buildIndex();
 	
