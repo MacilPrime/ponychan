@@ -32,7 +32,7 @@
 	  Welcome to MLPchan.net! <a href="/site/res/18.html">Read our introductory post!</a>
 	</div>
 
-	<div class="homeblock">
+	<div class="homeblock" id="boards">
 	  <h2>Boards</h2>
 	  {% for category in config.categories|keys %}
 	    <h3>{{ category }}</h3>
@@ -49,7 +49,7 @@
 	  {% endfor %}
 	</div>
 
-	<div class="homeblock">
+	<div class="homeblock" id="rules">
 	  <h2>Rules</h2>
 	  <h3>The Basics</h3>
 	  <ul>
@@ -98,7 +98,7 @@ These and all rules and guidelines are subject to change based on the community'
 </p>
 	</div>
 
-	<div class="homeblock">
+	<div class="homeblock" id="faq">
 	  <h2>FAQ</h2>
 <p>
  There is no signup; you can enter any name you like (or no name, bearing in mind it can sometimes be confusing to chat with Anonymous, Anonymous and Anonymous rather than Alice, Carol and Bob).
@@ -115,6 +115,24 @@ These and all rules and guidelines are subject to change based on the community'
 </p>
 	</div>
 
+	<div class="homeblock" id="staff">
+	  <h2>Staff</h2>
+	  <p>
+	    <h3>Administrator</h3>
+	    <div><span class="trip">!!Applejack</span> ## Admin - Anonthony!EEEEEEEEc2</div>
+	  </p>
+	  <p>
+	    <h3>Moderators</h3>
+	    <div><span class="trip">!!Twilight Sparkle</span> ## Mod - Cross Breeze!Q1IPegaSus</div>
+	    <div><span class="trip">!!Rainbow Dash</span> ## Mod - Lawny!uIsTheSex6</div>
+	    <div><span class="trip">!!Pinkie Pie</span> ## Mod - Starshine!SprintMJXo</div>
+	    <div><span class="trip">!!Fluttershy</span> ## Mod - Tom' the /♥/ bringer!tHOMASuvlQ</div>
+	    <div><span class="trip">!!Trixie</span> ## Mod - Marceline!dxpBMarcyU</div>
+	    <div><span class="trip">!!Iron Will</span> ## Mod - Eudae!K0I3bDrQc6</div>
+	    <div><span class="trip">!!Derpy</span> ## Mod - Derpymouz!TheMouZ8I6</div>
+	    <div><span class="trip">!!Littlepip</span> ## Mod - Macil!/5s/Techmk</div>
+	  </p>
+	</div>
 	{{ boardlist.bottom }}
 	<footer>
 		<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by <a href="http://tinyboard.org/">Tinyboard</a> {{ config.version }} | <a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2012 Tinyboard Development Group</p>
