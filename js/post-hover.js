@@ -11,7 +11,7 @@
  *
  */
 
-onready(function(){
+$(document).ready(function(){
 	var dont_fetch_again = [];
 	init_hover = function() {
 		var $link = $(this);
@@ -108,4 +108,3 @@ onready(function(){
 		$(post).find('p.body a:not([rel="nofollow"])').each(init_hover);
 	});
 });
-
