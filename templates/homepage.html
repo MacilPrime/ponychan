@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}">
+	{% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.url_favicon }}">{% endif %}
+	<title>MLPchan</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+	{% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
+	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}">{% endif %}
+	{% if not nojavascript %}
+		<script type="text/javascript" src="{{ config.url_javascript }}"></script>
+		{% if not config.additional_javascript_compile %}
+		{% for javascript in config.additional_javascript %}<script type="text/javascript" src="{{ config.additional_javascript_url }}{{ javascript }}"></script>{% endfor %}
+		{% endif %}
+	{% endif %}
+</head>
+<body class="homepage">
+	{{ boardlist.top }}
+	{% if pm %}<div class="top_notice">You have <a href="?/PM/{{ pm.id }}">an unread PM</a>{% if pm.waiting > 0 %}, plus {{ pm.waiting }} more waiting{% endif %}.</div><hr />{% endif %}
+	{% if config.url_banner %}<img class="banner" src="{{ config.url_banner }}" {% if config.banner_width or config.banner_height %}style="{% if config.banner_width %}width:{{ config.banner_width }}px{% endif %};{% if config.banner_width %}height:{{ config.banner_height }}px{% endif %}" {% endif %}alt="" />{% endif %}
+	<header>
+		<h1>MLPchan</h1>
+		<div class="subtitle">
+			Friendship is Magic!
+		</div>
+	</header>
+	
+	<hr />
+
+	<div class="homeblock mainhomeblock">
+	  Welcome to MLPchan.net! <a href="/site/res/18.html">Read our introductory post!</a>
+	</div>
+
+	<div class="homeblock">
+	  <h2>Boards</h2>
+	  {% for category in config.categories|keys %}
+	    <h3>{{ category }}</h3>
+	    <ul>
+	    {% for board in config.categories[category]|keys %}
+	      {% if 1 in config.categories[category][board]|keys %}
+	        {% set uri = board %}
+              {% else %}
+	        {% set uri = config.categories[category][board] %}
+              {% endif %}
+              <li><a href="/{{ uri }}/">{{ uri }} - {{ boards[uri].title }}</a> — {{ boards[uri].subtitle }}</li>
+	    {% endfor %}
+	    </ul>
+	  {% endfor %}
+	</div>
+
+	<div class="homeblock">
+	  <h2>Rules</h2>
+	  <h3>The Basics</h3>
+	  <ul>
+	    <li>Pornography, gore, and other explicit posts (whether in images
+	    or text) are not allowed under any circumstances.</li>
+	    <li>Threats, flaming, malicious trolling, and other abusive
+	    behaviors are not allowed under any circumstances.</li>
+	    <li>Advocating, promoting, or enabling illegal behavior behavior of
+	    any kind is not allowed under any circumstances.</li>
+	    <li>Spamming, raiding, posting other's personal information, and
+	    advocating or promoting such is not allowed under any
+	    circumstances.</li>
+	    <li>Ban evasion for any purpose is not allowed under any
+	    circumstances, and will result in further, longer bans added to the
+	    original.</li>
+	    <li>By accessing this site or any data derived from or associated
+	    with this site, its brand, or its users, you assume all aspects of
+	    responsibility for the content of your posts, and the direct and
+	    indirect consequences of your actions during, after, and relating
+	    to any access of said data.</li>
+	    <li>The staff reserves the right to enforce these and all other
+	    rules and guidelines in the manner they see fit to promote the best
+	    interests of the site, the community, the users and the environment
+	    we all share.</li>
+	    <li>Do not look for loopholes or try to argue technicalities in
+	    these guidelines. Follow their spirit as well as their letter.</li>
+	  </ul>
+	  <h3>The Specifics</h3>
+<p>
+The purpose of all the rules and guidelines of this site stem from one primary directive - to enable the users to enjoy themselves and the community as much as possible without interfering in the rights of others to do the same. We all share this space, and so a balance must be struck between free interaction and constraint. Do not look for technicalities or loopholes; these rules are basic, and designed to satisfy the requirements of as many of the best interests of the users as possible, and so following their spirit of respecting each other's place here is what is expected of all of us - the staff included.
+</p>
+<p>
+On racy/saucy content - Ponychan is a safe-for-work environment, and therefore all posts and images must be SFW as well. No visible genitalia, exposed female breasts, sex acts, underage sexualization of any kind, or crudely shopped Joseco art with Nicolas Cage's face over the naughty bits are allowed.
+</p>
+<p>
+On violent content - Ponychan, again, is a safe for work environment, and images or depictions of gore, death or dismemberment, or exposed bodily organs, or excessive blood or other highly violent images are not allowed.
+</p>
+<p>
+On behavior - Ponychan is a community, and not an impersonal space where attacking other members will be tolerated. Disagreements, arguments, debates; these are all normal in the course of interaction with others at times. Needless drama, flamewars, provoking, belittling or degrading other users is not. And while all trolling is in general looked down on, harmless jokes and innocent fun is not; we neither want to be too thin-skinned nor willing to acccept harmful behavior that hurts the enjoyment of others.
+</p>
+<p>
+On topicality - In some parts of the site, staying on topic to what's being discussed in a thread is important for everyone's enjoyment; so making an effort not to derail a subject people are in or trying to have will be required there. Don't forcefully drag a /pony/ thread into a conversation about League of Legends, please. A moderate amount of side chatter that doesn't interfere with topics isn't going to be met with harsh repercussions, but hampering others attempts to stay on track will start getting your posts deleted, warnings issued, and bans if necessary for those who can't get the message after that. In other areas of the site like /oat/ and /chat/, you can expect more leeway - though OP's and topics still have sway. Make the effort, is what we ask.
+</p>
+<p>
+These and all rules and guidelines are subject to change based on the community's needs, input, and the staff's overarching desire for the site to have the best possible environment for the most possible users who enjoy it. Feel free to bring up any questions, concerns, suggestions or issues on /site/ or with any staff member through email, and we will do our best to listen and consider the input or answer your inquiries.
+</p>
+	</div>
+
+	<div class="homeblock">
+	  <h2>FAQ</h2>
+<p>
+ There is no signup; you can enter any name you like (or no name, bearing in mind it can sometimes be confusing to chat with Anonymous, Anonymous and Anonymous rather than Alice, Carol and Bob).
+</p>
+<p>
+ You may use a tripcode like Bob#putasecretpasswordhere to consistently identify yourself as that Bob!wVf.9l8o4E — this works on most similar *chan sites. Programs like Tripcode Explorer and MTY are available to search for tripcodes which form attractive patterns or words.
+</p>
+<p>
+ This site has several features that other *chan sites often require separate userscripts for, like a Quick Reply dialog for posting and auto-updating threads. You can configure the site with the <code>[Settings]</code> button at the bottom-right corner of the page. Different themes are also available for you to use to view the site.
+</p>
+<p>
+ Consider donating to help the site!
+ <form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick" /> <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+" /> <input type="image" name="submit"
+	    src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif"
+	    alt="PayPal - The safer, easier way to pay online!" />
+  <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt=""
+       width="1" height="1" border="0" /></form>
+</p>
+	</div>
+
+	{{ boardlist.bottom }}
+	<footer>
+		<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by <a href="http://tinyboard.org/">Tinyboard</a> {{ config.version }} | <a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2012 Tinyboard Development Group</p>
+		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer }}</p>{% endfor %}
+	</footer>
+	<script type="text/javascript">{% raw %}
+		ready();
+	{% endraw %}</script>
+</body>
+</html>
