@@ -200,7 +200,7 @@ $(document).ready(function(){
 		if(/TEXTAREA|INPUT/.test(event.target.nodeName))
 			return true;
 
-		if(event.which == 85) {
+		if(event.which == 85 && !event.ctrlKey && !event.shiftKey) {
 			updateThreadNow();
 			return false;
 		}
