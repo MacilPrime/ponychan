@@ -87,7 +87,7 @@ $(document).ready(function(){
 		.attr("type", "text")
 		.attr("name", "email")
 		.attr("placeholder", "Email")
-		.attr("maxlength", 40)
+		.attr("maxlength", 75)
 		.css("box-sizing", "border-box")
 		.css("-moz-box-sizing", "border-box")
 		.css("width", "33%")
