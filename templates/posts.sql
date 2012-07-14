@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `subject` varchar(100) DEFAULT NULL,
   `email` varchar(75) DEFAULT NULL,
   `name` varchar(35) DEFAULT NULL,
-  `trip` varchar(15) DEFAULT NULL,
+  `trip` varchar(20) DEFAULT NULL,
   `capcode` varchar(50) DEFAULT NULL,
   `body` text NOT NULL,
   `body_nomarkup` text DEFAULT NULL,
