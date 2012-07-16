@@ -53,6 +53,8 @@ $(document).ready(function(){
 	}).scroll();
 
 	$(document).bind('new_post', function(e, post) {
+		if ($(post).hasClass("hidden"))
+			return;
 		$unseenPosts = $unseenPosts.add(post);
 		document.title = "("+$unseenPosts.length+") "+mainTitle;
 		oldCount = $unseenPosts.length;

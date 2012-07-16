@@ -30,23 +30,39 @@ $(document).ready(function(){
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
 			
 			var start_hover = function($link) {
-				var $newPost = $post.clone();
-				$newPost.find('span.mentioned').off('mouseenter').off('mouseleave').off('mousemove');
-				$newPost
-					.attr('id', 'post-hover-' + id)
-					.addClass('post-hover')
-					.css('position', 'absolute')
-					.css('border-style', 'solid')
-					.css('box-shadow', '1px 1px 1px #999')
-					.css('display', 'block')
-					.insertAfter($link.parent());
-				$link.trigger('mousemove');
+				$post = $('div.post#reply_' + id).first();
+
+				if ($post.length == 0) {
+					var $oppost = $('#thread_'+id+' .post.op').first();
+					if ($oppost.length == 0)
+						return false;
+					$post = $oppost.clone()
+						.addClass('reply')
+						.attr('id', 'reply_'+id)
+						.prependTo(document.body)
+						.css('display', 'none')
+						.addClass("hidden");
+					$post.children(".intro")
+						.after($oppost.parent().children('.fileinfo, a').clone());
+					$(document).trigger('new_post', $post[0]);
+				}
+				if (hovering) {
+					var $newPost = $post.clone();
+					$newPost.find('span.mentioned').off('mouseenter').off('mouseleave').off('mousemove');
+					$newPost
+						.attr('id', 'post-hover-' + id)
+						.addClass('post-hover')
+						.css('position', 'absolute')
+						.css('border-style', 'solid')
+						.css('box-shadow', '1px 1px 1px #999')
+						.css('display', 'block')
+						.prependTo(document.body);
+					$link.trigger('mousemove');
+				}
+				return true;
 			};
 			
-			$post = $('div.post#reply_' + id);
-			if($post.length > 0) {
-				start_hover($(this));
-			} else {
+			if(!start_hover($(this))) {
 				var url = $link.attr('href').replace(/#.*$/, '');
 				
 				if($.inArray(url, dont_fetch_again) != -1) {
@@ -58,16 +74,25 @@ $(document).ready(function(){
 					url: url,
 					context: document.body,
 					success: function(data) {
+						var $thread = $(data).find('.post.op').first().parent();
+						if ($thread.length && $('#'+$thread.attr('id')).length==0) {
+							$("<div/>")
+								.attr('id', $thread.attr('id'))
+								.hide()
+								.append( $thread.children('.fileinfo, a, .post.op') )
+								.prependTo(document.body);
+						}
+
 						$(data).find('div.post.reply').each(function() {
-							if($('#' + $(this).attr('id')).length == 0)
-								$('div.post:first').prepend($(this).css('display', 'none').addClass('hidden'));
+							if($('#' + $(this).attr('id')).length == 0) {
+								var $newpost = $(this).css('display', 'none').addClass('hidden').prependTo($('div.post:first'));
+								$(document).trigger('new_post', $newpost[0]);
+							}
+
 
 						});
 						
-						$post = $('div.post#reply_' + id);
-						if(hovering && $post.length > 0) {
-							start_hover($link);
-						}
+						start_hover($(this));
 					}
 				});
 			}
