@@ -471,9 +471,11 @@ $(document).ready(function(){
 				QRrepair(data);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
+				$QRwarning.text("Connection Error");
 				console.log("Ajax Error");
 				console.log(errorThrown);
 				setQRFormDisabled(false);
+				QRrepair(data);
 			}
 		});
 		return false;
