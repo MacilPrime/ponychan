@@ -43,7 +43,7 @@
               {% else %}
 	        {% set uri = config.categories[category][board] %}
               {% endif %}
-              <li><a href="/{{ uri }}/">{{ uri }} - {{ boards[uri].title }}</a> — {{ boards[uri].subtitle }}</li>
+              <li><a href="{{ uri }}/">{{ uri }} - {{ boards[uri].title }}</a> — {{ boards[uri].subtitle }}</li>
 	    {% endfor %}
 	    </ul>
 	  {% endfor %}
