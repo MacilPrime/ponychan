@@ -278,6 +278,15 @@ div.post.reply p.body span.spoiler a {
 span.spoiler:hover, div.post.reply p.body span.spoiler:hover a {
 	color: white;
 }
+.hidetext {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #ccc;
+	padding: 5px;
+	background: #ddd;
+	clear: both;
+	margin: 5px;
+}
 div.styles {
 	float: right;
 	padding-bottom: 20px;
