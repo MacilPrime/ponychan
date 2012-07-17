@@ -18,6 +18,7 @@ $(document).ready(function(){
 		var tag;
 		switch(event.which) {
 		case 66: tag = 'b'; break;
+		case 72: tag = 'h'; break;
 		case 73: tag = 'i'; break;
 		case 83: tag = 'spoiler'; break;
 		default:
