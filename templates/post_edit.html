@@ -1,0 +1,69 @@
+<form name="editpost" enctype="multipart/form-data" action="{{ config.post_url }}" method="post">
+<input type="hidden" name="editpost" value="1">
+<input type="hidden" name="board" value="{{ board.uri }}">
+<input type="hidden" name="id" value="{{ post.id }}">
+{% if password %}<input type="hidden" name="password" value="{{ password }}">{% endif %}
+{% if mod %}<input type="hidden" name="mod" value="1">{% endif %}
+	<table>
+		{% if post.name or post.trip or post.capcode or not config.field_disable_name %}<tr>
+			<th>
+				{% trans %}Name{% endtrans %}
+			</th>
+			<td>
+				{% if post.name %}<span class="name">{{ post.name }}</span>{% endif %}
+				{% if post.trip %}<span class="trip">{{ post.trip }}</span>{% endif %}
+				{% if post.capcode %}<span class="capcode">{{ post.capcode }}</span>{% endif %}
+			</td>
+		</tr>{% endif %}
+		{% if post.email or not config.field_disable_email %}<tr>
+			<th>
+				{% trans %}Email{% endtrans %}
+			</th>
+			<td>
+				{{ post.email }}
+			</td>
+		</tr>{% endif %}
+		<tr>
+			<th>
+				{% trans %}Subject{% endtrans %}
+			</th>
+			<td>
+				<span class="subject">{{ post.subject }}</span>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				{% trans %}Comment{% endtrans %}
+			</th>
+			<td>
+				<textarea name="body" id="body" rows="5" cols="35">{{ post.body_nomarkup|e }}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				{% trans %}File{% endtrans %}
+			</th>
+			<td>
+				{{ post.filename }}
+			</td>
+		</tr>
+		{% if mod %}
+		<tr>
+			<th>
+				{% trans %}Flags{% endtrans %}
+			</th>
+			<td>
+				{% if post.mod|hasPermission(config.mod.rawhtml, board.uri) %}<div>
+					<label for="raw">{% trans %}Raw HTML{% endtrans %}</label><br>
+					<input title="{% trans %}Raw HTML{% endtrans %}" type="checkbox" name="raw" id="raw">
+				</div>{% endif %}
+				{% if post.mod|hasPermission(config.mod.noeditmsg, board.uri) %}<div>
+					<label for="noeditmsg">{% trans %}No "Post was edited" message{% endtrans %}</label><br>
+					<input title="{% trans %}No edit message{% endtrans %}" type="checkbox" name="noeditmsg" id="noeditmsg">
+				</div>{% endif %}
+			</td>
+		</tr>
+		{% endif %}
+	</table>
+	<div style="text-align:center;"><input type="submit" value="Submit"></div>
+</form>

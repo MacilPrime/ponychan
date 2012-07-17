@@ -9,3 +9,9 @@
 		<input id="reason" type="text" name="reason" size="20" maxlength="50" />
 		<input type="submit" name="report" value="{% trans %}Report{% endtrans %}" />
 </div>
+{% if config.allow_self_edit %}
+<div class="delete" style="clear:both">
+	{% trans %}Edit Post{% endtrans %} 
+		<input type="submit" name="edit" value="{% trans %}Edit{% endtrans %}" />
+</div>
+{% endif %}

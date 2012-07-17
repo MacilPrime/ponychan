@@ -81,6 +81,211 @@ if (isset($_POST['delete'])) {
 	
 	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
 
+} elseif (isset($_POST['edit'])) {
+	// User picked a post to edit
+
+	if (!isset($_POST['board'], $_POST['password']))
+		error($config['error']['bot']);
+	
+	$password = &$_POST['password'];
+	
+	if ($password == '')
+		error($config['error']['invalidpassword']);
+	
+	$editposts = array();
+	foreach ($_POST as $post => $value) {
+		if (preg_match('/^delete_(\d+)$/', $post, $m)) {
+			$editposts[] = (int)$m[1];
+		}
+	}
+	
+	checkDNSBL();
+		
+	// Check if board exists
+	if (!openBoard($_POST['board']))
+		error($config['error']['noboard']);
+	
+	// Check if banned
+	checkBan($board['uri']);
+	
+	if (empty($editposts))
+		error($config['error']['noedit']);
+	if (count($editposts)!=1)
+		error($config['error']['toomanyedits']);
+
+	if (isset($_POST['mod']) && $_POST['mod']) {
+		require 'inc/mod.php';
+		if (!$mod) {
+			// Liar. You're not a mod.
+			error($config['error']['notamod']);
+		}
+	}
+
+	$id = $editposts[0];	
+	$query = prepare(sprintf("SELECT `thread`, `time`,`password` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
+	$query->bindValue(':id', $id, PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+	
+	$post = $query->fetch();
+	if(!$post)
+		error($config['error']['noedit']);
+
+	if ($password != '' && $post['password'] != $password)
+		error($config['error']['invalidpassword']);
+	
+	if ($post['time'] >= time() - $config['edit_time']) {
+		error(sprintf($config['error']['edit_too_soon'], until($post['time'] + $config['edit_time'])));
+	}
+
+	editPostForm($id, $password, $mod);
+} elseif (isset($_POST['editpost'])) {
+	// User is submitting an edited post
+
+	if (!isset($_POST['board'], $_POST['id']))
+		error($config['error']['bot']);
+		
+	$id = $_POST['id'];
+	
+	checkDNSBL();
+		
+	// Check if board exists
+	if (!openBoard($_POST['board']))
+		error($config['error']['noboard']);
+	
+	// Check if banned
+	checkBan($board['uri']);
+	
+	$query = prepare(sprintf("SELECT `thread`, `time`,`password` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
+	$query->bindValue(':id', $id, PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+	
+	$post = $query->fetch();
+	if(!$post)
+		error($config['error']['noedit']);
+
+	if ($post['time'] >= time() - $config['edit_time']) {
+		error(sprintf($config['error']['edit_too_soon'], until($post['time'] + $config['edit_time'])));
+	}
+
+	if (isset($_POST['password']))
+		$password = $_POST['password'];
+
+	if (isset($_POST['mod']) && $_POST['mod']) {
+		require 'inc/mod.php';
+		if (!$mod) {
+			// Liar. You're not a mod.
+			error($config['error']['notamod']);
+		}
+		
+		$post['raw'] = isset($_POST['raw']);
+		$post['noeditmsg'] = isset($_POST['noeditmsg']);
+		
+		if (!isset($password) && !hasPermission($config['mod']['editpost'], $board['uri']))
+			error($config['error']['noaccess']);
+		if ($post['raw'] && !hasPermission($config['mod']['rawhtml'], $board['uri']))
+			error($config['error']['noaccess']);
+		if ($post['noeditmsg'] && !hasPermission($config['mod']['noeditmsg'], $board['uri']))
+			error($config['error']['noaccess']);
+	} else {
+		if (!isset($password))
+			error($config['error']['bot']);
+	}
+
+	if (isset($password)) {
+		if ($password == '' || $post['password'] != $password)
+			error($config['error']['invalidpassword']);
+	}
+		
+	if ($post['time'] >= time() - $config['edit_time']) {
+		error(sprintf($config['error']['edit_too_soon'], until($post['time'] + $config['edit_time'])));
+	}
+
+	$post['op'] = !$post['thread'];
+	$post['body'] = $_POST['body'];
+
+	if (!($post['has_file'] || isset($post['embed'])) || (($post['op'] && $config['force_body_op']) || (!$post['op'] && $config['force_body']))) {
+		$stripped_whitespace = preg_replace('/[\s]/u', '', $post['body']);
+		if ($stripped_whitespace == '') {
+			error($config['error']['tooshort_body']);
+		}
+	}
+
+	if (!$mod && mb_strlen($post['body']) > $config['max_body'])
+		error($config['error']['toolong_body']);
+
+	wordfilters($post['body']);
+	
+	$post['body_nomarkup'] = $post['body'];
+
+	if (!($mod && isset($post['raw']) && $post['raw']))
+		$post['tracked_cites'] = markup($post['body'], true);
+
+	require_once 'inc/filters.php';
+	
+	do_filters($post);
+
+	if (!($mod && isset($post['noeditmsg']) && $post['noeditmsg'])) {
+		$now = new DateTime();
+		$nowStr = $now->format(DateTime::W3C);
+		$time = '<time datetime="'.$nowStr.'">'.$nowStr.'</time>';
+		$post['body'] .= "\n" . sprintf(isset($password) ? $config['edit_self_message'] : $config['edit_mod_message'], $time);
+	}
+	
+	if (!hasPermission($config['mod']['postunoriginal'], $board['uri']) && $config['robot_enable'] && checkRobot($post['body_nomarkup'])) {
+		if ($config['robot_mute']) {
+			error(sprintf($config['error']['muted'], mute()));
+		} else {
+			error($config['error']['unoriginal']);
+		}
+	}
+
+	$post = (object)$post;
+	if ($error = event('post', $post)) {
+		error($error);
+	}
+	if ($error = event('post-edit', $post)) {
+		error($error);
+	}
+	$post = (array)$post;
+	
+	$query = prepare(sprintf("UPDATE `posts_%s` SET `body` = :body, `body_nomarkup` = :body_nomarkup WHERE `id` = :id", $board['uri']));
+	$query->bindValue(':id', $id, PDO::PARAM_INT);
+	$query->bindValue(':body', $post['body'], PDO::PARAM_STR);
+	$query->bindValue(':body_nomarkup', $post['body_nomarkup'], PDO::PARAM_STR);
+	$query->execute() or error(db_error($query));
+
+	$query = prepare("DELETE FROM `cites` WHERE `board` = :board AND `post` = :id");
+	$query->bindValue(':board', $board['uri']);
+	$query->bindValue(':id', $id, PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+
+	if (isset($post['tracked_cites'])) {
+		foreach ($post['tracked_cites'] as $cite) {
+			$query = prepare('INSERT INTO `cites` VALUES (:board, :post, :target_board, :target)');
+			$query->bindValue(':board', $board['uri']);
+			$query->bindValue(':post', $id, PDO::PARAM_INT);
+			$query->bindValue(':target_board',$cite[0]);
+			$query->bindValue(':target', $cite[1], PDO::PARAM_INT);
+			$query->execute() or error(db_error($query));
+		}
+	}
+	
+	buildThread($post['op'] ? $id : $post['thread']);
+
+	event('post-after', $post);
+
+	buildIndex();
+	$root = $mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
+	
+	$redirect = $root . $board['dir'] . $config['dir']['res'] .
+		sprintf($config['file_page'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
+	
+	if ($config['syslog'])
+		_syslog(LOG_INFO, 'Edited post: /' . $board['dir'] . $config['dir']['res'] .
+			sprintf($config['file_page'], $post['op'] ? $id : $post['thread']) . (!$post['op'] ? '#' . $id : ''));
+
+	rebuildThemes('post');
+	header('Location: ' . $redirect, true, $config['redirect_http']);
 } elseif (isset($_POST['report'])) {
 	if (!isset($_POST['board'], $_POST['password'], $_POST['reason']))
 		error($config['error']['bot']);

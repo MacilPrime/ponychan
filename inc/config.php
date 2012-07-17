@@ -305,6 +305,8 @@
 	
 	// How long before you can delete a post after posting, in seconds.
 	$config['delete_time'] = 10;
+	// How long before you can edit a post after posting, in seconds.
+	$config['edit_time'] = 10;
 	// Reply limit (stops bumping thread when this is reached)
 	$config['reply_limit'] = 250;
 	
@@ -333,6 +335,9 @@
 	// Advanced raplcement (regular expressions):
 	// $config['wordfilters'][] = array('/cat/', 'dog', true); // 'true' means it's a regular expression
 	
+	// Allow users to edit their own posts
+	$config['allow_self_edit'] = false;
+
 	// Always act as if they had typed "noko" in the email field no mattter what
 	$config['always_noko'] = false;
 	
@@ -666,7 +671,9 @@
 	$config['error']['toomanycross']	= _('Too many cross-board links; post discarded.');
 	$config['error']['nodelete']		= _('You didn\'t select anything to delete.');
 	$config['error']['noreport']		= _('You didn\'t select anything to report.');
+	$config['error']['noedit']		= _('You didn\'t select anything to edit.');
 	$config['error']['toomanyreports']	= _('You can\'t report that many posts at once.');
+	$config['error']['toomanyedits']	= _('You can only edit one post at once.');
 	$config['error']['invalidpassword']	= _('Wrong password…');
 	$config['error']['invalidimg']		= _('Invalid image.');
 	$config['error']['unknownext']		= _('Unknown file extension.');
@@ -675,6 +682,7 @@
 	$config['error']['invalidzip']		= _('Invalid archive!');
 	$config['error']['fileexists']		= _('That file <a href="%s">already exists</a>!');
 	$config['error']['delete_too_soon']	= _('You\'ll have to wait another %s before deleting that.');
+	$config['error']['edit_too_soon']	= _('You\'ll have to wait another %s before editing that.');
 	$config['error']['mime_exploit']	= _('MIME type detection XSS exploit (IE) detected; post discarded.');
 	$config['error']['invalid_embed']	= _('Couldn\'t make sense of the URL of the video you tried to embed.');
 	$config['error']['captcha']		= _('You seem to have mistyped the verification.');
@@ -821,6 +829,11 @@
 	// Again, a little more database load.
 	$config['ban_cidr'] = true;
 	
+	// Message to show on posts edited by their author.
+	$config['edit_self_message'] = '<div class="editmsg">This post was edited by its author on %s.</div>';
+	// Message to show on posts edited by a moderator.
+	$config['edit_mod_message'] = '<div class="editmsg">This post was edited by a moderator on %s.</div>';
+
 	// Do a DNS lookup on IP addresses to get their hostname on the IP summary page
 	$config['mod']['dns_lookup'] = true;
 	// How many recent posts, per board, to show in the IP summary page
@@ -849,7 +862,7 @@
 	$config['mod']['default_ban_message'] = 'USER WAS BANNED FOR THIS POST';
 	// What to append to the post for public bans ("%s" is the message)
 	$config['mod']['ban_message'] = '<span class="public_ban">(%s)</span>';
-	
+
 	// When moving a thread to another board and choosing to keep a "shadow thread", an automated post (with a capcode) will
 	// be made, linking to the new location for the thread. "%s" will be replaced with a standard cross-board post citation (>>>/board/xxx)
 	$config['mod']['shadow_mesage'] = 'Moved to %s.';
@@ -923,8 +936,10 @@
 	$config['mod']['bumplock'] = MOD;
 	// View whether a thread has been bumplocked ("-1" to allow non-mods to see too)
 	$config['mod']['view_bumplock'] = MOD;
-	// Edit posts (EXPERIMENTAL)
-	$config['mod']['editpost'] = DISABLED;
+	// Edit posts
+	$config['mod']['editpost'] = ADMIN;
+	// Edit posts without leaving "Post was edited" message
+	$config['mod']['noeditmsg'] = ADMIN;
 	// "Move" a thread to another board (EXPERIMENTAL; has some known bugs)
 	$config['mod']['move'] = DISABLED;
 	// Bypass "field_disable_*" (forced anonymity, etc.)

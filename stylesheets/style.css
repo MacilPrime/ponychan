@@ -454,3 +454,6 @@ table.mod.config-editor input[type="text"] {
 	font-size: 130% !important;
 	text-align: center;
 }
+.editmsg {
+	font-style: italic;
+}

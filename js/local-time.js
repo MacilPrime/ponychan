@@ -24,9 +24,6 @@ $(document).ready(function(){
 	};
 	
 	var makeLocalTime = function() {
-		if(!$(this).text().match(/^\d+\/\d+\/\d+ \(\w+\) \d+:\d+:\d+$/))
-			return;
-		
 		var t = iso8601($(this).attr('datetime'));
 		
 		$(this).text(

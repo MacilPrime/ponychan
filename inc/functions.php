@@ -1642,6 +1642,32 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 	}
 }
 
+function editPostForm($postid, $password=false, $mod=false) {
+	global $config, $board;
+
+	$query = prepare(sprintf("SELECT * FROM `posts_%s` WHERE `id` = :id", $board['uri']));
+	$query->bindValue(':id', $postid, PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+	
+	$post = $query->fetch();
+	if(!$post)
+		error($config['error']['noedit']);
+
+	// The <textarea> gets screwed up if it's minified.
+	$config['minify_html'] = false;
+	echo Element('page.html', array(
+		'title' => 'Edit Post',
+		'config' => $config,
+		'boardlist' => createBoardlist($mod),
+		'body' => Element('post_edit.html', array(
+			'board' => $board,
+			'mod' => $mod,
+			'config' => $config,
+			'post' => $post,
+			'password' => $password,
+		))));
+}
+
  function rrmdir($dir) {
 	if (is_dir($dir)) {
 		$objects = scandir($dir);
@@ -1656,6 +1682,11 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 		reset($objects);
 		rmdir($dir);
 	}
+}
+
+function timezone() {
+	// there's probably a much easier way of doing this
+	return sprintf("%s%02d", ($hr = (int)floor(($tz = date('Z')) / 3600)) > 0 ? '+' : '-', abs($hr)) . ':' . sprintf("%02d", (($tz / 3600) - $hr) * 60);
 }
 
 function poster_id($ip, $thread) {

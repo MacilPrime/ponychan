@@ -997,6 +997,18 @@ function mod_deletefile($board, $post) {
 	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
 }
 
+function mod_edit($boardName, $post) {
+	global $config, $mod, $board;
+
+	if (!openBoard($boardName))
+		error($config['error']['noboard']);
+
+	if (!hasPermission($config['mod']['editpost'], $board['uri']))
+		error($config['error']['noaccess']);
+
+	editPostForm($post, false, $mod);
+}
+
 function mod_deletebyip($boardName, $post, $global = false) {
 	global $config, $mod, $board;
 	

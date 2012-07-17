@@ -64,6 +64,7 @@ $pages = array(
 	'/(\w+)/(un)?sticky/(\d+)'		=> 'sticky',		// sticky thread
 	'/(\w+)/bump(un)?lock/(\d+)'		=> 'bumplock',		// "bumplock" thread
 	'/(\w+)/move/(\d+)'			=> 'move',		// move thread
+	'/(\w+)/edit/(\d+)'			=> 'edit',		// edit post
 	
 	'/config'				=> 'config',		// config editor
 	
