@@ -2,6 +2,7 @@
 {# Automatically removes unnecessary whitespace #}
 <div class="ban">
 	<h2>{% trans %}You are banned! ;_;{% endtrans %}</h2>
+	<img src="/static/ban.png" style="margin:4px;" />
 	<p>
 		{% trans %}You have been banned from{% endtrans %}
 			{% if ban.board %}
@@ -66,6 +67,7 @@
 		</span>
 	</p>
 	<p>{% trans %}Your IP address is{% endtrans %} <strong>{{ ban.ip }}</strong>.</p>
+	<p style="clear:both;" class="moonlink">Visit <a href="/moon/">The Moon</a>.</p>
 </div>
 {% endfilter %}
 
