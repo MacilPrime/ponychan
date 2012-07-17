@@ -8,6 +8,9 @@ h1 {
 	font-family: sans-serif;
 	font-size: 30pt !important;
 }
+.subtitle {
+	font-size: 14pt !important;
+}
 .homepage header h1 {
 	font-size: 40pt !important;
 }
