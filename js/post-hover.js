@@ -12,7 +12,17 @@
  */
 
 $(document).ready(function(){
-	var dont_fetch_again = [];
+	var page_url_data = {};
+
+	var fix_image_src = function($tag) {
+		$tag.find('img').each(function() {
+			var realsrc = $(this).attr('data-src');
+			if (realsrc) {
+				$(this).attr('src', realsrc);
+			}
+		});
+	};
+
 	init_hover = function() {
 		var $link = $(this);
 		
@@ -61,40 +71,52 @@ $(document).ready(function(){
 				}
 				return true;
 			};
+
+			var load_post_from_data = function(id, $data) {
+				$data.find('#reply_'+id).each(function() {
+					if($('#' + $(this).attr('id')).length == 0) {
+						var $newpost = $(this).css('display', 'none').addClass('hidden').prependTo($('div.post:first'));
+						fix_image_src($newpost);
+						$(document).trigger('new_post', $newpost[0]);
+					}
+				});
+			};
 			
 			if(!start_hover($(this))) {
 				var url = $link.attr('href').replace(/#.*$/, '');
 				
-				if($.inArray(url, dont_fetch_again) != -1) {
-					return;
-				}
-				dont_fetch_again.push(url);
-				
-				$.ajax({
-					url: url,
-					context: document.body,
-					success: function(data) {
-						var $thread = $(data).find('.post.op').first().parent();
-						if ($thread.length && $('#'+$thread.attr('id')).length==0) {
-							$("<div/>")
-								.attr('id', $thread.attr('id'))
-								.hide()
-								.append( $thread.children('.fileinfo, a, .post.op') )
-								.prependTo(document.body);
-						}
+				if (!page_url_data[url]) {
+					page_url_data[url] = true;
+					$.ajax({
+						url: url,
+						context: document.body,
+						success: function(data) {
+							// Don't load all images
+							data = data.replace( /(<img\b[^>]+)\b(src\s*=\s*('[^']*'|"[^"]*"))/g, '$1data-$2');
+							var $data = $(data);
+							page_url_data[url] = $data;
 
-						$(data).find('div.post.reply').each(function() {
-							if($('#' + $(this).attr('id')).length == 0) {
-								var $newpost = $(this).css('display', 'none').addClass('hidden').prependTo($('div.post:first'));
-								$(document).trigger('new_post', $newpost[0]);
+							var $thread = $data.find('.post.op').first().parent();
+							fix_image_src($thread.children('.fileinfo, a, .post.op'));
+							if ($thread.length && $('#'+$thread.attr('id')).length==0) {
+								$("<div/>")
+									.attr('id', $thread.attr('id'))
+									.hide()
+									.append( $thread.children('.fileinfo, a, .post.op') )
+									.prependTo(document.body);
 							}
-
-
-						});
-						
+							
+							load_post_from_data(id, $data);
+							start_hover($(this));
+						}
+					});
+				} else {
+					var $data = page_url_data[url];
+					if ($data !== true) {
+						load_post_from_data(id, $data);
 						start_hover($(this));
 					}
-				});
+				}
 			}
 		}, function() {
 			hovering = false;
@@ -113,6 +135,7 @@ $(document).ready(function(){
 			if($hover.length == 0)
 				return;
 			
+			//console.log("mousemove for "+id);
 			var top = (e.pageY ? e.pageY : hovered_at['y']) - 10;
 			
 			if(e.pageY < $(window).scrollTop() + 15) {
