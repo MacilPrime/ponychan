@@ -46,7 +46,7 @@ h2 {
 header {
 	margin: 1em 0;
 }
-h1 {
+header h1, #settingsScreen h1 {
 	font-family: tahoma;
 	letter-spacing: -2px;
 	font-size: 20pt;
