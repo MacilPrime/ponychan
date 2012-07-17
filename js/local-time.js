@@ -30,11 +30,17 @@ $(document).ready(function(){
 		var t = iso8601($(this).attr('datetime'));
 		
 		$(this).text(
+			// day
+			["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][t.getDay()] + ", " +
 			// date
-			zeropad(t.getMonth() + 1, 2) + "/" + zeropad(t.getDate(), 2) + "/" + t.getFullYear().toString().substring(2) +
-			" (" + ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][t.getDay()]  + ") " +
+			zeropad(t.getDate(), 2) + " " + 
+			["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
+				"Oct", "Nov", "Dec"][t.getMonth()] + " " + 
+			t.getFullYear() + " " +
 			// time
-			zeropad(t.getHours(), 2) + ":" + zeropad(t.getMinutes(), 2) + ":" + zeropad(t.getSeconds(), 2)
+			zeropad(t.getHours(), 2) + ":" + 
+			zeropad(t.getMinutes(), 2) + ":" + 
+			zeropad(t.getSeconds(), 2)
 		);
 	};
 
