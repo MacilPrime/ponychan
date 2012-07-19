@@ -25,7 +25,7 @@ function doBoardListPart($list, $root) {
 	$body = '';
 	foreach ($list as $board) {
 		if (is_array($board))
-			$body .= ' [' . doBoardListPart($board, $root) . '] ';
+			$body .= ' <span class="boardlistpart">[' . doBoardListPart($board, $root) . ']</span> ';
 		else {
 			if (($key = array_search($board, $list)) && gettype($key) == 'string') {
 				$body .= ' <a href="' . $board . '">' . $key . '</a> /';
@@ -45,8 +45,8 @@ function createBoardlist($mod=false) {
 	if (!isset($config['boards'])) return Array('top'=>'','bottom'=>'');
 	
 	$body = doBoardListPart($config['boards'], $mod?'?/':$config['root']);
-	if (!preg_match('/\] $/', $body))
-		$body = '[' . $body . ']';
+	if (!preg_match('/\]<\/span> $/', $body))
+		$body = '<span class="boardlistpart">[' . $body . ']</span>';
 	
 	$body = trim($body);
 	
