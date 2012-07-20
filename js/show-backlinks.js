@@ -16,7 +16,7 @@ $(document).ready(function(){
 	var showBackLinks = function() {
 		var reply_id = $(this).attr('id').replace(/^reply_/, '');
 		
-		$(this).find('p.body a:not([rel="nofollow"])').each(function() {
+		$(this).find('.body a:not([rel="nofollow"])').each(function() {
 			var id, post, $mentioned;
 		
 			if(id = $(this).text().match(/^>>(\d+)$/))

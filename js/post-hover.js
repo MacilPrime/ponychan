@@ -149,10 +149,10 @@ $(document).ready(function(){
 		});
 	};
 	
-	$('p.body a:not([rel="nofollow"])').each(init_hover);
+	$('.body a:not([rel="nofollow"])').each(init_hover);
 	
 	// allow to work with auto-reload.js, etc.
 	$(document).bind('new_post', function(e, post) {
-		$(post).find('p.body a:not([rel="nofollow"])').each(init_hover);
+		$(post).find('.body a:not([rel="nofollow"])').each(init_hover);
 	});
 });
