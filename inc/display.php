@@ -20,17 +20,22 @@ function format_bytes($size) {
 }
 
 function doBoardListPart($list, $root) {
-	global $config;
+	global $config, $board;
 	
 	$body = '';
-	foreach ($list as $board) {
-		if (is_array($board))
-			$body .= ' <span class="boardlistpart">[' . doBoardListPart($board, $root) . ']</span> ';
+	foreach ($list as $boarduri) {
+		if (is_array($boarduri))
+			$body .= ' <span class="boardlistpart">[' . doBoardListPart($boarduri, $root) . ']</span> ';
 		else {
-			if (($key = array_search($board, $list)) && gettype($key) == 'string') {
-				$body .= ' <a href="' . $board . '">' . $key . '</a> /';
-			} else {			
-				$body .= ' <a href="' . $root . $board . '/' . $config['file_index'] . '">' . $board . '</a> /';
+			$class = '';
+			if (($key = array_search($boarduri, $list)) && gettype($key) == 'string') {
+				if ($board && $key === $board['uri'])
+					$class = 'class="boardlistactive" ';
+				$body .= ' <a ' . $class . 'href="' . $boarduri . '">' . $key . '</a> /';
+			} else {
+				if ($board && $boarduri === $board['uri'])
+					$class = 'class="boardlistactive" ';
+				$body .= ' <a ' . $class . 'href="' . $root . $boarduri . '/' . $config['file_index'] . '">' . $boarduri . '</a> /';
 			}
 		}
 	}
