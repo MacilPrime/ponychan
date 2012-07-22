@@ -1699,9 +1699,11 @@ if(!$mod) {
 			$query->bindValue(':board', $board['uri']);
 			$query->execute() or error(db_error($query));
 			
+if (false) {
 			$query = prepare("DELETE FROM `antispam` WHERE `board` = :board");
 			$query->bindValue(':board', $board['uri']);
 			$query->execute() or error(db_error($query));
+}
 			
 			$_board = $board;
 			

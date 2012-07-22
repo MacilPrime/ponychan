@@ -201,9 +201,11 @@ function mod_edit_board($boardName) {
 			$query->bindValue(':board', $board['uri']);
 			$query->execute() or error(db_error($query));
 			
+if (false) {
 			$query = prepare('DELETE FROM `antispam` WHERE `board` = :board');
 			$query->bindValue(':board', $board['uri']);
 			$query->execute() or error(db_error($query));
+}
 		} else {
 			$query = prepare('UPDATE `boards` SET `title` = :title, `subtitle` = :subtitle WHERE `uri` = :uri');
 			$query->bindValue(':uri', $board['uri']);
@@ -1660,6 +1662,7 @@ function mod_debug_antispam() {
 	
 	$args = array();
 	
+if (false) {
 	if (isset($_POST['board'], $_POST['thread'])) {
 		$where = '`board` = ' . $pdo->quote($_POST['board']);
 		if ($_POST['thread'] != '')
@@ -1685,6 +1688,7 @@ function mod_debug_antispam() {
 	
 	$query = query('SELECT * FROM `antispam` ' . ($where ? "WHERE $where" : '') . ' ORDER BY `passed` DESC LIMIT 40') or error(db_error());
 	$args['top'] = $query->fetchAll(PDO::FETCH_ASSOC);
+}
 	
 	mod_page(_('Debug: Anti-spam'), 'mod/debug/antispam.html', $args);
 }
