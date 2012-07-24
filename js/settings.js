@@ -82,12 +82,13 @@ $(document).ready(function(){
 	$settingsCloseButton.click(settings.hideWindow);
 
 	var settingTypes = {};
+	var defaultValues = {};
 
 	settings.getProp = function(name) {
 		var id = "setting_"+name;
 
 		if (localStorage[id] == null)
-			return undefined;
+			return defaultValues[name];
 
 		var type = settingTypes[name];
 		switch(type) {
@@ -149,10 +150,7 @@ $(document).ready(function(){
 		var id = "setting_"+name;
 
 		settingTypes[name] = "bool";
-
-		if (settings.getProp(name) === undefined) {
-			settings.setProp(name, defval);
-		}
+		defaultValues[name] = defval;
 
 		var $settingDiv = $("<div/>")
 			.appendTo($settingsScreen);
