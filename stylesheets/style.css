@@ -474,7 +474,6 @@ table.mod.config-editor input[type="text"] {
 	top: 0;
 	left: 13px;
 	width: 100%;
-	white-space: nowrap;
 }
 header { margin-top: 48px; }
 .boardlist.top .boardlistpart {

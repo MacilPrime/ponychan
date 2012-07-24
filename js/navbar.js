@@ -9,7 +9,12 @@
  */
 
 $(document).ready(function(){
-	settings.newProp("fixed_navbar", "bool", true, "Navbar stays at the top of the window");
+	var defval = true;
+	if(navigator.userAgent.match(/iPhone|iPod|Android|Opera Mini|Blackberry|PlayBook/i)) {
+		defval = false;
+	}
+
+	settings.newProp("fixed_navbar", "bool", defval, "Navbar stays at the top of the window");
 
 	var navbarApplySettings = function() {
 		var navbar = $(".boardlist.top");
