@@ -582,6 +582,7 @@
  */
 
 	// Additional Javascript files to include on board index and thread pages.
+	$config['additional_javascript'][] = 'js/default.js';
 	$config['additional_javascript'][] = 'js/inline-expanding.js';
 	// $config['additional_javascript'][] = 'js/local-time.js';
 	
