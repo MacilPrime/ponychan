@@ -74,8 +74,10 @@ settings.showWindow = function() {
 };
 
 $(document).on("style_changed", function() {
-	if ($settingsScreen.is(":visible"))
+	if ($settingsScreen.is(":visible")) {
+		$settingsScreen.hide();
 		settings.showWindow();
+	}
 });
 
 settings.hideWindow = function() {
