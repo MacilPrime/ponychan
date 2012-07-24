@@ -9,20 +9,30 @@
 
 $(document).ready(function(){
 	settings.newProp("image_hover_enabled", "bool", true, "Expand image on hover");
+	settings.newProp("image_spoiler_hover_enabled", "bool", false, "Expand spoiler image on hover");
 
 	var image_hover_enabled = settings.getProp("image_hover_enabled");
+	var image_spoiler_hover_enabled = settings.getProp("image_spoiler_hover_enabled");
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "image_hover_enabled")
 			image_hover_enabled = settings.getProp("image_hover_enabled");
+		else if (setting == "image_spoiler_hover_enabled")
+			image_spoiler_hover_enabled = settings.getProp("image_spoiler_hover_enabled");
 	});
 
 	init_image_hover = function() {
 		var $image = $(this);
+		var is_spoilered = /\/static\/spoiler\.\w+$/.test($image.attr("src"));
 		var imageurl = $image.parent().attr("href");
 		var hovered_at;
 		$image.hover(function(e) {
-			if(!image_hover_enabled)
-				return;
+			if(is_spoilered) {
+				if(!image_spoiler_hover_enabled)
+					return;
+			} else {
+				if(!image_hover_enabled)
+					return;
+			}
 			if($image.parent()[0].tag)
 				return;
 
