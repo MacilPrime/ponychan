@@ -481,6 +481,7 @@ header { margin-top: 48px; }
 	font-size: 0;
 	visibility: hidden;
 	padding-left: 6px;
+	float: left;
 }
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
 	display: inline-block;
@@ -504,3 +505,14 @@ header { margin-top: 48px; }
 .boardlist.top .boardlistpart a:after  { content: "/"; }
 .boardlist.top .boardlistpart a[href="/"]:before { content: ""; }
 .boardlist.top .boardlistpart a[href="/"]:after  { content: ""; }
+
+.boardlist.top .settingsButton.boardlistpart a:before { content: ""; }
+.boardlist.top .settingsButton.boardlistpart a:after  { content: ""; }
+.boardlist.top .settingsButton {
+	float: right;
+}
+.boardlist.top .settingsButton a {
+	font-weight: bold;
+	padding: 6px;
+	margin: 0 5px;
+}

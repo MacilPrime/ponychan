@@ -34,19 +34,15 @@ $(document).ready(function(){
 
 	$("<hr/>").appendTo($settingsScreen);
 
-	$(".styles").css("float", "right");
-
-	var $settingsDiv = $("<div/>")
-		.addClass("settingsButton")
-		.css("float", "right")
-		.css("clear", "left")
-		.css("margin", "0px 15px")
-		.insertAfter( $(".styles") );
-
 	var $settingsButton = $("<a/>")
-		.text("[ Settings ]")
-		.attr("href", "javascript:;")
-		.appendTo($settingsDiv);
+		.text("settings")
+		.attr("href", "javascript:;");
+
+	var $settingsSection = $("<span/>")
+		.addClass("settingsButton")
+		.addClass("boardlistpart")
+		.append('[ ', $settingsButton, ' ]')
+		.appendTo( $(".boardlist") );
 
 	var $settingsOverlay = $("<div/>")
 		.css("background-color", "black")
@@ -65,24 +61,14 @@ $(document).ready(function(){
 	settings = {};
 
 	settings.showWindow = function() {
-		if( $(window).height() < $settingsScreen.height()
-		    || $(window).width() < $settingsScreen.width()) {
-			$settingsScreen
-				.css("position", "static")
-				.css("top", "")
-				.css("left", "")
-				.css("margin-top", "")
-				.css("margin-left", "")
-		} else {
-			$settingsScreen
-				.css("position", "fixed")
-				.css("top", "50%")
-				.css("left", "50%")
-				.css("margin-top", "-200px")
-				.css("margin-left", "-200px")
+		$settingsScreen
+			.css("position", "absolute")
+			.css("top", ( $(window).scrollTop()+$(window).height()/2 ) + "px")
+			.css("left", "50%")
+			.css("margin-top", "-200px")
+			.css("margin-left", "-200px");
 
-			$settingsOverlay.show();
-		}
+		$settingsOverlay.show();
 		$settingsScreen.fadeIn("fast");
 	};
 
@@ -91,7 +77,7 @@ $(document).ready(function(){
 		$settingsOverlay.hide();
 	};
 
-	$settingsButton.click(settings.showWindow);
+	$(".settingsButton a").click(settings.showWindow);
 	$settingsOverlay.click(settings.hideWindow);
 	$settingsCloseButton.click(settings.hideWindow);
 
