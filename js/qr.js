@@ -237,6 +237,11 @@ $(document).ready(function(){
 		if($QR.is(":hidden")) {
 			$QR.show();
 		}
+		if($(".boardlist.top").css("position")=="fixed") {
+			$QR.css("top", $(".boardlist.top").height());
+		} else {
+			$QR.css("top", 0);
+		}
 	};
 
 	QR.clear = function() {
