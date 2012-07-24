@@ -83,17 +83,21 @@ $(document).ready(function(){
 
 	var settingTypes = {};
 	var defaultValues = {};
+	var settingSelectOptions = {};
 
 	settings.getProp = function(name) {
 		var id = "setting_"+name;
 
-		if (localStorage[id] == null)
+		var localVal = localStorage[id];
+		if (localVal == null)
 			return defaultValues[name];
 
 		var type = settingTypes[name];
 		switch(type) {
 		case "bool":
-			return localStorage[id] == "true";
+			return localVal == "true";
+		case "select":
+			return localVal;
 		}
 
 		console.error("Invalid property type: "+type+", name: "+name);
@@ -107,6 +111,9 @@ $(document).ready(function(){
 		switch(type) {
 		case "bool":
 			localStorage[id] = value ? "true" : "false";
+			break;
+		case "select":
+			localStorage[id] = value;
 			break;
 		default:
 			console.error("Invalid property type: "+type+", name: "+name);
@@ -143,27 +150,69 @@ $(document).ready(function(){
 		});
 	};
 
-	settings.newProp = function(name, type, defval, description) {
-		if (type != "bool")
+	settings.bindPropSelect = function($select, name) {
+		var changeGuard = false;
+		if (settingTypes[name] !== "select") {
+			console.error("Can not bind select to non-select setting ("+name+", type:"+settingTypes[name]+")");
 			return;
+		}
+		var value = settings.getProp(name);
+		var choices = settingSelectOptions[name];
+		
+		$.each(choices, function(key, text) {
+			$("<option/>").attr("value", key).text(text).appendTo($select);
+		});
 
+		$select
+			.val(settings.getProp(name))
+			.change(function() {
+				if(!changeGuard) {
+					changeGuard = true;
+					settings.setProp(name, $(this).val());
+					changeGuard = false;
+				}
+			});
+
+		$(document).on("setting_change", function(e, setting) {
+			if (!changeGuard && name == setting) {
+				changeGuard = true;
+				$select.val(settings.getProp(name));
+				changeGuard = false;
+			}
+		});
+	};
+
+	settings.newProp = function(name, type, defval, description) {
 		var id = "setting_"+name;
 
-		settingTypes[name] = "bool";
+		settingTypes[name] = type;
 		defaultValues[name] = defval;
 
-		var $settingDiv = $("<div/>")
-			.appendTo($settingsScreen);
+		if (type==="bool") {
+			var $settingDiv = $("<div/>")
+				.appendTo($settingsScreen);
 
-		var $label = $("<label/>")
-			.attr("for", id)
-			.text(" "+description)
-			.appendTo($settingDiv);
-		var $checkbox = $("<input/>")
-			.attr("type", "checkbox")
-			.attr("id", id)
-			.prependTo($label);
+			var $label = $("<label/>")
+				.attr("for", id)
+				.text(" "+description)
+				.appendTo($settingDiv);
+			var $checkbox = $("<input/>")
+				.attr("type", "checkbox")
+				.attr("id", id)
+				.prependTo($label);
 
-		settings.bindPropCheckbox($checkbox, name);
+			settings.bindPropCheckbox($checkbox, name);
+		} else if (type==="select") {
+			settingSelectOptions[name] = description[0];
+			description = description[1];
+			var $settingDiv = $("<div/>")
+				.text(" "+description)
+				.appendTo($settingsScreen);
+			var $settingSelect = $("<select/>").prependTo($settingDiv);
+			settings.bindPropSelect($settingSelect, name);
+		} else {
+			console.error("Unknown setting type ("+name+", type:"+type+")");
+			return;
+		}
 	};
 });
