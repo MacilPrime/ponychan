@@ -81,12 +81,15 @@ $(document).ready(function(){
 	$settingsOverlay.click(settings.hideWindow);
 	$settingsCloseButton.click(settings.hideWindow);
 
-	settings.getProp = function(name, type) {
+	var settingTypes = {};
+
+	settings.getProp = function(name) {
 		var id = "setting_"+name;
 
 		if (localStorage[id] == null)
 			return undefined;
 
+		var type = settingTypes[name];
 		switch(type) {
 		case "bool":
 			return localStorage[id] == "true";
@@ -96,9 +99,10 @@ $(document).ready(function(){
 		return undefined;
 	}
 
-	settings.setProp = function(name, type, value) {
+	settings.setProp = function(name, value) {
 		var id = "setting_"+name;
 
+		var type = settingTypes[name];
 		switch(type) {
 		case "bool":
 			localStorage[id] = value ? "true" : "false";
@@ -113,14 +117,18 @@ $(document).ready(function(){
 
 	settings.bindPropCheckbox = function($checkbox, name) {
 		var changeGuard = false;
-		var value = settings.getProp(name, "bool");
+		if (settingTypes[name] !== "bool") {
+			console.error("Can not bind checkbox to non-bool setting ("+name+", type:"+settingTypes[name]+")");
+			return;
+		}
+		var value = settings.getProp(name);
 		
 		$checkbox
 			.attr("checked", value)
 			.change(function() {
 				if(!changeGuard) {
 					changeGuard = true;
-					settings.setProp(name, "bool", $(this).attr("checked"));
+					settings.setProp(name, $(this).attr("checked"));
 					changeGuard = false;
 				}
 			});
@@ -128,7 +136,7 @@ $(document).ready(function(){
 		$(document).on("setting_change", function(e, setting) {
 			if (!changeGuard && name == setting) {
 				changeGuard = true;
-				$checkbox.attr("checked", settings.getProp(name, "bool"));
+				$checkbox.attr("checked", settings.getProp(name));
 				changeGuard = false;
 			}
 		});
@@ -140,8 +148,10 @@ $(document).ready(function(){
 
 		var id = "setting_"+name;
 
-		if (settings.getProp(name, type) === undefined) {
-			settings.setProp(name, type, defval);
+		settingTypes[name] = "bool";
+
+		if (settings.getProp(name) === undefined) {
+			settings.setProp(name, defval);
 		}
 
 		var $settingDiv = $("<div/>")

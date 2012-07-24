@@ -13,7 +13,7 @@ $(document).ready(function(){
 
 	var navbarApplySettings = function() {
 		var navbar = $(".boardlist.top");
-		if (settings.getProp("fixed_navbar", "bool")) {
+		if (settings.getProp("fixed_navbar")) {
 			navbar.css("position", "fixed");
 		} else {
 			navbar.css("position", "absolute");

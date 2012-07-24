@@ -14,10 +14,10 @@
 $(document).ready(function(){
 	settings.newProp("image_expand_enabled", "bool", true, "Expand image on click");
 
-	var image_expand_enabled = settings.getProp("image_expand_enabled", "bool");
+	var image_expand_enabled = settings.getProp("image_expand_enabled");
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "image_expand_enabled")
-			image_expand_enabled = settings.getProp("image_expand_enabled", "bool");
+			image_expand_enabled = settings.getProp("image_expand_enabled");
 	});
 
 	var init_expand_image = function() {

@@ -12,7 +12,7 @@ $(document).ready(function() {
 	settings.newProp("reveal_spoilers", "bool", false, "Reveal spoilers");
 
 	var processSpoilers = function(context) {
-		if(settings.getProp("reveal_spoilers", "bool"))
+		if(settings.getProp("reveal_spoilers"))
 			$(".spoiler", context).css("color", "white");
 		else
 			$(".spoiler", context).css("color", "");

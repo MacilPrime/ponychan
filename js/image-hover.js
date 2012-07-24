@@ -10,10 +10,10 @@
 $(document).ready(function(){
 	settings.newProp("image_hover_enabled", "bool", true, "Expand image on hover");
 
-	var image_hover_enabled = settings.getProp("image_hover_enabled", "bool");
+	var image_hover_enabled = settings.getProp("image_hover_enabled");
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "image_hover_enabled")
-			image_hover_enabled = settings.getProp("image_hover_enabled", "bool");
+			image_hover_enabled = settings.getProp("image_hover_enabled");
 	});
 
 	init_image_hover = function() {

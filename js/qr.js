@@ -445,7 +445,7 @@ $(document).ready(function(){
 					window.history.pushState({}, newPageTitle, url);
 					return;
 				} else {
-					if (settings.getProp("QR_persistent", "bool"))
+					if (settings.getProp("QR_persistent"))
 						QR.clear();
 					else
 						QR.close();
@@ -487,14 +487,14 @@ $(document).ready(function(){
 	});
 
 	var QRInit = function() {
-		use_QR = settings.getProp("use_QR", "bool");
+		use_QR = settings.getProp("use_QR");
 		if (use_QR) {
 			$oldForm.hide();
 			$QRButton.show();
 			citeReply = qrCiteReply;
 			if($captchaPuzzle.length)
 				stealCaptcha();
-			if (settings.getProp("QR_persistent", "bool"))
+			if (settings.getProp("QR_persistent"))
 				QR.open();
 		} else {
 			if(oldFormBad)
