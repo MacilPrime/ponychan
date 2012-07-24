@@ -2,6 +2,7 @@
  * default.js
  *
  * Usage:
+ *   $config['additional_javascript'][] = 'js/jquery.min.js';
  *   $config['additional_javascript'][] = 'js/default.js';
  *
  */
@@ -189,16 +190,4 @@ var RecaptchaOptions = {
 	theme : 'clean'
 };
 
-onready_callbacks = [];
-function onready(fnc) {
-	onready_callbacks.push(fnc);
-}
-
-function ready() {
-	for (var i = 0; i < onready_callbacks.length; i++) {
-		onready_callbacks[i]();
-	}
-}
-
-onready(init);
-
+$(document).ready(init);
