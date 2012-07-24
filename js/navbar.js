@@ -17,12 +17,13 @@ $(document).ready(function(){
 	settings.newProp("fixed_navbar", "bool", defval, "Navbar stays at the top of the window");
 
 	var navbarApplySettings = function() {
-		var navbar = $(".boardlist.top");
+		var $navbar = $(".boardlist.top");
 		if (settings.getProp("fixed_navbar")) {
-			navbar.css("position", "fixed");
+			$navbar.css("position", "fixed");
 		} else {
-			navbar.css("position", "absolute");
+			$navbar.css("position", "absolute");
 		}
+		$("header").css("margin-top", (16+$navbar.height())+"px");
 	};
 
 	navbarApplySettings();
