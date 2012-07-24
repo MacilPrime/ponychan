@@ -302,7 +302,7 @@ $(document).ready(function(){
 				if(text.length) {
 					var lines = text.split("\n");
 					var hasStarted = false;
-					for(i in lines) {
+					for(var i in lines) {
 						var line = lines[i].trim();
 						if(!hasStarted && line == "")
 							continue;
