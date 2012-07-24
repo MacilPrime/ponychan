@@ -15,6 +15,7 @@ var $settingsScreen = $("<div/>")
 	.css("border", "1px solid black")
 	.css("height", "400px")
 	.css("width", "400px")
+	.css("max-width", "100%")
 	.css("background-color", "rgb(128,150,150)")
 	.hide();
 
@@ -67,6 +68,9 @@ settings.showWindow = function() {
 	
 	$settingsOverlay.show();
 	$settingsScreen.fadeIn("fast");
+
+	if ($settingsScreen.position().left < 200)
+		$settingsScreen.css("left", "200px");
 };
 
 settings.hideWindow = function() {
