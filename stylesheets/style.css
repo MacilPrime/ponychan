@@ -479,6 +479,7 @@ table.mod.config-editor input[type="text"] {
 header { margin-top: 48px; }
 .boardlist.top .boardlistpart {
 	font-size: 0;
+	visibility: hidden;
 	padding-left: 6px;
 }
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
@@ -487,6 +488,7 @@ header { margin-top: 48px; }
 	padding: 6px 3px;
 	margin: 0 1px;
 	font-size: 16px;
+	visibility: visible;
 }
 .boardlist.top .boardlistpart a[href="/"] {
 	font-weight: bold;
