@@ -7,62 +7,6 @@
  *
  */
 
-function changeStyle(styleName, link) {
-	localStorage.stylesheet = styleName;
-	
-	if (!document.getElementById('stylesheet')) {
-		var s = document.createElement('link');
-		s.rel = 'stylesheet';
-		s.type = 'text/css';
-		s.id = 'stylesheet';
-		var x = document.getElementsByTagName('head')[0];
-		x.appendChild(s);
-	}
-	
-	document.getElementById('stylesheet').href = styles[styleName];
-	selectedstyle = styleName;
-	
-	if (document.getElementsByClassName('styles').length != 0) {
-		var styleLinks = document.getElementsByClassName('styles')[0].childNodes;
-		for (i = 0; i < styleLinks.length; i++) {
-			styleLinks[i].className = '';
-		}
-	}
-	
-	if (link) {
-		link.className = 'selected';
-	}
-}
-
-if (localStorage.stylesheet) {
-	for (styleName in styles) {
-		if (styleName == localStorage.stylesheet) {
-			changeStyle(styleName);
-			break;
-		}
-	}
-}
-
-function init_stylechooser() {
-	var newElement = document.createElement('div');
-	newElement.className = 'styles';
-	
-	for (styleName in styles) {
-		var style = document.createElement('a');
-		style.innerHTML = '[' + styleName + ']';
-		style.onclick = function() {
-			changeStyle(this.innerHTML.substring(1, this.innerHTML.length - 1), this);
-		};
-		if (styleName == selectedstyle) {
-			style.className = 'selected';
-		}
-		style.href = 'javascript:void(0);';
-		newElement.appendChild(style);
-	}	
-	
-	document.getElementsByTagName('body')[0].insertBefore(newElement, document.getElementsByTagName('body')[0].lastChild.nextSibling);
-}
-
 function get_cookie(cookie_name) {
 	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
 	if (results)
@@ -176,8 +120,6 @@ function rememberStuff() {
 }
 
 function init() {
-	init_stylechooser();
-	
 	if (document.forms.postcontrols) {
 		document.forms.postcontrols.password.value = localStorage.password;
 	}
