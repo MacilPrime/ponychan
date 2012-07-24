@@ -73,6 +73,11 @@ settings.showWindow = function() {
 		$settingsScreen.css("left", "200px");
 };
 
+$(document).on("style_changed", function() {
+	if ($settingsScreen.is(":visible"))
+		settings.showWindow();
+});
+
 settings.hideWindow = function() {
 	$settingsScreen.hide();
 	$settingsOverlay.hide();

@@ -26,6 +26,7 @@ Styles.apply = function(stylename) {
 			.appendTo(document.head);
 	}
 	$stylesheet.attr("href", styles[stylename]);
+	$(document).trigger('style_changed', $stylesheet[0]);
 }
 
 var applySelectedStyle = function() {
