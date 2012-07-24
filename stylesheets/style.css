@@ -483,19 +483,19 @@ header { margin-top: 48px; }
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
 	display: inline-block;
 	color: #ddd;
-	padding: 8px 3px;
+	padding: 6px 3px;
 	margin: 0 1px;
 	font-size: 16px;
 }
 .boardlist.top .boardlistpart a[href="/"] {
 	font-weight: bold;
 	color: #183;
-	padding: 8px;
+	padding: 6px;
 }
 .boardlist.top .boardlistpart a:hover { background: #444; }
 .boardlist.top .boardlistpart a.boardlistactive {
-	padding-top: 4px;
-	border-top: 4px solid #555;
+	padding-top: 3px;
+	border-top: 3px solid #555;
 }
 .boardlist.top .boardlistpart a:before { content: "/"; }
 .boardlist.top .boardlistpart a:after  { content: "/"; }
