@@ -105,8 +105,8 @@ form table tr td div label {
 .unimportant, .unimportant * {
 	font-size: 10px;
 }
-p.fileinfo {
-	display: block;
+.fileinfo {
+	font-size: 12px;
 	margin: 0;
 	padding-right: 7em;
 }
@@ -179,12 +179,17 @@ p.intro a {
 div.delete {
 	float: right;
 }
-div.post.reply p, div.post.reply .body {
+.body {
+	margin-left: 1.5em;
+}
+div.post.reply .body {
 	margin: 0.3em 0 0 0;
 }
 div.post.reply .body {
 	margin-left: 1.8em;
+	margin-right: 0;
 	margin-top: 0.8em;
+	margin-bottom: 0;
 	padding-right: 3em;
 	padding-bottom: 0.3em;
 }
@@ -343,15 +348,15 @@ hr {
 	height: 0;
 	clear: left;
 }
-div.boardlist {
+.boardlist {
 	color: #89A;
 	font-size: 9pt;
 	margin-top: 3px;
 }
-div.boardlist.bottom {
+.boardlist.bottom {
 	margin-top: 20px;
 }
-div.boardlist a {
+.boardlist a {
 	text-decoration: none;
 }
 div.report {
@@ -459,3 +464,40 @@ table.mod.config-editor input[type="text"] {
 	font-size: 75%;
 	margin-top: 1em;
 }
+/* Navbar stuff */
+.boardlist.top {
+	margin: 0 -13px;
+	box-shadow: 0 -1px 8px black;
+	background: #222;
+
+	position: fixed;
+	top: 0;
+	left: 13px;
+	width: 100%;
+}
+header { margin-top: 48px; }
+.boardlist.top .boardlistpart {
+	font-size: 0;
+	padding-left: 5px;
+}
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
+	display: inline-block;
+	color: #ddd;
+	padding: 8px 3px;
+	margin: 0 1px;
+	font-size: 16px;
+}
+.boardlist.top .boardlistpart a[href="/"] {
+	font-weight: bold;
+	color: #183;
+	padding: 8px;
+}
+.boardlist.top .boardlistpart a:hover { background: #444; }
+.boardlist.top .boardlistpart a.boardlistactive {
+	padding-top: 4px;
+	border-top: 4px solid #555;
+}
+.boardlist.top .boardlistpart a:before { content: "/"; }
+.boardlist.top .boardlistpart a:after  { content: "/"; }
+.boardlist.top .boardlistpart a[href="/"]:before { content: ""; }
+.boardlist.top .boardlistpart a[href="/"]:after  { content: ""; }
