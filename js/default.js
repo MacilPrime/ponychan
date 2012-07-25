@@ -36,7 +36,7 @@ function highlightReply(id) {
 
 function generatePassword() {
 	var pass = '';
-	var chars = '{% endraw %}{{ config.genpassword_chars }}{% raw %}';
+	var chars = genpassword_chars;
 	for (var i = 0; i < 8; i++) {
 		var rnd = Math.floor(Math.random() * chars.length);
 		pass += chars.substring(rnd, rnd + 1);
@@ -97,15 +97,15 @@ function rememberStuff() {
 		
 		if (sessionStorage.body) {
 			var saved = JSON.parse(sessionStorage.body);
-			if (get_cookie('{% endraw %}{{ config.cookies.js }}{% raw %}')) {
+			if (get_cookie(cookiename)) {
 				// Remove successful posts
-				var successful = JSON.parse(get_cookie('{% endraw %}{{ config.cookies.js }}{% raw %}'));
+				var successful = JSON.parse(get_cookie(cookiename));
 				for (var url in successful) {
 					saved[url] = null;
 				}
 				sessionStorage.body = JSON.stringify(saved);
 				
-				document.cookie = '{% endraw %}{{ config.cookies.js }}{% raw %}={};expires=0;path=/;';
+				document.cookie = cookiename+'={};expires=0;path=/;';
 			}
 			if (saved[document.location]) {
 				document.forms.post.body.value = saved[document.location];
