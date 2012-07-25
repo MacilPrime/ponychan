@@ -195,6 +195,7 @@ $(document).ready(function(){
 		.css("background-size", "cover")
 		.css("cursor", "pointer")
 		.click(function(event) {
+			event.preventDefault();
 			if (event.shiftKey) {
 				$file.val("").change();
 			} else {
@@ -311,7 +312,7 @@ $(document).ready(function(){
 			$imagepreview.css("background-image", "none").hide();
 		} else {
 			$imagepreview
-				.css("background-image", "url(" + (window.URL || window.webkitURL).createObjectURL(f) + ")")
+				.css("background-image", "url(" + wURL.createObjectURL(f) + ")")
 				.attr("title", f.name + " (" + (f.size/1024).toFixed(0) + " KB)")
 				.show();
 		}
