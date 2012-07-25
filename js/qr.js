@@ -258,6 +258,9 @@ $(document).ready(function(){
 		if($QR.is(":hidden")) {
 			$QR.show();
 		}
+		if(!hasLoadedPos) {
+			loadQRposition();
+		}
 		if($QR.data('at top')) {
 			if($(".boardlist.top").css("position")=="fixed") {
 				$QR.css("top", $(".boardlist.top").height());
@@ -454,37 +457,74 @@ $(document).ready(function(){
 		$("input, textarea", $QRForm).prop("disabled", disabled);
 	}
 
-	$QRmove.mousedown(function(event) {
-		if(event.which != 1)
-			return;
-		event.preventDefault();
+	var positionQR = function(newX, newY) {
 		var stickDistance = 10;
 		var topY = 0;
 		if($(".boardlist.top").css("position")=="fixed") {
 			topY = $(".boardlist.top").height();
 		}
+
+		if(newX < stickDistance) {
+			$QR.css("left", 0).css("right", "");
+		} else if(newX + $QR.width() > $(window).width() - stickDistance) {
+			$QR.css("left", "").css("right", 0);
+		} else {
+			$QR.css("left", newX).css("right", "");
+		}
+		if(newY < stickDistance + topY) {
+			$QR.css("top", topY).css("bottom", "").data('at top', true);
+		} else if(newY + $QR.height() > $(window).height() - stickDistance) {
+			$QR.css("top", "").css("bottom", 0).data('at top', false);
+		} else {
+			$QR.css("top", newY).css("bottom", "").data('at top', false);
+		}
+	};
+
+	var hasLoadedPos = false;
+	var loadQRposition = function() {
+		if(localStorage.qrX == null || localStorage.qrY == null)
+			return false;
+		var newX;
+		if(localStorage.qrX == Infinity)
+			newX = Infinity;
+		else
+			newX = parseInt(localStorage.qrX);
+		var newY;
+		if(localStorage.qrY == Infinity)
+			newY = Infinity;
+		else
+			newY = parseInt(localStorage.qrY);
+		positionQR(newX, newY);
+	};
+
+	var saveQRposition = function() {
+		if($QR.css("right")=="0px")
+			localStorage.qrX = Infinity;
+		else
+			localStorage.qrX = parseInt($QR.css("left"));
+
+		if($QR.data('at top'))
+			localStorage.qrY = 0;
+		else if($QR.css("bottom")=="0px")
+			localStorage.qrY = Infinity;
+		else
+			localStorage.qrY = parseInt($QR.css("top"));
+	};
+
+	$QRmove.mousedown(function(event) {
+		if(event.which != 1)
+			return;
+		event.preventDefault();
 		var startPos = $QR.position();
 		var xoff = event.pageX - startPos.left;
 		var yoff = event.pageY - startPos.top;
 		$(window).on("mousemove.qr", function(event) {
 			var newX = event.clientX - xoff;
 			var newY = event.clientY - yoff;
-			if(newX < stickDistance) {
-				$QR.css("left", 0).css("right", "");
-			} else if(newX + $QR.width() > $(window).width() - stickDistance) {
-				$QR.css("left", "").css("right", 0);
-			} else {
-				$QR.css("left", newX).css("right", "");
-			}
-			if(newY < stickDistance + topY) {
-				$QR.css("top", topY).css("bottom", "").data('at top', true);
-			} else if(newY + $QR.height() > $(window).height() - stickDistance) {
-				$QR.css("top", "").css("bottom", 0).data('at top', false);
-			} else {
-				$QR.css("top", newY).css("bottom", "").data('at top', false);
-			}
+			positionQR(newX, newY);
 		}).on("mouseup.qr", function(event) {
 			$(window).off("mousemove.qr").off("mouseup.qr");
+			saveQRposition();
 		});
 	});
 	
