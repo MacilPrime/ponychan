@@ -258,9 +258,7 @@ $(document).ready(function(){
 		if($QR.is(":hidden")) {
 			$QR.show();
 		}
-		if(!hasLoadedPos) {
-			loadQRposition();
-		}
+		loadQRposition();
 		if($QR.data('at top')) {
 			if($(".boardlist.top").css("position")=="fixed") {
 				$QR.css("top", $(".boardlist.top").height());
@@ -480,7 +478,6 @@ $(document).ready(function(){
 		}
 	};
 
-	var hasLoadedPos = false;
 	var loadQRposition = function() {
 		if(localStorage.qrX == null || localStorage.qrY == null)
 			return false;
