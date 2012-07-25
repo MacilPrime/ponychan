@@ -163,7 +163,7 @@ $(document).ready(function(){
 		.attr("title", "Shift+Click to remove the selected file")
 		.click(function(event) {
 			if (event.shiftKey) {
-				$(this).val("");
+				$(this).val("").change();
 				event.preventDefault();
 			}
 		})
@@ -182,6 +182,22 @@ $(document).ready(function(){
 		.attr("type", "checkbox")
 		.attr("name", "spoiler")
 		.attr("id", "qrspoiler");
+	var $imagepreview = $("<div/>")
+		.css("border", "1px solid black")
+		.css("width", "70px")
+		.css("height", "70px")
+		.css("margin-left", "3px")
+		.css("background-size", "cover")
+		.css("cursor", "pointer")
+		.click(function(event) {
+			if (event.shiftKey) {
+				$file.val("").change();
+			} else {
+				$file.click();
+			}
+		})
+		.hide()
+		.appendTo($QRForm);
 	$("<label/>")
 		.text("Spoiler Image")
 		.attr("for", "qrspoiler")
@@ -246,7 +262,7 @@ $(document).ready(function(){
 
 	QR.clear = function() {
 		$comment.val("");
-		$file.val("");
+		$file.val("").change();
 		$QRwarning.text("");
 		if (query) {
 			query.abort();
@@ -268,6 +284,33 @@ $(document).ready(function(){
 	$QRCloseButton.click(function() {
 		QR.close();
 		return false;
+	});
+	
+	var oldf = null;
+	var usewURL = false;
+	var wURL = window.URL || window.webkitURL;
+	if(typeof wURL != "undefined" && wURL != null) {
+		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL != null)
+			usewURL = true;
+	}
+
+	$file.change(function() {
+		if(!usewURL)
+			return;
+
+		var f = $file[0].files[0];
+		if(f == null) {
+			$imagepreview.css("background-image", "none").hide();
+		} else {
+			$imagepreview
+				.css("background-image", "url(" + (window.URL || window.webkitURL).createObjectURL(f) + ")")
+				.attr("title", f.name + " (" + (f.size/1024).toFixed(0) + " KB)")
+				.show();
+		}
+		if(oldf) {
+			wURL.revokeObjectURL(oldf);
+		}
+		oldf = f;
 	});
 
 	$(document).keydown(function(event) {
