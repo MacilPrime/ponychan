@@ -545,7 +545,7 @@ $(document).ready(function(){
 		var data = new FormData(this);
 		data.append("post", $submit.val());
 
-		$submit.val("Sending...");
+		$submit.val("...");
 		setQRFormDisabled(true);
 
 		var url = $(this).attr("action");
