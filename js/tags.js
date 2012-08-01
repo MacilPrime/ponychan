@@ -21,6 +21,7 @@ $(document).ready(function(){
 		case 72: tag = 'h'; break;
 		case 73: tag = 'i'; break;
 		case 83: tag = 'spoiler'; break;
+		case 85: tag = 'u'; break;
 		default:
 			return true;
 		}
