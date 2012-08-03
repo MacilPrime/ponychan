@@ -20,9 +20,9 @@ $(document).ready(function(){
 		case 66: tag = 'b'; break;
 		case 72: tag = 'h'; break;
 		case 73: tag = 'i'; break;
-		case 83: tag = 's'; break;
+		case 82: tag = 's'; break;
+		case 83: tag = '?'; break;
 		case 85: tag = 'u'; break;
-		case 191: tag = '?'; break;
 		default:
 			return true;
 		}
