@@ -433,7 +433,10 @@ table.mod.config-editor input[type="text"] {
 	-moz-border-radius: 3px;
 }
 .mainhomeblock {
-	font-size: 140%;
+	font-size: 130%;
+}
+.mainhomeblock sup {
+	font-size: 0.6em;
 }
 .hashtag {
 	display: inline-block;
