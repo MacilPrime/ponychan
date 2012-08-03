@@ -1745,9 +1745,9 @@ function generate_tripcode($name) {
 	if (!preg_match('/^(?P<name>[^#]*)(#(?P<trip>[^#]+))?(##(?P<secure>[^#]+))?/', $name, $match))
 		return array('Tripcode Error'); // Shouldn't ever happen
 	
-	$name = $match['name'];
-	$trip = $match['trip'];
-	$secure = $match['secure'];
+	$name = isset($match['name']) ? $match['name'] : '';
+	$trip = isset($match['trip']) ? $match['trip'] : '';
+	$secure = isset($match['secure']) ? $match['secure'] : '';
 		
 	$result_trip = '';
 
