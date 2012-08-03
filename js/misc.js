@@ -12,7 +12,7 @@ $(document).ready(function(){
 	var $targetLink = $("footer .unimportant a").slice(1,2);
 
 	var oldLink = $targetLink.attr("href");
-	var newLink = "/mod.php";
+	var newLink = siteroot+"mod.php";
 
 	var unprepTimer = null;
 	$secondLine.dblclick(function() {
