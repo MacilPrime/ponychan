@@ -1711,6 +1711,18 @@ function poster_id($ip, $thread) {
 	return substr(sha1(sha1($ip . $config['secure_trip_salt'] . $thread) . $config['secure_trip_salt']), 0, $config['poster_id_length']);
 }
 
+function simple_hash($input) {
+	// convert to SHIT_JIS encoding
+	$input = mb_convert_encoding($input, 'Shift_JIS', 'UTF-8');
+	
+	// generate salt
+	$salt = substr($input . 'H..', 1, 2);
+	$salt = preg_replace('/[^\.-z]/', '.', $salt);
+	$salt = strtr($salt, ':;<=>?@[\]^_`', 'ABCDEFGabcdef');
+
+	return substr(crypt($input, $salt), -10);
+}
+
 function secure_hash($input) {
 	global $config;
 
@@ -1730,34 +1742,30 @@ function generate_tripcode($name) {
 	if ($trip = event('tripcode', $name))
 		return $trip;
 	
-	if (!preg_match('/^([^#]+)?(##|#)(.+)$/', $name, $match))
-		return array($name);
+	if (!preg_match('/^(?P<name>[^#]*)(#(?P<trip>[^#]+))?(##(?P<secure>[^#]+))?/', $name, $match))
+		return array('Tripcode Error'); // Shouldn't ever happen
 	
-	$name = $match[1];
-	$secure = $match[2] == '##';
-	$trip = $match[3];
-	
-	// convert to SHIT_JIS encoding
-	$trip = mb_convert_encoding($trip, 'Shift_JIS', 'UTF-8');
-	
-	// generate salt
-	$salt = substr($trip . 'H..', 1, 2);
-	$salt = preg_replace('/[^\.-z]/', '.', $salt);
-	$salt = strtr($salt, ':;<=>?@[\]^_`', 'ABCDEFGabcdef');
-	
-	if ($secure) {
-		if (isset($config['custom_tripcode']["##{$trip}"]))
-			$trip = $config['custom_tripcode']["##{$trip}"];
-		else
-			$trip = '!!' . secure_hash($trip);
-	} else {
+	$name = $match['name'];
+	$trip = $match['trip'];
+	$secure = $match['secure'];
+		
+	$result_trip = '';
+
+	if (strlen($trip) > 0) {
 		if (isset($config['custom_tripcode']["#{$trip}"]))
-			$trip = $config['custom_tripcode']["#{$trip}"];
+			$result_trip .= $config['custom_tripcode']["#{$trip}"];
 		else
-			$trip = '!' . substr(crypt($trip, $salt), -10);
+			$result_trip .= '!' . simple_hash($trip);
+	}
+
+	if (strlen($secure) > 0) {
+		if (isset($config['custom_tripcode']["##{$secure}"]))
+			$result_trip .= $config['custom_tripcode']["##{$secure}"];
+		else
+			$result_trip .= '!!' . secure_hash($secure);
 	}
 	
-	return array($name, $trip);
+	return array($name, $result_trip);
 }
 	
 // Highest common factor
