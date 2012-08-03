@@ -600,18 +600,27 @@ function checkBan($board = 0) {
 	if (event('check-ban', $board))
 		return true;
 	
-	$query = prepare("SELECT `set`, `expires`, `reason`, `board`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip` = :ip ORDER BY `expires` IS NULL DESC, `expires` DESC, `expires` DESC LIMIT 1");
+	$query = prepare("SELECT `set`, `expires`, `reason`, `board`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip` = :ip");
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':board', $board);
 	$query->execute() or error(db_error($query));
-	if ($query->rowCount() < 1 && $config['ban_range']) {
-		$query = prepare("SELECT `set`, `expires`, `reason`, `board`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!' ORDER BY `expires` IS NULL DESC, `expires` DESC LIMIT 1");
+
+	$banlist = new stdClass;
+
+	$banlist->l = $query->fetchAll();
+	event('process-bans', $board, $banlist);
+
+	if (count($banlist->l) < 1 && $config['ban_range']) {
+		$query = prepare("SELECT `set`, `expires`, `reason`, `board`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!'");
 		$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 		$query->bindValue(':board', $board);
 		$query->execute() or error(db_error($query));
+
+		$banlist->l = $query->fetchAll();
+		event('process-bans', $board, $banlist);
 	}
 	
-	if ($query->rowCount() < 1 && $config['ban_cidr'] && !isIPv6()) {
+	if (count($banlist->l) < 1 && $config['ban_cidr'] && !isIPv6()) {
 		// my most insane SQL query yet
 		$query = prepare("SELECT `set`, `expires`, `reason`, `board`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board)
 			AND (					
@@ -621,23 +630,24 @@ function checkBan($board = 0) {
 					AND
 				:ip < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1))
 			)
-			ORDER BY `expires` IS NULL DESC, `expires` DESC LIMIT 1");
+			");
 		$query->bindValue(':ip', ip2long($_SERVER['REMOTE_ADDR']));
 		$query->bindValue(':board', $board);
 		$query->execute() or error(db_error($query));
+
+		$banlist->l = $query->fetchAll();
+		event('process-bans', $board, $banlist);
 	}
 	
-	if ($ban = $query->fetch()) {
+	foreach ($banlist->l as $ban) {
 		if ($ban['expires'] && $ban['expires'] < time()) {
 			// Ban expired
 			$query = prepare("DELETE FROM `bans` WHERE `id` = :id LIMIT 1");
 			$query->bindValue(':id', $ban['id'], PDO::PARAM_INT);
 			$query->execute() or error(db_error($query));
-			
-			return;
+		} else {
+			displayBan($ban);
 		}
-		
-		displayBan($ban);
 	}
 }
 
