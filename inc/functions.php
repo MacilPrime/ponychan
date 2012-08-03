@@ -1711,6 +1711,19 @@ function poster_id($ip, $thread) {
 	return substr(sha1(sha1($ip . $config['secure_trip_salt'] . $thread) . $config['secure_trip_salt']), 0, $config['poster_id_length']);
 }
 
+function secure_hash($input) {
+	global $config;
+
+	$count = 1 << $config['secure_count_log2'];
+
+	$hash = md5($config['secure_trip_salt'] . $input, TRUE);
+	do {
+		$hash = md5($hash . $input, TRUE);
+	} while (--$count);
+
+	return substr(base64_encode($hash), 0, 10);
+}
+
 function generate_tripcode($name) {
 	global $config;
 	
@@ -1736,7 +1749,7 @@ function generate_tripcode($name) {
 		if (isset($config['custom_tripcode']["##{$trip}"]))
 			$trip = $config['custom_tripcode']["##{$trip}"];
 		else
-			$trip = '!!' . substr(crypt($trip, $config['secure_trip_salt']), -10);
+			$trip = '!!' . secure_hash($trip);
 	} else {
 		if (isset($config['custom_tripcode']["#{$trip}"]))
 			$trip = $config['custom_tripcode']["#{$trip}"];

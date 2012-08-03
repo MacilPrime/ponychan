@@ -128,6 +128,8 @@
 	$config['mod']['expire'] = 15778463; //6 months
 	// Used to salt secure tripcodes (##trip) and poster IDs (if enabled)
 	$config['secure_trip_salt'] = ')(*&^%$#@!98765432190zyxwvutsrqponmlkjihgfedcba';
+	// Controls how much processing power is used in generating secure tripcodes
+	$config['secure_count_log2'] = 7;
 
 	// Used for simple access-control
 	$config['cookies']['mod_secret'] = 'lmnopqrstuvwxyz09123456789!@#$%^&*()';
