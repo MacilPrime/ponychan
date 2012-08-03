@@ -729,19 +729,19 @@ function post(array $post) {
 	$query->bindValue(':password', $post['password']);		
 	$query->bindValue(':ip', isset($post['ip']) ? $post['ip'] : $_SERVER['REMOTE_ADDR']);
 	
-	if ($post['op'] && $post['mod'] && $post['sticky']) {
+	if ($post['op'] && $post['sticky']) {
 		$query->bindValue(':sticky', 1, PDO::PARAM_INT);
 	} else {
 		$query->bindValue(':sticky', 0, PDO::PARAM_INT);
 	}
 	
-	if ($post['op'] && $post['mod'] && $post['locked']) {
+	if ($post['op'] && $post['locked']) {
 		$query->bindValue(':locked', 1, PDO::PARAM_INT);
 	} else {
 		$query->bindValue(':locked', 0, PDO::PARAM_INT);
 	}
 	
-	if ($post['mod'] && isset($post['capcode']) && $post['capcode']) {
+	if (isset($post['capcode']) && $post['capcode']) {
 		$query->bindValue(':capcode', $post['capcode'], PDO::PARAM_INT);
 	} else {
 		$query->bindValue(':capcode', NULL, PDO::PARAM_NULL);
