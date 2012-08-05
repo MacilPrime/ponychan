@@ -556,6 +556,7 @@ $(document).ready(function(){
 			processData: false,
 			type: 'POST',
 			success: function(data) {
+				query = null;
 				var title1 = $("h1", data).first().text().trim();
 				if (title1 == "Error") {
 					var title2 = $("h2", data).first().text().trim();
@@ -597,6 +598,7 @@ $(document).ready(function(){
 				QRrepair(data);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
+				query = null;
 				$QRwarning.text("Connection Error");
 				console.log("Ajax Error");
 				console.log(errorThrown);
