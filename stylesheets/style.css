@@ -86,8 +86,6 @@ form table.mod tr td {
 form table tr th {
 	text-align: left;
 	padding: 4px;
-}
-form table tr th {
 	background: #98E;
 }
 form table tr td div {
@@ -181,9 +179,6 @@ div.delete {
 }
 .body {
 	margin-left: 1.5em;
-}
-div.post.reply .body {
-	margin: 0.3em 0 0 0;
 }
 div.post.reply .body {
 	margin-left: 1.8em;
