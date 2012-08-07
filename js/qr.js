@@ -128,7 +128,6 @@ $(document).ready(function(){
 	var $QRCaptchaPuzzleDiv = $("<div/>")
 		.attr("id", "qrCaptchaPuzzle")
 		.css("background", "rgb(255,255,255)")
-		.css("width", "100%")
 		.attr("title", "Reload CAPTCHA")
 		.appendTo($QRCaptchaDiv);
 	var $QRCaptchaPuzzleImage = $("<img/>")
