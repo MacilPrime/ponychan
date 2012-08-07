@@ -42,29 +42,20 @@ $(document).ready(function(){
 			var start_hover = function($link) {
 				$post = $('div.post#reply_' + id).first();
 
-				if ($post.length == 0) {
-					var $oppost = $('#thread_'+id+' .post.op').first();
-					if ($oppost.length == 0)
-						return false;
-					$post = $oppost.clone()
-						.addClass('reply')
-						.attr('id', 'reply_'+id)
-						.prependTo(document.body)
-						.css('display', 'none')
-						.addClass("hidden");
-					$post.children(".intro")
-						.after($oppost.parent().children('.fileinfo, a').clone());
-					$(document).trigger('new_post', $post[0]);
-				}
+				if ($post.length == 0)
+					return false;
+
 				if (hovering) {
 					var $newPost = $post.clone();
 					$newPost.find('span.mentioned').off('mouseenter').off('mouseleave').off('mousemove');
 					$newPost
 						.attr('id', 'post-hover-' + id)
 						.addClass('post-hover')
+						.addClass('reply')
 						.css('position', 'absolute')
 						.css('border-style', 'solid')
 						.css('box-shadow', '1px 1px 1px #999')
+						.css('margin-left', '16px')
 						.css('display', 'block')
 						.prependTo(document.body);
 					$link.trigger('mousemove');
@@ -73,12 +64,16 @@ $(document).ready(function(){
 			};
 
 			var load_post_from_data = function(id, $data) {
+				if($('#' + $(this).attr('id')).length > 0) {
+					console.error("load_post_from_data("+id+", $data) called redundantly");
+					return;
+				}
+
 				$data.find('#reply_'+id).each(function() {
-					if($('#' + $(this).attr('id')).length == 0) {
-						var $newpost = $(this).css('display', 'none').addClass('hidden').prependTo($('div.post:first'));
-						fix_image_src($newpost);
-						$(document).trigger('new_post', $newpost[0]);
-					}
+					var $newpost = $(this).css('display', 'none').addClass('hidden').prependTo($('div.post:first'));
+					fix_image_src($newpost);
+					$(document).trigger('new_post', $newpost[0]);
+					return;
 				});
 			};
 			
@@ -95,16 +90,6 @@ $(document).ready(function(){
 							data = data.replace( /(<img\b[^>]+)\b(src\s*=\s*('[^']*'|"[^"]*"))/g, '$1data-$2');
 							var $data = $(data);
 							page_url_data[url] = $data;
-
-							var $thread = $data.find('.post.op').first().parent();
-							fix_image_src($thread.children('.fileinfo, a, .post.op'));
-							if ($thread.length && $('#'+$thread.attr('id')).length==0) {
-								$("<div/>")
-									.attr('id', $thread.attr('id'))
-									.hide()
-									.append( $thread.children('.fileinfo, a, .post.op') )
-									.prependTo(document.body);
-							}
 							
 							load_post_from_data(id, $data);
 							start_hover($(this));

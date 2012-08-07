@@ -1,5 +1,6 @@
 {% filter remove_whitespace %}
 {# tabs and new lines will be ignored #}
+<div class="postContainer replyContainer" id="replyC_{{ post.id }}">
 <div class="post reply" id="reply_{{ post.id }}">
 
 <p class="intro"{% if not index %} id="{{ post.id }}"{% endif %}>
@@ -95,5 +96,5 @@
 		{% endfilter %}{% if index %}{{ post.body|truncate_body(post.link) }}{% else %}{{ post.body }}{% endif %}{% filter remove_whitespace %}
 	</div>
 </div>
-<br/>
+</div>
 {% endfilter %}

@@ -1,8 +1,10 @@
 {% filter remove_whitespace %}
 {# tabs and new lines will be ignored #}
 
-<div id="thread_{{ post.id }}">
+<div class="thread" id="thread_{{ post.id }}">
 
+<div class="postContainer opContainer" id="replyC_{{ post.id }}">
+<div class="post op" id="reply_{{ post.id }}">
 {% if post.embed %}
 	{{ post.embed }}
 {% elseif post.file == 'deleted' %}
@@ -45,7 +47,8 @@
 		{{ config.uri_thumb }}{{ post.thumb }}
 	{% endif %}" style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px" alt="" /></a>
 {% endif %}
-<div class="post op"><p class="intro"{% if not index %} id="{{ post.id }}"{% endif %}>
+<div class="opMain">
+	<p class="intro"{% if not index %} id="{{ post.id }}"{% endif %}>
 	<input type="checkbox" class="delete" name="delete_{{ post.id }}" id="delete_{{ post.id }}" />
 	<label for="delete_{{ post.id }}">
 		{% if post.subject|length > 0 %}
@@ -135,7 +138,7 @@
 	{% endif %}
 {% if not index %}
 {% endif %}
-</div>{% endfilter %}
+</div></div></div>{% endfilter %}
 {% set hr = post.hr %}
 {% for post in post.posts %}
 	{% include 'post_reply.html' %}

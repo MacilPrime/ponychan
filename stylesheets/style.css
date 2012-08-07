@@ -143,11 +143,11 @@ div.post img.icon {
 	margin: 0 5px;
 	padding: 0;
 }
-div.post.op {
+.opMain {
 	margin-right: 20px;
 	margin-bottom: 5px;
 }
-div.post.op hr {
+.thread hr {
 	border-color: #D9BFB7;
 }
 p.intro {
