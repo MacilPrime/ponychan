@@ -191,7 +191,7 @@ div.post.reply .body {
 div.post.reply.highlighted {
 	background: #D6BAD0;
 }
-div.post.reply .body a {
+div.post .body a {
 	color: #D00;
 }
 div.post {
@@ -268,15 +268,15 @@ span.heading {
 	font-size: 11pt;
 	font-weight: bold;
 }
-span.spoiler {
+.spoiler {
 	background: black;
 	color: black;
 	padding: 0px 1px;
 }
-div.post.reply .body span.spoiler a {
+div.post .body .spoiler a {
 	color: black;
 }
-span.spoiler:hover, div.post.reply .body span.spoiler:hover a {
+.spoiler:hover, div.post .body .spoiler:hover a {
 	color: white;
 }
 .hidetext {
