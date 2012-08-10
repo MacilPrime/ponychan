@@ -1218,6 +1218,7 @@ function buildIndex() {
 	global $board, $config;
 	
 	$pages = getPages();
+	$antibot = create_antibot($board['uri']);
 
 	$page = 1;
 	while ($page <= $config['max_pages'] && $content = index($page)) {
@@ -1227,7 +1228,7 @@ function buildIndex() {
 		$content['pages'] = $pages;
 		$content['pages'][$page-1]['selected'] = true;
 		$content['btn'] = getPageButtons($content['pages']);
-		$content['antibot'] = create_antibot($board['uri']);
+		$content['antibot'] = $antibot;
 		file_write($filename, Element('index.html', $content));
 		
 		if (isset($md5) && $md5 == md5_file($filename)) {
