@@ -241,6 +241,8 @@ $(document).ready(function(){
 	settings.bindPropCheckbox($QRToggleCheckbox, "use_QR");
 
 	var use_QR;
+	var QRcooldownTimer = 0;
+	var QRrepairing = true;
 	var query = null;
 	var oldFormBad = false;
 
@@ -294,6 +296,24 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	var QRcooldown = function(time) {
+		QRcooldownTimer = time;
+		updateSubmitButton();
+		if (time > 0) {
+			setTimeout(QRcooldown, 1000, time-1);
+		}
+	};
+
+	var updateSubmitButton = function() {
+		if (QRcooldownTimer > 0) {
+			$submit.val(QRcooldownTimer).prop("disabled", true);
+		} else if (QRrepairing) {
+			$submit.val("...").prop("disabled", true);
+		} else {
+			$submit.val( $oldForm.find("input[type='submit']").val() ).prop("disabled", false);
+		}
+	};
+
 	var oldf = null;
 	var usewURL = false;
 	var wURL = window.URL || window.webkitURL;
@@ -368,10 +388,6 @@ $(document).ready(function(){
 		body.focus();
 	};
 
-	var fixSubmitButton = function() {
-		$submit.val( $oldForm.find("input[type='submit']").val() ).prop("disabled", false);
-	};
-
 	var stealCaptcha = function() {
 		$QRCaptchaPuzzleImage
 			.css("visibility", "visible")
@@ -392,7 +408,9 @@ $(document).ready(function(){
 			.hide()
 			.appendTo($QRForm);
 
-		fixSubmitButton();
+		QRrepairing = false;
+
+		updateSubmitButton();
 	};
 
 	stealFormHiddenInputs($oldForm);
@@ -430,7 +448,8 @@ $(document).ready(function(){
 
 	var QRrepair = function(newpage) {
 		oldFormBad = true;
-		$submit.val("...").prop("disabled", true);
+		QRrepairing = true;
+		updateSubmitButton();
 		QRhiddenFieldRepair(newpage);
 
 		if($captchaPuzzle.length) {
@@ -567,6 +586,7 @@ $(document).ready(function(){
 					window.history.pushState({}, newPageTitle, url);
 					return;
 				} else {
+					QRcooldown(10);
 					if (settings.getProp("QR_persistent"))
 						QR.clear();
 					else
