@@ -1,0 +1,130 @@
+/*
+Luna Theme.css
+by Soarin'Wonder
+soarinwonder@hotmail.com
+
+Font: Alex Brush ~ http://www.fontspace.com/typesetit/alex-brush
+*/
+
+@font-face {
+	font-family: "alex-brush";
+	src: url("font/alex-brush.ttf");
+	src: url("font/alex-brush.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+body {
+	background: url("img/luna/lunacorner.png") no-repeat right bottom fixed, 
+	url("img/luna/bggradient.png") repeat-x bottom fixed, 
+	url("img/luna/stars.png") top repeat-x, 
+	#070024 url("img/luna/moon.png") no-repeat 50px 100px;
+	color: #d7e5ff;
+	font-family: serif;
+	font-size: 16px;
+}
+a, a:visited {
+	color: #be78ff;
+}
+a:hover, p.intro a.post_no:hover {
+	color: white;
+}
+p.intro a.email span.name {
+	color: #4840fd;
+}
+p.intro a.email:hover span.name {
+	color: white;
+}
+header h1, #settingsScreen h1 {
+	font-family: "alex-brush", tahoma;
+	letter-spacing: 1px;
+	font-size: 42pt;
+}
+header div.subtitle, h1 {
+	color: #d7e5ff;
+}
+header div.subtitle {
+	font-size: 10pt;
+}
+input[type="text"], input[type="password"], textarea {
+	border: 2px solid #a9a9a9;
+}
+form table tr th {
+	border: 1px #737bb8 solid; 
+	background: #210f6e;
+}
+form table tr td div {
+	text-align: left;
+}
+div.banner {
+	background-color: #300087;
+	color: #d7e5ff;
+	padding: 1px 5px;
+	margin-left: auto;
+	margin-right: auto;
+	display: table;
+}
+p.intro span.subject {
+	color: #a646ff;
+}
+p.intro span.name {
+	color: #a7e0fd;
+}
+div.post.reply.highlighted {
+	background: #180b90;
+}
+div.post.reply {
+	background: #16094b;
+	border-width: 2px;
+	border-style: none solid solid none;
+	border-color: #737bb8;
+}
+div.hidetext {
+    background: #182563;
+}
+span.trip {
+	color: #37b3dc;
+}
+span.quote {
+	color: #37b3dc;
+}
+span.heading {
+	color: black;
+}
+.spoiler {
+	background: #485ebe;
+	color: #485ebe;
+}
+div.post .body .spoiler a {
+	color: #485ebe;
+}
+div.pages {
+	color: #004ed0;
+	background: none;
+	border-right: 1px none #B7C5D9;
+	border-bottom: 1px none #B7C5D9;
+}
+.boardlist {
+	color: #004ed0;
+}
+div.blotter {
+	color: #bcc9ff;
+}
+#settingsScreen{
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10pt;
+}
+#settingsScreen a, #settingsScreen a:visited{
+	color:#34345C;
+}
+#settingsScreen a:hover{
+	color:red;
+}
+#settingsScreen h1{
+	font-family: tahoma;
+	letter-spacing: -2px;
+	font-size: 20pt;
+}
+.homeblock {
+	border-color: rgba(120, 120, 120, 0.5);
+	background-color: rgba(100, 100, 100, 0.5);
+}
