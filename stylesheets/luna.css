@@ -22,7 +22,7 @@ body {
 	font-family: serif;
 	font-size: 16px;
 }
-a, a:visited {
+a, a:visited, div.post .body a {
 	color: #be78ff;
 }
 a:hover, p.intro a.post_no:hover {
