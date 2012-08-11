@@ -30,7 +30,10 @@ $(document).ready(function(){
 		.attr("type", "checkbox")
 		.prependTo($QRToggleLabel);
 
-	var $QRButtonDiv = $("<div/>").appendTo($QRToggleOptions);
+	var $QRButtonDiv = $("<div/>")
+		.attr("id", "qrDisplayButtonDiv")
+		.css("margin-bottom", "1.5em")
+		.appendTo($QRToggleOptions);
 	var $QRButton = $("<a/>")
 		.attr("id", "qrDisplayButton")
 		.attr("href", "javascript:;")
@@ -633,7 +636,7 @@ $(document).ready(function(){
 		use_QR = settings.getProp("use_QR");
 		if (use_QR) {
 			$oldForm.hide();
-			$QRButton.show();
+			$QRButtonDiv.show();
 			citeReply = qrCiteReply;
 			if($captchaPuzzle.length)
 				stealCaptcha();
@@ -645,7 +648,7 @@ $(document).ready(function(){
 
 			QR.close();
 			$oldForm.show();
-			$QRButton.hide();
+			$QRButtonDiv.hide();
 			citeReply = oldCiteReply;
 		}
 	}
