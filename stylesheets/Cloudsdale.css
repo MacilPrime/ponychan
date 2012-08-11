@@ -66,8 +66,7 @@ header div.subtitle, h1 {
 }
 
 form table tr th {
-	/* TODO */
-	background: none repeat scroll 0 0 #F0FFFF;
+	background: #F0FFFF;
 	border-style: solid;
 	border-width: 1px;
 	border-color: #ccc;	
@@ -91,8 +90,7 @@ div.post .body a {
 
 div.post.reply 
 {
-	/* TODO */
-	background: none repeat scroll 0 0 #F0FFFF;
+	background: #F0FFFF;
 	border-color: #B7C5D9;
 	border-style: solid solid solid solid;
 	border-width: 1px;

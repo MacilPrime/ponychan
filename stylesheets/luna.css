@@ -128,3 +128,7 @@ div.blotter {
 	border-color: rgba(120, 120, 120, 0.5);
 	background-color: rgba(100, 100, 100, 0.5);
 }
+div.ban {
+	background: white;
+	color: black;
+}

@@ -101,3 +101,14 @@ div.blotter {
 footer {
 	color: rgb(80, 80, 128);
 }
+div.ban {
+	background: white;
+	color: black;
+}
+div.ban a, div.ban a:visited {
+	text-decoration: underline;
+	color: #34345C;
+}
+div.ban a:hover {
+	color: #ff0000;
+}
