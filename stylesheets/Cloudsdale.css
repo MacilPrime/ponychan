@@ -1,0 +1,192 @@
+/*
+
+*------------------*
+| ~!!!CREDITS !!!~ |
+*------------------* 
+Cloudsdale.css for MLPchan.net
+By Pegasi - 2012 (pegasi@derpymail.com)
+Clouds vectors taken from various dA galleries
+
+*---------------------*
+| ~!!!DISCLAIMER !!!~ |
+*---------------------*
+While I am glad to be of good use, I maintain the right to may use and or alter 
+this document for future projects, unrelated to mlpchan.net.
+    
+Do NOT alter or redistribute this document without my permission.
+The administrative staff of mlpchan.net maintains the right to alter, but not to reuse 
+this document for other projects without my permission.
+	
+This document is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    
+*/
+
+@font-face {
+	font-family: CELESTIA;
+	src: url("font/celestia.ttf");
+	src: url("font/celestia.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	background: url("img/cloudsdale/cloudsgradient.png") repeat-x scroll 50% 0 #D7F0FF;
+	color: black;
+}
+
+a, a:visited {
+	color: #6666ff;
+}
+
+a:hover, p.intro a.post_no:hover {
+	color: #0000ff;
+}
+
+p.intro a.email span.name {
+	color: #2222ff;
+}
+
+p.intro a.email:hover span.name {
+	color: #3333ff;
+}
+
+h2 {
+	color: #1111aa;
+}
+
+header h1, #settingsScreen h1 {
+	font-family: CELESTIA, arial;
+	font-size: 30pt;
+}
+
+header div.subtitle, h1 {
+	color: #000;
+}
+
+form table tr th {
+	/* TODO */
+	background: none repeat scroll 0 0 #F0FFFF;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #ccc;	
+}
+
+p.intro span.subject {
+	color: #000;
+	font-size: 14px;
+}
+
+p.intro span.name {
+	color: #4444ff;
+	font-size: 13px;
+}
+
+div.post .body a {
+	color: #6666ff;
+}
+
+/* OP is always a faggot */
+
+div.post.reply 
+{
+	/* TODO */
+	background: none repeat scroll 0 0 #F0FFFF;
+	border-color: #B7C5D9;
+	border-style: solid solid solid solid;
+	border-width: 1px;
+	border-top-left-radius: 5px;
+	border-bottom-right-radius: 3px;
+}
+
+div.post.reply.highlighted {
+	background: #d8edff;
+}
+
+span.trip {
+	color: #6666ff;
+}
+
+div.boardlist {
+	font-size: 12pt;
+}
+
+div.blotter {
+	color: #1111aa;
+}
+
+/* Every time you clop, Celestia kills a pony */
+
+div.pages {
+	background: #f0ffff;
+	color: #89A;
+	margin-left: 17px;
+	margin-top: 5px;
+	padding-right: 1px;
+	padding-left: 4px;
+}
+
+div.banner {
+	background: none;
+	color: black;
+}
+
+div.banner, div.banner a {
+	color: black;
+}
+
+div.banner a:hover {
+	color: #4444ff;
+}
+
+input[type="submit"] {
+	padding: 3px !important;
+}
+
+input[type="text"], input[type="password"], textarea {
+	font-family: arial !important;
+	border-color: #ccc !important;
+	padding: 5px !important;
+}
+
+input[value="New Topic"], [value="New Reply"] {
+	padding: 2px !important;
+	margin-top: -1px !important;
+	height: 30px !important;
+}
+
+input[value="Next"], input[value="Previous"] {
+	margin-bottom: -1px !important;
+	padding: 2px !important;
+	margin-top: -0px !important;
+	height: 26px !important;
+	min-width: 50px;
+}
+
+/*Twilight is best pony*/
+
+span.quote {
+	color: #4A861E;
+}
+
+a.post_no {
+	color: black;
+	font-size: 14px;
+}
+
+.hashtag {
+	background: #F0FFFF;
+	color: black;
+	border-color: #ccc;
+	border-style: solid;
+	border-width: 1px;
+	box-shadow: none;
+	display: inline-block;
+	margin-right: 0.5em;
+	padding: 0.2em 0.5em;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
