@@ -66,7 +66,7 @@ function setCookies() {
 			$mod['hash'][1], // salt
 		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
 	
-	setcookie('mod_secret',
+	setcookie($config['cookies']['mod'] . '_secret',
 		$config['cookies']['mod_secret'],
 		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
 }
