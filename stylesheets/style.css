@@ -467,7 +467,7 @@ table.mod.config-editor input[type="text"] {
 	font-weight: bold;
 }
 .diceroll:before {
-	content: url(https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/2-Dice-Icon.svg/30px-2-Dice-Icon.svg.png);
+	content: url(img/dice.png);
 }
 /* Navbar stuff */
 .boardlist.top {
