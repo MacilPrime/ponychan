@@ -195,7 +195,7 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 			// remove broken HTML entity at the end (if existent)
 			$body = preg_replace('/&[^;]+$/', '', $body);
 			
-			$tags_no_close_needed = array("colgroup", "dd", "dt", "li", "optgroup", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr", "br");
+			$tags_no_close_needed = array("colgroup", "dd", "dt", "li", "optgroup", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr", "br", "img");
 			
 			// Close any open tags
 			foreach ($tags as &$tag) {
