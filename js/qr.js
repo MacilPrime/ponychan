@@ -277,6 +277,7 @@ $(document).ready(function(){
 		$comment.val("");
 		$file.val("").change();
 		$QRwarning.text("");
+		$spoiler.attr("checked", false);
 		if (query) {
 			query.abort();
 			query = null;
