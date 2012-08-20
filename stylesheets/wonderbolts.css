@@ -112,3 +112,6 @@ div.ban a, div.ban a:visited {
 div.ban a:hover {
 	color: #ff0000;
 }
+.hidetext {
+	background-color: #3189c6;
+}

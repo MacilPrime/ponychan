@@ -30,6 +30,7 @@ a:hover, p.intro a.post_no:hover {
 }
 p.intro a.email span.name {
 	color: #4840fd;
+	text-shadow: 1px 1px 5px black;
 }
 p.intro a.email:hover span.name {
 	color: white;
@@ -78,8 +79,8 @@ div.post.reply {
 	border-style: none solid solid none;
 	border-color: #737bb8;
 }
-div.hidetext {
-    background: #182563;
+.hidetext {
+	background: #182563;
 }
 span.trip {
 	color: #37b3dc;
