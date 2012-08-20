@@ -75,9 +75,9 @@ div.post.reply.highlighted {
 }
 div.post.reply {
 	background: #16094b;
-	border-width: 2px;
+	border-width: 1px;
 	border-style: none solid solid none;
-	border-color: #737bb8;
+	border-color: #434B58;
 }
 .hidetext {
 	background: #182563;
