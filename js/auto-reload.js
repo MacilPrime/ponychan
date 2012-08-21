@@ -138,8 +138,16 @@ $(document).ready(function(){
 		query = $.ajax({
 			url: document.location,
 			success: function(data) {
-				loadPosts(data);
-				prepareDelayedUpdate();
+				var $banner = $(data).filter('div.banner').add( $(data).find('div.banner') ).first();
+				if($banner.length) {
+					loadPosts(data);
+					prepareDelayedUpdate();
+				} else {
+					if($("h2", data).first().text().trim() === "Thread specified does not exist.")
+						$statusBox.css('color', 'red').text('404');
+					else
+						$statusBox.css('color', 'red').text('Error');
+				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				if(textStatus == "abort")
