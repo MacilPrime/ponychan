@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `thread` int(11) DEFAULT NULL,
   `subject` varchar(100) DEFAULT NULL,
   `email` varchar(75) DEFAULT NULL,
-  `name` varchar(35) DEFAULT NULL,
+  `name` varchar(75) DEFAULT NULL,
   `trip` varchar(25) DEFAULT NULL,
   `capcode` varchar(50) DEFAULT NULL,
   `body` text NOT NULL,

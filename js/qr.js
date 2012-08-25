@@ -83,7 +83,7 @@ $(document).ready(function(){
 		.attr("type", "text")
 		.attr("name", "name")
 		.attr("placeholder", "Name")
-		.attr("maxlength", 50)
+		.attr("maxlength", 75)
 		.css("box-sizing", "border-box")
 		.css("-moz-box-sizing", "border-box")
 		.css("width", "33%")

@@ -558,7 +558,7 @@ if (isset($_POST['delete'])) {
 	}
 	
 	// Check string lengths
-	if (mb_strlen($post['name']) > 35)
+	if (mb_strlen($post['name']) > 75)
 		error(sprintf($config['error']['toolong'], 'name'));	
 	if (mb_strlen($post['email']) > 75)
 		error(sprintf($config['error']['toolong'], 'email'));
