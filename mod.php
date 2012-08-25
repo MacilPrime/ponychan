@@ -66,6 +66,11 @@ $pages = array(
 	'/(\w+)/move/(\d+)'			=> 'move',		// move thread
 	'/(\w+)/edit/(\d+)'			=> 'edit',		// edit post
 	
+	'/themes'				=> 'themes_list',	// manage themes
+	'/themes/(\w+)'				=> 'theme_configure',	// configure/reconfigure theme
+	'/themes/(\w+)/rebuild'			=> 'theme_rebuild',	// rebuild theme
+	'/themes/(\w+)/uninstall'		=> 'theme_uninstall',	// uninstall theme
+	
 	'/config'				=> 'config',		// config editor
 	
 	// these pages aren't listed in the dashboard without $config['debug']
