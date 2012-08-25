@@ -10,9 +10,9 @@
 				{% trans %}Name{% endtrans %}
 			</th>
 			<td>
-				{% if post.name %}<span class="name">{{ post.name }}</span>{% endif %}
-				{% if post.trip %}<span class="trip">{{ post.trip }}</span>{% endif %}
-				{% if post.capcode %}<span class="capcode">{{ post.capcode }}</span>{% endif %}
+				{% if post.name %}<span class="name">{{ post.name|e }}</span>{% endif %}
+				{% if post.trip %}<span class="trip">{{ post.trip|e }}</span>{% endif %}
+				{% if post.capcode %}<span class="capcode">{{ post.capcode|e }}</span>{% endif %}
 			</td>
 		</tr>{% endif %}
 		{% if post.email or not config.field_disable_email %}<tr>
@@ -20,7 +20,7 @@
 				{% trans %}Email{% endtrans %}
 			</th>
 			<td>
-				{{ post.email }}
+				{{ post.email|e }}
 			</td>
 		</tr>{% endif %}
 		<tr>
@@ -28,7 +28,7 @@
 				{% trans %}Subject{% endtrans %}
 			</th>
 			<td>
-				<span class="subject">{{ post.subject }}</span>
+				<span class="subject">{{ post.subject|e }}</span>
 			</td>
 		</tr>
 		<tr>
@@ -44,7 +44,7 @@
 				{% trans %}File{% endtrans %}
 			</th>
 			<td>
-				{{ post.filename }}
+				{{ post.filename|e }}
 			</td>
 		</tr>
 		{% if mod %}
