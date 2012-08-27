@@ -30,6 +30,8 @@ $(document).ready(function(){
 		
 		if(id = $link.text().match(/^>>(\d+)$/)) {
 			id = id[1];
+		} else {
+			return;
 		}
 		
 		var $post = false;
