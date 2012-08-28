@@ -41,7 +41,7 @@ $(document).ready(function(){
 			hovering = true;
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
 			
-			var start_hover = function($link) {
+			var start_hover = function() {
 				$post = $('div.post#reply_' + id).first();
 
 				if ($post.length == 0)
@@ -54,6 +54,7 @@ $(document).ready(function(){
 						.attr('id', 'post-hover-' + id)
 						.addClass('post-hover')
 						.addClass('reply')
+						.addClass('reply_' + id)
 						.css('position', 'absolute')
 						.css('border-style', 'solid')
 						.css('box-shadow', '1px 1px 1px #999')
@@ -79,7 +80,7 @@ $(document).ready(function(){
 				});
 			};
 			
-			if(!start_hover($(this))) {
+			if(!start_hover()) {
 				var url = $link.attr('href').replace(/#.*$/, '');
 				
 				if (!page_url_data[url]) {
@@ -94,14 +95,14 @@ $(document).ready(function(){
 							page_url_data[url] = $data;
 							
 							load_post_from_data(id, $data);
-							start_hover($(this));
+							start_hover();
 						}
 					});
 				} else {
 					var $data = page_url_data[url];
 					if ($data !== true) {
 						load_post_from_data(id, $data);
-						start_hover($(this));
+						start_hover();
 					}
 				}
 			}
