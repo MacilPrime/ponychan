@@ -4,7 +4,7 @@
 <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>{{ settings.title }}</title>
-	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}"/>
+	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}?v={{ 'stylesheets/style.css'|filemtime }}"/>
 </head>
 <body>
 	<h1>{{ settings.title }}</h1>

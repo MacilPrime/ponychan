@@ -4,7 +4,7 @@
 <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>{{ settings.title }}</title>
-	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}"/>
+	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}?v={{ 'stylesheets/style.css'|filemtime }}"/>
 	<style type="text/css">
 		fieldset{margin:10px 0}
 		legend{width:100%;margin-left:-15px;background:#98E;border:1px solid white;color:white;font-weight:bold;padding:5px 5px}

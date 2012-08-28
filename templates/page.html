@@ -2,11 +2,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}">
+	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}?v={{ 'stylesheets/style.css'|filemtime }}">
 	{% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.url_favicon }}">{% endif %}
 	<title>{{ title }}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}">{% endif %}
+	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}?v={{ ('stylesheets/' ~ config.default_stylesheet.1)|filemtime }}">{% endif %}
 	{% if not nojavascript %}<script type="text/javascript" src="{{ config.url_javascript }}?v={{ config.file_script|filemtime }}"></script>{% endif %}
 </head>
 <body class="boardpage">
