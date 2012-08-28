@@ -1250,8 +1250,9 @@ function buildJavascript() {
 	$stylesheets = array();
 	foreach ($config['stylesheets'] as $name => $uri) {
 		$stylesheets[] = array(
-			'name' => addslashes($name),
-			'uri' => addslashes((!empty($uri) ? $config['uri_stylesheets'] : '') . $uri));
+			'name' => $name,
+			'uri' => (!empty($uri) ? $config['uri_stylesheets'] : '') . $uri,
+			'version' => (!empty($uri) ? '?v=' . filemtime('stylesheets/' . $uri) : ''));
 	}
 	
 	$script = Element('main.js', array(
