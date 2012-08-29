@@ -524,3 +524,13 @@ header { margin-top: 48px; }
 	font-size: 10pt;
 	margin-left: 2.7em;
 }
+.post-hover {
+	margin-left: 16px !important;
+	border-style: solid !important;
+	box-shadow: 1px 1px 1px #999 !important;
+	position: absolute !important;
+	display: block !important;
+}
+.preview-hidden {
+	display: none !important;
+}

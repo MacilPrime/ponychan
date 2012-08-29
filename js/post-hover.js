@@ -12,6 +12,18 @@
  */
 
 $(document).ready(function(){
+	settings.newProp("preview_hover", "bool", true, "Preview post on link hover");
+	// settings.newProp("preview_inline", "bool", true, "Preview post inline on link click");
+
+	var preview_hover = settings.getProp("preview_hover");
+	// var preview_inline = settings.getProp("preview_inline");
+	$(document).on("setting_change", function(e, setting) {
+		if (setting == "preview_hover")
+			preview_hover = settings.getProp("preview_hover");
+		// else if (setting == "preview_inline")
+		// 	preview_inline = settings.getProp("preview_inline");
+	});
+
 	var page_url_data = {};
 
 	var fix_image_src = function($tag) {
@@ -31,9 +43,35 @@ $(document).ready(function(){
 		
 		var $newpost = $data.find('#reply_'+id).first().clone();
 		if ($newpost.length) {
-			$newpost.css('display', 'none').addClass('hidden').prependTo($('div.post:first'));
+			$newpost.addClass('preview-hidden').appendTo(document.body);
 			fix_image_src($newpost);
 			$(document).trigger('new_post', $newpost[0]);
+		}
+	};
+
+	var load_post = function(id, url, callback) {
+		url = url.replace(/#.*$/, '');
+		
+		if (!page_url_data[url]) {
+			page_url_data[url] = true;
+			$.ajax({
+				url: url,
+				success: function(data) {
+					// Don't load all images
+					data = data.replace( /(<img\b[^>]+)\b(src\s*=\s*('[^']*'|"[^"]*"))/g, '$1data-$2');
+					var $data = $(data);
+					page_url_data[url] = $data;
+					
+					load_post_from_data(id, $data);
+					callback();
+				}
+			});
+		} else {
+			var $data = page_url_data[url];
+			if ($data !== true) {
+				load_post_from_data(id, $data);
+				callback();
+			}
 		}
 	};
 	
@@ -48,7 +86,7 @@ $(document).ready(function(){
 			return;
 		}
 
-		if ($('#' + id).not('.hidden').length) {
+		if ($('#' + id).not('.preview-hidden').length) {
 			var href = $link.attr('href').replace(/^[^#]*/, '');
 			$link.attr('href', href);
 		}
@@ -56,7 +94,14 @@ $(document).ready(function(){
 		var $post = false;
 		var hovering = false;
 		var hovered_at;
+
+		var $inlined_post = null;
 		$link.hover(function(e) {
+			if (!preview_hover)
+				return;
+			if ($link.hasClass('inlined'))
+				return;
+
 			hovering = true;
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
 			
@@ -67,6 +112,7 @@ $(document).ready(function(){
 					return false;
 
 				if (hovering) {
+					$('#post-hover-' + id).remove();
 					var $newPost = $post.clone();
 					$newPost.find('span.mentioned').off('mouseenter').off('mouseleave').off('mousemove');
 					$newPost.find('#' + id).attr('id', '');
@@ -75,52 +121,30 @@ $(document).ready(function(){
 						.addClass('post-hover')
 						.addClass('reply')
 						.addClass('post_' + id)
-						.css('position', 'absolute')
-						.css('border-style', 'solid')
-						.css('box-shadow', '1px 1px 1px #999')
-						.css('margin-left', '16px')
-						.css('display', 'block')
-						.prependTo(document.body);
+						.removeClass('preview-hidden')
+						.appendTo(document.body);
 					$link.trigger('mousemove');
 				}
 				return true;
 			};
 			
 			if(!start_hover()) {
-				var url = $link.attr('href').replace(/#.*$/, '');
-				
-				if (!page_url_data[url]) {
-					page_url_data[url] = true;
-					$.ajax({
-						url: url,
-						context: document.body,
-						success: function(data) {
-							// Don't load all images
-							data = data.replace( /(<img\b[^>]+)\b(src\s*=\s*('[^']*'|"[^"]*"))/g, '$1data-$2');
-							var $data = $(data);
-							page_url_data[url] = $data;
-							
-							load_post_from_data(id, $data);
-							start_hover();
-						}
-					});
-				} else {
-					var $data = page_url_data[url];
-					if ($data !== true) {
-						load_post_from_data(id, $data);
-						start_hover();
-					}
-				}
+				$("<div/>")
+					.attr('id','post-hover-'+id)
+					.addClass('post-hover')
+					.addClass('post')
+					.addClass('reply')
+					.text('Loading...')
+					.appendTo(document.body);
+				$link.trigger('mousemove');
+				load_post(id, $link.attr('href'), start_hover);
 			}
 		}, function() {
 			hovering = false;
 			if(!$post)
 				return;
 			
-			$post.attr('style', '');
-			if($post.hasClass('hidden'))
-				$post.css('display', 'none');
-			$('.post-hover').remove();
+			$('#post-hover-' + id).remove();
 		}).mousemove(function(e) {
 			if(!$post)
 				return;
@@ -140,6 +164,16 @@ $(document).ready(function(){
 			
 			
 			$hover.css('left', (e.pageX ? e.pageX : hovered_at['x'])).css('top', top);
+		}).click(function() {
+			// $link.trigger('mouseleave');
+			// if (!$link.hasClass('inlined')) {
+			// 	$link.addClass('inlined');
+			// 	$inlined_post = $post.clone();
+			// } else {
+			// 	$link.removeClass('inlined');
+			// 	if ($inlined_post)
+			// 		$inlined_post.remove();
+			// }
 		});
 	};
 	
