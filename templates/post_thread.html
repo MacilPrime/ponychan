@@ -10,7 +10,7 @@
 {% elseif post.file == 'deleted' %}
 	<img src="{{ config.image_deleted }}" alt="" />
 {% elseif post.file and post.file %}
-	<p class="fileinfo">{% trans %}File:{% endtrans %} <a href="{{ config.uri_img }}{{ post.file }}">{{ post.file }}</a> <span class="unimportant">
+	<p class="fileinfo">{% trans %}File:{% endtrans %} <a href="{{ config.uri_img }}{{ post.file }}">{{ post.file }}</a> <span class="morefileinfo">
 	(
 		{% if post.thumb == 'spoiler' %}
 			{% trans %}Spoiler Image{% endtrans %}, 
