@@ -21,6 +21,14 @@ $(document).ready(function(){
 	});
 
 	var init_expand_image = function() {
+		$(this).parent().each(function() {
+			if($(this).attr('data-old-src')) {
+				this.childNodes[0].src = $(this).attr('data-old-src');
+				this.childNodes[0].style.width = 'auto';
+				this.childNodes[0].style.height = 'auto';
+				$(this).attr('data-old-src', '');
+			}
+		});
 		$(this).parent().click(function(e) {
 			if(!image_expand_enabled)
 				return true;
@@ -28,8 +36,8 @@ $(document).ready(function(){
 			if(e.which == 2) {
 				return true;
 			}
-			if(!this.tag) {
-				this.tag = this.childNodes[0].src;
+			if(!$(this).attr('data-old-src')) {
+				$(this).attr('data-old-src', this.childNodes[0].src);
 				this.childNodes[0].src = this.href;
 				this.childNodes[0].style.width = 'auto';
 				this.childNodes[0].style.maxWidth = '95%';
@@ -42,10 +50,10 @@ $(document).ready(function(){
 					this.style.filter = '';
 				}
 			} else {
-				this.childNodes[0].src = this.tag;
+				this.childNodes[0].src = $(this).attr('data-old-src');
 				this.childNodes[0].style.width = 'auto';
 				this.childNodes[0].style.height = 'auto';
-				this.tag = '';
+				$(this).attr('data-old-src', '');
 			}
 			return false;
 		});
