@@ -3,8 +3,8 @@
 
 <div class="thread" id="thread_{{ post.id }}">
 
-<div class="postContainer opContainer" id="replyC_{{ post.id }}">
-<div class="post op" id="reply_{{ post.id }}">
+<div class="postContainer opContainer postC_{{ post.id }}" id="replyC_{{ post.id }}">
+<div class="post op post_{{ post.id }}" id="reply_{{ post.id }}">
 {% if post.embed %}
 	{{ post.embed }}
 {% elseif post.file == 'deleted' %}

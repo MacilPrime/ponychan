@@ -60,7 +60,7 @@ $(document).ready(function(){
 						.attr('id', 'post-hover-' + id)
 						.addClass('post-hover')
 						.addClass('reply')
-						.addClass('reply_' + id)
+						.addClass('post_' + id)
 						.css('position', 'absolute')
 						.css('border-style', 'solid')
 						.css('box-shadow', '1px 1px 1px #999')
