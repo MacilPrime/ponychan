@@ -34,7 +34,7 @@ $(document).ready(function(){
 			return;
 		}
 
-		if ($('div.post#reply_' + id).length) {
+		if ($('#' + id).not('.hidden').length) {
 			var href = $link.attr('href').replace(/^[^#]*/, '');
 			$link.attr('href', href);
 		}
@@ -73,7 +73,7 @@ $(document).ready(function(){
 			};
 
 			var load_post_from_data = function(id, $data) {
-				if($('#' + $(this).attr('id')).length > 0) {
+				if($('#reply_' + id).length > 0) {
 					console.error("load_post_from_data("+id+", $data) called redundantly");
 					return;
 				}
