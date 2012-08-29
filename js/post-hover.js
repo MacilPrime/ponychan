@@ -33,6 +33,11 @@ $(document).ready(function(){
 		} else {
 			return;
 		}
+
+		if ($('div.post#reply_' + id).length) {
+			var href = $link.attr('href').replace(/^[^#]*/, '');
+			$link.attr('href', href);
+		}
 		
 		var $post = false;
 		var hovering = false;
