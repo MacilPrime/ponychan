@@ -1,6 +1,8 @@
-Tinyboard -- A lightweight PHP imageboard.
+Tinyboard - A lightweight PHP imageboard.
 ==========================================
 
+About
+------------
 Tinyboard is a light-weight, fast, highly configurable and user-friendly
 imageboard software package released under a non-restrictive open-source
 license. It is written in PHP and has few dependencies.
@@ -11,7 +13,8 @@ Requirements
 2.	[mbstring](http://www.php.net/manual/en/mbstring.installation.php) 
 	(--enable-mbstring)
 3.	[PHP-GD](http://php.net/manual/en/book.image.php)
-4.	[PHP-PDO](http://php.net/manual/en/book.pdo.php) with appropriate <del>[driver for your database](http://www.php.net/manual/en/pdo.drivers.php)</del> (only MySQL is supported at the moment)
+4.	[PHP-PDO](http://php.net/manual/en/book.pdo.php) 
+	(only MySQL is supported at the moment)
 
 We try to make sure Tinyboard is compatible with all major web servers and
 operating systems. Tinyboard does not include an Apache ```.htaccess``` file nor does
@@ -19,8 +22,12 @@ it need one.
 
 Contributing
 ------------
-Use GitHub to submit a pull request. If you need help developing a patch, join
-our IRC channel.
+You can contribute to Tinyboard by:
+*	Developing patches/improvements/translations and using GitHub to submit pull requests
+*	Providing feedback and suggestions
+*	Writing/editing documentation
+
+If you need help developing a patch, please join our IRC channel.
 
 Installation
 -------------
@@ -51,7 +58,7 @@ find support from a variety of sources:
 *	Documentation can be found [here](http://tinyboard.org/docs/).
 *	You can join Tinyboard's IRC channel for support and general queries: 
 	[irc.datnode.net #tinyboard](irc://irc.datnode.net/tinyboard).
-*	Tinyboard has a general support board at [tinyboard.org/demo/sup/](http://tinyboard.org/demo/sup/).
+*	You can find enterprise-grade support at [tinyboard.org](http://tinyboard.org/#support).
 
 License
 --------

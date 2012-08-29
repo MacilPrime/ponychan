@@ -61,7 +61,7 @@ function mod_login() {
 }
 
 function mod_confirm($request) {
-	mod_page(_('Confirm action'), 'mod/confirm.html', array('request' => $request));
+	mod_page(_('Confirm action'), 'mod/confirm.html', array('request' => $request, 'token' => make_secure_link_token($request)));
 }
 
 function mod_logout() {
@@ -332,6 +332,9 @@ function mod_noticeboard_delete($id) {
 	
 	modLog('Deleted a noticeboard entry');
 	
+	if ($config['cache']['enabled'])
+		cache::delete('noticeboard_preview');
+	
 	header('Location: ?/noticeboard', true, $config['redirect_http']);
 }
 
@@ -415,6 +418,33 @@ function mod_log($page_no = 1) {
 	$count = $query->fetchColumn(0);
 	
 	mod_page(_('Moderation log'), 'mod/log.html', array('logs' => $logs, 'count' => $count));
+}
+
+function mod_user_log($username, $page_no = 1) {
+	global $config;
+	
+	if ($page_no < 1)
+		error($config['error']['404']);
+	
+	if (!hasPermission($config['mod']['modlog']))
+		error($config['error']['noaccess']);
+	
+	$query = prepare("SELECT `username`, `mod`, `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username ORDER BY `time` DESC LIMIT :offset, :limit");
+	$query->bindValue(':username', $username);
+	$query->bindValue(':limit', $config['mod']['modlog_page'], PDO::PARAM_INT);
+	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['modlog_page'], PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+	$logs = $query->fetchAll(PDO::FETCH_ASSOC);
+	
+	if (empty($logs) && $page_no > 1)
+		error($config['error']['404']);
+	
+	$query = prepare("SELECT COUNT(*) FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username");
+	$query->bindValue(':username', $username);
+	$query->execute() or error(db_error($query));
+	$count = $query->fetchColumn(0);
+	
+	mod_page(_('Moderation log'), 'mod/log.html', array('logs' => $logs, 'count' => $count, 'username' => $username));
 }
 
 function mod_view_board($boardName, $page_no = 1) {
@@ -551,7 +581,7 @@ function mod_page_ip($ip) {
 	}
 	
 	$args['boards'] = $boards;
-	
+	$args['token'] = make_secure_link_token('ban');
 	
 	if (hasPermission($config['mod']['view_ban'])) {
 		$query = prepare("SELECT `bans`.*, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `ip` = :ip");
@@ -577,7 +607,7 @@ function mod_ban() {
 		error($config['error']['noaccess']);
 	
 	if (!isset($_POST['ip'], $_POST['reason'], $_POST['length'], $_POST['board'])) {
-		mod_page(_('New ban'), 'mod/ban_form.html', array());
+		mod_page(_('New ban'), 'mod/ban_form.html', array('token' => make_secure_link_token('ban')));
 		return;
 	}
 	
@@ -897,10 +927,12 @@ function mod_move($originBoard, $postID) {
 	if (count($boards) <= 1)
 		error(_('Impossible to move thread; there is only one board.'));
 	
-	mod_page(_('Move thread'), 'mod/move.html', array('post' => $postID, 'board' => $originBoard, 'boards' => $boards));
+	$security_token = make_secure_link_token($originBoard . '/move/' . $postID);
+	
+	mod_page(_('Move thread'), 'mod/move.html', array('post' => $postID, 'board' => $originBoard, 'boards' => $boards, 'token' => $security_token));
 }
 
-function mod_ban_post($board, $delete, $post) {
+function mod_ban_post($board, $delete, $post, $token = false) {
 	global $config, $mod;
 	
 	if (!openBoard($board))
@@ -908,6 +940,8 @@ function mod_ban_post($board, $delete, $post) {
 	
 	if (!hasPermission($config['mod']['delete'], $board))
 		error($config['error']['noaccess']);
+	
+	$security_token = make_secure_link_token($board . '/ban' . ($delete ? '&delete' : '') . '/' . $post);
 	
 	$query = prepare(sprintf('SELECT `ip`, `thread` FROM `posts_%s` WHERE `id` = :id', $board));
 	$query->bindValue(':id', $post);
@@ -917,7 +951,7 @@ function mod_ban_post($board, $delete, $post) {
 	
 	$thread = $_post['thread'];
 	$ip = $_post['ip'];
-	
+
 	if (isset($_POST['new_ban'], $_POST['reason'], $_POST['length'], $_POST['board'])) {
 		require_once 'inc/mod/ban.php';
 		
@@ -953,7 +987,8 @@ function mod_ban_post($board, $delete, $post) {
 		'post' => $post,
 		'board' => $board,
 		'delete' => (bool)$delete,
-		'boards' => listBoards()
+		'boards' => listBoards(),
+		'token' => $security_token
 	);
 	
 	mod_page(_('New ban'), 'mod/ban_form.html', $args);
@@ -1701,9 +1736,9 @@ function mod_themes_list() {
 	if (!hasPermission($config['mod']['themes']))
 		error($config['error']['noaccess']);
 
-	if(!is_dir($config['dir']['themes']))
+	if (!is_dir($config['dir']['themes']))
 		error(_('Themes directory doesn\'t exist!'));
-	if(!$dir = opendir($config['dir']['themes']))
+	if (!$dir = opendir($config['dir']['themes']))
 		error(_('Cannot open themes directory; check permissions.'));
 
 	$query = query('SELECT `theme` FROM `theme_settings` WHERE `name` IS NULL AND `value` IS NULL') or error(db_error());
@@ -1730,14 +1765,14 @@ function mod_theme_configure($theme_name) {
 	if (!hasPermission($config['mod']['themes']))
 		error($config['error']['noaccess']);
 
-	if(!$theme = loadThemeConfig($theme_name)) {
+	if (!$theme = loadThemeConfig($theme_name)) {
 		error($config['error']['invalidtheme']);
 	}
 
-	if(isset($_POST['install'])) {
+	if (isset($_POST['install'])) {
 		// Check if everything is submitted
-		foreach($theme['config'] as &$conf) {
-			if(!isset($_POST[$conf['name']]) && $conf['type'] != 'checkbox')
+		foreach ($theme['config'] as &$conf) {
+			if (!isset($_POST[$conf['name']]) && $conf['type'] != 'checkbox')
 				error(sprintf($config['error']['required'], $c['title']));
 		}
 		
@@ -1746,7 +1781,7 @@ function mod_theme_configure($theme_name) {
 		$query->bindValue(':theme', $theme_name);
 		$query->execute() or error(db_error($query));
 		
-		foreach($theme['config'] as &$conf) {
+		foreach ($theme['config'] as &$conf) {
 			$query = prepare("INSERT INTO `theme_settings` VALUES(:theme, :name, :value)");
 			$query->bindValue(':theme', $theme_name);
 			$query->bindValue(':name', $conf['name']);
@@ -1760,17 +1795,17 @@ function mod_theme_configure($theme_name) {
 		
 		$result = true;
 		$message = false;
-		if(isset($theme['install_callback'])) {
+		if (isset($theme['install_callback'])) {
 			$ret = $theme['install_callback'](themeSettings($theme_name));
-			if($ret && !empty($ret)) {
-				if(is_array($ret) && count($ret) == 2) {
+			if ($ret && !empty($ret)) {
+				if (is_array($ret) && count($ret) == 2) {
 					$result = $ret[0];
 					$message = $ret[1];
 				}
 			}
 		}
 		
-		if(!$result) {
+		if (!$result) {
 			// Install failed
 			$query = prepare("DELETE FROM `theme_settings` WHERE `theme` = :theme");
 			$query->bindValue(':theme', $theme_name);

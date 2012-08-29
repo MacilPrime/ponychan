@@ -47,7 +47,7 @@ function doBoardListPart($list, $root) {
 function createBoardlist($mod=false) {
 	global $config;
 	
-	if (!isset($config['boards'])) return Array('top'=>'','bottom'=>'');
+	if (!isset($config['boards'])) return array('top'=>'','bottom'=>'');
 	
 	$body = doBoardListPart($config['boards'], $mod?'?/':$config['root']);
 	if (!preg_match('/\]<\/span> $/', $body))
@@ -55,7 +55,7 @@ function createBoardlist($mod=false) {
 	
 	$body = trim($body);
 	
-	return Array(
+	return array(
 		'top' => '<div class="boardlist top">' . $body . '</div>',
 		'bottom' => '<div class="boardlist bottom">' . $body . '</div>'
 	);
@@ -74,7 +74,7 @@ function error($message, $priority = true) {
 		die('Error: ' . $message . "\n");
 	}
 	
-	die(Element('page.html', Array(
+	die(Element('page.html', array(
 		'config'=>$config,
 		'title'=>'Error',
 		'subtitle'=>'An error has occured.',
@@ -91,11 +91,11 @@ function error($message, $priority = true) {
 function loginForm($error=false, $username=false, $redirect=false) {
 	global $config;
 	
-	die(Element('page.html', Array(
-		'index'=>$config['root'],
-		'title'=>_('Login'),
-		'config'=>$config,
-		'body'=>Element('login.html', Array(
+	die(Element('page.html', array(
+		'index' => $config['root'],
+		'title' => _('Login'),
+		'config' => $config,
+		'body' => Element('login.html', array(
 			'config'=>$config,
 			'error'=>$error,
 			'username'=>utf8tohtml($username),
@@ -135,7 +135,7 @@ function capcode($cap) {
 	if (!$cap)
 		return false;
 	
-	$capcode = Array();
+	$capcode = array();
 	if (isset($config['custom_capcode'][$cap])) {
 		if (is_array($config['custom_capcode'][$cap])) {
 			$capcode['cap'] = sprintf($config['custom_capcode'][$cap][0], $cap);
@@ -179,7 +179,7 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 		// Open tags
 		if (preg_match_all('/<([\w]+)[^>]*>/', $body, $open_tags)) {
 			
-			$tags = Array();
+			$tags = array();
 			for ($x=0;$x<count($open_tags[0]);$x++) {
 				if (!preg_match('/\/(\s+)?>$/', $open_tags[0][$x]))
 					$tags[] = $open_tags[1][$x];
@@ -213,12 +213,13 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 	return $body;
 }
 
-function confirmLink($text, $title, $confirm, $href) {
-	global $config, $mod;
-	if ($config['mod']['server-side_confirm'])
-		return '<a onclick="if (confirm(\'' . htmlentities(addslashes($confirm)) . '\')) document.location=\'?/' . htmlentities(addslashes($href)) . '\';return false;" title="' . htmlentities($title) . '" href="?/confirm/' . $href . '">' . $text . '</a>';
-	else
-		return '<a onclick="return confirm(\'' . htmlentities(addslashes($confirm)) . '\')" title="' . htmlentities($title) . '" href="?/' . $href . '">' . $text . '</a>';
+function secure_link_confirm($text, $title, $confirm_message, $href) {
+	global $config;
+
+	return '<a onclick="if (confirm(\'' . htmlentities(addslashes($confirm_message)) . '\')) document.location=\'?/' . htmlentities(addslashes($href . '/' . make_secure_link_token($href))) . '\';return false;" title="' . htmlentities($title) . '" href="?/' . $href . '">' . $text . '</a>';
+}
+function secure_link($href) {
+	return $href . '/' . make_secure_link_token($href);
 }
 
 class Post {
@@ -272,15 +273,15 @@ class Post {
 			
 			// Delete
 			if (hasPermission($config['mod']['delete'], $board['uri'], $this->mod))
-				$built .= ' ' . confirmLink($config['mod']['link_delete'], 'Delete', 'Are you sure you want to delete this?', $board['uri'] . '/delete/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_delete'], 'Delete', 'Are you sure you want to delete this?', $board['uri'] . '/delete/' . $this->id);
 			
 			// Delete all posts by IP
 			if (hasPermission($config['mod']['deletebyip'], $board['uri'], $this->mod))
-				$built .= ' ' . confirmLink($config['mod']['link_deletebyip'], 'Delete all posts by IP', 'Are you sure you want to delete all posts by this IP address?', $board['uri'] . '/deletebyip/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip'], 'Delete all posts by IP', 'Are you sure you want to delete all posts by this IP address?', $board['uri'] . '/deletebyip/' . $this->id);
 			
 			// Delete all posts by IP (global)
 			if (hasPermission($config['mod']['deletebyip_global'], $board['uri'], $this->mod))
-				$built .= ' ' . confirmLink($config['mod']['link_deletebyip_global'], 'Delete all posts by IP across all boards', 'Are you sure you want to delete all posts by this IP address, across all boards?', $board['uri'] . '/deletebyip/' . $this->id . '/global');
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip_global'], 'Delete all posts by IP across all boards', 'Are you sure you want to delete all posts by this IP address, across all boards?', $board['uri'] . '/deletebyip/' . $this->id . '/global');
 			
 			// Ban
 			if (hasPermission($config['mod']['ban'], $board['uri'], $this->mod))
@@ -307,7 +308,7 @@ class Post {
 	public function build($index=false) {
 		global $board, $config;
 		
-		return Element('post_reply.html', Array('config' => $config, 'board' => $board, 'post' => &$this, 'index' => $index));
+		return Element('post_reply.html', array('config' => $config, 'board' => $board, 'post' => &$this, 'index' => $index));
 	}
 };
 
@@ -335,7 +336,7 @@ class Thread {
 		$this->filename = $filename;
 		$this->omitted = 0;
 		$this->omitted_images = 0;
-		$this->posts = Array();
+		$this->posts = array();
 		$this->ip = $ip;
 		$this->sticky = $sticky;
 		$this->locked = $locked;
@@ -373,15 +374,15 @@ class Thread {
 			// Mod controls (on posts)
 			// Delete
 			if (hasPermission($config['mod']['delete'], $board['uri'], $this->mod))
-				$built .= ' ' . confirmLink($config['mod']['link_delete'], 'Delete', 'Are you sure you want to delete this?', $board['uri'] . '/delete/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_delete'], 'Delete', 'Are you sure you want to delete this?', $board['uri'] . '/delete/' . $this->id);
 			
 			// Delete all posts by IP
 			if (hasPermission($config['mod']['deletebyip'], $board['uri'], $this->mod))
-				$built .= ' ' . confirmLink($config['mod']['link_deletebyip'], 'Delete all posts by IP', 'Are you sure you want to delete all posts by this IP address?', $board['uri'] . '/deletebyip/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip'], 'Delete all posts by IP', 'Are you sure you want to delete all posts by this IP address?', $board['uri'] . '/deletebyip/' . $this->id);
 			
 			// Delete all posts by IP (global)
 			if (hasPermission($config['mod']['deletebyip_global'], $board['uri'], $this->mod))
-				$built .= ' ' . confirmLink($config['mod']['link_deletebyip_global'], 'Delete all posts by IP across all boards', 'Are you sure you want to delete all posts by this IP address, across all boards?', $board['uri'] . '/deletebyip/' . $this->id . '/global');
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip_global'], 'Delete all posts by IP across all boards', 'Are you sure you want to delete all posts by this IP address, across all boards?', $board['uri'] . '/deletebyip/' . $this->id . '/global');
 			
 			// Ban
 			if (hasPermission($config['mod']['ban'], $board['uri'], $this->mod))
@@ -404,16 +405,16 @@ class Thread {
 			
 			if (hasPermission($config['mod']['bumplock'], $board['uri'], $this->mod))
 				if ($this->bumplocked)
-					$built .= ' <a title="Allow thread to be bumped" href="?/' . $board['uri'] . '/bumpunlock/' . $this->id . '">' . $config['mod']['link_bumpunlock'] . '</a>';
+					$built .= ' <a title="Allow thread to be bumped" href="?/' . secure_link($board['uri'] . '/bumpunlock/' . $this->id) . '">' . $config['mod']['link_bumpunlock'] . '</a>';
 				else
-					$built .= ' <a title="Prevent thread from being bumped" href="?/' . $board['uri'] . '/bumplock/' . $this->id . '">' . $config['mod']['link_bumplock'] . '</a>';
+					$built .= ' <a title="Prevent thread from being bumped" href="?/' . secure_link($board['uri'] . '/bumplock/' . $this->id) . '">' . $config['mod']['link_bumplock'] . '</a>';
 			
 			// Lock
 			if (hasPermission($config['mod']['lock'], $board['uri'], $this->mod))
 				if ($this->locked)
-					$built .= ' <a title="Unlock thread" href="?/' . $board['uri'] . '/unlock/' . $this->id . '">' . $config['mod']['link_unlock'] . '</a>';
+					$built .= ' <a title="Unlock thread" href="?/' . secure_link($board['uri'] . '/unlock/' . $this->id) . '">' . $config['mod']['link_unlock'] . '</a>';
 				else
-					$built .= ' <a title="Lock thread" href="?/' . $board['uri'] . '/lock/' . $this->id . '">' . $config['mod']['link_lock'] . '</a>';
+					$built .= ' <a title="Lock thread" href="?/' . secure_link($board['uri'] . '/lock/' . $this->id) . '">' . $config['mod']['link_lock'] . '</a>';
 			
 			if (hasPermission($config['mod']['move'], $board['uri'], $this->mod))
 				$built .= ' <a title="Move thread to another board" href="?/' . $board['uri'] . '/move/' . $this->id . '">' . $config['mod']['link_move'] . '</a>';
@@ -437,7 +438,7 @@ class Thread {
 		
 		$hasnoko50 = $this->postCount() >= $config['noko50_min'];
 
-		$built = Element('post_thread.html', Array('config' => $config, 'board' => $board, 'post' => &$this, 'index' => $index, 'hasnoko50' => $hasnoko50, 'isnoko50' => $isnoko50));
+		$built = Element('post_thread.html', array('config' => $config, 'board' => $board, 'post' => &$this, 'index' => $index, 'hasnoko50' => $hasnoko50, 'isnoko50' => $isnoko50));
 		
 		if (!$this->mod && $index && $config['cache']['enabled']) {
 			cache::set($this->cache_key($index), $built);

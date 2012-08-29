@@ -1,12 +1,12 @@
 <?php
 
 // Installation/upgrade file	
-define('VERSION', 'v0.9.6-dev-5');
+define('VERSION', 'v0.9.6-dev-6');
 
 require 'inc/functions.php';
 
 $step = isset($_GET['step']) ? round($_GET['step']) : 0;
-$page = Array(
+$page = array(
 	'config' => $config,
 	'title' => 'Install',
 	'body' => '',
@@ -92,7 +92,7 @@ if (file_exists($config['has_installed'])) {
 			}
 		case 'v0.9.3-dev-6':
 			// change to MyISAM
-			$tables = Array(
+			$tables = array(
 				'bans', 'boards', 'ip_notes', 'modlogs', 'mods', 'mutes', 'noticeboard', 'pms', 'reports', 'robot', 'theme_settings', 'news'
 			);
 			foreach ($boards as &$board) {
@@ -216,6 +216,16 @@ if (false) {
 }
 		case 'v0.9.6-dev-4':
 			query("ALTER TABLE  `news` DROP INDEX  `id`, ADD PRIMARY KEY ( `id` )") or error(db_error());
+		case 'v0.9.6-dev-5':
+			query("ALTER TABLE  `bans` CHANGE  `id`  `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT") or error(db_error());
+			query("ALTER TABLE  `mods` CHANGE  `id`  `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT") or error(db_error());
+			query("ALTER TABLE  `news` CHANGE  `id`  `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT") or error(db_error());
+			query("ALTER TABLE  `noticeboard` CHANGE  `id`  `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT") or error(db_error());
+			query("ALTER TABLE  `pms` CHANGE  `id`  `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT") or error(db_error());
+			query("ALTER TABLE  `reports` CHANGE  `id`  `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT") or error(db_error());
+			foreach ($boards as $board) {
+				query(sprintf("ALTER TABLE  `posts_%s` CHANGE `id`  `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT", $board['uri'])) or error(db_error());
+			}
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);
@@ -521,7 +531,7 @@ if ($step == 0) {
 	preg_match_all("/(^|\n)((SET|CREATE|INSERT).+)\n\n/msU", $sql, $queries);
 	$queries = $queries[2];
 	
-	$queries[] = Element('posts.sql', Array('board' => 'b'));
+	$queries[] = Element('posts.sql', array('board' => 'b'));
 	
 	$sql_errors = '';
 	foreach ($queries as &$query) {

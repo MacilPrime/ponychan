@@ -39,6 +39,8 @@ $pages = array(
 	'/noticeboard/delete/(\d+)'		=> 'noticeboard_delete',// delete from noticeboard
 	'/log'					=> 'log',		// modlog
 	'/log/(\d+)'				=> 'log',		// modlog
+	'/log:([^/]+)'				=> 'user_log',		// modlog
+	'/log:([^/]+)/(\d+)'			=> 'user_log',		// modlog
 	'/news'					=> 'news',		// view news
 	'/news/(\d+)'				=> 'news',		// view news
 	'/news/delete/(\d+)'			=> 'news_delete',	// delete from news
@@ -50,21 +52,23 @@ $pages = array(
 	'/reports'				=> 'reports',		// report queue
 	'/reports/(\d+)/dismiss(all)?'		=> 'report_dismiss',	// dismiss a report
 	
-	'/ban'					=> 'ban',		// new ban
 	'/IP/([\w.:]+)'				=> 'ip',		// view ip address
 	'/IP/([\w.:]+)/remove_note/(\d+)'	=> 'ip_remove_note',	// remove note from ip address
 	'/bans'					=> 'bans',		// ban list
 	'/bans/(\d+)'				=> 'bans',		// ban list
 	
-	'/(\w+)/delete/(\d+)'			=> 'delete',		// delete post
-	'/(\w+)/ban(&delete)?/(\d+)'		=> 'ban_post',		// ban poster
-	'/(\w+)/deletefile/(\d+)'		=> 'deletefile',	// delete file from post
-	'/(\w+)/deletebyip/(\d+)(/global)?'	=> 'deletebyip',	// delete all posts by IP address
-	'/(\w+)/(un)?lock/(\d+)'		=> 'lock',		// lock thread
-	'/(\w+)/(un)?sticky/(\d+)'		=> 'sticky',		// sticky thread
-	'/(\w+)/bump(un)?lock/(\d+)'		=> 'bumplock',		// "bumplock" thread
-	'/(\w+)/move/(\d+)'			=> 'move',		// move thread
 	'/(\w+)/edit/(\d+)'			=> 'edit',		// edit post
+
+	// CSRF-protected moderator actions
+	'/ban'					=> 'secure_POST ban',	// new ban
+	'/(\w+)/ban(&delete)?/(\d+)'		=> 'secure_POST ban_post', // ban poster
+	'/(\w+)/move/(\d+)'			=> 'secure_POST move',	// move thread
+	'/(\w+)/delete/(\d+)'			=> 'secure delete',	// delete post
+	'/(\w+)/deletefile/(\d+)'		=> 'secure deletefile',	// delete file from post
+	'/(\w+)/deletebyip/(\d+)(/global)?'	=> 'secure deletebyip',	// delete all posts by IP address
+	'/(\w+)/(un)?lock/(\d+)'		=> 'secure lock',	// lock thread
+	'/(\w+)/(un)?sticky/(\d+)'		=> 'secure sticky',	// sticky thread
+	'/(\w+)/bump(un)?lock/(\d+)'		=> 'secure bumplock',	// "bumplock" thread
 	
 	'/themes'				=> 'themes_list',	// manage themes
 	'/themes/(\w+)'				=> 'theme_configure',	// configure/reconfigure theme
@@ -87,7 +91,6 @@ $pages = array(
 );
 
 
-
 if (!$mod) {
 	$pages = array('!!' => 'login');
 } elseif (isset($_GET['status'], $_GET['r'])) {
@@ -101,6 +104,8 @@ if (isset($config['mod']['custom_pages'])) {
 
 $new_pages = array();
 foreach ($pages as $key => $callback) {
+	if (preg_match('/^secure /', $callback))
+		$key .= '(/(?P<token>[a-f0-9]{8}))?';
 	$new_pages[@$key[0] == '!' ? $key : "!^$key$!"] = $callback;
 }
 $pages = $new_pages;
@@ -108,6 +113,29 @@ $pages = $new_pages;
 foreach ($pages as $uri => $handler) {
 	if (preg_match($uri, $query, $matches)) {
 		$matches = array_slice($matches, 1);
+		
+		if (preg_match('/^secure(_POST)? /', $handler, $m)) {
+			$secure_post_only = isset($m[1]);
+			if (!$secure_post_only || $_SERVER['REQUEST_METHOD'] == 'POST') {
+				$token = isset($matches['token']) ? $matches['token'] : (isset($_POST['token']) ? $_POST['token'] : false);
+				
+				if ($token === false) {
+					if ($secure_post_only)
+						error($config['error']['csrf']);
+					else {
+						mod_confirm(substr($query, 1));
+						exit;
+					}
+				}
+			
+				// CSRF-protected page; validate security token
+				$actual_query = preg_replace('!/([a-f0-9]{8})$!', '', $query);
+				if ($token != make_secure_link_token(substr($actual_query, 1))) {
+					error($config['error']['csrf']);
+				}
+			}
+			$handler = preg_replace('/^secure(_POST)? /', '', $handler);
+		}
 		
 		if ($config['debug']) {
 			$debug['mod_page'] = array(

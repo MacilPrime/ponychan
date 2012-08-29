@@ -30,7 +30,7 @@ class PreparedQueryDebug {
 		if ($config['debug'] && $function == 'execute') {
 			$time = round((microtime(true) - $start) * 1000, 2) . 'ms';
 			
-			$debug['sql'][] = Array(
+			$debug['sql'][] = array(
 				'query' => $this->query->queryString,
 				'rows' => $this->query->rowCount(),
 				'time' => '~' . $time
@@ -49,8 +49,11 @@ function sql_open() {
 	if (!empty($config['db']['dsn']))
 		$dsn .= ';' . $config['db']['dsn'];
 	try {
-		$options = Array(PDO::ATTR_TIMEOUT => $config['db']['timeout']);
-		$options = Array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
+		$options = array(
+			PDO::ATTR_TIMEOUT => $config['db']['timeout'],
+			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+		);
 		if ($config['db']['persistent'])
 			$options[PDO::ATTR_PERSISTENT] = true;
 		return $pdo = new PDO($dsn, $config['db']['user'], $config['db']['password'], $options);
@@ -73,6 +76,7 @@ function prepare($query) {
 	
 	if ($config['debug'])
 		return new PreparedQueryDebug($query);
+
 	return $pdo->prepare($query);
 }
 
@@ -87,25 +91,25 @@ function query($query) {
 		if (!$query)
 			return false;
 		$time = round((microtime(true) - $start) * 1000, 2) . 'ms';
-		$debug['sql'][] = Array(
+		$debug['sql'][] = array(
 			'query' => $query->queryString,
 			'rows' => $query->rowCount(),
 			'time' => '~' . $time
 		);
 		return $query;
-	} else {
-		return $pdo->query($query);
 	}
+
+	return $pdo->query($query);
 }
 
 function db_error($PDOStatement=null) {
 	global $pdo;
+
 	if (isset($PDOStatement)) {
 		$err = $PDOStatement->errorInfo();
 		return $err[2];
-	} else {
-		$err = $pdo->errorInfo();
-		return $err[2];
 	}
-}
 
+	$err = $pdo->errorInfo();
+	return $err[2];
+}
