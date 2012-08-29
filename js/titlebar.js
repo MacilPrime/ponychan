@@ -27,7 +27,7 @@ $(document).ready(function(){
 	}
 	var mainTitle = titlePrefix+titleEnd;
 
-	var $unseenPosts = $(".post.reply");
+	var $unseenPosts = $(".post.reply").not(".preview-hidden, .post-hover, .post-inline");
 
 	var oldCount = -1;
 	var scrollHandler = null;
@@ -53,7 +53,7 @@ $(document).ready(function(){
 	}).scroll();
 
 	$(document).bind('new_post', function(e, post) {
-		if ($(post).hasClass("hidden"))
+		if ($(post).is(".preview-hidden, .post-hover, .post-inline") || $(post).parent().is(".preview-hidden"))
 			return;
 		$unseenPosts = $unseenPosts.add(post);
 		document.title = "("+$unseenPosts.length+") "+mainTitle;
