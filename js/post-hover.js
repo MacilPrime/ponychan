@@ -55,6 +55,7 @@ $(document).ready(function(){
 				if (hovering) {
 					var $newPost = $post.clone();
 					$newPost.find('span.mentioned').off('mouseenter').off('mouseleave').off('mousemove');
+					$newPost.find('#' + id).attr('id', '');
 					$newPost
 						.attr('id', 'post-hover-' + id)
 						.addClass('post-hover')
