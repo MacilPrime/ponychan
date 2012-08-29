@@ -8,7 +8,7 @@
  */
 
 $(document).ready(function(){
-	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting");
+	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting", "Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.");
 	settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)");
 
 	var $oldForm = $("form[name='post']");

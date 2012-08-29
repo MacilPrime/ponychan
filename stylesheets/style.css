@@ -520,3 +520,7 @@ header { margin-top: 48px; }
 	padding: 6px;
 	margin: 0 5px;
 }
+.setting_more_details {
+	font-size: 10pt;
+	margin-left: 2.7em;
+}
