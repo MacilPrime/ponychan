@@ -54,7 +54,7 @@ $(document).ready(function(){
 		if (!page_url_data[url]) {
 			page_url_data[url] = true;
 			page_url_callbacks[url] = [];
-			page_url_callbacks[url].push(callback);
+			page_url_callbacks[url].push([id, callback]);
 			$.ajax({
 				url: url,
 				success: function(data) {
@@ -63,10 +63,11 @@ $(document).ready(function(){
 					var $data = $(data);
 					page_url_data[url] = $data;
 					
-					load_post_from_data(id, $data);
 					for (var i=0; i < page_url_callbacks[url].length; i++) {
-						page_url_callbacks[url][i]();
+						load_post_from_data(page_url_callbacks[url][i][0], $data);
+						page_url_callbacks[url][i][1]();
 					}
+					delete page_url_callbacks[url];
 				}
 			});
 		} else {
@@ -76,7 +77,7 @@ $(document).ready(function(){
 				callback();
 			} else {
 				// There already is an AJAX call in progress to load this post
-				page_url_callbacks[url].push(callback);
+				page_url_callbacks[url].push([id, callback]);
 			}
 		}
 	};
