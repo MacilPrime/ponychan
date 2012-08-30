@@ -530,7 +530,7 @@ header { margin-top: 48px; }
 	display: block !important;
 }
 .post-inline-container {
-	display: block !important;
+	display: table !important;
 }
 .post-inline {
 	display: inline-block !important;
