@@ -542,3 +542,6 @@ header { margin-top: 48px; }
 .preview-hidden {
 	display: none !important;
 }
+.inlined {
+	opacity: 0.5;
+}
