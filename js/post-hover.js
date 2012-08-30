@@ -123,6 +123,7 @@ $(document).ready(function(){
 					$newPost.find('span.mentioned').off('mouseenter').off('mouseleave').off('mousemove');
 					$newPost.find('[id]').attr('id', '');
 					$newPost.find('.post-inline-container').remove();
+					$newPost.find('.inlined').removeClass('inlined');
 					$newPost
 						.attr('id', 'post-hover-' + id)
 						.addClass('post-hover')
