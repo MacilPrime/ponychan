@@ -12,6 +12,9 @@ $(document).ready(function(){
 	settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)");
 
 	var $oldForm = $("form[name='post']");
+	var $oldName = $oldForm.find("input[name='name']");
+	var $oldEmail = $oldForm.find("input[name='email']");
+	var $oldSubject = $oldForm.find("input[name='subject']");
 
 	if ($oldForm.length == 0)
 		return;
@@ -88,7 +91,7 @@ $(document).ready(function(){
 		.css("-moz-box-sizing", "border-box")
 		.css("width", "33%")
 		.attr("size", 1)
-		.val( $oldForm.find("input[name='name']").val() )
+		.val( $oldName.val() )
 		.appendTo($namerow);
 	var $email = $("<input/>")
 		.attr("id", "qremail")
@@ -100,7 +103,7 @@ $(document).ready(function(){
 		.css("-moz-box-sizing", "border-box")
 		.css("width", "33%")
 		.attr("size", 1)
-		.val( $oldForm.find("input[name='email']").val() )
+		.val( $oldEmail.val() )
 		.appendTo($namerow);
 	var $subject = $("<input/>")
 		.attr("id", "qrsubject")
@@ -112,7 +115,7 @@ $(document).ready(function(){
 		.css("-moz-box-sizing", "border-box")
 		.attr("size", 1)
 		.css("width", "34%")
-		.val( $oldForm.find("input[name='subject']").val() )
+		.val( $oldSubject.val() )
 		.appendTo($namerow);
 	var $commentarea = $("<div/>").appendTo($QRForm);
 	var $comment = $("<textarea/>")
@@ -474,8 +477,30 @@ $(document).ready(function(){
 		Recaptcha.reload();
 	});
 
+	var checkNameDisable = function() {
+		if ($oldName.length == 0)
+			$name.prop("disabled", true);
+		if ($oldEmail.length == 0)
+			$email.prop("disabled", true);
+		if ($oldSubject.length == 0)
+			$subject.prop("disabled", true);
+	};
+	checkNameDisable();
+
+	if ($oldName.length == 0 && $oldEmail.length == 0) {
+		if ($oldSubject.length == 0) {
+			$namerow.hide();
+		} else {
+			$name.hide();
+			$email.hide();
+			$subject.css("width", "100%");
+		}
+	}
+
 	var setQRFormDisabled = function(disabled) {
 		$("input, textarea", $QRForm).prop("disabled", disabled);
+		if (!disabled)
+			checkNameDisable();
 	}
 
 	var positionQR = function(newX, newY) {
