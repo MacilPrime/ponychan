@@ -105,6 +105,9 @@ if (isset($_POST['delete'])) {
 	if (!openBoard($_POST['board']))
 		error($config['error']['noboard']);
 	
+	if (!$config['allow_self_edit'])
+		error($config['error']['bot']);
+
 	// Check if banned
 	checkBan($board['uri']);
 	
@@ -169,6 +172,9 @@ if (isset($_POST['delete'])) {
 
 	if (isset($_POST['password']))
 		$password = $_POST['password'];
+
+	if (isset($password) && !$config['allow_self_edit'])
+		error($config['error']['bot']);
 
 	if (isset($_POST['mod']) && $_POST['mod']) {
 		require 'inc/mod.php';
