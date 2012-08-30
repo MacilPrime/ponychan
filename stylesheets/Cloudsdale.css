@@ -82,7 +82,7 @@ p.intro span.name {
 	font-size: 13px;
 }
 
-div.post .body a {
+a.bodylink {
 	color: #6666ff;
 }
 

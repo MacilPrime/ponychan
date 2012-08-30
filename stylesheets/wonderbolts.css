@@ -19,7 +19,7 @@ body {
 	font-family: serif;
 	font-size: 16px;
 }
-a, a:visited, div.post .body a {
+a, a:visited, a.bodylink {
 	color: #f7fd77;
 }
 a:hover, p.intro a.post_no:hover {

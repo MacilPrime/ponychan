@@ -191,7 +191,7 @@ div.post.reply .body {
 div.post.reply.highlighted {
 	background: #D6BAD0;
 }
-div.post .body a {
+a.bodylink {
 	color: #D00;
 }
 div.post {
@@ -526,10 +526,18 @@ header { margin-top: 48px; }
 }
 .post-hover {
 	margin-left: 16px !important;
-	border-style: solid !important;
-	box-shadow: 1px 1px 1px #999 !important;
 	position: absolute !important;
 	display: block !important;
+}
+.post-inline-container {
+	display: block !important;
+}
+.post-inline {
+	display: inline-block !important;
+}
+.post-hover, .post-inline {
+	border-style: solid !important;
+	box-shadow: 1px 1px 1px #999 !important;
 }
 .preview-hidden {
 	display: none !important;
