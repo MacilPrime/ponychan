@@ -47,6 +47,7 @@ $(document).ready(function(){
 				.css('padding', '0')
 				.css('maxWidth', '75%')
 				.css('maxHeight', '95%')
+				.css('z-index', 10)
 				.insertAfter($image.parent())
 				.load(function() {
 					$(this).trigger('mousemove');
