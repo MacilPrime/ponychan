@@ -725,6 +725,8 @@ if (isset($_POST['delete'])) {
 			$post['thumb'] = substr_replace($post['thumb'], '', 0, mb_strlen($board['dir'] . $config['dir']['thumb']));
 	}
 	
+	$post['ip'] = $_SERVER['REMOTE_ADDR'];
+	
 	$post = (object)$post;
 	if ($error = event('post', $post)) {
 		undoImage((array)$post);
