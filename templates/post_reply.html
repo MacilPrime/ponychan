@@ -36,7 +36,7 @@
 		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
 	</label>
-	 <a class="post_no" {% if not index %}onclick="highlightReply({{ post.id }})" {% endif %}href="{{ post.link }}">No.</a>
+	 <a class="post_no" {% if not index %}onclick="highlightReply({{ post.id }})" href="#{{ post.id }}"{% else %}href="{{ post.link }}"{% endif %}>No.</a>
 	<a class="post_no"
 		{% if not index %}
 			 onclick="citeReply({{ post.id }});"

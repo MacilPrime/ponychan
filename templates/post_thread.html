@@ -81,7 +81,7 @@
 		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
 	</label>
-	 <a class="post_no" href="{{ post.link }}">No.</a>
+	 <a class="post_no" href="{% if not index %}#{{ post.id }}{% else %}{{ post.link }}{% endif %}">No.</a>
 	<a class="post_no"
 		{% if not index %}
 			 onclick="citeReply({{ post.id }});"
