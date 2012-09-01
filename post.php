@@ -246,9 +246,6 @@ if (isset($_POST['delete'])) {
 	}
 
 	$post = (object)$post;
-	if ($error = event('post', $post)) {
-		error($error);
-	}
 	if ($error = event('post-edit', $post)) {
 		error($error);
 	}
