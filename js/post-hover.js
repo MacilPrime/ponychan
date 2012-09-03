@@ -94,8 +94,7 @@ $(document).ready(function(){
 		}
 
 		if ($('#' + id).not('.preview-hidden').length) {
-			var href = $link.attr('href').replace(/^[^#]*/, '');
-			$link.attr('href', href);
+			$link.attr('href', '#'+id);
 		}
 		
 		var $post = false;
