@@ -197,11 +197,7 @@ a.bodylink {
 div.post {
 	max-width: 97%;
 }
-<<<<<<< HEAD
 div.post .body {
-=======
-div.post div.body {
->>>>>>> master
 	word-wrap: break-word;
 	white-space: pre-wrap;
 }
@@ -277,17 +273,10 @@ span.heading {
 	color: black;
 	padding: 0px 1px;
 }
-<<<<<<< HEAD
 div.post .body .spoiler a {
 	color: black;
 }
 .spoiler:hover, div.post .body .spoiler:hover a {
-=======
-div.post.reply div.body span.spoiler a {
-	color: black;
-}
-span.spoiler:hover, div.post.reply div.body span.spoiler:hover a {
->>>>>>> master
 	color: white;
 }
 .hidetext {
