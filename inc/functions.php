@@ -111,7 +111,7 @@ function loadConfig() {
 							str_replace('%d', '\d+', preg_quote($config['file_page50'], '/')) .
 						')' .
 					'|' .
-						preg_quote($config['file_mod'], '/') . '\?\/.+' .
+						preg_quote($config['file_mod'], '/') . '\?\/.*' .
 				')([#?](.+)?)?$/i';
 		} else {
 			// CLI mode
