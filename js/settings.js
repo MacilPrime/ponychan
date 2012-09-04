@@ -189,16 +189,16 @@ settings.bindPropSelect = function($select, name) {
 	});
 };
 
-settings.newProp = function(name, type, defval, description) {
+settings.newProp = function(name, type, defval, description, moredetails) {
 	var id = "setting_"+name;
 	
 	settingTypes[name] = type;
 	defaultValues[name] = defval;
 	
+	var $settingDiv = $("<div/>")
+		.appendTo($settingsScreen);
+
 	if (type==="bool") {
-		var $settingDiv = $("<div/>")
-			.appendTo($settingsScreen);
-		
 		var $label = $("<label/>")
 			.attr("for", id)
 			.text(" "+description)
@@ -212,14 +212,20 @@ settings.newProp = function(name, type, defval, description) {
 	} else if (type==="select") {
 		settingSelectOptions[name] = description[0];
 		description = description[1];
-		var $settingDiv = $("<div/>")
-			.text(" "+description)
-			.appendTo($settingsScreen);
+		$settingDiv.text(" "+description);
 		var $settingSelect = $("<select/>").prependTo($settingDiv);
 		settings.bindPropSelect($settingSelect, name);
 	} else {
 		console.error("Unknown setting type ("+name+", type:"+type+")");
+		$settingDiv.remove();
 		return;
+	}
+
+	if (moredetails) {
+		var $moredetails = $("<div/>")
+			.addClass("setting_more_details")
+			.text(moredetails)
+			.appendTo($settingDiv);
 	}
 };
 

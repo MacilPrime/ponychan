@@ -13,15 +13,23 @@ $(document).ready(function() {
 	var togglifier = function(context) {
 		$('.hidetext', context).each(function() {
 			var $text = $(this);
-			var $buttonP = $('<p/>')
-				.css('clear', 'both')
-				.insertBefore($text);
-			var $button = $('<button/>')
-				.addClass('hidetogglebutton')
-				.text('Show')
-				.attr('type', 'button')
-				.css('clear', 'both')
-				.appendTo($buttonP);
+			var $buttonP;
+			var $button;
+			if ($text.prev().is('.hidetogglebuttonP')) {
+				$buttonP = $text.prev();
+				$button = $buttonP.find(".hidetogglebutton");
+			} else {
+				$buttonP = $('<p/>')
+					.css('clear', 'both')
+					.addClass('hidetogglebuttonP')
+					.insertBefore($text);
+				$button = $('<button/>')
+					.addClass('hidetogglebutton')
+					.attr('type', 'button')
+					.css('clear', 'both')
+					.appendTo($buttonP);
+			}
+			$button.text('Show')
 			$text.hide();
 			$button.on('click.hider', function() {
 				if($text.is(':visible')) {

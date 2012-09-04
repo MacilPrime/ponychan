@@ -105,6 +105,9 @@ if (isset($_POST['delete'])) {
 	if (!openBoard($_POST['board']))
 		error($config['error']['noboard']);
 	
+	if (!$config['allow_self_edit'])
+		error($config['error']['bot']);
+
 	// Check if banned
 	checkBan($board['uri']);
 	
@@ -169,6 +172,9 @@ if (isset($_POST['delete'])) {
 
 	if (isset($_POST['password']))
 		$password = $_POST['password'];
+
+	if (isset($password) && !$config['allow_self_edit'])
+		error($config['error']['bot']);
 
 	if (isset($_POST['mod']) && $_POST['mod']) {
 		require 'inc/mod.php';
@@ -240,9 +246,6 @@ if (isset($_POST['delete'])) {
 	}
 
 	$post = (object)$post;
-	if ($error = event('post', $post)) {
-		error($error);
-	}
 	if ($error = event('post-edit', $post)) {
 		error($error);
 	}
@@ -271,8 +274,6 @@ if (isset($_POST['delete'])) {
 	}
 	
 	buildThread($post['op'] ? $id : $post['thread']);
-
-	event('post-after', $post);
 
 	buildIndex();
 	$root = $mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
@@ -344,7 +345,7 @@ if (isset($_POST['delete'])) {
 	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
 } elseif (isset($_POST['post'])) {
 	
-	if (!isset($_POST['subject'], $_POST['body'], $_POST['board']))
+	if (!isset($_POST['body'], $_POST['board']))
 		error($config['error']['bot']);
 	
 	if (!isset($_POST['name']))
@@ -352,6 +353,9 @@ if (isset($_POST['delete'])) {
 	
 	if (!isset($_POST['email']))
 		$_POST['email'] = '';
+	
+	if (!isset($_POST['subject']))
+		$_POST['subject'] = '';
 	
 	if (!isset($_POST['password']))
 		$_POST['password'] = '';
@@ -476,6 +480,9 @@ if (isset($_POST['delete'])) {
 	
 		if ($config['field_disable_password'])
 			$_POST['password'] = '';
+	
+		if ($config['field_disable_subject'] || (!$post['op'] && $config['field_disable_reply_subject']))
+			$_POST['subject'] = '';
 	}
 	
 	// Check for a file
@@ -712,6 +719,8 @@ if (isset($_POST['delete'])) {
 		if ($is_an_image && $post['thumb'] != 'spoiler')
 			$post['thumb'] = substr_replace($post['thumb'], '', 0, mb_strlen($board['dir'] . $config['dir']['thumb']));
 	}
+	
+	$post['ip'] = $_SERVER['REMOTE_ADDR'];
 	
 	$post = (object)$post;
 	if ($error = event('post', $post)) {

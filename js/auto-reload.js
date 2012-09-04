@@ -119,7 +119,7 @@ $(document).ready(function(){
 		$(data).find('div.postContainer.replyContainer').each(function(index) {
 			var id = $(this).attr('id');
 			if($('#' + id).length == 0) {
-				$(this).insertAfter($('div.postContainer:last'));
+				$(this).insertAfter($('div.postContainer:not(.post-inline-container):not(.preview-hidden):last'));
 				$(document).trigger('new_post', $(this).find('.post')[0]);
 				postsAddedCount++;
 			}

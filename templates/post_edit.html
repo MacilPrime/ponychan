@@ -23,14 +23,14 @@
 				{{ post.email|e }}
 			</td>
 		</tr>{% endif %}
-		<tr>
+		{% if post.subject or not (config.field_disable_subject or (post.thread and config.field_disable_reply_subject)) %}<tr>
 			<th>
 				{% trans %}Subject{% endtrans %}
 			</th>
 			<td>
 				<span class="subject">{{ post.subject|e }}</span>
 			</td>
-		</tr>
+		</tr>{% endif %}
 		<tr>
 			<th>
 				{% trans %}Comment{% endtrans %}

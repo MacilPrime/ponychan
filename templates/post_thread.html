@@ -3,14 +3,14 @@
 
 <div class="thread" id="thread_{{ post.id }}">
 
-<div class="postContainer opContainer" id="replyC_{{ post.id }}">
-<div class="post op" id="reply_{{ post.id }}">
+<div class="postContainer opContainer postC_{{ post.id }}" id="replyC_{{ post.id }}">
+<div class="post op post_{{ post.id }}" id="reply_{{ post.id }}">
 {% if post.embed %}
 	{{ post.embed }}
 {% elseif post.file == 'deleted' %}
 	<img src="{{ config.image_deleted }}" alt="" />
 {% elseif post.file and post.file %}
-	<p class="fileinfo">{% trans %}File:{% endtrans %} <a href="{{ config.uri_img }}{{ post.file }}">{{ post.file }}</a> <span class="unimportant">
+	<p class="fileinfo">{% trans %}File:{% endtrans %} <a href="{{ config.uri_img }}{{ post.file }}">{{ post.file }}</a> <span class="morefileinfo">
 	(
 		{% if post.thumb == 'spoiler' %}
 			{% trans %}Spoiler Image{% endtrans %}, 
@@ -71,21 +71,23 @@
 		{% if capcode %}
 			{{ capcode.cap }}
 		{% endif %}
+		{% if config.poster_ids %}
+			 <span class="posterid_part">(ID:
+				 <span class="posterid id_{{ post.ip|poster_id(post.thread) }}">{{ post.ip|poster_id(post.id) }}</span>)
+			</span>
+		{% endif %}
 		{% if post.mod and post.mod|hasPermission(config.mod.show_ip, board.uri) %}
 			 [<a style="margin:0;" href="?/IP/{{ post.ip }}">{{ post.ip }}</a>]
 		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
 	</label>
-	{% if config.poster_ids %}
-		 ID: {{ post.ip|poster_id(post.id) }}
-	{% endif %}
-	 <a class="post_no" href="{{ post.link }}">No.</a>
+	 <a class="post_no" href="{% if not index %}#{{ post.id }}{% else %}{{ post.link }}{% endif %}">No.</a>
 	<a class="post_no"
 		{% if not index %}
 			 onclick="citeReply({{ post.id }});"
 		{% endif %}
 		 href="{% if index %}
-			{{ post.link('q') }}
+			{{ post.link }}
 		{% else %}
 			javascript:void(0);
 		{% endif %}">

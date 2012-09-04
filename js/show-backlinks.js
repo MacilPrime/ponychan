@@ -14,7 +14,14 @@
 
 $(document).ready(function(){
 	var showBackLinks = function() {
-		var reply_id = $(this).attr('id').replace(/^reply_/, '');
+		var reply_id = /\bpost_(\d+)\b/.exec( $(this).attr('class') )[1];
+		
+		if ($(this).hasClass('post-inline') || $(this).hasClass('post-hover')) {
+			if (window.init_hover) {
+				$(this).find('.mentioned a').each(init_hover);
+			}
+			return;
+		}
 		
 		$(this).find('.body a:not([rel="nofollow"])').each(function() {
 			var id, post, $mentioned;
@@ -30,7 +37,7 @@ $(document).ready(function(){
 		
 			$mentioned = $post.find('p.intro span.mentioned');
 			if($mentioned.length == 0)
-				$mentioned = $('<span class="mentioned unimportant"></span>').appendTo($post.find('p.intro'));
+				$mentioned = $('<span class="mentioned"></span>').appendTo($post.find('p.intro'));
 			
 			if ($mentioned.find('a.mentioned-' + reply_id).length != 0)
 				return;

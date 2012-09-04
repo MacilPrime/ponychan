@@ -1363,7 +1363,7 @@ function markup_url($matches) {
 	
 	$markup_urls[] = $url;
 	
-	return '<a target="_blank" rel="nofollow" href="' . $url . '">' . $url . '</a>' . $after;
+	return '<a target="_blank" class="bodylink" rel="nofollow" href="' . $url . '">' . $url . '</a>' . $after;
 }
 
 function unicodify($body) {
@@ -1436,7 +1436,7 @@ function markup(&$body, $track_cites = false) {
 			$query->execute() or error(db_error($query));
 			
 			if ($post = $query->fetch()) {
-				$replacement = '<a onclick="highlightReply(\''.$cite.'\');" href="' .
+				$replacement = '<a class="bodylink postlink" onclick="highlightReply(\''.$cite.'\');" href="' .
 					$config['root'] . $board['dir'] . $config['dir']['res'] . ($post['thread']?$post['thread']:$post['id']) . '.html#' . $cite . '">' .
 						'&gt;&gt;' . $cite .
 						'</a>';
@@ -1469,7 +1469,7 @@ function markup(&$body, $track_cites = false) {
 					$query->execute() or error(db_error($query));
 					
 					if ($post = $query->fetch()) {
-						$replacement = '<a onclick="highlightReply(\''.$cite.'\');" href="' .
+						$replacement = '<a class="bodylink postlink" onclick="highlightReply(\''.$cite.'\');" href="' .
 							$config['root'] . $board['dir'] . $config['dir']['res'] . ($post['thread']?$post['thread']:$post['id']) . '.html#' . $cite . '">' .
 								'&gt;&gt;&gt;/' . $_board . '/' . $cite .
 								'</a>';
@@ -1742,7 +1742,7 @@ function generate_tripcode($name) {
 	if ($trip = event('tripcode', $name))
 		return $trip;
 	
-	if (!preg_match('/^(?P<name>[^#]*)(#(?P<trip>[^#]+))?(##(?P<secure>[^#]+))?/', $name, $match))
+	if (!preg_match('/^(?P<name>[^#]*)(#(?P<trip>[^#]+))?(##?(?P<secure>[^#]+))?/', $name, $match))
 		return array('Tripcode Error'); // Shouldn't ever happen
 	
 	$name = isset($match['name']) ? $match['name'] : '';
