@@ -1503,14 +1503,14 @@ function mod_new_pm($username) {
 function mod_rebuild() {
 	global $config, $twig;
 	
-	// Check the referrer
-	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
-		error($config['error']['referer']);
-
 	if (!hasPermission($config['mod']['rebuild']))
 		error($config['error']['noaccess']);
 	
 	if (isset($_POST['rebuild'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
 		set_time_limit($config['mod']['rebuild_timelimit']);
 		
 		$log = array();
