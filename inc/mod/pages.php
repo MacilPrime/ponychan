@@ -66,6 +66,11 @@ function mod_confirm($request) {
 
 function mod_logout() {
 	global $config, $mod;
+
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);		
+
 	destroyCookies();
 	
 	header('Location: ?/', true, $config['redirect_http']);
@@ -159,6 +164,10 @@ function mod_edit_board($boardName) {
 			error($config['error']['noaccess']);
 	
 	if (isset($_POST['title'], $_POST['subtitle'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+		
 		if (isset($_POST['delete'])) {
 			if (!hasPermission($config['mod']['manageboards'], $board['uri']))
 				error($config['error']['deleteboard']);
@@ -234,6 +243,10 @@ function mod_new_board() {
 		error($config['error']['noaccess']);
 	
 	if (isset($_POST['uri'], $_POST['title'], $_POST['subtitle'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+		
 		if ($_POST['uri'] == '')
 			error(sprintf($config['error']['required'], 'URI'));
 		
