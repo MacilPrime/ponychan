@@ -275,8 +275,6 @@ if (isset($_POST['delete'])) {
 	
 	buildThread($post['op'] ? $id : $post['thread']);
 
-	event('post-after', $post);
-
 	buildIndex();
 	$root = $mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 	
