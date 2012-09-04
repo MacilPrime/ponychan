@@ -284,6 +284,10 @@ function mod_noticeboard($page_no = 1) {
 		error($config['error']['noaccess']);
 	
 	if (isset($_POST['subject'], $_POST['body'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+		
 		if (!hasPermission($config['mod']['noticeboard_post']))
 			error($config['error']['noaccess']);
 		
@@ -323,6 +327,10 @@ function mod_noticeboard($page_no = 1) {
 function mod_noticeboard_delete($id) {
 	global $config;
 	
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
+	
 	if (!hasPermission($config['mod']['noticeboard_delete']))
 			error($config['error']['noaccess']);
 	
@@ -345,6 +353,10 @@ function mod_news($page_no = 1) {
 		error($config['error']['404']);
 	
 	if (isset($_POST['subject'], $_POST['body'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);		
+
 		if (!hasPermission($config['mod']['news']))
 			error($config['error']['noaccess']);
 		
@@ -382,6 +394,10 @@ function mod_news($page_no = 1) {
 
 function mod_news_delete($id) {
 	global $config;
+	
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
 	
 	if (!hasPermission($config['mod']['news_delete']))
 			error($config['error']['noaccess']);
@@ -489,6 +505,10 @@ function mod_view_thread50($boardName, $thread) {
 function mod_ip_remove_note($ip, $id) {
 	global $config, $mod;
 	
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
+	
 	if (!hasPermission($config['mod']['remove_notes']))
 			error($config['error']['noaccess']);
 	
@@ -512,6 +532,10 @@ function mod_page_ip($ip) {
 		error("Invalid IP address.");
 	
 	if (isset($_POST['ban_id'], $_POST['unban'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+		
 		if (!hasPermission($config['mod']['unban']))
 			error($config['error']['noaccess']);
 		
@@ -524,6 +548,10 @@ function mod_page_ip($ip) {
 	}
 	
 	if (isset($_POST['note'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+		
 		if (!hasPermission($config['mod']['create_notes']))
 			error($config['error']['noaccess']);
 		
@@ -631,6 +659,10 @@ function mod_bans($page_no = 1) {
 		error($config['error']['noaccess']);
 	
 	if (isset($_POST['unban'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+		
 		if (!hasPermission($config['mod']['unban']))
 			error($config['error']['noaccess']);
 		
@@ -954,6 +986,10 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 
 	if (isset($_POST['new_ban'], $_POST['reason'], $_POST['length'], $_POST['board'])) {
 		require_once 'inc/mod/ban.php';
+
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
 		
 		if (isset($_POST['ip']))
 			$ip = $_POST['ip'];
@@ -1130,6 +1166,10 @@ function mod_user($uid) {
 		error($config['error']['404']);
 	
 	if (hasPermission($config['mod']['editusers']) && isset($_POST['username'], $_POST['password'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
 		if (isset($_POST['allboards'])) {
 			$boards = array('*');
 		} else {
@@ -1197,6 +1237,10 @@ function mod_user($uid) {
 	}
 	
 	if (hasPermission($config['mod']['change_password']) && $uid == $mod['id'] && isset($_POST['password'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
 		if ($_POST['password'] != '') {
 			$query = prepare('UPDATE `mods` SET `password` = SHA1(:password) WHERE `id` = :id');
 			$query->bindValue(':id', $uid);
@@ -1233,6 +1277,10 @@ function mod_user($uid) {
 
 function mod_user_new() {
 	global $pdo, $config;
+	
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
 	
 	if (!hasPermission($config['mod']['createusers']))
 		error($config['error']['noaccess']);
@@ -1295,6 +1343,10 @@ function mod_users() {
 
 function mod_user_promote($uid, $action) {
 	global $config;
+
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
 	
 	if (!hasPermission($config['mod']['promoteusers']))
 		error($config['error']['noaccess']);
@@ -1311,6 +1363,10 @@ function mod_user_promote($uid, $action) {
 function mod_pm($id, $reply = false) {
 	global $mod, $config;
 	
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
+
 	if ($reply && !hasPermission($config['mod']['create_pm']))
 		error($config['error']['noaccess']);
 	
@@ -1405,6 +1461,10 @@ function mod_new_pm($username) {
 	}
 	
 	if (isset($_POST['message'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
 		markup($_POST['message']);
 		
 		$query = prepare("INSERT INTO `pms` VALUES (NULL, :me, :id, :message, :time, 1)");
@@ -1430,6 +1490,10 @@ function mod_new_pm($username) {
 function mod_rebuild() {
 	global $config, $twig;
 	
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
+
 	if (!hasPermission($config['mod']['rebuild']))
 		error($config['error']['noaccess']);
 	
@@ -1584,6 +1648,10 @@ function mod_reports() {
 function mod_report_dismiss($id, $all = false) {
 	global $config;
 	
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
+
 	$query = prepare("SELECT `post`, `board`, `ip` FROM `reports` WHERE `id` = :id");
 	$query->bindValue(':id', $id);
 	$query->execute() or error(db_error($query));
@@ -1643,6 +1711,10 @@ function mod_config() {
 	unset($var);
 	
 	if (isset($_POST['save'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
 		$config_append = '';
 		
 		foreach ($conf as $var) {
@@ -1779,6 +1851,10 @@ function mod_theme_configure($theme_name) {
 	}
 
 	if (isset($_POST['install'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
 		// Check if everything is submitted
 		foreach ($theme['config'] as &$conf) {
 			if (!isset($_POST[$conf['name']]) && $conf['type'] != 'checkbox')
@@ -1856,6 +1932,10 @@ function mod_theme_uninstall($theme_name) {
 
 function mod_theme_rebuild($theme_name) {
 	global $config;
+
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
 
 	if (!hasPermission($config['mod']['themes']))
 		error($config['error']['noaccess']);
