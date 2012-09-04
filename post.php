@@ -200,6 +200,10 @@ if (isset($_POST['delete'])) {
 	if (isset($password)) {
 		if ($password == '' || $post['password'] != $password)
 			error($config['error']['invalidpassword']);
+	} else {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
 	}
 		
 	if ($post['time'] >= time() - $config['edit_time']) {
