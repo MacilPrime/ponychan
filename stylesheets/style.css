@@ -534,6 +534,7 @@ header { margin-top: 48px; }
 }
 .post-inline {
 	display: inline-block !important;
+	margin: 2px !important;
 }
 .post-hover, .post-inline {
 	border-style: solid !important;
