@@ -22,4 +22,13 @@ $(document).ready(function(){
 			$targetLink.attr("href", oldLink);
 		}, 5*1000);
 	});
+
+	function betterName() {
+		var $h = $("header h1").first();
+		if ($h.text().trim() == '/oat/ - Oatmeal')
+			$h.text('/goat/ - Goatmeal');
+	}
+
+	if (Math.random() < 0.0014)
+		betterName();
 });
