@@ -96,6 +96,9 @@ $(document).ready(function(){
 		if ($('#' + id).not('.preview-hidden').length) {
 			$link.attr('href', '#'+id);
 		}
+
+		var $parent_post = $link.parents('.post');
+		var parent_id = $parent_post.children('.intro').find('.post_no:eq(1)').first().text();
 		
 		var $post = false;
 		var hovering = false;
@@ -124,6 +127,9 @@ $(document).ready(function(){
 					$newPost.find('[id]').attr('id', '');
 					$newPost.find('.post-inline-container').remove();
 					$newPost.find('.inlined').removeClass('inlined');
+					$newPost.find('a').filter(function() {
+						return $(this).text() === '>>' + parent_id;
+					}).addClass('parent-link');
 					$newPost
 						.attr('id', 'post-hover-' + id)
 						.addClass('post-hover')
@@ -199,6 +205,9 @@ $(document).ready(function(){
 					$inlined_postC.find('[id]').attr('id', '');
 					$inlined_postC.find('.post-inline-container').remove();
 					$inlined_postC.find('.inlined').removeClass('inlined');
+					$inlined_postC.find('a').filter(function() {
+						return $(this).text() === '>>' + parent_id;
+					}).addClass('parent-link');
 					$inlined_postC
 						.attr('id', '')
 						.addClass('post-inline-container')
