@@ -97,8 +97,8 @@ $(document).ready(function(){
 			$link.attr('href', '#'+id);
 		}
 
-		var $parent_post = $link.parents('.post');
-		var parent_id = $parent_post.children('.intro').find('.post_no:eq(1)').first().text();
+		var $parent_post = $link.parents('.post').first();
+		var parent_id = $parent_post.find('> .intro, > .opMain > .intro').find('.post_no:eq(1)').first().text();
 		
 		var $post = false;
 		var hovering = false;
