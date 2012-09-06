@@ -35,9 +35,9 @@ $(document).ready(function(){
 			if($post.length == 0)
 				return;
 		
-			$mentioned = $post.find('p.intro span.mentioned');
+			$mentioned = $post.find('.intro').first().find('.mentioned').first();
 			if($mentioned.length == 0)
-				$mentioned = $('<span class="mentioned"></span>').appendTo($post.find('p.intro'));
+				$mentioned = $('<span class="mentioned"></span>').appendTo($post.find('.intro').first());
 			
 			if ($mentioned.find('a.mentioned-' + reply_id).length != 0)
 				return;
