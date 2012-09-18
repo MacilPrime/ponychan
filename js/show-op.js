@@ -31,8 +31,8 @@ $(document).ready(function(){
 			else
 				return;
 			
-			if (postID == OP) {
-				$(this).after(' <small>(OP)</small>');
+			if (postID == OP && !$(this).next().is(".opnote")) {
+				$(this).after(' <small class="opnote">(OP)</small>');
 			}
 		});
 	};
