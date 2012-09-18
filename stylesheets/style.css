@@ -25,9 +25,6 @@ a.post_no {
 p.intro a.post_no {
 	color: inherit;
 }
-p.intro a.post_no, p.intro a.email {
-	margin: 0;
-}
 p.intro a.email span.name {
 	color: #34345C;
 }
@@ -171,8 +168,8 @@ p.intro span.capcode, p.intro a.capcode, p.intro a.nametag {
 	color: #F00000;
 	margin-left: 0;
 }
-p.intro a {
-	margin-left: 8px;
+p.intro .mentioned a {
+	margin-left: 2px;
 }
 div.delete {
 	float: right;
