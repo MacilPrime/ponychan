@@ -171,6 +171,9 @@ p.intro span.capcode, p.intro a.capcode, p.intro a.nametag {
 p.intro .mentioned a {
 	margin-left: 2px;
 }
+.threadviewlink {
+	margin-left: 8px;
+}
 div.delete {
 	float: right;
 }
