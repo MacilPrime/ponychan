@@ -15,6 +15,8 @@ var $settingsScreen = $("<div/>")
 	.css("border", "1px solid black")
 	.css("height", "400px")
 	.css("width", "400px")
+	.css("overflow-y", "auto")
+	.css("max-height", "100%")
 	.css("max-width", "100%")
 	.css("background-color", "rgb(128,150,150)")
 	.hide();
@@ -59,18 +61,29 @@ var $settingsOverlay = $("<div/>")
 settings = {};
 
 settings.showWindow = function() {
+	var topPos = $(window).scrollTop()+$(window).height()/2;
+	if (topPos < 200)
+		topPos = 200;
+
 	$settingsScreen
 		.css("position", "absolute")
-		.css("top", ( $(window).scrollTop()+$(window).height()/2 ) + "px")
+		.css("top", topPos+"px")
 		.css("left", "50%")
 		.css("margin-top", "-200px")
 		.css("margin-left", "-200px");
-	
+
 	$settingsOverlay.show();
 	$settingsScreen.fadeIn("fast");
+	$(document.body).css("overflow", "hidden");
 
 	if ($settingsScreen.position().left < 200)
 		$settingsScreen.css("left", "200px");
+};
+
+settings.hideWindow = function() {
+	$settingsScreen.hide();
+	$settingsOverlay.hide();
+	$(document.body).css("overflow", "");
 };
 
 $(document).on("style_changed", function() {
@@ -79,11 +92,6 @@ $(document).on("style_changed", function() {
 		settings.showWindow();
 	}
 });
-
-settings.hideWindow = function() {
-	$settingsScreen.hide();
-	$settingsOverlay.hide();
-};
 
 $settingsOverlay.click(settings.hideWindow);
 $settingsCloseButton.click(settings.hideWindow);
@@ -230,6 +238,11 @@ settings.newProp = function(name, type, defval, description, moredetails) {
 };
 
 $(document).ready(function() {
+	// If the settings stuff already is on the page, then remove
+	// it. This can happen if the user saves the page from a web
+	// browser and opens it again.
+	$("#settingsScreen, .settingsButton, #settings-overlay").remove();
+
 	$(document.body).append($settingsOverlay, $settingsScreen);
 	$(".boardlist").append($settingsSection);
 	$(".settingsButton a").click(settings.showWindow);
