@@ -238,6 +238,11 @@ settings.newProp = function(name, type, defval, description, moredetails) {
 };
 
 $(document).ready(function() {
+	// If the settings stuff already is on the page, then remove
+	// it. This can happen if the user saves the page from a web
+	// browser and opens it again.
+	$("#settingsScreen, .settingsButton, #settings-overlay").remove();
+
 	$(document.body).append($settingsOverlay, $settingsScreen);
 	$(".boardlist").append($settingsSection);
 	$(".settingsButton a").click(settings.showWindow);
