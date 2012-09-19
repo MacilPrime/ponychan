@@ -624,10 +624,12 @@ $(document).ready(function(){
 			type: 'POST',
 			xhr: function() {
 				var xhr = new window.XMLHttpRequest();
-				xhr.upload.addEventListener("progress", function(e) {
-					if (e.lengthComputable)
-						$submit.val(Math.round(e.loaded * 100 / e.total).toString() + "%");
-				}, false);
+				if (typeof xhr.upload != "undefined" && xhr.upload != null) {
+					xhr.upload.addEventListener("progress", function(e) {
+						if (e.lengthComputable)
+							$submit.val(Math.round(e.loaded * 100 / e.total).toString() + "%");
+					}, false);
+				}
 				return xhr;
 			},
 			success: function(data) {
