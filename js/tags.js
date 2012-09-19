@@ -35,6 +35,8 @@ $(document).ready(function(){
 		var end = event.target.selectionEnd;
 		text = text.slice(0,start) + '['+tag+']' + text.slice(start,end) + '[/'+tag+']' + text.slice(end);
 		$(event.target).val(text);
+		var afterInsert = end + ('['+tag+']').length;
+		event.target.setSelectionRange(afterInsert, afterInsert);
 		return false;
 	});
 });

@@ -367,14 +367,14 @@ $(document).ready(function(){
 	var qrCiteReply = function(id) {
 		QR.open();
 
-		var body = $('#qrbody');
+		var $body = $('#qrbody');
 
 		var cited = ">>"+id+"\n";
 
 		if(typeof window.getSelection != "undefined" && window.getSelection != null) {
 			var sel = window.getSelection();
-			var startPostNo = $(sel.anchorNode).parents(".post").first().find(">.intro>.post_no").last().text();
-			var endPostNo = $(sel.focusNode).parents(".post").first().find(">.intro>.post_no").last().text();
+			var startPostNo = $(sel.anchorNode).parents(".post").first().find(".intro:first>.post_no").last().text();
+			var endPostNo = $(sel.focusNode).parents(".post").first().find(".intro:first>.post_no").last().text();
 			if(id == startPostNo && id == endPostNo) {
 				var text = sel.toString().trim();
 				if(text.length) {
@@ -391,8 +391,17 @@ $(document).ready(function(){
 			}
 		}
 
-		body.val( body.val() + cited );
-		body.focus();
+		var text = $body.val();
+		if(typeof $body[0].selectionStart != "undefined" && $body[0].selectionStart != null) {
+			var start = $body[0].selectionStart;
+			var end = $body[0].selectionEnd;
+			$body.val(text.slice(0, start)+cited+text.slice(end));
+			var afterInsert = start+cited.length;
+			$body[0].setSelectionRange(afterInsert, afterInsert);
+		} else {
+			$body.val(text + cited);
+		}
+		$body.focus();
 	};
 
 	var stealCaptcha = function() {
