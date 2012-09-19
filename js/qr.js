@@ -19,7 +19,9 @@ $(document).ready(function(){
 	if ($oldForm.length == 0)
 		return;
 
+	$("#qrtoggleoptions").remove();
 	var $QRToggleOptions = $("<div/>")
+		.attr("id", "qrtoggleoptions")
 		.css("text-align", "center")
 		.insertBefore($oldForm);
 
@@ -45,6 +47,7 @@ $(document).ready(function(){
 		.text("Open the Quick Reply dialog")
 		.appendTo($QRButtonDiv);
 
+	$("#qr").remove();
 	var $QR = $("<div/>")
 		.css("position", "fixed")
 		.attr("id", "qr")
@@ -215,7 +218,7 @@ $(document).ready(function(){
 		.prepend($spoiler)
 		.appendTo($spoilerrow);
 
-	if( $oldForm.find("#spoiler").filter(":visible").length == 0 ) {
+	if( $oldForm.find("#spoiler").length == 0 ) {
 		$spoilerrow.hide();
 	}
 
