@@ -228,7 +228,11 @@ $(document).ready(function(){
 	var $QRwarning = $("<div/>")
 		.addClass("qrWarning")
 		.css("color", "red")
+		.click(function() {
+			$QRwarning.text("");
+		})
 		.appendTo($QRForm);
+		
 
 	$("input[type='text'], textarea, #qrCaptchaPuzzle", $QRForm)
 		.css("margin", "0px")
@@ -583,6 +587,12 @@ $(document).ready(function(){
 	});
 	
 	$QRForm.submit(function(event) {
+		if (query) {
+			query.abort();
+			query = null;
+			return false;
+		}
+		
 		if (!dopost(this)) {
 			$QRwarning.text("Your post must have an image or a comment!");
 			return false;
@@ -601,9 +611,9 @@ $(document).ready(function(){
 		var data = new FormData(this);
 		data.append("post", $submit.val());
 
-		$submit.val("...");
 		setQRFormDisabled(true);
-
+		$submit.val("...").prop("disabled", false);
+		
 		var url = $(this).attr("action");
 		query = $.ajax({
 			url: url,
@@ -665,7 +675,7 @@ $(document).ready(function(){
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				query = null;
-				$QRwarning.text("Connection Error");
+				$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
 				console.log("Ajax Error");
 				console.log(errorThrown);
 				setQRFormDisabled(false);
