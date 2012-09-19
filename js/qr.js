@@ -612,6 +612,14 @@ $(document).ready(function(){
 			contentType: false,
 			processData: false,
 			type: 'POST',
+			xhr: function() {
+				var xhr = new window.XMLHttpRequest();
+				xhr.upload.addEventListener("progress", function(e) {
+					if (e.lengthComputable)
+						$submit.val(Math.round(e.loaded * 100 / e.total).toString() + "%");
+				}, false);
+				return xhr;
+			},
 			success: function(data) {
 				query = null;
 				var title1 = $("h1", data).first().text().trim();
