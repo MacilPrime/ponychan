@@ -69,7 +69,7 @@
 				{% trans %}File{% endtrans %}
 			</th>
 			<td>
-				<input type="file" name="file">
+				<input type="file" name="file" data-max-filesize="{{ config.max_filesize }}">
 				{{ antibot.html() }}
 			</td>
 		</tr>
