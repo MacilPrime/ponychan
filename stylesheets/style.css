@@ -604,10 +604,10 @@ header { margin-top: 48px; }
 	min-height: 26px;
 }
 #qr input[type='file'] {
-	width: 80%;
+	width: 70%;
 }
 #qr input[type='submit'] {
-	width: 20%;
+	width: 30%;
 }
 #qr input[type='checkbox'] {
 	position: relative;
@@ -619,7 +619,7 @@ header { margin-top: 48px; }
 	overflow-y: hidden;
 	background-color: darkGray;
 	position: relative;
-	min-height: 98px;
+	min-height: 87px;
 	display: none;
 }
 #qrimages { 
@@ -648,8 +648,8 @@ header { margin-top: 48px; }
 	transition: opacity .15s ease-in-out;
 	-o-transition: opacity .15s ease-in-out;
 	opacity: .6;
-	width: 78px;
-	height: 78px;
+	width: 68px;
+	height: 68px;
 	background-size: cover;
 	cursor: pointer;
 	display: inline-block;
