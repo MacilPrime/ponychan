@@ -298,16 +298,16 @@ $(document).ready(function(){
 	function reply() {
 		this.file = null;
 		this.comment = "";
-		(function(_this) {
-			_this.el = $("<div/>")
-				.attr("class", "qrthumb")
-				.click(function(e) {
-					if (e.shiftKey)
-						return _this.rm();
-					_this.select();
-				})
-				.appendTo($QRImages);
-		})(this);
+		var that = this;
+		this.el = $("<div/>")
+			.attr("class", "qrthumb")
+			.click(function(e) {
+				if (e.shiftKey)
+					return that.rm();
+				that.select();
+			})
+			.appendTo($QRImages);
+
 		this.setfile = function(file) {
 			if (this.file != null)
 				this.rmfile();
@@ -321,10 +321,10 @@ $(document).ready(function(){
 			this.el.attr("id", "qrthumbselected");
 			selectedreply = this;
 			$comment.val(selectedreply.comment)
-			.unbind("input")
-			.bind("input", function() {
-				selectedreply.comment = $comment.val();
-			});
+				.off("input.selectedreply")
+				.on("input.selectedreply", function() {
+					selectedreply.comment = $comment.val();
+				});
 		}
 		this.store = function() {
 			this.comment = $comment.val();
@@ -343,7 +343,7 @@ $(document).ready(function(){
 			} else {
 				$QRImagesWrapper.hide();
 				this.el.css("background-image", "none")
-				.attr("title", "");
+					.attr("title", "");
 				this.comment = "";
 				this.file = null;
 			}
@@ -629,7 +629,6 @@ $(document).ready(function(){
 			return false;
 		}
 		
-		// if (!dopost(this)) {
 		if (selectedreply.comment == "" && selectedreply.file == null) {
 			$QRwarning.text("Your post must have an image or a comment!");
 			return false;
@@ -640,6 +639,13 @@ $(document).ready(function(){
 			return false;
 		}
 
+		if (this.elements['name']) {
+			localStorage.name = this.elements['name'].value.replace(/ ##.+$/, '');
+		}
+		if (this.elements['email'] && this.elements['email'].value != 'sage') {
+			localStorage.email = this.elements['email'].value;
+		}
+		
 		$QRwarning.text("");
 
 		if (typeof FormData === "undefined" || FormData == null)
