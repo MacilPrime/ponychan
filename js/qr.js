@@ -688,8 +688,9 @@ $(document).ready(function(){
 					window.history.pushState({}, newPageTitle, url);
 					return;
 				} else {
+					selectedreply.rm();
 					QRcooldown(10);
-					if (settings.getProp("QR_persistent"))
+					if (settings.getProp("QR_persistent") || ($auto.is(":checked") && selectedreply.file != null))
 						QR.clear();
 					else
 						QR.close();
@@ -718,8 +719,6 @@ $(document).ready(function(){
 
 				setQRFormDisabled(false);
 				QRrepair(data);
-				
-				selectedreply.rm();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				query = null;
