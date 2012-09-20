@@ -178,7 +178,7 @@ $(document).ready(function(){
 	var $spoiler = $("<input/>")
 		.attr("id", "qrspoiler")
 		.attr("type", "checkbox")
-		.attr("name", "spoiler Image");
+		.attr("name", "spoiler");
 	var $spoilerlabel = $("<label/>")
 		.text("Spoiler Image")
 		.attr("for", "qrspoiler")
@@ -478,17 +478,12 @@ $(document).ready(function(){
 	};
 	checkNameDisable();
 
-	if ($oldName.length == 0 && $oldEmail.length == 0) {
-		if ($oldSubject.length == 0) {
-			$name.hide();
-			$email.hide();
-			$subject.hide();
-		} else {
-			$name.hide();
-			$email.hide();
-			$subject.css("width", "100%");
-		}
-	}
+	if ($oldName.length == 0)
+		$name.hide();
+	if ($oldEmail.length == 0)
+		$email.hide();
+	if ($oldSubject.length == 0)
+		$subject.hide();
 
 	var setQRFormDisabled = function(disabled) {
 		$("input, textarea", $QRForm).prop("disabled", disabled);
