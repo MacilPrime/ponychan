@@ -181,6 +181,15 @@ $(document).ready(function(){
 		.attr("for", "qrauto")
 		.prepend($auto)
 		.appendTo($row);
+	var $rawhtml = $("<input/>")
+		.attr("id", "qrraw")
+		.attr("type", "checkbox")
+		.attr("name", "raw");
+	var $rawhtmllabel = $("<label/>")
+		.text("Raw HTML")
+		.attr("for", "qrraw")
+		.prepend($rawhtml)
+		.appendTo($row);
 	var $QRwarning = $("<div/>")
 		.attr("id", "qrwarning")
 		.click(function() {
@@ -194,6 +203,9 @@ $(document).ready(function(){
 		.appendTo($QRForm);
 	if( $oldForm.find("#spoiler").length == 0 ) {
 		$spoilerlabel.hide();
+	}
+	if( $oldForm.find("#raw").length == 0 ) {
+		$rawhtmllabel.hide();
 	}
 	
 	var QRInputNames = {};
@@ -239,6 +251,7 @@ $(document).ready(function(){
 		$file.val("").change();
 		$QRwarning.text("");
 		$spoiler.attr("checked", false);
+		$rawhtml.attr("checked", false);
 		if (query) {
 			query.abort();
 			query = null;
