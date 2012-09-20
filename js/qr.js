@@ -179,7 +179,7 @@ $(document).ready(function(){
 		.attr("id", "qrspoiler")
 		.attr("type", "checkbox")
 		.attr("name", "spoiler Image")
-	$("<label/>")
+	var $spoilerlabel = $("<label/>")
 		.text("Spoiler Image")
 		.attr("for", "qrspoiler")
 		.prepend($spoiler)
@@ -196,7 +196,7 @@ $(document).ready(function(){
 		.val( $("form[name='postcontrols'] input#password").val() )
 		.appendTo($QRForm);
 	if( $oldForm.find("#spoiler").length == 0 ) {
-		$spoilerrow.hide();
+		$spoilerlabel.hide();
 	}
 	
 	var QRInputNames = {};
@@ -482,7 +482,9 @@ $(document).ready(function(){
 
 	if ($oldName.length == 0 && $oldEmail.length == 0) {
 		if ($oldSubject.length == 0) {
-			$namerow.hide();
+			$name.hide();
+			$email.hide();
+			$subject.hide();
 		} else {
 			$name.hide();
 			$email.hide();
