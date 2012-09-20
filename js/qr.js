@@ -178,7 +178,7 @@ $(document).ready(function(){
 	var $spoiler = $("<input/>")
 		.attr("id", "qrspoiler")
 		.attr("type", "checkbox")
-		.attr("name", "spoiler Image")
+		.attr("name", "spoiler Image");
 	var $spoilerlabel = $("<label/>")
 		.text("Spoiler Image")
 		.attr("for", "qrspoiler")
@@ -250,7 +250,7 @@ $(document).ready(function(){
 			query = null;
 			QRrepair();
 		}
-	}
+	};
 
 	QR.close = function() {
 		$QR.hide();
@@ -494,7 +494,7 @@ $(document).ready(function(){
 		$("input, textarea", $QRForm).prop("disabled", disabled);
 		if (!disabled)
 			checkNameDisable();
-	}
+	};
 
 	var positionQR = function(newX, newY) {
 		var stickDistance = 10;
@@ -686,7 +686,7 @@ $(document).ready(function(){
 			$QRButtonDiv.hide();
 			citeReply = oldCiteReply;
 		}
-	}
+	};
 
 	QRInit();
 	$(document).on("setting_change", function(e, setting) {
