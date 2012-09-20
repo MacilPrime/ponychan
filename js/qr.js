@@ -89,6 +89,7 @@ $(document).ready(function(){
 		.appendTo($QRImagesWrapper);
 	var $QRToggleImagesButton = $("<a/>")
 		.attr("href", "javascript:;")
+		.attr("title", "Toggle image")
 		.text("+")
 		.click(function() {
 			$QRImagesWrapper.toggle();
@@ -179,7 +180,7 @@ $(document).ready(function(){
 		.attr("type", "checkbox")
 		.attr("name", "spoiler Image")
 	$("<label/>")
-		.text("Spoiler")
+		.text("Spoiler Image")
 		.attr("for", "qrspoiler")
 		.prepend($spoiler)
 		.appendTo($QRForm);
