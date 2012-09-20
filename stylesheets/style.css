@@ -615,11 +615,11 @@ header { margin-top: 48px; }
 	margin-right: 2px;
 }
 #qrimageswrapper {
-	/* overflow-x: scroll;
-	overflow-y: hidden; */
+	overflow-x: scroll;
+	overflow-y: hidden;
 	background-color: darkGray;
 	position: relative;
-	min-height: 80px;
+	min-height: 98px;
 	display: none;
 }
 #qrimages { 
@@ -639,7 +639,7 @@ header { margin-top: 48px; }
 	font-size: 15px;
 }
 .qrthumb {
-	border: 1px solid darkGray;
+	border: 1px solid black;
 	-webkit-transition: opacity .15s ease-in-out;
 	-moz-transition: opacity .15s ease-in-out;
 	transition: opacity .15s ease-in-out;
@@ -650,13 +650,17 @@ header { margin-top: 48px; }
 	background-size: cover;
 	cursor: pointer;
 	display: inline-block;
+	background-color: #cfcfcf;
 }
 .qrthumb:hover {
 	opacity: 1;
 }
+#qradd {
+
+}
 #qrthumbselected {
 	opacity: 1;
-	border: 1px solid black;
+	border: 1px solid white;
 }
 #qrwarning {
 	color: red;

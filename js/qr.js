@@ -74,14 +74,6 @@ $(document).ready(function(){
 		.appendTo($QRmove);
 	var $QRImagesWrapper = $("<div/>")
 		.attr("id", "qrimageswrapper")
-		.click(function(event) {
-			event.preventDefault();
-			if (event.shiftKey) {
-				$file.val("").change();
-			} else {
-				$file.click();
-			}
-		})
 		.hide()
 		.appendTo($QR);
 	var $QRImages = $("<div/>")
@@ -89,7 +81,7 @@ $(document).ready(function(){
 		.appendTo($QRImagesWrapper);
 	var $QRToggleImagesButton = $("<a/>")
 		.attr("href", "javascript:;")
-		.attr("title", "Toggle image")
+		.attr("title", "Toggle image queue")
 		.text("+")
 		.click(function() {
 			$QRImagesWrapper.toggle();
@@ -161,19 +153,17 @@ $(document).ready(function(){
 		.attr("id", "qrfile")
 		.attr("type", "file")
 		.attr("name", "file")
-		.attr("title", "Shift+Click to remove the selected file")
-		.click(function(event) {
-			if (event.shiftKey) {
-				$(this).val("").change();
-				event.preventDefault();
-			}
-		})
+		.attr("multiple", "")
+		.attr("title", "Shift+Click to remove the selected reply")
 		.appendTo($QRForm);
 	var $submit = $("<input/>")
 		.attr("id", "qrsubmit")
 		.attr("type", "submit")
 		.attr("name", "post")
 		.attr("accesskey", "s")
+		.appendTo($QRForm);
+	var $row = $("<div/>")
+		.css("min-width", "100%")
 		.appendTo($QRForm);
 	var $spoiler = $("<input/>")
 		.attr("id", "qrspoiler")
@@ -183,7 +173,16 @@ $(document).ready(function(){
 		.text("Spoiler Image")
 		.attr("for", "qrspoiler")
 		.prepend($spoiler)
-		.appendTo($QRForm);
+		.appendTo($row);
+	var $auto = $("<input/>")
+		.attr("id", "qrauto")
+		.attr("type", "checkbox")
+	$("<label/>")
+		.text("Auto Mode")
+		.attr("title", "Automatically post the next image in queue")
+		.attr("for", "qrauto")
+		.prepend($auto)
+		.appendTo($row);
 	var $QRwarning = $("<div/>")
 		.attr("id", "qrwarning")
 		.click(function() {
@@ -272,6 +271,9 @@ $(document).ready(function(){
 		updateSubmitButton();
 		if (time > 0) {
 			setTimeout(QRcooldown, 1000, time-1);
+		} else {
+			if ($auto.is(":checked") && selectedreply.file != null)
+				$QRForm.submit();
 		}
 	};
 
@@ -284,8 +286,7 @@ $(document).ready(function(){
 			$submit.val( $oldForm.find("input[type='submit']").val() ).prop("disabled", false);
 		}
 	};
-
-	var oldf = null;
+	
 	var usewURL = false;
 	var wURL = window.URL || window.webkitURL;
 	if(typeof wURL != "undefined" && wURL != null) {
@@ -293,35 +294,97 @@ $(document).ready(function(){
 			usewURL = true;
 	}
 	
+	var replies = [];
+	function reply() {
+		this.file = null;
+		this.comment = "";
+		(function(_this) {
+			_this.el = $("<div/>")
+				.attr("class", "qrthumb")
+				.click(function(e) {
+					if (e.shiftKey)
+						return _this.rm();
+					_this.select();
+				})
+				.appendTo($QRImages);
+		})(this);
+		this.setfile = function(file) {
+			if (this.file != null)
+				this.rmfile();
+			this.file = file;
+			this.el.attr("title", file.name + " (" + getFileSizeString(file.size) + ") (Shift+Click to remove this reply)");
+			if (usewURL)
+				this.el.css("background-image", "url(" + wURL.createObjectURL(file) + ")")
+		}
+		this.select = function() {
+			$("#qrthumbselected").removeAttr("id");
+			this.el.attr("id", "qrthumbselected");
+			(function(_this) {
+				selectedreply = _this;
+				$comment.val(_this.comment)
+				.unbind("input")
+				.bind("input", function() {
+					_this.comment = $comment.val();
+				});
+			})(this);
+		}
+		this.store = function() {
+			this.comment = $comment.val();
+		}
+		this.rm = function() {
+			if (this.file != null) {
+				if (usewURL)
+					wURL.revokeObjectURL(this.file);
+				delete this.file;
+			}
+			if (replies.length > 1) {
+				this.el.remove();
+				var index = replies.indexOf(this);
+				replies.splice(index, 1);
+				replies[0].select();
+			} else {
+				$QRImagesWrapper.hide();
+				this.el.css("background-image", "none")
+				.attr("title", "");
+				this.comment = "";
+				this.file = null;
+			}
+		}
+	}
+	
+	var selectedreply = new reply();
+	selectedreply.select();
+	replies.push(selectedreply);
+	
+	$file.click(function(e) {
+		var current = selectedreply;
+		if (e.shiftKey) {
+			current.rm();
+			return e.preventDefault();
+		}
+	});
+	
 	var maxsize = $("input[name='file']", $oldForm).attr("data-max-filesize");
 	
 	$file.change(function() {
-		if(!usewURL)
-			return;
-
-		var f = $file[0].files[0];
+		var files = $file[0].files;
 		
-		$("#qrthumbselected").remove();
+		for (var i = 0, len = files.length; i < len; i++) {
+			if (files[i].size > maxsize)
+				return $QRwarning.text(files[i].name + " is too large");
+			if (!/^image/.test(files[i].type))
+				return $QRwarning.text(files[i].name + " has an unsupported file extension");
+			if (selectedreply.file == null) {
+				selectedreply.setfile(files[i]);
+			} else {
+				var newreply = new reply();
+				newreply.setfile(files[i]);
+				replies.push(newreply);
+			}
+		}
 		
-		if(f == null) {
-			$QRImagesWrapper.hide();
-		} else {
-			if (f.size > maxsize)
-				return $QRwarning.text(f.name + " is too large");
-			if (!/^image/.test(f.type))
-				return $QRwarning.text(f.name + " has an unsupported file extension");
-			var $thumb = $("<div/>")
-				.attr("id", "qrthumbselected")
-				.attr("class", "qrthumb")
-				.css("background-image", "url(" + wURL.createObjectURL(f) + ")")
-				.attr("title", f.name + " (" + getFileSizeString(f.size) + ")")
-				.appendTo($QRImages);
-			$QRImagesWrapper.show();
-		}
-		if(oldf) {
-			wURL.revokeObjectURL(oldf);
-		}
-		oldf = f;
+		$QRImagesWrapper.show();
+		$file.val("");
 	});
 	
 	var getFileSizeString = function(size) {
@@ -568,7 +631,8 @@ $(document).ready(function(){
 			return false;
 		}
 		
-		if (!dopost(this)) {
+		// if (!dopost(this)) {
+		if (selectedreply.comment == "" && selectedreply.file == null) {
 			$QRwarning.text("Your post must have an image or a comment!");
 			return false;
 		}
@@ -585,6 +649,7 @@ $(document).ready(function(){
 
 		var data = new FormData(this);
 		data.append("post", $submit.val());
+		data.append("file", selectedreply.file);
 
 		setQRFormDisabled(true);
 		$submit.val("...").prop("disabled", false);
@@ -649,6 +714,8 @@ $(document).ready(function(){
 
 				setQRFormDisabled(false);
 				QRrepair(data);
+				
+				selectedreply.rm();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				query = null;
