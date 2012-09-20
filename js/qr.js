@@ -319,14 +319,12 @@ $(document).ready(function(){
 		this.select = function() {
 			$("#qrthumbselected").removeAttr("id");
 			this.el.attr("id", "qrthumbselected");
-			(function(_this) {
-				selectedreply = _this;
-				$comment.val(_this.comment)
-				.unbind("input")
-				.bind("input", function() {
-					_this.comment = $comment.val();
-				});
-			})(this);
+			selectedreply = this;
+			$comment.val(selectedreply.comment)
+			.unbind("input")
+			.bind("input", function() {
+				selectedreply.comment = $comment.val();
+			});
 		}
 		this.store = function() {
 			this.comment = $comment.val();
