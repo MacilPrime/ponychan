@@ -247,9 +247,10 @@ $(document).ready(function(){
 
 	QR.close = function() {
 		if (replies.length) {
-			do {
+			while (replies.length > 1) {
 				replies[0].rm();
-			} while (replies.length > 1);
+			}
+			replies[0].rm();
 		}
 		$QR.hide();
 		QR.clear();
