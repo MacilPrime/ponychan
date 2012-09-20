@@ -22,7 +22,6 @@ $(document).ready(function(){
 	$("#qrtoggleoptions").remove();
 	var $QRToggleOptions = $("<div/>")
 		.attr("id", "qrtoggleoptions")
-		.css("text-align", "center")
 		.insertBefore($oldForm);
 
 	var $QRToggleLabel = $("<label/>")
@@ -37,51 +36,51 @@ $(document).ready(function(){
 
 	var $QRButtonDiv = $("<div/>")
 		.attr("id", "qrDisplayButtonDiv")
-		.css("margin-bottom", "1.5em")
 		.appendTo($QRToggleOptions);
 	var $QRButton = $("<a/>")
 		.attr("id", "qrDisplayButton")
 		.attr("href", "javascript:;")
-		.css("color", "red")
-		.css("font-size", "150%")
 		.text("Open the Quick Reply dialog")
 		.appendTo($QRButtonDiv);
 
 	$("#qr").remove();
 	var $QR = $("<div/>")
-		.css("position", "fixed")
 		.attr("id", "qr")
-		.css("background-color", "grey")
 		.css("top", 0)
 		.css("right", 0)
 		.css("left", "")
 		.css("bottom", "")
-		.css("padding", "2px 0")
-		.css("min-width", "300px")
 		.hide()
 		.data('at top', true)
 		.appendTo(document.body);
 
 	var $QRmove = $("<div/>")
+		.attr("id", "qrmove")
 		.text("Quick Reply")
-		.css("cursor", "move")
-		.css("padding", "2px")
 		.appendTo($QR);
 	var $QRCloseButton = $("<a/>")
 		.attr("href", "javascript:;")
 		.text("X")
-		.css("float", "right")
-		.css("color", "blue")
-		.css("text-decoration", "none")
-		.css("margin", "0 3px")
 		.appendTo($QRmove);
 
+		var $QRUpButton = $("<a/>")
+		.attr("href", "#")
+		.text("▲")
+		.appendTo($QRmove);
+
+		var $QRDownButton = $("<a/>")
+		.attr("href", "javascript:;")
+		.text("▼")
+		.click(function() {
+			window.scrollTo(0, document.body.scrollHeight);
+		})
+		.appendTo($QRmove);
+	
 	var $QRForm = $("<form/>")
 		.attr("id", "qrform")
 		.attr("method", "post")
 		.attr("action", $oldForm.attr("action") )
 		.attr("enctype", "multipart/form-data")
-		.css("margin", 0)
 		.appendTo($QR);
 	var $namerow = $("<div/>").appendTo($QRForm);
 	var $name = $("<input/>")
@@ -90,9 +89,6 @@ $(document).ready(function(){
 		.attr("name", "name")
 		.attr("placeholder", "Name")
 		.attr("maxlength", 75)
-		.css("box-sizing", "border-box")
-		.css("-moz-box-sizing", "border-box")
-		.css("width", "33%")
 		.attr("size", 1)
 		.val( $oldName.val() )
 		.appendTo($namerow);
@@ -102,9 +98,6 @@ $(document).ready(function(){
 		.attr("name", "email")
 		.attr("placeholder", "Email")
 		.attr("maxlength", 75)
-		.css("box-sizing", "border-box")
-		.css("-moz-box-sizing", "border-box")
-		.css("width", "33%")
 		.attr("size", 1)
 		.val( $oldEmail.val() )
 		.appendTo($namerow);
@@ -114,10 +107,7 @@ $(document).ready(function(){
 		.attr("name", "subject")
 		.attr("placeholder", "Subject")
 		.attr("maxlength", 100)
-		.css("box-sizing", "border-box")
-		.css("-moz-box-sizing", "border-box")
 		.attr("size", 1)
-		.css("width", "34%")
 		.val( $oldSubject.val() )
 		.appendTo($namerow);
 	var $commentarea = $("<div/>").appendTo($QRForm);
@@ -125,26 +115,15 @@ $(document).ready(function(){
 		.attr("id", "qrbody")
 		.attr("placeholder", "Comment")
 		.attr("name", "body")
-		.css("margin", 0)
-		.css("box-sizing", "border-box")
-		.css("-moz-box-sizing", "border-box")
-		.css("min-height", "120px")
-		.css("min-width", "100%")
 		.appendTo($commentarea);
 
 	var $QRCaptchaDiv = $("<div/>")
 		.appendTo($QRForm);
 	var $QRCaptchaPuzzleDiv = $("<div/>")
 		.attr("id", "qrCaptchaPuzzle")
-		.css("background", "rgb(255,255,255)")
 		.attr("title", "Reload CAPTCHA")
 		.appendTo($QRCaptchaDiv);
 	var $QRCaptchaPuzzleImage = $("<img/>")
-		.css("width", "300px")
-		.css("height", "57px")
-		.css("margin", "0px")
-		.css("padding", "0px")
-		.css("float", "none")
 		.appendTo($QRCaptchaPuzzleDiv);
 	var $QRCaptchaAnswerDiv = $("<div/>").appendTo($QRCaptchaDiv);
 	var $QRCaptchaChallengeField = $("<input/>")
@@ -157,10 +136,7 @@ $(document).ready(function(){
 		.attr("type", "text")
 		.attr("placeholder", "Verification")
 		.attr("name", "recaptcha_response_field")
-		.css("box-sizing", "border-box")
-		.css("-moz-box-sizing", "border-box")
 		.attr("size", 1)
-		.css("width", "100%")
 		.appendTo($QRCaptchaAnswerDiv);
 
 	var $captchaPuzzle = $("#recaptcha_image");
@@ -172,7 +148,6 @@ $(document).ready(function(){
 		.attr("id", "qrfile")
 		.attr("type", "file")
 		.attr("name", "file")
-		.css("width", "70%")
 		.attr("title", "Shift+Click to remove the selected file")
 		.click(function(event) {
 			if (event.shiftKey) {
@@ -186,7 +161,6 @@ $(document).ready(function(){
 		.attr("type", "submit")
 		.attr("name", "post")
 		.attr("accesskey", "s")
-		.css("width", "30%")
 		.appendTo($filerow);
 	var $spoilerrow = $("<div/>")
 		.css("padding", "2px")
@@ -196,12 +170,7 @@ $(document).ready(function(){
 		.attr("name", "spoiler")
 		.attr("id", "qrspoiler");
 	var $imagepreview = $("<div/>")
-		.css("border", "1px solid black")
-		.css("width", "70px")
-		.css("height", "70px")
-		.css("margin-left", "3px")
-		.css("background-size", "cover")
-		.css("cursor", "pointer")
+		.attr("id", "qrimages")
 		.click(function(event) {
 			event.preventDefault();
 			if (event.shiftKey) {
@@ -230,17 +199,10 @@ $(document).ready(function(){
 
 	var $QRwarning = $("<div/>")
 		.addClass("qrWarning")
-		.css("color", "red")
 		.click(function() {
 			$QRwarning.text("");
 		})
 		.appendTo($QRForm);
-		
-
-	$("input[type='text'], textarea, #qrCaptchaPuzzle", $QRForm)
-		.css("margin", "0px")
-		.css("padding", "2px 4px 3px")
-		.css("border", "1px solid rgb(128,128,128)");
 
 	var QRInputNames = {};
 	$("input, textarea", $QRForm).each(function() {

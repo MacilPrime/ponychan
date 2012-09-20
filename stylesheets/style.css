@@ -550,3 +550,90 @@ header { margin-top: 48px; }
 	text-decoration: none;
 	border-bottom: 1px dashed;
 }
+/* qr */
+#qrtoggleoptions {
+	text-align: center;
+}
+#qrDisplayButtonDiv {
+	margin-bottom: 1.5em;
+}
+#qrDisplayButton {
+	color: red;
+	font-size: 150%;
+}
+#qr {
+	position: fixed;
+	background-color: grey;
+	padding: 2px 0;
+	min-width: 300px;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10pt;
+}
+#qrmove {
+	cursor: move;
+	padding: 2px;
+}
+#qrmove a {
+	float: right;
+	color: blue;
+	text-decoration: none;
+	margin-right: 3px;
+	font-weight: bold;
+}
+#qrform {
+	margin: 0;
+}
+#qrname, #qremail, #qrsubject {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width: 33%;
+}
+#qrsubject {
+	width: 34%;
+}
+#qrbody {
+	margin: 0;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	min-height: 120px;
+	min-width: 100%;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10pt;
+}
+#qrCaptchaPuzzle {
+	background: rgb(255,255,255);
+}
+#qrCaptchaPuzzle img {
+	width: 300px;
+	height: 57px;
+	margin: 0px;
+	padding: 0px;
+	float: none;
+}
+#qrCaptchaChallenge input {
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+#qrfile {
+	width: 70%;
+}
+#qrsubmit {
+	width: 30%;
+}
+#qrimages {
+	border: 1px solid black;
+	width: 70px;
+	height: 70px;
+	margin-left: 3px;
+	background-size: cover;
+	cursor: pointer;
+}
+.qrWarning {
+	color: red;
+}
+#qr input[type='text'], #qr textarea, #qrCaptchaPuzzle {
+	margin: 0px;
+	padding: 2px 4px 3px;
+	border: 1px solid rgb(128,128,128);
+}
