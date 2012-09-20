@@ -351,8 +351,6 @@ $(document).ready(function(){
 	var qrCiteReply = function(id) {
 		QR.open();
 
-		var $body = $('#qrbody');
-
 		var cited = ">>"+id+"\n";
 
 		if(typeof window.getSelection != "undefined" && window.getSelection != null) {
@@ -375,17 +373,17 @@ $(document).ready(function(){
 			}
 		}
 
-		var text = $body.val();
-		if(typeof $body[0].selectionStart != "undefined" && $body[0].selectionStart != null) {
-			var start = $body[0].selectionStart;
-			var end = $body[0].selectionEnd;
-			$body.val(text.slice(0, start)+cited+text.slice(end));
+		var text = $comment.val();
+		if(typeof $comment[0].selectionStart != "undefined" && $comment[0].selectionStart != null) {
+			var start = $comment[0].selectionStart;
+			var end = $comment[0].selectionEnd;
+			$comment.val(text.slice(0, start)+cited+text.slice(end));
 			var afterInsert = start+cited.length;
-			$body[0].setSelectionRange(afterInsert, afterInsert);
+			$comment[0].setSelectionRange(afterInsert, afterInsert);
 		} else {
-			$body.val(text + cited);
+			$comment.val(text + cited);
 		}
-		$body.focus();
+		$comment.focus();
 	};
 
 	var stealCaptcha = function() {
