@@ -297,18 +297,25 @@ $(document).ready(function(){
 		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL != null)
 			usewURL = true;
 	}
-
+	
+	var maxsize = $("input[name='file']", $oldForm).attr("data-max-filesize");
+	
 	$file.change(function() {
 		if(!usewURL)
 			return;
 
 		var f = $file[0].files[0];
+		
 		if(f == null) {
 			$imagepreview.css("background-image", "none").hide();
 		} else {
+			if (f.size > maxsize)
+				return $QRwarning.text(f.name + " is too large");
+			if (!/^image/.test(f.type))
+				return $QRwarning.text("File " + f.name + " has an unsupported file extension");
 			$imagepreview
 				.css("background-image", "url(" + wURL.createObjectURL(f) + ")")
-				.attr("title", f.name + " (" + (f.size/1024).toFixed(0) + " KB)")
+				.attr("title", f.name + " (" + getFileSizeString(f.size) + ")")
 				.show();
 		}
 		if(oldf) {
@@ -316,6 +323,14 @@ $(document).ready(function(){
 		}
 		oldf = f;
 	});
+	
+	var getFileSizeString = function(size) {
+		if (size < 1024)
+			return size + " B";
+		if (size < 1048576)
+			return (size/1024).toFixed(0) + " KB";
+		return (size/1048576).toFixed(2) + " MB";
+	}
 
 	$(document).keydown(function(event) {
 		if(event.which == 27) {
