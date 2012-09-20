@@ -44,6 +44,7 @@ $(document).ready(function(){
 		.appendTo($QRButtonDiv);
 
 	$("#qr").remove();
+	
 	var $QR = $("<div/>")
 		.attr("id", "qr")
 		.css("top", 0)
@@ -53,36 +54,52 @@ $(document).ready(function(){
 		.hide()
 		.data('at top', true)
 		.appendTo(document.body);
-
 	var $QRmove = $("<div/>")
 		.attr("id", "qrmove")
-		.text("Quick Reply")
 		.appendTo($QR);
 	var $QRCloseButton = $("<a/>")
 		.attr("href", "javascript:;")
 		.text("X")
 		.appendTo($QRmove);
-
-		var $QRUpButton = $("<a/>")
+	var $QRUpButton = $("<a/>")
 		.attr("href", "#")
 		.text("▲")
 		.appendTo($QRmove);
-
-		var $QRDownButton = $("<a/>")
+	var $QRDownButton = $("<a/>")
 		.attr("href", "javascript:;")
 		.text("▼")
 		.click(function() {
 			window.scrollTo(0, document.body.scrollHeight);
 		})
 		.appendTo($QRmove);
-	
+	var $QRImagesWrapper = $("<div/>")
+		.attr("id", "qrimageswrapper")
+		.click(function(event) {
+			event.preventDefault();
+			if (event.shiftKey) {
+				$file.val("").change();
+			} else {
+				$file.click();
+			}
+		})
+		.hide()
+		.appendTo($QR);
+	var $QRImages = $("<div/>")
+		.attr("id", "qrimages")
+		.appendTo($QRImagesWrapper);
+	var $QRToggleImagesButton = $("<a/>")
+		.attr("href", "javascript:;")
+		.text("+")
+		.click(function() {
+			$QRImagesWrapper.toggle();
+		})
+		.appendTo($QRmove);
 	var $QRForm = $("<form/>")
 		.attr("id", "qrform")
 		.attr("method", "post")
 		.attr("action", $oldForm.attr("action") )
 		.attr("enctype", "multipart/form-data")
 		.appendTo($QR);
-	var $namerow = $("<div/>").appendTo($QRForm);
 	var $name = $("<input/>")
 		.attr("id", "qrname")
 		.attr("type", "text")
@@ -91,7 +108,7 @@ $(document).ready(function(){
 		.attr("maxlength", 75)
 		.attr("size", 1)
 		.val( $oldName.val() )
-		.appendTo($namerow);
+		.appendTo($QRForm);
 	var $email = $("<input/>")
 		.attr("id", "qremail")
 		.attr("type", "text")
@@ -100,7 +117,7 @@ $(document).ready(function(){
 		.attr("maxlength", 75)
 		.attr("size", 1)
 		.val( $oldEmail.val() )
-		.appendTo($namerow);
+		.appendTo($QRForm);
 	var $subject = $("<input/>")
 		.attr("id", "qrsubject")
 		.attr("type", "text")
@@ -109,14 +126,12 @@ $(document).ready(function(){
 		.attr("maxlength", 100)
 		.attr("size", 1)
 		.val( $oldSubject.val() )
-		.appendTo($namerow);
-	var $commentarea = $("<div/>").appendTo($QRForm);
+		.appendTo($QRForm);
 	var $comment = $("<textarea/>")
-		.attr("id", "qrbody")
+		.attr("id", "qrcomment")
 		.attr("placeholder", "Comment")
 		.attr("name", "body")
-		.appendTo($commentarea);
-
+		.appendTo($QRForm);
 	var $QRCaptchaDiv = $("<div/>")
 		.appendTo($QRForm);
 	var $QRCaptchaPuzzleDiv = $("<div/>")
@@ -138,12 +153,9 @@ $(document).ready(function(){
 		.attr("name", "recaptcha_response_field")
 		.attr("size", 1)
 		.appendTo($QRCaptchaAnswerDiv);
-
 	var $captchaPuzzle = $("#recaptcha_image");
 	if($captchaPuzzle.length == 0)
 		$QRCaptchaDiv.hide();
-	
-	var $filerow = $("<div/>").appendTo($QRForm);
 	var $file = $("<input/>")
 		.attr("id", "qrfile")
 		.attr("type", "file")
@@ -155,55 +167,37 @@ $(document).ready(function(){
 				event.preventDefault();
 			}
 		})
-		.appendTo($filerow);
+		.appendTo($QRForm);
 	var $submit = $("<input/>")
 		.attr("id", "qrsubmit")
 		.attr("type", "submit")
 		.attr("name", "post")
 		.attr("accesskey", "s")
-		.appendTo($filerow);
-	var $spoilerrow = $("<div/>")
-		.css("padding", "2px")
 		.appendTo($QRForm);
 	var $spoiler = $("<input/>")
+		.attr("id", "qrspoiler")
 		.attr("type", "checkbox")
-		.attr("name", "spoiler")
-		.attr("id", "qrspoiler");
-	var $imagepreview = $("<div/>")
-		.attr("id", "qrimages")
-		.click(function(event) {
-			event.preventDefault();
-			if (event.shiftKey) {
-				$file.val("").change();
-			} else {
-				$file.click();
-			}
-		})
-		.hide()
-		.appendTo($QRForm);
+		.attr("name", "spoiler Image")
 	$("<label/>")
-		.text("Spoiler Image")
+		.text("Spoiler")
 		.attr("for", "qrspoiler")
 		.prepend($spoiler)
-		.appendTo($spoilerrow);
-
-	if( $oldForm.find("#spoiler").length == 0 ) {
-		$spoilerrow.hide();
-	}
-
+		.appendTo($QRForm);
+	var $QRwarning = $("<div/>")
+		.attr("id", "qrwarning")
+		.click(function() {
+			$QRwarning.text("");
+		})
+		.appendTo($QRForm);
 	var $password = $("<input/>")
 		.attr("type", "hidden")
 		.attr("name", "password")
 		.val( $("form[name='postcontrols'] input#password").val() )
 		.appendTo($QRForm);
-
-	var $QRwarning = $("<div/>")
-		.addClass("qrWarning")
-		.click(function() {
-			$QRwarning.text("");
-		})
-		.appendTo($QRForm);
-
+	if( $oldForm.find("#spoiler").length == 0 ) {
+		$spoilerrow.hide();
+	}
+	
 	var QRInputNames = {};
 	$("input, textarea", $QRForm).each(function() {
 		var name = $(this).attr("name");
@@ -306,17 +300,22 @@ $(document).ready(function(){
 
 		var f = $file[0].files[0];
 		
+		$("#qrthumbselected").remove();
+		
 		if(f == null) {
-			$imagepreview.css("background-image", "none").hide();
+			$QRImagesWrapper.hide();
 		} else {
 			if (f.size > maxsize)
 				return $QRwarning.text(f.name + " is too large");
 			if (!/^image/.test(f.type))
-				return $QRwarning.text("File " + f.name + " has an unsupported file extension");
-			$imagepreview
+				return $QRwarning.text(f.name + " has an unsupported file extension");
+			var $thumb = $("<div/>")
+				.attr("id", "qrthumbselected")
+				.attr("class", "qrthumb")
 				.css("background-image", "url(" + wURL.createObjectURL(f) + ")")
 				.attr("title", f.name + " (" + getFileSizeString(f.size) + ")")
-				.show();
+				.appendTo($QRImages);
+			$QRImagesWrapper.show();
 		}
 		if(oldf) {
 			wURL.revokeObjectURL(oldf);
@@ -330,7 +329,7 @@ $(document).ready(function(){
 		if (size < 1048576)
 			return (size/1024).toFixed(0) + " KB";
 		return (size/1048576).toFixed(2) + " MB";
-	}
+	};
 
 	$(document).keydown(function(event) {
 		if(event.which == 27) {

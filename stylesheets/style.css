@@ -552,7 +552,7 @@ header { margin-top: 48px; }
 }
 /* qr */
 #qrtoggleoptions {
-	text-align: center;
+ 	text-align: center;
 }
 #qrDisplayButtonDiv {
 	margin-bottom: 1.5em;
@@ -561,80 +561,104 @@ header { margin-top: 48px; }
 	color: red;
 	font-size: 150%;
 }
-#qr {
-	position: fixed;
-	background-color: grey;
-	padding: 2px 0;
-	min-width: 300px;
-	font-family: arial, helvetica, sans-serif;
-	font-size: 10pt;
+#qr * {
+	margin: 0;
+	padding: 0;
+}
+#qr label {
+	cursor: pointer;
+	margin: 0 2px 0 1px;
+	color: black;
 }
 #qrmove {
+	min-width: 100%;
+	height: 22px;
+	background-color: black;
 	cursor: move;
+}
+#qr {
+	border-radius: 3px;
+	padding: 1px;
+	background-color: #e2e2e2;
+	border: 1px solid black;
+	z-index: 1;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 12px;
+	min-width: 400px;
+	position: fixed;
+}
+#qr input[type='text'], #qr textarea {
+	min-width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	display: block;
+}
+#qr textarea {
+	padding: 3px;
+	font-family: Arial;
+	font-size: 13px;
+	min-height: 120px;
+}
+#qr input[type='text'] {
 	padding: 2px;
+	min-height: 26px;
+}
+#qr input[type='file'] {
+	width: 80%;
+}
+#qr input[type='submit'] {
+	width: 20%;
+}
+#qr input[type='checkbox'] {
+	position: relative;
+	top: 2px;
+	margin-right: 2px;
+}
+#qrimageswrapper {
+	/* overflow-x: scroll;
+	overflow-y: hidden; */
+	background-color: darkGray;
+	position: relative;
+	min-height: 80px;
+	display: none;
+}
+#qrimages { 
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	white-space: pre;
 }
 #qrmove a {
+	color: white;
+	cursor: pointer;
+	margin: 2px 3px 0 0;
 	float: right;
-	color: blue;
-	text-decoration: none;
-	margin-right: 3px;
 	font-weight: bold;
+	text-decoration: none;
+	font-size: 15px;
 }
-#qrform {
-	margin: 0;
-}
-#qrname, #qremail, #qrsubject {
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	width: 33%;
-}
-#qrsubject {
-	width: 34%;
-}
-#qrbody {
-	margin: 0;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	min-height: 120px;
-	min-width: 100%;
-	font-family: arial, helvetica, sans-serif;
-	font-size: 10pt;
-}
-#qrCaptchaPuzzle {
-	background: rgb(255,255,255);
-}
-#qrCaptchaPuzzle img {
-	width: 300px;
-	height: 57px;
-	margin: 0px;
-	padding: 0px;
-	float: none;
-}
-#qrCaptchaChallenge input {
-	width: 100%;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-}
-#qrfile {
-	width: 70%;
-}
-#qrsubmit {
-	width: 30%;
-}
-#qrimages {
-	border: 1px solid black;
-	width: 70px;
-	height: 70px;
-	margin-left: 3px;
+.qrthumb {
+	border: 1px solid darkGray;
+	-webkit-transition: opacity .15s ease-in-out;
+	-moz-transition: opacity .15s ease-in-out;
+	transition: opacity .15s ease-in-out;
+	-o-transition: opacity .15s ease-in-out;
+	opacity: .6;
+	width: 78px;
+	height: 78px;
 	background-size: cover;
 	cursor: pointer;
+	display: inline-block;
 }
-.qrWarning {
+.qrthumb:hover {
+	opacity: 1;
+}
+#qrthumbselected {
+	opacity: 1;
+	border: 1px solid black;
+}
+#qrwarning {
 	color: red;
-}
-#qr input[type='text'], #qr textarea, #qrCaptchaPuzzle {
-	margin: 0px;
-	padding: 2px 4px 3px;
-	border: 1px solid rgb(128,128,128);
 }
 /* end qr */
