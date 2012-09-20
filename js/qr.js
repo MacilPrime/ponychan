@@ -208,10 +208,7 @@ $(document).ready(function(){
 	settings.bindPropCheckbox($QRToggleCheckbox, "use_QR");
 
 	var use_QR;
-	var QRcooldownTimer = 0;
-	var QRrepairing = true;
 	var query = null;
-	var oldFormBad = false;
 
 	QR = {};
 
@@ -245,7 +242,6 @@ $(document).ready(function(){
 		if (query) {
 			query.abort();
 			query = null;
-			QRrepair();
 		}
 	};
 
@@ -269,27 +265,22 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	var prepSubmitButton = function() {
+		$submit.val( $oldForm.find("input[type='submit']").val() ).prop("disabled", false);
+	};
+	prepSubmitButton();
+	
 	var QRcooldown = function(time) {
-		QRcooldownTimer = time;
-		updateSubmitButton();
 		if (time > 0) {
+			$submit.val(time).prop("disabled", true);
 			setTimeout(QRcooldown, 1000, time-1);
 		} else {
+			prepSubmitButton();
 			if ($auto.is(":checked") && selectedreply.file != null)
 				$QRForm.submit();
 		}
 	};
 
-	var updateSubmitButton = function() {
-		if (QRcooldownTimer > 0) {
-			$submit.val(QRcooldownTimer).prop("disabled", true);
-		} else if (QRrepairing) {
-			$submit.val("...").prop("disabled", true);
-		} else {
-			$submit.val( $oldForm.find("input[type='submit']").val() ).prop("disabled", false);
-		}
-	};
-	
 	var usewURL = false;
 	var wURL = window.URL || window.webkitURL;
 	if(typeof wURL != "undefined" && wURL != null) {
@@ -516,51 +507,10 @@ $(document).ready(function(){
 			.addClass("QRhiddenInputs")
 			.hide()
 			.appendTo($QRForm);
-
-		QRrepairing = false;
-
-		updateSubmitButton();
 	};
-
 	stealFormHiddenInputs($oldForm);
 
-	var QRhiddenFieldRepair = function(newpage) {
-		if (newpage == null)
-			newpage = $("");
-
-		var $thisBannerDiv = $("div.banner").first();
-		var $newBannerDiv = $(newpage)
-			.filter("div.banner")
-			.add( $(newpage).find("div.banner") )
-			.first();
-		var $newForm = $(newpage)
-			.filter("form[name='post']")
-			.add( $(newpage).find("form[name='post']") )
-			.first();
-
-		if (($thisBannerDiv.length == $newBannerDiv.length) && $newForm.length) {
-			stealFormHiddenInputs($newForm);
-		} else {
-			setTimeout(function() {
-				$.ajax({
-					url: document.location,
-					success: function(data) {
-						QRhiddenFieldRepair(data);
-					},
-					error: function(jqXHR, textStatus, errorThrown) {
-						QRhiddenFieldRepair(null);
-					}
-				});
-			}, 5000);
-		}
-	};
-
-	var QRrepair = function(newpage) {
-		oldFormBad = true;
-		QRrepairing = true;
-		updateSubmitButton();
-		QRhiddenFieldRepair(newpage);
-
+	var QRrepair = function() {
 		if($captchaPuzzle.length) {
 			$QRCaptchaPuzzleImage.css("visibility", "hidden");
 			$QRCaptchaAnswer.val("").prop("disabled", true);
@@ -703,7 +653,8 @@ $(document).ready(function(){
 
 		var data = new FormData(this);
 		data.append("post", $submit.val());
-		data.append("file", selectedreply.file);
+		if (selectedreply.file)
+			data.append("file", selectedreply.file);
 
 		setQRFormDisabled(true);
 		$submit.val("...").prop("disabled", false);
@@ -732,6 +683,7 @@ $(document).ready(function(){
 				if (title1 == "Error") {
 					var title2 = $("h2", data).first().text().trim();
 					$QRwarning.text(title2);
+					prepSubmitButton();
 				} else if (title1 == "Banned!") {
 					document.write(data);
 					var newPageTitle = $("title", data).text();
@@ -769,17 +721,19 @@ $(document).ready(function(){
 				}
 
 				setQRFormDisabled(false);
-				QRrepair(data);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				query = null;
+				prepSubmitButton();
 				$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
 				console.log("Ajax Error");
 				console.log(errorThrown);
 				setQRFormDisabled(false);
-				QRrepair(data);
 			}
 		});
+
+		QRrepair();
+
 		return false;
 	});
 
@@ -794,9 +748,6 @@ $(document).ready(function(){
 			if (settings.getProp("QR_persistent"))
 				QR.open();
 		} else {
-			if(oldFormBad)
-				window.location.reload();
-
 			QR.close();
 			$oldForm.show();
 			$QRButtonDiv.hide();
