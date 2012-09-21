@@ -447,7 +447,7 @@ $(document).ready(function(){
 		$QR.addClass("noQueuing");
 		$autolabel.hide();
 		$file
-			.attr("title", "Shift+Click to remove the selected file")
+			.attr("title", "Shift+Click to remove the selected image")
 			.change(function() {
 				$QRwarning.text("");
 				var file = $file[0].files[0];
@@ -478,7 +478,7 @@ $(document).ready(function(){
 		$QR.addClass("queuing");
 		$file
 			.attr("multiple", "")
-			.attr("title", "Shift+Click to remove the selected reply")
+			.attr("title", "Shift+Click to remove the selected image")
 			.change(function() {
 				$QRwarning.text("");
 				var files = $file[0].files;
@@ -511,7 +511,7 @@ $(document).ready(function(){
 				$file.val("");
 			}).click(function(e) {
 				if (e.shiftKey) {
-					selectedreply.rm();
+					selectedreply.rmfile();
 					e.preventDefault();
 				}
 			});
