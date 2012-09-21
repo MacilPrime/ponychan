@@ -343,7 +343,7 @@ $(document).ready(function(){
 		}
 		this.rmfile = function() {
 			if (this.file != null) {
-				if (usewURL)
+				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL)
 					wURL.revokeObjectURL(this.file);
 				delete this.file;
 			}
