@@ -10,7 +10,7 @@
 $(document).ready(function(){
 	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting", "Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.");
 	settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)");
-
+	
 	var $oldForm = $("form[name='post']");
 	var $oldName = $oldForm.find("input[name='name']");
 	var $oldEmail = $oldForm.find("input[name='email']");
@@ -177,10 +177,31 @@ $(document).ready(function(){
 		.attr("type", "checkbox")
 	var $autolabel = $("<label/>")
 		.text("Auto Mode")
-		.attr("title", "Automatically post the next image in queue")
+		.attr("title", "Automatically post the next reply in queue")
 		.attr("for", "qrauto")
 		.prepend($auto)
 		.appendTo($row);
+	var $modrow = $("<div/>")
+		.css("min-width", "100%")
+		.appendTo($QRForm);
+	var $sticky = $("<input/>")
+		.attr("id", "qrsticky")
+		.attr("type", "checkbox")
+		.attr("name", "sticky");
+	var $stickylabel = $("<label/>")
+		.text("Sticky")
+		.attr("for", "qrsticky")
+		.prepend($sticky)
+		.appendTo($modrow);
+	var $lock = $("<input/>")
+		.attr("id", "qrlock")
+		.attr("type", "checkbox")
+		.attr("name", "lock");
+	var $locklabel = $("<label/>")
+		.text("Lock")
+		.attr("for", "qrlock")
+		.prepend($lock)
+		.appendTo($modrow);
 	var $rawhtml = $("<input/>")
 		.attr("id", "qrraw")
 		.attr("type", "checkbox")
@@ -189,7 +210,7 @@ $(document).ready(function(){
 		.text("Raw HTML")
 		.attr("for", "qrraw")
 		.prepend($rawhtml)
-		.appendTo($row);
+		.appendTo($modrow);
 	var $QRwarning = $("<div/>")
 		.attr("id", "qrwarning")
 		.click(function() {
@@ -206,6 +227,12 @@ $(document).ready(function(){
 	}
 	if( $oldForm.find("#raw").length == 0 ) {
 		$rawhtmllabel.hide();
+	}
+	if( $oldForm.find("#lock").length == 0 ) {
+		$locklabel.hide();
+	}
+	if( $oldForm.find("#sticky").length == 0 ) {
+		$stickylabel.hide();
 	}
 	
 	var QRInputNames = {};
