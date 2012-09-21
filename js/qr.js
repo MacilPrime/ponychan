@@ -95,8 +95,10 @@ $(document).ready(function(){
 		.attr("title", "Add reply")
 		.text("+")
 		.click(function() {
-			$QRImagesWrapper.show();
-			addReply();
+			if (!query) {
+				$QRImagesWrapper.show();
+				addReply();
+			}
 		})
 		.appendTo($QRImages);
 	var $QRToggleImagesButton = $("<a/>")
@@ -350,7 +352,7 @@ $(document).ready(function(){
 			setTimeout(QRcooldown, 1000, time-1);
 		} else {
 			prepSubmitButton();
-			if ($auto.is(":checked") && selectedreply.file != null)
+			if ($auto.is(":checked"))
 				$QRForm.submit();
 		}
 	};
@@ -778,6 +780,7 @@ $(document).ready(function(){
 			},
 			success: function(data) {
 				query = null;
+				setQRFormDisabled(false);
 				var title1 = $("h1", data).first().text().trim();
 				if (title1 == "Error") {
 					var title2 = $("h2", data).first().text().trim();
@@ -818,8 +821,6 @@ $(document).ready(function(){
 						setTimeout(updateThreadNow, 1000);
 					}
 				}
-
-				setQRFormDisabled(false);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				query = null;
