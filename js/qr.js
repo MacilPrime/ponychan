@@ -393,7 +393,7 @@ $(document).ready(function(){
 			.appendTo(this.el);
 		this.setfile = function(file) {
 			if (this.file != null)
-				this.rmfile();
+				this.rmfile(true);
 			this.file = file;
 			this.el.attr("title", file.name + " (" + getFileSizeString(file.size) + ") (Shift+Click to remove image from reply)");
 			if (usewURL) {
@@ -416,7 +416,7 @@ $(document).ready(function(){
 		this.store = function() {
 			this.comment = $comment.val();
 		}
-		this.rmfile = function() {
+		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
 				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && this.fileurl) {
 					wURL.revokeObjectURL(this.fileurl);
@@ -426,7 +426,7 @@ $(document).ready(function(){
 				this.el.css("background-image", "none")
 					.attr("title", "");
 			}
-			if (selectedreply == this) {
+			if (!dontResetFileInput && selectedreply == this) {
 				$file.val("");
 			}
 		}
