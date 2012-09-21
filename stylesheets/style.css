@@ -634,7 +634,7 @@ header { margin-top: 48px; }
 	padding: 3px;
 	font-family: Arial;
 	font-size: 13px;
-	min-height: 120px;
+	min-height: 110px;
 }
 #qr input[type='text'] {
 	padding: 2px;
