@@ -681,6 +681,7 @@ header { margin-top: 48px; }
 	left: 0;
 	overflow: hidden;
 	white-space: pre;
+	counter-reset: thumbnails;
 }
 #qrmove a {
 	color: white;
@@ -708,11 +709,18 @@ header { margin-top: 48px; }
 	display: inline-block;
 	background-color: #cfcfcf;
 }
+.qrthumb::before {
+	counter-increment: thumbnails;
+	content: counter(thumbnails);
+	color: #FFF;
+	font-weight: 700;
+	padding: 3px;
+	top: 0;
+	left: 0;
+	text-shadow: 0 0 3px #000, 0 0 8px #000;
+}
 .qrthumb:hover {
 	opacity: 1;
-}
-#qradd {
-
 }
 #qrthumbselected {
 	opacity: 1;
