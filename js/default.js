@@ -16,7 +16,7 @@ function get_cookie(cookie_name) {
 }
 
 function highlightReply(id) {
-	if (typeof window.event != "undefined" && event.which == 2) {
+	if (typeof window.event != "undefined" && typeof event.which != "undefined" && event.which == 2) {
 		// don't highlight on middle click
 		return true;
 	}

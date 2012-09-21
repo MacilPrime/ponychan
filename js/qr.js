@@ -328,6 +328,9 @@ $(document).ready(function(){
 		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL != null)
 			usewURL = true;
 	}
+	if (!usewURL) {
+		$QRToggleImagesButton.hide();
+	}
 	
 	var replies = [];
 	function reply() {
@@ -337,12 +340,16 @@ $(document).ready(function(){
 		this.el = $("<div/>")
 			.attr("class", "qrthumb")
 			.click(function(e) {
+				e.preventDefault();
 				if (e.shiftKey) {
-					that.rm();
-					$file.val("");
-					e.preventDefault();
+					if (!query || !that.el.is("#qrthumbselected")) {
+						that.rm();
+						$file.val("");
+					}
 				} else {
-					that.select();
+					if (!query) {
+						that.select();
+					}
 				}
 			})
 			.appendTo($QRImages);
@@ -370,7 +377,7 @@ $(document).ready(function(){
 		}
 		this.rmfile = function() {
 			if (this.file != null) {
-				if (usewURL)
+				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL)
 					wURL.revokeObjectURL(this.file);
 				delete this.file;
 			}
@@ -381,7 +388,8 @@ $(document).ready(function(){
 				this.el.remove();
 				var index = replies.indexOf(this);
 				replies.splice(index, 1);
-				replies[0].select();
+				if (selectedreply == this)
+					replies[0].select();
 			} else {
 				$QRImagesWrapper.hide();
 				this.el.css("background-image", "none")
@@ -397,7 +405,7 @@ $(document).ready(function(){
 	
 	var maxsize = $("input[name='file']", $oldForm).attr("data-max-filesize");
 	
-	if (typeof FormData === "undefined" || FormData == null) {
+	if (!usewURL || typeof FormData === "undefined" || FormData == null) {
 		$autolabel.hide();
 		$file
 			.attr("title", "Shift+Click to remove the selected file")
@@ -418,7 +426,8 @@ $(document).ready(function(){
 				}
 				
 				selectedreply.setfile(file);
-				$QRImagesWrapper.show();
+				if (usewURL)
+					$QRImagesWrapper.show();
 			}).click(function(e) {
 				if (e.shiftKey) {
 					$file.val("");
@@ -436,19 +445,17 @@ $(document).ready(function(){
 				if (files.length == 0)
 					return;
 				
+				if (usewURL)
+					$QRImagesWrapper.show();
+
 				for (var i = 0, len = files.length; i < len; i++) {
 					var file = files[i];
 
 					if (file.size > maxsize) {
 						$QRwarning.text(file.name + " is too large");
-						$file.val("");
-						return;
 					} else if (!/^image/.test(file.type)) {
 						$QRwarning.text(file.name + " has an unsupported file type");
-						$file.val("");
-						return;
-					}
-					if (selectedreply.file == null) {
+					} else if (selectedreply.file == null) {
 						selectedreply.setfile(file);
 					} else {
 						var newreply = new reply();
@@ -457,7 +464,6 @@ $(document).ready(function(){
 					}
 				}
 				
-				$QRImagesWrapper.show();
 				$file.val("");
 			}).click(function(e) {
 				if (e.shiftKey) {
