@@ -550,6 +550,7 @@ $(document).ready(function(){
 			$comment.val(text + cited);
 		}
 		$comment.focus();
+		$comment.get(0).dispatchEvent(new Event("input"));
 	};
 
 	var stealCaptcha = function() {
