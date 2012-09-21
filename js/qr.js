@@ -10,6 +10,16 @@
 $(document).ready(function(){
 	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting", "Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.");
 	settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)");
+
+	var useFormData = typeof FormData != "undefined" && FormData != null;
+	var usewURL = false;
+	var wURL = window.URL || window.webkitURL;
+	if(typeof wURL != "undefined" && wURL != null) {
+		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL != null)
+			usewURL = true;
+	}
+	
+	var useQueuing = usewURL && useFormData;
 	
 	var $oldForm = $("form[name='post']");
 	var $oldName = $oldForm.find("input[name='name']");
@@ -345,12 +355,6 @@ $(document).ready(function(){
 		}
 	};
 
-	var usewURL = false;
-	var wURL = window.URL || window.webkitURL;
-	if(typeof wURL != "undefined" && wURL != null) {
-		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL != null)
-			usewURL = true;
-	}
 	if (!usewURL) {
 		$QRToggleImagesButton.hide();
 	}
@@ -364,13 +368,10 @@ $(document).ready(function(){
 			.attr("class", "qrthumb")
 			.click(function(e) {
 				e.preventDefault();
-				if (e.shiftKey) {
-					if (!query) {
+				if (!query) {
+					if (e.shiftKey) {
 						that.rmfile();
-						$file.val("");
-					}
-				} else {
-					if (!query) {
+					} else {
 						that.select();
 					}
 				}
@@ -381,6 +382,8 @@ $(document).ready(function(){
 			.attr("title", "Remove reply")
 			.text("x")
 			.click(function(e) {
+				e.preventDefault();
+				e.stopPropagation();
 				if (!e.shiftKey && !query)
 					that.rm();
 			})
@@ -397,6 +400,8 @@ $(document).ready(function(){
 			$("#qrthumbselected").removeAttr("id");
 			this.el.attr("id", "qrthumbselected");
 			selectedreply = this;
+			if ($file.is(":visible") || !useFormData)
+				$file.val("");
 			$comment.val(selectedreply.comment)
 				.off("input.selectedreply")
 				.on("input.selectedreply", function() {
@@ -414,6 +419,9 @@ $(document).ready(function(){
 				this.el.css("background-image", "none")
 					.attr("title", "");
 			}
+			if (selectedreply == this && ($file.is(":visible") || !useFormData)) {
+				$file.val("");
+			}
 		}
 		this.rm = function() {
 			this.rmfile();
@@ -421,12 +429,15 @@ $(document).ready(function(){
 				this.el.remove();
 				var index = replies.indexOf(this);
 				replies.splice(index, 1);
-				if (selectedreply == this)
-					replies[0].select();
 			} else {
 				$QRImagesWrapper.hide();
 				this.comment = "";
 			}
+			// Even if this was the only reply and we
+			// didn't remove it, still reselect it so the
+			// comment field and such gets reset.
+			if (selectedreply == this)
+				replies[0].select();
 		}
 	}
 	
@@ -441,11 +452,10 @@ $(document).ready(function(){
 	
 	var maxsize = $("input[name='file']", $oldForm).attr("data-max-filesize");
 	
-	var useQueuing = usewURL && typeof FormData != "undefined" && FormData != null;
-	
 	if (!useQueuing) {
 		$QR.addClass("noQueuing");
 		$autolabel.hide();
+		$QRAddImageButton.hide();
 		$file
 			.attr("title", "Shift+Click to remove the selected image")
 			.change(function() {
@@ -469,8 +479,7 @@ $(document).ready(function(){
 					$QRImagesWrapper.show();
 			}).click(function(e) {
 				if (e.shiftKey) {
-					$file.val("");
-					selectedreply.rm();
+					selectedreply.rmfile();
 					e.preventDefault();
 				}
 			});
@@ -507,8 +516,6 @@ $(document).ready(function(){
 						}
 					}
 				}
-				
-				$file.val("");
 			}).click(function(e) {
 				if (e.shiftKey) {
 					selectedreply.rmfile();
@@ -577,7 +584,7 @@ $(document).ready(function(){
 			$comment.val(text + cited);
 		}
 		$comment.focus();
-		$comment.get(0).dispatchEvent(new Event("input"));
+		$comment.trigger("input");
 	};
 
 	var stealCaptcha = function() {
@@ -740,7 +747,7 @@ $(document).ready(function(){
 		
 		$QRwarning.text("");
 
-		if (typeof FormData === "undefined" || FormData == null)
+		if (!useFormData)
 			return true;
 
 		var data = new FormData(this);
