@@ -279,6 +279,8 @@ $(document).ready(function(){
 		$QRwarning.text("");
 		$spoiler.attr("checked", false);
 		$rawhtml.attr("checked", false);
+		$lock.attr("checked", false);
+		$sticky.attr("checked", false);
 		if (query) {
 			query.abort();
 			query = null;
