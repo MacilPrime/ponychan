@@ -149,17 +149,28 @@ $(document).ready(function(){
 	var $captchaPuzzle = $("#recaptcha_image");
 	if($captchaPuzzle.length == 0)
 		$QRCaptchaDiv.hide();
+	var $buttonrow = $("<div/>")
+		.attr("id", "qrbuttonrow")
+		.appendTo($QRForm);
 	var $file = $("<input/>")
 		.attr("id", "qrfile")
 		.attr("type", "file")
 		.attr("name", "file")
-		.appendTo($QRForm);
+		.appendTo($buttonrow);
+	var $filebutton = $("<button/>")
+		.attr("id", "qrfilebutton")
+		.text("Browse...")
+		.click(function(e) {
+			e.preventDefault();
+			$file.click();
+		})
+		.appendTo($buttonrow);
 	var $submit = $("<input/>")
 		.attr("id", "qrsubmit")
 		.attr("type", "submit")
 		.attr("name", "post")
 		.attr("accesskey", "s")
-		.appendTo($QRForm);
+		.appendTo($buttonrow);
 	var $row = $("<div/>")
 		.css("min-width", "100%")
 		.appendTo($QRForm);
@@ -407,7 +418,10 @@ $(document).ready(function(){
 	
 	var maxsize = $("input[name='file']", $oldForm).attr("data-max-filesize");
 	
-	if (!usewURL || typeof FormData === "undefined" || FormData == null) {
+	var useQueuing = usewURL && typeof FormData != "undefined" && FormData != null;
+	
+	if (!useQueuing) {
+		$QR.addClass("noQueuing");
 		$autolabel.hide();
 		$file
 			.attr("title", "Shift+Click to remove the selected file")
@@ -438,6 +452,7 @@ $(document).ready(function(){
 				}
 			});
 	} else {
+		$QR.addClass("queuing");
 		$file
 			.attr("multiple", "")
 			.attr("title", "Shift+Click to remove the selected reply")

@@ -640,12 +640,28 @@ header { margin-top: 48px; }
 	padding: 2px;
 	min-height: 26px;
 }
-#qr input[type='file'] {
+
+#qrfile {
 	width: 70%;
 }
-#qr input[type='submit'] {
+#qr.noQueuing #qrfilebutton {
+	display: none;
+}
+#qr.noQueuing #qrsubmit {
 	width: 30%;
 }
+
+#qr.queuing #qrfile {
+	display: none;
+}
+#qrfilebutton {
+	width: 35%;
+}
+#qr.queuing #qrsubmit {
+	width: 35%;
+	float: right;
+}
+
 #qr input[type='checkbox'] {
 	position: relative;
 	top: 2px;
