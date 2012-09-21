@@ -9,16 +9,6 @@
 
 var $settingsScreen = $("<div/>")
 	.attr("id", "settingsScreen")
-	.css("z-index", 20)
-	.css("clear", "both")
-	.css("color", "black")
-	.css("border", "1px solid black")
-	.css("height", "400px")
-	.css("width", "400px")
-	.css("overflow-y", "auto")
-	.css("max-height", "100%")
-	.css("max-width", "100%")
-	.css("background-color", "rgb(128,150,150)")
 	.hide();
 
 var $settingsTitle = $("<h1/>")
@@ -26,9 +16,6 @@ var $settingsTitle = $("<h1/>")
 	.appendTo($settingsScreen);
 
 var $settingsCloseButton = $("<a/>")
-	.css("float", "right")
-	.css("margin", "2px")
-	.css("text-decoration", "none")
 	.text("X")
 	.attr("href", "javascript:;")
 	.appendTo($settingsTitle);
@@ -46,14 +33,6 @@ var $settingsSection = $("<span/>")
 
 var $settingsOverlay = $("<div/>")
 	.attr("id", "settings-overlay")
-	.css("background-color", "black")
-	.css("opacity", 0.5)
-	.css("z-index", 19)
-	.css("position", "fixed")
-	.css("top", "0px")
-	.css("left", "0px")
-	.css("width", "100%")
-	.css("height", "100%")
 	.hide();
 
 // DOM setup over
