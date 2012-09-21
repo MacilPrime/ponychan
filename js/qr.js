@@ -81,7 +81,7 @@ $(document).ready(function(){
 		.appendTo($QRImagesWrapper);
 	var $QRToggleImagesButton = $("<a/>")
 		.attr("href", "javascript:;")
-		.attr("title", "Toggle image queue")
+		.attr("title", "Toggle reply queue")
 		.text("+")
 		.click(function() {
 			$QRImagesWrapper.toggle();
