@@ -405,8 +405,7 @@ $(document).ready(function(){
 			$("#qrthumbselected").removeAttr("id");
 			this.el.attr("id", "qrthumbselected");
 			selectedreply = this;
-			if ($file.is(":visible") || !useFormData)
-				$file.val("");
+			$file.val("");
 			$comment.val(selectedreply.comment)
 				.off("input.selectedreply")
 				.on("input.selectedreply", function() {
@@ -426,7 +425,7 @@ $(document).ready(function(){
 				this.el.css("background-image", "none")
 					.attr("title", "");
 			}
-			if (selectedreply == this && ($file.is(":visible") || !useFormData)) {
+			if (selectedreply == this) {
 				$file.val("");
 			}
 		}
