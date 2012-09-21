@@ -426,14 +426,9 @@ $(document).ready(function(){
 
 					if (file.size > maxsize) {
 						$QRwarning.text(file.name + " is too large");
-						$file.val("");
-						return;
 					} else if (!/^image/.test(file.type)) {
 						$QRwarning.text(file.name + " has an unsupported file type");
-						$file.val("");
-						return;
-					}
-					if (selectedreply.file == null) {
+					} else if (selectedreply.file == null) {
 						selectedreply.setfile(file);
 					} else {
 						var newreply = new reply();
