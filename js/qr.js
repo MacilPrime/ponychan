@@ -301,6 +301,9 @@ $(document).ready(function(){
 		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL != null)
 			usewURL = true;
 	}
+	if (!usewURL) {
+		$QRToggleImagesButton.hide();
+	}
 	
 	var replies = [];
 	function reply() {
@@ -370,7 +373,7 @@ $(document).ready(function(){
 	
 	var maxsize = $("input[name='file']", $oldForm).attr("data-max-filesize");
 	
-	if (typeof FormData === "undefined" || FormData == null) {
+	if (!usewURL || typeof FormData === "undefined" || FormData == null) {
 		$autolabel.hide();
 		$file
 			.attr("title", "Shift+Click to remove the selected file")
@@ -391,7 +394,8 @@ $(document).ready(function(){
 				}
 				
 				selectedreply.setfile(file);
-				$QRImagesWrapper.show();
+				if (usewURL)
+					$QRImagesWrapper.show();
 			}).click(function(e) {
 				if (e.shiftKey) {
 					$file.val("");
@@ -409,6 +413,9 @@ $(document).ready(function(){
 				if (files.length == 0)
 					return;
 				
+				if (usewURL)
+					$QRImagesWrapper.show();
+
 				for (var i = 0, len = files.length; i < len; i++) {
 					var file = files[i];
 
@@ -430,7 +437,6 @@ $(document).ready(function(){
 					}
 				}
 				
-				$QRImagesWrapper.show();
 				$file.val("");
 			}).click(function(e) {
 				if (e.shiftKey) {
