@@ -79,6 +79,16 @@ $(document).ready(function(){
 	var $QRImages = $("<div/>")
 		.attr("id", "qrimages")
 		.appendTo($QRImagesWrapper);
+	var $QRAddImageButton = $("<a/>")
+		.attr("id", "qraddimage")
+		.attr("href", "javascript:;")
+		.attr("title", "Add reply")
+		.text("+")
+		.click(function() {
+			$QRImagesWrapper.show();
+			addReply();
+		})
+		.appendTo($QRImages);
 	var $QRToggleImagesButton = $("<a/>")
 		.attr("href", "javascript:;")
 		.attr("title", "Toggle reply queue")
@@ -355,8 +365,8 @@ $(document).ready(function(){
 			.click(function(e) {
 				e.preventDefault();
 				if (e.shiftKey) {
-					if (!query || !that.el.is("#qrthumbselected")) {
-						that.rm();
+					if (!query) {
+						that.rmfile();
 						$file.val("");
 					}
 				} else {
@@ -365,13 +375,21 @@ $(document).ready(function(){
 					}
 				}
 			})
-			.appendTo($QRImages);
-
+			.insertBefore($QRAddImageButton);
+		$("<a/>")
+			.attr("class", "qrremovethumb")
+			.attr("title", "Remove reply")
+			.text("x")
+			.click(function(e) {
+				if (!e.shiftKey && !query)
+					that.rm();
+			})
+			.appendTo(this.el);
 		this.setfile = function(file) {
 			if (this.file != null)
 				this.rmfile();
 			this.file = file;
-			this.el.attr("title", file.name + " (" + getFileSizeString(file.size) + ") (Shift+Click to remove this reply)");
+			this.el.attr("title", file.name + " (" + getFileSizeString(file.size) + ") (Shift+Click to remove image from reply)");
 			if (usewURL)
 				this.el.css("background-image", "url(" + wURL.createObjectURL(file) + ")")
 		}
@@ -393,6 +411,8 @@ $(document).ready(function(){
 				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL)
 					wURL.revokeObjectURL(this.file);
 				delete this.file;
+				this.el.css("background-image", "none")
+					.attr("title", "");
 			}
 		}
 		this.rm = function() {
@@ -405,16 +425,19 @@ $(document).ready(function(){
 					replies[0].select();
 			} else {
 				$QRImagesWrapper.hide();
-				this.el.css("background-image", "none")
-					.attr("title", "");
 				this.comment = "";
 			}
 		}
 	}
 	
-	var selectedreply = new reply();
-	selectedreply.select();
-	replies.push(selectedreply);
+	var addReply = function() {
+		selectedreply = new reply();
+		selectedreply.select();
+		replies.push(selectedreply);
+	};
+	
+	var selectedreply = null;
+	addReply();
 	
 	var maxsize = $("input[name='file']", $oldForm).attr("data-max-filesize");
 	
@@ -475,9 +498,13 @@ $(document).ready(function(){
 					} else if (selectedreply.file == null) {
 						selectedreply.setfile(file);
 					} else {
-						var newreply = new reply();
-						newreply.setfile(file);
-						replies.push(newreply);
+						if (files.length == 1 && i == 0) {
+							selectedreply.setfile(file);
+						} else {
+							var newreply = new reply();
+							newreply.setfile(file);
+							replies.push(newreply);
+						}
 					}
 				}
 				

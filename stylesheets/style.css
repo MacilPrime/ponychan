@@ -721,4 +721,33 @@ header { margin-top: 48px; }
 #qrwarning {
 	color: red;
 }
+.qrremovethumb:hover {
+	color: white;
+	
+}
+#qraddimage:hover {
+	color: white;
+}
+#qraddimage {
+	color: black;
+    display: inline-block;
+    width: 68px;
+    height: 68px;
+    text-align: center;
+    font-size: 50px;
+    line-height: 69px;
+    vertical-align: top;
+    text-decoration: none;
+}
+.qrremovethumb {
+    font-size: 12px;
+    float: right;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    padding: 0 3px 1px 3px !important;
+	border-radius: 2px;
+}
 /* end qr */
