@@ -352,7 +352,7 @@ $(document).ready(function(){
 			setTimeout(QRcooldown, 1000, time-1);
 		} else {
 			prepSubmitButton();
-			if ($auto.is(":checked"))
+			if ($auto.is(":checked") && (selectedreply.comment || selectedreply.file))
 				$QRForm.submit();
 		}
 	};
