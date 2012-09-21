@@ -313,12 +313,16 @@ $(document).ready(function(){
 		this.el = $("<div/>")
 			.attr("class", "qrthumb")
 			.click(function(e) {
+				e.preventDefault();
 				if (e.shiftKey) {
-					that.rm();
-					$file.val("");
-					e.preventDefault();
+					if (!query || !that.el.is("#qrthumbselected")) {
+						that.rm();
+						$file.val("");
+					}
 				} else {
-					that.select();
+					if (!query) {
+						that.select();
+					}
 				}
 			})
 			.appendTo($QRImages);
@@ -357,7 +361,8 @@ $(document).ready(function(){
 				this.el.remove();
 				var index = replies.indexOf(this);
 				replies.splice(index, 1);
-				replies[0].select();
+				if (selectedreply == this)
+					replies[0].select();
 			} else {
 				$QRImagesWrapper.hide();
 				this.el.css("background-image", "none")
