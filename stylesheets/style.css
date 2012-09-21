@@ -718,6 +718,7 @@ header { margin-top: 48px; }
 	top: 0;
 	left: 0;
 	text-shadow: 0 0 3px #000, 0 0 8px #000;
+	float: left;
 }
 .qrthumb:hover {
 	opacity: 1;
@@ -756,6 +757,6 @@ header { margin-top: 48px; }
     color: white;
     border: 1px solid black;
     padding: 0 3px 1px 3px !important;
-	border-radius: 2px;
+    border-radius: 2px;
 }
 /* end qr */
