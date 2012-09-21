@@ -405,7 +405,8 @@ $(document).ready(function(){
 			$("#qrthumbselected").removeAttr("id");
 			this.el.attr("id", "qrthumbselected");
 			selectedreply = this;
-			$file.val("");
+			if ($file[0].files.length && this.file != $file[0].files[0])
+				$file.val("");
 			$comment.val(selectedreply.comment)
 				.off("input.selectedreply")
 				.on("input.selectedreply", function() {
