@@ -655,10 +655,10 @@ header { margin-top: 48px; }
 	display: none;
 }
 #qrfilebutton {
-	width: 35%;
+	width: 30%;
 }
 #qr.queuing #qrsubmit {
-	width: 35%;
+	width: 30%;
 	float: right;
 }
 
