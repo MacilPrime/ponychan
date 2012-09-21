@@ -364,6 +364,7 @@ $(document).ready(function(){
 	var replies = [];
 	function reply() {
 		this.file = null;
+		this.fileurl = null;
 		this.comment = "";
 		var that = this;
 		this.el = $("<div/>")
@@ -395,8 +396,10 @@ $(document).ready(function(){
 				this.rmfile();
 			this.file = file;
 			this.el.attr("title", file.name + " (" + getFileSizeString(file.size) + ") (Shift+Click to remove image from reply)");
-			if (usewURL)
-				this.el.css("background-image", "url(" + wURL.createObjectURL(file) + ")")
+			if (usewURL) {
+				this.fileurl = wURL.createObjectURL(file);
+				this.el.css("background-image", "url(" + this.fileurl + ")");
+			}
 		}
 		this.select = function() {
 			$("#qrthumbselected").removeAttr("id");
@@ -415,8 +418,10 @@ $(document).ready(function(){
 		}
 		this.rmfile = function() {
 			if (this.file != null) {
-				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL)
-					wURL.revokeObjectURL(this.file);
+				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && this.fileurl) {
+					wURL.revokeObjectURL(this.fileurl);
+					delete this.fileurl;
+				}
 				delete this.file;
 				this.el.css("background-image", "none")
 					.attr("title", "");
