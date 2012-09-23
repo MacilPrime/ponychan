@@ -128,6 +128,7 @@ function send_usage(retryTime) {
 	
 	usage.settings = settings.getAllSettings();
 	
+	usage.supportFile = typeof DataTransfer != "undefined" && DataTransfer != null && "files" in DataTransfer.prototype;
 	usage.supportFormData = typeof FormData != "undefined" && FormData != null;
 	
 	var wURL = window.URL || window.webkitURL;
