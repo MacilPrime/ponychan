@@ -533,6 +533,7 @@ $(document).ready(function(){
 		var oEvent = event.originalEvent;
 		if (!use_QR || typeof oEvent.dataTransfer === "undefined" || !oEvent.dataTransfer)
 			return;
+		QR.open();
 		QR.fileInput(oEvent.dataTransfer.files);
 		event.preventDefault();
 	});
