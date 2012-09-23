@@ -1,3 +1,11 @@
+function nop() {}
+
+if (typeof console == "undefined" || !console) {
+	console = {};
+	console.log = nop;
+	console.error = nop;
+}
+
 function createID() {
 	var id = "";
 	var hexDigits = "0123456789abcdef";
