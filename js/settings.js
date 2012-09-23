@@ -216,6 +216,14 @@ settings.newProp = function(name, type, defval, description, moredetails) {
 	}
 };
 
+settings.getAllSettings = function() {
+	var allSettings = {};
+	$.each(settingTypes, function(index) {
+		allSettings[index] = settings.getProp(index);
+	});
+	return allSettings;
+};
+
 $(document).ready(function() {
 	// If the settings stuff already is on the page, then remove
 	// it. This can happen if the user saves the page from a web
