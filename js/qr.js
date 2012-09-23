@@ -658,13 +658,19 @@ $(document).ready(function(){
 			checkNameDisable();
 	};
 
-	var positionQR = function(newX, newY) {
-		var stickDistance = 10;
-		var topY = 0;
-		if($(".boardlist.top").css("position")=="fixed") {
-			topY = $(".boardlist.top").height();
-		}
+	var stickDistance = 10;
 
+	var QRtopY;
+	var setTopY = function() {
+		if($(".boardlist.top").css("position")=="fixed") {
+			QRtopY = $(".boardlist.top").height();
+		} else {
+			QRtopY = 0;
+		}
+	};
+	setTopY();
+
+	var positionQR = function(newX, newY) {
 		if(newX < stickDistance) {
 			$QR.css("left", 0).css("right", "");
 		} else if(newX + $QR.width() > $(window).width() - stickDistance) {
@@ -672,8 +678,8 @@ $(document).ready(function(){
 		} else {
 			$QR.css("left", newX).css("right", "");
 		}
-		if(newY < stickDistance + topY) {
-			$QR.css("top", topY).css("bottom", "").data('at top', true);
+		if(newY < stickDistance + QRtopY) {
+			$QR.css("top", QRtopY).css("bottom", "").data('at top', true);
 		} else if(newY + $QR.height() > $(window).height() - stickDistance) {
 			$QR.css("top", "").css("bottom", 0).data('at top', false);
 		} else {
@@ -682,6 +688,7 @@ $(document).ready(function(){
 	};
 
 	var loadQRposition = function() {
+		setTopY();
 		if(localStorage.qrX == null || localStorage.qrY == null)
 			return false;
 		var newX;
@@ -715,6 +722,7 @@ $(document).ready(function(){
 		if(event.which != 1)
 			return;
 		event.preventDefault();
+		setTopY();
 		var startPos = $QR.position();
 		var xoff = event.pageX - startPos.left;
 		var yoff = event.pageY - startPos.top;
