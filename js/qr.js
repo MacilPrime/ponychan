@@ -538,7 +538,7 @@ $(document).ready(function(){
 
 	$(document).on("drop.qrfile", function(event) {
 		var oEvent = event.originalEvent;
-		if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) || !oEvent.dataTransfer.files || oEvent.dataTransfer.files.length == 0 )
+		if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) || !oEvent.dataTransfer.types.contains("Files") || !oEvent.dataTransfer.files || oEvent.dataTransfer.files.length == 0 )
 			return;
 		QR.open();
 		QR.fileInput(oEvent.dataTransfer.files);
@@ -546,7 +546,7 @@ $(document).ready(function(){
 	});
 	$(document).on("dragover.qrfile", function(event) {
 		var oEvent = event.originalEvent;
-		if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) )
+		if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) || !oEvent.dataTransfer.types.contains("Files") )
 			return;
 		oEvent.dataTransfer.dropEffect = "copy";
 		event.preventDefault();
