@@ -463,74 +463,87 @@ $(document).ready(function(){
 		$QR.addClass("noQueuing");
 		$autolabel.hide();
 		$QRAddImageButton.hide();
-		$file
-			.attr("title", "Shift+Click to remove the selected image")
-			.change(function() {
-				$QRwarning.text("");
-				var file = $file[0].files[0];
-				if (!file)
-					return;
+		QR.fileInput = function(files) {
+			$QRwarning.text("");
+			if (files.length != 1)
+				return;
+			var file = files[0];
+			if (!file)
+				return;
+			
+			if (file.size > maxsize) {
+				$QRwarning.text(file.name + " is too large");
+				$file.val("");
+				return;
+			} else if (!/^image/.test(file.type)) {
+				$QRwarning.text(file.name + " has an unsupported file type");
+				$file.val("");
+				return;
+			}
+			
+			selectedreply.setfile(file);
+			if (usewURL)
+				$QRImagesWrapper.show();
+		};
+	} else {
+		$QR.addClass("queuing");
+		$file.attr("multiple", "");
+		QR.fileInput = function(files) {
+			$QRwarning.text("");
+			if (files.length == 0)
+				return;
+			
+			if (usewURL)
+				$QRImagesWrapper.show();
+			
+			for (var i = 0, len = files.length; i < len; i++) {
+				var file = files[i];
 				
 				if (file.size > maxsize) {
 					$QRwarning.text(file.name + " is too large");
-					$file.val("");
-					return;
 				} else if (!/^image/.test(file.type)) {
 					$QRwarning.text(file.name + " has an unsupported file type");
-					$file.val("");
-					return;
-				}
-				
-				selectedreply.setfile(file);
-				if (usewURL)
-					$QRImagesWrapper.show();
-			}).click(function(e) {
-				if (e.shiftKey) {
-					selectedreply.rmfile();
-					e.preventDefault();
-				}
-			});
-	} else {
-		$QR.addClass("queuing");
-		$file
-			.attr("multiple", "")
-			.attr("title", "Shift+Click to remove the selected image")
-			.change(function() {
-				$QRwarning.text("");
-				var files = $file[0].files;
-				if (files.length == 0)
-					return;
-				
-				if (usewURL)
-					$QRImagesWrapper.show();
-
-				for (var i = 0, len = files.length; i < len; i++) {
-					var file = files[i];
-
-					if (file.size > maxsize) {
-						$QRwarning.text(file.name + " is too large");
-					} else if (!/^image/.test(file.type)) {
-						$QRwarning.text(file.name + " has an unsupported file type");
-					} else if (selectedreply.file == null) {
+				} else if (selectedreply.file == null) {
+					selectedreply.setfile(file);
+				} else {
+					if (files.length == 1 && i == 0) {
 						selectedreply.setfile(file);
 					} else {
-						if (files.length == 1 && i == 0) {
-							selectedreply.setfile(file);
-						} else {
-							var newreply = new reply();
-							newreply.setfile(file);
-							replies.push(newreply);
-						}
+						var newreply = new reply();
+						newreply.setfile(file);
+						replies.push(newreply);
 					}
 				}
-			}).click(function(e) {
-				if (e.shiftKey) {
-					selectedreply.rmfile();
-					e.preventDefault();
-				}
-			});
+			}
+		};
 	}
 	
+	$file
+		.attr("title", "Shift+Click to remove the selected image")
+		.change(function() {
+			QR.fileInput(this.files);
+		}).click(function(e) {
+			if (e.shiftKey) {
+				selectedreply.rmfile();
+				e.preventDefault();
+			}
+		});
+
+	$(document).on("drop.qrfile", function(event) {
+		var oEvent = event.originalEvent;
+		if (!use_QR || typeof oEvent.dataTransfer === "undefined" || !oEvent.dataTransfer)
+			return;
+		QR.fileInput(oEvent.dataTransfer.files);
+		event.preventDefault();
+	});
+	$(document).on("dragover.qrfile", function(event) {
+		var oEvent = event.originalEvent;
+		if (!use_QR || typeof oEvent.dataTransfer === "undefined" || !oEvent.dataTransfer)
+			return;
+		oEvent.dataTransfer.dropEffect = "copy";
+		event.preventDefault();
+	});
+
 	var getFileSizeString = function(size) {
 		if (size < 1024)
 			return size + " B";
