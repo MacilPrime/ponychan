@@ -26,10 +26,27 @@ if (!userid) {
 	} catch (e) {}
 }
 
+var noSendBefore = 0;
+var noSendDelay = 10;
+var send_queued = 0;
+var send_maxQueued = 7;
 function send_error(error, retryTime) {
 	if (!error.hasOwnProperty("message")) {
 		log_error("send_error called without error.message");
 	}
+	
+	var now = (new Date()).getTime();
+	if (now < noSendBefore) {
+		if (send_queued < send_maxQueued) {
+			send_queued++;
+			setTimeout(function() {
+				send_queued--;
+				send_error(error, retryTime);
+			}, noSendBefore-now+10);
+		}
+		return;
+	}
+	
 	error.pageurl = document.location.href;
 	
 	var errorString = JSON.stringify(error);
@@ -41,6 +58,12 @@ function send_error(error, retryTime) {
 		retryTime = 3*1000;
 	else if (retryTime > maxRetryTime)
 		retryTime = maxRetryTime;
+	
+	noSendBefore = now + noSendDelay;
+
+	noSendDelay *= 2;
+	if (noSendDelay > maxRetryTime)
+		noSendDelay = maxRetryTime;
 	
 	$.ajax({
 		url: url,
