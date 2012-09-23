@@ -11,15 +11,16 @@ $(document).ready(function(){
 	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting", "Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.");
 	settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)");
 
-	var useFormData = typeof FormData != "undefined" && FormData != null;
+	var useFile = typeof FileReader != "undefined" && !!FileReader;
+	var useFormData = typeof FormData != "undefined" && !!FormData;
 	var usewURL = false;
 	var wURL = window.URL || window.webkitURL;
-	if(typeof wURL != "undefined" && wURL != null) {
-		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL != null)
+	if(typeof wURL != "undefined" && wURL) {
+		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL)
 			usewURL = true;
 	}
 	
-	var useQueuing = usewURL && useFormData;
+	var useQueuing = useFile && useFormData && usewURL;
 	
 	var $oldForm = $("form[name='post']");
 	var $oldName = $oldForm.find("input[name='name']");
@@ -404,9 +405,11 @@ $(document).ready(function(){
 		this.select = function() {
 			$("#qrthumbselected").removeAttr("id");
 			this.el.attr("id", "qrthumbselected");
+			if (selectedreply != this) {
+				if (!useFile || $file[0].files.length && this.file != $file[0].files[0])
+					$file.val("");
+			}
 			selectedreply = this;
-			if ($file[0].files.length && this.file != $file[0].files[0])
-				$file.val("");
 			$comment.val(selectedreply.comment)
 				.off("input.selectedreply")
 				.on("input.selectedreply", function() {
@@ -471,11 +474,11 @@ $(document).ready(function(){
 			if (!file)
 				return;
 			
-			if (file.size > maxsize) {
+			if ('size' in file && file.size > maxsize) {
 				$QRwarning.text(file.name + " is too large");
 				$file.val("");
 				return;
-			} else if (!/^image/.test(file.type)) {
+			} else if ('type' in file && !/^image/.test(file.type)) {
 				$QRwarning.text(file.name + " has an unsupported file type");
 				$file.val("");
 				return;
@@ -499,9 +502,9 @@ $(document).ready(function(){
 			for (var i = 0, len = files.length; i < len; i++) {
 				var file = files[i];
 				
-				if (file.size > maxsize) {
+				if ('size' in file && file.size > maxsize) {
 					$QRwarning.text(file.name + " is too large");
-				} else if (!/^image/.test(file.type)) {
+				} else if ('type' in file && !/^image/.test(file.type)) {
 					$QRwarning.text(file.name + " has an unsupported file type");
 				} else if (selectedreply.file == null) {
 					selectedreply.setfile(file);
@@ -521,7 +524,11 @@ $(document).ready(function(){
 	$file
 		.attr("title", "Shift+Click to remove the selected image")
 		.change(function() {
-			QR.fileInput(this.files);
+			if ('files' in this) {
+				QR.fileInput(this.files);
+			} else {
+				QR.fileInput(null);
+			}
 		}).click(function(e) {
 			if (e.shiftKey) {
 				selectedreply.rmfile();
@@ -531,7 +538,7 @@ $(document).ready(function(){
 
 	$(document).on("drop.qrfile", function(event) {
 		var oEvent = event.originalEvent;
-		if (!use_QR || typeof oEvent.dataTransfer === "undefined" || !oEvent.dataTransfer)
+		if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) || !oEvent.dataTransfer.files || oEvent.dataTransfer.files.length == 0 )
 			return;
 		QR.open();
 		QR.fileInput(oEvent.dataTransfer.files);
@@ -539,7 +546,7 @@ $(document).ready(function(){
 	});
 	$(document).on("dragover.qrfile", function(event) {
 		var oEvent = event.originalEvent;
-		if (!use_QR || typeof oEvent.dataTransfer === "undefined" || !oEvent.dataTransfer)
+		if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) )
 			return;
 		oEvent.dataTransfer.dropEffect = "copy";
 		event.preventDefault();
@@ -574,7 +581,7 @@ $(document).ready(function(){
 
 		var cited = ">>"+id+"\n";
 
-		if(typeof window.getSelection != "undefined" && window.getSelection != null) {
+		if(typeof window.getSelection != "undefined" && window.getSelection) {
 			var sel = window.getSelection();
 			var startPostNo = $(sel.anchorNode).parents(".post").first().find(".intro:first>.post_no").last().text();
 			var endPostNo = $(sel.focusNode).parents(".post").first().find(".intro:first>.post_no").last().text();
@@ -595,7 +602,7 @@ $(document).ready(function(){
 		}
 
 		var text = $comment.val();
-		if(typeof $comment[0].selectionStart != "undefined" && $comment[0].selectionStart != null) {
+		if(typeof $comment[0].selectionStart != "undefined" && $comment[0].selectionStart) {
 			var start = $comment[0].selectionStart;
 			var end = $comment[0].selectionEnd;
 			$comment.val(text.slice(0, start)+cited+text.slice(end));
@@ -757,7 +764,7 @@ $(document).ready(function(){
 			return false;
 		}
 		
-		if (selectedreply.comment == "" && selectedreply.file == null) {
+		if (!selectedreply.comment && !selectedreply.file && !$file.val()) {
 			$QRwarning.text("Your post must have an image or a comment!");
 			return false;
 		}
@@ -797,7 +804,7 @@ $(document).ready(function(){
 			type: 'POST',
 			xhr: function() {
 				var xhr = new window.XMLHttpRequest();
-				if (typeof xhr.upload != "undefined" && xhr.upload != null) {
+				if (typeof xhr.upload != "undefined" && xhr.upload) {
 					xhr.upload.addEventListener("progress", function(e) {
 						if (e.lengthComputable)
 							$submit.val(Math.round(e.loaded * 100 / e.total).toString() + "%");
