@@ -60,6 +60,8 @@
 	// Requires safe_mode to be disabled.
 	$config['dns_system'] = false;
 	
+	//$config['js_error_log'] = '/var/log/tinyboard/js_error.log';
+	
 /*
  * ====================
  *  Database settings
