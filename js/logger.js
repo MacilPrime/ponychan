@@ -27,7 +27,7 @@ function createID() {
 }
 
 var userid;
-if (typeof localStorage != "undefined" && localStorage) {
+if (typeof localStorage != "undefined" && !!localStorage) {
 	userid = localStorage.getItem("userid");
 }
 if (!userid) {
@@ -128,13 +128,13 @@ function send_usage(retryTime) {
 	
 	usage.settings = settings.getAllSettings();
 	
-	usage.supportFile = typeof DataTransfer != "undefined" && DataTransfer != null && "files" in DataTransfer.prototype;
-	usage.supportFormData = typeof FormData != "undefined" && FormData != null;
+	usage.supportFile = typeof FileReader != "undefined" && !!FileReader;
+	usage.supportFormData = typeof FormData != "undefined" && !!FormData;
 	
 	var wURL = window.URL || window.webkitURL;
-	usage.supportwURL = typeof wURL != "undefined" && wURL != null;
+	usage.supportwURL = typeof wURL != "undefined" && !!wURL;
 	
-	usage.supportGetSelection = typeof window.getSelection != "undefined" && window.getSelection != null;
+	usage.supportGetSelection = typeof window.getSelection != "undefined" && !!window.getSelection;
 	
 	var usageString = JSON.stringify(usage);
 	
