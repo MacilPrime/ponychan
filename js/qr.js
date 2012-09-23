@@ -465,7 +465,7 @@ $(document).ready(function(){
 		$QRAddImageButton.hide();
 		QR.fileInput = function(files) {
 			$QRwarning.text("");
-			if (files.length != 1)
+			if (!files || files.length != 1)
 				return;
 			var file = files[0];
 			if (!file)
@@ -490,7 +490,7 @@ $(document).ready(function(){
 		$file.attr("multiple", "");
 		QR.fileInput = function(files) {
 			$QRwarning.text("");
-			if (files.length == 0)
+			if (!files || files.length == 0)
 				return;
 			
 			if (usewURL)
