@@ -6,15 +6,40 @@ if (typeof console == "undefined" || !console) {
 	console.error = nop;
 }
 
-String.prototype.hashCode = function(){
+function basicStringHash(string, prevHash){
 	var hash = 0;
-	if (this.length == 0) return hash;
-	for (i = 0; i < this.length; i++) {
-		char = this.charCodeAt(i);
+	if (prevHash)
+		hash = prevHash;
+	if (string.length == 0) return hash;
+	for (i = 0; i < string.length; i++) {
+		var char = string.charCodeAt(i);
 		hash = ((hash<<5)-hash)+char;
 		hash = hash & hash; // Convert to 32bit integer
 	}
 	return hash;
+}
+
+function hashCode(x, prevHash){
+	if (typeof x === "object") {
+		var hash = 0;
+		if (prevHash)
+			hash = prevHash;
+		
+		var keys = [];
+		$.each(x, function(key, value) {
+			keys.push(key);
+		});
+		keys.sort();
+		
+		hash = basicStringHash("object:len:"+keys.length, hash);
+		$.each(keys, function(i, key) {
+			hash = basicStringHash(";"+i+key+":", hash);
+			hash = hashCode(x[key], hash);
+		});
+		return hash;
+	} else {
+		return basicStringHash((typeof x)+":"+x, prevHash);
+	}
 }
 
 function createID() {
@@ -136,11 +161,11 @@ function send_usage(retryTime) {
 	
 	usage.supportGetSelection = typeof window.getSelection != "undefined" && !!window.getSelection;
 	
-	var usageString = JSON.stringify(usage);
-	
-	var usageHash = (userid + usageString).hashCode()
+	var usageHash = hashCode(userid + hashCode(usage))
 	if (usageHash == localStorage.getItem("last_usage_data"))
 		return;
+	
+	var usageString = JSON.stringify(usage);
 	
 	var data = {type: "usage", userid: userid, data: usageString};
 	
