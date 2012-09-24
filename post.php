@@ -807,6 +807,31 @@ if (isset($_POST['delete'])) {
 		_syslog(LOG_INFO, 'New post: /' . $board['dir'] . $config['dir']['res'] .
 			sprintf($config['file_page'], $post['op'] ? $id : $post['thread']) . (!$post['op'] ? '#' . $id : ''));
 	
+	if (isset($config['action_log'])) {
+		check_userid();
+		$logdata = array();
+		$logdata['userid'] = $userid;
+		$logdata['action'] = 'post';
+		$logdata['board'] = $board['uri'];
+		$logdata['number'] = $id;
+		$logdata['time'] = date(DATE_ATOM);
+		$logdata['thread'] = $post['op'] ? null : $post['thread'];
+		$logdata['ip'] = $post['ip'];
+		$logdata['name'] = $post['name'];
+		if ($post['trip'])
+			$logdata['trip'] = $post['trip'];
+		if ($post['capcode'])
+			$logdata['capcode'] = $post['capcode'];
+		if ($post['has_file']) {
+			$logdata['filehash'] = $post['filehash'];
+			$logdata['filesize'] = $post['filesize'];
+			$logdata['filename'] = $post['filename'];
+		}
+		$logdata['commentsimplehash'] = simplifiedHash($post['body_nomarkup']);
+		$logline = json_encode($logdata);
+		logToFile($config['action_log'], $logline);
+	}
+	
 	rebuildThemes('post');
 	header('Location: ' . $redirect, true, $config['redirect_http']);
 } else {

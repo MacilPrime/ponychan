@@ -18,6 +18,8 @@ require_once 'inc/lib/gettext/gettext.inc';
 // the user is not currently logged in as a moderator
 $mod = false;
 
+$userid = false;
+
 register_shutdown_function('fatal_error_handler');
 mb_internal_encoding('UTF-8');
 loadConfig();
@@ -235,6 +237,17 @@ function _syslog($priority, $message) {
 	}
 }
 
+function check_userid() {
+	global $userid;
+	if (!isset($_COOKIE['userid']))
+		return;
+	if (!preg_match('/^[0-9a-f]{16}$/', $_COOKIE['userid'])) {
+		// invalid userid cookie, ignore it
+		return;
+	}
+	$userid = $_COOKIE['userid'];
+}
+
 function create_antibot($board, $thread = null) {
 	require_once dirname(__FILE__) . '/anti-bot.php';
 	
@@ -297,6 +310,12 @@ function sprintf3($str, $vars, $delim = '%') {
 	}
 	return str_replace(array_keys($replaces),
 	                   array_values($replaces), $str);
+}
+
+function simplifiedHash($text) {
+	$text = strtolower($text);
+	$text = preg_replace('/[^a-z0-9]/', '', $text);
+	return sha1($text);
 }
 
 function setupBoard($array) {

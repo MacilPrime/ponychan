@@ -17,12 +17,15 @@ header('Content-type: text/plain');
 if (!isset($_POST['userid'], $_POST['type'], $_POST['data']))
 	die("Error: Missing arguments");
 
-$userid = $_POST['userid'];
+check_userid();
+if (!$userid)
+	$userid = $_POST['userid'];
+elseif ($_POST['userid'] !== $userid)
+	die("Error: invalid values");
+
 $type = $_POST['type'];
 $data = json_decode($_POST['data']);
 
-if (isset($_COOKIE['userid']) && $_COOKIE['userid'] !== $userid)
-	die("Error: invalid values");
 if (!preg_match('/^[0-9a-f]{16}$/', $userid))
 	die("Error: userid is formatted incorrectly");
 if ($data === NULL)
