@@ -37,7 +37,7 @@ $output['userid'] = $userid;
 $output['data'] = $data;
 $output['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 
-$output_line = json_encode($output) . "\n";
+$output_line = json_encode($output);
 
 if ($type === 'error') {
 	if (!isset($data->message))
@@ -46,20 +46,12 @@ if ($type === 'error') {
 	if (!isset($config['js_error_log']))
 		die("Error: Server not configured for logging");
 	
-	$fd = fopen($config['js_error_log'], 'at');
-	if (!$fd)
-		die("Error: Server logging failed");
-	fwrite($fd, $output_line);
-	fclose($fd);
+	logToFile($config['js_error_log'], $output_line);
 } elseif ($type === 'usage') {
 	if (!isset($config['js_usage_log']))
 		die("Error: Server not configured for logging");
 	
-	$fd = fopen($config['js_usage_log'], 'at');
-	if (!$fd)
-		die("Error: Server logging failed");
-	fwrite($fd, $output_line);
-	fclose($fd);
+	logToFile($config['js_usage_log'], $output_line);
 } else {
 	die("Error: Invalid type");
 }

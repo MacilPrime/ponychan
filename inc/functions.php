@@ -1820,6 +1820,15 @@ function undoImage(array $post) {
 		file_unlink($post['thumb']);
 }
 
+function logToFile($filename, $line) {
+	$fd = fopen($filename, 'at');
+	if (!$fd)
+		return false;
+	fwrite($fd, $line . "\n");
+	fclose($fd);
+	return true;
+}
+
 function rDNS($ip_addr) {
 	global $config;
 	
