@@ -13,6 +13,7 @@ $hidden_inputs_twig = array();
 
 class AntiBot {
 	public $salt, $inputs = array(), $index = 0;
+	private $hasLogged = false;
 	
 	public static function randomString($length, $uppercase = false, $special_chars = false) {
 		$chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -169,7 +170,23 @@ class AntiBot {
 		$hash .= $config['cookies']['salt'];
 		
 		// Use SHA1 for the hash
-		return sha1($hash . $this->salt);
+		$hash = sha1($hash . $this->salt);
+		
+		if (!$this->hasLogged && isset($config['antibot_log'])) {
+			$logdata = array();
+			$logdata['time'] = date(DATE_ATOM);
+			$logdata['action'] = 'hash_made';
+			
+			$logdata['inputs'] = $inputs;
+			$logdata['hash'] = $hash;
+			
+			$logline = json_encode($logdata);
+			logToFile($config['antibot_log'], $logline);
+			
+			$this->hasLogged = true;
+		}
+		
+		return $hash;
 	}
 }
 
