@@ -249,7 +249,7 @@ function checkSpam(array $extra_salt = array()) {
 			check_userid();
 			$logdata = array();
 			$logdata['userid'] = $userid;
-			$logdata['query'] = $_SERVER['QUERY_STRING'];
+			$logdata['referrer'] = $_SERVER['HTTP_REFERER'];
 			$logdata['time'] = date(DATE_ATOM);
 			$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
 			$logdata['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
