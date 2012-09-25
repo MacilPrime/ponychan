@@ -243,8 +243,28 @@ function checkSpam(array $extra_salt = array()) {
 	// Use SHA1 for the hash
 	$_hash = sha1($_hash . $extra_salt);
 
-	if ($hash != $_hash)
+	if ($hash != $_hash) {
+		if (isset($config['antibot_log'])) {
+			global $userid;
+			check_userid();
+			$logdata = array();
+			$logdata['userid'] = $userid;
+			$logdata['query'] = $_SERVER['QUERY_STRING'];
+			$logdata['time'] = date(DATE_ATOM);
+			$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
+			$logdata['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+			$logdata['action'] = 'hash_failure';
+
+			$logdata['inputs_given'] = $inputs;
+			$logdata['hash_given'] = $hash;
+			$logdata['hash_expected'] = $_hash;
+			
+			$logline = json_encode($logdata);
+			logToFile($config['antibot_log'], $logline);
+		}
+		
 		return true;
+	}
 	
 if (false) {
 	$query = prepare('SELECT `passed` FROM `antispam` WHERE `hash` = :hash');

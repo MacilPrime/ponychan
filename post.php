@@ -495,6 +495,7 @@ if (isset($_POST['delete'])) {
 			error($config['error']['noimage']);
 	}
 	
+	$post['ip'] = $_SERVER['REMOTE_ADDR'];
 	$post['name'] = $_POST['name'] != '' ? $_POST['name'] : $config['anonymous'];
 	$post['subject'] = $_POST['subject'];
 	$post['email'] = str_replace(' ', '%20', htmlspecialchars($_POST['email']));
@@ -723,8 +724,6 @@ if (isset($_POST['delete'])) {
 		if ($is_an_image && $post['thumb'] != 'spoiler')
 			$post['thumb'] = substr_replace($post['thumb'], '', 0, mb_strlen($board['dir'] . $config['dir']['thumb']));
 	}
-	
-	$post['ip'] = $_SERVER['REMOTE_ADDR'];
 	
 	$post = (object)$post;
 	if ($error = event('post', $post)) {
