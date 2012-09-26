@@ -581,7 +581,7 @@ $(document).ready(function(){
 
 		var cited = ">>"+id+"\n";
 
-		if(typeof window.getSelection != "undefined" && window.getSelection) {
+		if(typeof window.getSelection != "undefined" && window.getSelection != null) {
 			var sel = window.getSelection();
 			var startPostNo = $(sel.anchorNode).parents(".post").first().find(".intro:first>.post_no").last().text();
 			var endPostNo = $(sel.focusNode).parents(".post").first().find(".intro:first>.post_no").last().text();
@@ -602,7 +602,7 @@ $(document).ready(function(){
 		}
 
 		var text = $comment.val();
-		if(typeof $comment[0].selectionStart != "undefined" && $comment[0].selectionStart) {
+		if(typeof $comment[0].selectionStart != "undefined" && $comment[0].selectionStart != null) {
 			var start = $comment[0].selectionStart;
 			var end = $comment[0].selectionEnd;
 			$comment.val(text.slice(0, start)+cited+text.slice(end));
