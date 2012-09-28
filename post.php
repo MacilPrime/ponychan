@@ -495,7 +495,9 @@ if (isset($_POST['delete'])) {
 			error($config['error']['noimage']);
 	}
 	
+	check_userid();
 	$post['ip'] = $_SERVER['REMOTE_ADDR'];
+	$post['userid'] = $userid;
 	$post['name'] = $_POST['name'] != '' ? $_POST['name'] : $config['anonymous'];
 	$post['subject'] = $_POST['subject'];
 	$post['email'] = str_replace(' ', '%20', htmlspecialchars($_POST['email']));
@@ -807,9 +809,8 @@ if (isset($_POST['delete'])) {
 			sprintf($config['file_page'], $post['op'] ? $id : $post['thread']) . (!$post['op'] ? '#' . $id : ''));
 	
 	if (isset($config['action_log'])) {
-		check_userid();
 		$logdata = array();
-		$logdata['userid'] = $userid;
+		$logdata['userid'] = $post['userid'];
 		$logdata['action'] = 'post';
 		$logdata['board'] = $board['uri'];
 		$logdata['number'] = $id;
