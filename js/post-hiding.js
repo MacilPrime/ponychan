@@ -153,6 +153,7 @@ $(document).ready(function(){
 	}
 
 	function process_posts(context) {
+		var threads_needed = 0;
 		var $pcs = $(context).filter(".postContainer").add( $(".postContainer", context) );
 		$pcs.each(function() {
 			var $pc = $(this);
@@ -167,9 +168,51 @@ $(document).ready(function(){
 			place_button($pc);
 			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
 			if (is_post_hidden(get_post_board($pc), postnum)) {
+				if ($pc.hasClass("opContainer"))
+					threads_needed++;
 				do_hide_post($pc);
+			} else {
+				if ($pc.hasClass("opContainer") && $pc.parents(".thread").first().attr("data-loaded-late"))
+					threads_needed--;
 			}
 		});
+		
+		// Load more threads onto the page to make up for
+		// hidden threads if this is an index page. Only load
+		// more threads on page 1 and if a page 2 exists
+		var $selected = $(".pages .selected");
+		var $nextpage = $selected.next();
+		if (threads_needed > 0 && $selected.text() == "1" && $nextpage.text() == "2" && $nextpage.attr("href")) {
+			$.ajax({
+				url: $nextpage.attr("href"),
+				success: function(data) {
+					var $threads = $(".thread", data);
+					$threads.each(function() {
+						var $thread = $(this);
+						
+						// If this thread already exists on
+						// the current page, ignore it.
+						if ($("#"+$thread.attr("id")).not(".preview-hidden").length > 0)
+							return;
+						
+						// It would be silly if we just loaded hidden threads onto this
+						// page to make up for hidden threads.
+						var postnum = /replyC_(\d+)/.exec($thread.find(".opContainer").first().attr("id"))[1];
+						if (is_post_hidden(board_id, postnum))
+							return;
+						
+						$thread.attr("data-loaded-late", true);
+						$(".thread").not(".preview-hidden").last().after($thread);
+						$thread.find(".post").each(function() {
+							$(document).trigger('new_post', this);
+						});
+						threads_needed--;
+						if (threads_needed <= 0)
+							return false;
+					});
+				}
+			});
+		}
 	}
 
 	function place_button($pc) {
