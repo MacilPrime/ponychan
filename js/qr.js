@@ -836,7 +836,7 @@ $(document).ready(function(){
 				}
 
 				if ($("div.banner").length == 0) {
-					var newThreadNumber = parseInt($(".post.op .post_no", data).last().text());
+					var newThreadNumber = parseInt(/reply_(\d+)/.exec($(".post.op", data).first().attr("id"))[1]);
 					if (isNaN(newThreadNumber)) {
 						console.error("Could not read new thread number!");
 					} else {
