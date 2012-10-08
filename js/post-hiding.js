@@ -159,6 +159,11 @@ $(document).ready(function(){
 			if (!$pc.attr("id"))
 				return;
 			
+			// Don't hide a thread if we're trying to view
+			// it specifically.
+			if ($pc.hasClass("opContainer") && $('div.banner').length)
+				return;
+			
 			place_button($pc);
 			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
 			if (is_post_hidden(get_post_board($pc), postnum)) {
