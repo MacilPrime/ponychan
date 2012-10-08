@@ -203,7 +203,7 @@ $(document).ready(function(){
 						$inlined_postC.remove();
 					$inlined_postC = $postC.clone();
 					$inlined_postC.find('[id]').attr('id', '');
-					$inlined_postC.find('.post-inline-container').remove();
+					$inlined_postC.find('.post-inline-container, .postSide').remove();
 					$inlined_postC.find('.inlined').removeClass('inlined');
 					$inlined_postC.find('a').filter(function() {
 						return $(this).text() === '>>' + parent_id;

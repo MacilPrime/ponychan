@@ -203,12 +203,12 @@ div.post .body {
 }
 div.post.reply {
 	background: #D6DAF0;
-	margin: 0.2em 16px;
+	margin: 4px 16px;
 	padding: 0.2em 0.3em 0.5em 0.6em;
 	border-width: 1px;
 	border-style: none solid solid none;
 	border-color: #B7C5D9;
-	display: inline-block;
+	display: table;
 }
 span.trip {
 	color: #228854;
@@ -761,3 +761,13 @@ header { margin-top: 48px; }
     border-radius: 2px;
 }
 /* end qr */
+.postSide {
+	float: left;
+	margin-right: 2px;
+	margin-top: 0;
+	margin-left: 2px;
+	font-size: 10pt;
+}
+.postSide a, .hide_button a {
+	text-decoration: none;
+}
