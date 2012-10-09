@@ -132,14 +132,14 @@ settings.bindPropCheckbox = function($checkbox, name) {
 				changeGuard = true;
 				settings.setProp(name, $(this).attr("checked"));
 				changeGuard = false;
-				}
+			}
 		});
 	
 	$(document).on("setting_change", function(e, setting) {
-		if (!changeGuard && name == setting) {
+		if (name == setting) {
 			changeGuard = true;
 			$checkbox.attr("checked", settings.getProp(name));
-				changeGuard = false;
+			changeGuard = false;
 		}
 	});
 };
@@ -168,7 +168,7 @@ settings.bindPropSelect = function($select, name) {
 		});
 	
 	$(document).on("setting_change", function(e, setting) {
-		if (!changeGuard && name == setting) {
+		if (name == setting) {
 			changeGuard = true;
 			$select.val(settings.getProp(name));
 			changeGuard = false;
@@ -183,16 +183,17 @@ settings.newProp = function(name, type, defval, description, moredetails) {
 	defaultValues[name] = defval;
 	
 	var $settingDiv = $("<div/>")
+		.attr("id", id)
 		.appendTo($settingsScreen);
-
+	
 	if (type==="bool") {
 		var $label = $("<label/>")
-			.attr("for", id)
+			.attr("for", "cb_"+id)
 			.text(" "+description)
 			.appendTo($settingDiv);
 		var $checkbox = $("<input/>")
 			.attr("type", "checkbox")
-			.attr("id", id)
+			.attr("id", "cb_"+id)
 			.prependTo($label);
 		
 		settings.bindPropCheckbox($checkbox, name);
