@@ -238,6 +238,7 @@
 		'recaptcha_challenge_field',
 		'recaptcha_response_field',
 		'spoiler',
+		'mature',
 		'quick-reply'
 	);
 	
@@ -344,7 +345,10 @@
 	
 	// Allow users to edit their own posts
 	$config['allow_self_edit'] = false;
-
+	
+	// Allow [#Mature] threads
+	$config['mature_allowed'] = false;
+	
 	// Always act as if they had typed "noko" in the email field no mattter what
 	$config['always_noko'] = false;
 	

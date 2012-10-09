@@ -1,7 +1,18 @@
 {% filter remove_whitespace %}
 {# tabs and new lines will be ignored #}
 
-<div class="thread" id="thread_{{ post.id }}">
+{% if not index and post.mature %}
+<div class="mature_warning">
+This is a mature content thread. You must have viewing mature content enabled in the Settings menu to view this thread.
+</div> 
+{% endif %}
+
+<div class="thread{% if post.mature %} mature_thread{% endif %}"
+ id="thread_{{ post.id }}"
+{% if post.mature %}
+ style="display:none"
+{% endif %}
+>
 
 <div class="postContainer opContainer postC_{{ post.id }}" id="replyC_{{ post.id }}">
 <div class="post op post_{{ post.id }}" id="reply_{{ post.id }}">
@@ -43,9 +54,19 @@
 		{% endif %}
 	{% elseif post.thumb == 'spoiler' %}
 		{{ config.root }}{{ config.spoiler_image }}
+	{% elseif post.mature %}
+		{{ config.root }}{{ config.mature_image }}
 	{% else %}
 		{{ config.uri_thumb }}{{ post.thumb }}
-	{% endif %}" style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px" alt="" /></a>
+	{% endif %}"
+	{% if post.mature and post.thumb != 'file' and post.thumb != 'spoiler' %}
+	 data-mature-src="{{ config.uri_thumb }}{{ post.thumb }}"
+	 data-mature-style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px"
+	 style=""
+	{% else %}
+	 style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px"
+	{% endif %}
+	 alt="" /></a>
 {% endif %}
 <div class="opMain">
 	<p class="intro"{% if not index %} id="{{ post.id }}"{% endif %}>
@@ -78,6 +99,9 @@
 		{% endif %}
 		{% if post.mod and post.mod|hasPermission(config.mod.show_ip, board.uri) %}
 			 [<a style="margin:0;" href="?/IP/{{ post.ip }}">{{ post.ip }}</a>]
+		{% endif %}
+		{% if post.mature %}
+			 <span class="mature_note">Mature Content</span>
 		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
 	</label>

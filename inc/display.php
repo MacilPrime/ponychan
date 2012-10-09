@@ -223,7 +223,7 @@ function secure_link($href) {
 }
 
 class Post {
-	public function __construct($id, $thread, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumbx, $thumby, $file, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false) {
+	public function __construct($id, $thread, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumbx, $thumby, $file, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -249,6 +249,7 @@ class Post {
 		$this->embed = $embed;
 		$this->root = $root;
 		$this->mod = $mod;
+		$this->mature = $mature;
 		
 		if ($this->mod)
 			// Fix internal links
@@ -313,7 +314,7 @@ class Post {
 };
 
 class Thread {
-	public function __construct($id, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumbx, $thumby, $file, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true) {
+	public function __construct($id, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumbx, $thumby, $file, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -345,6 +346,7 @@ class Thread {
 		$this->root = $root;
 		$this->mod = $mod;
 		$this->hr = $hr;
+		$this->mature = $mature;
 		
 		if ($this->mod)
 			// Fix internal links

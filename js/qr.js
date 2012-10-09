@@ -206,6 +206,16 @@ $(document).ready(function(){
 		.attr("for", "qrspoiler")
 		.prepend($spoiler)
 		.appendTo($row);
+	var $mature = $("<input/>")
+		.attr("id", "qrmature")
+		.attr("type", "checkbox")
+		.attr("name", "mature");
+	var $maturelabel = $("<label/>")
+		.text("Mature Content")
+		.attr("id", "qrmaturelabel")
+		.attr("for", "qrmature")
+		.prepend($mature)
+		.appendTo($row);
 	var $auto = $("<input/>")
 		.attr("id", "qrauto")
 		.attr("type", "checkbox")
@@ -268,6 +278,13 @@ $(document).ready(function(){
 	if( $oldForm.find("#sticky").length == 0 ) {
 		$stickylabel.hide();
 	}
+	function init_mature_button() {
+		if( $oldForm.find("#mature").length == 0 || !settings.getProp("show_mature") )
+			$maturelabel.hide();
+		else
+			$maturelabel.show();
+	}
+	init_mature_button();
 	
 	var QRInputNames = {};
 	$("input, textarea", $QRForm).each(function() {
@@ -891,8 +908,9 @@ $(document).ready(function(){
 
 	QRInit();
 	$(document).on("setting_change", function(e, setting) {
-		if (setting != "use_QR")
-			return;
-		QRInit();
+		if (setting == "use_QR")
+			QRInit();
+		else if (setting == "show_mature")
+			init_mature_button();
 	});
 });

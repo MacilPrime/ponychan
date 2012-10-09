@@ -605,13 +605,13 @@ function mod_page_ip($ip) {
 					$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
 					$post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
 					$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['sticky'], $post['locked'],
-					$post['sage'], $post['embed'], '?/', $mod, false
+					$post['sage'], $post['embed'], '?/', $mod, false, $post['mature']
 				);
 			} else {
 				$po = new Post(
 					$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
 					$post['body'], $post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
-					$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod
+					$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
 				);
 			}
 			
@@ -1623,13 +1623,13 @@ function mod_reports() {
 				$post['capcode'], $post['body'], $post['time'], $post['thumb'],
 				$post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
 				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['sticky'],
-				$post['locked'], $post['sage'], $post['embed'], '?/', $mod, false
+				$post['locked'], $post['sage'], $post['embed'], '?/', $mod, false, $post['mature']
 			);
 		} else {
 			$po = new Post(
 				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
 				$post['body'], $post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
-				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['embed'], '?/', $mod
+				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['embed'], '?/', $mod, $post['mature']
 			);
 		}
 		
