@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `locked` int(1) NOT NULL,
   `sage` int(1) NOT NULL,
   `embed` text,
+  `mature` int(1) NOT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `thread` (`thread`),
   KEY `time` (`time`),

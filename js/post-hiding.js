@@ -7,9 +7,11 @@
  *
  */
 
-$(document).ready(function(){
-	settings.newProp("show_hide_buttons", "bool", false, "Show post hiding buttons");
+settings.newProp("show_hide_buttons", "bool", false, "Show post hiding buttons");
+settings.newProp("show_mature", "bool", false, "Show mature content threads", "Only available on certain boards");
+settings.newProp("mature_as_spoiler", "bool", false, "Treat mature content images as spoilered images");
 
+$(document).ready(function(){
 	function init_hide_style() {
 		var $hide_style = $("style#hide_button_style");
 		if (!$hide_style.length) {
@@ -26,9 +28,81 @@ $(document).ready(function(){
 	}
 	init_hide_style();
 	
+	function init_mature() {
+		var expires = new Date();
+		if (settings.getProp("show_mature")) {
+			expires.setTime((new Date).getTime()+60480000000)
+			document.cookie = "show_mature=true; expires="+expires.toGMTString()+"; path="+siteroot;
+			
+			prep_mature_threads( $(".mature_thread") );
+			$(".mature_warning").hide();
+			$(".mature_post_button, #setting_mature_as_spoiler").show();
+		} else {
+			expires.setTime((new Date).getTime()-50000)
+			document.cookie = "show_mature=false; expires="+expires.toGMTString()+"; path="+siteroot;
+			
+			$(".mature_warning").show();
+			$(".mature_thread, .mature_post_button, #setting_mature_as_spoiler").hide();
+		}
+	}
+	
+	function prep_mature_threads($threads) {
+		$threads.show().find("img[data-mature-src]").each(function() {
+			var $img = $(this);
+			
+			if (!settings.getProp("mature_as_spoiler")) {
+				if ($img.attr("data-spoiler-src") == undefined)
+					$img.attr("data-spoiler-src", $img.attr("src"));
+				$img.attr("src", $img.attr("data-mature-src"));
+				
+				if ($img.attr("data-mature-style") != undefined) {
+					if ($img.attr("data-spoiler-style") == undefined)
+						$img.attr("data-spoiler-style", $img.attr("style"));
+					$img.attr("style", $img.attr("data-mature-style"));
+				}
+			} else {
+				if ($img.attr("data-spoiler-src") != undefined)
+					$img.attr("src", $img.attr("data-spoiler-src"));
+				if ($img.attr("data-spoiler-style") != undefined)
+					$img.attr("style", $img.attr("data-spoiler-style"));
+			}
+		});
+	}
+	init_mature();
+
+	var ofAge = false;
+	function switch_mature() {
+		if (settings.getProp("show_mature")) {
+			if (localStorage.getItem("ofAge") == "true") {
+				ofAge = true;
+			}
+			if (!ofAge) {
+				if (confirm("You must be at least 18 years of age to continue.\nPush Cancel if you are not.")) {
+					ofAge = true;
+					try {
+						localStorage.setItem("ofAge", "true");
+					} catch(e) {}
+				} else {
+					settings.setProp("show_mature", false);
+				}
+			}
+		}
+		init_mature();
+	}
+
+	function switch_mature_as_spoiler() {
+		if (settings.getProp("show_mature")) {
+			prep_mature_threads( $(".mature_thread") );
+		}
+	}
+	
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "show_hide_buttons")
 			init_hide_style();
+		else if (setting == "show_mature")
+			switch_mature();
+		else if (setting == "mature_as_spoiler")
+			switch_mature_as_spoiler();
 	});
 
 	var hidden_posts = [];
@@ -159,12 +233,18 @@ $(document).ready(function(){
 			var $pc = $(this);
 			if (!$pc.attr("id"))
 				return;
+
+			var $thread = $pc.parents(".thread").first();
+			
+			if ($pc.hasClass("opContainer") && $thread.hasClass("mature_thread") && settings.getProp("show_mature")) {
+				prep_mature_threads($thread);
+			}
 			
 			// Don't hide a thread if we're trying to view
 			// it specifically.
 			if ($pc.hasClass("opContainer") && $('div.banner').length)
 				return;
-			
+
 			place_button($pc);
 			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
 			if (is_post_hidden(get_post_board($pc), postnum)) {
@@ -172,7 +252,9 @@ $(document).ready(function(){
 					threads_needed++;
 				do_hide_post($pc);
 			} else {
-				if ($pc.hasClass("opContainer") && $pc.parents(".thread").first().attr("data-loaded-late"))
+				if ($pc.hasClass("opContainer") && $thread.hasClass("mature_thread") && !settings.getProp("show_mature"))
+					threads_needed++;
+				else if ($pc.hasClass("opContainer") && $thread.attr("data-loaded-late"))
 					threads_needed--;
 			}
 		});
@@ -199,6 +281,10 @@ $(document).ready(function(){
 						// page to make up for hidden threads.
 						var postnum = /replyC_(\d+)/.exec($thread.find(".opContainer").first().attr("id"))[1];
 						if (is_post_hidden(board_id, postnum))
+							return;
+
+						// If it's a mature thread and we can't view those, skip it.
+						if ($thread.hasClass("mature_thread") && !settings.getProp("show_mature"))
 							return;
 						
 						$thread.attr("data-loaded-late", true);

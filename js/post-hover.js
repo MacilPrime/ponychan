@@ -36,16 +36,41 @@ $(document).ready(function(){
 		});
 	};
 
+	var make_mature_warning_postC = function(id) {
+		var $newpostC = $("<div/>")
+			.addClass('preview-hidden')
+			.addClass('preview-no-mature')
+			.addClass('postContainer')
+			.addClass('replyContainer');
+		var $newpost = $("<div/>")
+			.addClass('post')
+			.addClass('reply')
+			.text('Linked post is in a mature content thread, and viewing mature content threads is currently disabled.')
+			.appendTo($newpostC);
+		if (id) {
+			$newpostC.attr("id", "replyC_"+id);
+			$newpost.attr("id", "reply_"+id);
+		}
+		return $newpostC;
+	};
+
 	var load_post_from_data = function(id, $data) {
 		if($('#replyC_' + id).length > 0) {
 			return;
 		}
 		
-		var $newpostC = $data.find('#replyC_'+id).first().clone();
-		if ($newpostC.length) {
-			$newpostC.addClass('preview-hidden').appendTo(document.body);
-			fix_image_src($newpostC);
-		}
+		var $postC = $data.find('#replyC_'+id);
+		if (!$postC.length)
+			return;
+
+		var $newpostC;
+		if (!settings.getProp("show_mature") && $postC.parents(".thread").first().hasClass("mature_thread"))
+			$newpostC = make_mature_warning_postC(id);
+		else
+			var $newpostC = $postC.clone();
+		
+		$newpostC.addClass('preview-hidden').appendTo(document.body);
+		fix_image_src($newpostC);
 	};
 
 	var load_post = function(id, url, callback) {
@@ -119,6 +144,9 @@ $(document).ready(function(){
 
 				if ($post.length == 0)
 					return false;
+
+				if (!settings.getProp("show_mature") && $post.parents(".thread").first().hasClass("mature_thread"))
+					$post = make_mature_warning_postC().find(".post");
 
 				if (hovering) {
 					$('#post-hover-' + id).remove();
@@ -197,6 +225,9 @@ $(document).ready(function(){
 
 				if ($postC.length == 0)
 					return false;
+
+				if (!settings.getProp("show_mature") && $postC.parents(".thread").first().hasClass("mature_thread"))
+					$postC = make_mature_warning_postC();
 
 				if ($link.hasClass('inlined')) {
 					if ($inlined_postC)

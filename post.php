@@ -440,7 +440,7 @@ if (isset($_POST['delete'])) {
 	
 	//Check if thread exists
 	if (!$post['op']) {
-		$query = prepare(sprintf("SELECT `sticky`,`locked`,`sage` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
+		$query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`mature` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
 		$query->bindValue(':id', $post['thread'], PDO::PARAM_INT);
 		$query->execute() or error(db_error());
 		
@@ -563,12 +563,46 @@ if (isset($_POST['delete'])) {
 		$post['email'] = '';
 	} else $noko = false;
 	
+	$post['mature'] = $post['op'] ? false : $thread['mature'];
+	
+	if (isset($_POST['mature'])) {
+		if (!$post['op']) {
+			undoImage($post);
+			error("Only threads can be set as mature");
+		} elseif (!$config['mature_allowed']) {
+			undoImage($post);
+			error("This board doesn't allow mature content threads");
+		} else {
+			$post['mature'] = true;
+		}
+	}
+	
+	// Allow replies to mature threads to have the #Mature tag
+	if (!$post['mature'] && stripos($post['body'], '[#mature]') !== false) {
+		if (!$post['op']) {
+			undoImage($post);
+			error("Only threads can be tagged as mature");
+		} elseif (!$config['mature_allowed']) {
+			undoImage($post);
+			error("This board doesn't allow mature content threads");
+		} else {
+			$post['mature'] = true;
+		}
+	}
+	
+	if ($post['mature'] && $post['op'] && stripos($post['body'], '[#mature]') === false) {
+		$post['body'] = "[#Mature]\n" . $post['body'];
+	}
+	
 	if ($post['has_file']) {
 		$post['extension'] = strtolower(substr($post['filename'], strrpos($post['filename'], '.') + 1));
 		if (isset($config['filename_func']))
 			$post['file_id'] = $config['filename_func']($post);
 		else
 			$post['file_id'] = time() . substr(microtime(), 2, 3);
+		
+		if ($post['mature'])
+			$post['file_id'] = 'mtr_' . $post['file_id'];
 		
 		$post['file'] = $board['dir'] . $config['dir']['img'] . $post['file_id'] . '.' . $post['extension'];
 		$post['thumb'] = $board['dir'] . $config['dir']['thumb'] . $post['file_id'] . '.' . ($config['thumb_ext'] ? $config['thumb_ext'] : $post['extension']);

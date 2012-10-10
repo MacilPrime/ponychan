@@ -34,6 +34,9 @@
 		{% if post.mod and post.mod|hasPermission(config.mod.show_ip, board.uri) %}
 			 [<a style="margin:0;" href="?/IP/{{ post.ip }}">{{ post.ip }}</a>]
 		{% endif %}
+		{% if post.mature %}
+			 <span class="mature_note">Mature Content</span>
+		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
 	</label>
 	 <a class="post_no" {% if not index %}onclick="highlightReply({{ post.id }})" href="#{{ post.id }}"{% else %}href="{{ post.link }}"{% endif %}>No.</a>
@@ -88,9 +91,19 @@
 			{% endif %}
 		{% elseif post.thumb == 'spoiler' %}
 			{{ config.root }}{{ config.spoiler_image }}
+		{% elseif post.mature %}
+			{{ config.root }}{{ config.mature_image }}
 		{% else %}
 			{{ config.uri_thumb }}{{ post.thumb }}
-		{% endif %}" style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px" alt="" />
+		{% endif %}"
+		{% if post.mature and post.thumb != 'file' and post.thumb != 'spoiler' %}
+		 data-mature-src="{{ config.uri_thumb }}{{ post.thumb }}"
+		 data-mature-style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px"
+		 style=""
+		{% else %}
+		 style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px"
+		{% endif %}
+		 alt="" />
 	</a>
 	{% endif %}
 	{{ post.postControls }}
