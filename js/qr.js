@@ -850,26 +850,26 @@ $(document).ready(function(){
 						QR.close();
 
 					selectedreply.rm();
-				}
 
-				if ($("div.banner").length == 0) {
-					var newThreadNumber = parseInt(/reply_(\d+)/.exec($(".post.op", data).first().attr("id"))[1]);
-					if (isNaN(newThreadNumber)) {
-						console.error("Could not read new thread number!");
+					if ($("div.banner").length == 0) {
+						var newThreadNumber = parseInt(/reply_(\d+)/.exec($(".post.op", data).first().attr("id"))[1]);
+						if (isNaN(newThreadNumber)) {
+							console.error("Could not read new thread number!");
+						} else {
+							var newThreadURL = /^.*\//.exec(document.location) + "res/"+newThreadNumber+".html";
+							window.location.href = newThreadURL;
+						}
 					} else {
-						var newThreadURL = /^.*\//.exec(document.location) + "res/"+newThreadNumber+".html";
-						window.location.href = newThreadURL;
-					}
-				} else {
-					var $newBannerDiv = $(data)
-						.filter("div.banner")
-						.add( $(data).find("div.banner") )
-						.first();
-
-					if ($newBannerDiv.length) {
-						updateThreadNowWithData(data);
-					} else {
-						setTimeout(updateThreadNow, 1000);
+						var $newBannerDiv = $(data)
+							.filter("div.banner")
+							.add( $(data).find("div.banner") )
+							.first();
+						
+						if ($newBannerDiv.length) {
+							updateThreadNowWithData(data);
+						} else {
+							setTimeout(updateThreadNow, 1000);
+						}
 					}
 				}
 			},
