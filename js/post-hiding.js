@@ -37,6 +37,7 @@ $(document).ready(function(){
 			prep_mature_threads( $(".mature_thread") );
 			$(".mature_warning").hide();
 			$(".mature_post_button, #setting_mature_as_spoiler").show();
+			switch_mature_as_spoiler();
 		} else {
 			expires.setTime((new Date).getTime()-50000)
 			document.cookie = "show_mature=false; expires="+expires.toGMTString()+"; path="+siteroot;
@@ -45,9 +46,14 @@ $(document).ready(function(){
 			$(".mature_thread, .mature_post_button, #setting_mature_as_spoiler").hide();
 		}
 	}
+	init_mature();
 	
 	function prep_mature_threads($threads) {
-		$threads.show().find("img[data-mature-src]").each(function() {
+		$threads.show();
+	}
+
+	function prep_mature_images(context) {
+		$("img[data-mature-src]", context).each(function() {
 			var $img = $(this);
 			
 			if (!settings.getProp("mature_as_spoiler")) {
@@ -68,7 +74,6 @@ $(document).ready(function(){
 			}
 		});
 	}
-	init_mature();
 
 	var ofAge = false;
 	function switch_mature() {
@@ -92,7 +97,7 @@ $(document).ready(function(){
 
 	function switch_mature_as_spoiler() {
 		if (settings.getProp("show_mature")) {
-			prep_mature_threads( $(".mature_thread") );
+			prep_mature_images( $(".mature_thread") );
 		}
 	}
 	
@@ -236,8 +241,10 @@ $(document).ready(function(){
 
 			var $thread = $pc.parents(".thread").first();
 			
-			if ($pc.hasClass("opContainer") && $thread.hasClass("mature_thread") && settings.getProp("show_mature")) {
-				prep_mature_threads($thread);
+			if ($thread.hasClass("mature_thread") && settings.getProp("show_mature")) {
+				if ($pc.hasClass("opContainer"))
+					prep_mature_threads($thread);
+				prep_mature_images($pc);
 			}
 			
 			// Don't hide a thread if we're trying to view
