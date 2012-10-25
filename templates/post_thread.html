@@ -15,7 +15,7 @@ This is a mature content thread. You must have viewing mature content enabled in
 >
 
 <div class="postContainer opContainer postC_{{ post.id }}" id="replyC_{{ post.id }}">
-<div class="post op post_{{ post.id }}" id="reply_{{ post.id }}">
+<div class="post op{% if post.mature %} mature_post{% endif %} post_{{ post.id }}" id="reply_{{ post.id }}">
 {% if post.embed %}
 	{{ post.embed }}
 {% elseif post.file == 'deleted' %}

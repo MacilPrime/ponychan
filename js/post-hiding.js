@@ -34,9 +34,8 @@ $(document).ready(function(){
 			expires.setTime((new Date).getTime()+60480000000)
 			document.cookie = "show_mature=true; expires="+expires.toGMTString()+"; path="+siteroot;
 			
-			prep_mature_threads( $(".mature_thread") );
 			$(".mature_warning").hide();
-			$(".mature_post_button, #setting_mature_as_spoiler").show();
+			$(".mature_thread, .mature_post_button, #setting_mature_as_spoiler").show();
 			switch_mature_as_spoiler();
 		} else {
 			expires.setTime((new Date).getTime()-50000)
@@ -48,10 +47,6 @@ $(document).ready(function(){
 	}
 	init_mature();
 	
-	function prep_mature_threads($threads) {
-		$threads.show();
-	}
-
 	function prep_mature_images(context) {
 		$("img[data-mature-src]", context).each(function() {
 			var $img = $(this);
@@ -97,7 +92,7 @@ $(document).ready(function(){
 
 	function switch_mature_as_spoiler() {
 		if (settings.getProp("show_mature")) {
-			prep_mature_images( $(".mature_thread") );
+			prep_mature_images(document.body);
 		}
 	}
 	
@@ -233,25 +228,34 @@ $(document).ready(function(){
 
 	function process_posts(context) {
 		var threads_needed = 0;
-		var $pcs = $(context).filter(".postContainer").add( $(".postContainer", context) );
-		$pcs.each(function() {
-			var $pc = $(this);
-			if (!$pc.attr("id"))
-				return;
+		var $posts = $(context).filter(".post").add( $(".post", context) );
+		$posts.each(function() {
+			var $post = $(this);
 
-			var $thread = $pc.parents(".thread").first();
-			
-			if ($thread.hasClass("mature_thread") && settings.getProp("show_mature")) {
-				if ($pc.hasClass("opContainer"))
-					prep_mature_threads($thread);
-				prep_mature_images($pc);
+			if ($post.hasClass("mature_post") && settings.getProp("show_mature")) {
+				prep_mature_images($post);
 			}
 			
 			// Don't hide a thread if we're trying to view
 			// it specifically.
-			if ($pc.hasClass("opContainer") && $('div.banner').length)
+			if ($post.hasClass("op") && $('div.banner').length)
 				return;
 
+			// Everything after this relies on the post
+			// being a non-previewed post that has an ID
+			// itself.
+			if (!$post.attr("id"))
+				return;
+			
+			// Everything following is for regular post
+			// hiding functionality, which requires a
+			// .postContainer element.
+			var $pc = $post.parent();
+			if (!$pc.length || !$pc.hasClass("postContainer"))
+				return;
+
+			var $thread = $pc.parents(".thread").first();
+			
 			place_button($pc);
 			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
 			if (is_post_hidden(get_post_board($pc), postnum)) {
@@ -328,8 +332,7 @@ $(document).ready(function(){
 	}
 
 	process_posts(document);
-	$(document).bind('new_post', function(e, post) {
-		if ($(post).parent().hasClass("postContainer"))
-			process_posts($(post).parent());
+	$(document).on('new_post', function(e, post) {
+		process_posts(post);
 	});
 });

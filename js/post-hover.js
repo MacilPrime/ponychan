@@ -84,7 +84,7 @@ $(document).ready(function(){
 				url: url,
 				success: function(data) {
 					// Don't load all images
-					data = data.replace( /(<img\b[^>]+)\b(src\s*=\s*('[^']*'|"[^"]*"))/g, '$1data-$2');
+					data = data.replace(/(<img\b[^>]*\s)(src\s*=)/g, '$1data-$2');
 					var $data = $(data);
 					page_url_data[url] = $data;
 					
