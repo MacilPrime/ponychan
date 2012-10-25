@@ -288,6 +288,9 @@ div.post .body .spoiler a {
 	clear: both;
 	margin: 5px;
 }
+.comicsans {
+	font-family: comic sans, comic sans ms;
+}
 div.styles {
 	float: right;
 	padding-bottom: 20px;
