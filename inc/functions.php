@@ -879,7 +879,7 @@ function deleteFile($id, $remove_entirely_if_already=true) {
 }
 
 // rebuild post (markup)
-function rebuildPost($id) {
+function rebuildPost($id, $rebuildThread=true) {
 	global $board;
 	
 	$query = prepare(sprintf("SELECT `body_nomarkup`, `thread` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
@@ -896,18 +896,24 @@ function rebuildPost($id) {
 	$query->bindValue(':id', $id, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 	
-	buildThread($post['thread'] ? $post['thread'] : $id);
+	$thread = $post['thread'] ? $post['thread'] : $id;
 	
-	return true;
+	if ($rebuildThread)
+		buildThread($thread);
+	
+	return $thread;
 }
 
 // Delete a post (reply or thread)
 function deletePost($id, $error_if_doesnt_exist=true, $rebuild_after=true) {
+	return deletePosts(array($id), $error_if_doesnt_exist, $rebuild_after);
+}
+
+function deletePosts($ids, $error_if_doesnt_exist=true, $rebuild_after=true) {
 	global $board, $config;
 	
 	// Select post and replies (if thread) in one query
-	$query = prepare(sprintf("SELECT `id`,`thread`,`thumb`,`file` FROM `posts_%s` WHERE `id` = :id OR `thread` = :id", $board['uri']));
-	$query->bindValue(':id', $id, PDO::PARAM_INT);
+	$query = prepare(sprintf("SELECT `id`,`thread`,`thumb`,`file` FROM `posts_%s` WHERE `id` IN (" . implode(', ', $ids) . ") OR `thread` IN (" . implode(', ', $ids) . ")", $board['uri']));
 	$query->execute() or error(db_error($query));
 	
 	if ($query->rowCount() < 1) {
@@ -916,7 +922,12 @@ function deletePost($id, $error_if_doesnt_exist=true, $rebuild_after=true) {
 		else return false;
 	}
 	
-	$ids = array();
+	// Is an array where the keys are boards, values are arrays
+	// where the keys are thread numbers.
+	$threads_to_rebuild = array();
+	// This one is just a simple array of IDs. All in the original
+	// board.
+	$deleted_ids = array();
 	
 	// Delete posts and maybe replies
 	while ($post = $query->fetch()) {
@@ -931,9 +942,9 @@ if (false) {
 			$antispam_query->bindValue(':thread', $post['id']);
 			$antispam_query->execute() or error(db_error($antispam_query));
 }
-		} elseif ($query->rowCount() == 1) {
-			// Rebuild thread
-			$rebuild = &$post['thread'];
+		} else {
+			// Mark thread for rebuild
+			$threads_to_rebuild[ $board['uri'] ][ $post['thread'] ] = true;
 		}
 		if ($post['thumb']) {
 			// Delete thumbnail
@@ -944,37 +955,43 @@ if (false) {
 			file_unlink($board['dir'] . $config['dir']['img'] . $post['file']);
 		}
 		
-		$ids[] = (int)$post['id'];
-		
+		$deleted_ids[] = (int)$post['id'];
 	}
 	
-	$query = prepare(sprintf("DELETE FROM `posts_%s` WHERE `id` = :id OR `thread` = :id", $board['uri']));
-	$query->bindValue(':id', $id, PDO::PARAM_INT);
+	$query = prepare(sprintf("DELETE FROM `posts_%s` WHERE `id` IN (" . implode(', ', $ids) . ") OR `thread` IN (" . implode(', ', $ids) . ")", $board['uri']));
 	$query->execute() or error(db_error($query));
 	
-	$query = prepare("SELECT `board`, `post` FROM `cites` WHERE `target_board` = :board AND (`target` = " . implode(' OR `target` = ', $ids) . ")");
+	$query = prepare("SELECT `board`, `post` FROM `cites` WHERE `target_board` = :board AND `target` IN (" . implode(', ', $deleted_ids) . ")");
 	$query->bindValue(':board', $board['uri']);
-	$query->execute() or error(db_error($query));
-	while ($cite = $query->fetch()) {
-		if ($board['uri'] != $cite['board']) {
-			if (!isset($tmp_board))
-				$tmp_board = $board['uri'];
-			openBoard($cite['board']);
-		}
-		rebuildPost($cite['post']);
-	}
-	
-	if (isset($tmp_board))
-		openBoard($tmp_board);
-	
-	$query = prepare("DELETE FROM `cites` WHERE (`target_board` = :board AND `target` = :id) OR (`board` = :board AND `post` = :id)");
-	$query->bindValue(':board', $board['uri']);
-	$query->bindValue(':id', $id, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 
-	if (isset($rebuild) && $rebuild_after) {
-		buildThread($rebuild);
+	$orig_board = $board['uri'];
+
+	while ($cite = $query->fetch()) {
+		if ($board['uri'] != $cite['board'])
+			openBoard($cite['board']);
+		$citedThread = rebuildPost($cite['post'], false);
+		if ($citedThread !== false)
+			$threads_to_rebuild[ $cite['board'] ][ $citedThread ] = true;
 	}
+	
+	$query = prepare("DELETE FROM `cites` WHERE (`target_board` = :board AND `target` IN (" . implode(', ', $deleted_ids) . ")) OR (`board` = :board AND `post` IN (" . implode(', ', $deleted_ids) . "))");
+	$query->bindValue(':board', $orig_board);
+	$query->execute() or error(db_error($query));
+
+	if ($rebuild_after) {
+		foreach ($threads_to_rebuild as $_board => $_threads) {
+			if ($board['uri'] != $_board)
+				openBoard($_board);
+			foreach ($_threads as $_thread => $_dummy) {
+				if ($_dummy && ($board['uri'] != $orig_board || !in_array($_thread, $deleted_ids)))
+					buildThread($_thread);
+			}
+		}
+	}
+	
+	if ($board['uri'] != $orig_board)
+		openBoard($orig_board);
 	
 	return true;
 }
