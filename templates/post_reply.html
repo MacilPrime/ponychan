@@ -5,7 +5,6 @@
 
 <p class="intro"{% if not index %} id="{{ post.id }}"{% endif %}>
 	<input type="checkbox" class="delete" name="delete_{{ post.id }}" id="delete_{{ post.id }}" />
-	<label for="delete_{{ post.id }}">
 		{% if post.subject|length > 0 %}
 			{# show subject #}
 			<span class="subject">{{ post.subject }}</span> 
@@ -38,7 +37,6 @@
 			 <span class="mature_note">Mature Content</span>
 		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
-	</label>
 	 <a class="post_no" {% if not index %}onclick="highlightReply({{ post.id }})" href="#{{ post.id }}"{% else %}href="{{ post.link }}"{% endif %}>No.</a>
 	<a class="post_no"
 		{% if not index %}
