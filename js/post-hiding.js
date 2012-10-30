@@ -7,7 +7,7 @@
  *
  */
 
-settings.newProp("show_hide_buttons", "bool", false, "Show post hiding buttons");
+settings.newProp("show_hide_buttons", "bool", true, "Show post hiding buttons");
 settings.newProp("show_mature", "bool", false, "Show mature content threads", "Only available on certain boards");
 settings.newProp("mature_as_spoiler", "bool", false, "Treat mature content images as spoilered images");
 
