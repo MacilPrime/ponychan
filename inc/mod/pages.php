@@ -1511,30 +1511,39 @@ function mod_rebuild() {
 		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
 			error($config['error']['referer']);
 
+		header('Content-type: text/html; charset=utf-8');
 		set_time_limit($config['mod']['rebuild_timelimit']);
-		
-		$log = array();
+		ini_set("zlib.output_compression", 0);
+?><!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Rebuild</title>
+</head>
+<body>
+<div>
+<?php
 		$boards = listBoards();
 		$rebuilt_scripts = array();
 		
 		if (isset($_POST['rebuild_cache'])) {
 			if ($config['cache']['enabled']) {
-				$log[] = 'Flushing cache';
+				echo "Flushing cache<br>\n";
 				Cache::flush();
 			}
 			
-			$log[] = 'Clearing template cache';
+			echo "Clearing template cache<br>\n";
 			load_twig();
 			$twig->clearCacheFiles();
 		}
 		
 		if (isset($_POST['rebuild_themes'])) {
-			$log[] = 'Regenerating theme files';
+			echo "Regenerating theme files<br>\n";
 			rebuildThemes('all');
 		}
 		
 		if (isset($_POST['rebuild_javascript'])) {
-			$log[] = 'Rebuilding <strong>' . $config['file_script'] . '</strong>';
+			echo 'Rebuilding <strong>' . $config['file_script'] . "</strong><br>\n";
 			buildJavascript();
 			$rebuilt_scripts[] = $config['file_script'];
 		}
@@ -1547,11 +1556,11 @@ function mod_rebuild() {
 			
 			if (isset($_POST['rebuild_index'])) {
 				buildIndex();
-				$log[] = '<strong>' . sprintf($config['board_abbreviation'], $board['uri']) . '</strong>: Creating index pages';
+				echo '<strong>' . sprintf($config['board_abbreviation'], $board['uri']) . "</strong>: Creating index pages<br>\n";
 			}
 			
 			if (isset($_POST['rebuild_javascript']) && !in_array($config['file_script'], $rebuilt_scripts)) {
-				$log[] = '<strong>' . sprintf($config['board_abbreviation'], $board['uri']) . '</strong>: Rebuilding <strong>' . $config['file_script'] . '</strong>';
+				echo '<strong>' . sprintf($config['board_abbreviation'], $board['uri']) . '</strong>: Rebuilding <strong>' . $config['file_script'] . "</strong><br>\n";
 				buildJavascript();
 				$rebuilt_scripts[] = $config['file_script'];
 			}
@@ -1559,13 +1568,22 @@ function mod_rebuild() {
 			if (isset($_POST['rebuild_thread'])) {
 				$query = query(sprintf("SELECT `id` FROM `posts_%s` WHERE `thread` IS NULL", $board['uri'])) or error(db_error());
 				while ($post = $query->fetch(PDO::FETCH_ASSOC)) {
-					$log[] = '<strong>' . sprintf($config['board_abbreviation'], $board['uri']) . '</strong>: Rebuilding thread #' . $post['id'];
+					echo '<strong>' . sprintf($config['board_abbreviation'], $board['uri']) . '</strong>: Rebuilding thread #' . $post['id'] . "<br>\n";
+					ob_flush();
+					flush();
 					buildThread($post['id']);
 				}
 			}
 		}
-		
-		mod_page(_('Rebuild'), 'mod/rebuilt.html', array('logs' => $log));
+?>
+<p>
+	<a href="?/rebuild">Go back and rebuild again</a>.
+	<a href="?/">Go back to dashboard</a>.
+</p>
+</div>
+</body>
+</html>
+<?php		
 		return;
 	}
 	
