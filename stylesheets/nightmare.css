@@ -43,10 +43,13 @@ hr {
 	border-color: rgb(128,128,128);
 }
 div.post.reply {
-	background-color: #19041d;
+	background-color: rgb(25, 4, 29);
 	border-width: 2px;
 	border-style: solid;
 	border-color: #f46700;
+}
+div.post.reply.highlighted {
+	background: rgb(45, 24, 49)
 }
 span.quote {
 	color: #ffb642;
@@ -77,4 +80,7 @@ div.pages {
 	background: none;
 	border-right: none;
 	border-bottom: none;
+}
+.homeblock, fieldset {
+	background-color: rgba(30, 30, 30, 0.5);
 }
