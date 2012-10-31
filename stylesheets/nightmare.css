@@ -1,0 +1,80 @@
+body {
+	background:
+		url("img/nightmare/bggradient.png") repeat-x bottom fixed,
+		url("img/nightmare/moon.png") no-repeat 100px 70px,
+		url("img/nightmare/eyes.png"),
+		#000;
+	color: white;
+	font-family: serif;
+	font-size: 16px;
+}
+a, a:visited {
+	color: rgb(72, 72, 112);
+}
+form table tr th {
+	background: rgb(93, 76, 178);
+}
+header h1, #settingsScreen h1 {
+	font-family: sans-serif;
+	font-size: 30pt !important;
+}
+.subtitle {
+	font-size: 14pt !important;
+}
+.homepage header h1 {
+	font-size: 40pt !important;
+}
+.homeblock h2 {
+	font-size: 24px;
+}
+div.boardlist {
+	font-size: 11pt;
+}
+form {
+	margin-bottom: 2em;
+}
+div.banner {
+	padding: 1px 5px;
+	margin-left: auto;
+	margin-right: auto;
+	display: table;
+}
+hr {
+	border-color: rgb(128,128,128);
+}
+div.post.reply {
+	background-color: #19041d;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #f46700;
+}
+span.quote {
+	color: #ffb642;
+}
+p.intro span.name {
+	color: white;
+}
+p.intro a.email span.name {
+	color: #d0d0ff;
+}
+span.trip {
+	color: #f46700;
+}
+.spoiler {
+	background: #b42700;
+	color: #b42700;
+}
+div.post .body .spoiler a {
+	color: #b42700;
+}
+p.intro span.subject {
+	color: rgb(65, 62, 143);
+}
+.hidetext {
+	background-color: rgb(100, 100, 100);
+}
+div.pages {
+	background: none;
+	border-right: none;
+	border-bottom: none;
+}
