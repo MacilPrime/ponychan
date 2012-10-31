@@ -79,12 +79,12 @@ var settingTypes = {};
 var defaultValues = {};
 var settingSelectOptions = {};
 
-settings.getProp = function(name) {
+settings.getProp = function(name, noDefault) {
 	var id = "setting_"+name;
 	
 	var localVal = localStorage[id];
 	if (localVal == null)
-		return defaultValues[name];
+		return noDefault ? null : defaultValues[name];
 	
 	var type = settingTypes[name];
 	switch(type) {
@@ -101,17 +101,21 @@ settings.getProp = function(name) {
 settings.setProp = function(name, value) {
 	var id = "setting_"+name;
 	
-	var type = settingTypes[name];
-	switch(type) {
-	case "bool":
-		localStorage[id] = value ? "true" : "false";
-		break;
-	case "select":
-		localStorage[id] = value;
-		break;
-	default:
-		console.error("Invalid property type: "+type+", name: "+name);
-		return;
+	if (value == null) {
+		delete localStorage[id];
+	} else {
+		var type = settingTypes[name];
+		switch(type) {
+		case "bool":
+			localStorage[id] = value ? "true" : "false";
+			break;
+		case "select":
+			localStorage[id] = value;
+			break;
+		default:
+			console.error("Invalid property type: "+type+", name: "+name);
+			return;
+		}
 	}
 	$(document).trigger("setting_change", name)
 	return value;
