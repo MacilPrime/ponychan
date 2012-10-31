@@ -81,6 +81,9 @@ div.pages {
 	border-right: none;
 	border-bottom: none;
 }
-.homeblock, fieldset {
+.homeblock {
 	background-color: rgba(30, 30, 30, 0.5);
+}
+fieldset {
+	background-color: rgba(0, 0, 0, 0.5);
 }
