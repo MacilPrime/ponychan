@@ -31,4 +31,14 @@ $(document).ready(function(){
 
 	if (Math.random() < 0.0014)
 		betterName();
+
+	try {
+		if (!localStorage.event_nightmare_old_style) {
+			localStorage.event_nightmare_old_style = settings.getProp("style", true);
+			console.log("Enabling nightmare theme");
+			settings.setProp("style", "Nightmare");
+		}
+	} catch (e) {
+		send_error(e);
+	}
 });
