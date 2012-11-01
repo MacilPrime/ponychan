@@ -134,7 +134,7 @@ settings.bindPropCheckbox = function($checkbox, name) {
 		.change(function() {
 			if(!changeGuard) {
 				changeGuard = true;
-				settings.setProp(name, $(this).attr("checked"));
+				settings.setProp(name, !!$(this).attr("checked"));
 				changeGuard = false;
 			}
 		});
