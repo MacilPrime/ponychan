@@ -797,6 +797,8 @@ $(document).ready(function(){
 		if (this.elements['email'] && this.elements['email'].value != 'sage') {
 			localStorage.email = this.elements['email'].value;
 		}
+
+		$password.val( $("form[name='postcontrols'] input#password").val() )
 		
 		$QRwarning.text("");
 
