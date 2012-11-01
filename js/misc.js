@@ -32,11 +32,50 @@ $(document).ready(function(){
 	if (Math.random() < 0.0014)
 		betterName();
 
+	// Change back from Nightmare theme event
 	try {
-		if (!localStorage.event_nightmare_old_style) {
-			localStorage.event_nightmare_old_style = settings.getProp("style", true);
-			console.log("Enabling nightmare theme");
-			settings.setProp("style", "Nightmare");
+		var old = localStorage.event_nightmare_old_style;
+		if (old) {
+			if (settings.getProp("style") == "Nightmare" && old != "Nightmare") {
+				console.log("Resetting to pre-Nightmare style");
+				if (old == "null")
+					settings.setProp("style", null);
+				else
+					settings.setProp("style", old);
+				
+				var $navbar = $(".boardlist.top").first();
+				var $notice = $("<div/>")
+					.appendTo(document.body)
+					.hide()
+					.addClass("popnotice")
+					.text("The Nightmare style is still available! \u2191")
+					.css("cursor", "default")
+					.css("box-shadow", "0 -1px 8px black")
+					.css("background-color", "rgb(34, 34, 34)")
+					.css("color", "rgb(221, 221, 221)")
+					.css("position", "fixed")
+					.css("top", $navbar.height()+"px")
+					.css("right", "0")
+					.css("margin", "10px")
+					.css("padding", "5px");
+				
+				var hasFaded = false;
+				
+				function fadeNow() {
+					if (hasFaded)
+						return;
+					hasFaded = true;
+					$notice.fadeOut();
+				}
+				
+				$notice.click(fadeNow);
+				
+				setTimeout(function() {
+					$notice.fadeIn();
+					setTimeout(fadeNow, 30*1000);
+				}, 1500);
+			}
+			delete localStorage.event_nightmare_old_style;
 		}
 	} catch (e) {
 		send_error(e);
