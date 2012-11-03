@@ -125,7 +125,7 @@ if (isset($_POST['delete'])) {
 	}
 
 	$id = $editposts[0];	
-	$query = prepare(sprintf("SELECT `thread`, `time`,`password` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
+	$query = prepare(sprintf("SELECT `thread`,`time`,`password` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
 	$query->bindValue(':id', $id, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 	
@@ -158,7 +158,7 @@ if (isset($_POST['delete'])) {
 	// Check if banned
 	checkBan($board['uri']);
 	
-	$query = prepare(sprintf("SELECT `thread`, `time`,`password` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
+	$query = prepare(sprintf("SELECT `thread`,`time`,`password`,`file`,`embed` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
 	$query->bindValue(':id', $id, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 	
@@ -213,7 +213,7 @@ if (isset($_POST['delete'])) {
 	$post['op'] = !$post['thread'];
 	$post['body'] = $_POST['body'];
 
-	if (!($post['has_file'] || isset($post['embed'])) || (($post['op'] && $config['force_body_op']) || (!$post['op'] && $config['force_body']))) {
+	if (!($post['file'] || isset($post['embed'])) || (($post['op'] && $config['force_body_op']) || (!$post['op'] && $config['force_body']))) {
 		$stripped_whitespace = preg_replace('/[\s]/u', '', $post['body']);
 		if ($stripped_whitespace == '') {
 			error($config['error']['tooshort_body']);
