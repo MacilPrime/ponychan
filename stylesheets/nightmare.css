@@ -14,6 +14,9 @@ a, a:visited {
 a.bodylink {
 	color: rgb(221, 0, 0);
 }
+a:hover, p.intro a.post_no:hover {
+	color: #ff0000;
+}
 form table tr th {
 	background: rgb(93, 76, 178);
 }
