@@ -11,6 +11,9 @@ body {
 a, a:visited {
 	color: rgb(72, 72, 112);
 }
+a.bodylink {
+	color: rgb(221, 0, 0);
+}
 form table tr th {
 	background: rgb(93, 76, 178);
 }
