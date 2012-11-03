@@ -128,19 +128,31 @@ function init() {
 		highlightReply(window.location.hash.substring(1));
 }
 
-// Disables all img tags in some html
+function htmlEntities(str) {
+	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// Disables all img, audio, video, and script tags in some html
 function mogrifyHTML(html) {
-	html = html.replace(/(<img\b[^>]*\s)(src\s*=)/g, '$1data-$2');
+	function mogrifier(text) {
+		return '<span class="mogrifier" data-data="' + htmlEntities(text) + '"></span>';
+	}
+	
+	html = html.replace(/<img\b[^>]*>/g, mogrifier);
+	html = html.replace(/<audio\b[^>]*>.*?<\/audio>/g, mogrifier);
+	html = html.replace(/<video\b[^>]*>.*?<\/video>/g, mogrifier);
+	html = html.replace(/<script\b[^>]*>.*?<\/script>/g, mogrifier);
+	
 	return html;
 }
 
-// Re-enables img tags in an element
+// Re-enables mogrified tags in an element
 function demogrifyEl($el) {
-	$el.find('img').each(function() {
-		var realsrc = $(this).attr('data-src');
-		if (realsrc) {
-			$(this).attr('src', realsrc);
-		}
+	$el.find('.mogrifier').each(function() {
+		var $mog = $(this);
+		var html = $mog.attr('data-data');
+		$mog.html(html);
+		$mog.children().unwrap();
 	});
 }
 
