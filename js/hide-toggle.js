@@ -19,14 +19,12 @@ $(document).ready(function() {
 				$buttonP = $text.prev();
 				$button = $buttonP.find(".hidetogglebutton");
 			} else {
-				$buttonP = $('<p/>')
-					.css('clear', 'both')
+				$buttonP = $('<span/>')
 					.addClass('hidetogglebuttonP')
 					.insertBefore($text);
 				$button = $('<button/>')
 					.addClass('hidetogglebutton')
 					.attr('type', 'button')
-					.css('clear', 'both')
 					.appendTo($buttonP);
 			}
 			$button.text('Show')
