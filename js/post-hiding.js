@@ -279,6 +279,7 @@ $(document).ready(function(){
 			$.ajax({
 				url: $nextpage.attr("href"),
 				success: function(data) {
+					data = mogrifyHTML(data);
 					var $threads = $(".thread", data);
 					$threads.each(function() {
 						var $thread = $(this);

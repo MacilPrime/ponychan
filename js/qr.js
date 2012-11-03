@@ -832,6 +832,7 @@ $(document).ready(function(){
 				return xhr;
 			},
 			success: function(data) {
+				data = mogrifyHTML(data);
 				query = null;
 				setQRFormDisabled(false);
 				var title1 = $("h1", data).first().text().trim();
@@ -868,7 +869,7 @@ $(document).ready(function(){
 							.first();
 						
 						if ($newBannerDiv.length) {
-							updateThreadNowWithData(data);
+							updateThreadNowWithData($(data));
 						} else {
 							setTimeout(updateThreadNow, 1000);
 						}

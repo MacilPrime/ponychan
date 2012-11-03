@@ -128,6 +128,26 @@ function init() {
 		highlightReply(window.location.hash.substring(1));
 }
 
+// Disables all img tags in some html
+function mogrifyHTML(html) {
+	html = html.replace(/(<img\b[^>]*\s)(src\s*=)/g, '$1data-$2');
+	return html;
+}
+
+// Re-enables img tags in an element
+function demogrifyEl($el) {
+	$el.find('img').each(function() {
+		var realsrc = $(this).attr('data-src');
+		if (realsrc) {
+			$(this).attr('src', realsrc);
+		}
+	});
+}
+
+$(document).bind('new_post', function(e, post) {
+	demogrifyEl($(post));
+});
+
 var RecaptchaOptions = {
 	theme : 'clean'
 };

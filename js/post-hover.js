@@ -27,15 +27,6 @@ $(document).ready(function(){
 	var page_url_data = {};
 	var page_url_callbacks = {};
 
-	var fix_image_src = function($tag) {
-		$tag.find('img').each(function() {
-			var realsrc = $(this).attr('data-src');
-			if (realsrc) {
-				$(this).attr('src', realsrc);
-			}
-		});
-	};
-
 	var make_mature_warning_postC = function(id) {
 		var $newpostC = $("<div/>")
 			.addClass('preview-hidden')
@@ -70,7 +61,6 @@ $(document).ready(function(){
 			var $newpostC = $postC.clone();
 		
 		$newpostC.addClass('preview-hidden').appendTo(document.body);
-		fix_image_src($newpostC);
 	};
 
 	var load_post = function(id, url, callback) {
@@ -83,8 +73,7 @@ $(document).ready(function(){
 			$.ajax({
 				url: url,
 				success: function(data) {
-					// Don't load all images
-					data = data.replace(/(<img\b[^>]*\s)(src\s*=)/g, '$1data-$2');
+					data = mogrifyHTML(data);
 					var $data = $(data);
 					page_url_data[url] = $data;
 					

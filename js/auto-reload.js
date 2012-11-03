@@ -114,9 +114,9 @@ $(document).ready(function(){
 		$statusSettings.hide();
 	});
 	
-	var loadPosts = function(data) {
+	var loadPosts = function($data) {
 		var postsAddedCount = 0;
-		$(data).find('div.postContainer.replyContainer').each(function(index) {
+		$data.find('div.postContainer.replyContainer').each(function(index) {
 			var id = $(this).attr('id');
 			if($('#' + id).length == 0) {
 				$(this).insertAfter($('div.postContainer:not(.post-inline-container):not(.preview-hidden):last'));
@@ -138,15 +138,19 @@ $(document).ready(function(){
 		query = $.ajax({
 			url: document.location,
 			success: function(data) {
-				var $banner = $(data).filter('div.banner').add( $(data).find('div.banner') ).first();
+				data = mogrifyHTML(data);
+				var $data = $(data);
+				var $banner = $data.filter('div.banner').add( $data.find('div.banner') ).first();
 				if($banner.length) {
-					loadPosts(data);
+					loadPosts($data);
 					prepareDelayedUpdate();
 				} else {
-					if($("h2", data).first().text().trim() === "Thread specified does not exist.")
+					if($("h2", data).first().text().trim() === "Thread specified does not exist.") {
 						$statusBox.css('color', 'red').text('404');
-					else
+					} else {
 						$statusBox.css('color', 'red').text('Error');
+						prepareDelayedUpdate();
+					}
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
@@ -190,13 +194,13 @@ $(document).ready(function(){
 		tick();
 	};
 
-	updateThreadNowWithData = function(data) {
+	updateThreadNowWithData = function($data) {
 		if(query) {
 			query.abort();
 			query = null;
 		}
 
-		loadPosts(data);
+		loadPosts($data);
 		prepareDelayedUpdate();
 	};
 
