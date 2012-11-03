@@ -156,6 +156,7 @@ input.delete {
 p.intro span.subject {
 	color: #0F0C5D;
 	font-weight: bold;
+	font-size: 125%;
 }
 p.intro span.name {
 	color: #117743;
