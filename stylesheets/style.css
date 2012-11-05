@@ -277,6 +277,9 @@ div.post .body .spoiler a {
 .spoiler:hover, div.post .body .spoiler:hover a {
 	color: white;
 }
+.hidetogglebutton {
+	width: 4em;
+}
 .hidetext {
 	border-style: solid;
 	border-width: 1px;
@@ -285,6 +288,11 @@ div.post .body .spoiler a {
 	background: #ddd;
 	clear: both;
 	margin: 5px;
+}
+.hidetext.off {
+	height: 0;
+	padding: 0;
+	overflow: hidden;
 }
 .comicsans {
 	font-family: comic sans, comic sans ms;

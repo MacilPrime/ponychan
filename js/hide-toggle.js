@@ -27,14 +27,16 @@ $(document).ready(function() {
 					.attr('type', 'button')
 					.appendTo($buttonP);
 			}
+			
+			$text.addClass('off');
 			$button.text('Show')
-			$text.hide();
+			
 			$button.on('click.hider', function() {
-				if($text.is(':visible')) {
-					$text.hide();
+				if(!$text.hasClass('off')) {
+					$text.addClass('off');
 					$button.text('Show');
 				} else {
-					$text.show();
+					$text.removeClass('off');
 					$button.text('Hide');
 				}
 				return false;
