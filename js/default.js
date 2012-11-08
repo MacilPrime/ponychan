@@ -128,6 +128,35 @@ function init() {
 		highlightReply(window.location.hash.substring(1));
 }
 
+(function() {
+	var path_board_regex = new RegExp(siteroot+"([^/]+)/");
+	board_id = null;
+	var reg_result = path_board_regex.exec(document.location.pathname);
+	if (reg_result) {
+		board_id = reg_result[1];
+	} else {
+		var href_board_regex = new RegExp("\\?/([^/]+)/");
+		reg_result = href_board_regex.exec(document.location.href);
+		if (reg_result) {
+			board_id = reg_result[1];
+		}
+	}
+	
+	get_post_board = function($post) {
+		var $post_no = $post.find(".post_no:first");
+		var no_board_regex = new RegExp("^\\??"+siteroot+"([^/]+)/res/\\d+");
+		var reg_result = no_board_regex.exec($post_no.attr("href"));
+		if (reg_result) {
+			return reg_result[1];
+		} else {
+			// If the No. button didn't have the board
+			// name in its link, then the post belongs to
+			// the current page's board.
+			return board_id;
+		}
+	}
+})();
+
 function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
