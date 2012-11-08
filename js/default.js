@@ -141,29 +141,25 @@ function init() {
 			board_id = reg_result[1];
 		}
 	}
-	
-	get_post_board = function($post) {
-		var $post_no = $post.find(".post_no:first");
-		var no_board_regex = new RegExp("^\\??"+siteroot+"([^/]+)/res/\\d+");
-		var reg_result = no_board_regex.exec($post_no.attr("href"));
-		if (reg_result) {
-			return reg_result[1];
-		} else {
-			// If the No. button didn't have the board
-			// name in its link, then the post belongs to
-			// the current page's board.
-			return board_id;
-		}
-	}
-
-	get_post_num = function($post) {
-		return /\bpost_(\d+)\b/.exec($post.attr("class"))[1];
-	}
-
-	get_post_id = function($post) {
-		return get_post_board($post)+':'+get_post_num($post);
-	}
 })();
+	
+function get_post_board($post) {
+	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
+}
+
+function get_post_num($post) {
+	return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
+}
+
+function get_post_id($post) {
+	var match = /\bpost_(\w+)-(\d+)\b/.exec($post.attr("class"));
+	return match[1]+':'+match[2];
+}
+
+function get_post_class(postid) {
+	var match = /^(\w+):(\d+)$/.exec(postid);
+	return 'post_'+match[1]+'-'+match[2];
+}
 
 function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

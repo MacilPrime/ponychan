@@ -190,13 +190,13 @@ $(document).ready(function(){
 	function hide_this_post() {
 		var $pc = $(this).parents(".postContainer").first();
 		var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
-		hide_post(get_post_board($pc), postnum);
+		hide_post(get_post_board($pc.children(".post")), postnum);
 	}
 
 	function show_this_post() {
 		var $pc = $(this).parents(".postContainer").first();
 		var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
-		show_post(get_post_board($pc), postnum);
+		show_post(get_post_board($pc.children(".post")), postnum);
 	}
 
 	function process_posts(context) {
@@ -231,7 +231,7 @@ $(document).ready(function(){
 			
 			place_button($pc);
 			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
-			if (is_post_hidden(get_post_board($pc), postnum)) {
+			if (is_post_hidden(get_post_board($pc.children(".post")), postnum)) {
 				if ($pc.hasClass("opContainer"))
 					threads_needed++;
 				do_hide_post($pc);
