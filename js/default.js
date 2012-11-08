@@ -21,17 +21,9 @@ function highlightReply(id) {
 		return true;
 	}
 	
-	var divs = document.getElementsByTagName('div');
-	for (var i = 0; i < divs.length; i++)
-	{
-		if (divs[i].className.indexOf('post') != -1)
-			divs[i].className = divs[i].className.replace(/highlighted/, '');
-	}
-	if (id) {
-		var post = document.getElementById('reply_'+id);
-		if (post)
-			post.className += ' highlighted';
-	}
+	$('.highlighted').removeClass('highlighted');
+	if (id)
+		$('#reply_'+id).addClass('highlighted');
 }
 
 function generatePassword() {

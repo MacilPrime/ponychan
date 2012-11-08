@@ -203,21 +203,6 @@ function populate_watcher_screen() {
 		var board = match[1];
 		var postnum = match[2];
 		
-		var $postlink = $('<a/>')
-			.addClass('wlink')
-			.attr('href', make_thread_url(board, postnum))
-			.text('/'+board+'/'+postnum);
-		var $postlinkpart = $('<span/>')
-			.addClass('wlinkpart')
-			.append($postlink);
-		if (thread.known_reply_count > 100) {
-			var $postlink50 = $('<a/>')
-				.addClass('wlink50')
-				.attr('href', make_thread50_url(board, postnum))
-				.text('+50');
-			$postlinkpart.append(' ', $postlink50);
-		}
-
 		var $name = $('<span/>')
 			.addClass('wname')
 			.text(thread.opname);
@@ -232,6 +217,7 @@ function populate_watcher_screen() {
 			.text(thread.post);
 
 		var $postcounter;
+		var unread_hash = '';
 		if (thread.known_reply_count == null) {
 			$postcounter = '';
 		} else {
@@ -247,6 +233,7 @@ function populate_watcher_screen() {
 			// number of new posts.
 			if (thread.last_known_time > thread.last_seen_time && page_thread_id != id) {
 				alerts++;
+				unread_hash = '#unread';
 				var $newposts = $('<span/>')
 					.addClass('wnewposts');
 				if (thread.known_reply_count > thread.seen_reply_count) {
@@ -260,6 +247,21 @@ function populate_watcher_screen() {
 			}
 		}
 		
+		var $postlink = $('<a/>')
+			.addClass('wlink')
+			.attr('href', make_thread_url(board, postnum)+unread_hash)
+			.text('/'+board+'/'+postnum);
+		var $postlinkpart = $('<span/>')
+			.addClass('wlinkpart')
+			.append($postlink);
+		if (thread.known_reply_count > 100) {
+			var $postlink50 = $('<a/>')
+				.addClass('wlink50')
+				.attr('href', make_thread50_url(board, postnum)+unread_hash)
+				.text('+50');
+			$postlinkpart.append(' ', $postlink50);
+		}
+
 		var $removebutton = $('<a/>')
 			.addClass('wremove')
 			.attr("href", "javascript:;")
@@ -388,11 +390,38 @@ function watcher_acknowledge_page() {
 	populate_watcher_screen();
 }
 
+function jump_to_first_unread_post() {
+	if (!page_thread_id)
+		return false;
+	if (!(page_thread_id in watched_threads))
+		return false;
+	var last_seen_time = watched_threads[page_thread_id].last_seen_time;
+	if (!last_seen_time)
+		return false;
+	var jumped = false;
+	$('.thread .reply').each(function() {
+		var $post = $(this);
+		var post_time = (new Date($post.find('.intro:first').find('time:first').attr('datetime'))).getTime()/1000;
+		if (post_time > last_seen_time) {
+			jumped = true;
+			var postnum = get_post_num($post);
+			window.location.hash = postnum;
+			highlightReply(postnum);
+			return false;
+		}
+	});
+	return jumped;
+}
+
 var page_thread_id = null;
 
 $(document).ready(function() {
 	if ($('div.banner').length && $('.thread .post.op').length)
 		page_thread_id = get_post_id($('.thread .post.op').first());
+	
+	if ($('div.banner').length && window.location.hash == '#unread') {
+		jump_to_first_unread_post();
+	}
 	
 	watcher_acknowledge_page();
 	init_watcher_menu();
