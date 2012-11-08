@@ -194,6 +194,7 @@ function populate_watcher_screen() {
 	var $watcherScreen = $('#watcherScreen');
 	$watcherScreen.html('');
 	var alerts = 0;
+
 	for (id in watched_threads) {
 		var thread = watched_threads[id];
 		
@@ -239,13 +240,11 @@ function populate_watcher_screen() {
 				.addClass('wallposts')
 				.text(thread.known_reply_count+' posts');
 
-			var threadid = get_post_id($('.thread .post.op').first());
 			// If the reported last time is greater than
 			// the last seen time, and we're not directly
 			// viewing this thread now, then show the
 			// number of new posts.
-			if (thread.last_known_time > thread.last_seen_time &&
-			    ($('div.banner').length != 0 || threadid != id)) {
+			if (thread.last_known_time > thread.last_seen_time && page_thread_id != id) {
 				alerts++;
 				var $newposts = $('<span/>')
 					.addClass('wnewposts');
@@ -388,7 +387,12 @@ function watcher_acknowledge_page() {
 	populate_watcher_screen();
 }
 
+var page_thread_id = null;
+
 $(document).ready(function() {
+	if ($('div.banner').length && $('.thread .post.op').length)
+		page_thread_id = get_post_id($('.thread .post.op').first());
+	
 	watcher_acknowledge_page();
 	init_watcher_menu();
 	add_watch_buttons( $(".post.op") );
