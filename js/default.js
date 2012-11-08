@@ -155,6 +155,14 @@ function init() {
 			return board_id;
 		}
 	}
+
+	get_post_num = function($post) {
+		return /\bpost_(\d+)\b/.exec($post.attr("class"))[1];
+	}
+
+	get_post_id = function($post) {
+		return get_post_board($post)+':'+get_post_num($post);
+	}
 })();
 
 function htmlEntities(str) {
