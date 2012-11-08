@@ -8,7 +8,7 @@
  */
 
 var max_watched_threads = 30;
-var watcher_poll_time = 60 * 1000;
+var watcher_poll_time = 30 * 1000;
 
 var watched_threads;
 load_watched_threads();
@@ -155,10 +155,9 @@ function refresh_watched_threads(callback) {
 				}
 			}
 			
-			if (changed) {
+			if (changed)
 				save_watched_threads();
-				populate_watcher_screen();
-			}
+			populate_watcher_screen();
 
 			if(callback)
 				callback(true);
