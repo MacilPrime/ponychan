@@ -488,6 +488,8 @@ table.mod.config-editor input[type="text"] {
 	top: 0;
 	left: 13px;
 	width: 100%;
+	
+	z-index: 5;
 }
 header { margin-top: 48px; }
 .boardlist.top .boardlistpart {
@@ -628,7 +630,7 @@ header { margin-top: 48px; }
 	padding: 1px;
 	background-color: #e2e2e2;
 	border: 1px solid black;
-	z-index: 1;
+	z-index: 6;
 	font-family: Arial, Verdana, sans-serif;
 	font-size: 12px;
 	min-width: 300px;
@@ -788,7 +790,9 @@ header { margin-top: 48px; }
 #watcherScreen {
 	margin: 15px;
 	padding: 0;
+	border: 1px solid black;
 	box-shadow: 0px -1px 8px black;
+	border-radius: 3px;
 	background: #303030;
 	right: 0;
 	color: white;
@@ -798,6 +802,9 @@ header { margin-top: 48px; }
 .wthread {
 	padding: 5px;
 	border-bottom: 1px solid black;
+}
+.wthread:last-of-type {
+	border-bottom: none;
 }
 .wlinkpart a, .wlinkpart a:visited {
 	color: rgb(100, 100, 230);
