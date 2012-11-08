@@ -793,6 +793,7 @@ header { margin-top: 48px; }
 	right: 0;
 	color: white;
 	width: 40em;
+	font-size: 11pt;
 }
 .wthread {
 	padding: 5px;
@@ -804,6 +805,12 @@ header { margin-top: 48px; }
 }
 .wlinkpart a:hover {
 	color: rgb(80, 80, 200);
+}
+.wtrip {
+	color: #ccc;
+}
+.wpostcounter {
+	margin-left: 0.7em;
 }
 .wnewposts {
 	color: red;
@@ -820,6 +827,12 @@ header { margin-top: 48px; }
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+
+	padding-left: 0.5em;
+	color: #aaa;
+}
+.wsubject {
+	color: white;
 }
 .postfooter {
 	font-size: 90%;
