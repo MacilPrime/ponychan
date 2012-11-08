@@ -206,6 +206,17 @@ function populate_watcher_screen() {
 			.addClass('wlink')
 			.attr('href', make_thread_url(board, postnum))
 			.text('/'+board+'/'+postnum);
+		var $postlinkpart = $('<span/>')
+			.addClass('wlinkpart')
+			.append($postlink);
+		if (thread.known_reply_count > 100) {
+			var $postlink50 = $('<a/>')
+				.addClass('wlink50')
+				.attr('href', make_thread50_url(board, postnum))
+				.text('+50');
+			$postlinkpart.append(' ', $postlink50);
+		}
+
 		var $name = $('<span/>')
 			.addClass('wname')
 			.text(thread.opname);
@@ -257,7 +268,7 @@ function populate_watcher_screen() {
 
 		var $top = $('<div/>')
 			.addClass('wtop')
-			.append($postlink, ' ', $name, $trip, ' ', $postcounter, ' ', $removebutton);
+			.append($postlinkpart, ' ', $name, $trip, ' ', $postcounter, ' ', $removebutton);
 		var $details = $('<div/>')
 			.addClass('wdetails')
 			.append($subject, ' — ', $post);

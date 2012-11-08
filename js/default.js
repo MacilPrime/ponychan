@@ -150,6 +150,13 @@ function make_thread_url(board, postnum) {
 		return siteroot+board+'/res/'+postnum+'.html';
 }
 	
+function make_thread50_url(board, postnum) {
+	if (document.location.pathname == siteroot+'mod.php')
+		return '?/'+board+'/res/'+postnum+'+50.html';
+	else
+		return siteroot+board+'/res/'+postnum+'+50.html';
+}
+	
 function get_post_board($post) {
 	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
 }

@@ -798,11 +798,11 @@ header { margin-top: 48px; }
 	padding: 5px;
 	border-bottom: 1px solid black;
 }
-.wlink, .wlink:visited {
+.wlinkpart a, .wlinkpart a:visited {
 	color: rgb(100, 100, 230);
 	text-decoration: none;
 }
-.wlink:hover {
+.wlinkpart a:hover {
 	color: rgb(80, 80, 200);
 }
 .wnewposts {
