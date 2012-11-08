@@ -19,3 +19,4 @@ thumbs.db
 Icon?
 Thumbs.db
 *~
+/inc/instance-config.php
