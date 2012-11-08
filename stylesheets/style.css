@@ -780,3 +780,51 @@ header { margin-top: 48px; }
 .postSide a, .hide_button a {
 	text-decoration: none;
 }
+#watcherButton.open { background: #383838; }
+#watcherAlerts {
+	color: red;
+	margin-right: 0.3em;
+}
+#watcherScreen {
+	margin: 15px;
+	padding: 0;
+	box-shadow: 0px -1px 8px black;
+	background: #303030;
+	right: 0;
+	color: white;
+	width: 40em;
+}
+.wthread {
+	padding: 5px;
+	border-bottom: 1px solid black;
+}
+.wlink, .wlink:visited {
+	color: rgb(100, 100, 230);
+	text-decoration: none;
+}
+.wlink:hover {
+	color: rgb(80, 80, 200);
+}
+.wnewposts {
+	color: red;
+}
+.wremove, .wremove:visited {
+	color: rgb(160,0,0);
+	text-decoration: none;
+	float: right;
+}
+.wremove:hover {
+	color: rgb(230,0,0);
+}
+.wdetails {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.postfooter {
+	font-size: 90%;
+	text-align: right;
+}
+.postfooter a {
+	text-decoration: none;
+}
