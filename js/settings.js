@@ -23,11 +23,12 @@ var $settingsCloseButton = $("<a/>")
 $("<hr/>").appendTo($settingsScreen);
 
 var $settingsButton = $("<a/>")
+	.attr("id", "settingsButton")
 	.text("settings")
 	.attr("href", "javascript:;");
 
 var $settingsSection = $("<span/>")
-	.addClass("settingsButton")
+	.attr("id", "settingsSection")
 	.addClass("boardlistpart")
 	.append('[ ', $settingsButton, ' ]');
 
@@ -233,9 +234,9 @@ $(document).ready(function() {
 	// If the settings stuff already is on the page, then remove
 	// it. This can happen if the user saves the page from a web
 	// browser and opens it again.
-	$("#settingsScreen, .settingsButton, #settings-overlay").remove();
+	$("#settingsScreen, #settingsSection, #settings-overlay").remove();
 
 	$(document.body).append($settingsOverlay, $settingsScreen);
 	$(".boardlist").append($settingsSection);
-	$(".settingsButton a").click(settings.showWindow);
+	$("#settingsButton").click(settings.showWindow);
 });

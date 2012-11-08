@@ -519,12 +519,12 @@ header { margin-top: 48px; }
 .boardlist.top .boardlistpart a[href="/"]:before { content: ""; }
 .boardlist.top .boardlistpart a[href="/"]:after  { content: ""; }
 
-.boardlist.top .settingsButton.boardlistpart a:before { content: ""; }
-.boardlist.top .settingsButton.boardlistpart a:after  { content: ""; }
-.boardlist.top .settingsButton {
+.boardlist.top #settingsSection.boardlistpart a:before { content: ""; }
+.boardlist.top #settingsSection.boardlistpart a:after  { content: ""; }
+.boardlist.top #settingsSection {
 	float: right;
 }
-.boardlist.top .settingsButton a {
+.boardlist.top #settingsSection a {
 	font-weight: bold;
 	padding: 6px;
 	margin: 0 5px;
