@@ -238,7 +238,14 @@ function populate_watcher_screen() {
 			var $allposts = $('<span/>')
 				.addClass('wallposts')
 				.text(thread.known_reply_count+' posts');
-			if (thread.last_known_time > thread.last_seen_time) {
+
+			var threadid = get_post_id($('.thread .post.op').first());
+			// If the reported last time is greater than
+			// the last seen time, and we're not directly
+			// viewing this thread now, then show the
+			// number of new posts.
+			if (thread.last_known_time > thread.last_seen_time &&
+			    ($('div.banner').length != 0 || threadid != id)) {
 				alerts++;
 				var $newposts = $('<span/>')
 					.addClass('wnewposts');
@@ -377,6 +384,8 @@ function watcher_acknowledge_page() {
 		watched_threads[threadid].last_seen_time = last_seen_time;
 		save_watched_threads();
 	}
+
+	populate_watcher_screen();
 }
 
 $(document).ready(function() {
