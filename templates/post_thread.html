@@ -139,30 +139,30 @@ This is a mature content thread. You must have viewing mature content enabled in
 	<div class="body">
 		{% endfilter %}{% if index %}{{ post.body|truncate_body(post.link) }}{% else %}{{ post.body }}{% endif %}{% filter remove_whitespace %}
 	</div>
-	{% if post.omitted or post.omitted_images %}
-		<span class="omitted">
-			{% if post.omitted %}
-				{% trans %}
-					1 post
-				{% plural post.omitted %}
-					{{ count }} posts
-				{% endtrans %}
-				{% if post.omitted_images %}
-					 {% trans %}and{% endtrans %} 
-				{% endif %}
-			{% endif %}
-			{% if post.omitted_images %}
-				{% trans %}
-					1 image reply
-				{% plural post.omitted_images %}
-					{{ count }} image replies
-				{% endtrans %}
-			{% endif %} {% trans %}omitted. Click View to see all.{% endtrans %}
-		</span>
-	{% endif %}
 {% if not index %}
 {% endif %}
 </div></div></div>{% endfilter %}
+{% if post.omitted or post.omitted_images %}
+<div class="omitted">
+	{% if post.omitted %}
+		{% trans %}
+			1 post
+		{% plural post.omitted %}
+			{{ count }} posts
+		{% endtrans %}
+		{% if post.omitted_images %}
+			 {% trans %}and{% endtrans %} 
+		{% endif %}
+	{% endif %}
+	{% if post.omitted_images %}
+		{% trans %}
+			1 image reply
+		{% plural post.omitted_images %}
+			{{ count }} image replies
+		{% endtrans %}
+	{% endif %} {% trans %}omitted. Click View to see all.{% endtrans %}
+</div>
+{% endif %}
 {% set hr = post.hr %}
 {% for post in post.posts %}
 	{% include 'post_reply.html' %}

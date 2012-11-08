@@ -154,7 +154,7 @@ $(document).ready(function(){
 		var prefix = "";
 		if ($postC.hasClass("opContainer")) {
 			var $thread = $postC.parent(".thread");
-			$thread.find(".replyContainer").hide();
+			$thread.find(".replyContainer, .omitted").hide();
 			prefix = "Thread hidden - ";
 		}
 
@@ -189,7 +189,7 @@ $(document).ready(function(){
 	function do_show_post($postC) {
 		if ($postC.hasClass("opContainer")) {
 			var $thread = $postC.parent(".thread");
-			$thread.find(".replyContainer").show();
+			$thread.find(".replyContainer, .omitted").show();
 		}
 
 		$postC.find(".postStub").remove();
