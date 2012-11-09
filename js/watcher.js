@@ -115,7 +115,6 @@ function refresh_watched_threads(callback) {
 	
 	watcher_query = $.ajax({
 		url: siteroot+'watcher/threads',
-		cache: false,
 		data: {ids: Object.keys(watched_threads)},
 		dataType: "json",
 		success: function(data) {
