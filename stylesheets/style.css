@@ -521,12 +521,12 @@ header { margin-top: 48px; }
 .boardlist.top .boardlistpart a[href="/"]:before { content: ""; }
 .boardlist.top .boardlistpart a[href="/"]:after  { content: ""; }
 
-.boardlist.top #settingsSection.boardlistpart a:before { content: ""; }
-.boardlist.top #settingsSection.boardlistpart a:after  { content: ""; }
-.boardlist.top #settingsSection {
+.boardlist.top .settingsSection.boardlistpart a:before { content: ""; }
+.boardlist.top .settingsSection.boardlistpart a:after  { content: ""; }
+.boardlist.top .settingsSection {
 	float: right;
 }
-.boardlist.top #settingsSection a {
+.boardlist.top .settingsSection a {
 	font-weight: bold;
 	padding: 6px;
 	margin: 0 5px;
@@ -782,7 +782,7 @@ header { margin-top: 48px; }
 .postSide a, .hide_button a {
 	text-decoration: none;
 }
-#watcherButton.open { background: #383838; }
+.boardlist.top .watcherButton.open { background: #383838; }
 #watcherAlerts {
 	color: red;
 	margin-right: 0.3em;

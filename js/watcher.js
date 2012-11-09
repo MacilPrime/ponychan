@@ -52,7 +52,7 @@ function add_watch($post) {
 		save_watched_threads();
 		
 		add_watch_buttons($("."+get_post_class(postid)));
-		if ($("#watcherButton").length == 0) {
+		if ($(".watcherButton").length == 0) {
 			init_watcher_menu();
 		} else {
 			populate_watcher_screen();
@@ -178,14 +178,14 @@ function refresh_watched_threads(callback) {
 function open_watcher() {
 	var $watcherScreen = $('#watcherScreen');
 	if ($watcherScreen.is(':hidden')) {
-		$('#watcherButton').addClass('open');
+		$('.watcherButton').addClass('open');
 		var $navbar = $('.boardlist.top');
 		$watcherScreen
 			.show()
 			.css('position', $navbar.css('position') )
 			.css('top', $navbar.height() );
 	} else {
-		$('#watcherButton').removeClass('open');
+		$('.watcherButton').removeClass('open');
 		$watcherScreen.hide();
 	}
 }
@@ -295,7 +295,7 @@ function watcher_alerts(count) {
 		if ($watcherAlerts.length == 0) {
 			$watcherAlerts = $('<span/>')
 				.attr('id', 'watcherAlerts')
-				.prependTo( $('#watcherButton') );
+				.prependTo( $('.watcherButton') );
 		}
 		$watcherAlerts.text('('+count+')');
 	}
@@ -337,16 +337,16 @@ function end_watcher_refresher() {
 }
 
 function init_watcher_menu() {
-	$("#watcherButton, #watcherScreen").remove();
+	$(".watcherButton, #watcherScreen").remove();
 	
 	if (Object.keys(watched_threads).length == 0)
 		return;
 	
 	var $watcherButton = $("<a/>")
-		.attr("id", "watcherButton")
+		.addClass("watcherButton")
 		.text("watcher")
 		.attr("href", "javascript:;")
-		.prependTo( $("#settingsSection") );
+		.prependTo( $(".top .settingsSection") );
 
 	var $watcherScreen = $("<div/>")
 		.attr("id", "watcherScreen")
