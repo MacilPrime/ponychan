@@ -470,6 +470,8 @@
 	$config['max_height'] = $config['max_width']; // 1:1
 	// Reject dupliate image uploads
 	$config['image_reject_repost'] = true;
+	// Reject dupliate image uploads within the same thread. Doesn't change anything if image_reject_repost is true.
+	$config['image_reject_repost_in_thread'] = false;
 	
 	// Display the aspect ratio in a post's file info
 	$config['show_ratio'] = false;
@@ -698,6 +700,7 @@
 	$config['error']['maxsize']		= _('The file was too big.');
 	$config['error']['invalidzip']		= _('Invalid archive!');
 	$config['error']['fileexists']		= _('That file <a href="%s">already exists</a>!');
+	$config['error']['fileexistsinthread']	= _('That file <a href="%s">already exists</a> in this thread!');
 	$config['error']['delete_too_soon']	= _('You\'ll have to wait another %s before deleting that.');
 	$config['error']['edit_too_soon']	= _('You\'ll have to wait another %s before editing that.');
 	$config['error']['mime_exploit']	= _('MIME type detection XSS exploit (IE) detected; post discarded.');
