@@ -380,11 +380,18 @@
  * ====================
  */
 
-	// "Wiki" markup syntax ($config['wiki_markup'] in pervious versions):
-	$config['markup'][] = array("/'''(.+?)'''/", "<strong>\$1</strong>");
-	$config['markup'][] = array("/''(.+?)''/", "<em>\$1</em>");
-	$config['markup'][] = array("/\*\*(.+?)\*\*/", "<span class=\"spoiler\">\$1</span>");
-	$config['markup'][] = array("/^[ |\t]*==(.+?)==[ |\t]*$/m", "<span class=\"heading\">\$1</span>");
+	$config['markup'][] = array("/\[b\](.+?)\[\/b\]/s", "<strong>\$1</strong>");
+	$config['markup'][] = array("/\[i\](.+?)\[\/i\]/s", "<em>\$1</em>");
+	$config['markup'][] = array("/\[u\](.+?)\[\/u\]/s", "<u>\$1</u>");
+	$config['markup'][] = array("/\[s\](.+?)\[\/s\]/s", "<s>\$1</s>");
+	$config['markup'][] = array("/\[spoiler\](.+?)\[\/spoiler\]/s", "<span class=\"spoiler\">\$1</span>");
+	$config['markup'][] = array("/\[\?\](.+?)\[\/\?\]/s", "<span class=\"spoiler\">\$1</span>");
+        $config['markup'][] = array("/\[h\](?:\s*\n)?(.+?)\[\/h\]/s", "<div class=\"hidetext\">\$1</div>");
+        $config['markup'][] = array('/\[hide\](?:\s*\n)?(.+?)\[\/hide\]/s', "<div class=\"hidetext\">\$1</div>");
+	$config['markup'][] = array("/\[#(.+?)\]/", "<span class=\"hashtag\">#\$1</span>");
+	$config['markup'][] = array("/^\s*==(.+?)==\s*$/m", "<span class=\"heading\">\$1</span>");
+	$config['markup'][] = array("/\[cs\](.+?)\[\/cs\]/s", "<span class=\"comicsans\">\$1</span>");
+	$config['markup'][] = array("/\[tt\](.+?)\[\/tt\]/s", "<span style=\"font-family: monospace\">\$1</span>");
 	
 	// Highlight PHP code wrapped in <code> tags (PHP 5.3.0+)
 	// $config['markup'][] = array(
@@ -537,7 +544,7 @@
 	// Assign each poster in a thread a unique ID, shown by "ID: {id}" before the post number.
 	$config['poster_ids'] = false;
 	// Number of characters in the poster ID (maximum is 40)
-	$config['poster_id_length'] = 5;
+	$config['poster_id_length'] = 6;
 	
 	// Page footer
 	$config['footer'][] = 'All trademarks, copyrights, comments, and images on this page are owned by and are the responsibility of their respective parties.';
@@ -557,28 +564,35 @@
 	$config['stylesheets']['Yotsuba'] = 'yotsuba.css';
 	// $config['stylesheets']['Futaba'] = 'futaba.css';
 	
+	$config['stylesheets']['Pone'] = 'pone.css';
+	$config['stylesheets']['Luna'] = 'luna.css';
+	$config['stylesheets']['Wonderbolts'] = 'wonderbolts.css';
+	$config['stylesheets']['Cloudsdale'] = 'Cloudsdale.css';
+	$config['stylesheets']['Nightmare'] = 'nightmare.css';
+	
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/
 	// $config['uri_stylesheets'] = 'http://static.example.org/stylesheets/';
 	
 	// The default stylesheet to use
-	$config['default_stylesheet'] = array('Yotsuba B', $config['stylesheets']['Yotsuba B']);
+	//$config['default_stylesheet'] = array('Yotsuba B', $config['stylesheets']['Yotsuba B']);
+	$config['default_stylesheet'] = array('Pone', $config['stylesheets']['Pone']);
 	
 	// Boardlinks
 	// You can group, order and place the boardlist at the top of every page, using the following template.	
-	//$config['boards'] = array(
+	$config['boards'] = array(
 	//	array('a', 'b'),
 	//	array('c', 'd', 'e', 'f', 'g'),
 	//	array('h', 'i', 'j'),
 	//	array('k', array('l', 'm')),
 	//	array('status' => 'http://status.example.org/')
-	//);
+	);
 	
 	// Categories
 	// Required for the Categories theme.
-	//$config['categories'] = array(
+	$config['categories'] = array(
 	//	'Group Name' => array('a', 'b', 'c'),
 	//	'Another Group' => array('d')
-	//);
+	);
 	
 	// Custom_categories
 	// Optional for the Categories theme. array of name => (title, url) groups for categories with non-board links.
@@ -599,14 +613,29 @@
  */
 
 	// Additional Javascript files to include on board index and thread pages.
-	$config['additional_javascript'][] = 'js/jquery.min.js';
-	$config['additional_javascript'][] = 'js/default.js';
-	$config['additional_javascript'][] = 'js/inline-expanding.js';
-	// $config['additional_javascript'][] = 'js/local-time.js';
-	
-	// Some scripts require jQuery. Check the comments in script files to see what's needed.
-	// $config['additional_javascript'][] = 'js/jquery.min.js';
-	// $config['additional_javascript'][] = 'js/auto-reload.js';
+        $config['additional_javascript'][] = 'js/jquery.min.js';
+        $config['additional_javascript'][] = 'js/logger.js';
+        $config['additional_javascript'][] = 'js/default.js';
+        $config['additional_javascript'][] = 'js/settings.js';
+        $config['additional_javascript'][] = 'js/styles.js';
+        $config['additional_javascript'][] = 'js/spoiler-toggle.js';
+        $config['additional_javascript'][] = 'js/local-time.js';
+        $config['additional_javascript'][] = 'js/auto-reload.js';
+        $config['additional_javascript'][] = 'js/post-hover.js';
+        $config['additional_javascript'][] = 'js/show-op.js';
+        $config['additional_javascript'][] = 'js/show-filenames.js';
+        $config['additional_javascript'][] = 'js/inline-expanding.js';
+        $config['additional_javascript'][] = 'js/image-hover.js';
+        $config['additional_javascript'][] = 'js/smartphone-spoiler.js';
+        $config['additional_javascript'][] = 'js/show-backlinks.js';
+        $config['additional_javascript'][] = 'js/navbar.js';
+        $config['additional_javascript'][] = 'js/qr.js';
+        $config['additional_javascript'][] = 'js/tags.js';
+        $config['additional_javascript'][] = 'js/misc.js';
+        $config['additional_javascript'][] = 'js/titlebar.js';
+        $config['additional_javascript'][] = 'js/hide-toggle.js';
+	$config['additional_javascript'][] = 'js/post-hiding.js';
+	$config['additional_javascript'][] = 'js/watcher.js';
 	 
 	// Where these script files are located on the web (defaults to $config['root']).
 	// $config['additional_javascript_url'] = '/js/';
@@ -955,7 +984,7 @@
 	// View whether a thread has been bumplocked ("-1" to allow non-mods to see too)
 	$config['mod']['view_bumplock'] = MOD;
 	// Edit posts
-	$config['mod']['editpost'] = ADMIN;
+	$config['mod']['editpost'] = MOD;
 	// Edit posts without leaving "Post was edited" message
 	$config['mod']['noeditmsg'] = ADMIN;
 	// "Move" a thread to another board (EXPERIMENTAL; has some known bugs)
