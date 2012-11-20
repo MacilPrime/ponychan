@@ -81,10 +81,11 @@ class Filter {
 				else
 					$all_boards = false;
 				
-				$query = prepare("INSERT INTO `bans` VALUES (NULL, :ip, :mod, :set, :expires, :reason, :board)");
+				$query = prepare("INSERT INTO `bans` (`ip`,`ip_type`,`mod`,`set`,`expires`,`reason`,`board`) VALUES (:ip, :type, :mod, :set, :expires, :reason, :board)");
 				$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
+				$query->bindValue(':type', 0);
 				$query->bindValue(':mod', -1);
-				$query->bindValue(':set', time());
+				$query->bindValue(':set', time(), PDO::PARAM_INT);
 				
 				if ($expires)
 					$query->bindValue(':expires', $expires);

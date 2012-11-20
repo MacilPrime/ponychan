@@ -46,13 +46,15 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `bans` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `ip` varchar(45) NOT NULL,
+  `ip_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:exact, 1:range glob, 2:IPv4 CIDR',
   `mod` int(11) NOT NULL COMMENT 'which mod made the ban',
-  `set` int(11) NOT NULL,
+  `set` int(11) NOT NULL COMMENT 'when the ban was set',
   `expires` int(11) DEFAULT NULL,
   `reason` text,
   `board` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ip` (`ip`)
+  KEY (`ip`),
+  KEY (`ip_type`,`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

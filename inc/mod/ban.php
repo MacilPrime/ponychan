@@ -56,10 +56,18 @@ function parse_time($str) {
 function ban($mask, $reason, $length, $board) {
 	global $mod, $pdo;
 	
-	$query = prepare("INSERT INTO `bans` VALUES (NULL, :ip, :mod, :time, :expires, :reason, :board)");
+	if (strpos($mask, '*') !== FALSE)
+		$type = 1;
+	elseif (strpos($mask, '/') !== FALSE)
+		$type = 2;
+	else
+		$type = 0;
+	
+	$query = prepare("INSERT INTO `bans` (`ip`,`ip_type`,`mod`,`set`,`expires`,`reason`,`board`) VALUES (:ip, :type, :mod, :time, :expires, :reason, :board)");
 	$query->bindValue(':ip', $mask);
-	$query->bindValue(':mod', $mod['id']);
-	$query->bindValue(':time', time());
+	$query->bindValue(':type', $type, PDO::PARAM_INT);
+	$query->bindValue(':mod', $mod['id'], PDO::PARAM_INT);
+	$query->bindValue(':time', time(), PDO::PARAM_INT);
 	if ($reason !== '') {
 		markup($reason);
 		$query->bindValue(':reason', $reason);
