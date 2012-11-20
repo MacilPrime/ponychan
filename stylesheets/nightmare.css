@@ -90,6 +90,6 @@ div.pages {
 .homeblock {
 	background-color: rgba(30, 30, 30, 0.5);
 }
-fieldset {
+fieldset, div.ban {
 	background-color: rgba(0, 0, 0, 0.5);
 }

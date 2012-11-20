@@ -12,7 +12,10 @@ $(document).ready(function(){
 		return; // not index
 
 	var titlePrefix = document.title.split("-")[0]+"- ";
-	var titleEnd = document.title.split("-")[1].slice(1);
+	var titleSplit = document.title.split("-");
+	if (titleSplit.length < 2)
+		return;
+	var titleEnd = titleSplit[1].slice(1);
 
 	var opsubject = $(".post.op .subject").text().trim();
 	var optext = $(".post.op .body").text().trim();

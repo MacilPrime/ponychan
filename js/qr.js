@@ -841,10 +841,9 @@ $(document).ready(function(){
 					$QRwarning.text(title2);
 					prepSubmitButton();
 				} else if (title1 == "Banned!") {
-					document.write(data);
-					var newPageTitle = $("title", data).text();
-					window.history.pushState({}, newPageTitle, url);
-					return;
+					var pageState = {title: title1, banpage: data};
+					newState(pageState);
+					prepSubmitButton();
 				} else {
 					QRcooldown(10);
 					if (settings.getProp("QR_persistent") || (replies.length > 1))

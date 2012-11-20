@@ -617,6 +617,7 @@
         $config['additional_javascript'][] = 'js/logger.js';
         $config['additional_javascript'][] = 'js/default.js';
         $config['additional_javascript'][] = 'js/settings.js';
+        $config['additional_javascript'][] = 'js/state.js';
         $config['additional_javascript'][] = 'js/styles.js';
         $config['additional_javascript'][] = 'js/spoiler-toggle.js';
         $config['additional_javascript'][] = 'js/local-time.js';

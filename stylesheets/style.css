@@ -848,3 +848,6 @@ header { margin-top: 48px; }
 .postfooter a {
 	text-decoration: none;
 }
+.ban-hidden {
+	display: none !important;
+}
