@@ -45,17 +45,25 @@ function hashCode(x, prevHash){
 function createID() {
 	var id = "";
 	var hexDigits = "0123456789abcdef";
-	for (var i = 0; i < 16; i++) {
+	for (var i = 0; i < 32; i++) {
 		id += hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
 	}
 	return id;
 }
 
-var userid;
+var userid, olduserid;
 if (typeof localStorage != "undefined" && !!localStorage) {
 	userid = localStorage.getItem("userid");
+	if (userid && userid.length == 16) {
+		olduserid = userid;
+		try {
+			localStorage.setItem("olduserid", olduserid);
+		} catch(e) {}
+	} else {
+		olduserid = localStorage.getItem("olduserid");
+	}
 }
-if (!userid) {
+if (!userid || userid.length != 32) {
 	userid = createID();
 	try {
 		localStorage.setItem("userid", userid);
@@ -161,6 +169,9 @@ function send_usage(retryTime) {
 	
 	usage.supportGetSelection = typeof window.getSelection != "undefined" && !!window.getSelection;
 	
+	if (olduserid)
+		usage.olduserid = olduserid;
+
 	var usageHash = hashCode(userid + hashCode(usage))
 	if (usageHash == localStorage.getItem("last_usage_data"))
 		return;

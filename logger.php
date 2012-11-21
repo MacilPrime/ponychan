@@ -26,7 +26,7 @@ elseif ($_POST['userid'] !== $userid)
 $type = $_POST['type'];
 $data = json_decode($_POST['data']);
 
-if (!preg_match('/^[0-9a-f]{16}$/', $userid))
+if (!preg_match('/^[0-9a-f]{32}$/', $userid))
 	die("Error: userid is formatted incorrectly");
 if ($data === NULL)
 	die("Error: Could not interpret JSON data");

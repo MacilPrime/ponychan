@@ -244,7 +244,7 @@ function check_userid() {
 	global $userid;
 	if (!isset($_COOKIE['userid']))
 		return;
-	if (!preg_match('/^[0-9a-f]{16}$/', $_COOKIE['userid'])) {
+	if (!preg_match('/^[0-9a-f]{32}$/', $_COOKIE['userid'])) {
 		// invalid userid cookie, ignore it
 		return;
 	}
