@@ -96,12 +96,14 @@ function rememberStuff() {
 					saved[url] = null;
 				}
 				sessionStorage.body = JSON.stringify(saved);
-				
-				document.cookie = cookiename+'={};expires=0;path=/;';
 			}
 			if (saved[document.location]) {
 				document.forms.post.body.value = saved[document.location];
 			}
+		}
+		
+		if (get_cookie(cookiename)) {
+			document.cookie = cookiename+'={};expires=0;path=/;';
 		}
 		
 		if (localStorage.body) {
