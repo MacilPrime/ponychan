@@ -8,6 +8,7 @@ var styles = {
 };
 
 var cookiename = '{% endraw %}{{ config.cookies.js }}{% raw %}';
+var cookiepath = '{% endraw %}{% if config.cookies.jail %}{{ config.cookies.path }}{% else %}/{% endif %}{% raw %}';
 
 var genpassword_chars = '{% endraw %}{{ config.genpassword_chars }}{% raw %}';
 

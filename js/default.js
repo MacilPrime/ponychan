@@ -103,7 +103,7 @@ function rememberStuff() {
 		}
 		
 		if (get_cookie(cookiename)) {
-			document.cookie = cookiename+'={};expires=0;path=/;';
+			document.cookie = cookiename+'={};expires=0;path='+cookiepath+';';
 		}
 		
 		if (localStorage.body) {
