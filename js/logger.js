@@ -80,8 +80,15 @@ var noSendBefore = 0;
 var noSendDelay = 10;
 var send_queued = 0;
 var send_maxQueued = 7;
+var malformed_errors = {};
+
 function send_error(error, retryTime) {
-	if (!error.hasOwnProperty("message")) {
+	error.pageurl = document.location.href;
+	var errorString = JSON.stringify(error);
+	var data = {type: "error", userid: userid, data: errorString};
+		
+	if (!error.hasOwnProperty("message") && !malformed_errors.hasOwnProperty(errorString)) {
+		malformed_errors[errorString] = true;
 		log_error("send_error called without error.message");
 	}
 	
@@ -96,11 +103,6 @@ function send_error(error, retryTime) {
 		}
 		return;
 	}
-	
-	error.pageurl = document.location.href;
-	
-	var errorString = JSON.stringify(error);
-	var data = {type: "error", userid: userid, data: errorString};
 	
 	if (!retryTime)
 		retryTime = 3*1000;
