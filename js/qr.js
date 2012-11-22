@@ -179,6 +179,7 @@ $(document).ready(function(){
 		.attr("id", "qrfile")
 		.attr("type", "file")
 		.attr("name", "file")
+		.attr("accept", "image/*")
 		.appendTo($buttonrow);
 	var $filebutton = $("<button/>")
 		.attr("id", "qrfilebutton")
@@ -495,7 +496,7 @@ $(document).ready(function(){
 				$QRwarning.text(file.name + " is too large");
 				$file.val("");
 				return;
-			} else if ('type' in file && !/^image/.test(file.type)) {
+			} else if ('type' in file && !/^image\//.test(file.type)) {
 				$QRwarning.text(file.name + " has an unsupported file type");
 				$file.val("");
 				return;
