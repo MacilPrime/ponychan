@@ -195,12 +195,6 @@ function populate_watcher_screen() {
 	$watcherScreen.html('');
 	var alerts = 0;
 
-	var $status = $('<div/>')
-		.addClass('wthread')
-		.addClass('wstatus')
-		.text('Server maintenance happening: Watcher may not be fully functional')
-		.appendTo($watcherScreen);
-
 	for (id in watched_threads) {
 		var thread = watched_threads[id];
 		
