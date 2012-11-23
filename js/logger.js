@@ -165,6 +165,9 @@ function send_usage(retryTime) {
 	
 	usage.supportFile = typeof FileReader != "undefined" && !!FileReader;
 	usage.supportFormData = typeof FormData != "undefined" && !!FormData;
+	usage.supportPostMessage = typeof window.postMessage != "undefined" && !!window.postMessage;
+	usage.supportWorker = typeof Worker != "undefined" && !!Worker;
+	usage.supportSharedWorker = typeof SharedWorker != "undefined" && !!SharedWorker;
 	
 	var wURL = window.URL || window.webkitURL;
 	usage.supportwURL = typeof wURL != "undefined" && !!wURL;
