@@ -223,7 +223,7 @@ class ImageConvert extends ImageBase {
 		
 		$this->temp = false;
 	}
-	public function from() {	
+	public function from() {
 		$size = trim(shell_exec('identify -format "%w %h" ' . escapeshellarg($this->src . '[0]')));	
 		if (preg_match('/^(\d+) (\d+)$/', $size, $m)) {
 			$this->width = $m[1];
