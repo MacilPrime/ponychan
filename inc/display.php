@@ -52,6 +52,10 @@ function createBoardlist($mod=false) {
 	$body = doBoardListPart($config['boards'], $mod?'?/':$config['root']);
 	if (!preg_match('/\]<\/span> $/', $body))
 		$body = '<span class="boardlistpart">[' . $body . ']</span>';
+
+	if ($mod && count($config['modboards']) > 0) {
+		$body .= ' <span class="boardlistpart modboardlistpart">[' . doBoardListPart($config['modboards'], '?/') . ']</span>';
+	}
 	
 	$body = trim($body);
 	

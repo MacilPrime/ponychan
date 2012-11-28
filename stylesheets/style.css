@@ -506,6 +506,9 @@ header { margin-top: 48px; }
 	font-size: 16px;
 	visibility: visible;
 }
+.boardlist .modboardlistpart a, .boardlist .modboardlistpart a:visited {
+	opacity: 0.65;
+}
 .boardlist.top .boardlistpart a[href="/"] {
 	font-weight: bold;
 	color: #183;
@@ -514,7 +517,7 @@ header { margin-top: 48px; }
 .boardlist.top .boardlistpart a:hover { background: #444; }
 .boardlist.top .boardlistpart a.boardlistactive {
 	padding-top: 3px;
-	border-top: 3px solid #555;
+	border-top: 3px solid #666;
 }
 .boardlist.top .boardlistpart a:before { content: "/"; }
 .boardlist.top .boardlistpart a:after  { content: "/"; }

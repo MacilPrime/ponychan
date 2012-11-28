@@ -587,6 +587,10 @@
 	//	array('status' => 'http://status.example.org/')
 	);
 	
+	$config['modboards'] = array(
+	//	'mod', 'test'
+	);
+	
 	// Categories
 	// Required for the Categories theme.
 	$config['categories'] = array(
