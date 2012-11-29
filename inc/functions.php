@@ -549,6 +549,9 @@ function listBoards() {
 function checkFlood($post) {
 	global $board, $config;
 	
+	if (event('check-flood', $post))
+		return true;
+	
 	$query = prepare(sprintf("SELECT * FROM `posts_%s` WHERE (`ip` = :ip AND `time` >= :floodtime) OR (`ip` = :ip AND `body` != '' AND `body` = :body AND `time` >= :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` >= :floodsametime) LIMIT 1", $board['uri']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':body', $post['body'], PDO::PARAM_INT);
@@ -558,9 +561,6 @@ function checkFlood($post) {
 	$query->execute() or error(db_error($query));
 	
 	$flood = (bool)$query->fetch();
-	
-	if (event('check-flood', $post))
-		return true;
 	
 	return $flood;
 }
