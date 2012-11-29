@@ -107,7 +107,7 @@ $(document).ready(function(){
 			return;
 		}
 
-		if ($('#' + id).not('.preview-hidden').length) {
+		if ($('#replyC_' + id).not('.preview-hidden').length) {
 			$link.attr('href', '#'+id);
 		}
 

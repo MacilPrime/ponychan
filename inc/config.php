@@ -634,6 +634,7 @@
         $config['additional_javascript'][] = 'js/smartphone-spoiler.js';
         $config['additional_javascript'][] = 'js/show-backlinks.js';
         $config['additional_javascript'][] = 'js/navbar.js';
+        $config['additional_javascript'][] = 'js/permalink.js';
         $config['additional_javascript'][] = 'js/qr.js';
         $config['additional_javascript'][] = 'js/tags.js';
         $config['additional_javascript'][] = 'js/misc.js';
