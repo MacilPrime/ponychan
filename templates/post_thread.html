@@ -103,7 +103,7 @@ This is a mature content thread. You must have viewing mature content enabled in
 			 <span class="mature_note">Mature Content</span>
 		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
-	 <a class="post_no" href="{% if not index %}#{{ post.id }}{% else %}{{ post.link }}{% endif %}">No.</a>
+	 <a class="post_no" href="{{ post.link }}">No.</a>
 	<a class="post_no"
 		{% if not index %}
 			 onclick="citeReply({{ post.id }});"
