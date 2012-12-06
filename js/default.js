@@ -26,6 +26,22 @@ function highlightReply(id) {
 		$('#reply_'+id).addClass('highlighted');
 }
 
+function confirmDelete() {
+	var count = $('form[name="postcontrols"] input.delete:checked').length;
+	if (count == 0) {
+		alert('No posts selected');
+		return false;
+	} else {
+		var message;
+		if (count == 1)
+			message = 'Are you sure you want to delete the selected post?';
+		else
+			message = 'Are you sure you want to delete the '+count+' selected posts?';
+		
+		return confirm(message);
+	}
+}
+
 function generatePassword() {
 	var pass = '';
 	var chars = genpassword_chars;
