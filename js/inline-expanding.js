@@ -21,44 +21,47 @@ $(document).ready(function(){
 	});
 
 	var init_expand_image = function() {
-		$(this).parent().each(function() {
-			if($(this).attr('data-old-src')) {
-				this.childNodes[0].src = $(this).attr('data-old-src');
-				this.childNodes[0].style.width = 'auto';
-				this.childNodes[0].style.height = 'auto';
-				$(this).attr('data-old-src', '');
-			}
-		});
-		$(this).parent().click(function(e) {
+		var $img = $(this);
+		if($img.attr('data-old-src')) {
+			$img.attr({
+				src: $img.attr('data-old-src'),
+				'data-old-src': '',
+			}).removeClass('expanded').removeClass('loading');
+		}
+		$img.click(function(e) {
 			if(!image_expand_enabled)
 				return true;
 
 			if(e.which == 2) {
 				return true;
 			}
-			if(!$(this).attr('data-old-src')) {
-				$(this).attr('data-old-src', this.childNodes[0].src);
-				this.childNodes[0].src = this.href;
-				this.childNodes[0].style.width = 'auto';
-				this.childNodes[0].style.maxWidth = '95%';
-				this.childNodes[0].style.maxHeight = '95%';
-				this.childNodes[0].style.height = 'auto';
-				this.childNodes[0].style.opacity = '0.4';
-				this.childNodes[0].style.filter = 'alpha(opacity=40)';
-				this.childNodes[0].onload = function() {
-					this.style.opacity = '1';
-					this.style.filter = '';
-				}
+
+			var $img = $(this);
+			var $a = $img.parent();
+			
+			if(!$img.attr('data-old-src')) {
+				$img
+					.attr({
+						'data-old-src': $img.attr('src'),
+						src: $a.attr('href'),
+					})
+					.addClass('expanded')
+					.addClass('loading')
+					.load(function() {
+						$(this).removeClass('loading');
+					});
 			} else {
-				this.childNodes[0].src = $(this).attr('data-old-src');
-				this.childNodes[0].style.width = 'auto';
-				this.childNodes[0].style.height = 'auto';
-				$(this).attr('data-old-src', '');
+				$img.attr({
+					src: $img.attr('data-old-src'),
+					'data-old-src': '',
+				}).removeClass('expanded').removeClass('loading');
 			}
+			e.stopPropagation();
+			e.preventDefault();
 			return false;
 		});
 	};
-	$('form[name="postcontrols"]>div>a:not([class="file"])>img').each(init_expand_image);
+	
 	$('div.post>a:not([class="file"])>img').each(init_expand_image);
 	$(document).bind('new_post', function(e, post) {
 		$(post).find('>a:not([class="file"])>img').each(init_expand_image);

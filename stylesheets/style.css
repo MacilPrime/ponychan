@@ -137,6 +137,16 @@ div.post img.icon {
 	margin: 0 5px;
 	padding: 0;
 }
+img.loading {
+	opacity: 0.4;
+	filter: alpha(opacity=40);
+}
+img.expanded {
+	width: auto !important;
+	height: auto !important;
+	max-width: 95%;
+	max-height: 95%;
+}
 .opMain {
 	margin-right: 20px;
 	margin-bottom: 5px;
