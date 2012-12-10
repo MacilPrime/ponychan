@@ -12,7 +12,7 @@ $(document).ready(function(){
 		if(!/TEXTAREA/.test(event.target.nodeName))
 			return true;
 
-		if(!event.ctrlKey)
+		if(!event.ctrlKey || event.shiftKey)
 			return true;
 
 		var tag;
