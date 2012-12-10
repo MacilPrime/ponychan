@@ -168,6 +168,7 @@ function send_usage(retryTime) {
 	usage.supportPostMessage = typeof window.postMessage != "undefined" && !!window.postMessage;
 	usage.supportWorker = typeof Worker != "undefined" && !!Worker;
 	usage.supportSharedWorker = typeof SharedWorker != "undefined" && !!SharedWorker;
+	usage.supportWindowScrollTo = typeof window.scrollTo != "undefined" && !!window.scrollTo;
 	
 	var wURL = window.URL || window.webkitURL;
 	usage.supportwURL = typeof wURL != "undefined" && !!wURL;
