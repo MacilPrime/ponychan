@@ -33,7 +33,7 @@ $(document).ready(function(){
 				if(!image_hover_enabled)
 					return;
 			}
-			if($image.parent().attr('data-old-src'))
+			if($image.attr('data-old-src'))
 				return;
 
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
