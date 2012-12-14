@@ -268,16 +268,16 @@ $(document).ready(function(){
 		.val( $("form[name='postcontrols'] input#password").val() )
 		.appendTo($QRForm);
 	if( $oldForm.find("#spoiler").length == 0 ) {
-		$spoilerlabel.hide();
+		$spoilerlabel.remove();
 	}
 	if( $oldForm.find("#raw").length == 0 ) {
-		$rawhtmllabel.hide();
+		$rawhtmllabel.remove();
 	}
 	if( $oldForm.find("#lock").length == 0 ) {
-		$locklabel.hide();
+		$locklabel.remove();
 	}
 	if( $oldForm.find("#sticky").length == 0 ) {
-		$stickylabel.hide();
+		$stickylabel.remove();
 	}
 	function init_mature_button() {
 		if( $oldForm.find("#mature").length == 0 || !settings.getProp("show_mature") )
@@ -685,11 +685,11 @@ $(document).ready(function(){
 	checkNameDisable();
 
 	if ($oldName.length == 0)
-		$name.hide();
+		$name.remove();
 	if ($oldEmail.length == 0)
-		$email.hide();
+		$email.remove();
 	if ($oldSubject.length == 0)
-		$subject.hide();
+		$subject.remove();
 
 	var setQRFormDisabled = function(disabled) {
 		$("input, textarea", $QRForm).prop("disabled", disabled);
