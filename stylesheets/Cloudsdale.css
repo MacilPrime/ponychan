@@ -61,7 +61,7 @@ header h1, #settingsScreen h1 {
 	font-size: 30pt;
 }
 
-header div.subtitle, h1 {
+header div.subtitle, header h1 {
 	color: #000;
 }
 

@@ -38,7 +38,7 @@ header h1 {
 	font-family: "Yesteryear", tahoma;
 	font-size: 38pt;
 }
-header div.subtitle, h1 {
+header div.subtitle, header h1 {
 	color: #f8fd77;
 	font-size: 10pt;
 }
