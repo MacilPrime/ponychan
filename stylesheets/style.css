@@ -34,6 +34,8 @@ p.intro a.email:hover span.name {
 h2 {
 	color: #AF0A0F;
 	font-size: 11pt;
+}
+.homeblock h2 {
 	margin: 0;
 	padding: 0;
 }
@@ -46,7 +48,7 @@ header h1, #settingsScreen h1 {
 	font-size: 20pt;
 	margin: 0;
 }
-header div.subtitle, h1 {
+header div.subtitle, header h1 {
 	color: #AF0A0F;
 	text-align: center;
 }
