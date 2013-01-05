@@ -113,6 +113,7 @@ function refresh_watched_threads(callback) {
 	if (watcher_query)
 		query.abort();
 	
+	var request_date = new Date();
 	watcher_query = $.ajax({
 		url: siteroot+'watcher/threads',
 		data: {ids: Object.keys(watched_threads)},
@@ -136,7 +137,7 @@ function refresh_watched_threads(callback) {
 				if (watched_threads[id].seen_reply_count == null ||
 				    (watched_threads[id].seen_reply_count > threads[id].reply_count &&
 				     threads[id].reply_count != null &&
-				     (watched_threads[id].last_seen_time + 2*60 < Math.round((new Date()).getTime()/1000) ||
+				     (watched_threads[id].last_seen_time + 2*60 < request_date.getTime()/1000 ||
 				      watched_threads[id].last_seen_time < threads[id].last_reply_time))) {
 					watched_threads[id].seen_reply_count = threads[id].reply_count;
 					changed = true;
