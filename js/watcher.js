@@ -376,7 +376,7 @@ function watcher_acknowledge_page() {
 			reply_count += parseInt(match[1]);
 	});
 	
-	var last_seen_time = (new Date($('.thread .reply:not(.post-inline) time').last().attr('datetime'))).getTime()/1000;
+	var last_seen_time = (new Date($('.thread .reply:not(.post-inline):last .intro:first time').attr('datetime'))).getTime()/1000;
 	
 	if (watched_threads[threadid].seen_reply_count != reply_count ||
 	    watched_threads[threadid].last_seen_time != last_seen_time) {
