@@ -130,6 +130,8 @@ function refresh_watched_threads(callback) {
 			for (id in threads) {
 				if (!watched_threads[id])
 					continue;
+				// If we've never viewed the thread since watching it, assume we've already
+				// seen all of its posts.
 				// Only decrease the seen_reply_count value if the latest post seen
 				// locally was more than two minutes ago (The server may cache old values for
 				// a short amount of time), or if the last reported reply time is more recent
@@ -216,13 +218,14 @@ function populate_watcher_screen() {
 			.addClass('wpost')
 			.text(thread.post);
 
-		var $postcounter;
+		var $postcounter = $('<span/>').addClass('wpostcounter');
 		var unread_hash = '';
 		if (thread.known_reply_count == null) {
-			$postcounter = '';
+			var $error = $('<span/>')
+				.addClass('wcounterror')
+				.text('Thread not found');
+			$postcounter.append('(', $error, ')');
 		} else {
-			$postcounter = $('<span/>')
-				.addClass('wpostcounter');
 			var $allposts = $('<span/>')
 				.addClass('wallposts')
 				.text(thread.known_reply_count+' posts');
@@ -377,7 +380,10 @@ function watcher_acknowledge_page() {
 			reply_count += parseInt(match[1]);
 	});
 	
-	var last_seen_time = (new Date($('.thread .reply:not(.post-inline):last .intro:first time').attr('datetime'))).getTime()/1000;
+	var last_seen_time = 0;
+	if ($('.thread .reply:not(.post-inline):last').length) {
+		last_seen_time = (new Date($('.thread .reply:not(.post-inline):last .intro:first time').attr('datetime'))).getTime()/1000;
+	}
 	
 	if (watched_threads[threadid].seen_reply_count != reply_count ||
 	    watched_threads[threadid].last_seen_time != last_seen_time) {

@@ -837,7 +837,10 @@ header { margin-top: 48px; }
 	margin-left: 0.7em;
 }
 .wnewposts {
-	color: red;
+	color: rgb(255,0,0);
+}
+.wcounterror {
+	color: rgb(200,0,0);
 }
 .wremove, .wremove:visited {
 	color: rgb(160,0,0);
