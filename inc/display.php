@@ -66,11 +66,31 @@ function createBoardlist($mod=false) {
 }
 
 function error($message, $priority = true) {
-	global $board, $mod, $config;
+	global $board, $mod, $config, $userid;
 	
 	if ($config['syslog'] && $priority !== false) {
 		// Use LOG_NOTICE instead of LOG_ERR or LOG_WARNING because most error message are not significant.
 		_syslog($priority !== true ? $priority : LOG_NOTICE, $message);
+	}
+
+	if (isset($config['error_log'])) {
+		check_userid();
+		
+		$logdata = array();
+		$logdata['userid'] = $userid;
+		$logdata['message'] = $message;
+		$logdata['time'] = date(DATE_ATOM);
+		if (isset($_SERVER['REMOTE_ADDR']))
+			$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
+		if (isset($_SERVER['REQUEST_METHOD']))
+			$logdata['method'] = $_SERVER['REQUEST_METHOD'];
+		if (isset($_SERVER['REQUEST_URI']))
+			$logdata['uri'] = $_SERVER['REQUEST_URI'];
+		if (isset($_SERVER['HTTP_REFERER']))
+			$logdata['referrer'] = $_SERVER['HTTP_REFERER'];
+		
+		$logline = json_encode($logdata);
+		logToFile($config['error_log'], $logline);
 	}
 	
 	if (defined('STDIN')) {

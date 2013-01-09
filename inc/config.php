@@ -62,6 +62,7 @@
 	
 	//$config['action_log'] = '/var/log/tinyboard/action.log';
 	//$config['antibot_log'] = '/var/log/tinyboard/antibot.log';
+	//$config['error_log'] = '/var/log/tinyboard/error.log';
 	//$config['js_usage_log'] = '/var/log/tinyboard/js_usage.log';
 	//$config['js_error_log'] = '/var/log/tinyboard/js_error.log';
 	
