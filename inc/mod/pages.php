@@ -986,7 +986,7 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 	if (!hasPermission($config['mod']['delete'], $board))
 		error($config['error']['noaccess']);
 	
-	$security_token = make_secure_link_token($board . '/ban' . ($delete ? '&delete' : '') . '/' . $post);
+	$security_token = make_secure_link_token($board . '/ban/' . $post);
 	
 	$query = prepare(sprintf('SELECT `ip`, `thread` FROM `posts_%s` WHERE `id` = :id', $board));
 	$query->bindValue(':id', $post);
@@ -1076,6 +1076,7 @@ function mod_deletefile($board, $post) {
 	deleteFile($post);
 	// Record the action
 	modLog("Deleted file from post #{$post}");
+	
 	// Rebuild board
 	buildIndex();
 	
