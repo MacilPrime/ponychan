@@ -874,6 +874,10 @@ if (isset($_POST['delete'])) {
 		$logdata['name'] = $post['name'];
 		if ($post['trip'])
 			$logdata['trip'] = $post['trip'];
+		if ($post['email'])
+			$logdata['email'] = $post['email'];
+		if ($post['subject'])
+			$logdata['subject'] = $post['subject'];
 		if ($post['capcode'])
 			$logdata['capcode'] = $post['capcode'];
 		if ($post['has_file']) {
