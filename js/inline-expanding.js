@@ -29,12 +29,8 @@ $(document).ready(function(){
 			}).removeClass('expanded').removeClass('loading');
 		}
 		$img.click(function(e) {
-			if(!image_expand_enabled)
+			if(!image_expand_enabled || e.which == 2 || e.ctrlKey || e.altKey)
 				return true;
-
-			if(e.which == 2) {
-				return true;
-			}
 
 			var $img = $(this);
 			var $a = $img.parent();
