@@ -1465,7 +1465,7 @@ function markup(&$body, $track_cites = false) {
 	$tracked_cites = array();
 	
 	// Cites
-	if (isset($board) && preg_match_all('/(^|\s)&gt;&gt;(\d+?)([\s,.)?]|$)/m', $body, $cites)) {			
+	if (isset($board) && preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;(\d+?)([^a-z0-9&;]|$)/im', $body, $cites)) {
 		if (count($cites[0]) > $config['max_cites']) {
 			error($config['error']['toomanycites']);
 		}
