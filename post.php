@@ -280,17 +280,17 @@ if (isset($_POST['delete'])) {
 	buildThread($post['op'] ? $id : $post['thread']);
 
 	buildIndex();
-	$root = $mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
-	
-	$redirect = $root . $board['dir'] . $config['dir']['res'] .
-		sprintf($config['file_page'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
 	
 	if ($config['syslog'])
 		_syslog(LOG_INFO, 'Edited post: /' . $board['dir'] . $config['dir']['res'] .
 			sprintf($config['file_page'], $post['op'] ? $id : $post['thread']) . (!$post['op'] ? '#' . $id : ''));
 
 	rebuildThemes('post');
-	header('Location: ' . $redirect, true, $config['redirect_http']);
+
+	$is_mod = isset($_POST['mod']) && $_POST['mod'];
+	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
+	
+	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
 } elseif (isset($_POST['report'])) {
 	if (!isset($_POST['board'], $_POST['password'], $_POST['reason']))
 		error($config['error']['bot']);
