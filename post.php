@@ -290,10 +290,10 @@ if (isset($_POST['delete'])) {
 		$logdata['userid'] = $userid;
 		$logdata['action'] = 'editpost';
 		$logdata['board'] = $board['uri'];
-		$logdata['number'] = $id;
+		$logdata['number'] = intval($id);
 		$logdata['byauthor'] = isset($password);
 		$logdata['time'] = date(DATE_ATOM);
-		$logdata['thread'] = $post['op'] ? null : $post['thread'];
+		$logdata['thread'] = $post['op'] ? null : intval($post['thread']);
 		$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
 		$logdata['commentsimplehash'] = simplifiedHash($post['body_nomarkup']);
 		$logline = json_encode($logdata);
@@ -881,9 +881,9 @@ if (isset($_POST['delete'])) {
 		$logdata['userid'] = $post['userid'];
 		$logdata['action'] = 'post';
 		$logdata['board'] = $board['uri'];
-		$logdata['number'] = $id;
+		$logdata['number'] = intval($id);
 		$logdata['time'] = date(DATE_ATOM);
-		$logdata['thread'] = $post['op'] ? null : $post['thread'];
+		$logdata['thread'] = $post['op'] ? null : intval($post['thread']);
 		$logdata['ip'] = $post['ip'];
 		$logdata['name'] = $post['name'];
 		if ($post['trip'])
