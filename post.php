@@ -498,7 +498,6 @@ if (isset($_POST['delete'])) {
 			error($config['error']['noimage']);
 	}
 	
-	check_userid();
 	$post['ip'] = $_SERVER['REMOTE_ADDR'];
 	$post['userid'] = $userid;
 	$post['name'] = $_POST['name'] != '' ? $_POST['name'] : $config['anonymous'];

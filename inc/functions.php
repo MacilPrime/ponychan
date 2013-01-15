@@ -19,6 +19,7 @@ require_once 'inc/lib/gettext/gettext.inc';
 $mod = false;
 
 $userid = false;
+check_userid();
 
 register_shutdown_function('fatal_error_handler');
 mb_internal_encoding('UTF-8');

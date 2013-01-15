@@ -263,7 +263,6 @@ function checkSpam(array $extra_salt = array()) {
 	if ($hash != $_hash) {
 		if (isset($config['antibot_log'])) {
 			global $userid;
-			check_userid();
 			$logdata = array();
 			$logdata['userid'] = $userid;
 			$logdata['referrer'] = $_SERVER['HTTP_REFERER'];

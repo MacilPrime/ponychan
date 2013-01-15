@@ -17,7 +17,6 @@ header('Content-type: text/plain');
 if (!isset($_POST['userid'], $_POST['type'], $_POST['data']))
 	die("Error: Missing arguments");
 
-check_userid();
 if (!$userid)
 	$userid = $_POST['userid'];
 elseif ($_POST['userid'] !== $userid)

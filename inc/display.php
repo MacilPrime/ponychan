@@ -74,8 +74,6 @@ function error($message, $priority = true) {
 	}
 
 	if (isset($config['error_log'])) {
-		check_userid();
-		
 		$logdata = array();
 		$logdata['userid'] = $userid;
 		$logdata['message'] = $message;
