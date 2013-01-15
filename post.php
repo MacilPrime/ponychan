@@ -285,6 +285,21 @@ if (isset($_POST['delete'])) {
 		_syslog(LOG_INFO, 'Edited post: /' . $board['dir'] . $config['dir']['res'] .
 			sprintf($config['file_page'], $post['op'] ? $id : $post['thread']) . (!$post['op'] ? '#' . $id : ''));
 
+	if (isset($config['action_log'])) {
+		$logdata = array();
+		$logdata['userid'] = $userid;
+		$logdata['action'] = 'editpost';
+		$logdata['board'] = $board['uri'];
+		$logdata['number'] = $id;
+		$logdata['byauthor'] = isset($password);
+		$logdata['time'] = date(DATE_ATOM);
+		$logdata['thread'] = $post['op'] ? null : $post['thread'];
+		$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
+		$logdata['commentsimplehash'] = simplifiedHash($post['body_nomarkup']);
+		$logline = json_encode($logdata);
+		logToFile($config['action_log'], $logline);
+	}
+	
 	rebuildThemes('post');
 
 	$is_mod = isset($_POST['mod']) && $_POST['mod'];
