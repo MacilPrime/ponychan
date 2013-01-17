@@ -62,15 +62,22 @@ $(document).ready(function(){
 			} else {
 				images = $(context).find('.post.reply > a > img');
 			}
-			images.each(function() {
+			images.each(function(i) {
 				var $img = $(this);
-				var $post = $img.parent().parent();
-				var $body = $post.find('> .body, > .opMain > .body').first();
-				var hatleft = ($img.outerWidth()-65) * 0.5;
-				$body.before('<img class="fancy hat" style="position:absolute;margin-top:-22px;margin-left:'+hatleft+'px;padding:0;height:56px;width:65px;" src="'+siteroot+'static/tophat.png">');
-				var monoheight = ($img.outerHeight()-25) * 0.4;
-				var monoleft = ($img.outerWidth()-30) * 0.8;
-				$body.before('<img class="fancy monocle" style="position:absolute;margin-top:'+monoheight+'px;margin-left:'+monoleft+'px;padding:0;height:75px;width:30px;" src="'+siteroot+'static/monocle.png">');
+				function addfancy() {
+					var $post = $img.parent().parent();
+					var $body = $post.find('> .body, > .opMain > .body').first();
+					var hatleft = ($img.outerWidth()-65) * 0.5;
+					$body.before('<img class="fancy hat" style="position:absolute;margin-top:-22px;margin-left:'+hatleft+'px;padding:0;height:56px;width:65px;" src="'+siteroot+'static/tophat.png">');
+					var monoheight = ($img.outerHeight()-25) * 0.4;
+					var monoleft = ($img.outerWidth()-30) * 0.8;
+					$body.before('<img class="fancy monocle" style="position:absolute;margin-top:'+monoheight+'px;margin-left:'+monoleft+'px;padding:0;height:75px;width:30px;" src="'+siteroot+'static/monocle.png">');
+				}
+				if (i == 0) {
+					addfancy();
+				} else {
+					setTimeout(addfancy, i*5);
+				}
 			});
 		}
 	}
