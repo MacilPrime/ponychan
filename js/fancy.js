@@ -20,6 +20,7 @@ $(document).ready(function(){
 		if (setting == "fancy_mode") {
 			fancy_mode = settings.getProp("fancy_mode");
 			init_fancy_option();
+			cancelFancyPends();
 			fancify(document);
 		}
 	});
@@ -52,6 +53,8 @@ $(document).ready(function(){
 		fancify(post);
 	});
 
+	var fancy_pends = [];
+
 	function fancify(context) {
 		$(context).find('.fancy').remove();
 		if (fancy_mode) {
@@ -76,9 +79,16 @@ $(document).ready(function(){
 				if (i == 0) {
 					addfancy();
 				} else {
-					setTimeout(addfancy, i*5);
+					fancy_pends.push(setTimeout(addfancy, i*5));
 				}
 			});
 		}
+	}
+
+	function cancelFancyPends() {
+		for(var i=0; i<fancy_pends.length; i++) {
+			clearTimeout(fancy_pends[i]);
+		}
+		fancy_pends = [];
 	}
 });
