@@ -14,6 +14,7 @@ settings.newProp("fancy_mode", "bool", false, "Fancy mode");
 $(document).ready(function(){
 	var fancy_mode = settings.getProp("fancy_mode");
 	var show_fancy = false;
+	var fancy_pends = [];
 	init_fancy_option();
 	
 	$(document).on("setting_change", function(e, setting) {
@@ -52,8 +53,6 @@ $(document).ready(function(){
 	$(document).on('new_post', function(e, post) {
 		fancify(post);
 	});
-
-	var fancy_pends = [];
 
 	function fancify(context) {
 		$(context).find('.fancy').remove();
