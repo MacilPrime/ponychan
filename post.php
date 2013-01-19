@@ -705,7 +705,7 @@ if (isset($_POST['delete'])) {
 			} elseif ($config['minimum_copy_resize'] &&
 				$image->size->width <= $config['thumb_width'] &&
 				$image->size->height <= $config['thumb_height'] &&
-				$post['extension'] == ($config['thumb_ext'] ? $config['thumb_ext'] : $post['extension'])) {
+				(!$config['thumb_ext'] || $post['extension'] == $config['thumb_ext'])) {
 			
 				// Copy, because there's nothing to resize
 				copy($upload, $post['thumb']);
