@@ -1,7 +1,7 @@
 <?php
 
 /*
- *  Copyright (c) 2010-2012 Tinyboard Development Group
+ *  Copyright (c) 2010-2013 Tinyboard Development Group
  */
 
 if (realpath($_SERVER['SCRIPT_FILENAME']) == str_replace('\\', '/', __FILE__)) {
@@ -744,6 +744,11 @@ function mod_lock($board, $unlock, $post) {
 	}
 	
 	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	
+	if ($unlock)
+		event('unlock', $post);
+	else
+		event('lock', $post);
 }
 
 function mod_sticky($board, $unsticky, $post) {
@@ -947,7 +952,7 @@ function mod_move($originBoard, $postID) {
 				'thread' => $postID,
 				'op' => false
 			);
-			
+
 			$post['body'] = $post['body_nomarkup'] =  sprintf($config['mod']['shadow_mesage'], '>>>/' . $targetBoard . '/' . $newID);
 			
 			markup($post['body']);

@@ -1,7 +1,7 @@
 <?php
 
 /*
- *  Copyright (c) 2010-2012 Tinyboard Development Group
+ *  Copyright (c) 2010-2013 Tinyboard Development Group
  */
 
 if (realpath($_SERVER['SCRIPT_FILENAME']) == str_replace('\\', '/', __FILE__)) {
@@ -428,9 +428,9 @@ class Thread {
 			// Sticky
 			if (hasPermission($config['mod']['sticky'], $board['uri'], $this->mod))
 				if ($this->sticky)
-					$built .= ' <a title="Make thread not sticky" href="?/' . $board['uri'] . '/unsticky/' . $this->id . '">' . $config['mod']['link_desticky'] . '</a>';
+					$built .= ' <a title="Make thread not sticky" href="?/' . secure_link($board['uri'] . '/unsticky/' . $this->id) . '">' . $config['mod']['link_desticky'] . '</a>';
 				else
-					$built .= ' <a title="Make thread sticky" href="?/' . $board['uri'] . '/sticky/' . $this->id . '">' . $config['mod']['link_sticky'] . '</a>';
+					$built .= ' <a title="Make thread sticky" href="?/' . secure_link($board['uri'] . '/sticky/' . $this->id) . '">' . $config['mod']['link_sticky'] . '</a>';
 			
 			if (hasPermission($config['mod']['bumplock'], $board['uri'], $this->mod))
 				if ($this->bumplocked)

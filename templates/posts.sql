@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `embed` text,
   `mature` int(1) NOT NULL,
   UNIQUE KEY `id` (`id`),
-  KEY `thread` (`thread`),
   KEY `thread_id` (`thread`, `id`),
   KEY `time` (`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
