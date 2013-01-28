@@ -1475,7 +1475,7 @@ function markup(&$body, $track_cites = false) {
 	$tracked_cites = array();
 	
 	// Cites
-	if (isset($board) && preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;(\d+?)([^a-z0-9&;]|$)/im', $body, $cites)) {
+	if (isset($board) && preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;(\d+)([^a-z0-9&;]|$)/im', $body, $cites)) {
 		if (count($cites[0]) > $config['max_cites']) {
 			error($config['error']['toomanycites']);
 		}
@@ -1500,7 +1500,7 @@ function markup(&$body, $track_cites = false) {
 	}
 	
 	// Cross-board linking
-	if (preg_match_all('/(^|\s)&gt;&gt;&gt;\/(\w+?)\/(\d+)?([\s,.)?]|$)/m', $body, $cites)) {
+	if (preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;&gt;\/(\w+)\/(\d+)?([^a-z0-9&;]|$)/m', $body, $cites)) {
 		if (count($cites[0]) > $config['max_cites']) {
 			error($config['error']['toomanycross']);
 		}
