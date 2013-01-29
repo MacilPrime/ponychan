@@ -632,6 +632,7 @@
         $config['additional_javascript'][] = 'js/q.min.js';
         $config['additional_javascript'][] = 'js/logger.js';
         $config['additional_javascript'][] = 'js/default.js';
+        $config['additional_javascript'][] = 'js/thumbnailer.js';
         $config['additional_javascript'][] = 'js/settings.js';
         $config['additional_javascript'][] = 'js/state.js';
         $config['additional_javascript'][] = 'js/styles.js';
