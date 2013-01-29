@@ -629,6 +629,7 @@
 
 	// Additional Javascript files to include on board index and thread pages.
         $config['additional_javascript'][] = 'js/jquery.min.js';
+        $config['additional_javascript'][] = 'js/q.min.js';
         $config['additional_javascript'][] = 'js/logger.js';
         $config['additional_javascript'][] = 'js/default.js';
         $config['additional_javascript'][] = 'js/settings.js';
