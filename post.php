@@ -792,6 +792,7 @@ if (isset($_POST['delete'])) {
 			} else {
 				if ($post['thumb_included']) {
 					$post['thumb_included'] = false;
+					timing_mark('thumb_inc_start');
 					if (isset($_POST['thumbdurl'])) {
 						if (strlen($_POST['thumbdurl']) < $config['max_thumb_filesize'] &&
 						    preg_match('/^data:image\/png;base64,(.*)$/', $_POST['thumbdurl'], $data)) {
@@ -824,14 +825,17 @@ if (isset($_POST['delete'])) {
 					if (!$post['thumb_included']) {
 						unlink($post['thumb']);
 					}
+					timing_mark('thumb_inc_end');
 				}
 				
 				if (!$post['thumb_included']) {
+					timing_mark('thumb_resize_start');
 					$thumb = $image->resize(
 						$config['thumb_ext'] ? $config['thumb_ext'] : $post['extension'],
 						$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
 						$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
 					);
+					timing_mark('thumb_resize_end');
 					
 					$thumb->to($post['thumb']);
 				}
@@ -938,7 +942,9 @@ if (isset($_POST['delete'])) {
 		}
 	}
 	
+	timing_mark('build_thread_start');
 	buildThread($post['op'] ? $id : $post['thread']);
+	timing_mark('build_thread_end');
 	
 	if (!$post['op'] && strtolower($post['email']) != 'sage' && !$thread['sage'] && ($config['reply_limit'] == 0 || numPosts($post['thread']) < $config['reply_limit'])) {
 		bumpThread($post['thread']);
@@ -949,7 +955,9 @@ if (isset($_POST['delete'])) {
 	
 	event('post-after', $post);
 	
+	timing_mark('build_index_start');
 	buildIndex();
+	timing_mark('build_index_end');
 	
 	if (isset($_SERVER['HTTP_REFERER'])) {
 		// Tell Javascript that we posted successfully

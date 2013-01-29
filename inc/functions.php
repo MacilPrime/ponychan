@@ -23,6 +23,11 @@ check_userid();
 
 fix_cloudflare_headers();
 
+$timings = array();
+$timing_details = array();
+timing_mark('start');
+register_shutdown_function('timing_end');
+
 register_shutdown_function('fatal_error_handler');
 mb_internal_encoding('UTF-8');
 loadConfig();
@@ -258,6 +263,42 @@ function check_userid() {
 function fix_cloudflare_headers() {
 	if (!isset($_SERVER['HTTP_IF_NONE_MATCH']) && isset($_SERVER['HTTP_X_CF_DODGE_IF_NONE_MATCH'])) {
 		$_SERVER['HTTP_IF_NONE_MATCH'] = $_SERVER['HTTP_X_CF_DODGE_IF_NONE_MATCH'];
+	}
+}
+
+function timing_mark($name) {
+	global $timings;
+	
+	array_push($timings, array($name, microtime(true)));
+}
+
+function timing_detail($name, $val) {
+	global $timing_details;
+
+	$timing_details[$name] = $val;
+}
+
+function timing_end() {
+	global $config, $userid, $timings, $timing_details;
+
+	if (isset($config) && isset($config['timing_log']) && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+		timing_mark('end');
+		
+		$logdata = array();
+		$logdata['time'] = date(DATE_ATOM);
+		$logdata['userid'] = $userid;
+		$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
+		if (isset($_SERVER['REQUEST_METHOD']))
+			$logdata['method'] = $_SERVER['REQUEST_METHOD'];
+		if (isset($_SERVER['REQUEST_URI']))
+			$logdata['uri'] = $_SERVER['REQUEST_URI'];
+		if (isset($_SERVER['HTTP_REFERER']))
+			$logdata['referrer'] = $_SERVER['HTTP_REFERER'];
+
+		$logdata['timings'] = $timings;
+		$logdata['details'] = $timing_details;
+		$logline = json_encode($logdata);
+		logToFile($config['timing_log'], $logline);
 	}
 }
 
