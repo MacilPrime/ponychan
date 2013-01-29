@@ -521,7 +521,8 @@ if (isset($_POST['delete'])) {
 	$post['body'] = $_POST['body'];
 	$post['password'] = $_POST['password'];
 	$post['has_file'] = !isset($post['embed']) && (($post['op'] && !isset($post['no_longer_require_an_image_for_op']) && $config['force_image_op']) || (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != ''));
-	
+	$post['thumb_included'] = $post['has_file'] && (isset($_POST['thumbdurl']) || (isset($_FILES['thumbfile']) && $_FILES['thumbfile']['tmp_name'] != ''));
+
 	if ($post['has_file'])
 		$post['filename'] = utf8tohtml(get_magic_quotes_gpc() ? stripslashes($_FILES['file']['name']) : $_FILES['file']['name']);
 	
@@ -777,7 +778,7 @@ if (isset($_POST['delete'])) {
 				$size = @getimagesize($config['spoiler_image']);
 				$post['thumbwidth'] = $size[0];
 				$post['thumbheight'] = $size[1];
-			} elseif ($config['minimum_copy_resize'] &&
+			} elseif (($config['minimum_copy_resize'] && filesize($upload) < $config['max_thumb_filesize']) &&
 				$image->size->width <= $config['thumb_width'] &&
 				$image->size->height <= $config['thumb_height'] &&
 				(!$config['thumb_ext'] || $post['extension'] == $config['thumb_ext'])) {
@@ -788,13 +789,51 @@ if (isset($_POST['delete'])) {
 				$post['thumbwidth'] = $image->size->width;
 				$post['thumbheight'] = $image->size->height;
 			} else {
-				$thumb = $image->resize(
-					$config['thumb_ext'] ? $config['thumb_ext'] : $post['extension'],
-					$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
-					$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
-				);
+				if ($post['thumb_included']) {
+					$post['thumb_included'] = false;
+					if (isset($_POST['thumbdurl'])) {
+						if (strlen($_POST['thumbdurl']) < $config['max_thumb_filesize'] &&
+						    preg_match('/^data:image\/png;base64,(.*)$/', $_POST['thumbdurl'], $data)) {
+							$data = base64_decode($data[1], true);
+							if ($data) {
+								$fd = fopen($post['thumb'], 'wb');
+								if ($fd) {
+									fwrite($fd, $data);
+									fclose($fd);
+								}
+							}
+						}
+					} else {
+						$size = $_FILES['thumbfile']['size'];
+						if ($size < $config['max_thumb_filesize'])
+							copy($_FILES['thumbfile']['tmp_name'], $post['thumb']);
+					}
+					if (is_readable($post['thumb'])) {
+						// find dimensions of an image using GD
+						if ($size = @getimagesize($post['thumb'])) {
+							$thumb_max_width = $post['op'] ? $config['thumb_op_width'] : $config['thumb_width'];
+							$thumb_max_height = $post['op'] ? $config['thumb_op_height'] : $config['thumb_height'];
+							if ($size[0] <= $thumb_max_width && $size[1] <= $thumb_max_height) {
+								$post['thumb_included'] = true;
+								$thumb = new Image($post['thumb'], 'png');
+								$thumb = $thumb->image;
+							}
+						}
+					}
+					if (!$post['thumb_included']) {
+						unlink($post['thumb']);
+					}
+				}
 				
-				$thumb->to($post['thumb']);
+				if (!$post['thumb_included']) {
+					$thumb = $image->resize(
+						$config['thumb_ext'] ? $config['thumb_ext'] : $post['extension'],
+						$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
+						$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
+					);
+					
+					$thumb->to($post['thumb']);
+				}
 			
 				$post['thumbwidth'] = $thumb->width;
 				$post['thumbheight'] = $thumb->height;
@@ -973,6 +1012,7 @@ if (isset($_POST['delete'])) {
 			$logdata['filehash'] = $post['filehash'];
 			$logdata['filesize'] = $post['filesize'];
 			$logdata['filename'] = $post['filename'];
+			$logdata['thumb_included'] = $post['thumb_included'];
 		}
 		$logdata['commentsimplehash'] = simplifiedHash($post['body_nomarkup']);
 		$logline = json_encode($logdata);

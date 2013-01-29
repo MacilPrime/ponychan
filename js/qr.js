@@ -13,6 +13,7 @@ $(document).ready(function(){
 
 	var useFile = typeof FileReader != "undefined" && !!FileReader;
 	var useFormData = typeof FormData != "undefined" && !!FormData;
+	var useCanvas = !!window.HTMLCanvasElement;
 	var usewURL = false;
 	var wURL = window.URL || window.webkitURL;
 	if(typeof wURL != "undefined" && wURL) {
@@ -26,6 +27,7 @@ $(document).ready(function(){
 	var $oldName = $oldForm.find("input[name='name']");
 	var $oldEmail = $oldForm.find("input[name='email']");
 	var $oldSubject = $oldForm.find("input[name='subject']");
+	var $oldFile = $oldForm.find("input[name='file']");
 
 	if ($oldForm.length == 0)
 		return;
@@ -418,6 +420,26 @@ $(document).ready(function(){
 			if (usewURL) {
 				this.fileurl = wURL.createObjectURL(file);
 				this.el.css("background-image", "url(" + this.fileurl + ")");
+				if (useCanvas) {
+					this.fileimg = new Image();
+					this.fileimg.src = this.fileurl;
+					this.fileimg.onload = function() {
+						var maxX = parseInt($oldFile.attr("data-thumb-max-width"));
+						var maxY = parseInt($oldFile.attr("data-thumb-max-height"));
+						if (maxX >= that.fileimg.width && maxY >= that.fileimg.height)
+							return;
+						var scalex = maxX / that.fileimg.width;
+						var scaley = maxY / that.fileimg.height;
+						var scale = Math.min(scalex,scaley);
+						that.filethumb = document.createElement('canvas');
+						that.filethumb.width = Math.min(maxX, Math.round(scale*that.fileimg.width));
+						that.filethumb.height = Math.min(maxY, Math.round(scale*that.fileimg.height));
+						that.filethumb.getContext('2d').drawImage(
+							that.fileimg, 0, 0,
+							that.filethumb.width, that.filethumb.height);
+						console.log('filethumb ready');
+					};
+				}
 			}
 		}
 		this.select = function() {
@@ -439,6 +461,10 @@ $(document).ready(function(){
 		}
 		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
+				if (this.fileimg)
+					this.fileimg.onload = null;
+				delete this.fileimg;
+				delete this.filethumb;
 				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && this.fileurl) {
 					wURL.revokeObjectURL(this.fileurl);
 					delete this.fileurl;
@@ -478,7 +504,7 @@ $(document).ready(function(){
 	var selectedreply = null;
 	addReply();
 	
-	var maxsize = $("input[name='file']", $oldForm).attr("data-max-filesize");
+	var maxsize = $oldFile.attr("data-max-filesize");
 	
 	if (!useQueuing) {
 		$QR.addClass("noQueuing");
@@ -809,6 +835,15 @@ $(document).ready(function(){
 		var data = new FormData(this);
 		data.append("post", $submit.val());
 		if (selectedreply.file) {
+			if (selectedreply.filethumb && !$spoiler.is(':checked')) {
+				if (selectedreply.filethumb.mozGetAsFile) {
+					data.append('thumbfile', selectedreply.filethumb.mozGetAsFile('thumb.png', 'image/png'));
+					console.log('thumbfile appended');
+				} else {
+					data.append('thumbdurl', selectedreply.filethumb.toDataURL('image/png'));
+					console.log('thumbdurl appended');
+				}
+			}
 			if (!$file.val())
 				data.append("file", selectedreply.file);
 		}
