@@ -808,8 +808,10 @@ $(document).ready(function(){
 
 		var data = new FormData(this);
 		data.append("post", $submit.val());
-		if (selectedreply.file)
-			data.append("file", selectedreply.file);
+		if (selectedreply.file) {
+			if (!$file.val())
+				data.append("file", selectedreply.file);
+		}
 
 		setQRFormDisabled(true);
 		$submit.val("...").prop("disabled", false);
