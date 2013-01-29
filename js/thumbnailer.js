@@ -28,7 +28,7 @@ function thumbnailer(elem, img, sx, lobes, callback){
         width: sx,
         height: Math.round(img.height * sx / img.width),
     };
-    this.dest.data = new Array(this.dest.width * this.dest.height * 3);
+    this.dest.data = new Array(this.dest.width * this.dest.height * 4);
     this.lanczos = lanczosCreate(lobes);
     this.ratio = img.width / sx;
     this.rcp_ratio = 2 / this.ratio;
@@ -45,8 +45,8 @@ thumbnailer.prototype.process1 = function(self, u, callback){
     for (var v = 0; v < self.dest.height; v++) {
         self.center.y = (v + 0.5) * self.ratio;
         self.icenter.y = Math.floor(self.center.y);
-        var a, r, g, b;
-        a = r = g = b = 0;
+        var a, r, g, b, t;
+        a = r = g = b = t = 0;
         for (var i = self.icenter.x - self.range2; i <= self.icenter.x + self.range2; i++) {
             if (i < 0 || i >= self.src.width) 
                 continue;
@@ -66,13 +66,15 @@ thumbnailer.prototype.process1 = function(self, u, callback){
                     r += weight * self.src.data[idx];
                     g += weight * self.src.data[idx + 1];
                     b += weight * self.src.data[idx + 2];
+                    t += weight * self.src.data[idx + 3];
                 }
             }
         }
-        var idx = (v * self.dest.width + u) * 3;
+        var idx = (v * self.dest.width + u) * 4;
         self.dest.data[idx] = r / a;
         self.dest.data[idx + 1] = g / a;
         self.dest.data[idx + 2] = b / a;
+        self.dest.data[idx + 3] = t / a;
     }
 
     if (++u < self.dest.width) 
@@ -83,16 +85,16 @@ thumbnailer.prototype.process1 = function(self, u, callback){
 thumbnailer.prototype.process2 = function(self, callback){
     self.canvas.width = self.dest.width;
     self.canvas.height = self.dest.height;
-    self.ctx.drawImage(self.img, 0, 0);
     self.src = self.ctx.getImageData(0, 0, self.dest.width, self.dest.height);
     var idx, idx2;
     for (var i = 0; i < self.dest.width; i++) {
         for (var j = 0; j < self.dest.height; j++) {
-            idx = (j * self.dest.width + i) * 3;
+            idx = (j * self.dest.width + i) * 4;
             idx2 = (j * self.dest.width + i) * 4;
             self.src.data[idx2] = self.dest.data[idx];
             self.src.data[idx2 + 1] = self.dest.data[idx + 1];
             self.src.data[idx2 + 2] = self.dest.data[idx + 2];
+            self.src.data[idx2 + 3] = self.dest.data[idx + 3];
         }
     }
     self.ctx.putImageData(self.src, 0, 0);
