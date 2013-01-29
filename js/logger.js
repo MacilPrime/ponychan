@@ -169,6 +169,7 @@ function send_usage(retryTime) {
 	usage.supportWorker = typeof Worker != "undefined" && !!Worker;
 	usage.supportSharedWorker = typeof SharedWorker != "undefined" && !!SharedWorker;
 	usage.supportWindowScrollTo = typeof window.scrollTo != "undefined" && !!window.scrollTo;
+	usage.supportCanvas = !!window.HTMLCanvasElement;
 	
 	var wURL = window.URL || window.webkitURL;
 	usage.supportwURL = typeof wURL != "undefined" && !!wURL;
