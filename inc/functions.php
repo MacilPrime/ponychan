@@ -21,6 +21,8 @@ $mod = false;
 $userid = false;
 check_userid();
 
+fix_cloudflare_headers();
+
 register_shutdown_function('fatal_error_handler');
 mb_internal_encoding('UTF-8');
 loadConfig();
@@ -251,6 +253,12 @@ function check_userid() {
 		return;
 	}
 	$userid = $_COOKIE['userid'];
+}
+
+function fix_cloudflare_headers() {
+	if (!isset($_SERVER['HTTP_IF_NONE_MATCH']) && isset($_SERVER['HTTP_X_CF_DODGE_IF_NONE_MATCH'])) {
+		$_SERVER['HTTP_IF_NONE_MATCH'] = $_SERVER['HTTP_X_CF_DODGE_IF_NONE_MATCH'];
+	}
 }
 
 function create_antibot($board, $thread = null) {
@@ -1618,6 +1626,9 @@ function buildThread($id, $return=false, $mod=false) {
 	}
 
 	file_write($board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], $id), $body);
+
+	if ($config['cache']['enabled'] && !$mod)
+		cache::set("thread_etag_{$board['uri']}_{$id}", uniqid());
 }
 
 function buildThread50($id, $return=false, $mod=false, $thread=null) {

@@ -129,15 +129,24 @@ $(document).ready(function(){
 	};
 
 	var query = null;
+	var page_etag = null;
 	var updateThread = function() {
 		if(query)
 			query.abort();
 
 		$postsAdded.text("...");
 
+		var headers = {};
+		if (page_etag && document.location.pathname == siteroot+'mod.php') {
+			headers['X-CF-Dodge-If-None-Match'] = page_etag;
+		}
+
 		query = $.ajax({
 			url: document.location,
-			success: function(data) {
+			headers: headers,
+			success: function(data, status, jqXHR) {
+				if (jqXHR.getResponseHeader('Etag'))
+					page_etag = jqXHR.getResponseHeader('Etag');
 				data = mogrifyHTML(data);
 				var $data = $(data);
 				var $banner = $data.filter('div.banner').add( $data.find('div.banner') ).first();

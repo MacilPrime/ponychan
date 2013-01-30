@@ -501,6 +501,17 @@ function mod_view_thread($boardName, $thread) {
 	if (!openBoard($boardName))
 		error($config['error']['noboard']);
 	
+	if ($config['cache']['enabled']) {
+		if (!($etag = cache::get("thread_etag_{$boardName}_{$thread}"))) {
+			$etag = uniqid();
+			cache::set("thread_etag_{$boardName}_{$thread}", $etag);
+		} else if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] === $etag) {
+			header('HTTP/1.1 304 Not Modified');
+			return;
+		}
+		header("Etag: ${etag}");
+	}
+	
 	$page = buildThread($thread, true, $mod);
 	echo $page;
 }
@@ -510,6 +521,17 @@ function mod_view_thread50($boardName, $thread) {
 	
 	if (!openBoard($boardName))
 		error($config['error']['noboard']);
+	
+	if ($config['cache']['enabled']) {
+		if (!($etag = cache::get("thread_etag_{$boardName}_{$thread}"))) {
+			$etag = uniqid();
+			cache::set("thread_etag_{$boardName}_{$thread}", $etag);
+		} else if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] === $etag) {
+			header('HTTP/1.1 304 Not Modified');
+			return;
+		}
+		header("Etag: ${etag}");
+	}
 	
 	$page = buildThread50($thread, true, $mod);
 	echo $page;
