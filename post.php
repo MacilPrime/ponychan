@@ -1014,7 +1014,7 @@ if (isset($_POST['delete'])) {
 			$logdata['filesize'] = $post['filesize'];
 			$logdata['filename'] = $post['filename'];
 			$logdata['thumb_included'] = $post['thumb_included'];
-			if ($post['thumb_included'])
+			if (isset($post['thumb_time']))
 				$logdata['thumb_time'] = intval($post['thumb_time']);
 		}
 		$logdata['commentsimplehash'] = simplifiedHash($post['body_nomarkup']);

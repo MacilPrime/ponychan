@@ -465,6 +465,7 @@ $(document).ready(function(){
 		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
 				delete this.filethumb;
+				delete this.filethumboktoskip;
 				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && this.fileurl) {
 					wURL.revokeObjectURL(this.fileurl);
 					delete this.fileurl;
@@ -837,39 +838,46 @@ $(document).ready(function(){
 		if (selectedreply.file) {
 			if (selectedreply.filethumb && !selectedreply.filethumb.isRejected() && !$spoiler.is(':checked')) {
 				if (selectedreply.filethumb.isPending()) {
-					// thumbnail isn't generated yet, so let's wait until it's ready
-					setQRFormDisabled(true);
-					$submit.val("...").prop("disabled", false);
-					var hasCancelled = false;
-					query = {abort: function() {
-						hasCancelled = true;
-						query = null;
-						prepSubmitButton();
-						$QRwarning.text("Post discarded");
-						setQRFormDisabled(false);
-					}};
-					selectedreply.filethumb.finally(function() {
-						if (hasCancelled)
-							return;
-						query = null;
-						prepSubmitButton();
-						setQRFormDisabled(false);
-						$QRForm.submit();
-					});
-					return false;
-				}
-				
-				var result = selectedreply.filethumb.valueOf();
-				var filethumb = result[0];
-				var thumb_timing = result[1];
-				data.append('thumbtime', thumb_timing);
-				
-				if (filethumb.mozGetAsFile) {
-					data.append('thumbfile', filethumb.mozGetAsFile('thumb.png', 'image/png'));
-					console.log('thumbfile appended');
+					if (selectedreply.filethumboktoskip) {
+						// We already tried waiting. Give up on it.
+						console.log('took too long to generate thumbnail; skipping');
+						data.append('thumbtime', -1);
+					} else {
+						// thumbnail isn't generated yet, so let's wait until it's ready
+						setQRFormDisabled(true);
+						$submit.val("...").prop("disabled", false);
+						var hasCancelled = false;
+						query = {abort: function() {
+							hasCancelled = true;
+							query = null;
+							prepSubmitButton();
+							$QRwarning.text("Post discarded");
+							setQRFormDisabled(false);
+						}};
+						selectedreply.filethumb.timeout(5000).finally(function() {
+							if (hasCancelled)
+								return;
+							selectedreply.filethumboktoskip = true;
+							query = null;
+							prepSubmitButton();
+							setQRFormDisabled(false);
+							$QRForm.submit();
+						});
+						return false;
+					}
 				} else {
-					data.append('thumbdurl', filethumb.toDataURL('image/png'));
-					console.log('thumbdurl appended');
+					var result = selectedreply.filethumb.valueOf();
+					var filethumb = result[0];
+					var thumb_timing = result[1];
+					data.append('thumbtime', thumb_timing);
+					
+					if (filethumb.mozGetAsFile) {
+						data.append('thumbfile', filethumb.mozGetAsFile('thumb.png', 'image/png'));
+						console.log('thumbfile appended');
+					} else {
+						data.append('thumbdurl', filethumb.toDataURL('image/png'));
+						console.log('thumbdurl appended');
+					}
 				}
 			}
 			if (!$file.val())
