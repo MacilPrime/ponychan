@@ -1,102 +1,116 @@
 // Based on code from
 // http://stackoverflow.com/questions/2303690/resizing-an-image-in-an-html5-canvas/3223466#3223466
 
-function lanczosCreate(lobes){
-  return function(x){
-    if (x > lobes) 
-      return 0;
-    x *= Math.PI;
-    if (Math.abs(x) < 1e-16) 
-      return 1
-    var xx = x / lobes;
-    return Math.sin(x) * Math.sin(xx) / x / xx;
-  }
+function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
+	var scalex = max_x / orig_width;
+	var scaley = max_y / orig_height;
+	var scale = Math.min(scalex, scaley);
+	var dest_width = Math.min(max_x, Math.round(scale*orig_width));
+	var dest_height = Math.min(max_y, Math.round(scale*orig_height));
+
+	return {width: dest_width, height: dest_height};
 }
 
-//elem: canvas element, img: image element, sx: scaled width, lobes: kernel radius, callback: end function
-//must be called as `new thumbnailer(...);`
-function thumbnailer(elem, img, sx, lobes, callback){ 
-    this.canvas = elem;
-    elem.width = img.width;
-    elem.height = img.height;
-    elem.style.display = "none";
-    this.ctx = elem.getContext("2d");
-    this.ctx.drawImage(img, 0, 0);
-    this.img = img;
-    this.src = this.ctx.getImageData(0, 0, img.width, img.height);
-    this.dest = {
-        width: sx,
-        height: Math.round(img.height * sx / img.width),
-    };
-    this.dest.data = new Array(this.dest.width * this.dest.height * 4);
-    this.lanczos = lanczosCreate(lobes);
-    this.ratio = img.width / sx;
-    this.rcp_ratio = 2 / this.ratio;
-    this.range2 = Math.ceil(this.ratio * lobes / 2);
-    this.cacheLanc = {};
-    this.center = {};
-    this.icenter = {};
-    setTimeout(this.process1, 0, this, 0, callback);
+function thumbnailer(image, max_x, max_y) {
+	var job = Q.defer();
+	
+	try {
+		var dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
+		
+		if (dest.width >= image.width || dest.height >= image.height) {
+			job.reject(new Error('image already small enough'));
+		} else {
+			var quick_x = max_x * 3;
+			var quick_y = max_y * 3;
+			if (image.width > quick_x || image.height > quick_y) {
+				thumbnailer_simple(image, quick_x, quick_y).then(function(canvas) {
+					job.resolve(thumbnailer_fancy(canvas, max_x, max_y));
+				});
+			} else {
+				job.resolve(thumbnailer_fancy(image, max_x, max_y));
+			}
+		}
+	} catch(e) {
+		job.reject(e);
+	}
+	
+	return job.promise;
 }
 
-thumbnailer.prototype.process1 = function(self, u, callback){
-    self.center.x = (u + 0.5) * self.ratio;
-    self.icenter.x = Math.floor(self.center.x);
-    for (var v = 0; v < self.dest.height; v++) {
-        self.center.y = (v + 0.5) * self.ratio;
-        self.icenter.y = Math.floor(self.center.y);
-        var a, r, g, b, t;
-        a = r = g = b = t = 0;
-        for (var i = self.icenter.x - self.range2; i <= self.icenter.x + self.range2; i++) {
-            if (i < 0 || i >= self.src.width) 
-                continue;
-            var f_x = Math.floor(1000 * Math.abs(i - self.center.x));
-            if (!self.cacheLanc[f_x]) 
-                self.cacheLanc[f_x] = {};
-            for (var j = self.icenter.y - self.range2; j <= self.icenter.y + self.range2; j++) {
-                if (j < 0 || j >= self.src.height) 
-                    continue;
-                var f_y = Math.floor(1000 * Math.abs(j - self.center.y));
-                if (self.cacheLanc[f_x][f_y] == undefined) 
-                    self.cacheLanc[f_x][f_y] = self.lanczos(Math.sqrt(Math.pow(f_x * self.rcp_ratio, 2) + Math.pow(f_y * self.rcp_ratio, 2)) / 1000);
-                weight = self.cacheLanc[f_x][f_y];
-                if (weight > 0) {
-                    var idx = (j * self.src.width + i) * 4;
-                    a += weight;
-                    r += weight * self.src.data[idx];
-                    g += weight * self.src.data[idx + 1];
-                    b += weight * self.src.data[idx + 2];
-                    t += weight * self.src.data[idx + 3];
-                }
-            }
-        }
-        var idx = (v * self.dest.width + u) * 4;
-        self.dest.data[idx] = r / a;
-        self.dest.data[idx + 1] = g / a;
-        self.dest.data[idx + 2] = b / a;
-        self.dest.data[idx + 3] = t / a;
-    }
+function thumbnailer_simple(image, max_x, max_y) {
+	var job = Q.defer();
+	
+	try {
+		var dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
+		
+		if (dest.width >= image.width || dest.height >= image.height) {
+			job.reject(new Error('image already small enough'));
+		} else {
+			var canvas = document.createElement('canvas');
+			canvas.width = dest.width;
+			canvas.height = dest.height;
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+			job.resolve(canvas);
+		}
+	} catch(e) {
+		job.reject(e);
+	}
+	
+	return job.promise;
+}
 
-    if (++u < self.dest.width) 
-        setTimeout(self.process1, 0, self, u, callback);
-    else 
-        setTimeout(self.process2, 0, self, callback);
-};
-thumbnailer.prototype.process2 = function(self, callback){
-    self.canvas.width = self.dest.width;
-    self.canvas.height = self.dest.height;
-    self.src = self.ctx.getImageData(0, 0, self.dest.width, self.dest.height);
-    var idx, idx2;
-    for (var i = 0; i < self.dest.width; i++) {
-        for (var j = 0; j < self.dest.height; j++) {
-            idx = (j * self.dest.width + i) * 4;
-            idx2 = (j * self.dest.width + i) * 4;
-            self.src.data[idx2] = self.dest.data[idx];
-            self.src.data[idx2 + 1] = self.dest.data[idx + 1];
-            self.src.data[idx2 + 2] = self.dest.data[idx + 2];
-            self.src.data[idx2 + 3] = self.dest.data[idx + 3];
-        }
-    }
-    self.ctx.putImageData(self.src, 0, 0);
-    setTimeout(callback, 0);
+function thumbnailer_fancy(image, max_x, max_y, lobes) {
+	if (lobes === undefined)
+		lobes = 3;
+	
+	var job = Q.defer();
+	try {
+		var dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
+		
+		if (dest.width >= image.width || dest.height >= image.height) {
+			job.reject(new Error('image already small enough'));
+		} else {
+			var canvas = document.createElement('canvas');
+			canvas.width = image.width;
+			canvas.height = image.height;
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(image, 0, 0);
+			
+			var imageCPA = ctx.getImageData(0, 0, canvas.width, canvas.height);
+			var imagedata = Array.prototype.slice.call(imageCPA.data);
+			
+			var worker = new Worker(siteroot+'js/thumbnailer-worker.js?v=10');
+			worker.onmessage = function worker_onmessage(event) {
+				if (event.data.result) {
+					canvas.width = dest.width;
+					canvas.height = dest.height;
+					imageCPA = ctx.getImageData(0, 0, canvas.width, canvas.height);
+					for (var i = 0; i < event.data.result.length; i++) {
+						imageCPA.data[i] = event.data.result[i];
+					}
+					ctx.putImageData(imageCPA, 0, 0);
+					job.resolve(canvas);
+				} else if (event.data.message) {
+					console.log('worker message: '+event.data.message);
+				}
+			};
+			worker.onerror = function worker_onerror(e) {
+				job.reject(e);
+			};
+			
+			worker.postMessage({
+				dest_width: dest.width,
+				dest_height: dest.height,
+				orig_width: image.width,
+				orig_height: image.height,
+				orig_data: imagedata,
+				lobes: lobes
+			});
+		}
+	} catch(e) {
+		job.reject(e);
+	}
+	
+	return job.promise;
 }

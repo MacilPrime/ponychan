@@ -15,6 +15,7 @@ $(document).ready(function(){
 	var useFile = typeof FileReader != "undefined" && !!FileReader;
 	var useFormData = typeof FormData != "undefined" && !!FormData;
 	var useCanvas = !!window.HTMLCanvasElement;
+	var useWorker = !!window.Worker;
 	var usewURL = false;
 	var wURL = window.URL || window.webkitURL;
 	if(typeof wURL != "undefined" && wURL) {
@@ -421,29 +422,20 @@ $(document).ready(function(){
 			if (usewURL) {
 				this.fileurl = wURL.createObjectURL(file);
 				this.el.css("background-image", "url(" + this.fileurl + ")");
-				if (useCanvas) {
+				if (useCanvas && useWorker) {
 					var render_job = Q.defer();
-					this.filethumbpromise = render_job.promise;
+					this.filethumb = render_job.promise;
+					
 					var fileimg = new Image();
 					fileimg.onload = function() {
 						var maxX = parseInt($oldFile.attr("data-thumb-max-width"));
 						var maxY = parseInt($oldFile.attr("data-thumb-max-height"));
-						if (maxX >= fileimg.width && maxY >= fileimg.height) {
-							delete that.filethumbpromise;
-							render_job.resolve();
-							return;
-						}
-						var scalex = maxX / fileimg.width;
-						var scaley = maxY / fileimg.height;
-						var scale = Math.min(scalex,scaley);
-						var width = Math.min(maxX, Math.round(scale*fileimg.width));
-						var height = Math.min(maxY, Math.round(scale*fileimg.height));
-						var filethumb = document.createElement('canvas');
-						new thumbnailer(filethumb, fileimg, width, 3, function() {
-							that.filethumb = filethumb;
-							delete that.filethumbpromise;
-							console.log('filethumb ready');
-							render_job.resolve();
+						var start = new Date().getTime();
+						render_job.resolve(thumbnailer(fileimg, maxX, maxY));
+						render_job.promise.then(function() {
+							var end = new Date().getTime();
+							var time = end-start;
+							console.log('thumbnailing took '+time+' milliseconds');
 						});
 					};
 					fileimg.src = this.fileurl;
@@ -470,7 +462,6 @@ $(document).ready(function(){
 		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
 				delete this.filethumb;
-				delete this.filethumbpromise;
 				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && this.fileurl) {
 					wURL.revokeObjectURL(this.fileurl);
 					delete this.fileurl;
@@ -841,8 +832,8 @@ $(document).ready(function(){
 		var data = new FormData(this);
 		data.append("post", $submit.val());
 		if (selectedreply.file) {
-			if ((selectedreply.filethumb || selectedreply.filethumbpromise) && !$spoiler.is(':checked')) {
-				if (!selectedreply.filethumb) {
+			if (selectedreply.filethumb && !selectedreply.filethumb.isRejected() && !$spoiler.is(':checked')) {
+				if (selectedreply.filethumb.isPending()) {
 					// thumbnail isn't generated yet, so let's wait until it's ready
 					setQRFormDisabled(true);
 					$submit.val("...").prop("disabled", false);
@@ -854,7 +845,7 @@ $(document).ready(function(){
 						$QRwarning.text("Post discarded");
 						setQRFormDisabled(false);
 					}};
-					selectedreply.filethumbpromise.then(function() {
+					selectedreply.filethumb.finally(function() {
 						if (hasCancelled)
 							return;
 						query = null;
@@ -864,11 +855,12 @@ $(document).ready(function(){
 					});
 					return false;
 				}
-				if (selectedreply.filethumb.mozGetAsFile) {
-					data.append('thumbfile', selectedreply.filethumb.mozGetAsFile('thumb.png', 'image/png'));
+				var filethumb = selectedreply.filethumb.valueOf();
+				if (filethumb.mozGetAsFile) {
+					data.append('thumbfile', filethumb.mozGetAsFile('thumb.png', 'image/png'));
 					console.log('thumbfile appended');
 				} else {
-					data.append('thumbdurl', selectedreply.filethumb.toDataURL('image/png'));
+					data.append('thumbdurl', filethumb.toDataURL('image/png'));
 					console.log('thumbdurl appended');
 				}
 			}
