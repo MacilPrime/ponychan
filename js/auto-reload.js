@@ -147,6 +147,11 @@ $(document).ready(function(){
 			success: function(data, status, jqXHR) {
 				if (jqXHR.getResponseHeader('Etag'))
 					page_etag = jqXHR.getResponseHeader('Etag');
+				else if (jqXHR.getResponseHeader('X-CF-Dodge-Etag'))
+					page_etag = jqXHR.getResponseHeader('X-CF-Dodge-Etag');
+				if (status == 'notmodified') {
+					data = '<!doctype html><html><body><div class="banner">dummy</div></body></html>';
+				}
 				data = mogrifyHTML(data);
 				var $data = $(data);
 				var $banner = $data.filter('div.banner').add( $data.find('div.banner') ).first();

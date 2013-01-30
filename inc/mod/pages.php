@@ -510,6 +510,7 @@ function mod_view_thread($boardName, $thread) {
 			return;
 		}
 		header("Etag: ${etag}");
+		header("X-CF-Dodge-Etag: ${etag}");
 	}
 	
 	$page = buildThread($thread, true, $mod);
@@ -531,6 +532,7 @@ function mod_view_thread50($boardName, $thread) {
 			return;
 		}
 		header("Etag: ${etag}");
+		header("X-CF-Dodge-Etag: ${etag}");
 	}
 	
 	$page = buildThread50($thread, true, $mod);
