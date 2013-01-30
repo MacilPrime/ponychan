@@ -430,13 +430,16 @@ $(document).ready(function(){
 					fileimg.onload = function() {
 						var maxX = parseInt($oldFile.attr("data-thumb-max-width"));
 						var maxY = parseInt($oldFile.attr("data-thumb-max-height"));
+						
 						var start = new Date().getTime();
-						render_job.resolve(thumbnailer(fileimg, maxX, maxY));
-						render_job.promise.then(function() {
+						var thumber = thumbnailer(fileimg, maxX, maxY);
+						var thumber_timing = thumber.then(function() {
 							var end = new Date().getTime();
 							var time = end-start;
 							console.log('thumbnailing took '+time+' milliseconds');
+							return time;
 						});
+						render_job.resolve(Q.all([thumber, thumber_timing]));
 					};
 					fileimg.src = this.fileurl;
 				}
@@ -855,7 +858,12 @@ $(document).ready(function(){
 					});
 					return false;
 				}
-				var filethumb = selectedreply.filethumb.valueOf();
+				
+				var result = selectedreply.filethumb.valueOf();
+				var filethumb = result[0];
+				var thumb_timing = result[1];
+				data.append('thumbtime', thumb_timing);
+				
 				if (filethumb.mozGetAsFile) {
 					data.append('thumbfile', filethumb.mozGetAsFile('thumb.png', 'image/png'));
 					console.log('thumbfile appended');

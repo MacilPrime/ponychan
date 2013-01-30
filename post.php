@@ -522,6 +522,7 @@ if (isset($_POST['delete'])) {
 	$post['password'] = $_POST['password'];
 	$post['has_file'] = !isset($post['embed']) && (($post['op'] && !isset($post['no_longer_require_an_image_for_op']) && $config['force_image_op']) || (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != ''));
 	$post['thumb_included'] = $post['has_file'] && (isset($_POST['thumbdurl']) || (isset($_FILES['thumbfile']) && $_FILES['thumbfile']['tmp_name'] != ''));
+	$post['thumb_time'] = isset($_POST['thumbtime']) ? $_POST['thumbtime'] : null;
 
 	if ($post['has_file'])
 		$post['filename'] = utf8tohtml(get_magic_quotes_gpc() ? stripslashes($_FILES['file']['name']) : $_FILES['file']['name']);
@@ -1013,6 +1014,8 @@ if (isset($_POST['delete'])) {
 			$logdata['filesize'] = $post['filesize'];
 			$logdata['filename'] = $post['filename'];
 			$logdata['thumb_included'] = $post['thumb_included'];
+			if ($post['thumb_included'])
+				$logdata['thumb_time'] = intval($post['thumb_time']);
 		}
 		$logdata['commentsimplehash'] = simplifiedHash($post['body_nomarkup']);
 		$logline = json_encode($logdata);

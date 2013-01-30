@@ -248,6 +248,7 @@
 		'mature',
 		'thumbfile',
 		'thumbdurl',
+		'thumbtime',
 		'quick-reply'
 	);
 	
