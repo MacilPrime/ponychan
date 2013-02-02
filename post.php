@@ -464,7 +464,6 @@ if (isset($_POST['delete'])) {
 			error($config['error']['nonexistant']);
 		}
 	}
-		
 	
 	// Check for an embed field
 	if ($config['enable_embedding'] && isset($_POST['embed']) && !empty($_POST['embed'])) {
@@ -534,13 +533,21 @@ if (isset($_POST['delete'])) {
 		}
 	}
 	
-	// Check if thread is locked
-	// but allow mods to post
-	if (!$post['op'] && !hasPermission($config['mod']['postinlocked'], $board['uri'])) {
-		if ($thread['locked'])
+	if (!$post['op']) {
+		// Check if thread is locked
+		// but allow mods to post
+		if ($thread['locked'] && !hasPermission($config['mod']['postinlocked'], $board['uri']))
 			error($config['error']['locked']);
+		
+		$numposts = numPosts($post['thread']);
+		
+		if ($config['reply_hard_limit'] != 0 && $config['reply_hard_limit'] <= $numposts['replies'])
+			error($config['error']['reply_hard_limit']);
+		
+		if ($post['has_file'] && $config['image_hard_limit'] != 0 && $config['image_hard_limit'] <= $numposts['images'])
+			error($config['error']['image_hard_limit']);
 	}
-	
+		
 	if ($post['has_file']) {
 		$size = $_FILES['file']['size'];
 		if ($size > $config['max_filesize'])
@@ -946,7 +953,7 @@ if (isset($_POST['delete'])) {
 	buildThread($post['op'] ? $id : $post['thread']);
 	timing_mark('build_thread_end');
 	
-	if (!$post['op'] && strtolower($post['email']) != 'sage' && !$thread['sage'] && ($config['reply_limit'] == 0 || numPosts($post['thread']) < $config['reply_limit'])) {
+	if (!$post['op'] && strtolower($post['email']) != 'sage' && !$thread['sage'] && ($config['reply_limit'] == 0 || $numposts['replies']+1 < $config['reply_limit'])) {
 		bumpThread($post['thread']);
 	}
 	
