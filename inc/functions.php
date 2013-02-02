@@ -963,6 +963,9 @@ function deletePost($id, $error_if_doesnt_exist=true, $rebuild_after=true) {
 function deletePosts($ids, $error_if_doesnt_exist=true, $rebuild_after=true) {
 	global $board, $config;
 	
+	if (count($ids) == 0)
+		return true;
+	
 	// Select post and replies (if thread) in one query
 	$query = prepare(sprintf("SELECT `id`,`thread`,`thumb`,`file` FROM `posts_%s` WHERE `id` IN (" . implode(', ', $ids) . ") OR `thread` IN (" . implode(', ', $ids) . ")", $board['uri']));
 	$query->execute() or error(db_error($query));
