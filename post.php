@@ -455,7 +455,7 @@ if (isset($_POST['delete'])) {
 	
 	//Check if thread exists
 	if (!$post['op']) {
-		$query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`mature` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
+		$query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`mature`,`body` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
 		$query->bindValue(':id', $post['thread'], PDO::PARAM_INT);
 		$query->execute() or error(db_error());
 		
@@ -539,13 +539,22 @@ if (isset($_POST['delete'])) {
 		if ($thread['locked'] && !hasPermission($config['mod']['postinlocked'], $board['uri']))
 			error($config['error']['locked']);
 		
-		$numposts = numPosts($post['thread']);
-		
-		if ($config['reply_hard_limit'] != 0 && $config['reply_hard_limit'] <= $numposts['replies'])
-			error($config['error']['reply_hard_limit']);
-		
-		if ($post['has_file'] && $config['image_hard_limit'] != 0 && $config['image_hard_limit'] <= $numposts['images'])
-			error($config['error']['image_hard_limit']);
+		$thread['cyclic'] = (stripos($thread['body'], '<span class="hashtag">#cyclic</span>') !== FALSE);
+
+		if ($thread['cyclic']) {
+			cyclicThreadCleanup($post['thread']);
+			
+			// this gets used later elsewhere
+			$numposts = numPosts($post['thread']);
+		} else {
+			$numposts = numPosts($post['thread']);
+			
+			if ($config['reply_hard_limit'] != 0 && $config['reply_hard_limit'] <= $numposts['replies'])
+				error($config['error']['reply_hard_limit']);
+			
+			if ($post['has_file'] && $config['image_hard_limit'] != 0 && $config['image_hard_limit'] <= $numposts['images'])
+				error($config['error']['image_hard_limit']);
+		}
 	}
 		
 	if ($post['has_file']) {

@@ -329,6 +329,9 @@
 	// Reply limit (stops bumping thread when this is reached)
 	$config['reply_limit'] = 250;
 	
+	// Cyclic thread reply limit (old replies are removed as this is hit)
+	$config['cyclic_reply_limit'] = 500;
+	
 	// Image hard limit (stops allowing new image replies when this is reached if not zero)
 	$config['image_hard_limit'] = 0;
 	// Reply hard limit (stops allowing new replies when this is reached if not zero)

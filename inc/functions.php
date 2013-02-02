@@ -302,6 +302,22 @@ function timing_end() {
 	}
 }
 
+function cyclicThreadCleanup($thread) {
+	global $board, $config;
+	
+	$query = prepare(sprintf("SELECT `id` FROM `posts_%s` WHERE `thread` = :thread AND `id` < (SELECT MIN(`id`) FROM (SELECT `id` FROM `posts_%s` WHERE `thread` = :thread ORDER BY `id` DESC LIMIT :limit) AS subquery)", $board['uri'], $board['uri']));
+	$query->bindValue(':thread', $thread, PDO::PARAM_INT);
+	$query->bindValue(':limit', $config['cyclic_reply_limit'], PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+	
+	$ids = array();
+	while ($row = $query->fetch()) {
+		array_push($ids, $row['id']);
+	}
+
+	deletePosts($ids, false, false);
+}
+
 function create_antibot($board, $thread = null) {
 	require_once dirname(__FILE__) . '/anti-bot.php';
 	
