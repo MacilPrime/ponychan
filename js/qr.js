@@ -854,7 +854,7 @@ $(document).ready(function(){
 							$QRwarning.text("Post discarded");
 							setQRFormDisabled(false);
 						}};
-						selectedreply.filethumb.timeout(5000).finally(function() {
+						selectedreply.filethumb.timeout(5000)['finally'](function() {
 							if (hasCancelled)
 								return;
 							selectedreply.filethumboktoskip = true;
