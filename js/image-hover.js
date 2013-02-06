@@ -22,10 +22,10 @@ $(document).ready(function(){
 
 	init_image_hover = function() {
 		var $image = $(this);
-		var is_spoilered = /\/static\/spoiler\.\w+$/.test($image.attr("src"));
-		var imageurl = $image.parent().attr("href");
 		var hovered_at;
 		$image.hover(function(e) {
+			var is_spoilered = /\/static\/spoiler\.\w+$/.test($image.attr("src"));
+			var imageurl = $image.parent().attr("href");
 			if(is_spoilered) {
 				if(!image_spoiler_hover_enabled)
 					return;
