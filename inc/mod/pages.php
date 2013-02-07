@@ -956,6 +956,8 @@ function mod_move($originBoard, $postID) {
 		// return to original board
 		openBoard($originBoard);
 		
+		modLog("Moved thread &gt;&gt;&gt;/{$originBoard}/{$postID} to &gt;&gt;&gt;/{$targetBoard}/{$newID}");
+		
 		if ($shadow) {
 			// lock old thread
 			$query = prepare(sprintf('UPDATE `posts_%s` SET `locked` = 1 WHERE `id` = :id', $originBoard));
