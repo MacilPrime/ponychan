@@ -459,9 +459,6 @@ $(document).ready(function(){
 					selectedreply.comment = $comment.val();
 				});
 		}
-		this.store = function() {
-			this.comment = $comment.val();
-		}
 		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
 				delete this.filethumb;
@@ -491,7 +488,7 @@ $(document).ready(function(){
 			// Even if this was the only reply and we
 			// didn't remove it, still reselect it so the
 			// comment field and such gets reset.
-			if (selectedreply == this)
+			if (selectedreply === this)
 				replies[0].select();
 		}
 	}
@@ -532,6 +529,11 @@ $(document).ready(function(){
 			selectedreply.setfile(file);
 			if (usewURL)
 				$QRImagesWrapper.show();
+			
+			if (useFormData && useFile) {
+				if ($file[0].files && ($file[0].files.length > 1 || ($file[0].files.length && this.file != $file[0].files[0])))
+					$file.val("");
+			}
 		};
 	} else {
 		$QR.addClass("queuing");
@@ -566,6 +568,24 @@ $(document).ready(function(){
 			$file.val("");
 		};
 	}
+
+	if (useFormData && useFile) {
+		$(document).on("drop.qrfile", function(event) {
+			var oEvent = event.originalEvent;
+			if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) || $.inArray("Files", oEvent.dataTransfer.types) == -1 || !oEvent.dataTransfer.files || oEvent.dataTransfer.files.length == 0 )
+				return;
+			QR.open();
+			QR.fileInput(oEvent.dataTransfer.files);
+			event.preventDefault();
+		});
+		$(document).on("dragover.qrfile", function(event) {
+			var oEvent = event.originalEvent;
+			if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) || $.inArray("Files", oEvent.dataTransfer.types) == -1 )
+				return;
+			oEvent.dataTransfer.dropEffect = "copy";
+			event.preventDefault();
+		});
+	}
 	
 	$file
 		.attr("title", "Shift+Click to remove the selected image")
@@ -581,22 +601,6 @@ $(document).ready(function(){
 				e.preventDefault();
 			}
 		});
-
-	$(document).on("drop.qrfile", function(event) {
-		var oEvent = event.originalEvent;
-		if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) || $.inArray("Files", oEvent.dataTransfer.types) == -1 || !oEvent.dataTransfer.files || oEvent.dataTransfer.files.length == 0 )
-			return;
-		QR.open();
-		QR.fileInput(oEvent.dataTransfer.files);
-		event.preventDefault();
-	});
-	$(document).on("dragover.qrfile", function(event) {
-		var oEvent = event.originalEvent;
-		if (!use_QR || !('dataTransfer' in oEvent) || !('files' in oEvent.dataTransfer) || $.inArray("Files", oEvent.dataTransfer.types) == -1 )
-			return;
-		oEvent.dataTransfer.dropEffect = "copy";
-		event.preventDefault();
-	});
 
 	var getFileSizeString = function(size) {
 		if (size < 1024)
