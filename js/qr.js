@@ -474,7 +474,7 @@ $(document).ready(function(){
 				this.el.css("background-image", "none")
 					.attr("title", "");
 			}
-			if (!dontResetFileInput && selectedreply == this) {
+			if (!dontResetFileInput && selectedreply === this) {
 				$file.val("");
 			}
 		}
@@ -563,6 +563,7 @@ $(document).ready(function(){
 					}
 				}
 			}
+			$file.val("");
 		};
 	}
 	
