@@ -1,0 +1,278 @@
+/*
+=All hail the Queen=
+Chrysalis theme by Tom'
+Images used:
+Chrysalis: http://i.imgur.com/Rq0aZ.png
+	img/queen/queen.png
+Background: http://sadpanda.us/images/1270423-BMIGQZH.png
+	img/queen/bg.png
+Post highlight: http://sadpanda.us/images/1270450-RADUQR1.png
+	img/queen/highlight.png
+Enjoy! ♥
+*/
+
+body{
+	background: url('img/queen/queen.png') no-repeat bottom right fixed, url('img/queen/bg.png') repeat-y top right scroll #000800 ;
+	color: #D6DBD9 ;
+	font-family: "Times New Roman", Times, serif ;
+	font-size: 16px;
+}
+
+a, a:visited,
+a.bodylink,
+div.banner a,
+#qrDisplayButton {
+	color: #708F70;
+	text-decoration: underline;
+}
+
+a:hover,
+a.bodylink:hover,
+div.banner a:hover,
+p.intro a.post_no:hover,
+#qrDisplayButton:hover {
+	color: #8DA58D;
+}
+
+form[name="post"] label, #qr label {
+	color: #708F70;
+	font-size: 13px;
+}
+
+#qrDisplayButton {
+	font-size: 14px;
+}
+
+#qr {
+	background-color: #081A0E;
+	border: 1px solid rgb(38,92,56);
+}
+
+#qrimageswrapper {
+	background-color: #081A0E ;
+}
+#qrmove {
+	background-color: #06150C ;
+	border-bottom: 1px solid #265C38;
+	margin-bottom:1px;
+}
+
+p.intro {
+	margin-top: 1px;
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
+p.intro a.email {
+	color: #245D79;
+	margin: 0;
+}
+p.intro a.post_no{
+	margin:0;
+}
+p.fileinfo{
+	font-size:8pt ;
+}
+
+header h1 {
+	font-family: inherit;
+	color: #3E95B1;
+	letter-spacing: 2px;
+	font-size: 32px;
+	text-shadow: 3px 3px 10px #2E596E;
+}
+h2 {
+	color: #3E95B1;
+	font-size: 20px;
+	border-bottom:1px solid #D6DBD9;
+}
+h3 {
+	font-size: 17px;
+}
+header div.subtitle {
+	color: #3E95B1;
+	font-size: 14px;
+}
+
+p.intro span.name,
+p.intro a.email span.name,
+p.intro a.email:hover span.name,
+span.wname {
+	color: #245D79;
+}
+span.trip, span.wtrip {
+	color: #6F98C1;
+	font-style: italic;
+}
+.postSide {
+	font-size: 12px;
+}
+span.quote {
+	color: #668EA3;
+}
+.spoiler{
+	background: #0A2213;
+	color: #0A2213;
+}
+
+span.heading, p.intro span.subject{
+	color: #8B1650;
+}
+p.intro span.capcode, p.intro a.capcode, p.intro a.nametag, span.public_ban {
+	color: #A30000;
+}
+
+div.post.reply {
+	background: #16303C;
+	margin: 8px 26px 4px;
+	padding-bottom: 4px;
+	border: none;
+	box-shadow: 1px 1px 4px #66A3E0 ;
+	border-bottom-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+div.post.reply.highlighted {
+	background: url('img/queen/highlight.png') repeat-x bottom scroll #244024;
+}
+
+div.blotter {
+	color: #668EA3;
+}
+
+#qrDisplayButtonDiv{
+	margin-bottom: 2px;
+}
+
+div.banner {
+	background: transparent;
+	color: inherit;
+}
+.hidetext{
+	background: #0D2B18;
+	border-color: #0D2B18;
+}
+
+.boardlist.top {
+	background-color: #0d401c;
+	padding-bottom: 1px;
+	box-shadow: 0 3px 6px rgb(82,157,123);
+	border-bottom: 1px solid rgb(82,157,123);
+}
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, .boardlist.top .boardlistpart a[href="/"] {
+	padding: 2px 0 0 0;
+	color: #BEDECE;
+	font-size: 10pt;
+	letter-spacing: 1px;
+}
+.boardlist.top .boardlistpart a.boardlistactive {
+	padding-top: 0;
+	text-shadow: 1px 1px 3px #85E085;
+	border-top: 2px solid #BEDECE;
+	background: none;
+}
+.boardlist.top .boardlistpart a:hover{
+	text-shadow: 1px 1px 4px #85E085;
+	background: none;
+}
+.boardlist.top .modboardlistpart a, .boardlist.top .modboardlistpart a:visited {
+	color: #FFFFA3;
+}
+.boardlist.top .modboardlistpart a.boardlistactive {
+	border-top: 2px solid #FFFFA3;
+}
+
+div.pages {
+	border: none;
+	background-color:#001900;
+	color: #E2E9E2;
+	padding-top: 4px;
+}
+.boardlist.bottom {
+	color:#D6DBD9;
+}
+
+/*This is the Text box (that no one really uses)*/
+input[type="text"], input[type="password"], textarea {
+	border: 1px solid #1E0F2C;
+}
+form table tr th {
+	border: 1px solid #673C51 ;
+	background-color: #410B25 ;
+}
+#updateSettings{
+	background-color: #000A00 !important;
+	border: 2px solid #333B33;
+	border-radius: 6px;
+	padding-left:2px;
+	opacity:0.85;
+}
+#settingsScreen {
+	background-color: #0D230D ;
+	border: 2px solid #3B4D3B ;
+	color:#E2E9E2;
+}
+div.ban {
+	background-color:#000F00;
+}
+hr, .thread hr {
+	border-top: 1px solid #D6DBD9;
+}
+
+fieldset {
+	color: #B2B2B2;
+}
+.homeblock, fieldset {
+	background: none;
+}
+.homeblock{
+	padding-top:4px;
+	padding-bottom:2px;
+	margin-bottom:0;
+	margin-top:3px;
+}
+/*Thread watcher*/
+.wthread{
+	background-color:#192B19;
+}
+.boardlist.top .watcherButton.open {
+	background: none;
+	text-shadow: 1px 1px 3px #87C9EB;
+}
+.postfooter {
+	position:relative;
+	top:-7px;
+	height:7px;
+}
+.postfooter a {
+	color: #708F70 ;
+	font-size: 0.9em;
+	font-weight: bold;
+	padding: 2px 4px ;
+	background: #001900 ;
+	border: none;
+	border-radius: 2px;
+	box-shadow: 1px 1px 4px #4AB84A ;
+}
+.postfooter a:hover{
+	color: #BFE5F2;
+	box-shadow: 1px 1px 2px #4AB84A ;
+}
+
+#watcherAlerts, span.wnewposts{
+	color: #C56E8B;
+	text-shadow: none;
+}
+
+.hashtag{
+	color:white;
+	margin-top:2px;
+	padding-bottom:1px;
+	margin-bottom:1px;
+}
+footer {
+	font-size: 0.8em;
+}
+
+div.report {
+	color:#D6DBD9;
+}
