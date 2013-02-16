@@ -46,6 +46,7 @@ form[name="post"] label, #qr label {
 #qr {
 	background-color: #081A0E;
 	border: 1px solid rgb(38,92,56);
+	opacity: 0.9;
 }
 
 #qrimageswrapper {
@@ -191,10 +192,26 @@ div.pages {
 	color:#D6DBD9;
 }
 
-/*This is the Text box (that no one really uses)*/
-input[type="text"], input[type="password"], textarea {
-	border: 1px solid #1E0F2C;
+input[type="text"], input[type="password"], input[type="file"], input[type="submit"], button, textarea {
+	border: 1px solid #140F33;
+	background-color: #040a04;
+	color: #e2f0e2;
 }
+::-webkit-input-placeholder {color: #606060 !important;}
+:-moz-placeholder {color: #606060 !important;}
+::-moz-placeholder {color: #606060 !important;}
+:-ms-input-placeholder {color: #606060 !important;}
+input[type="checkbox"] {
+	opacity: 0.5;
+}
+
+#qrmove a {
+	color: #909090;
+}
+#qrmove a:hover {
+	color: white;
+}
+
 form table tr th {
 	border: 1px solid #673C51 ;
 	background-color: #410B25 ;
