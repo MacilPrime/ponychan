@@ -136,6 +136,11 @@ div.post.reply.highlighted {
 	background: url('img/queen/highlight.png') repeat-x bottom scroll #244024;
 }
 
+.post-hover, .post-inline {
+	border-style: none !important;
+	box-shadow: 1px 1px 4px #66A3E0 !important;
+}
+
 div.blotter {
 	color: #668EA3;
 }
