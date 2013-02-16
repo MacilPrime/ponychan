@@ -84,18 +84,6 @@ form table tr th {
 	padding: 4px;
 	background: #98E;
 }
-form table tr td div {
-	text-align: center;
-	float: left;
-	padding-left: 3px;
-}
-form table tr td div input {
-	display: block;
-	margin: 2px auto 0 auto;
-}
-form table tr td div label {
-	font-size: 10px;
-}
 .unimportant, .unimportant * {
 	font-size: 10px;
 }
@@ -795,7 +783,7 @@ header { margin-top: 48px; }
 	margin-left: 2px;
 	font-size: 10pt;
 }
-.postSide a, .hide_button a {
+.postSide a {
 	text-decoration: none;
 }
 .boardlist.top .watcherButton.open {
