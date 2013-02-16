@@ -590,6 +590,7 @@
 	$config['stylesheets']['Wonderbolts'] = 'wonderbolts.css';
 	$config['stylesheets']['Cloudsdale'] = 'Cloudsdale.css';
 	$config['stylesheets']['Nightmare'] = 'nightmare.css';
+	$config['stylesheets']['Australian'] = 'Australian.css';
 	
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/
 	// $config['uri_stylesheets'] = 'http://static.example.org/stylesheets/';

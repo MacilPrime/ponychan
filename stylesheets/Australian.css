@@ -1,0 +1,181 @@
+/*
+
+Australian.css - A spartan design for mlpchan.net
+
+http://colorschemedesigner.com/#0C61Teeqaw0w0
+
+    +----------+---------+---------+
+    |          |         |         |
+    | #E8C39A  |         | #9C8468 |
+    |          |         |         |
+    +----------+ #D0A574 +---------+   Primary
+    |          |         |         |
+    | #E8CDAF  |         | #875926 |
+    |          |         |         |
+    +----------+---------+---------+
+    | #9C8E68  |         | #E8D29A |
+    +----------+ #D0B674 +---------+   Secondary A
+    | #876C26  |         | #E8D8AF |
+    +----------+---------+---------+
+    | #9C7268  |         | #E8A99A |
+    +----------+ #D08674 +---------+   Secondary B
+    | #873826  |         | #E8BAAF |
+    +----------+---------+---------+
+    | #435963  |         | #84AFC1 |
+    +----------+ #4C7383 +---------+   Complements
+    | #194355  |         | #94B4C1 |
+    +----------+---------+---------+
+	
+
+AUTHOR
+
+RogerDodger <roger.dodger.pony@gmail.com>, last modified 19 Nov 2012.
+
+COPYING
+
+This document is free software. It comes without any warranty, to
+the extent permitted by applicable law. You can redistribute it
+and/or modify it under the terms of the Do What The Fuck You Want
+To Public License, Version 2, as published by Sam Hocevar. See
+http://sam.zoy.org/wtfpl/COPYING for more details.
+
+*/
+
+body {
+	background: #E8C39A url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAEsCAYAAAACUNnVAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wLEgAHF+h6y/EAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAlklEQVQ4y7VTWw6DMAxzc+ZdaffZhRLvox0IKS9E94Nw7Dg2Evi8XxSQEACPH9ws5m2Wd1z4D/hYt+fthGtGgDL8jdzKItNwrQHzXdZWVptyM8soRpjKmqaezpp3u84W5fN0qGNYPdOoFg6WzdIWlWFUxuvh2Wv6IfKTWh9acACc/+DZ/DfTK2syABUCmAQW5AEtDTQlX32Wy0EeSpPfAAAAAElFTkSuQmCC') repeat-x;
+	color: #222;
+	font-family: "Bitstream Charter", "Charter BT", "Book Antiqua",
+		"Bookman Old Style", Palladio, "URW Palladio L", Garamond,
+		"Apple Garamond", Georgia, serif;
+}
+header h1 {
+	font-size: 48px;
+	font-family: inherit;
+	color: #000;
+}
+header div.subtitle {
+	font-size: 12px;
+	color: #222;
+}
+h2 {
+	font-size: 24px;
+	color: #444;
+}
+h3 {
+	font-size: 18px;
+	color: #000;
+}
+hr, .thread hr {
+	border-top: 1px solid #D0A574;
+}
+
+/*
+ * Containers
+ */
+
+div.banner {
+	background: transparent;
+	color: inherit;
+}
+div.pages {
+	background: transparent;
+	color: #444;
+	border: none;
+}
+.boardlist.bottom {
+	color: #444;
+}
+div.post.reply, div.homeblock {
+	background: #E8CDAF;
+	border: 1px solid #D0A574;
+	border-radius: 5px 0px 0px 0px;
+}
+div.post.reply.highlighted {
+	background: #F7E0C8;
+}
+div.blotter {
+	color: inherit;
+}
+.hidetext {
+	border: 1px solid #D0A574;
+	background: rgba(255, 255, 255, 0.20);
+	padding: 10px;
+	margin: 0;
+	position: relative;
+	left: -11px;
+	width: 100%;
+}
+.hidetext.off {
+	padding: 1px 10px;
+}
+
+/*
+ * Content
+ */
+
+a, a:visited,
+a.bodylink,
+div.banner a,
+#qrDisplayButton {
+	color: #873826;
+	text-decoration: none;
+	transition: .05s all linear;
+	-moz-transition: .05s all linear;
+	-webkit-transition: .05s all linear;
+}
+a:hover,
+a.bodylink:hover,
+div.banner a:hover,
+p.intro a.post_no:hover,
+#qrDisplayButton:hover {
+	color: #E41;
+}
+p.intro span.subject {
+	color: #000;
+}
+p.intro span.name,
+p.intro a.email span.name,
+p.intro a.email:hover span.name {
+	color: #435963;
+}
+p.intro a.email span.name {
+	border-bottom: 1px dotted #194355;
+}
+span.trip {
+	color: #4C7383;
+}
+p.intro span.trip,
+p.intro span.name {
+	font-size: 1.1em;
+}
+span.quote {
+	color: #C06F60;
+}
+.hashtag {
+	background: #E8D8AF;
+	border: 1px solid #D0B674;
+	border-radius: 5px;
+	margin: 0 2px;
+	color: inherit;
+	box-shadow: 1px 1px 1px #876C26;
+}
+
+/*
+ * Forms
+ */
+
+form[name="post"] table {
+	line-height: 0;
+}
+form[name="post"] table tr th {
+	background: #E8CDAF;
+	border: 1px solid #D0A574;
+}
+form[name="post"] input[type="text"],
+form[name="post"] input[type="password"],
+form[name="post"] textarea {
+	padding: 4px;
+	border: 1px solid #D0A574;
+	font-family: Tahoma, Verdana, sans-serif;
+	font: -webkit-small-control;
+}
