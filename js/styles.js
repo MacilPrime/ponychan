@@ -17,6 +17,10 @@ settings.newProp("style", "select", selectedstyle, [styleChoices, "Style"]);
 
 var Styles = {};
 Styles.apply = function(stylename) {
+	if (styles[stylename] == null) {
+		console.log('Unknown style:', stylename);
+		return;
+	}
 	var $stylesheet = $("#stylesheet");
 	if ($stylesheet.length == 0) {
 		$stylesheet = $("<link/>")
