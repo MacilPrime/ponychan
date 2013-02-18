@@ -14,19 +14,20 @@ Font: Yesteryear ~ http://www.fontspace.com/astigmatic-one-eye-typographic-insti
 }
 body {
 	background: url("img/wonderbolts/wbs.png") no-repeat right bottom fixed, 
-	url("img/wonderbolts/wbtgradient.png") repeat-x bottom fixed #29a0de;
+	url("img/wonderbolts/wbtgradient.png?v=2") repeat-x bottom fixed #29a0de;
 	color: white;
 	font-family: serif;
 	font-size: 16px;
 }
 a, a:visited, a.bodylink {
-	color: #f7fd77;
+	color: #FFFFB8;
 }
 a:hover, p.intro a.post_no:hover {
 	color: #5EDCFF;
 }
 a#qrDisplayButton {
-	color: #f7fd77 !important;
+	color: #FFFFB8 !important;
+	font-size: 14px;
 }
 p.intro a.email span.name {
 	color: #f8fd77;
@@ -35,12 +36,13 @@ p.intro a.email:hover span.name {
 	color: white;
 }
 header h1 {
+	color: #FFFFB8;
 	font-family: "Yesteryear", tahoma;
-	font-size: 38pt;
+	font-size: 48px;
 }
-header div.subtitle, header h1 {
-	color: #f8fd77;
-	font-size: 10pt;
+header div.subtitle {
+	color: #FFFFB8;
+	font-size: 14px;
 }
 textarea#body, textarea#qrbody {
 	background: url("img/wonderbolts/wblogo.png") center no-repeat white;
@@ -53,7 +55,9 @@ form table tr td div {
 	text-align: left;
 }
 div.banner {
-	background-color: rgb(248, 253, 119);
+	background-color: #FFFFB8;
+	border: 1px solid black;
+	
 }
 div.banner, div.banner a {
 	color: black;
@@ -65,19 +69,22 @@ p.intro span.name {
 	color: #d6fcff;
 }
 .reply p.intro span.name {
-	color: #c6ecff;
+	color: #B2E6FF;
 }
 div.post.reply.highlighted {
-	background: url("img/wonderbolts/wbhlgradient.png") bottom repeat-x #00b9d5;
+	background: url("img/wonderbolts/wbhlgradient.png") bottom repeat-x #2660b0;
 }
 div.post.reply {
-	background: #0179c6;
+	background: #1650A7;
 	border-width: 2px;
 	border-style: solid;
-	border-color: rgb(220, 220, 120);
+	border-color: #E6E6B8;
 }
 span.trip, span.quote {
 	color: #ffd155;
+}
+p.intro span.subject {
+	color:#B02B2B;
 }
 span.heading {
 	color: black;
@@ -92,7 +99,13 @@ div.boardlist {
 	color: #004ed0;
 }
 div.blotter {
-	color: blue;
+	color: black;
+}
+div.blotter a {
+	color: #f7fd77;
+}
+div.blotter a:hover {
+	color: #5edcff;
 }
 .homeblock {
 	border-color: rgba(120, 120, 120, 0.3);
@@ -114,4 +127,13 @@ div.ban a:hover {
 }
 .hidetext {
 	background-color: #3189c6;
+}
+hr, .thread hr {
+	border-color:#FFFFB8;
+}
+#settingsScreen a, #settingsScreen hr {
+	color: black;
+}
+#settingsScreen h1 {
+	padding-left:25px;
 }
