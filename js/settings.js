@@ -131,11 +131,11 @@ settings.bindPropCheckbox = function($checkbox, name) {
 	var value = settings.getProp(name);
 	
 	$checkbox
-		.attr("checked", value)
+		.prop("checked", value)
 		.change(function() {
 			if(!changeGuard) {
 				changeGuard = true;
-				settings.setProp(name, !!$(this).attr("checked"));
+				settings.setProp(name, $(this).prop("checked"));
 				changeGuard = false;
 			}
 		});
@@ -143,7 +143,7 @@ settings.bindPropCheckbox = function($checkbox, name) {
 	$(document).on("setting_change", function(e, setting) {
 		if (name == setting) {
 			changeGuard = true;
-			$checkbox.attr("checked", settings.getProp(name));
+			$checkbox.prop("checked", settings.getProp(name));
 			changeGuard = false;
 		}
 	});

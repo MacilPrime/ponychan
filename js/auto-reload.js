@@ -59,9 +59,9 @@ $(document).ready(function(){
 	var $updateCheckbox = $("<input/>")
 		.attr("id", "updateCheckbox")
 		.attr("type", "checkbox")
-		.attr("checked", updateEnabled)
+		.prop("checked", updateEnabled)
 		.change(function() {
-			updateEnabled = Boolean($(this).attr("checked"));
+			updateEnabled = $(this).prop("checked");
 			if(updateEnabled) {
 				prepareDelayedUpdate();
 			} else {
@@ -153,13 +153,13 @@ $(document).ready(function(){
 					data = '<!doctype html><html><body><div class="banner">dummy</div></body></html>';
 				}
 				data = mogrifyHTML(data);
-				var $data = $(data);
+				var $data = $($.parseHTML(data));
 				var $banner = $data.filter('div.banner').add( $data.find('div.banner') ).first();
 				if($banner.length) {
 					loadPosts($data);
 					prepareDelayedUpdate();
 				} else {
-					if($("h2", data).first().text().trim() === "Thread specified does not exist.") {
+					if($data.find("h2").first().text().trim() === "Thread specified does not exist.") {
 						$statusBox.css('color', 'red').text('404');
 					} else {
 						$statusBox.css('color', 'red').text('Error');
@@ -230,4 +230,3 @@ $(document).ready(function(){
 
 	prepareDelayedUpdate();
 });
-

@@ -23,7 +23,7 @@ function applyState(state) {
 			document.title = original_page_title;
 		}
 		if (state && state.hasOwnProperty('banpage')) {
-			var $banbody = $(state.banpage).filter('.ban');
+			var $banbody = $($.parseHTML(state.banpage)).filter('.ban');
 			$('.ban').remove();
 			$(document.body).children().addClass('ban-hidden');
 			$(document.body).append($banbody);

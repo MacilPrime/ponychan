@@ -333,10 +333,10 @@ $(document).ready(function(){
 		$comment.val("");
 		$file.val("").change();
 		$QRwarning.text("");
-		$spoiler.attr("checked", false);
-		$rawhtml.attr("checked", false);
-		$lock.attr("checked", false);
-		$sticky.attr("checked", false);
+		$spoiler.prop("checked", false);
+		$rawhtml.prop("checked", false);
+		$lock.prop("checked", false);
+		$sticky.prop("checked", false);
 		if (query) {
 			query.abort();
 			query = null;
@@ -732,7 +732,7 @@ $(document).ready(function(){
 	var stickDistance = 10;
 
 	var QRtopY;
-	var setTopY = function() {
+	function setTopY() {
 		if($(".boardlist.top").css("position")=="fixed") {
 			QRtopY = $(".boardlist.top").height();
 		} else {
@@ -794,15 +794,24 @@ $(document).ready(function(){
 			return;
 		event.preventDefault();
 		setTopY();
+		var sLeft, sTop;
+		function calibrateScroll() {
+			sLeft = $(window).scrollLeft();
+			sTop = $(window).scrollTop();
+		}
+		calibrateScroll();
 		var startPos = $QR.position();
-		var xoff = event.pageX - startPos.left;
-		var yoff = event.pageY - startPos.top;
-		$(window).on("mousemove.qr", function(event) {
-			var newX = event.clientX - xoff;
-			var newY = event.clientY - yoff;
+		var xoff = event.pageX - sLeft - startPos.left;
+		var yoff = event.pageY - sTop - startPos.top;
+		
+		$(window).on("mousemove.qrmove", function(event) {
+			var newX = event.pageX - sLeft - xoff;
+			var newY = event.pageY - sTop - yoff;
 			positionQR(newX, newY);
-		}).on("mouseup.qr", function(event) {
-			$(window).off("mousemove.qr").off("mouseup.qr");
+		}).on("scroll.qrmove", function(event) {
+			calibrateScroll();
+		}).on("mouseup.qrmove", function(event) {
+			$(window).off(".qrmove");
 			saveQRposition();
 		});
 	});
@@ -859,7 +868,7 @@ $(document).ready(function(){
 							$QRwarning.text("Post discarded");
 							setQRFormDisabled(false);
 						}};
-						selectedreply.filethumb.timeout(5000)['finally'](function() {
+						selectedreply.filethumb.timeout(5000).fin(function() {
 							if (hasCancelled)
 								return;
 							selectedreply.filethumboktoskip = true;
@@ -912,11 +921,12 @@ $(document).ready(function(){
 			},
 			success: function(data) {
 				data = mogrifyHTML(data);
+				var $data = $($.parseHTML(data));
 				query = null;
 				setQRFormDisabled(false);
-				var title1 = $("h1", data).first().text().trim();
+				var title1 = $("h1", $data).first().text().trim();
 				if (title1 == "Error") {
-					var title2 = $("h2", data).first().text().trim();
+					var title2 = $("h2", $data).first().text().trim();
 					$QRwarning.text(title2);
 					prepSubmitButton();
 				} else if (title1 == "Banned!") {
@@ -933,7 +943,7 @@ $(document).ready(function(){
 					selectedreply.rm();
 
 					if ($("div.banner").length == 0) {
-						var newThreadNumber = parseInt(/reply_(\d+)/.exec($(".post.op", data).first().attr("id"))[1]);
+						var newThreadNumber = parseInt(/reply_(\d+)/.exec($(".post.op", $data).first().attr("id"))[1]);
 						if (isNaN(newThreadNumber)) {
 							console.error("Could not read new thread number!");
 						} else {
@@ -941,13 +951,13 @@ $(document).ready(function(){
 							window.location.href = newThreadURL;
 						}
 					} else {
-						var $newBannerDiv = $(data)
+						var $newBannerDiv = $data
 							.filter("div.banner")
-							.add( $(data).find("div.banner") )
+							.add( $data.find("div.banner") )
 							.first();
 						
 						if ($newBannerDiv.length) {
-							updateThreadNowWithData($(data));
+							updateThreadNowWithData($data);
 						} else {
 							setTimeout(updateThreadNow, 1000);
 						}
