@@ -667,6 +667,7 @@
         $config['additional_javascript'][] = 'js/hide-toggle.js';
 	$config['additional_javascript'][] = 'js/post-hiding.js';
 	$config['additional_javascript'][] = 'js/watcher.js';
+	$config['additional_javascript'][] = 'js/ips.js';
 	$config['additional_javascript'][] = 'js/fancy.js';
 	 
 	// Where these script files are located on the web (defaults to $config['root']).

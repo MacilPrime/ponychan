@@ -191,6 +191,12 @@ settings.newProp = function(name, type, defval, description, moredetails) {
 		.attr("id", id)
 		.appendTo($settingsScreen);
 	
+	if (/^mod_/.test(name)) {
+		$settingDiv.addClass('mod_setting');
+		if (document.location.pathname != siteroot+'mod.php')
+			$settingDiv.hide();
+	}
+	
 	if (type==="bool") {
 		var $label = $("<label/>")
 			.attr("for", "cb_"+id)
