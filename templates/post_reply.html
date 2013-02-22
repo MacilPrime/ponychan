@@ -31,7 +31,7 @@
 			</span>
 		{% endif %}
 		{% if post.mod and post.mod|hasPermission(config.mod.show_ip, board.uri) %}
-			 [<a style="margin:0;" href="?/IP/{{ post.ip }}">{{ post.ip }}</a>]
+			 <span class="posterip">[<a href="?/IP/{{ post.ip }}">{{ post.ip }}</a>]</span>
 		{% endif %}
 		{% if post.mature %}
 			 <span class="mature_note">Mature Content</span>
