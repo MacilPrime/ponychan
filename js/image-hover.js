@@ -7,10 +7,10 @@
  *
  */
 
-$(document).ready(function(){
-	settings.newProp("image_hover_enabled", "bool", true, "Expand image on hover");
-	settings.newProp("image_spoiler_hover_enabled", "bool", false, "Expand spoiler image on hover");
+settings.newProp("image_hover_enabled", "bool", true, "Expand image on hover", null, 'links', 4);
+settings.newProp("image_spoiler_hover_enabled", "bool", false, "Expand spoiler image on hover", null, 'links', 5);
 
+$(document).ready(function(){
 	var image_hover_enabled = settings.getProp("image_hover_enabled");
 	var image_spoiler_hover_enabled = settings.getProp("image_spoiler_hover_enabled");
 	$(document).on("setting_change", function(e, setting) {

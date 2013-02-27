@@ -13,7 +13,7 @@ $.each(styles, function(name, file) {
 	styleChoices[name] = name;
 });
 
-settings.newProp("style", "select", selectedstyle, [styleChoices, "Style"]);
+settings.newProp("style", "select", selectedstyle, [styleChoices, "Style"], null, 'pagestyle', 1);
 
 var Styles = {};
 Styles.apply = function(stylename) {

@@ -11,9 +11,10 @@
  *   $config['additional_javascript'][] = 'js/inline-expanding.js';
  *
  */
-$(document).ready(function(){
-	settings.newProp("image_expand_enabled", "bool", true, "Expand image on click");
 
+settings.newProp("image_expand_enabled", "bool", true, "Expand image on click", null, 'links', 3);
+
+$(document).ready(function(){
 	var image_expand_enabled = settings.getProp("image_expand_enabled");
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "image_expand_enabled")

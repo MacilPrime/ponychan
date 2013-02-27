@@ -8,14 +8,15 @@
  *
  */
 
-$(document).ready(function(){
+(function() {
 	var defval = true;
 	if(navigator.userAgent.match(/iPhone|iPod|Android|Opera Mini|Blackberry|PlayBook/i)) {
 		defval = false;
 	}
+	settings.newProp("fixed_navbar", "bool", defval, "Navbar stays at the top of the window", null, 'pagestyle', 3);
+})();
 
-	settings.newProp("fixed_navbar", "bool", defval, "Navbar stays at the top of the window");
-
+$(document).ready(function(){
 	var navbarApplySettings = function() {
 		var $navbar = $(".boardlist.top");
 		if (settings.getProp("fixed_navbar")) {

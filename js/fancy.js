@@ -9,7 +9,7 @@
  *
  */
 
-settings.newProp("fancy_mode", "bool", false, "Fancy mode");
+settings.newProp("fancy_mode", "bool", false, "Fancy mode", null, 'pagestyle');
 
 $(document).ready(function(){
 	var fancy_mode = settings.getProp("fancy_mode");

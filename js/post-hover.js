@@ -11,10 +11,10 @@
  *
  */
 
-$(document).ready(function(){
-	settings.newProp("preview_hover", "bool", true, "Preview post on link hover");
-	settings.newProp("preview_inline", "bool", true, "Preview post inline on link click");
+settings.newProp("preview_inline", "bool", true, "Preview post inline on link click", null, 'links', 1);
+settings.newProp("preview_hover", "bool", true, "Preview post on link hover", null, 'links', 2);
 
+$(document).ready(function(){
 	var preview_hover = settings.getProp("preview_hover");
 	var preview_inline = settings.getProp("preview_inline");
 	$(document).on("setting_change", function(e, setting) {

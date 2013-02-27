@@ -8,10 +8,10 @@
  *
  */
 
-$(document).ready(function(){
-	settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting", "Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.");
-	settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)");
+settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting", "Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.", 'posting', 1);
+settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", null, 'posting', 2);
 
+$(document).ready(function(){
 	var useFile = typeof FileReader != "undefined" && !!FileReader;
 	var useFormData = typeof FormData != "undefined" && !!FormData;
 	var useCanvas = !!window.HTMLCanvasElement;

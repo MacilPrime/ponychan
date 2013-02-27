@@ -1,4 +1,4 @@
-settings.newProp("mod_obscure_ips", "bool", false, "Obscure user IP addresses");
+settings.newProp("mod_obscure_ips", "bool", false, "Obscure user IP addresses", null, 'mod', 1);
 
 $(document).ready(function() {
 	var obscure_ips = settings.getProp("mod_obscure_ips");

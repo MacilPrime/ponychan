@@ -181,21 +181,67 @@ settings.bindPropSelect = function($select, name) {
 	});
 };
 
-settings.newProp = function(name, type, defval, description, moredetails) {
+// Contains an array of tuples of [orderhint, name]
+var section_order = [];
+// Contains a key for each section, and then an array of tuples of the above format.
+var section_prop_order = {};
+
+settings.newSection = function(name, displayName, orderhint, modOnly) {
+	if (orderhint == null)
+		orderhint = 0;
+	var id = "settings_section_"+name;
+
+	if ($('#'+id).length)
+		throw new Error('Section '+name+' already exists!');
+	
+	var $sectionDiv = $("<div/>")
+		.attr("id", id);
+	var $sectionHeader = $("<h2/>")
+		.text(displayName)
+		.prependTo($sectionDiv);
+	
+	if (modOnly) {
+		$sectionDiv.addClass('mod_settings_section');
+		if (document.location.pathname != siteroot+'mod.php')
+			$sectionDiv.hide();
+	}
+
+	var nextname = null;
+	for(var i=0; i<section_order.length; i++) {
+		if (orderhint < section_order[i][0]) {
+			nextname = section_order[i][1];
+			section_order.splice(i, 0, [orderhint, name]);
+			break;
+		}
+	}
+	if (nextname == null) {
+		section_order.push([orderhint, name]);
+		$sectionDiv.appendTo($settingsScreen);
+	} else {
+		var next_section_id = "settings_section_"+nextname;
+		var $nextSectionDiv = $settingsScreen.find('#'+next_section_id);
+		if (!$nextSectionDiv.length)
+			throw new Error('Could not find next section: '+nextname);
+		$sectionDiv.insertBefore($nextSectionDiv);
+	}
+	section_prop_order[name] = [];
+};
+
+settings.newProp = function(name, type, defval, description, moredetails, section, orderhint) {
+	if (orderhint == null)
+		orderhint = 0;
 	var id = "setting_"+name;
 	
 	settingTypes[name] = type;
 	defaultValues[name] = defval;
 	
-	var $settingDiv = $("<div/>")
-		.attr("id", id)
-		.appendTo($settingsScreen);
+	var section_id = "settings_section_"+section;
+	var $sectionDiv = $settingsScreen.find("#"+section_id);
+	if (!$sectionDiv.length || !section_prop_order.hasOwnProperty(section))
+		throw new Error('Section '+section+' does not exist!');
 	
-	if (/^mod_/.test(name)) {
-		$settingDiv.addClass('mod_setting');
-		if (document.location.pathname != siteroot+'mod.php')
-			$settingDiv.hide();
-	}
+	var $settingDiv = $("<div/>")
+		.attr("id", id);
 	
 	if (type==="bool") {
 		var $label = $("<label/>")
@@ -215,9 +261,8 @@ settings.newProp = function(name, type, defval, description, moredetails) {
 		var $settingSelect = $("<select/>").prependTo($settingDiv);
 		settings.bindPropSelect($settingSelect, name);
 	} else {
-		console.error("Unknown setting type ("+name+", type:"+type+")");
 		$settingDiv.remove();
-		return;
+		throw new Error("Unknown setting type ("+name+", type:"+type+")");
 	}
 
 	if (moredetails) {
@@ -225,6 +270,26 @@ settings.newProp = function(name, type, defval, description, moredetails) {
 			.addClass("setting_more_details")
 			.text(moredetails)
 			.appendTo($settingDiv);
+	}
+	
+	var nextname = null;
+	var prop_order = section_prop_order[section];
+	for(var i=0; i<prop_order.length; i++) {
+		if (orderhint < prop_order[i][0]) {
+			nextname = prop_order[i][1];
+			prop_order.splice(i, 0, [orderhint, name]);
+			break;
+		}
+	}
+	if (nextname == null) {
+		prop_order.push([orderhint, name]);
+		$settingDiv.appendTo($sectionDiv);
+	} else {
+		var next_setting_id = "setting_"+nextname;
+		var $nextSettingDiv = $settingsScreen.find('#'+next_setting_id);
+		if (!$nextSettingDiv.length)
+			throw new Error('Could not find next setting: '+nextname);
+		$settingDiv.insertBefore($nextSettingDiv);
 	}
 };
 
@@ -235,6 +300,12 @@ settings.getAllSettings = function() {
 	});
 	return allSettings;
 };
+
+settings.newSection('pagestyle', 'Page Formatting', 1);
+settings.newSection('filters', 'Filters', 4);
+settings.newSection('links', 'Link Behavior', 2);
+settings.newSection('posting', 'Posting', 3);
+settings.newSection('mod', 'Moderation', 1.5, true);
 
 $(document).ready(function() {
 	// If the settings stuff already is on the page, then remove

@@ -8,9 +8,9 @@
  *
  */
 
-$(document).ready(function() {
-	settings.newProp("reveal_spoilers", "bool", false, "Reveal spoilers");
+settings.newProp("reveal_spoilers", "bool", false, "Reveal spoilers", null, 'pagestyle', 2);
 
+$(document).ready(function() {
 	var processSpoilers = function(context) {
 		if(settings.getProp("reveal_spoilers"))
 			$(".spoiler", context).css("color", "white");
