@@ -179,8 +179,10 @@ function send_usage(retryTime) {
 	if (olduserid)
 		usage.olduserid = olduserid;
 
+	var last_usage_hash_key = "last_usage_data:"+siteroot;
+
 	var usageHash = hashCode(userid + hashCode(usage))
-	if (usageHash == localStorage.getItem("last_usage_data"))
+	if (usageHash == localStorage.getItem(last_usage_hash_key))
 		return;
 	
 	var usageString = JSON.stringify(usage);
@@ -199,7 +201,7 @@ function send_usage(retryTime) {
 		type: 'POST',
 		success: function(data) {
 			try {
-				localStorage.setItem("last_usage_data", usageHash);
+				localStorage.setItem(last_usage_hash_key, usageHash);
 			} catch(e) {}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
