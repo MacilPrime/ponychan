@@ -195,6 +195,7 @@ settings.newSection = function(name, displayName, orderhint, modOnly) {
 		throw new Error('Section '+name+' already exists!');
 	
 	var $sectionDiv = $("<div/>")
+		.addClass("setting_section")
 		.attr("id", id);
 	var $sectionHeader = $("<h2/>")
 		.text(displayName)
@@ -241,6 +242,7 @@ settings.newProp = function(name, type, defval, description, moredetails, sectio
 		throw new Error('Section '+section+' does not exist!');
 	
 	var $settingDiv = $("<div/>")
+		.addClass("setting_part")
 		.attr("id", id);
 	
 	if (type==="bool") {
