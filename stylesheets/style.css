@@ -253,6 +253,7 @@ div.ban h2 {
 	background: #98E;
 	color: black;
 	font-size: 12pt;
+	margin: 0;
 }
 div.ban p {
 	font-size: 12px;
