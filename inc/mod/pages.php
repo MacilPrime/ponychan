@@ -421,6 +421,8 @@ function mod_news_delete($id) {
 	
 	modLog('Deleted a news entry');
 	
+	rebuildThemes('news');
+	
 	header('Location: ?/news', true, $config['redirect_http']);
 }
 
