@@ -1599,7 +1599,7 @@ function markup(&$body, $track_cites = false) {
 							$tracked_cites[] = array($board['uri'], $post['id']);
 					}
 				} else {
-					$replacement = '<a href="' .
+					$replacement = '<a class="bodylink" href="' .
 						$config['root'] . $board['dir'] . $config['file_index'] . '">' .
 							'&gt;&gt;&gt;/' . $_board . '/' .
 							'</a>';
