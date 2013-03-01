@@ -26,6 +26,7 @@
 		// Build news page
 		public function homepage($settings) {
 			global $config, $board;
+			$oldboard = $board;
 			
 			$settings['no_recent'] = (int) $settings['no_recent'];
 			
@@ -76,18 +77,18 @@
 				}
 			}
 			
-			// We don't want a random board to be left active
+			// We don't want a random board to be left active in the board list.
 			$board = false;
+			$boardlist = createBoardlist();
+			$board = $oldboard;
 			
 			return Element('themes/mlpchan/index.html', Array(
 				'settings' => $settings,
 				'config' => $config,
 				'categories' => $categories,
-				'boardlist' => createBoardlist(),
+				'boardlist' => $boardlist,
 				'recent_posts' => $recent_posts,
 				'news' => $news
 			));
 		}
 	};
-	
-?>
