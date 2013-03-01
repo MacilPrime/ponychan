@@ -188,6 +188,7 @@ a.bodylink {
 }
 div.post {
 	max-width: 97%;
+	white-space: normal;
 }
 div.post .body {
 	word-wrap: break-word;
@@ -201,7 +202,6 @@ div.post.reply {
 	border-style: none solid solid none;
 	border-color: #B7C5D9;
 	display: inline-block;
-	white-space: normal;
 }
 .postContainer {
 	white-space: nowrap;
