@@ -863,3 +863,6 @@ header { margin-top: 48px; }
 .ban-hidden {
 	display: none !important;
 }
+.newscontent {
+	margin: 0.5em;
+}
