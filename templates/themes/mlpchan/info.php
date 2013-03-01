@@ -35,6 +35,21 @@
 		'comment' => '(number of recent news entries to display; "-1" is infinite)'
 	);
 	
+	$theme['config'][] = Array(
+		'title' => 'Excluded boards',
+		'name' => 'exclude',
+		'type' => 'text',
+		'comment' => '(space seperated)'
+	);
+	
+	$theme['config'][] = Array(
+		'title' => '# of recent posts',
+		'name' => 'limit_posts',
+		'type' => 'text',
+		'default' => '4',
+		'comment' => '(maximum posts to display)'
+	);
+	
 	// Unique function name for building everything
 	$theme['build_function'] = 'basic_build';
 	$theme['install_callback'] = 'build_install';
@@ -43,5 +58,7 @@
 		function build_install($settings) {
 			if (!is_numeric($settings['no_recent']) || $settings['no_recent'] < -1)
 				return Array(false, '<strong>' . utf8tohtml($settings['no_recent']) . '</strong> is not an integer >= -1.');
+			if (!is_numeric($settings['limit_posts']) || $settings['limit_posts'] < 0)
+				return Array(false, '<strong>' . utf8tohtml($settings['limit_posts']) . '</strong> is not a non-negative integer.');
 		}
 	}

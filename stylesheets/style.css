@@ -860,6 +860,13 @@ header { margin-top: 48px; }
 .newscontent {
 	margin: 0.5em;
 }
+#recent_posts {
+	white-space: nowrap;
+	overflow-x: hidden;
+}
 .recent_post {
 	display: inline-block;
+	text-align: center;
+	padding: 5px;
+	margin: 15px;
 }

@@ -63,6 +63,23 @@
 	  {% endfor %}
 	</div>
 
+	{% if recent_posts|count > 0 %}
+	<div class="homeblock" id="recent_posts">
+		<h2>Recent Posts</h2>
+		<div class="recent_posts_parent">
+		{% for post in recent_posts %}
+		<div class="recent_post">
+			<a href="{{ post.link }}">
+				<img src="{{ post.src }}" style="width:{{ post.thumbwidth }}px;height:{{ post.thumbheight }}px" alt="">
+			</a>
+			<div class="boardname"><a href="{{ post.boardlink }}">/{{ post.board }}/</a></div>
+			{{ post.snippet }}
+		</div>
+		{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
 	<div class="homeblock" id="rules">
 	  <h2>Rules</h2>
 	  <h3>Sitewide</h3>
