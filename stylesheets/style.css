@@ -541,7 +541,7 @@ header { margin-top: 48px; }
 	z-index: 10;
 }
 .post-inline-container {
-	display: table !important;
+	overflow: hidden;
 }
 .post-inline {
 	margin: 2px !important;
