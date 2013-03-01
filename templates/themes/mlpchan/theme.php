@@ -75,7 +75,10 @@
 					$recent_posts[] = $post;
 				}
 			}
-
+			
+			// We don't want a random board to be left active
+			$board = false;
+			
 			return Element('themes/mlpchan/index.html', Array(
 				'settings' => $settings,
 				'config' => $config,
