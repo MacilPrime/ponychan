@@ -124,7 +124,7 @@ p.intro span.capcode, p.intro a.capcode, p.intro a.nametag, span.public_ban {
 
 div.post.reply {
 	background: #16303C;
-	margin: 4px 12px 4px 0;
+	margin: 4px 12px 4px 18px;
 	padding-bottom: 4px;
 	border: none;
 	box-shadow: 1px 1px 4px #66A3E0 ;

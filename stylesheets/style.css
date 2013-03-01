@@ -188,7 +188,6 @@ a.bodylink {
 }
 div.post {
 	max-width: 97%;
-	white-space: normal;
 }
 div.post .body {
 	word-wrap: break-word;
@@ -196,15 +195,12 @@ div.post .body {
 }
 div.post.reply {
 	background: #D6DAF0;
-	margin: 2px 16px 2px 0;
+	margin: 2px 16px 2px 20px;
 	padding: 0.2em 0.3em 0.5em 0.6em;
 	border-width: 1px;
 	border-style: none solid solid none;
 	border-color: #B7C5D9;
 	display: inline-block;
-}
-.postContainer {
-	white-space: nowrap;
 }
 span.trip {
 	color: #228854;
@@ -774,15 +770,18 @@ header { margin-top: 48px; }
     border-radius: 2px;
 }
 /* end qr */
-.postSide {
-	float: left;
-	margin-right: 2px;
-	margin-top: 0;
-	margin-left: 2px;
-	font-size: 10pt;
+.postHider {
+	font-size: 13px;
 }
-.postSide a {
+.reply .postHider {
+	position: absolute;
+	margin-left: -34px;
+}
+.postHider a {
 	text-decoration: none;
+}
+.post-inline .postHider, .post-hover .postHider {
+	display: none;
 }
 .boardlist.top .watcherButton.open {
 	background: #404040;

@@ -23,7 +23,7 @@ $(document).ready(function(){
 		if (settings.getProp("show_hide_buttons")) {
 			$hide_style.text("");
 		} else {
-			$hide_style.text(".postSide .hide_button { display: none; }");
+			$hide_style.text(".postHider { display: none; }");
 		}
 	}
 	init_hide_style();
@@ -138,7 +138,6 @@ $(document).ready(function(){
 		
 		var $stub = $("<div/>")
 			.addClass("postStub")
-			.addClass("hide_button")
 			.appendTo($postC);
 		var $stubLink = $("<a/>")
 			.attr("href", "javascript:void(0);")
@@ -229,7 +228,7 @@ $(document).ready(function(){
 
 			var $thread = $pc.parents(".thread").first();
 			
-			place_button($pc);
+			place_button($post);
 			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
 			if (is_post_hidden(get_post_board($pc.children(".post")), postnum)) {
 				if ($pc.hasClass("opContainer"))
@@ -286,19 +285,21 @@ $(document).ready(function(){
 		}
 	}
 
-	function place_button($pc) {
-		var $side = $pc.children(".postSide");
-		if (!$side.length) {
-			$side = $("<div/>")
-				.addClass("postSide")
-				.prependTo($pc);
+	function place_button($post) {
+		var $hider = $post.children(".postHider");
+		if (!$hider.length) {
+			$hider = $("<span/>")
+				.addClass("postHider");
+			if ($post.hasClass('op'))
+				$post.children('.fileinfo').prepend($hider, ' ');
+			else
+				$post.prepend($hider);
 		}
-		var $hide_button = $side.find("a.hide_button");
+		var $hide_button = $hider.find("a");
 		if (!$hide_button.length) {
 			$hide_button = $("<a/>")
-				.addClass("hide_button")
 				.attr("href", "javascript:void(0);")
-				.prependTo($side);
+				.prependTo($hider);
 		}
 		$hide_button
 			.text("[ - ]")
