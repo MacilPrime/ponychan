@@ -53,7 +53,7 @@
 	{% if post.embed %}
 		{{ post.embed }}
 	{% elseif post.file == 'deleted' %}
-		<img src="{{ config.image_deleted }}" alt="" />
+		<img class="postimg" src="{{ config.image_deleted }}" alt="" />
 	{% elseif post.file and post.file %}
 		<p class="fileinfo">File: <a href="{{ config.uri_img }}{{ post.file }}">{{ post.file }}</a> <span class="morefileinfo">
 		(
@@ -79,7 +79,7 @@
 		</span>
 </p>
 	<a href="{{ config.uri_img }}{{ post.file }}" target="_blank"{% if post.thumb == 'file' %} class="file"{% endif %}>
-	<img src="
+	<img class="postimg" src="
 		{% if post.thumb == 'file' %}
 			{{ config.root }}
 			{% if config.file_icons[post.filename|extension] %}

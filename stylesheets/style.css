@@ -111,21 +111,15 @@ img.banner {
 	border: 1px solid #a9a9a9;
 	margin: 12px auto 0 auto;
 }
-img {
+img.postimg {
 	display: block;
 	float: left;
-	margin: 10px 20px;
+	margin: 5px 20px 0 0;
+	padding: 5px;
 	border: none;
 }
-div.post img {
-	padding: 5px;
-	margin: 5px 20px 0 0;
-}
 div.post img.icon {
-	display: inline;
-	float: none;
 	margin: 0 5px;
-	padding: 0;
 }
 img.loading {
 	opacity: 0.4;
@@ -865,4 +859,7 @@ header { margin-top: 48px; }
 }
 .newscontent {
 	margin: 0.5em;
+}
+.recent_post {
+	display: inline-block;
 }
