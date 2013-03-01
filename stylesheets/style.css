@@ -868,5 +868,8 @@ header { margin-top: 48px; }
 	display: inline-block;
 	text-align: center;
 	padding: 5px;
-	margin: 15px;
+	width: 200px;
+	vertical-align: middle;
+	white-space: normal;
+	word-wrap: break-word;
 }
