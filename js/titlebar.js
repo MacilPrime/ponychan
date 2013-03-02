@@ -54,10 +54,22 @@ $(document).ready(function(){
 			scrollHandler = null;
 		}, 100);
 	}).scroll();
-
-	$(document).bind('new_post', function(e, post) {
-		if ($(post).is(".preview-hidden, .post-hover, .post-inline") || $(post).parent().is(".preview-hidden"))
+	
+	var myposts = [];
+	$(document).on('post_submitted', function(e, info) {
+		var postid = info.board+':'+info.postid;
+		myposts.push(postid);
+	}).on('new_post', function(e, post) {
+		var $post = $(post);
+		// Don't increase the counter for post previews
+		if ($post.is(".preview-hidden, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
 			return;
+		// Or for posts the user made themselves.
+		var i = myposts.indexOf( get_post_id($post) );
+		if (i != -1) {
+			myposts.splice(i, 1);
+			return;
+		}
 		$unseenPosts = $unseenPosts.add(post);
 		document.title = "("+$unseenPosts.length+") "+mainTitle;
 		oldCount = $unseenPosts.length;
