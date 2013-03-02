@@ -968,9 +968,9 @@ $(document).ready(function(){
 				query = null;
 				prepSubmitButton();
 				$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
-				console.log("Ajax Error");
-				console.log(errorThrown);
 				setQRFormDisabled(false);
+				var info = {xhrstatus: jqXHR.status, textStatus: textStatus, errorThrown: errorThrown};
+				console.log("Ajax Error", info);
 			}
 		});
 
