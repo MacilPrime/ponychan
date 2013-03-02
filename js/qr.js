@@ -933,6 +933,13 @@ $(document).ready(function(){
 					
 					selectedreply.rm();
 					
+					$(document).trigger('post_submitted', {
+						postid: data.postid,
+						threadid: data.threadid,
+						board: data.board,
+						url: data.url
+					});
+					
 					if (data.threadid == null) {
 						window.location.href = data.url;
 					} else {
