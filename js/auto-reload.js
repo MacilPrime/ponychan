@@ -130,7 +130,7 @@ $(document).ready(function(){
 
 	var query = null;
 	var page_etag = null;
-	var updateThread = function() {
+	var updateThread = function(nocache) {
 		if(query)
 			query.abort();
 
@@ -144,6 +144,7 @@ $(document).ready(function(){
 		query = $.ajax({
 			url: document.location,
 			headers: headers,
+			cache: !nocache,
 			success: function(data, status, jqXHR) {
 				if (jqXHR.getResponseHeader('Etag'))
 					page_etag = jqXHR.getResponseHeader('Etag');
@@ -188,7 +189,7 @@ $(document).ready(function(){
 		});
 	}
 
-	var tick = function() {
+	var tick = function(nocache) {
 		if(tickTimer) {
 			clearTimeout(tickTimer);
 			tickTimer = null;
@@ -199,13 +200,13 @@ $(document).ready(function(){
 			timeUntilUpdate--;
 			tickTimer = setTimeout(tick, 1000);
 		} else {
-			updateThread();
+			updateThread(nocache);
 		}
 	};
 
-	updateThreadNow = function() {
+	updateThreadNow = function(nocache) {
 		timeUntilUpdate = 0;
-		tick();
+		tick(nocache);
 	};
 
 	updateThreadNowWithData = function($data) {

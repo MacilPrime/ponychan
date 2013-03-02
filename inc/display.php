@@ -66,7 +66,7 @@ function createBoardlist($mod=false) {
 }
 
 function error($message, $priority = true) {
-	global $board, $mod, $config, $userid;
+	global $board, $mod, $config, $userid, $wantjson;
 	
 	if ($config['syslog'] && $priority !== false) {
 		// Use LOG_NOTICE instead of LOG_ERR or LOG_WARNING because most error message are not significant.
@@ -94,6 +94,11 @@ function error($message, $priority = true) {
 	if (defined('STDIN')) {
 		// Running from CLI
 		die('Error: ' . $message . "\n");
+	}
+	
+	if ($wantjson) {
+		header('Content-Type: application/json');
+		die(json_encode(array('error' => 'message', 'message' => _($message))));
 	}
 	
 	die(Element('page.html', array(

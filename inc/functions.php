@@ -18,6 +18,9 @@ require_once 'inc/lib/gettext/gettext.inc';
 // the user is not currently logged in as a moderator
 $mod = false;
 
+// Setting to true will cause error messages to be given as JSON.
+$wantjson = false;
+
 $userid = false;
 check_userid();
 
@@ -664,21 +667,24 @@ function ago($timestamp) {
 }
 
 function displayBan($ban) {
-	global $config;
+	global $config, $wantjson;
 	
 	$ban['ip'] = $_SERVER['REMOTE_ADDR'];
 	
-	// Show banned page and exit
-	die(
-		Element('page.html', array(
+	$banhtml = Element('page.html', array(
 			'title' => 'Banned!',
 			'config' => $config,
 			'body' => Element('banned.html', array(
 				'config' => $config,
 				'ban' => $ban
-			)
-		))
-	));
+			))));
+	
+	if ($wantjson) {
+		header('Content-Type: application/json');
+		die(json_encode(array('error' => 'ban', 'banhtml' => $banhtml)));
+	}
+	
+	die($banhtml);
 }
 
 function checkBan($board = 0) {

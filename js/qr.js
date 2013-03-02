@@ -849,6 +849,7 @@ $(document).ready(function(){
 
 		var data = new FormData(this);
 		data.append("post", $submit.val());
+		data.append("wantjson", 1);
 		if (selectedreply.file) {
 			if (selectedreply.filethumb && !selectedreply.filethumb.isRejected() && !$spoiler.is(':checked')) {
 				if (selectedreply.filethumb.isPending()) {
@@ -909,6 +910,7 @@ $(document).ready(function(){
 			contentType: false,
 			processData: false,
 			type: 'POST',
+			dataType: 'json',
 			xhr: function() {
 				var xhr = new window.XMLHttpRequest();
 				if (typeof xhr.upload != "undefined" && xhr.upload) {
@@ -920,48 +922,32 @@ $(document).ready(function(){
 				return xhr;
 			},
 			success: function(data) {
-				data = mogrifyHTML(data);
-				var $data = $($.parseHTML(data));
 				query = null;
 				setQRFormDisabled(false);
-				var title1 = $("h1", $data).first().text().trim();
-				if (title1 == "Error") {
-					var title2 = $("h2", $data).first().text().trim();
-					$QRwarning.text(title2);
-					prepSubmitButton();
-				} else if (title1 == "Banned!") {
-					var pageState = {title: title1, banpage: data};
-					newState(pageState);
-					prepSubmitButton();
-				} else {
+				if (data.status == 'success') {
 					QRcooldown(10);
 					if (settings.getProp("QR_persistent") || (replies.length > 1))
 						QR.clear();
 					else
 						QR.close();
-
+					
 					selectedreply.rm();
-
-					if ($("div.banner").length == 0) {
-						var newThreadNumber = parseInt(/reply_(\d+)/.exec($(".post.op", $data).first().attr("id"))[1]);
-						if (isNaN(newThreadNumber)) {
-							console.error("Could not read new thread number!");
-						} else {
-							var newThreadURL = /^.*\//.exec(document.location) + "res/"+newThreadNumber+".html";
-							window.location.href = newThreadURL;
-						}
+					
+					if (data.threadid == null) {
+						window.location.href = data.url;
 					} else {
-						var $newBannerDiv = $data
-							.filter("div.banner")
-							.add( $data.find("div.banner") )
-							.first();
-						
-						if ($newBannerDiv.length) {
-							updateThreadNowWithData($data);
-						} else {
-							setTimeout(updateThreadNow, 1000);
-						}
+						setTimeout(updateThreadNow, 10, true);
 					}
+				} else {
+					if (data.error == 'message') {
+						$QRwarning.text(data.message);
+					} else if (data.error == 'ban') {
+						var pageState = {title: 'Ban', banpage: data.banhtml};
+						newState(pageState);
+					} else {
+						$QRwarning.text('Unknown error: '+data.error);
+					}
+					prepSubmitButton();
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {

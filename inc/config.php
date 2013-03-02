@@ -250,6 +250,7 @@
 		'thumbfile',
 		'thumbdurl',
 		'thumbtime',
+		'wantjson',
 		'quick-reply'
 	);
 	

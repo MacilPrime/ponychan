@@ -364,6 +364,9 @@ if (isset($_POST['delete'])) {
 	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
 } elseif (isset($_POST['post'])) {
 	
+	if (isset($_POST['wantjson']) && $_POST['wantjson'])
+		$wantjson = true;
+	
 	if (!isset($_POST['body'], $_POST['board']))
 		error($config['error']['bot']);
 	
@@ -989,7 +992,7 @@ if (isset($_POST['delete'])) {
 	
 	$root = $post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 	
-	if ($config['always_noko'] || $noko) {
+	if ($wantjson || $config['always_noko'] || $noko) {
 		$redirect = $root . $board['dir'] . $config['dir']['res'] .
 			sprintf($config['file_page'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
 
@@ -1047,6 +1050,19 @@ if (isset($_POST['delete'])) {
 	}
 	
 	rebuildThemes('post');
+	
+	if ($wantjson) {
+		$response = array();
+		$response['status'] = 'success';
+		$response['postid'] = intval($id);
+		$response['threadid'] = $post['op'] ? null : intval($post['thread']);
+		$response['board'] = $board['uri'];
+		$response['url'] = $redirect;
+		
+		header('Content-Type: application/json');
+		die(json_encode($response));
+	}
+	
 	header('Location: ' . $redirect, true, $config['redirect_http']);
 } else {
 	if (!file_exists($config['has_installed'])) {
