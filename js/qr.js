@@ -134,7 +134,7 @@ $(document).ready(function(){
 		.attr("type", "text")
 		.attr("name", "email")
 		.attr("placeholder", "Email")
-		.attr("maxlength", 75)
+		.attr("maxlength", 254)
 		.attr("size", 1)
 		.val( $oldEmail.val() )
 		.appendTo($QRForm);
