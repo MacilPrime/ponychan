@@ -3,6 +3,8 @@ function nop() {}
 if (typeof console == "undefined" || !console) {
 	console = {};
 	console.log = nop;
+	console.info = nop;
+	console.warn = nop;
 	console.error = nop;
 }
 
