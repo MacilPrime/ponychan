@@ -4,8 +4,8 @@ $(document).ready(function() {
 	var obscure_ips = settings.getProp("mod_obscure_ips");
 	
 	function getIPfromlink($a) {
-		var m = /^\?\/IP\/(.*)$/.exec($a.attr('href'));
-		return m[1];
+		var m = /\?\/IP\/(.*)$/.exec($a.attr('href'));
+		return m ? m[1] : "Error";
 	}
 
 	var processIPs = function(context) {
