@@ -60,19 +60,19 @@ $(document).ready(function(){
 			// grumble grumble there ought to be a better way to do this
 			var images;
 			if ($(context).is('.post.reply')) {
-				images = $(context).find('> a > img');
+				images = $(context).find('> a > img.postimg');
 			} else {
-				images = $(context).find('.post.reply > a > img');
+				images = $(context).find('.post.reply > a > img.postimg');
 			}
 			images.each(function(i) {
 				var $img = $(this);
 				function addfancy() {
 					var $post = $img.parent().parent();
-					var $body = $post.find('> .body, > .opMain > .body').first();
-					var hatleft = ($img.outerWidth()-65) * 0.5;
+					var $body = $post.find("> .body").first();
+					var hatleft = (($img.outerWidth()-65) * 0.5)-$img.outerWidth()-parseInt($img.css('margin-right'));
 					$body.before('<img class="fancy hat" style="position:absolute;margin-top:-22px;margin-left:'+hatleft+'px;padding:0;height:56px;width:65px;" src="'+siteroot+'static/tophat.png">');
 					var monoheight = ($img.outerHeight()-25) * 0.4;
-					var monoleft = ($img.outerWidth()-30) * 0.8;
+					var monoleft = (($img.outerWidth()-30) * 0.8)-$img.outerWidth()-parseInt($img.css('margin-right'));
 					$body.before('<img class="fancy monocle" style="position:absolute;margin-top:'+monoheight+'px;margin-left:'+monoleft+'px;padding:0;height:75px;width:30px;" src="'+siteroot+'static/monocle.png">');
 				}
 				if (i == 0) {
