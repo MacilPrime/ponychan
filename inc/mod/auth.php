@@ -71,6 +71,14 @@ function setCookies() {
 			$mod['sessionsalt'], // salt
 		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
 	
+	setModSecretCookie();
+}
+
+function setModSecretCookie() {
+	global $mod, $config;
+	if (!$mod)
+		error('setModSecretCookie() was called for a non-moderator!');
+	
 	setcookie($config['cookies']['mod'] . '_secret',
 		$config['cookies']['mod_secret'],
 		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
