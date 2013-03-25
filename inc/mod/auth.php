@@ -42,12 +42,15 @@ function login($username, $password, $makehash=true) {
 	$query->bindValue(':password', $password);
 	$query->execute() or error(db_error($query));
 	
+	$hash = mkhash($username, $password);
+	
 	if ($user = $query->fetch()) {
 		return $mod = array(
 			'id' => $user['id'],
 			'type' => $user['type'],
 			'username' => $username,
-			'hash' => mkhash($username, $password),
+			'passhash' => $hash[0],
+			'sessionsalt' => $hash[1],
 			'boards' => explode(',', $user['boards'])
 			);
 	} else return false;
@@ -57,13 +60,15 @@ function setCookies() {
 	global $mod, $config;
 	if (!$mod)
 		error('setCookies() was called for a non-moderator!');
+	if (!isset($mod['passhash']))
+		error('setCookies() can only be called when logging in!');
 	
 	setcookie($config['cookies']['mod'],
 			$mod['username'] . // username
 			':' . 
-			$mod['hash'][0] . // password
+			$mod['passhash'] . // password
 			':' .
-			$mod['hash'][1], // salt
+			$mod['sessionsalt'], // salt
 		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
 	
 	setcookie($config['cookies']['mod'] . '_secret',
@@ -122,6 +127,7 @@ if (isset($_COOKIE[$config['cookies']['mod']])) {
 		'id' => $user['id'],
 		'type' => $user['type'],
 		'username' => $cookie[0],
+		'sessionsalt' => $cookie[2],
 		'boards' => explode(',', $user['boards'])
 	);
 }
