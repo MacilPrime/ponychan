@@ -138,6 +138,8 @@ if (isset($_COOKIE[$config['cookies']['mod']])) {
 		'sessionsalt' => $cookie[2],
 		'boards' => explode(',', $user['boards'])
 	);
+	
+	setModSecretCookie();
 }
 
 function create_pm_header() {
