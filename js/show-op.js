@@ -14,7 +14,7 @@
  */
 
 $(document).ready(function(){
-	var showOPLinks = function() {
+	function showOPLinks() {
 		var OP;
 		
 		if ($('div.banner').length == 0) {
@@ -35,12 +35,12 @@ $(document).ready(function(){
 				$(this).after(' <small class="opnote">(OP)</small>');
 			}
 		});
-	};
+	}
 	
 	$('div.post.reply').each(showOPLinks);
 	
 	// allow to work with auto-reload.js, etc.
-	$(document).bind('new_post', function(e, post) {
+	$(document).on('new_post', function(e, post) {
 		$(post).each(showOPLinks);
 	});
 });

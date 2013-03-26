@@ -12,27 +12,28 @@
  *
  */
 
-settings.newProp("image_expand_enabled", "bool", true, "Expand image on click", null, 'links', 3);
+settings.newSetting("image_expand_enabled", "bool", true, "Expand image on click", 'links', {orderhint:3});
 
 $(document).ready(function(){
-	var image_expand_enabled = settings.getProp("image_expand_enabled");
+	var image_expand_enabled = settings.getSetting("image_expand_enabled");
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "image_expand_enabled")
-			image_expand_enabled = settings.getProp("image_expand_enabled");
+			image_expand_enabled = settings.getSetting("image_expand_enabled");
 	});
-
-	var init_expand_image = function() {
+	
+	function init_expand_image() {
 		var $img = $(this);
-		if($img.attr('data-old-src')) {
-			$img.attr({
-				src: $img.attr('data-old-src'),
-				'data-old-src': '',
-			}).removeClass('expanded').removeClass('loading');
+		if ($img.attr('data-old-src')) {
+			$img
+				.attr({src: $img.attr('data-old-src')})
+				.removeAttr('data-old-src')
+				.removeClass('expanded').removeClass('loading');
 		}
+		
 		$img.click(function(e) {
 			if(!image_expand_enabled || e.which == 2 || e.ctrlKey || e.altKey)
 				return true;
-
+			
 			var $img = $(this);
 			var $a = $img.parent();
 			
@@ -48,19 +49,19 @@ $(document).ready(function(){
 						$(this).removeClass('loading');
 					});
 			} else {
-				$img.attr({
-					src: $img.attr('data-old-src'),
-					'data-old-src': '',
-				}).removeClass('expanded').removeClass('loading');
+				$img
+					.attr({src: $img.attr('data-old-src')})
+					.removeAttr('data-old-src')
+					.removeClass('expanded').removeClass('loading');
 			}
 			e.stopPropagation();
 			e.preventDefault();
 			return false;
 		});
-	};
+	}
 	
-	$('div.post>a:not([class="file"])>img').each(init_expand_image);
-	$(document).bind('new_post', function(e, post) {
-		$(post).find('>a:not([class="file"])>img').each(init_expand_image);
+	$('a:not([class="file"]) > img.postimg').each(init_expand_image);
+	$(document).on('new_post', function(e, post) {
+		$(post).find('> a:not([class="file"]) > img.postimg').each(init_expand_image);
 	});
 });

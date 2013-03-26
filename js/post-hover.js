@@ -11,23 +11,23 @@
  *
  */
 
-settings.newProp("preview_inline", "bool", true, "Preview post inline on link click", null, 'links', 1);
-settings.newProp("preview_hover", "bool", true, "Preview post on link hover", null, 'links', 2);
+settings.newSetting("preview_inline", "bool", true, "Preview post inline on link click", 'links', {orderhint:1});
+settings.newSetting("preview_hover", "bool", true, "Preview post on link hover", 'links', {orderhint:2});
 
 $(document).ready(function(){
-	var preview_hover = settings.getProp("preview_hover");
-	var preview_inline = settings.getProp("preview_inline");
+	var preview_hover = settings.getSetting("preview_hover");
+	var preview_inline = settings.getSetting("preview_inline");
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "preview_hover")
-			preview_hover = settings.getProp("preview_hover");
+			preview_hover = settings.getSetting("preview_hover");
 		else if (setting == "preview_inline")
-			preview_inline = settings.getProp("preview_inline");
+			preview_inline = settings.getSetting("preview_inline");
 	});
-
+	
 	var page_url_data = {};
 	var page_url_callbacks = {};
-
-	var make_mature_warning_postC = function(id) {
+	
+	function make_mature_warning_postC(id) {
 		var $newpostC = $("<div/>")
 			.addClass('preview-hidden')
 			.addClass('preview-no-mature')
@@ -43,9 +43,9 @@ $(document).ready(function(){
 			$newpost.attr("id", "reply_"+id);
 		}
 		return $newpostC;
-	};
-
-	var load_post_from_data = function(id, $data) {
+	}
+	
+	function load_post_from_data(id, $data) {
 		if($('#replyC_' + id).length > 0) {
 			return;
 		}
@@ -61,9 +61,9 @@ $(document).ready(function(){
 			var $newpostC = $postC.clone();
 		
 		$newpostC.addClass('preview-hidden').appendTo(document.body);
-	};
-
-	var load_post = function(id, url, callback) {
+	}
+	
+	function load_post(id, url, callback) {
 		url = url.replace(/#.*$/, '');
 		
 		if (!page_url_data[url]) {
@@ -94,9 +94,9 @@ $(document).ready(function(){
 				page_url_callbacks[url].push([id, callback]);
 			}
 		}
-	};
+	}
 	
-	init_hover = function() {
+	function init_postlink_hover() {
 		var $link = $(this);
 		
 		var id;
@@ -128,7 +128,7 @@ $(document).ready(function(){
 			hovering = true;
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
 			
-			var start_hover = function() {
+			function start_hover() {
 				$post = $('div.post#reply_' + id).first();
 
 				if ($post.length == 0)
@@ -159,7 +159,7 @@ $(document).ready(function(){
 					$link.trigger('mousemove');
 				}
 				return true;
-			};
+			}
 			
 			if(!start_hover()) {
 				$("<div/>")
@@ -202,14 +202,14 @@ $(document).ready(function(){
 			$link.trigger('mouseleave');
 			e.preventDefault();
 
-			var place_inline = function() {
+			function place_inline() {
 				if ($link.parent().hasClass('mentioned'))
 					$inlined_postC.insertAfter($link.parents('.intro').first());
 				else
 					$inlined_postC.insertAfter($link);
-			};
+			}
 
-			var start_inline = function() {
+			function start_inline() {
 				$postC = $('#replyC_' + id).first();
 
 				if ($postC.length == 0)
@@ -248,8 +248,8 @@ $(document).ready(function(){
 					});
 				}
 				return true;
-			};
-
+			}
+			
 			if (!$link.hasClass('inlined')) {
 				// Don't allow opening a post preview of a parent post.
 				// (Artificial limit, it would work fine. Just enforcing
@@ -279,12 +279,12 @@ $(document).ready(function(){
 				}
 			}
 		});
-	};
+	}
+	window.init_postlink_hover = init_postlink_hover;
 	
-	$('.body a:not([rel="nofollow"])').each(init_hover);
+	$('a.postlink').each(init_postlink_hover);
 	
-	// allow to work with auto-reload.js, etc.
-	$(document).bind('new_post', function(e, post) {
-		$(post).find('.body a:not([rel="nofollow"])').each(init_hover);
+	$(document).on('new_post', function(e, post) {
+		$(post).find('a.postlink').each(init_postlink_hover);
 	});
 });

@@ -7,20 +7,20 @@
  *
  */
 
-settings.newProp("image_hover_enabled", "bool", true, "Expand image on hover", null, 'links', 4);
-settings.newProp("image_spoiler_hover_enabled", "bool", false, "Expand spoiler image on hover", null, 'links', 5);
+settings.newSetting("image_hover_enabled", "bool", true, "Expand image on hover", 'links', {orderhint:4});
+settings.newSetting("image_spoiler_hover_enabled", "bool", false, "Expand spoiler image on hover", 'links', {orderhint:5});
 
 $(document).ready(function(){
-	var image_hover_enabled = settings.getProp("image_hover_enabled");
-	var image_spoiler_hover_enabled = settings.getProp("image_spoiler_hover_enabled");
+	var image_hover_enabled = settings.getSetting("image_hover_enabled");
+	var image_spoiler_hover_enabled = settings.getSetting("image_spoiler_hover_enabled");
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "image_hover_enabled")
-			image_hover_enabled = settings.getProp("image_hover_enabled");
+			image_hover_enabled = settings.getSetting("image_hover_enabled");
 		else if (setting == "image_spoiler_hover_enabled")
-			image_spoiler_hover_enabled = settings.getProp("image_spoiler_hover_enabled");
+			image_spoiler_hover_enabled = settings.getSetting("image_spoiler_hover_enabled");
 	});
-
-	init_image_hover = function() {
+	
+	function init_image_hover() {
 		var $image = $(this);
 		var hovered_at;
 		$image.hover(function(e) {
@@ -72,11 +72,10 @@ $(document).ready(function(){
 		}).click(function() {
 			$image.trigger('mouseleave');
 		});
-	};
+	}
 	
-	$('form[name="postcontrols"]>div>a:not([class="file"])>img').each(init_image_hover);
-	$('div.post>a:not([class="file"])>img').each(init_image_hover);
-	$(document).bind('new_post', function(e, post) {
-		$(post).find('>a:not([class="file"])>img').each(init_image_hover);
+	$('a:not([class="file"]) > img.postimg').each(init_image_hover);
+	$(document).on('new_post', function(e, post) {
+		$(post).find('> a:not([class="file"]) > img.postimg').each(init_image_hover);
 	});
 });

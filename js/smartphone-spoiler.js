@@ -13,15 +13,14 @@
 
 $(document).ready(function(){
 	if(navigator.userAgent.match(/iPhone|iPod|iPad|Android|Opera Mini|Blackberry|PlayBook/i)) {
-		var init_spoiler_show = function() {
-			$(this).mousedown(function() {
+		function init_spoiler_show() {
+			$(this).click(function() {
 				$(this).css("color", "white");
 			});
 		};
 		$(".spoiler").each(init_spoiler_show);
-		$(document).bind('new_post', function(e, post) {
+		$(document).on('new_post', function(e, post) {
 			$(post).find(".spoiler").each(init_spoiler_show);
 		});
 	}
 });
-

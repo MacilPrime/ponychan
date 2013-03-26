@@ -12,18 +12,20 @@
  */
 
 $(document).ready(function(){
-	var iso8601 = function(s) {
+	function iso8601(s) {
 		s = s.replace(/\.\d\d\d+/,""); // remove milliseconds
 		s = s.replace(/-/,"/").replace(/-/,"/");
 		s = s.replace(/T/," ").replace(/Z/," UTC");
 		s = s.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2"); // -04:00 -> -0400
 		return new Date(s);
-	};
-	var zeropad = function(num, count) {
+	}
+	function zeropad(num, count) {
+		var l = num.toString().length;
+		if (l >= count) return num;
 		return [Math.pow(10, count - num.toString().length), num].join('').substr(1);
-	};
+	}
 	
-	var makeLocalTime = function() {
+	function makeLocalTime() {
 		var t = iso8601($(this).attr('datetime'));
 		
 		$(this).text(
@@ -39,13 +41,12 @@ $(document).ready(function(){
 			zeropad(t.getMinutes(), 2) + ":" + 
 			zeropad(t.getSeconds(), 2)
 		);
-	};
+	}
 
 	$('time').each(makeLocalTime);
 
 	// allow to work with auto-reload.js, etc.
-	$(document).bind('new_post', function(e, post) {
+	$(document).on('new_post', function(e, post) {
 		$('time', post).each(makeLocalTime);
 	});
 });
-
