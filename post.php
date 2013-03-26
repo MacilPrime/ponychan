@@ -1004,7 +1004,7 @@ if (isset($_POST['delete'])) {
 				'res' => preg_quote($config['dir']['res'], '/'),
 			);
 
-			if (preg_match('/\/' . $regex['board'] . $regex['res'] . $regex['page50'] . '([?&].*)?$/', $_SERVER['HTTP_REFERER'])) {
+			if (preg_match('/\/' . $regex['board'] . $regex['res'] . $regex['page50'] . '([?&#].*)?$/', $_SERVER['HTTP_REFERER'])) {
 				$redirect = $root . $board['dir'] . $config['dir']['res'] .
 					sprintf($config['file_page50'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
 			}
