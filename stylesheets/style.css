@@ -151,10 +151,12 @@ p.intro span.subject {
 	color: #0F0C5D;
 	font-weight: bold;
 	font-size: 125%;
+	unicode-bidi: embed;
 }
 p.intro span.name {
 	color: #117743;
 	font-weight: bold;
+	unicode-bidi: embed;
 }
 p.intro span.capcode, p.intro a.capcode, p.intro a.nametag {
 	color: #F00000;
@@ -814,6 +816,9 @@ header { margin-top: 48px; }
 }
 .wlinkpart a:hover {
 	color: rgb(80, 80, 200);
+}
+.wname, .wsubject, .wpost {
+	unicode-bidi: embed;
 }
 .wtrip {
 	color: #ccc;
