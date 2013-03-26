@@ -40,23 +40,9 @@
 	// DOM setup over
 	
 	function showWindow() {
-		var topPos = $(window).scrollTop()+$(window).height()/2;
-		if (topPos < 200)
-			topPos = 200;
-		
-		$settingsScreen
-			.css("position", "absolute")
-			.css("top", topPos+"px")
-			.css("left", "50%")
-			.css("margin-top", "-200px")
-			.css("margin-left", "-200px");
-		
 		$settingsOverlay.show();
 		$settingsScreen.fadeIn("fast");
 		$(document.body).css("overflow", "hidden");
-		
-		if ($settingsScreen.position().left < 200)
-			$settingsScreen.css("left", "200px");
 	}
 	exports.showWindow = showWindow;
 	
@@ -66,13 +52,6 @@
 		$(document.body).css("overflow", "");
 	}
 	exports.hideWindow = hideWindow;
-	
-	$(document).on("style_changed.Settings", function() {
-		if ($settingsScreen.is(":visible")) {
-			$settingsScreen.hide();
-			settings.showWindow();
-		}
-	});
 	
 	$settingsOverlay.click(hideWindow);
 	$settingsCloseButton.click(hideWindow);
