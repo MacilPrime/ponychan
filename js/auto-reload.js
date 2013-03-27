@@ -163,7 +163,7 @@ $(document).ready(function(){
 					if($data.find("h2").first().text().trim() === "Thread specified does not exist.") {
 						$statusBox.css('color', 'red').text('404');
 					} else {
-						$statusBox.css('color', 'red').text('Error');
+						$postsAdded.text('Error');
 						prepareDelayedUpdate();
 					}
 				}
