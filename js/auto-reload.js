@@ -116,14 +116,25 @@ $(document).ready(function(){
 	
 	var loadPosts = function($data) {
 		var postsAddedCount = 0;
+		
+		var $lastPostC = $('div.postContainer:not(.post-inline-container):not(.preview-hidden):last');
+		var lastPostNum = get_post_num($lastPostC.children('.post').first());
+		
 		$data.find('div.postContainer.replyContainer').each(function(index) {
-			var id = $(this).attr('id');
-			if($('#' + id).length == 0) {
-				$(this).insertAfter($('div.postContainer:not(.post-inline-container):not(.preview-hidden):last'));
-				$(document).trigger('new_post', $(this).find('.post')[0]);
+			var $postC = $(this);
+			var postNum = get_post_num($postC.children('.post').first());
+			
+			if(postNum > lastPostNum && $('#' + $postC.attr('id')).length == 0) {
+				$postC.insertAfter($lastPostC);
+				$(document).trigger('new_post', $postC.children('.post')[0]);
+				
+				$lastPostC = $postC;
+				lastPostNum = postNum;
+				
 				postsAddedCount++;
 			}
 		});
+		
 		$postsAdded.text("+"+postsAddedCount);
 		$countDown.text("-");
 	};
