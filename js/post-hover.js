@@ -129,7 +129,7 @@ $(document).ready(function(){
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
 			
 			function start_hover() {
-				$post = $('div.post#reply_' + id).first();
+				$post = $('#reply_' + id).first();
 
 				if ($post.length == 0)
 					return false;
