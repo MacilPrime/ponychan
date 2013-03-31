@@ -16,9 +16,6 @@ $(document).ready(function(){
 	function showBackLinks() {
 		var reply_id = get_post_num( $(this) );
 		
-		if (window.init_postlink_hover)
-			$(this).find('.mentioned a').each(init_postlink_hover);
-		
 		if ($(this).hasClass('post-inline') || $(this).hasClass('post-hover'))
 			return;
 		
