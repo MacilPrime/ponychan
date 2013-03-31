@@ -1,22 +1,17 @@
 /*
- * show-op
- * https://github.com/savetheinternet/Tinyboard/blob/master/js/show-op.js
+ * postlink-info.js
  *
- * Adds "(OP)" to >>X links when the OP is quoted.
- *
- * Released under the MIT license
- * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
- *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/show-op.js';
+ * Adds " (OP)" to >>X links when the OP is quoted.
+ * Adds " (You)" to >>X links when the user is quoted.
  *
  */
 
-settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6, moredetails:"Requires Quick Reply dialog to work"});
-
-$(document).ready(function(){
+(function(exports) {
+	settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6, moredetails:"Requires Quick Reply dialog to work."});
+	
 	var myposts = [];
+	exports.myposts = myposts;
+	
 	function loadMyPosts() {
 		if (window.sessionStorage && sessionStorage.myposts)
 			myposts = JSON.parse(sessionStorage.myposts);
@@ -63,7 +58,7 @@ $(document).ready(function(){
 			}
 		});
 	}
-
+	
 	function updateLinkInfo() {
 		var $info_style = $("style#link_info_style");
 		if (!$info_style.length) {
@@ -78,18 +73,21 @@ $(document).ready(function(){
 			$info_style.text(".younote { display: none; }");
 		}
 	}
-	updateLinkInfo();
-	
-	$('.thread').each(descLinks);
-	
-	$(document).on('new_post', function(e, post) {
-		$(post).each(descLinks);
-	}).on('post_submitted', function(e, info) {
+
+	$(document).on('post_submitted', function(e, info) {
 		loadMyPosts();
 		myposts.push(info.board+':'+info.postid);
 		saveMyPosts();
-	}).on("setting_change", function(e, setting) {
-		if (setting == "link_show_you")
-			updateLinkInfo();
+	}).ready(function() {
+		updateLinkInfo();
+		
+		$('.thread').each(descLinks);
+		
+		$(document).on('new_post', function(e, post) {
+			$(post).each(descLinks);
+		}).on("setting_change", function(e, setting) {
+			if (setting == "link_show_you")
+				updateLinkInfo();
+		});
 	});
-});
+})(window.postlinkinfo||(window.postlinkinfo={}));

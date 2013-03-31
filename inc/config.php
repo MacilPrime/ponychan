@@ -653,7 +653,9 @@
         $config['additional_javascript'][] = 'js/local-time.js';
         $config['additional_javascript'][] = 'js/auto-reload.js';
         $config['additional_javascript'][] = 'js/post-hover.js';
-        $config['additional_javascript'][] = 'js/show-op.js';
+        $config['additional_javascript'][] = 'js/postlinkinfo.js';
+	$config['additional_javascript'][] = 'js/watcher.js';
+        $config['additional_javascript'][] = 'js/notifier.js';
         $config['additional_javascript'][] = 'js/show-filenames.js';
         $config['additional_javascript'][] = 'js/inline-expanding.js';
         $config['additional_javascript'][] = 'js/image-hover.js';
@@ -667,7 +669,6 @@
         $config['additional_javascript'][] = 'js/titlebar.js';
         $config['additional_javascript'][] = 'js/hide-toggle.js';
 	$config['additional_javascript'][] = 'js/post-hiding.js';
-	$config['additional_javascript'][] = 'js/watcher.js';
 	$config['additional_javascript'][] = 'js/ips.js';
 	$config['additional_javascript'][] = 'js/fancy.js';
 	 

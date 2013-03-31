@@ -3,41 +3,74 @@
  *
  * Usage:
  *   $config['additional_javascript'][] = 'js/jquery.min.js';
+ *   $config['additional_javascript'][] = 'js/postlinkinfo.js';
  *   $config['additional_javascript'][] = 'js/titlebar.js';
  *
  */
 
-$(document).ready(function(){
-	if($('div.banner').length == 0)
-		return; // not index
-
-	var titlePrefix = document.title.split("-")[0]+"- ";
-	var titleSplit = document.title.split("-");
-	if (titleSplit.length < 2)
-		return;
-	var titleEnd = titleSplit[1].slice(1);
-
-	var opsubject = $(".post.op .subject").text().trim();
-	var optext = $(".post.op .body").text().trim();
-
-	if(opsubject) {
-		titleEnd = opsubject;
-	} else if(optext) {
-		if(optext.length > 20)
-			titleEnd = optext.slice(0,20)+"...";
-		else
-			titleEnd = optext;
+(function(exports) {
+	var flash = {};
+	var flashmessage = '';
+	
+	// Temporary dummy function. Gets replaced later.
+	var updateTitle = function() {};
+	
+	function updateTitleFlash() {
+		flashmessage = '';
+		$.each(flash, function(i, val) {
+			flashmessage += val + ' ';
+		});
+		updateTitle();
 	}
-	var mainTitle = titlePrefix+titleEnd;
+	
+	function setTitleFlash(key, message) {
+		flash[key] = message;
+		updateTitleFlash();
+	}
+	exports.setTitleFlash = setTitleFlash;
+	
+	function removeTitleFlash(key) {
+		delete flash[key];
+		updateTitleFlash();
+	}
+	exports.removeTitleFlash = removeTitleFlash;
+	
+	$(document).ready(function() {
+		if($('div.banner').length == 0)
+			return; // not index
 
-	var $unseenPosts = $(".post.reply").not(".preview-hidden, .post-hover, .post-inline");
-
-	var oldCount = -1;
-	var scrollHandler = null;
-	$(window).scroll(function(event) {
-		if(scrollHandler)
+		var titlePrefix = document.title.split("-")[0]+"- ";
+		var titleSplit = document.title.split("-");
+		if (titleSplit.length < 2)
 			return;
-		scrollHandler = setTimeout(function() {
+		var titleEnd = titleSplit[1].slice(1);
+
+		var opsubject = $(".post.op .subject").text().trim();
+		if(opsubject) {
+			titleEnd = opsubject;
+		} else {
+			var optext = $(".post.op .body").text().trim();
+			if(optext) {
+				if(optext.length > 20)
+					titleEnd = optext.slice(0,20)+"...";
+				else
+					titleEnd = optext;
+			}
+		}
+		
+		var mainTitle = titlePrefix+titleEnd;
+
+		var $unseenPosts = $(".thread .post.reply").not(".preview-hidden, .post-hover, .post-inline");
+
+		var pendingScrollHandler = null;
+		
+		updateTitle = function() {
+			var newTitle = flashmessage + "("+$unseenPosts.length+") "+mainTitle;
+			if(document.title != newTitle)
+				document.title = newTitle;
+		};
+		
+		function scrollHandler() {
 			while($unseenPosts.length > 0) {
 				var $post = $($unseenPosts[0]);
 				if($post.is(":visible")) {
@@ -48,30 +81,26 @@ $(document).ready(function(){
 				}
 				$unseenPosts = $unseenPosts.slice(1);
 			}
-			if($unseenPosts.length != oldCount)
-				document.title = "("+$unseenPosts.length+") "+mainTitle;
-			oldCount = $unseenPosts.length;
-			scrollHandler = null;
-		}, 100);
-	}).scroll();
-	
-	var myposts = [];
-	$(document).on('post_submitted', function(e, info) {
-		var postid = info.board+':'+info.postid;
-		myposts.push(postid);
-	}).on('new_post', function(e, post) {
-		var $post = $(post);
-		// Don't increase the counter for post previews
-		if ($post.is(".preview-hidden, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
-			return;
-		// Or for posts the user made themselves.
-		var i = myposts.indexOf( get_post_id($post) );
-		if (i != -1) {
-			myposts.splice(i, 1);
-			return;
+			updateTitle();
+			pendingScrollHandler = null;
 		}
-		$unseenPosts = $unseenPosts.add(post);
-		document.title = "("+$unseenPosts.length+") "+mainTitle;
-		oldCount = $unseenPosts.length;
+		
+		$(window).scroll(function(event) {
+			if(pendingScrollHandler)
+				return;
+			pendingScrollHandler = setTimeout(scrollHandler, 100);
+		}).scroll();
+		
+		$(document).on('new_post', function(e, post) {
+			var $post = $(post);
+			// Don't increase the counter for post previews
+			if ($post.is(".preview-hidden, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
+				return;
+			// Or for posts the user made themselves.
+			if (postlinkinfo.myposts.indexOf( get_post_id($post) ) != -1)
+				return;
+			$unseenPosts = $unseenPosts.add(post);
+			updateTitle();
+		});
 	});
-});
+})(window.titlebar||(window.titlebar={}));
