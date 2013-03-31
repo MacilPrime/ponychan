@@ -13,6 +13,8 @@
  *
  */
 
+settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6, moredetails:"Requires Quick Reply dialog to work"});
+
 $(document).ready(function(){
 	var myposts = [];
 	function loadMyPosts() {
@@ -51,16 +53,32 @@ $(document).ready(function(){
 			else
 				return;
 			
-			if (postnum == OP && !$(this).hasClass("opnote")) {
-				$(this).addClass('opnote').text( $(this).text()+' (OP)');
+			if (postnum == OP && !$(this).children(".opnote").length) {
+				$(this).append( $('<span/>').addClass('opnote').text(' (OP)') );
 			}
 			
 			var postid = board+':'+postnum;
-			if (myposts.indexOf(postid) != -1 && !$(this).hasClass("younote")) {
-				$(this).addClass('younote').text( $(this).text()+' (You)');
+			if (myposts.indexOf(postid) != -1 && !$(this).children(".younote").length) {
+				$(this).append( $('<span/>').addClass('younote').text(' (You)') );
 			}
 		});
 	}
+
+	function updateLinkInfo() {
+		var $info_style = $("style#link_info_style");
+		if (!$info_style.length) {
+			$info_style = $("<style/>")
+				.attr("id", "link_info_style")
+				.attr("type", "text/css")
+				.appendTo(document.head);
+		}
+		if (settings.getSetting("link_show_you")) {
+			$info_style.text("");
+		} else {
+			$info_style.text(".younote { display: none; }");
+		}
+	}
+	updateLinkInfo();
 	
 	$('.thread').each(descLinks);
 	
@@ -70,5 +88,8 @@ $(document).ready(function(){
 		loadMyPosts();
 		myposts.push(info.board+':'+info.postid);
 		saveMyPosts();
+	}).on("setting_change", function(e, setting) {
+		if (setting == "link_show_you")
+			updateLinkInfo();
 	});
 });
