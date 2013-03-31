@@ -364,12 +364,12 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	var prepSubmitButton = function() {
+	function prepSubmitButton() {
 		$submit.val( $oldForm.find("input[type='submit']").val() ).prop("disabled", false);
-	};
+	}
 	prepSubmitButton();
 	
-	var QRcooldown = function(time) {
+	function QRcooldown(time) {
 		if (time > 0) {
 			$submit.val(time).prop("disabled", true);
 			setTimeout(QRcooldown, 1000, time-1);
@@ -378,7 +378,7 @@ $(document).ready(function(){
 			if ($auto.is(":checked") && (selectedreply.comment || selectedreply.file))
 				$QRForm.submit();
 		}
-	};
+	}
 
 	if (!usewURL) {
 		$QRToggleImagesButton.hide();
@@ -493,11 +493,11 @@ $(document).ready(function(){
 		}
 	}
 	
-	var addReply = function() {
+	function addReply() {
 		selectedreply = new reply();
 		selectedreply.select();
 		replies.push(selectedreply);
-	};
+	}
 	
 	var selectedreply = null;
 	addReply();
@@ -602,13 +602,13 @@ $(document).ready(function(){
 			}
 		});
 
-	var getFileSizeString = function(size) {
+	function getFileSizeString(size) {
 		if (size < 1024)
 			return size + " B";
 		if (size < 1048576)
 			return (size/1024).toFixed(0) + " KB";
 		return (size/1048576).toFixed(2) + " MB";
-	};
+	}
 
 	$(document).keydown(function(event) {
 		if(event.which == 27) {
@@ -626,7 +626,7 @@ $(document).ready(function(){
 	});
 
 	var oldCiteReply = citeReply;
-	var qrCiteReply = function(id) {
+	function qrCiteReply(id) {
 		QR.open();
 
 		var cited = ">>"+id+"\n";
@@ -663,17 +663,17 @@ $(document).ready(function(){
 		}
 		$comment.focus();
 		$comment.trigger("input");
-	};
+	}
 
-	var stealCaptcha = function() {
+	function stealCaptcha() {
 		$QRCaptchaPuzzleImage
 			.css("visibility", "visible")
 			.attr("src", $captchaPuzzle.find("img").attr("src"));
 		$QRCaptchaChallengeField.val( $("#recaptcha_challenge_field").val() );
 		$QRCaptchaAnswer.val("").prop("disabled", false);
-	};
+	}
 
-	var stealFormHiddenInputs = function(context) {
+	function stealFormHiddenInputs(context) {
 		$(".QRhiddenInputs", $QRForm).remove();
 
 		$("input, textarea", context)
@@ -684,16 +684,16 @@ $(document).ready(function(){
 			.addClass("QRhiddenInputs")
 			.hide()
 			.appendTo($QRForm);
-	};
+	}
 	stealFormHiddenInputs($oldForm);
 
-	var QRrepair = function() {
+	function QRrepair() {
 		if($captchaPuzzle.length) {
 			$QRCaptchaPuzzleImage.css("visibility", "hidden");
 			$QRCaptchaAnswer.val("").prop("disabled", true);
 			Recaptcha.reload();
 		}
-	};
+	}
 
 	if($captchaPuzzle.length) {
 		stealCaptcha();
@@ -706,14 +706,14 @@ $(document).ready(function(){
 		Recaptcha.reload();
 	});
 
-	var checkNameDisable = function() {
+	function checkNameDisable() {
 		if ($oldName.length == 0)
 			$name.prop("disabled", true);
 		if ($oldEmail.length == 0)
 			$email.prop("disabled", true);
 		if ($oldSubject.length == 0)
 			$subject.prop("disabled", true);
-	};
+	}
 	checkNameDisable();
 
 	if ($oldName.length == 0)
@@ -723,11 +723,11 @@ $(document).ready(function(){
 	if ($oldSubject.length == 0)
 		$subject.remove();
 
-	var setQRFormDisabled = function(disabled) {
+	function setQRFormDisabled(disabled) {
 		$("input, textarea", $QRForm).prop("disabled", disabled);
 		if (!disabled)
 			checkNameDisable();
-	};
+	}
 
 	var stickDistance = 10;
 
@@ -741,7 +741,7 @@ $(document).ready(function(){
 	};
 	setTopY();
 
-	var positionQR = function(newX, newY) {
+	function positionQR(newX, newY) {
 		if(newX < stickDistance) {
 			$QR.css("left", 0).css("right", "");
 		} else if(newX + $QR.width() > $(window).width() - stickDistance) {
@@ -756,9 +756,9 @@ $(document).ready(function(){
 		} else {
 			$QR.css("top", newY).css("bottom", "").data('at top', false);
 		}
-	};
+	}
 
-	var loadQRposition = function() {
+	function loadQRposition() {
 		setTopY();
 		if(localStorage.qrX == null || localStorage.qrY == null)
 			return false;
@@ -773,9 +773,9 @@ $(document).ready(function(){
 		else
 			newY = parseInt(localStorage.qrY);
 		positionQR(newX, newY);
-	};
+	}
 
-	var saveQRposition = function() {
+	function saveQRposition() {
 		if($QR.css("right")=="0px")
 			localStorage.qrX = Infinity;
 		else
@@ -787,7 +787,7 @@ $(document).ready(function(){
 			localStorage.qrY = Infinity;
 		else
 			localStorage.qrY = parseInt($QR.css("top"));
-	};
+	}
 
 	$QRmove.mousedown(function(event) {
 		if(event.which != 1)
@@ -972,7 +972,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-	var QRInit = function() {
+	function QRInit() {
 		use_QR = settings.getSetting("use_QR");
 		if (use_QR) {
 			$oldForm.hide();
@@ -988,7 +988,7 @@ $(document).ready(function(){
 			$QRButtonDiv.hide();
 			citeReply = oldCiteReply;
 		}
-	};
+	}
 
 	QRInit();
 	$(document).on("setting_change", function(e, setting) {
