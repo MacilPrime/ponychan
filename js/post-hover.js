@@ -101,7 +101,7 @@ $(document).ready(function(){
 		
 		var id;
 		
-		if(id = $link.text().match(/^>>(\d+)$/)) {
+		if(id = $link.text().match(/^>>(\d+)/)) {
 			id = id[1];
 		} else {
 			return;
@@ -145,7 +145,7 @@ $(document).ready(function(){
 					$newPost.find('.post-inline-container').remove();
 					$newPost.find('.inlined').removeClass('inlined');
 					$newPost.find('a').filter(function() {
-						return $(this).text() === '>>' + parent_id;
+						return $(this).text().match('^>>'+parent_id+'\\b');
 					}).addClass('parent-link');
 					$newPost
 						.attr('id', 'post-hover-' + id)
@@ -226,7 +226,7 @@ $(document).ready(function(){
 					$inlined_postC.find('.post-inline-container, .postSide, .postStub').remove();
 					$inlined_postC.find('.inlined').removeClass('inlined');
 					$inlined_postC.find('a').filter(function() {
-						return $(this).text() === '>>' + parent_id;
+						return $(this).text().match('^>>'+parent_id+'\\b');
 					}).addClass('parent-link');
 					$inlined_postC
 						.attr('id', '')

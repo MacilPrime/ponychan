@@ -22,8 +22,8 @@ $(document).ready(function(){
 		if ($(this).hasClass('post-inline') || $(this).hasClass('post-hover'))
 			return;
 		
-		$(this).find('.body a.postlink').each(function() {
-			var m = $(this).text().match(/^>>(\d+)$/);
+		$(this).find('a.bodylink.postlink').each(function() {
+			var m = $(this).text().match(/^>>(\d+)/);
 			if (!m) return;
 			var id = m[1];
 		
@@ -48,7 +48,7 @@ $(document).ready(function(){
 	}
 	
 	$('div.post.reply').each(showBackLinks);
-	$(document).bind('new_post', function(e, post) {
+	$(document).on('new_post', function(e, post) {
 		$(post).each(showBackLinks);
 	});
 });
