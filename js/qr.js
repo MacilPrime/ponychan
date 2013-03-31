@@ -8,8 +8,8 @@
  *
  */
 
-settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting", "Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.", 'posting', 1);
-settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", null, 'posting', 2);
+settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.", orderhint:1});
+settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});
 
 $(document).ready(function(){
 	var useFile = typeof FileReader != "undefined" && !!FileReader;
@@ -284,7 +284,7 @@ $(document).ready(function(){
 		$stickylabel.remove();
 	}
 	function init_mature_button() {
-		if( $oldForm.find("#mature").length == 0 || !settings.getProp("show_mature") )
+		if( $oldForm.find("#mature").length == 0 || !settings.getSetting("show_mature") )
 			$maturelabel.hide();
 		else
 			$maturelabel.show();
@@ -300,7 +300,7 @@ $(document).ready(function(){
 
 	// DOM setup over.
 
-	settings.bindPropCheckbox($QRToggleCheckbox, "use_QR");
+	settings.bindCheckbox($QRToggleCheckbox, "use_QR");
 
 	var use_QR;
 	var query = null;
@@ -926,7 +926,7 @@ $(document).ready(function(){
 				setQRFormDisabled(false);
 				if (data.status == 'success') {
 					QRcooldown(10);
-					if (settings.getProp("QR_persistent") || (replies.length > 1))
+					if (settings.getSetting("QR_persistent") || (replies.length > 1))
 						QR.clear();
 					else
 						QR.close();
@@ -973,14 +973,14 @@ $(document).ready(function(){
 	});
 
 	var QRInit = function() {
-		use_QR = settings.getProp("use_QR");
+		use_QR = settings.getSetting("use_QR");
 		if (use_QR) {
 			$oldForm.hide();
 			$QRButtonDiv.show();
 			citeReply = qrCiteReply;
 			if($captchaPuzzle.length)
 				stealCaptcha();
-			if (settings.getProp("QR_persistent"))
+			if (settings.getSetting("QR_persistent"))
 				QR.open();
 		} else {
 			QR.close();
