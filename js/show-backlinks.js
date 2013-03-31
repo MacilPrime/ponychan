@@ -13,15 +13,14 @@
  */
 
 $(document).ready(function(){
-	var showBackLinks = function() {
-		var reply_id = /\bpost_(\d+)\b/.exec( $(this).attr('class') )[1];
+	function showBackLinks() {
+		var reply_id = get_post_num( $(this) );
 		
-		if ($(this).hasClass('post-inline') || $(this).hasClass('post-hover')) {
-			if (window.init_hover) {
-				$(this).find('.mentioned a').each(init_hover);
-			}
+		if (window.init_postlink_hover)
+			$(this).find('.mentioned a').each(init_postlink_hover);
+		
+		if ($(this).hasClass('post-inline') || $(this).hasClass('post-hover'))
 			return;
-		}
 		
 		$(this).find('.body a.postlink').each(function() {
 			var m = $(this).text().match(/^>>(\d+)$/);
@@ -43,11 +42,10 @@ $(document).ready(function(){
 				reply_id + '</a>');
 			$mentioned.append(" ", $link);
 			
-			if (window.init_postlink_hover) {
+			if (window.init_postlink_hover)
 				$link.each(init_postlink_hover);
-			}
 		});
-	};
+	}
 	
 	$('div.post.reply').each(showBackLinks);
 	$(document).bind('new_post', function(e, post) {
