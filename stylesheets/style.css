@@ -185,6 +185,10 @@ div.post.reply .body {
 div.post.reply.highlighted {
 	background: #D6BAD0;
 }
+a.postlink {
+	word-wrap: normal;
+	white-space: nowrap;
+}
 a.bodylink {
 	color: #D00;
 }
