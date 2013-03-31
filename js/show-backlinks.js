@@ -13,47 +13,42 @@
  */
 
 $(document).ready(function(){
-	var showBackLinks = function() {
-		var reply_id = /\bpost_(\d+)\b/.exec( $(this).attr('class') )[1];
+	function showBackLinks() {
+		var reply_id = get_post_num( $(this) );
 		
-		if ($(this).hasClass('post-inline') || $(this).hasClass('post-hover')) {
-			if (window.init_hover) {
-				$(this).find('.mentioned a').each(init_hover);
-			}
+		if (window.init_postlink_hover)
+			$(this).find('.mentioned a').each(init_postlink_hover);
+		
+		if ($(this).hasClass('post-inline') || $(this).hasClass('post-hover'))
 			return;
-		}
 		
-		$(this).find('.body a:not([rel="nofollow"])').each(function() {
-			var id, post, $mentioned;
+		$(this).find('a.bodylink.postlink').each(function() {
+			var m = $(this).text().match(/^>>(\d+)/);
+			if (!m) return;
+			var id = m[1];
 		
-			if(id = $(this).text().match(/^>>(\d+)$/))
-				id = id[1];
-			else
-				return;
-		
-			$post = $('#reply_' + id);
+			var $post = $('#reply_' + id);
 			if($post.length == 0)
 				return;
 		
-			$mentioned = $post.find('.intro').first().find('.mentioned').first();
+			var $mentioned = $post.find('.intro').first().find('.mentioned').first();
 			if($mentioned.length == 0)
 				$mentioned = $('<span class="mentioned"></span>').appendTo($post.find('.intro').first());
 			
 			if ($mentioned.find('a.mentioned-' + reply_id).length != 0)
 				return;
 			
-			var $link = $('<a class="mentioned-' + reply_id + '" onclick="highlightReply(\'' + reply_id + '\');" href="#' + reply_id + '">&gt;&gt;' +
+			var $link = $('<a class="postlink backlink mentioned-' + reply_id + '" onclick="highlightReply(\'' + reply_id + '\');" href="#' + reply_id + '">&gt;&gt;' +
 				reply_id + '</a>');
 			$mentioned.append(" ", $link);
 			
-			if (window.init_hover) {
-				$link.each(init_hover);
-			}
+			if (window.init_postlink_hover)
+				$link.each(init_postlink_hover);
 		});
-	};
+	}
 	
 	$('div.post.reply').each(showBackLinks);
-	$(document).bind('new_post', function(e, post) {
+	$(document).on('new_post', function(e, post) {
 		$(post).each(showBackLinks);
 	});
 });

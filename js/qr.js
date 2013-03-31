@@ -8,8 +8,8 @@
  *
  */
 
-settings.newProp("use_QR", "bool", false, "Use Quick Reply dialog for posting", "Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.", 'posting', 1);
-settings.newProp("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", null, 'posting', 2);
+settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.", orderhint:1});
+settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});
 
 $(document).ready(function(){
 	var useFile = typeof FileReader != "undefined" && !!FileReader;
@@ -284,7 +284,7 @@ $(document).ready(function(){
 		$stickylabel.remove();
 	}
 	function init_mature_button() {
-		if( $oldForm.find("#mature").length == 0 || !settings.getProp("show_mature") )
+		if( $oldForm.find("#mature").length == 0 || !settings.getSetting("show_mature") )
 			$maturelabel.hide();
 		else
 			$maturelabel.show();
@@ -300,7 +300,7 @@ $(document).ready(function(){
 
 	// DOM setup over.
 
-	settings.bindPropCheckbox($QRToggleCheckbox, "use_QR");
+	settings.bindCheckbox($QRToggleCheckbox, "use_QR");
 
 	var use_QR;
 	var query = null;
@@ -364,12 +364,12 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	var prepSubmitButton = function() {
+	function prepSubmitButton() {
 		$submit.val( $oldForm.find("input[type='submit']").val() ).prop("disabled", false);
-	};
+	}
 	prepSubmitButton();
 	
-	var QRcooldown = function(time) {
+	function QRcooldown(time) {
 		if (time > 0) {
 			$submit.val(time).prop("disabled", true);
 			setTimeout(QRcooldown, 1000, time-1);
@@ -378,7 +378,7 @@ $(document).ready(function(){
 			if ($auto.is(":checked") && (selectedreply.comment || selectedreply.file))
 				$QRForm.submit();
 		}
-	};
+	}
 
 	if (!usewURL) {
 		$QRToggleImagesButton.hide();
@@ -493,11 +493,11 @@ $(document).ready(function(){
 		}
 	}
 	
-	var addReply = function() {
+	function addReply() {
 		selectedreply = new reply();
 		selectedreply.select();
 		replies.push(selectedreply);
-	};
+	}
 	
 	var selectedreply = null;
 	addReply();
@@ -602,13 +602,13 @@ $(document).ready(function(){
 			}
 		});
 
-	var getFileSizeString = function(size) {
+	function getFileSizeString(size) {
 		if (size < 1024)
 			return size + " B";
 		if (size < 1048576)
 			return (size/1024).toFixed(0) + " KB";
 		return (size/1048576).toFixed(2) + " MB";
-	};
+	}
 
 	$(document).keydown(function(event) {
 		if(event.which == 27) {
@@ -626,7 +626,7 @@ $(document).ready(function(){
 	});
 
 	var oldCiteReply = citeReply;
-	var qrCiteReply = function(id) {
+	function qrCiteReply(id) {
 		QR.open();
 
 		var cited = ">>"+id+"\n";
@@ -663,17 +663,17 @@ $(document).ready(function(){
 		}
 		$comment.focus();
 		$comment.trigger("input");
-	};
+	}
 
-	var stealCaptcha = function() {
+	function stealCaptcha() {
 		$QRCaptchaPuzzleImage
 			.css("visibility", "visible")
 			.attr("src", $captchaPuzzle.find("img").attr("src"));
 		$QRCaptchaChallengeField.val( $("#recaptcha_challenge_field").val() );
 		$QRCaptchaAnswer.val("").prop("disabled", false);
-	};
+	}
 
-	var stealFormHiddenInputs = function(context) {
+	function stealFormHiddenInputs(context) {
 		$(".QRhiddenInputs", $QRForm).remove();
 
 		$("input, textarea", context)
@@ -684,16 +684,16 @@ $(document).ready(function(){
 			.addClass("QRhiddenInputs")
 			.hide()
 			.appendTo($QRForm);
-	};
+	}
 	stealFormHiddenInputs($oldForm);
 
-	var QRrepair = function() {
+	function QRrepair() {
 		if($captchaPuzzle.length) {
 			$QRCaptchaPuzzleImage.css("visibility", "hidden");
 			$QRCaptchaAnswer.val("").prop("disabled", true);
 			Recaptcha.reload();
 		}
-	};
+	}
 
 	if($captchaPuzzle.length) {
 		stealCaptcha();
@@ -706,14 +706,14 @@ $(document).ready(function(){
 		Recaptcha.reload();
 	});
 
-	var checkNameDisable = function() {
+	function checkNameDisable() {
 		if ($oldName.length == 0)
 			$name.prop("disabled", true);
 		if ($oldEmail.length == 0)
 			$email.prop("disabled", true);
 		if ($oldSubject.length == 0)
 			$subject.prop("disabled", true);
-	};
+	}
 	checkNameDisable();
 
 	if ($oldName.length == 0)
@@ -723,11 +723,11 @@ $(document).ready(function(){
 	if ($oldSubject.length == 0)
 		$subject.remove();
 
-	var setQRFormDisabled = function(disabled) {
+	function setQRFormDisabled(disabled) {
 		$("input, textarea", $QRForm).prop("disabled", disabled);
 		if (!disabled)
 			checkNameDisable();
-	};
+	}
 
 	var stickDistance = 10;
 
@@ -741,7 +741,7 @@ $(document).ready(function(){
 	};
 	setTopY();
 
-	var positionQR = function(newX, newY) {
+	function positionQR(newX, newY) {
 		if(newX < stickDistance) {
 			$QR.css("left", 0).css("right", "");
 		} else if(newX + $QR.width() > $(window).width() - stickDistance) {
@@ -756,9 +756,9 @@ $(document).ready(function(){
 		} else {
 			$QR.css("top", newY).css("bottom", "").data('at top', false);
 		}
-	};
+	}
 
-	var loadQRposition = function() {
+	function loadQRposition() {
 		setTopY();
 		if(localStorage.qrX == null || localStorage.qrY == null)
 			return false;
@@ -773,9 +773,9 @@ $(document).ready(function(){
 		else
 			newY = parseInt(localStorage.qrY);
 		positionQR(newX, newY);
-	};
+	}
 
-	var saveQRposition = function() {
+	function saveQRposition() {
 		if($QR.css("right")=="0px")
 			localStorage.qrX = Infinity;
 		else
@@ -787,7 +787,7 @@ $(document).ready(function(){
 			localStorage.qrY = Infinity;
 		else
 			localStorage.qrY = parseInt($QR.css("top"));
-	};
+	}
 
 	$QRmove.mousedown(function(event) {
 		if(event.which != 1)
@@ -926,7 +926,7 @@ $(document).ready(function(){
 				setQRFormDisabled(false);
 				if (data.status == 'success') {
 					QRcooldown(10);
-					if (settings.getProp("QR_persistent") || (replies.length > 1))
+					if (settings.getSetting("QR_persistent") || (replies.length > 1))
 						QR.clear();
 					else
 						QR.close();
@@ -972,15 +972,15 @@ $(document).ready(function(){
 		return false;
 	});
 
-	var QRInit = function() {
-		use_QR = settings.getProp("use_QR");
+	function QRInit() {
+		use_QR = settings.getSetting("use_QR");
 		if (use_QR) {
 			$oldForm.hide();
 			$QRButtonDiv.show();
 			citeReply = qrCiteReply;
 			if($captchaPuzzle.length)
 				stealCaptcha();
-			if (settings.getProp("QR_persistent"))
+			if (settings.getSetting("QR_persistent"))
 				QR.open();
 		} else {
 			QR.close();
@@ -988,7 +988,7 @@ $(document).ready(function(){
 			$QRButtonDiv.hide();
 			citeReply = oldCiteReply;
 		}
-	};
+	}
 
 	QRInit();
 	$(document).on("setting_change", function(e, setting) {

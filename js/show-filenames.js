@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var filename_expander = function(context) {
+	function filename_expander(context) {
 		$(".postfilename[title], .postfilename[data-fn-fullname]", context).each(function() {
 			var $fn = $(this);
 			var shortname = $fn.attr("data-fn-shortname") || $fn.text();
@@ -15,10 +15,10 @@ $(document).ready(function() {
 					$fn.text(shortname);
 				});
 		});
-	};
-
+	}
+	
 	filename_expander(document);
-	$(document).bind('new_post', function(e, post) {
+	$(document).on('new_post.showfn', function(e, post) {
 		filename_expander(post);
 	});
 });

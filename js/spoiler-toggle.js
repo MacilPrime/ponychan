@@ -8,23 +8,29 @@
  *
  */
 
-settings.newProp("reveal_spoilers", "bool", false, "Reveal spoilers", null, 'pagestyle', 2);
+settings.newSetting("reveal_spoilers", "bool", false, "Reveal spoilers", 'pagestyle', {orderhint: 2});
 
 $(document).ready(function() {
-	var processSpoilers = function(context) {
-		if(settings.getProp("reveal_spoilers"))
+	var reveal_spoilers;
+	
+	function processSpoilers(context) {
+		if(reveal_spoilers)
 			$(".spoiler", context).css("color", "white");
 		else
 			$(".spoiler", context).css("color", "");
 	}
-
-	processSpoilers(document);
-
+	
+	function init() {
+		reveal_spoilers = settings.getSetting("reveal_spoilers");
+		processSpoilers(document);
+	}
+	init();
+	
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "reveal_spoilers")
-			processSpoilers(document);
+			init();
 	});
-
+	
 	$(document).on('new_post', function(e, post) {
 		processSpoilers(post);
 	});

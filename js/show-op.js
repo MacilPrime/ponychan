@@ -14,34 +14,61 @@
  */
 
 $(document).ready(function(){
-	var showOPLinks = function() {
-		var OP;
+	var myposts = [];
+	function loadMyPosts() {
+		if (window.sessionStorage && sessionStorage.myposts)
+			myposts = JSON.parse(sessionStorage.myposts);
+	}
+	function saveMyPosts() {
+		if (window.sessionStorage)
+			sessionStorage.myposts = JSON.stringify(myposts);
+	}
+	loadMyPosts();
+	
+	function descLinks() {
+		var $thread;
+		if ($(this).hasClass('thread'))
+			$thread = $(this);
+		else
+			$thread = $(this).parents('.thread').first();
 		
-		if ($('div.banner').length == 0) {
-			OP = $(this).parent().find('div.post.op a.post_no:eq(1)').text();
-		} else {
-			OP = $('div.post.op a.post_no:eq(1)').text();
+		if (!$thread.length) {
+			if ($('.thread').length == 1)
+				$thread = $('.thread');
+			else
+				return;
 		}
 		
-		$(this).find('.body a:not([rel="nofollow"])').each(function() {
-			var postID;
+		var $OP = $thread.find('div.post.op');
+		var OP = get_post_num($OP);
+		var board = get_post_board($OP);
+		
+		$(this).find('a.bodylink.postlink').each(function() {
+			var postnum;
 			
-			if(postID = $(this).text().match(/^>>(\d+)$/))
-				postID = postID[1];
+			if(postnum = $(this).text().match(/^>>(\d+)/))
+				postnum = parseInt(postnum[1]);
 			else
 				return;
 			
-			if (postID == OP && !$(this).next().is(".opnote")) {
-				$(this).after(' <small class="opnote">(OP)</small>');
+			if (postnum == OP && !$(this).hasClass("opnote")) {
+				$(this).addClass('opnote').text( $(this).text()+' (OP)');
+			}
+			
+			var postid = board+':'+postnum;
+			if (myposts.indexOf(postid) != -1 && !$(this).hasClass("younote")) {
+				$(this).addClass('younote').text( $(this).text()+' (You)');
 			}
 		});
-	};
+	}
 	
-	$('div.post.reply').each(showOPLinks);
+	$('.thread').each(descLinks);
 	
-	// allow to work with auto-reload.js, etc.
-	$(document).bind('new_post', function(e, post) {
-		$(post).each(showOPLinks);
+	$(document).on('new_post', function(e, post) {
+		$(post).each(descLinks);
+	}).on('post_submitted', function(e, info) {
+		loadMyPosts();
+		myposts.push(info.board+':'+info.postid);
+		saveMyPosts();
 	});
 });
-

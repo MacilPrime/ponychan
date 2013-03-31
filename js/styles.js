@@ -8,38 +8,41 @@
  *
  */
 
-var styleChoices = {};
-$.each(styles, function(name, file) {
-	styleChoices[name] = name;
-});
-
-settings.newProp("style", "select", selectedstyle, [styleChoices, "Style"], null, 'pagestyle', 1);
-
-var Styles = {};
-Styles.apply = function(stylename) {
-	if (styles[stylename] == null) {
-		console.log('Unknown style:', stylename);
-		return;
+(function(exports) {
+	var styleChoices = {};
+	$.each(styles, function(name, file) {
+		styleChoices[name] = name;
+	});
+	
+	settings.newSetting("style", "select", selectedstyle, "Style", 'pagestyle',
+			    {orderhint: 1, selectOptions: styleChoices});
+	
+	function apply(stylename) {
+		if (styles[stylename] == null) {
+			console.log('Unknown style:', stylename);
+			return;
+		}
+		var $stylesheet = $("#stylesheet");
+		if ($stylesheet.length == 0) {
+			$stylesheet = $("<link/>")
+				.attr("rel", "stylesheet")
+				.attr("type", "text/css")
+				.attr("id", "stylesheet")
+				.appendTo(document.head);
+		}
+		$stylesheet.attr("href", styles[stylename]);
+		$(document).trigger('style_changed', $stylesheet[0]);
 	}
-	var $stylesheet = $("#stylesheet");
-	if ($stylesheet.length == 0) {
-		$stylesheet = $("<link/>")
-			.attr("rel", "stylesheet")
-			.attr("type", "text/css")
-			.attr("id", "stylesheet")
-			.appendTo(document.head);
+	exports.apply = apply;
+	
+	function applySelectedStyle() {
+		apply(settings.getSetting("style"));
 	}
-	$stylesheet.attr("href", styles[stylename]);
-	$(document).trigger('style_changed', $stylesheet[0]);
-}
-
-var applySelectedStyle = function() {
-	Styles.apply(settings.getProp("style"));
-};
-
-applySelectedStyle();
-$(document).on("setting_change", function(e, setting) {
-	if (setting == "style") {
-		applySelectedStyle();
-	}
-});
+	
+	applySelectedStyle();
+	$(document).on("setting_change", function(e, setting) {
+		if (setting === "style") {
+			applySelectedStyle();
+		}
+	});
+})(window.styles||(window.styles={}));

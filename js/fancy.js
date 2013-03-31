@@ -9,17 +9,17 @@
  *
  */
 
-settings.newProp("fancy_mode", "bool", false, "Fancy mode", null, 'pagestyle');
+settings.newSetting("fancy_mode", "bool", false, "Fancy mode", 'pagestyle', {orderhint:20});
 
 $(document).ready(function(){
-	var fancy_mode = settings.getProp("fancy_mode");
+	var fancy_mode = settings.getSetting("fancy_mode");
 	var show_fancy = false;
 	var fancy_pends = [];
 	init_fancy_option();
 	
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "fancy_mode") {
-			fancy_mode = settings.getProp("fancy_mode");
+			fancy_mode = settings.getSetting("fancy_mode");
 			init_fancy_option();
 			cancelFancyPends();
 			fancify(document);
