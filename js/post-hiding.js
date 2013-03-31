@@ -7,9 +7,9 @@
  *
  */
 
-settings.newProp("show_mature", "bool", false, "Show mature content threads", "Only available on certain boards", 'filters', 1);
-settings.newProp("mature_as_spoiler", "bool", true, "Treat mature content images as spoilered images", null, 'filters', 2);
-settings.newProp("show_hide_buttons", "bool", true, "Show post hiding buttons", null, 'filters', 3);
+settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {moredetails:"Only available on certain boards", orderhint:1});
+settings.newSetting("mature_as_spoiler", "bool", true, "Treat mature content images as spoilered images", 'filters', {orderhint:2});
+settings.newSetting("show_hide_buttons", "bool", true, "Show post hiding buttons", 'filters', {orderhint:3});
 
 $(document).ready(function(){
 	function init_hide_style() {
@@ -20,7 +20,7 @@ $(document).ready(function(){
 				.attr("type", "text/css")
 				.appendTo(document.head);
 		}
-		if (settings.getProp("show_hide_buttons")) {
+		if (settings.getSetting("show_hide_buttons")) {
 			$hide_style.text("");
 		} else {
 			$hide_style.text(".postHider { display: none; }");
@@ -30,7 +30,7 @@ $(document).ready(function(){
 	
 	function init_mature() {
 		var expires = new Date();
-		if (settings.getProp("show_mature")) {
+		if (settings.getSetting("show_mature")) {
 			expires.setTime((new Date).getTime()+60480000000)
 			document.cookie = "show_mature=true; expires="+expires.toGMTString()+"; path="+siteroot;
 			
@@ -51,7 +51,7 @@ $(document).ready(function(){
 		$("img[data-mature-src]", context).each(function() {
 			var $img = $(this);
 			
-			if (!settings.getProp("mature_as_spoiler")) {
+			if (!settings.getSetting("mature_as_spoiler")) {
 				if ($img.attr("data-spoiler-src") == undefined)
 					$img.attr("data-spoiler-src", $img.attr("src"));
 				$img.attr("src", $img.attr("data-mature-src"));
@@ -72,7 +72,7 @@ $(document).ready(function(){
 
 	var ofAge = false;
 	function switch_mature() {
-		if (settings.getProp("show_mature")) {
+		if (settings.getSetting("show_mature")) {
 			if (localStorage.getItem("ofAge") == "true") {
 				ofAge = true;
 			}
@@ -83,7 +83,7 @@ $(document).ready(function(){
 						localStorage.setItem("ofAge", "true");
 					} catch(e) {}
 				} else {
-					settings.setProp("show_mature", false);
+					settings.setSetting("show_mature", false);
 				}
 			}
 		}
@@ -91,7 +91,7 @@ $(document).ready(function(){
 	}
 
 	function switch_mature_as_spoiler() {
-		if (settings.getProp("show_mature")) {
+		if (settings.getSetting("show_mature")) {
 			prep_mature_images(document.body);
 		}
 	}
@@ -204,7 +204,7 @@ $(document).ready(function(){
 		$posts.each(function() {
 			var $post = $(this);
 
-			if ($post.hasClass("mature_post") && settings.getProp("show_mature")) {
+			if ($post.hasClass("mature_post") && settings.getSetting("show_mature")) {
 				prep_mature_images($post);
 			}
 			
@@ -235,7 +235,7 @@ $(document).ready(function(){
 					threads_needed++;
 				do_hide_post($pc);
 			} else {
-				if ($pc.hasClass("opContainer") && $thread.hasClass("mature_thread") && !settings.getProp("show_mature"))
+				if ($pc.hasClass("opContainer") && $thread.hasClass("mature_thread") && !settings.getSetting("show_mature"))
 					threads_needed++;
 				else if ($pc.hasClass("opContainer") && $thread.attr("data-loaded-late"))
 					threads_needed--;
@@ -268,7 +268,7 @@ $(document).ready(function(){
 							return;
 
 						// If it's a mature thread and we can't view those, skip it.
-						if ($thread.hasClass("mature_thread") && !settings.getProp("show_mature"))
+						if ($thread.hasClass("mature_thread") && !settings.getSetting("show_mature"))
 							return;
 						
 						$thread.attr("data-loaded-late", true);

@@ -13,13 +13,13 @@
 	if(navigator.userAgent.match(/iPhone|iPod|Android|Opera Mini|Blackberry|PlayBook/i)) {
 		defval = false;
 	}
-	settings.newProp("fixed_navbar", "bool", defval, "Navbar stays at the top of the window", null, 'pagestyle', 3);
+	settings.newSetting("fixed_navbar", "bool", defval, "Navbar stays at the top of the window", 'pagestyle', {orderhint:3});
 })();
 
 $(document).ready(function(){
 	var navbarApplySettings = function() {
 		var $navbar = $(".boardlist.top");
-		if (settings.getProp("fixed_navbar")) {
+		if (settings.getSetting("fixed_navbar")) {
 			$navbar.css("position", "fixed");
 		} else {
 			$navbar.css("position", "absolute");

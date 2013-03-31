@@ -55,7 +55,7 @@ $(document).ready(function(){
 			return;
 
 		var $newpostC;
-		if (!settings.getProp("show_mature") && $postC.parents(".thread").first().hasClass("mature_thread"))
+		if (!settings.getSetting("show_mature") && $postC.parents(".thread").first().hasClass("mature_thread"))
 			$newpostC = make_mature_warning_postC(id);
 		else
 			var $newpostC = $postC.clone();
@@ -134,7 +134,7 @@ $(document).ready(function(){
 				if ($post.length == 0)
 					return false;
 
-				if (!settings.getProp("show_mature") && $post.parents(".thread").first().hasClass("mature_thread"))
+				if (!settings.getSetting("show_mature") && $post.parents(".thread").first().hasClass("mature_thread"))
 					$post = make_mature_warning_postC().find(".post");
 
 				if (hovering) {
@@ -215,7 +215,7 @@ $(document).ready(function(){
 				if ($postC.length == 0)
 					return false;
 
-				if (!settings.getProp("show_mature") && $postC.parents(".thread").first().hasClass("mature_thread"))
+				if (!settings.getSetting("show_mature") && $postC.parents(".thread").first().hasClass("mature_thread"))
 					$postC = make_mature_warning_postC();
 
 				if ($link.hasClass('inlined')) {

@@ -36,12 +36,12 @@ $(document).ready(function(){
 	try {
 		var old = localStorage.event_nightmare_old_style;
 		if (old) {
-			if (settings.getProp("style") == "Nightmare" && old != "Nightmare") {
+			if (settings.getSetting("style") == "Nightmare" && old != "Nightmare") {
 				console.log("Resetting to pre-Nightmare style");
 				if (old == "null")
-					settings.setProp("style", null);
+					settings.setSetting("style", null);
 				else
-					settings.setProp("style", old);
+					settings.setSetting("style", old);
 				
 				var $navbar = $(".boardlist.top").first();
 				var $notice = $("<div/>")

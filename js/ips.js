@@ -1,7 +1,7 @@
-settings.newProp("mod_obscure_ips", "bool", false, "Obscure user IP addresses", null, 'mod', 1);
+settings.newSetting("mod_obscure_ips", "bool", false, "Obscure user IP addresses", 'mod', {orderhint:1});
 
 $(document).ready(function() {
-	var obscure_ips = settings.getProp("mod_obscure_ips");
+	var obscure_ips = settings.getSetting("mod_obscure_ips");
 	
 	function getIPfromlink($a) {
 		var m = /\?\/IP\/(.*)$/.exec($a.attr('href'));
@@ -36,7 +36,7 @@ $(document).ready(function() {
 
 	$(document).on("setting_change", function(e, setting) {
 		if (setting === "mod_obscure_ips") {
-			obscure_ips = settings.getProp("mod_obscure_ips");
+			obscure_ips = settings.getSetting("mod_obscure_ips");
 			processIPs(document);
 		}
 	});
