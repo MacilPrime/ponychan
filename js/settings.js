@@ -42,7 +42,6 @@
 	function showWindow() {
 		$settingsOverlay.show();
 		$settingsScreen.fadeIn("fast");
-		$(document.body).css("overflow", "hidden");
 	}
 	exports.showWindow = showWindow;
 	
