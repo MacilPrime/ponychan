@@ -14,7 +14,7 @@
 	
 	function loadMyPosts() {
 		if (window.sessionStorage && sessionStorage.myposts)
-			myposts = JSON.parse(sessionStorage.myposts);
+			exports.myposts = myposts = JSON.parse(sessionStorage.myposts);
 	}
 	function saveMyPosts() {
 		if (window.sessionStorage)
