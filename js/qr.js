@@ -950,7 +950,7 @@ $(document).ready(function(){
 						$QRwarning.text(data.message);
 					} else if (data.error == 'ban') {
 						var pageState = {title: 'Ban', banpage: data.banhtml};
-						newState(pageState);
+						state.newState(pageState);
 					} else {
 						$QRwarning.text('Unknown error: '+data.error);
 					}
