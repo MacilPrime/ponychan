@@ -272,8 +272,8 @@ function checkSpam(array $extra_salt = array()) {
 			$logdata['action'] = 'hash_failure';
 
 			$logdata['inputs_given'] = $inputs;
-			$logdata['hash_given'] = $hash;
-			$logdata['hash_expected'] = $_hash;
+			$logdata['hash_given'] = $_hash;
+			$logdata['hash_expected'] = $hash;
 			
 			$logline = json_encode($logdata);
 			logToFile($config['antibot_log'], $logline);
