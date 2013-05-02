@@ -986,7 +986,7 @@ if (isset($_POST['delete'])) {
 			$js = (object) array();
 		// Tell the client it doesn't need to remember the post
 		$thread_id = $board['uri'] . ':' . ($post['op'] ? 0 : $post['thread']);
-		$js->{$thread_id} = true;
+		$js->{$thread_id} = intval($id);
 		// Encode and set cookie
 		setcookie($config['cookies']['js'], json_encode($js), 0, $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, false);
 	}

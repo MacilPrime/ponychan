@@ -112,8 +112,23 @@ function rememberStuff() {
 			if (get_cookie(cookiename)) {
 				// Remove successful posts
 				var successful = JSON.parse(get_cookie(cookiename));
-				for (var url in successful) {
-					delete saved[url];
+				for (var id in successful) {
+					delete saved[id];
+					if (successful[id] !== true) {
+						var split = id.split(":");
+						var postid = successful[id];
+						var threadid = (split[1] == 0) ? null : parseInt(split[1]);
+						var board = split[0];
+						if (postlinkinfo.myposts.indexOf(board+":"+postid) == -1) {
+							var url = make_thread_url(board, (threadid == null) ? postid : threadid);
+							$(document).trigger('post_submitted', {
+								postid: postid,
+								threadid: threadid,
+								board: board,
+								url: url
+							});
+						}
+					}
 				}
 				sessionStorage.body = JSON.stringify(saved);
 			}
