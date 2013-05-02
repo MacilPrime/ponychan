@@ -8,7 +8,7 @@
  */
 
 (function(exports) {
-	settings.newSetting("reply_notify", "bool", true, "Reply Notifier", 'links', {orderhint:7, moredetails:"Alert you when a post by you in a thread you're viewing is replied to. Requires Quick Reply dialog to work."});
+	settings.newSetting("reply_notify", "bool", true, "Reply Notifier Sound", 'links', {orderhint:7, moredetails:"Audibly alert you when a post by you in a thread you're viewing is replied to. Requires Quick Reply dialog to work."});
 	
 	var $au;
 	function prepareNotifySound() {
@@ -77,15 +77,14 @@
 	}
 	
 	function notifyCheck($post) {
-		if (!settings.getSetting("reply_notify"))
-			return;
 		// Only run for actually new autoloaded posts
 		if ($post.is(".preview-hidden, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
 			return;
 		if ($post.find('.younote').length == 0)
 			return;
 		// Okay, this post is a brand new reply to you
-		playSound();
+		if (settings.getSetting("reply_notify"))
+			playSound();
 		$unseenPosts = $unseenPosts.add($post);
 		updateTitle();
 	}
