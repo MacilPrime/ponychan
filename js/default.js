@@ -121,11 +121,6 @@ function rememberStuff() {
 		if (get_cookie(cookiename)) {
 			document.cookie = cookiename+'={};expires=0;path='+cookiepath+';';
 		}
-		
-		if (localStorage.body) {
-			document.forms.post.body.value = localStorage.body;
-			localStorage.body = '';
-		}
 	}
 }
 
