@@ -984,8 +984,9 @@ if (isset($_POST['delete'])) {
 			$js = json_decode($_COOKIE[$config['cookies']['js']]);
 		else
 			$js = (object) array();
-		// Tell it to delete the cached post for referer
-		$js->{$_SERVER['HTTP_REFERER']} = true;
+		// Tell the client it doesn't need to remember the post
+		$thread_id = $board['uri'] . ':' . ($post['op'] ? 0 : $post['thread']);
+		$js->{$thread_id} = true;
 		// Encode and set cookie
 		setcookie($config['cookies']['js'], json_encode($js), 0, $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, false);
 	}

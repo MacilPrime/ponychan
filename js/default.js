@@ -52,8 +52,6 @@ function generatePassword() {
 	return pass;
 }
 
-var saved = {};
-
 function dopost(form) {
 	if (form.elements['name']) {
 		localStorage.name = form.elements['name'].value.replace(/ ##.+$/, '');
@@ -62,7 +60,13 @@ function dopost(form) {
 		localStorage.email = form.elements['email'].value;
 	}
 	
-	saved[document.location] = form.elements['body'].value;
+	var saved;
+	if (sessionStorage.body)
+		saved = JSON.parse(sessionStorage.body);
+	else
+		saved = {};
+	
+	saved[board_id+":"+thread_id] = form.elements['body'].value;
 	sessionStorage.body = JSON.stringify(saved);
 	
 	return form.elements['body'].value != "" || form.elements['file'].value != "";
@@ -109,11 +113,11 @@ function rememberStuff() {
 				// Remove successful posts
 				var successful = JSON.parse(get_cookie(cookiename));
 				for (var url in successful) {
-					saved[url] = null;
+					delete saved[url];
 				}
 				sessionStorage.body = JSON.stringify(saved);
 			}
-			if (saved[document.location]) {
+			if (saved[board_id+":"+thread_id]) {
 				document.forms.post.body.value = saved[document.location];
 			}
 		}
@@ -124,27 +128,26 @@ function rememberStuff() {
 	}
 }
 
-function init() {
+$(document).ready(function init() {
 	if (document.forms.postcontrols) {
 		document.forms.postcontrols.password.value = localStorage.password;
 	}
 	
 	if (window.location.hash.indexOf('q') != 1 && window.location.hash.substring(1))
 		highlightReply(window.location.hash.substring(1));
-}
+});
 
+var board_id = null;
+var thread_id = null;
 (function() {
-	var path_board_regex = new RegExp(siteroot+"([^/]+)/");
-	board_id = null;
-	var reg_result = path_board_regex.exec(document.location.pathname);
+	var path_board_regex = new RegExp("^"+siteroot+"(?:mod\\.php\\?/)?([^/]+)/(?:res/([0-9]+))?");
+	var reg_result = path_board_regex.exec(document.location.pathname+document.location.search);
 	if (reg_result) {
 		board_id = reg_result[1];
-	} else {
-		var href_board_regex = new RegExp("\\?/([^/]+)/");
-		reg_result = href_board_regex.exec(document.location.href);
-		if (reg_result) {
-			board_id = reg_result[1];
-		}
+		if (reg_result[2] === undefined)
+			thread_id = 0;
+		else
+			thread_id = parseInt(reg_result[2]);
 	}
 })();
 
@@ -215,5 +218,3 @@ $(document).on('new_post', function(e, post) {
 var RecaptchaOptions = {
 	theme : 'clean'
 };
-
-$(document).ready(init);
