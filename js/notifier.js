@@ -43,7 +43,13 @@
 				$(window).off('scroll.notifier');
 			}
 		} else {
-			titlebar.setTitleFlash('notifier', '('+$unseenPosts.length+' replies)');
+			var replymsg;
+			if ($unseenPosts.length == 1)
+				replymsg = 'reply';
+			else
+				replymsg = 'replies';
+			
+			titlebar.setTitleFlash('notifier', '('+$unseenPosts.length+' '+replymsg+')');
 			if (!scrollHandlerInstalled) {
 				scrollHandlerInstalled = true;
 				$(window).on('scroll.notifier', function(event) {
