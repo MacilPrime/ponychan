@@ -8,7 +8,7 @@
  */
 
 (function(exports) {
-	settings.newSetting("reply_notify", "bool", true, "Reply Notifier Sound", 'links', {orderhint:7, moredetails:"Audibly alert you when a post by you in a thread you're viewing is replied to. Requires Quick Reply dialog to work."});
+	settings.newSetting("reply_notify", "bool", true, "Reply Notifier Sound", 'links', {orderhint:7, moredetails:"Audibly alert you when a post by you in a thread you're viewing is replied to."});
 	
 	var $au;
 	function prepareNotifySound() {

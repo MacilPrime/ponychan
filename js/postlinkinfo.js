@@ -7,7 +7,7 @@
  */
 
 (function(exports) {
-	settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6, moredetails:"Requires Quick Reply dialog to work."});
+	settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6});
 	
 	var myposts = [];
 	exports.myposts = myposts;
