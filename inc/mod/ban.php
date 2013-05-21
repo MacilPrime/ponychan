@@ -56,6 +56,10 @@ function parse_time($str) {
 function ban($mask, $reason, $length, $board) {
 	global $mod, $pdo;
 	
+	if(mb_strlen(trim($reason)) == 0) {
+		error('Reason must be given for ban!');
+	}
+	
 	if (strpos($mask, '*') !== FALSE)
 		$type = 1;
 	elseif (strpos($mask, '/') !== FALSE)
