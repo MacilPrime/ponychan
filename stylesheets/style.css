@@ -780,6 +780,10 @@ header { margin-top: 48px; }
 .post-inline .postHider, .post-hover .postHider {
 	display: none;
 }
+.zam_rating_critical {
+	color: red;
+	font-weight: bold;
+}
 .boardlist.top .watcherButton.open {
 	background: #404040;
 }
