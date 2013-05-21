@@ -11,7 +11,9 @@
 		{% endif %}
 		{% if post.email|length > 0 %}
 			{# start email #}
-			<a class="email" href="mailto:{{ post.email }}">
+			<a class="email namepart" href="mailto:{{ post.email }}">
+		{% else %}
+			<span class="namepart">
 		{% endif %}
 		{% set capcode = post.capcode|capcode %}
 		<span {% if capcode.name %}style="{{ capcode.name }}" {% endif %}class="name">{{ post.name|bidi_cleanup }}</span>
@@ -21,6 +23,8 @@
 		{% if post.email|length > 0 %}
 			{# end email #}
 			</a>
+		{% else %}
+			</span>
 		{% endif %}
 		{% if capcode %}
 			{{ capcode.cap }}
