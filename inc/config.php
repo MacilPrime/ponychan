@@ -593,6 +593,7 @@
 	$config['stylesheets']['Nightmare'] = 'nightmare.css';
 	$config['stylesheets']['Australian'] = 'Australian.css';
 	$config['stylesheets']['Chrysalis'] = 'Queen.css';
+	$config['stylesheets']['Tomorrow'] = 'Tomorrow.css';
 	
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/
 	// $config['uri_stylesheets'] = 'http://static.example.org/stylesheets/';
