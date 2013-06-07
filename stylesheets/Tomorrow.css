@@ -75,13 +75,15 @@ div.pages {
 }
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
     font-size: 14px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
     color: rgb(75, 90, 110);
 }
 .boardlist.top .boardlistpart a[href="/"] {
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
