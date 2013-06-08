@@ -8,7 +8,7 @@
  *
  */
 
-settings.newSetting("reveal_spoilers", "bool", false, "Reveal spoilers", 'pagestyle', {orderhint: 2});
+settings.newSetting("reveal_spoilers", "bool", false, "Reveal spoiler text", 'pagestyle', {orderhint: 2});
 
 $(document).ready(function() {
 	var reveal_spoilers;
