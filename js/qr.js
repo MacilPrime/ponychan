@@ -8,7 +8,7 @@
  *
  */
 
-settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Shift+I is the quick keyboard shortcut.", orderhint:1});
+settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Q is the quick keyboard shortcut.", orderhint:1});
 settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});
 
 $(document).ready(function(){
@@ -611,15 +611,19 @@ $(document).ready(function(){
 	}
 
 	$(document).keydown(function(event) {
+		if(!use_QR || event.ctrlKey || event.metaKey || event.altKey)
+			return true;
+		
 		if(event.which == 27) {
 			QR.close();
 			return false;
 		}
-
+		
 		if(/TEXTAREA|INPUT/.test(event.target.nodeName))
 			return true;
 
-		if(event.which == 73 && event.shiftKey && use_QR) {
+		if((event.which == 81 && !event.shiftKey) ||
+		   (event.which == 73 && event.shiftKey)) {
 			QR.open();
 			return false;
 		}
