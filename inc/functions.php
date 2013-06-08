@@ -829,13 +829,13 @@ function post(array $post) {
 	$query->bindValue(':password', $post['password']);		
 	$query->bindValue(':ip', isset($post['ip']) ? $post['ip'] : $_SERVER['REMOTE_ADDR']);
 	
-	if ($post['op'] && $post['sticky']) {
+	if ($post['op'] && isset($post['sticky']) && $post['sticky']) {
 		$query->bindValue(':sticky', 1, PDO::PARAM_INT);
 	} else {
 		$query->bindValue(':sticky', 0, PDO::PARAM_INT);
 	}
 	
-	if ($post['op'] && $post['locked']) {
+	if ($post['op'] && isset($post['locked']) && $post['locked']) {
 		$query->bindValue(':locked', 1, PDO::PARAM_INT);
 	} else {
 		$query->bindValue(':locked', 0, PDO::PARAM_INT);
