@@ -51,11 +51,11 @@
 	);
 	
 	// Unique function name for building everything
-	$theme['build_function'] = 'basic_build';
-	$theme['install_callback'] = 'build_install';
+	$theme['build_function'] = 'mlpchan_build';
+	$theme['install_callback'] = 'mlpchan_install';
 
-	if (!function_exists('build_install')) {
-		function build_install($settings) {
+	if (!function_exists('mlpchan_install')) {
+		function mlpchan_install($settings) {
 			if (!is_numeric($settings['no_recent']) || $settings['no_recent'] < -1)
 				return Array(false, '<strong>' . utf8tohtml($settings['no_recent']) . '</strong> is not an integer >= -1.');
 			if (!is_numeric($settings['limit_posts']) || $settings['limit_posts'] < 0)

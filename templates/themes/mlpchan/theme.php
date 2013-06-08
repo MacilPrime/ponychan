@@ -1,7 +1,7 @@
 <?php
 	require 'info.php';
 	
-	function basic_build($action, $settings) {
+	function mlpchan_build($action, $settings) {
 		// Possible values for $action:
 		//	- all (rebuild everything, initialization)
 		//	- news (news has been updated)
