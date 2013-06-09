@@ -286,14 +286,17 @@ $(document).ready(function(){
 	}
 
 	function place_button($post) {
-		var $hider = $post.children(".postHider");
+		var $hider = $post.find(".postHider");
 		if (!$hider.length) {
 			$hider = $("<span/>")
 				.addClass("postHider");
-			if ($post.hasClass('op'))
-				$post.children('.fileinfo').prepend($hider, ' ');
-			else
+			if ($post.hasClass('op')) {
+				var $post_fi = $post.find('.fileinfo');
+				var $target = ($post_fi.length) ? $post_fi : $post.find('.intro');
+				$target.prepend($hider, ' ');
+			} else {
 				$post.prepend($hider);
+			}
 		}
 		var $hide_button = $hider.find("a");
 		if (!$hide_button.length) {
