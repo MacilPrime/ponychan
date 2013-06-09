@@ -838,7 +838,7 @@ $(document).ready(function(){
 		}
 
 		if (this.elements['name']) {
-			localStorage.name = this.elements['name'].value.replace(/ ##.+$/, '');
+			localStorage.name = this.elements['name'].value.replace(/( |^)## .+$/, '');
 		}
 		if (this.elements['email'] && this.elements['email'].value != 'sage') {
 			localStorage.email = this.elements['email'].value;
