@@ -777,6 +777,8 @@ header { margin-top: 48px; }
 /* for OP posts without a file */
 .intro .postHider {
 	float: left;
+	margin-left: -5px;
+	margin-right: 4px;
 }
 .postHider a {
 	text-decoration: none;
