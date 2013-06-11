@@ -30,8 +30,11 @@
 				$(document.body).append($banbody);
 				demogrifyEl($banbody);
 			} else {
-				$('.ban-hidden').removeClass('ban-hidden');
-				$('.ban').remove();
+				var $bh = $('.ban-hidden');
+				if ($bh.length) {
+					$bh.removeClass('ban-hidden');
+					$('.ban').remove();
+				}
 			}
 		});
 	}
