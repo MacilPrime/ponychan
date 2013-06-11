@@ -132,8 +132,9 @@ function rememberStuff() {
 				}
 				sessionStorage.body = JSON.stringify(saved);
 			}
-			if (saved[board_id+":"+thread_id]) {
-				document.forms.post.body.value = saved[document.location];
+			var thisBody = saved[board_id+":"+thread_id];
+			if (thisBody) {
+				document.forms.post.body.value = thisBody;
 			}
 		}
 		
