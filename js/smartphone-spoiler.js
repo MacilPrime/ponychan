@@ -14,10 +14,15 @@
 $(document).ready(function(){
 	if(navigator.userAgent.match(/iPhone|iPod|iPad|Android|Opera Mini|Blackberry|PlayBook/i)) {
 		function init_spoiler_show() {
-			$(this).click(function() {
-				$(this).css("color", "white");
+			$(this).click(function(event) {
+				var $this = $(this);
+				if (!$this.hasClass("spoiler-force-color")) {
+					$this.add( $this.find("*") ).addClass("spoiler-force-color");
+					event.preventDefault();
+				}
 			});
 		};
+		$(".spoiler-force-color").removeClass("spoiler-force-color");
 		$(".spoiler").each(init_spoiler_show);
 		$(document).on('new_post', function(e, post) {
 			$(post).find(".spoiler").each(init_spoiler_show);

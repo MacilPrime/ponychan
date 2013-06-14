@@ -15,9 +15,9 @@ $(document).ready(function() {
 	
 	function processSpoilers(context) {
 		if(reveal_spoilers)
-			$(".spoiler", context).css("color", "white");
+			$(".spoiler, .spoiler *", context).addClass("spoiler-force-color");
 		else
-			$(".spoiler", context).css("color", "");
+			$(".spoiler, .spoiler *", context).removeClass("spoiler-force-color");
 	}
 	
 	function init() {

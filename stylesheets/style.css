@@ -273,8 +273,8 @@ span.heading {
 div.post .body .spoiler a {
 	color: black;
 }
-.spoiler:hover, div.post .body .spoiler:hover a {
-	color: white;
+.spoiler:hover, div.post .body .spoiler:hover a, .spoiler-force-color {
+	color: white !important;
 }
 .hidetogglebutton {
 	width: 4em;
