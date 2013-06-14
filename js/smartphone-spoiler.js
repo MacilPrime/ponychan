@@ -22,7 +22,8 @@ $(document).ready(function(){
 				}
 			});
 		};
-		$(".spoiler-force-color").removeClass("spoiler-force-color");
+		// Handled by spoiler-toggle.js
+		// $(".spoiler-force-color").removeClass("spoiler-force-color");
 		$(".spoiler").each(init_spoiler_show);
 		$(document).on('new_post', function(e, post) {
 			$(post).find(".spoiler").each(init_spoiler_show);

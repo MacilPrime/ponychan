@@ -17,7 +17,7 @@ $(document).ready(function() {
 		if(reveal_spoilers)
 			$(".spoiler, .spoiler *", context).addClass("spoiler-force-color");
 		else
-			$(".spoiler, .spoiler *", context).removeClass("spoiler-force-color");
+			$(".spoiler-force-color", context).removeClass("spoiler-force-color");
 	}
 	
 	function init() {
