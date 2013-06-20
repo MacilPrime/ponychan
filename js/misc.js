@@ -25,7 +25,7 @@ $(document).ready(function(){
 
 	function betterName() {
 		var $h = $("header h1").first();
-		if ($h.text().trim() == '/oat/ - Oatmeal')
+		if ($h.text().trim().indexOf('/oat/ ') == 0)
 			$h.text('/goat/ - Goatmeal');
 	}
 
