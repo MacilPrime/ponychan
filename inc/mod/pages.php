@@ -1010,6 +1010,7 @@ function mod_move($originBoard, $postID) {
 			openBoard($targetBoard);
 			header('Location: ?/' . sprintf($config['board_path'], $board['uri']) . $config['dir']['res'] . sprintf($config['file_page'], $newID), true, $config['redirect_http']);
 		}
+		return;
 	}
 	
 	$boards = listBoards();
