@@ -51,7 +51,7 @@ function sql_open() {
 	try {
 		$options = array(
 			PDO::ATTR_TIMEOUT => $config['db']['timeout'],
-			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
 			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
 		);
 		if ($config['db']['persistent'])
