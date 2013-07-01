@@ -187,6 +187,9 @@ function mod_edit_board($boardName) {
 			$query->bindValue(':uri', $board['uri']);
 			$query->execute() or error(db_error($query));
 			
+			if ($config['cache']['enabled'])
+				cache::delete('all_boards');
+			
 			modLog('Deleted board: ' . sprintf($config['board_abbreviation'], $board['uri']), false);
 			
 			// Delete entire board directory
