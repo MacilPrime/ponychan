@@ -208,6 +208,9 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 		// Remove any corrupt tags at the end
 		$body = preg_replace('/<([\w]+)?([^>]*)?$/', '', $body);
 		
+		// remove broken HTML entity at the end (if existent)
+		$body = preg_replace('/&#?[A-Za-z0-9]*$/', '', $body);
+		
 		// Open tags
 		if (preg_match_all('/<([\w]+)[^>]*>/', $body, $open_tags)) {
 			
@@ -224,9 +227,6 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 				}
 			}
 			
-			// remove broken HTML entity at the end (if existent)
-			$body = preg_replace('/&[^;]+$/', '', $body);
-			
 			$tags_no_close_needed = array("colgroup", "dd", "dt", "li", "optgroup", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr", "br", "img");
 			
 			// Close any open tags
@@ -234,9 +234,6 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 				if (!in_array($tag, $tags_no_close_needed))
 					$body .= "</{$tag}>";
 			}
-		} else {
-			// remove broken HTML entity at the end (if existent)
-			$body = preg_replace('/&[^;]*$/', '', $body);
 		}
 		
 		$body .= '<span class="toolong">Post too long. Click <a href="' . $url . '">here</a> to view the full text.</span>';
