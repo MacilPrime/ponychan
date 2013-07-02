@@ -391,13 +391,13 @@ div.top_notice {
 	text-align: center;
 	margin: 48px auto 1em;
 }
-span.public_ban {
+.public_ban {
 	display: block;
 	color: red;
 	font-weight: bold;
 	margin-top: 15px;
 }
-span.toolong {
+.toolong {
 	display: block;
 	margin-top: 15px;
 }

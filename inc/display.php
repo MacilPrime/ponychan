@@ -236,7 +236,7 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 			}
 		}
 		
-		$body .= '<span class="toolong">Post too long. Click <a href="' . $url . '">here</a> to view the full text.</span>';
+		$body .= '<div class="toolong">Post too long. Click <a href="' . $url . '">here</a> to view the full text.</div>';
 	}
 	
 	return $body;
