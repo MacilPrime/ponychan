@@ -21,6 +21,9 @@
 			
 			if ($action == 'all' || $action == 'boards' || $action == 'news' || $action == 'post')
 				file_write($config['dir']['home'] . $settings['file'], tMLPchan::homepage($settings));
+			
+			if ($action == 'all')
+				file_write($config['dir']['home'] . 'settings.html', tMLPchan::settingspage($settings));
 		}
 		
 		// Build news page
@@ -84,6 +87,17 @@
 				'boardlist' => createBoardlist(false, true),
 				'recent_posts' => $recent_posts,
 				'news' => $news
+			));
+		}
+
+		// Build settings page
+		public function settingspage($settings) {
+			global $config;
+			
+			return Element('themes/mlpchan/settings.html', Array(
+				'settings' => $settings,
+				'config' => $config,
+				'boardlist' => createBoardlist(false, true)
 			));
 		}
 	};

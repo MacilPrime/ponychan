@@ -10,6 +10,7 @@
 (function(exports) {
 	var $settingsScreen = $("<div/>")
 		.attr("id", "settingsScreen")
+		.addClass("settingsScreen")
 		.hide();
 	
 	var $settingsTitle = $("<h1/>")
@@ -18,15 +19,15 @@
 	
 	var $settingsCloseButton = $("<a/>")
 		.text("X")
+		.addClass("settings-close-button")
 		.attr("href", "javascript:;")
 		.appendTo($settingsTitle);
 	
-	$("<hr/>").appendTo($settingsScreen);
+	var $settingsTopHR = $("<hr/>").appendTo($settingsScreen);
 	
 	var $settingsButton = $("<a/>")
 		.addClass("settingsButton")
-		.text("settings")
-		.attr("href", "javascript:;");
+		.text("settings");
 	
 	var $settingsSection = $("<span/>")
 		.addClass("settingsSection")
@@ -39,16 +40,32 @@
 	
 	// DOM setup over
 	
+	var isSettingsPage = false;
+	
+	function shouldCompatSettingsPage() {
+		// Returns true if we don't think the normal settings
+		// screen pop-up can be scrolled correctly by the
+		// browser.
+
+		// Check if we're on Android
+		if (navigator.userAgent.match(/^Mozilla[^(]+\(Linux; U; Android[^)]*\).*Mobile Safari/)) {
+			// Make sure we only match the stock browser, not Chrome
+			return navigator.userAgent.indexOf("Chrome") == -1;
+		}
+		return false;
+	}
+	
 	function showWindow() {
+		if (isSettingsPage) return;
 		$settingsOverlay.show();
 		$settingsScreen.fadeIn("fast");
 	}
 	exports.showWindow = showWindow;
 	
 	function hideWindow() {
+		if (isSettingsPage) return;
 		$settingsScreen.hide();
 		$settingsOverlay.hide();
-		$(document.body).css("overflow", "");
 	}
 	exports.hideWindow = hideWindow;
 	
@@ -313,11 +330,25 @@
 		// If the settings stuff already is on the page, then remove
 		// it. This can happen if the user saves the page from a web
 		// browser and opens it again.
-		$("#settingsScreen, .settingsSection, #settings-overlay").remove();
+		$(".settingsScreen, .settingsSection, #settings-overlay").remove();
 		
-		$(document.body).append($settingsOverlay, $settingsScreen);
-		$(".boardlist").append($settingsSection);
-		$(".settingsButton").click(settings.showWindow);
+		var $settingsPage = $("#settingsPage");
+		if ($settingsPage.length) {
+			isSettingsPage = true;
+			$settingsPage.text("");
+			$settingsTitle.remove();
+			$settingsTopHR.remove();
+			$settingsScreen.removeAttr('id').show().appendTo($settingsPage);
+		} else {
+			$(document.body).append($settingsOverlay, $settingsScreen);
+			$(".boardlist").append($settingsSection);
+			
+			if(shouldCompatSettingsPage()) {
+				$(".settingsButton").attr("href", siteroot+"settings.html");
+			} else {
+				$(".settingsButton").attr("href", "javascript:;").click(settings.showWindow);
+			}
+		}
 	});
 
 	// Deprecated stuff
