@@ -68,8 +68,7 @@
 				$query->execute() or error(db_error($query));
 				
 				while ($post = $query->fetch(PDO::FETCH_ASSOC)) {
-					if ($board['uri'] !== $post['board'])
-						openBoard($post['board']);
+					openBoard($post['board']);
 					
 					// board settings won't be available in the template file, so generate links now
 					$post['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], ($post['thread'] ? $post['thread'] : $post['id'])) . '#' . $post['id'];
@@ -81,8 +80,7 @@
 				}
 			}
 			
-			if ($board['uri'] !== $oldboarduri)
-				openBoard($oldboarduri);
+			openBoard($oldboarduri);
 			
 			return Element('themes/mlpchan/index.html', Array(
 				'settings' => $settings,

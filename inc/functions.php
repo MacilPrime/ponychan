@@ -421,10 +421,16 @@ function setupBoard($array) {
 			or error("Couldn't create " . $board['dir'] . $config['dir']['img'] . ". Check permissions.", true);
 }
 
-function openBoard($uri) {
-	$board = getBoardInfo($uri);
-	if ($board) {
-		setupBoard($board);
+function openBoard($uri, $forcereload=false) {
+	global $board;
+	
+	// If the board is already loaded, don't do anything.
+	if (isset($board['uri']) && $board['uri'] === $uri && !$forcereload)
+		return true;
+	
+	$boardinfo = getBoardInfo($uri);
+	if ($boardinfo) {
+		setupBoard($boardinfo);
 		return true;
 	}
 	return false;
