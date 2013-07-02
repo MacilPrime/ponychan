@@ -77,16 +77,11 @@
 				}
 			}
 			
-			// We don't want a random board to be left active in the board list.
-			$board = false;
-			$boardlist = createBoardlist();
-			$board = $oldboard;
-			
 			return Element('themes/mlpchan/index.html', Array(
 				'settings' => $settings,
 				'config' => $config,
 				'categories' => $categories,
-				'boardlist' => $boardlist,
+				'boardlist' => createBoardlist(false, true),
 				'recent_posts' => $recent_posts,
 				'news' => $news
 			));

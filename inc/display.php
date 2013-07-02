@@ -19,21 +19,21 @@ function format_bytes($size) {
 	return round($size, 2).$units[$i];
 }
 
-function doBoardListPart($list, $root) {
+function doBoardListPart($list, $root, $noactive=false) {
 	global $config, $board;
 	
 	$body = '';
 	foreach ($list as $boarduri) {
 		if (is_array($boarduri))
-			$body .= ' <span class="boardlistpart">[' . doBoardListPart($boarduri, $root) . ']</span> ';
+			$body .= ' <span class="boardlistpart">[' . doBoardListPart($boarduri, $root, $noactive) . ']</span> ';
 		else {
 			$class = '';
 			if (($key = array_search($boarduri, $list)) && gettype($key) == 'string') {
-				if ($board && $key === $board['uri'])
+				if ($board && !$noactive && $key === $board['uri'])
 					$class = 'class="boardlistactive" ';
 				$body .= ' <a ' . $class . 'href="' . $boarduri . '">' . $key . '</a> /';
 			} else {
-				if ($board && $boarduri === $board['uri'])
+				if ($board && !$noactive && $boarduri === $board['uri'])
 					$class = 'class="boardlistactive" ';
 				$body .= ' <a ' . $class . 'href="' . $root . $boarduri . '/' . $config['file_index'] . '">' . $boarduri . '</a> /';
 			}
@@ -44,17 +44,17 @@ function doBoardListPart($list, $root) {
 	return $body;
 }
 
-function createBoardlist($mod=false) {
+function createBoardlist($mod=false, $noactive=false) {
 	global $config;
 	
 	if (!isset($config['boards'])) return array('top'=>'','bottom'=>'');
 	
-	$body = doBoardListPart($config['boards'], $mod?'?/':$config['root']);
+	$body = doBoardListPart($config['boards'], $mod?'?/':$config['root'], $noactive);
 	if (!preg_match('/\]<\/span> $/', $body))
 		$body = '<span class="boardlistpart">[' . $body . ']</span>';
 
 	if ($mod && count($config['modboards']) > 0) {
-		$body .= ' <span class="boardlistpart modboardlistpart">[' . doBoardListPart($config['modboards'], '?/') . ']</span>';
+		$body .= ' <span class="boardlistpart modboardlistpart">[' . doBoardListPart($config['modboards'], '?/', $noactive) . ']</span>';
 	}
 	
 	$body = trim($body);
