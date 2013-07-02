@@ -206,7 +206,7 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 	
 	if ($body != $original_body) {
 		// Remove any corrupt tags at the end
-		$body = preg_replace('/<([\w]+)?([^>]*)?$/', '', $body);
+		$body = preg_replace('/<[^>]*$/', '', $body);
 		
 		// remove broken HTML entity at the end (if existent)
 		$body = preg_replace('/&#?[A-Za-z0-9]*$/', '', $body);
@@ -214,25 +214,26 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 		// Open tags
 		if (preg_match_all('/<([\w]+)[^>]*>/', $body, $open_tags)) {
 			
+			$tags_no_close_needed = array("colgroup", "dd", "dt", "li", "optgroup", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr", "br", "img");
+			
 			$tags = array();
-			for ($x=0;$x<count($open_tags[0]);$x++) {
-				if (!preg_match('/\/(\s+)?>$/', $open_tags[0][$x]))
-					$tags[] = $open_tags[1][$x];
+			foreach ($open_tags[1] as &$tag) {
+				if (!in_array($tag, $tags_no_close_needed))
+					array_unshift($tags, $tag);
 			}
 			
 			// List successfully closed tags
-			if (preg_match_all('/(<\/([\w]+))>/', $body, $closed_tags)) {
-				for ($x=0;$x<count($closed_tags[0]);$x++) {
-					unset($tags[array_search($closed_tags[2][$x], $tags)]);
+			if (preg_match_all('/<\/([\w]+)>/', $body, $closed_tags)) {
+				foreach ($closed_tags[1] as &$tag) {
+					$i = array_search($tag, $tags);
+					if ($i !== FALSE)
+						unset($tags[$i]);
 				}
 			}
 			
-			$tags_no_close_needed = array("colgroup", "dd", "dt", "li", "optgroup", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr", "br", "img");
-			
 			// Close any open tags
 			foreach ($tags as &$tag) {
-				if (!in_array($tag, $tags_no_close_needed))
-					$body .= "</{$tag}>";
+				$body .= "</{$tag}>";
 			}
 		}
 		
