@@ -33,7 +33,10 @@ p.intro a.email:hover span.name {
 }
 h2 {
 	color: #AF0A0F;
-	font-size: 11pt;
+	font-size: 18px;
+}
+h3 {
+	font-size: 17px;
 }
 .homeblock h2 {
 	margin: 0;
