@@ -76,6 +76,9 @@ form table tr td {
 	margin: 0;
 	padding: 0;
 }
+form[name="post"] input[name="submit"] {
+	margin-left: 2px;
+}
 form table.mod tr td {
 	padding: 2px;
 }

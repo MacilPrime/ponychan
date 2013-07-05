@@ -32,14 +32,14 @@
 				{{ antibot.html() }}
 			</th>
 			<td>
-				<input style="float:left;" type="text" name="subject" size="25" maxlength="100" autocomplete="off">
+				<input type="text" name="subject" size="25" maxlength="100" autocomplete="off">
 			{% else %}<th>
 				{% trans %}Submit{% endtrans %}
 				{{ antibot.html() }}
 			</th>
 			<td>
 			{% endif %}
-				<input accesskey="s" style="margin-left:2px;" type="submit" name="post" value="{% if id %}{{ config.button_reply }}{% else %}{{ config.button_newtopic }}{% endif %}" />
+				<input accesskey="s" type="submit" name="post" value="{% if id %}{{ config.button_reply }}{% else %}{{ config.button_newtopic }}{% endif %}" />
 			</td>
 		</tr>
 		<tr>
