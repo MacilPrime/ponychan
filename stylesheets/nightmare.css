@@ -36,9 +36,6 @@ header h1, #settingsScreen h1 {
 div.boardlist {
 	font-size: 11pt;
 }
-form {
-	margin-bottom: 2em;
-}
 div.banner {
 	padding: 1px 5px;
 	margin-left: auto;

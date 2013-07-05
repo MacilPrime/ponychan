@@ -51,9 +51,6 @@ form table tr th {
 	border: 1px yellow solid;
 	background: #0179c6;
 }
-form table tr td div {
-	text-align: left;
-}
 div.banner {
 	background-color: #FFFFB8;
 	border: 1px solid black;
