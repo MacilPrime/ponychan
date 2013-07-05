@@ -4,7 +4,7 @@
 	{% set action = '?/ban' %}
 {% endif %}
 
-<form action="{{ action }}" method="post">
+<form action="{{ action }}" method="post" class="banform">
 	<input type="hidden" name="token" value="{{ token }}">
 	{% if redirect %}
 		<input type="hidden" name="redirect" value="{{ redirect|e }}">

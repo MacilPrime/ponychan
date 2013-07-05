@@ -56,7 +56,7 @@
 		{% endif %}
 		
 		{% if mod|hasPermission(config.mod.create_notes) %}
-			<form action="" method="post" style="margin:0">
+			<form action="" method="post" class="noteform">
 				<table>
 					<tr>
 						<th>{% trans 'Staff' %}</th>
@@ -86,8 +86,8 @@
 		<legend>{{ bans|count }} {% trans bans_on_record %}</legend>
 		
 		{% for ban in bans %}
-			<form action="" method="post" style="text-align:center">
-				<table style="width:400px;margin-bottom:10px;border-bottom:1px solid #ddd;padding:5px">
+			<form action="" method="post" class="userbanlist">
+				<table>
 					<tr>
 						<th>{% trans 'Status' %}</th>
 						<td>

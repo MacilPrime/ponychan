@@ -64,6 +64,15 @@ form[name='post'] {
 form table {
 	margin: auto;
 }
+form.userbanlist {
+	text-align:center;
+}
+form.userbanlist table {
+	width: 400px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+	padding:5px
+}
 form table input {
 	height: auto;
 }
@@ -82,7 +91,7 @@ form table tr td {
 form[name="post"] input[name="submit"] {
 	margin-left: 2px;
 }
-form table.mod tr td {
+table.banlist tr td {
 	padding: 2px;
 }
 form table tr th {
@@ -385,8 +394,6 @@ table.modlog tr th {
 	text-align: left;
 	padding: 4px 15px 5px 5px;
 	white-space: nowrap;
-}
-table.modlog tr th {
 	background: #98E;
 }
 td.minimal, th.minimal {
