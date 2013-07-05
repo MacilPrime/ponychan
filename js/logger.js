@@ -65,6 +65,7 @@ if (typeof localStorage != "undefined" && !!localStorage) {
 		olduserid = localStorage.getItem("olduserid");
 	}
 }
+var user_is_noob = !userid;
 if (!userid || userid.length != 32) {
 	userid = createID();
 	try {
