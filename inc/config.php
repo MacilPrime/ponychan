@@ -582,14 +582,15 @@
 	// $config['banner_height'] = 100;
 	
 	// Custom stylesheets available. The prefix for each stylesheet URI is defined below.
+
+	$config['stylesheets']['Cloudsdale'] = 'Cloudsdale.css';
+	$config['stylesheets']['Pone'] = 'pone.css';
 	$config['stylesheets']['Yotsuba B'] = ''; // default
 	$config['stylesheets']['Yotsuba'] = 'yotsuba.css';
 	// $config['stylesheets']['Futaba'] = 'futaba.css';
 	
-	$config['stylesheets']['Pone'] = 'pone.css';
 	$config['stylesheets']['Luna'] = 'luna.css';
 	$config['stylesheets']['Wonderbolts'] = 'wonderbolts.css';
-	$config['stylesheets']['Cloudsdale'] = 'Cloudsdale.css';
 	$config['stylesheets']['Nightmare'] = 'nightmare.css';
 	$config['stylesheets']['Australian'] = 'Australian.css';
 	$config['stylesheets']['Chrysalis'] = 'Queen.css';
@@ -600,7 +601,7 @@
 	
 	// The default stylesheet to use
 	//$config['default_stylesheet'] = array('Yotsuba B', $config['stylesheets']['Yotsuba B']);
-	$config['default_stylesheet'] = array('Pone', $config['stylesheets']['Pone']);
+	$config['default_stylesheet'] = array('Cloudsdale', $config['stylesheets']['Cloudsdale']);
 	
 	// Boardlinks
 	// You can group, order and place the boardlist at the top of every page, using the following template.	
