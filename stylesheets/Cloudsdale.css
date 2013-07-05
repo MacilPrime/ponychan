@@ -105,6 +105,10 @@ span.trip {
 	color: #6666ff;
 }
 
+.namepart {
+	font-family: serif;
+}
+
 div.boardlist {
 	font-size: 12pt;
 }
