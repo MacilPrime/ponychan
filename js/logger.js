@@ -22,7 +22,7 @@ function basicStringHash(string, prevHash){
 }
 
 function hashCode(x, prevHash){
-	if (typeof x === "object") {
+	if (typeof x === "object" && x !== null) {
 		var hash = 0;
 		if (prevHash)
 			hash = prevHash;
