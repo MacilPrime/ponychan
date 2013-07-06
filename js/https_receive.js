@@ -70,6 +70,7 @@ function receiveMessage(event) {
 	
 	var intended = "http://mlpchan.net";
 	if (event.origin !== intended) return;
+	if (!event.data['https_transit_content']) return;
 	
 	var response;
 	try {
@@ -77,6 +78,7 @@ function receiveMessage(event) {
 	} catch(e) {
 		response = {error: e};
 	}
+	response['https_transit_response'] = true;
 	event.source.postMessage(response, intended);
 }
 

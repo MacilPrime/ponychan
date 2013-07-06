@@ -20,6 +20,7 @@
 			.attr({id:'httpsif', src:'https://mlpchan.net'+siteroot+'https_receive.html'})
 			.css({visibility:'hidden', width:'2px', height:'2px'})
 			.load(function() {
+				data['https_transit_content'] = true;
 				this.contentWindow.postMessage(data, 'https://mlpchan.net');
 			})
 			.appendTo(document.body);
@@ -28,6 +29,7 @@
 	
 	function receiveMessage(event) {
 		if (event.origin !== 'https://mlpchan.net') return;
+		if (!event.data['https_transit_response']) return;
 		
 		console.log("https iframe response:", event.data);
 		if (event.data.success) {
