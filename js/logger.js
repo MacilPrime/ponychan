@@ -164,7 +164,7 @@ window.onerror = function(errorMsg, url, lineNumber) {
 function send_usage(retryTime) {
 	var usage = {};
 	
-	usage.settings = settings.getAllSettings();
+	usage.settings = settings.getAllSettings(true);
 	
 	usage.supportFile = typeof FileReader != "undefined" && !!FileReader;
 	usage.supportFormData = typeof FormData != "undefined" && !!FormData;
