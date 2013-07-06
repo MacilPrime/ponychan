@@ -20,7 +20,7 @@
 		var iframeLoaded = false;
 		var data = getData();
 		var $if = $('<iframe/>')
-			.attr({id:'httpsif', src:'https://mlpchan.net'+siteroot+'https_receive.html'})
+			.attr({id:'httpsif', src:'https://mlpchan.net'+siteroot+'https_receive.html?v=2'})
 			.css({visibility:'hidden', width:'2px', height:'2px'})
 			.load(function() {
 				iframeLoaded = true;
