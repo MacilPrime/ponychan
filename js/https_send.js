@@ -14,22 +14,36 @@
 	}
 	exports.getData = getData;
 	
+	var receivedResponse = false;
+	
 	function sendData() {
+		var iframeLoaded = false;
 		var data = getData();
 		var $if = $('<iframe/>')
 			.attr({id:'httpsif', src:'https://mlpchan.net'+siteroot+'https_receive.html'})
 			.css({visibility:'hidden', width:'2px', height:'2px'})
 			.load(function() {
+				iframeLoaded = true;
 				data['https_transit_content'] = true;
 				this.contentWindow.postMessage(data, 'https://mlpchan.net');
+				setTimeout(function() {
+					if (!receivedResponse)
+						log_error("https iframe response timeout");
+				}, 5*1000);
 			})
 			.appendTo(document.body);
+		setTimeout(function() {
+			if (!iframeLoaded)
+				log_error("https iframe load timeout");
+		}, 5*1000);
 	}
 	exports.sendData = sendData;
 	
 	function receiveMessage(event) {
 		if (event.origin !== 'https://mlpchan.net') return;
 		if (!event.data['https_transit_response']) return;
+		
+		receivedResponse = true;
 		
 		console.log("https iframe response:", event.data);
 		if (event.data.success) {
