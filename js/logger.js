@@ -86,6 +86,9 @@ var send_maxQueued = 7;
 var malformed_errors = {};
 
 function send_error(error, retryTime) {
+	if (typeof error === "string")
+		error = {message: error};
+	
 	error.pageurl = document.location.href;
 	var errorString = JSON.stringify(error);
 	var data = {type: "error", userid: userid, data: errorString};
@@ -139,9 +142,9 @@ function send_error(error, retryTime) {
 	});
 }
 
-function log_error(message) {
-	console.error(message);
-	send_error({message: message});
+function log_error(error) {
+	console.error(error);
+	send_error(error);
 }
 
 var old_onerror = window.onerror;
