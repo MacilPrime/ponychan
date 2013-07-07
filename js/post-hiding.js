@@ -73,7 +73,7 @@ $(document).ready(function(){
 	var ofAge = false;
 	function switch_mature() {
 		if (settings.getSetting("show_mature")) {
-			if (localStorage.getItem("ofAge") == "true") {
+			if (window.localStorage && localStorage.getItem("ofAge") == "true") {
 				ofAge = true;
 			}
 			if (!ofAge) {

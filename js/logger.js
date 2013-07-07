@@ -165,6 +165,11 @@ window.onerror = function(errorMsg, url, lineNumber) {
 };
 
 function send_usage(retryTime) {
+	
+	// localStorage is used to know if we've already sent in a
+	// usage report to not spam the system.
+	if (!window.localStorage) return;
+	
 	var usage = {};
 	
 	usage.settings = settings.getAllSettings(true);

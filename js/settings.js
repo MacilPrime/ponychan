@@ -72,6 +72,9 @@
 	$settingsOverlay.click(hideWindow);
 	$settingsCloseButton.click(hideWindow);
 	
+	if (!window.localStorage)
+		var tempSettingsStorage = {};
+	
 	var settingTypes = {};
 	var defaultValues = {};
 	var settingSelectOptions = {};
@@ -80,7 +83,15 @@
 	function getSetting(name, noDefault) {
 		var id = "setting_"+name;
 		
-		var localVal = localStorage[id];
+		var localVal = null;
+		if (window.localStorage) {
+			if (localStorage.hasOwnProperty(id))
+				localVal = localStorage[id];
+		} else {
+			if (tempSettingsStorage.hasOwnProperty(id))
+				localVal = tempSettingsStorage[id];
+		}
+		
 		if (localVal == null)
 			return noDefault ? null : defaultValues[name];
 		
@@ -97,27 +108,39 @@
 	}
 	exports.getSetting = getSetting;
 	
-	function setSetting(name, value) {
+	function setSetting(name, value, notquiet) {
 		var id = "setting_"+name;
 		
+		if (!window.localStorage) {
+			if (notquiet)
+				alert("Your browser does not support the localStorage standard. Settings will not be saved. Please upgrade your browser!");
+		}
+		
 		if (value == null) {
-			delete localStorage[id];
+			if (window.localStorage)
+				delete localStorage[id];
+			else
+				delete tempSettingsStorage[id];
 		} else {
 			var type = settingTypes[name];
+			var toWrite;
 			switch(type) {
 			case "bool":
-				localStorage[id] = value ? "true" : "false";
+				toWrite = value ? "true" : "false";
 				break;
 			case "select":
-				localStorage[id] = value;
+				toWrite = value;
 				break;
 			default:
 				console.error("Invalid property type: "+type+", name: "+name);
 				return;
 			}
+			if (window.localStorage)
+				localStorage[id] = toWrite;
+			else
+				tempSettingsStorage[id] = toWrite;
 		}
 		$(document).trigger("setting_change", name)
-		return value;
 	}
 	exports.setSetting = setSetting;
 	
@@ -134,7 +157,7 @@
 			.change(function() {
 				if(!changeGuard) {
 					changeGuard = true;
-					setSetting(name, $(this).prop("checked"));
+					setSetting(name, $(this).prop("checked"), true);
 					changeGuard = false;
 				}
 			});
@@ -167,7 +190,7 @@
 			.change(function() {
 				if(!changeGuard) {
 					changeGuard = true;
-					setSetting(name, $(this).val());
+					setSetting(name, $(this).val(), true);
 					changeGuard = false;
 				}
 			});

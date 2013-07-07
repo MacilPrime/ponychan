@@ -14,7 +14,7 @@ var watched_threads;
 load_watched_threads();
 
 function load_watched_threads() {
-	if (localStorage.getItem("watched_threads"))
+	if (window.localStorage && localStorage.getItem("watched_threads"))
 		watched_threads = JSON.parse(localStorage.getItem("watched_threads"));
 	else
 		watched_threads = {};
@@ -422,6 +422,8 @@ function jump_to_first_unread_post() {
 var page_thread_id = null;
 
 $(document).ready(function() {
+	if (!window.localStorage) return;
+	
 	if ($('div.banner').length && $('.thread .post.op').length)
 		page_thread_id = get_post_id($('.thread .post.op').first());
 	

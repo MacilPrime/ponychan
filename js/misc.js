@@ -32,19 +32,23 @@ $(document).ready(function(){
 	if (Math.random() < 0.0014)
 		betterName();
 	
-	if (new Date() < new Date("Jul 14 2013 04:00:00")) {
+	if (window.localStorage && new Date() < new Date("Jul 14 2013 04:00:00")) {
 		if (user_is_noob) {
-			localStorage.no_show_pone_note = true;
+			try {
+				localStorage.no_show_pone_note = true;
+			} catch(e) {}
 		} else if (!localStorage.no_show_pone_note && settings.getSetting("style", true) == null) {
 			notice.settingsAd('The old site style "Pone" is still available!', undefined, function() {
-				localStorage.no_show_pone_note = true;
+				try {
+					localStorage.no_show_pone_note = true;
+				} catch(e) {}
 			});
 		}
 	}
 	
 	// Change back from Nightmare theme event
 	try {
-		var old = localStorage.event_nightmare_old_style;
+		var old = window.localStorage && localStorage.event_nightmare_old_style;
 		if (old) {
 			if (settings.getSetting("style") == "Nightmare" && old != "Nightmare") {
 				console.log("Resetting to pre-Nightmare style");

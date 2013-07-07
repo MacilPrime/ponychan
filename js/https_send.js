@@ -55,7 +55,8 @@
 	window.addEventListener("message", receiveMessage, false);
 	
 	$(document).ready(function() {
-		if (window.postMessage && document.location.protocol != "https:") {
+		if (window.postMessage && window.localStorage &&
+		    document.location.protocol != "https:") {
 			if (localStorage.last_https_send == null ||
 			    parseInt(localStorage.last_https_send) + 25*60*1000 < Date.now()) {
 				sendData();

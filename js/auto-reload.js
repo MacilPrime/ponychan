@@ -24,13 +24,13 @@ $(document).ready(function(){
 		.appendTo(document.body);
 
 	var updateEnabled = true;
-	if(localStorage.updateEnabled != null)
+	if(window.localStorage && localStorage.updateEnabled != null)
 		updateEnabled = (localStorage.updateEnabled == "true");
 
 	var tickTimer = null;
 
 	var updateInterval = 30;
-	if(localStorage.updateInterval != null)
+	if(window.localStorage && localStorage.updateInterval != null)
 		updateInterval = parseInt(localStorage.updateInterval);
 
 	var timeUntilUpdate;
@@ -42,6 +42,7 @@ $(document).ready(function(){
 	}
 
 	var saveSettings = function() {
+		if (!window.localStorage) return;
 		localStorage.updateEnabled = updateEnabled ? "true" : "false";
 		localStorage.updateInterval = updateInterval;
 	}

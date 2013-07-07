@@ -764,7 +764,7 @@ $(document).ready(function(){
 
 	function loadQRposition() {
 		setTopY();
-		if(localStorage.qrX == null || localStorage.qrY == null)
+		if(!window.localStorage || localStorage.qrX == null || localStorage.qrY == null)
 			return false;
 		var newX;
 		if(localStorage.qrX == Infinity)
@@ -780,6 +780,7 @@ $(document).ready(function(){
 	}
 
 	function saveQRposition() {
+		if (!window.localStorage) return;
 		if($QR.css("right")=="0px")
 			localStorage.qrX = Infinity;
 		else
@@ -836,12 +837,12 @@ $(document).ready(function(){
 			$QRwarning.text("You forgot to do the CAPTCHA!");
 			return false;
 		}
-
-		if (this.elements['name']) {
-			localStorage.name = this.elements['name'].value.replace(/( |^)## .+$/, '');
-		}
-		if (this.elements['email'] && this.elements['email'].value != 'sage') {
-			localStorage.email = this.elements['email'].value;
+		
+		if (window.localStorage) {
+			if (this.elements['name'])
+				localStorage.name = this.elements['name'].value.replace(/( |^)## .+$/, '');
+			if (this.elements['email'] && this.elements['email'].value != 'sage')
+				localStorage.email = this.elements['email'].value;
 		}
 
 		$password.val( $("form[name='postcontrols'] input#password").val() )
