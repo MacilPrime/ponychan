@@ -907,3 +907,9 @@ header { margin-top: 48px; }
 	white-space: normal;
 	word-wrap: break-word;
 }
+table.boarddir {
+	border: none;
+}
+table.boarddir td {
+	padding: 2px 5px;
+}
