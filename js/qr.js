@@ -302,6 +302,14 @@ $(document).ready(function(){
 
 	settings.bindCheckbox($QRToggleCheckbox, "use_QR");
 
+	function resetFileInput() {
+		if (/MSIE/.test(navigator.userAgent)) {
+			$file.replaceWith($file=$file.clone(true));
+		} else {
+			$file.val('');
+		}
+	}
+
 	var use_QR;
 	var query = null;
 
@@ -331,7 +339,8 @@ $(document).ready(function(){
 
 	QR.clear = function() {
 		$comment.val("");
-		$file.val("").change();
+		resetFileInput();
+		$file.change();
 		$QRwarning.text("");
 		$spoiler.prop("checked", false);
 		$rawhtml.prop("checked", false);
@@ -450,7 +459,7 @@ $(document).ready(function(){
 			this.el.attr("id", "qrthumbselected");
 			if (selectedreply != this) {
 				if (!useFile || $file[0].files.length && this.file != $file[0].files[0])
-					$file.val("");
+					resetFileInput();
 			}
 			selectedreply = this;
 			$comment.val(selectedreply.comment)
@@ -472,7 +481,7 @@ $(document).ready(function(){
 					.attr("title", "");
 			}
 			if (!dontResetFileInput && selectedreply === this) {
-				$file.val("");
+				resetFileInput();
 			}
 		}
 		this.rm = function() {
@@ -518,11 +527,11 @@ $(document).ready(function(){
 			
 			if ('size' in file && file.size > maxsize) {
 				$QRwarning.text(file.name + " is too large");
-				$file.val("");
+				resetFileInput();
 				return;
 			} else if ('type' in file && !/^image\//.test(file.type)) {
 				$QRwarning.text(file.name + " has an unsupported file type");
-				$file.val("");
+				resetFileInput();
 				return;
 			}
 			
@@ -532,7 +541,7 @@ $(document).ready(function(){
 			
 			if (useFormData && useFile) {
 				if ($file[0].files && ($file[0].files.length > 1 || ($file[0].files.length && this.file != $file[0].files[0])))
-					$file.val("");
+					resetFileInput();
 			}
 		};
 	} else {
@@ -565,7 +574,7 @@ $(document).ready(function(){
 					}
 				}
 			}
-			$file.val("");
+			resetFileInput();
 		};
 	}
 
@@ -850,7 +859,7 @@ $(document).ready(function(){
 				localStorage.email = $QRForm[0].elements['email'].value;
 		}
 
-		$password.val( $("form[name='postcontrols'] input#password").val() )
+		$password.val( $("form[name='postcontrols'] input#password").val() );
 		
 		$QRwarning.text("");
 
