@@ -376,7 +376,7 @@ $(document).ready(function(){
 		} else {
 			prepSubmitButton();
 			if ($auto.is(":checked") && (selectedreply.comment || selectedreply.file))
-				$QRForm.submit();
+				submitPost();
 		}
 	}
 
@@ -821,7 +821,12 @@ $(document).ready(function(){
 		});
 	});
 	
-	$QRForm.submit(function(event) {
+	$submit.click(function(event) {
+		submitPost();
+		event.preventDefault();
+	});
+	
+	function submitPost() {
 		if (query) {
 			query.abort();
 			query = null;
@@ -839,20 +844,27 @@ $(document).ready(function(){
 		}
 		
 		if (window.localStorage) {
-			if (this.elements['name'])
-				localStorage.name = this.elements['name'].value.replace(/( |^)## .+$/, '');
-			if (this.elements['email'] && this.elements['email'].value != 'sage')
-				localStorage.email = this.elements['email'].value;
+			if ($QRForm[0].elements['name'])
+				localStorage.name = $QRForm[0].elements['name'].value.replace(/( |^)## .+$/, '');
+			if ($QRForm[0].elements['email'] && $QRForm[0].elements['email'].value != 'sage')
+				localStorage.email = $QRForm[0].elements['email'].value;
 		}
 
 		$password.val( $("form[name='postcontrols'] input#password").val() )
 		
 		$QRwarning.text("");
 
-		if (!useFormData)
+		if (useFormData) {
+			try {
+				var data = new FormData($QRForm[0]);
+			} catch(e) {}
+		}
+		
+		if (!data) {
+			$QRForm.submit();
 			return true;
-
-		var data = new FormData(this);
+		}
+		
 		data.append("post", $submit.val());
 		data.append("wantjson", 1);
 		if (selectedreply.file) {
@@ -881,7 +893,7 @@ $(document).ready(function(){
 							query = null;
 							prepSubmitButton();
 							setQRFormDisabled(false);
-							$QRForm.submit();
+							submitPost();
 						});
 						return false;
 					}
@@ -907,7 +919,7 @@ $(document).ready(function(){
 		setQRFormDisabled(true);
 		$submit.val("...").prop("disabled", false);
 		
-		var url = $(this).attr("action");
+		var url = $QRForm.attr("action");
 		query = $.ajax({
 			url: url,
 			data: data,
@@ -974,8 +986,8 @@ $(document).ready(function(){
 
 		QRrepair();
 
-		return false;
-	});
+		return true;
+	}
 
 	function QRInit() {
 		use_QR = settings.getSetting("use_QR");
