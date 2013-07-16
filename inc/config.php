@@ -578,7 +578,6 @@
 	$config['banner_prefix'] = 'static/banners/';
 	// Array is (filename, width, height)
 	// $config['banners'][] = array('some image.png', 600, 150);
-	$config['banners'][] = array('10%20-%20anon.png', 600, 150);
 	$config['banners'][] = array('Airplane%20Allen%20-%20anon.png', 600, 150);
 	$config['banners'][] = array('aj%20and%20pinkie%20-%20trashman.jpg', 600, 150);
 	$config['banners'][] = array('applejack%20-%20tpwpf%20%26%20anon.png', 600, 150);
