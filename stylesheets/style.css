@@ -122,7 +122,7 @@ div.banner a:hover {
 	text-decoration: none;
 }
 img.banner {
-	float: none;
+	display: block;
 	border: 1px solid #a9a9a9;
 	margin: 12px auto 0 auto;
 }

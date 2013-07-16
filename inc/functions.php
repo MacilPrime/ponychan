@@ -67,6 +67,7 @@ function loadConfig() {
 		'stylesheets',
 		'additional_javascript',
 		'markup',
+		'banners',
 		'custom_pages'
 	);
 	

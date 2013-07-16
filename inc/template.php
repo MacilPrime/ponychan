@@ -43,6 +43,15 @@ function Element($templateFile, array $options) {
 		$options['pm'] = create_pm_header();
 	}
 	
+	if (isset($options['config']) && !isset($options['config']['url_banner']) &&
+	    isset($options['config']['banners']) && count($options['config']['banners']) > 0)
+	{
+		$banner = $options['config']['banners'][array_rand($options['config']['banners'])];
+		$options['config']['url_banner'] = htmlspecialchars($options['config']['root'] . $options['config']['banner_prefix'] . $banner[0], ENT_QUOTES);
+		$options['config']['banner_width'] = $banner[1];
+		$options['config']['banner_height'] = $banner[2];
+	}
+	
 	if (isset($options['body']) && $config['debug']) {
 		if (isset($debug['start'])) {
 			$debug['time'] = '~' . round((microtime(true) - $debug['start']) * 1000, 2) . 'ms';

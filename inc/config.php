@@ -574,12 +574,79 @@
 	// Characters used to generate a random password (with Javascript)
 	$config['genpassword_chars'] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
 	
-	// Optional banner at the top of every page.
-	// $config['url_banner'] = '/banner.php';
-	// Banner dimensions are also optional. As the banner loads after the rest of the page, everything
-	// may be shifted down a few pixels when it does. Making the banner a fixed size will prevent this.
-	// $config['banner_width'] = 300;
-	// $config['banner_height'] = 100;
+	// Page image banners
+	$config['banner_prefix'] = 'static/banners/';
+	// Array is (filename, width, height)
+	// $config['banners'][] = array('some image.png', 600, 150);
+	$config['banners'][] = array('10%20-%20anon.png', 600, 150);
+	$config['banners'][] = array('Airplane%20Allen%20-%20anon.png', 600, 150);
+	$config['banners'][] = array('aj%20and%20pinkie%20-%20trashman.jpg', 600, 150);
+	$config['banners'][] = array('applejack%20-%20tpwpf%20%26%20anon.png', 600, 150);
+	$config['banners'][] = array('are%20you%20amused%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('cena%202%20-anon.jpg', 704, 150);
+	$config['banners'][] = array('Cena%20-%20Bready.gif', 600, 150);
+	$config['banners'][] = array('come%20together%20-%20patachu-sized.png', 600, 150);
+	$config['banners'][] = array('cool%20pinkie%20-%20Patachu.jpg', 600, 150);
+	$config['banners'][] = array('dat%20rump%20-%20paperponi.jpg', 600, 150);
+	$config['banners'][] = array('derp%20-%20trashman.jpg', 600, 150);
+	$config['banners'][] = array('Derpy%20-%20Tom.jpg', 600, 150);
+	$config['banners'][] = array('do%20you%20even%20-%20paperponi.jpg', 600, 150);
+	$config['banners'][] = array('EMELPEECHAIN%20-%20Mitch.png', 1000, 150);
+	$config['banners'][] = array('ew%2C%20normal.png', 600, 150);
+	$config['banners'][] = array('facehoof%20-%20Tom.jpg', 600, 150);
+	$config['banners'][] = array('Fence%20-%20Desert.jpg', 721, 150);
+	$config['banners'][] = array('fetish.png', 600, 150);
+	$config['banners'][] = array('FILE%20WAS%20NAMED%20FOR%20THIS%20POST%20-%20TPWPF.png', 600, 150);
+	$config['banners'][] = array('fluttergif%20-%20Tom.gif', 800, 150);
+	$config['banners'][] = array('flutter-luna.jpg', 600, 150);
+	$config['banners'][] = array('gas%20mask%20-%20serys.jpg', 600, 150);
+	$config['banners'][] = array('glorious%20motherland-%20Red.png', 670, 150);
+	$config['banners'][] = array('Graffiti%20-%20patachu.jpg', 600, 150);
+	$config['banners'][] = array('Gummy%20-%20Anonthony.png', 991, 150);
+	$config['banners'][] = array('human%20shy%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('it%27s%20happening%20-%20nopony.jpg', 600, 150);
+	$config['banners'][] = array('It%27s%20kinda%20like%20that%20-%20Mort.jpg', 600, 150);
+	$config['banners'][] = array('It%27s%20not%20just%20a%20cartoon%20-%20TPWPF.png', 600, 150);
+	$config['banners'][] = array('le%20face%20-%20Queenie.jpg', 600, 150);
+	$config['banners'][] = array('Leprechauns%20-%20TPWPF.png', 1000, 150);
+	$config['banners'][] = array('lick%20-%20tpwpf.jpg', 600, 150);
+	$config['banners'][] = array('luna%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('lyra%20banned%20-%20derpy%20squared.jpg', 600, 150);
+	$config['banners'][] = array('mlpchan.dept%20-%20Mr.%20Burns%20%26%20Legendary.gif', 500, 150);
+	$config['banners'][] = array('mlpchan%2C%20I...%20-%20anon.png', 600, 150);
+	$config['banners'][] = array('mlpchan%20tv%20-%20trashman.gif', 600, 150);
+	$config['banners'][] = array('MLP%20is...%20-%20Spectre.png', 600, 150);
+	$config['banners'][] = array('no%20control%20-%20trashman.gif', 600, 150);
+	$config['banners'][] = array('no%20more%20tears%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('no%20place%20like%20home%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('Now%20with%20dinosaurs%20-%20Tom.jpg', 610, 150);
+	$config['banners'][] = array('oldmap%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('owl%20-%20tom.jpg', 600, 150);
+	$config['banners'][] = array('pinka%20friends%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('pinkie%20what%20could%20go%20wrong%20-%20Etna.gif', 600, 150);
+	$config['banners'][] = array('portal%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('pumpkin%20-%20Tom.jpg', 599, 150);
+	$config['banners'][] = array('rainbow%20dash%20-%20anon.png', 600, 150);
+	$config['banners'][] = array('reading%20-%20trashman.jpg', 600, 150);
+	$config['banners'][] = array('Reality%20-%20Tom.gif', 600, 150);
+	$config['banners'][] = array('red%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('scruffy%20anon%20hug%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('shazbot%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('spaghetti%20-%20mlpchan.jpg', 600, 150);
+	$config['banners'][] = array('spike%20jewels%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('spongebob%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('spooky%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('stopped%20worrying.jpg', 600, 150);
+	$config['banners'][] = array('Stubble%20-%20Mike.jpg', 1000, 150);
+	$config['banners'][] = array('sweetie%20dating%20tiara%20-%20anon.png', 500, 150);
+	$config['banners'][] = array('Too%20Young%20-%20Tpwpf.png', 600, 150);
+	$config['banners'][] = array('Totally%20Normal%20-%20TPWPF.jpg', 600, 150);
+	$config['banners'][] = array('toys%20-%20patachu.jpg', 600, 150);
+	$config['banners'][] = array('twinuts%20-%20Derpy%20Square.jpg', 600, 150);
+	$config['banners'][] = array('Twi%20-%20Tom.jpg', 800, 150);
+	$config['banners'][] = array('twixie%20-%20paperponi.gif', 600, 150);
+	$config['banners'][] = array('unoriginality%20-%20anon.jpg', 600, 150);
+	$config['banners'][] = array('why%20-%20tpwpf.jpg', 596, 150);
 	
 	// Custom stylesheets available. The prefix for each stylesheet URI is defined below.
 
