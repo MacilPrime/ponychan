@@ -1756,8 +1756,9 @@ function buildThread($id, $return=false, $mod=false) {
 	$hasnoko50 = $thread->postCount() >= $config['noko50_min'];
 
 	$body = Element('thread.html', array(
-		'board'=>$board, 
-		'body'=>$thread->build(),
+		'board' => $board,
+		'thread' => $thread,
+		'body' => $thread->build(),
 		'config' => $config,
 		'id' => $id,
 		'mod' => $mod,
@@ -1844,6 +1845,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 
 	$body = Element('thread.html', array(
 		'board'=>$board, 
+		'thread' => $thread,
 		'body'=>$thread->build(false, true),
 		'config' => $config,
 		'id' => $id,
