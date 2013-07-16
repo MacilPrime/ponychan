@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `expires` int(11) DEFAULT NULL,
   `reason` text,
   `board` varchar(120) DEFAULT NULL,
+  `seen` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY (`ip`),
   KEY (`ip_type`,`ip`)

@@ -67,7 +67,7 @@ function ban($mask, $reason, $length, $board) {
 	else
 		$type = 0;
 	
-	$query = prepare("INSERT INTO `bans` (`ip`,`ip_type`,`mod`,`set`,`expires`,`reason`,`board`) VALUES (:ip, :type, :mod, :time, :expires, :reason, :board)");
+	$query = prepare("INSERT INTO `bans` (`ip`,`ip_type`,`mod`,`set`,`expires`,`reason`,`board`,`seen`) VALUES (:ip, :type, :mod, :time, :expires, :reason, :board, 0)");
 	$query->bindValue(':ip', $mask);
 	$query->bindValue(':type', $type, PDO::PARAM_INT);
 	$query->bindValue(':mod', $mod['id'], PDO::PARAM_INT);
