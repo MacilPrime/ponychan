@@ -24,7 +24,7 @@ $(document).ready(function(){
 		} else {
 			$navbar.css("position", "absolute");
 		}
-		$("header, .top_notice").css("margin-top", (16+$navbar.height())+"px");
+		$(".boardlist.top + *").css("margin-top", (16+$navbar.height())+"px");
 	};
 
 	navbarApplySettings();
