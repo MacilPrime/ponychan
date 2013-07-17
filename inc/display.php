@@ -188,23 +188,32 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 	if ($max_chars === false)
 		$max_chars = $config['body_truncate_char'];
 	
-	// We don't want to risk truncating in the middle of an HTML comment.
-	// It's easiest just to remove them all first.
-	$body = preg_replace('/<!--.*?-->/s', '', $body);
-	
-	$original_body = $body;
-	
-	$lines = substr_count($body, '<br/>');
-	
-	// Limit line count
-	if ($lines > $max_lines) {
-		if (preg_match('/(((.*?)<br\/>){' . $max_lines . '})/', $body, $m))
+	$trunc_str = '<!--truncate here-->';
+	$manual_trunc = strpos($body, $trunc_str);
+	if ($manual_trunc !== FALSE) {
+		$body = rtrim($body);
+		$original_body = $body;
+		if ($manual_trunc + strlen($trunc_str) !== strlen($body)) {
+			// Not mb_substr, because we're indexing based on strpos which
+			// isn't multi-byte, so it also means we shouldn't be able to
+			// cut a multi-byte character.
+			$body = substr($body, 0, $manual_trunc);
+		}
+	} else {
+		// We don't want to risk truncating in the middle of an HTML comment.
+		// It's easiest just to remove them all first.
+		$body = preg_replace('/<!--.*?-->/s', '', $body);
+		
+		// Don't count removing comments as a change
+		$original_body = $body;
+		
+		if (preg_match('/(((.*?)<br\b[^>]*>){' . $max_lines . '})/', $body, $m))
 			$body = $m[0];
+		
+		$body = mb_substr($body, 0, $max_chars);
 	}
 	
-	$body = mb_substr($body, 0, $max_chars);
-	
-	if ($body != $original_body) {
+	if ($body !== $original_body) {
 		// Remove any corrupt tags at the end
 		$body = preg_replace('/<[^>]*$/', '', $body);
 		
