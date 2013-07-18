@@ -413,6 +413,8 @@
 	$config['markup'][] = array("/\[cs\](.+?)\[\/cs\]/s", "<span class=\"comicsans\">\$1</span>");
 	$config['markup'][] = array("/\[tt\](.+?)\[\/tt\]/s", "<span style=\"font-family: monospace\">\$1</span>");
 	
+	$config['user_url_markup'] = true;
+	
 	// Highlight PHP code wrapped in <code> tags (PHP 5.3.0+)
 	// $config['markup'][] = array(
 	// 	'/^&lt;code&gt;(.+)&lt;\/code&gt;/ms',

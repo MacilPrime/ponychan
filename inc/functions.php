@@ -1524,24 +1524,48 @@ function markup(&$body, $track_cites = false) {
 		}
 	}
 	
-	if ($config['markup_urls']) {
+	$num_links = 0;
+	
+	if ($config['user_url_markup']) {
 		$markup_urls = array();
-		
 		$body = preg_replace_callback(
-				'/((?:https?:\/\/|ftp:\/\/|irc:\/\/)[^\s<>()"]+?(?:\([^\s<>()"]*?\)[^\s<>()"]*?)*)((?:\s|<|>|"|\.||\]|!|\?|,|&#44;|&quot;)*(?:[\s<>()"]|$))/',
-				'markup_url',
-				$body,
-				-1,
-				$num_links);
-		
-		if ($num_links > $config['max_links'])
-			error($config['error']['toomanylinks']);
+			'/\[url="?((?:https?|ftp|irc):\/\/[^\s<>"\[\]]+)"?\](.+?)\[\/url\]/',
+			function($matches) {
+				global $markup_urls;
+				$url = $matches[1];
+				$text = $matches[2];
+				$markup_urls[] = $url;
+				return '<a target="_blank" class="bodylink" rel="nofollow" href="' . $url . '">' . $text . '</a>';
+			},
+			$body,
+			$config['max_links'] + 1,
+			$num_links);
 	}
+	
+	if ($config['markup_urls']) {
+		if (!isset($markup_urls))
+			$markup_urls = array();
+		
+		$body = preg_replace_callback('/(?<=^|>)[^<]+/s', function($matches) use (&$num_links) {
+			global $config;
+			$res = preg_replace_callback(
+				'/((?:https?|ftp|irc):\/\/[^\s<>()"]+?(?:\([^\s<>()"]*?\)[^\s<>()"]*?)*)((?:\s|<|>|"|\.||\]|!|\?|,|&#44;|&quot;)*(?:[\s<>()"]|$))/',
+				'markup_url',
+				$matches[0],
+				$config['max_links'] + 1,
+				$more_num_links);
+			$num_links += $more_num_links;
+			return $res;
+		}, $body);
+	}
+	
+	if ($num_links > $config['max_links'])
+		error($config['error']['toomanylinks']);
 	
 	if ($config['auto_unicode']) {
 		$body = unicodify($body);
-	
-		if ($config['markup_urls']) {
+		
+		if (isset($markup_urls)) {
 			foreach ($markup_urls as &$url) {
 				$body = str_replace(unicodify($url), $url, $body);
 			}
@@ -1553,74 +1577,81 @@ function markup(&$body, $track_cites = false) {
 	
 	$tracked_cites = array();
 	
-	// Cites
-	if (isset($board) && preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;(\d+)([^a-z0-9&;]|$)/im', $body, $cites)) {
-		if (count($cites[0]) > $config['max_cites']) {
-			error($config['error']['toomanycites']);
-		}
+	$body = preg_replace_callback('/(?<=^|>)[^<]+/s', function($matches) use ($track_cites, &$tracked_cites) {
+		global $config, $board;
+		$body = $matches[0];
 		
-		for ($index=0;$index<count($cites[0]);$index++) {
-			$cite = $cites[2][$index];
-			$query = prepare(sprintf("SELECT `thread`,`id` FROM `posts_%s` WHERE `id` = :id LIMIT 1", $board['uri']));
-			$query->bindValue(':id', $cite);
-			$query->execute() or error(db_error($query));
-			
-			if ($post = $query->fetch()) {
-				$replacement = '<a class="bodylink postlink" onclick="highlightReply(\''.$cite.'\');" href="' .
-					$config['root'] . $board['dir'] . $config['dir']['res'] . ($post['thread']?$post['thread']:$post['id']) . '.html#' . $cite . '">' .
-						'&gt;&gt;' . $cite .
-						'</a>';
-				$body = str_replace($cites[0][$index], $cites[1][$index] . $replacement . $cites[3][$index], $body);
-				
-				if ($track_cites && $config['track_cites'])
-					$tracked_cites[] = array($board['uri'], $post['id']);
+		// Cites
+		if (isset($board) && preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;(\d+)([^a-z0-9&;]|$)/im', $body, $cites)) {
+			if (count($cites[0]) > $config['max_cites']) {
+				error($config['error']['toomanycites']);
 			}
-		}
-	}
-	
-	// Cross-board linking
-	if (preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;&gt;\/(\w+)\/(\d+)?([^a-z0-9&;]|$)/m', $body, $cites)) {
-		if (count($cites[0]) > $config['max_cites']) {
-			error($config['error']['toomanycross']);
-		}
-		
-		for ($index=0;$index<count($cites[0]);$index++) {
-			$_board = $cites[2][$index];
-			$cite = @$cites[3][$index];
 			
-			// Temporarily store board information because it will be overwritten
-			$tmp_board = $board['uri'];
-			
-			// Check if the board exists, and load settings
-			if (openBoard($_board)) {
-				if ($cite) {
-					$query = prepare(sprintf("SELECT `thread`,`id` FROM `posts_%s` WHERE `id` = :id LIMIT 1", $board['uri']));
-					$query->bindValue(':id', $cite);
-					$query->execute() or error(db_error($query));
-					
-					if ($post = $query->fetch()) {
-						$replacement = '<a class="bodylink postlink" href="' .
-							$config['root'] . $board['dir'] . $config['dir']['res'] . ($post['thread']?$post['thread']:$post['id']) . '.html#' . $cite . '">' .
-								'&gt;&gt;&gt;/' . $_board . '/' . $cite .
-								'</a>';
-						$body = str_replace($cites[0][$index], $cites[1][$index] . $replacement . $cites[4][$index], $body);
-						
-						if ($track_cites && $config['track_cites'])
-							$tracked_cites[] = array($board['uri'], $post['id']);
-					}
-				} else {
-					$replacement = '<a class="bodylink" href="' .
-						$config['root'] . $board['dir'] . $config['file_index'] . '">' .
-							'&gt;&gt;&gt;/' . $_board . '/' .
+			for ($index=0;$index<count($cites[0]);$index++) {
+				$cite = $cites[2][$index];
+				$query = prepare(sprintf("SELECT `thread`,`id` FROM `posts_%s` WHERE `id` = :id LIMIT 1", $board['uri']));
+				$query->bindValue(':id', $cite);
+				$query->execute() or error(db_error($query));
+				
+				if ($post = $query->fetch()) {
+					$replacement = '<a class="bodylink postlink" onclick="highlightReply(\''.$cite.'\');" href="' .
+						$config['root'] . $board['dir'] . $config['dir']['res'] . ($post['thread']?$post['thread']:$post['id']) . '.html#' . $cite . '">' .
+							'&gt;&gt;' . $cite .
 							'</a>';
-					$body = str_replace($cites[0][$index], $cites[1][$index] . $replacement . $cites[4][$index], $body);
+					$body = str_replace($cites[0][$index], $cites[1][$index] . $replacement . $cites[3][$index], $body);
+					
+					if ($track_cites && $config['track_cites'])
+						$tracked_cites[] = array($board['uri'], $post['id']);
 				}
 			}
-			
-			// Restore main board settings
-			openBoard($tmp_board);
 		}
-	}
+		
+		// Cross-board linking
+		if (preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;&gt;\/(\w+)\/(\d+)?([^a-z0-9&;]|$)/m', $body, $cites)) {
+			if (count($cites[0]) > $config['max_cites']) {
+				error($config['error']['toomanycross']);
+			}
+			
+			for ($index=0;$index<count($cites[0]);$index++) {
+				$_board = $cites[2][$index];
+				$cite = @$cites[3][$index];
+				
+				// Temporarily store board information because it will be overwritten
+				$tmp_board = $board['uri'];
+				
+				// Check if the board exists, and load settings
+				if (openBoard($_board)) {
+					if ($cite) {
+						$query = prepare(sprintf("SELECT `thread`,`id` FROM `posts_%s` WHERE `id` = :id LIMIT 1", $board['uri']));
+						$query->bindValue(':id', $cite);
+						$query->execute() or error(db_error($query));
+						
+						if ($post = $query->fetch()) {
+							$replacement = '<a class="bodylink postlink" href="' .
+								$config['root'] . $board['dir'] . $config['dir']['res'] . ($post['thread']?$post['thread']:$post['id']) . '.html#' . $cite . '">' .
+									'&gt;&gt;&gt;/' . $_board . '/' . $cite .
+									'</a>';
+							$body = str_replace($cites[0][$index], $cites[1][$index] . $replacement . $cites[4][$index], $body);
+							
+							if ($track_cites && $config['track_cites'])
+								$tracked_cites[] = array($board['uri'], $post['id']);
+						}
+					} else {
+						$replacement = '<a class="bodylink" href="' .
+							$config['root'] . $board['dir'] . $config['file_index'] . '">' .
+								'&gt;&gt;&gt;/' . $_board . '/' .
+								'</a>';
+						$body = str_replace($cites[0][$index], $cites[1][$index] . $replacement . $cites[4][$index], $body);
+					}
+				}
+				
+				// Restore main board settings
+				openBoard($tmp_board);
+			}
+		}
+		
+		return $body;
+	}, $body);
 	
 	$body = preg_replace("/^\s*&gt;.*$/m", '<span class="quote">$0</span>', $body);
 	
