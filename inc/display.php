@@ -180,7 +180,7 @@ function capcode($cap) {
 	return $capcode;
 }
 
-function truncate($body, $url, $max_lines = false, $max_chars = false) {
+function truncate($body, $url, $max_lines = false, $max_chars = false, $no_manual_trunc = false) {
 	global $config;
 	
 	if ($max_lines === false)
@@ -189,8 +189,7 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 		$max_chars = $config['body_truncate_char'];
 	
 	$trunc_str = '<!--truncate here-->';
-	$manual_trunc = strpos($body, $trunc_str);
-	if ($manual_trunc !== FALSE) {
+	if (!$no_manual_trunc && ($manual_trunc = strpos($body, $trunc_str)) !== FALSE) {
 		$body = rtrim($body);
 		$original_body = $body;
 		if ($manual_trunc + strlen($trunc_str) !== strlen($body)) {

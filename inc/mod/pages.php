@@ -1704,7 +1704,7 @@ function mod_reports() {
 		$append_html = Element('mod/report.html', array('report' => $report, 'config' => $config, 'mod' => $mod));
 		
 		// Bug fix for https://github.com/savetheinternet/Tinyboard/issues/21
-		$po->body = truncate($po->body, $po->link(), $config['body_truncate'] - substr_count($append_html, '<br>'));
+		$po->body = truncate($po->body, $po->link(), $config['body_truncate'] - preg_match_all('/<br\b[^>]*>/', $append_html, $extra) - 1, false, true);
 		
 		if (mb_strlen($po->body) + mb_strlen($append_html) > $config['body_truncate_char']) {
 			// still too long; temporarily increase limit in the config
