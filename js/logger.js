@@ -85,9 +85,28 @@ var send_queued = 0;
 var send_maxQueued = 7;
 var malformed_errors = {};
 
+function error_to_object(error) {
+	var newError = {message: error.message, url: error.fileName, lineNumber: error.lineNumber};
+	if (error.constructor && error.constructor.name)
+		newError.type = error.constructor.name;
+	// get anything missed. For some reason error.message doesn't show up in this pass.
+	for (var prop in error) {
+		if (!error.hasOwnProperty(prop)) continue;
+		var newProp;
+		if (prop == "fileName")
+			newProp = "url";
+		else
+			newProp = prop;
+		newError[newProp] = error[prop];
+	}
+	return newError;
+}
+
 function send_error(error, retryTime) {
 	if (typeof error === "string")
 		error = {message: error};
+	else if (error instanceof Error)
+		error = error_to_object(error);
 	
 	error.pageurl = document.location.href;
 	var errorString = JSON.stringify(error);
@@ -154,7 +173,7 @@ window.onerror = function(errorMsg, url, lineNumber) {
 	if (error_handler_nest_count <= 1) {
 		error_handler_nest_count++;
 		
-		var error = {message: errorMsg, url: url, lineNumber: lineNumber};
+		var error = {message: errorMsg, url: url, lineNumber: lineNumber, caughtBy: "window.onerror"};
 		send_error(error);
 		
 		error_handler_nest_count--;
