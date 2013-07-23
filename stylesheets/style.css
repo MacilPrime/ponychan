@@ -125,6 +125,7 @@ img.banner {
 	display: block;
 	border: 1px solid #a9a9a9;
 	margin: 12px auto 0 auto;
+	max-width: 100%;
 }
 img.postimg {
 	display: block;
