@@ -891,7 +891,7 @@ if (isset($_POST['delete'])) {
 			if ($p = getPostByHash($post['filehash'])) {
 				undoImage($post);
 				error(sprintf($config['error']['fileexists'], 
-					$post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'] .
+					( $post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'] ) .
 					$board['dir'] . $config['dir']['res'] .
 						($p['thread'] ?
 							$p['thread'] . '.html#' . $p['id']
@@ -904,7 +904,7 @@ if (isset($_POST['delete'])) {
 			if ($p = getPostByHashInThread($post['filehash'], $post['thread'])) {
 				undoImage($post);
 				error(sprintf($config['error']['fileexistsinthread'], 
-					$post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'] .
+					( $post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'] ) .
 					$board['dir'] . $config['dir']['res'] .
 						($p['thread'] ?
 							$p['thread'] . '.html#' . $p['id']
