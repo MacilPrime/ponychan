@@ -98,16 +98,19 @@
 			</th>
 			<td>
 				{% if not id and post.mod|hasPermission(config.mod.sticky, board.uri) %}<div>
-					<label for="sticky">{% trans %}Sticky{% endtrans %}</label>
-					<input title="{% trans %}Sticky{% endtrans %}" type="checkbox" name="sticky" id="sticky"><br>
+					<label>
+					<input title="{% trans %}Sticky{% endtrans %}" type="checkbox" name="sticky" id="sticky">
+					 {% trans %}Sticky{% endtrans %}</label>
 				</div>{% endif %}
 				{% if not id and post.mod|hasPermission(config.mod.lock, board.uri) %}<div>
-					<label for="lock">{% trans %}Lock{% endtrans %}</label><br>
+					<label>
 					<input title="{% trans %}Lock{% endtrans %}" type="checkbox" name="lock" id="lock">
+					 {% trans %}Lock{% endtrans %}</label>
 				</div>{% endif %}
 				{% if post.mod|hasPermission(config.mod.rawhtml, board.uri) %}<div>
-					<label for="raw">{% trans %}Raw HTML{% endtrans %}</label><br>
+					<label>
 					<input title="{% trans %}Raw HTML{% endtrans %}" type="checkbox" name="raw" id="raw">
+					 {% trans %}Raw HTML{% endtrans %}</label>
 				</div>{% endif %}
 			</td>
 		</tr>
