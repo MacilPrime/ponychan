@@ -91,12 +91,23 @@
 			</td>
 		</tr>
 		{% endif %}
-		{% if mod %}
+		{% if mod or config.spoiler_images or (config.mature_allowed and not id) %}
 		<tr>
 			<th>
 				{% trans %}Flags{% endtrans %}
 			</th>
 			<td>
+				{% if config.spoiler_images %}<div>
+					<label>
+					<input id="spoiler" name="spoiler" type="checkbox">
+					 {% trans %}Spoiler Image{% endtrans %}</label>
+				</div>{% endif %}
+				{% if config.mature_allowed and not id %}<div style="display:none" class="mature_post_button">
+					<label>
+					<input id="mature" name="mature" type="checkbox">
+					 {% trans %}Mature Content{% endtrans %}</label>
+				</div>{% endif %}
+			{% if mod %}
 				{% if not id and post.mod|hasPermission(config.mod.sticky, board.uri) %}<div>
 					<label>
 					<input title="{% trans %}Sticky{% endtrans %}" type="checkbox" name="sticky" id="sticky">
@@ -112,6 +123,7 @@
 					<input title="{% trans %}Raw HTML{% endtrans %}" type="checkbox" name="raw" id="raw">
 					 {% trans %}Raw HTML{% endtrans %}</label>
 				</div>{% endif %}
+			{% endif %}
 			</td>
 		</tr>
 		{% endif %}
@@ -126,20 +138,6 @@
 				{{ antibot.html() }}
 			</td>
 		</tr>{% endif %}
-		{% if config.spoiler_images or (config.mature_allowed and not id) %}
-		<tr>
-			<td colspan=2>
-				{% if config.spoiler_images %}
-				 <input id="spoiler" name="spoiler" type="checkbox"> <label for="spoiler">{% trans %}Spoiler Image{% endtrans %}</label>
-				{% endif %}
-				{% if config.mature_allowed and not id %}
-				 <span style="display:none" class="mature_post_button">
-					<input id="mature" name="mature" type="checkbox"> <label for="mature">{% trans %}Mature Content{% endtrans %}</label>
-				</span>
-				{% endif %}
-			</td>
-		</tr>
-		{% endif %}
 	</table>
 {{ antibot.html(true) }}
 <input type="hidden" name="hash" value="{{ antibot.hash() }}">
