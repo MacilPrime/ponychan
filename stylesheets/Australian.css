@@ -1,181 +1,200 @@
-/*
-
-Australian.css - A spartan design for mlpchan.net
-
-http://colorschemedesigner.com/#0C61Teeqaw0w0
-
-    +----------+---------+---------+
-    |          |         |         |
-    | #E8C39A  |         | #9C8468 |
-    |          |         |         |
-    +----------+ #D0A574 +---------+   Primary
-    |          |         |         |
-    | #E8CDAF  |         | #875926 |
-    |          |         |         |
-    +----------+---------+---------+
-    | #9C8E68  |         | #E8D29A |
-    +----------+ #D0B674 +---------+   Secondary A
-    | #876C26  |         | #E8D8AF |
-    +----------+---------+---------+
-    | #9C7268  |         | #E8A99A |
-    +----------+ #D08674 +---------+   Secondary B
-    | #873826  |         | #E8BAAF |
-    +----------+---------+---------+
-    | #435963  |         | #84AFC1 |
-    +----------+ #4C7383 +---------+   Complements
-    | #194355  |         | #94B4C1 |
-    +----------+---------+---------+
-	
-
-AUTHOR
-
-RogerDodger <roger.dodger.pony@gmail.com>, last modified 19 Nov 2012.
-
-COPYING
-
-This document is free software. It comes without any warranty, to
-the extent permitted by applicable law. You can redistribute it
-and/or modify it under the terms of the Do What The Fuck You Want
-To Public License, Version 2, as published by Sam Hocevar. See
-http://sam.zoy.org/wtfpl/COPYING for more details.
-
-*/
-
-body {
-	background: #E8C39A url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAEsCAYAAAACUNnVAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wLEgAHF+h6y/EAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAlklEQVQ4y7VTWw6DMAxzc+ZdaffZhRLvox0IKS9E94Nw7Dg2Evi8XxSQEACPH9ws5m2Wd1z4D/hYt+fthGtGgDL8jdzKItNwrQHzXdZWVptyM8soRpjKmqaezpp3u84W5fN0qGNYPdOoFg6WzdIWlWFUxuvh2Wv6IfKTWh9acACc/+DZ/DfTK2syABUCmAQW5AEtDTQlX32Wy0EeSpPfAAAAAElFTkSuQmCC') repeat-x;
-	color: #222;
-	font-family: "Bitstream Charter", "Charter BT", "Book Antiqua",
-		"Bookman Old Style", Palladio, "URW Palladio L", Garamond,
-		"Apple Garamond", Georgia, serif;
-}
-header h1 {
-	font-size: 48px;
-	font-family: inherit;
-	color: #000;
-}
-header div.subtitle {
-	font-size: 12px;
-	color: #222;
-}
-h2 {
-	font-size: 24px;
-	color: #444;
-}
-h3 {
-	font-size: 18px;
-	color: #000;
-}
-hr, .thread hr {
-	border-top: 1px solid #D0A574;
-}
-
-/*
- * Containers
+/**
+ * NAME
+ *
+ * australian.css - A spartan design for mlpchan.net
+ *
+ * COLOUR SCHEME
+ *
+ * From http://colorschemedesigner.com/#0C61Teeqaw0w0
+ *
+ * SOURCE CODE
+ *
+ * Available at https://gist.github.com/RogerDodger/24483ecc752334735035
+ *
+ * AUTHOR
+ *
+ * RogerDodger <roger.dodger.pony@gmail.com>, last modified 27 Jul 2013.
+ *
+ * COPYING
+ *
+ * This document is free software. It comes without any warranty, to
+ * the extent permitted by applicable law. You can redistribute it
+ * and/or modify it under the terms of the Do What The Fuck You Want
+ * To Public License, Version 2, as published by Sam Hocevar. See
+ * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
+/*
+ * 1. Change to inherit when this becomes config option
+ */
+body {
+  background-color: #e8c39a;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e8c39a), color-stop(100%, #d0a574));
+  background-image: -webkit-linear-gradient(bottom, #e8c39a, #d0a574);
+  background-image: linear-gradient(to top,#e8c39a, #d0a574);
+  background-size: auto 30em;
+  color: #222;
+  /* 1 */
+  font-family: serif;
+  font-size: 16px;
+  line-height: 1.25; }
+
+header h1 {
+  color: #000;
+  font-size: 3em;
+  line-height: 1;
+  font-family: inherit; }
+header div.subtitle {
+  color: #222;
+  font-size: 1em; }
+
+h2 {
+  color: #444;
+  font-size: 1.5em; }
+
+h3 {
+  color: #000;
+  font-size: 1.2em; }
+
+hr,
+.thread hr {
+  border-top: 0.07em solid #d0a574; }
+
+.thread hr {
+  margin: 1em 0; }
 
 div.banner {
-	background: transparent;
-	color: inherit;
-}
+  background: transparent;
+  color: inherit; }
+
 div.pages {
-	background: transparent;
-	color: #444;
-	border: none;
-}
+  background: transparent;
+  border: none;
+  color: #444; }
+
+.boardlist {
+  font-size: 0.9em; }
+
+.boardlist.top {
+  padding: 0; }
+  .boardlist.top .boardlistpart a,
+  .boardlist.top .boardlistpart a:visited,
+  .boardlist.top .boardlistpart a[href="/"] {
+    font-family: sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    padding: 0.6em 0.3em; }
+  .boardlist.top .boardlistpart a.boardlistactive {
+    background: transparent;
+    border-top: 0.3em solid #aaa;
+    padding-top: 0.3em; }
+  .boardlist.top .boardlistpart a:hover {
+    background: transparent;
+    border-bottom: 0.3em solid #aaa;
+    padding-bottom: 0.3em; }
+  .boardlist.top .boardlistpart a[href="/"]:hover {
+    border-bottom: 0.3em solid transparent; }
+
 .boardlist.bottom {
-	color: #444;
-}
-div.post.reply, div.homeblock {
-	background: #E8CDAF;
-	border: 1px solid #D0A574;
-	border-radius: 5px 0px 0px 0px;
-}
-div.post.reply.highlighted {
-	background: #F7E0C8;
-}
+  color: #444; }
+
+.unimportant,
+.unimportant * {
+  font-size: 0.8em; }
+
 div.blotter {
-	color: inherit;
-}
-.hidetext {
-	border: 1px solid #D0A574;
-	background: rgba(255, 255, 255, 0.20);
-	padding: 10px;
-	margin: 0;
-	position: relative;
-	left: -11px;
-	width: 100%;
-}
-.hidetext.off {
-	padding: 1px 10px;
-}
+  color: inherit; }
 
-/*
- * Content
- */
-
-a, a:visited,
+a,
+a:visited,
 a.bodylink,
 div.banner a,
 #qrDisplayButton {
-	color: #873826;
-	text-decoration: none;
-	transition: .05s all linear;
-	-moz-transition: .05s all linear;
-	-webkit-transition: .05s all linear;
-}
-a:hover,
-a.bodylink:hover,
-div.banner a:hover,
-p.intro a.post_no:hover,
-#qrDisplayButton:hover {
-	color: #E41;
-}
+  color: #873826;
+  text-decoration: none; }
+  a:hover,
+  a:visited:hover,
+  a.bodylink:hover,
+  div.banner a:hover,
+  #qrDisplayButton:hover {
+    color: #cb6048; }
+
+p.intro a.post_no:hover {
+  color: #cb6048; }
 p.intro span.subject {
-	color: #000;
-}
+  color: #000; }
 p.intro span.name,
 p.intro a.email span.name,
 p.intro a.email:hover span.name {
-	color: #435963;
-}
+  color: #435963; }
 p.intro a.email span.name {
-	border-bottom: 1px dotted #194355;
-}
-span.trip {
-	color: #4C7383;
-}
+  border-bottom: 0.07em dotted #194355; }
 p.intro span.trip,
 p.intro span.name {
-	font-size: 1.1em;
-}
+  font-size: 1.1em; }
+
+.fileinfo {
+  font-size: 0.9em; }
+
+div.post .body {
+  max-width: 66em; }
+
+div.post.reply,
+div.homeblock {
+  background: #e8cdaf;
+  border: 0.07em solid #d0a574;
+  border-top-left-radius: 0.3em;
+  padding-right: 1em; }
+
+div.post.reply.highlighted {
+  background: #f1e1cf; }
+
+span.trip {
+  color: #4c7383; }
+
 span.quote {
-	color: #C06F60;
-}
+  color: #c66b56; }
+
 .hashtag {
-	background: #E8D8AF;
-	border: 1px solid #D0B674;
-	border-radius: 5px;
-	margin: 0 2px;
-	color: inherit;
-	box-shadow: 1px 1px 1px #876C26;
-}
+  background: #e8d8af;
+  border: 0.07em solid #d0b674;
+  border-radius: 0.3em;
+  box-shadow: 0.07em 0.07em 0.07em #876c26;
+  color: inherit;
+  margin: 0 0.15em; }
 
-/*
- * Forms
- */
+.hidetext {
+  background: rgba(255, 255, 255, 0.2);
+  border: 0.07em solid #d0a574;
+  padding: 0.6em;
+  margin: 0;
+  width: 100%; }
 
-form[name="post"] table {
-	line-height: 0;
-}
-form[name="post"] table tr th {
-	background: #E8CDAF;
-	border: 1px solid #D0A574;
-}
+.hidetext.off {
+  padding: 0.1em 0.6em; }
+
+form[name="post"] table,
+form[name="editpost"] table {
+  padding: 0.5em 0; }
+form[name="post"] table tr th,
+form[name="editpost"] table tr th {
+  background: transparent;
+  padding: 0 0.7em;
+  text-align: right; }
 form[name="post"] input[type="text"],
 form[name="post"] input[type="password"],
-form[name="post"] textarea {
-	padding: 4px;
-	border: 1px solid #D0A574;
-	font-family: Tahoma, Verdana, sans-serif;
-	font: -webkit-small-control;
-}
+form[name="post"] textarea,
+form[name="editpost"] input[type="text"],
+form[name="editpost"] input[type="password"],
+form[name="editpost"] textarea {
+  border: 0.1em solid #d0a574;
+  border-radius: 0.3em;
+  padding: 0.2em; }
+form[name="post"] input[type="text"],
+form[name="editpost"] input[type="text"] {
+  width: 20em; }
+form[name="post"] textarea,
+form[name="editpost"] textarea {
+  height: 15em;
+  min-height: 15em;
+  min-width: 40em;
+  width: 40em; }
