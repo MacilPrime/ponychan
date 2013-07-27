@@ -743,7 +743,6 @@
 	$config['additional_javascript'][] = 'js/ips.js';
 	$config['additional_javascript'][] = 'js/fancy.js';
 	$config['additional_javascript'][] = 'js/zam_detector.js';
-	$config['additional_javascript'][] = 'js/https_send.js';
 	 
 	// Where these script files are located on the web (defaults to $config['root']).
 	// $config['additional_javascript_url'] = '/js/';

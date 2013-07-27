@@ -7,13 +7,6 @@
  *
  */
 
-// Temporary https transition forcer.
-// Making the site immediately issue 301 redirects would break thread
-// auto-reloading for people currently in threads.
-if (window.location.protocol != "https:" && (!window.localStorage || localStorage.last_https_send)) {
-	window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-}
-
 $(document).ready(function(){
 	var $secondLine = $("footer .unimportant").slice(1,2);
 	var $targetLink = $("footer .unimportant a").slice(1,2);
