@@ -102,7 +102,7 @@ $(document).ready(function(){
 		var id;
 		
 		if(id = $link.text().match(/^>>(\d+)/)) {
-			id = id[1];
+			id = parseInt(id[1]);
 		} else {
 			return;
 		}
