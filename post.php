@@ -710,12 +710,12 @@ if (isset($_POST['delete'])) {
 			// Currently only works with the 'convert' option selected but it could easily be expanded to work with the rest if you can be bothered.
 			if ($config['thumb_method'] == 'convert') {
 				if ($post['extension'] == 'jpg' || $post['extension'] == 'jpeg') {
-					$exif = exif_read_data($upload);
+					$exif = @exif_read_data($upload);
 					if (isset($exif['Orientation'])) {
+						$args = false;
 						switch($exif['Orientation']) {
 							case 1:
 								// Normal
-								$args = false;
 								break;
 							case 2:
 								// 888888
