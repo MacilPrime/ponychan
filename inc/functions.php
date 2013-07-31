@@ -21,6 +21,8 @@ $mod = false;
 // Setting to true will cause error messages to be given as JSON.
 $wantjson = false;
 
+utf8_clean_userinput();
+
 $userid = false;
 check_userid();
 
@@ -250,6 +252,26 @@ function _syslog($priority, $message) {
 		syslog($priority, $message . ' - client: ' . $_SERVER['REMOTE_ADDR'] . ', request: "' . $_SERVER['REQUEST_METHOD'] . ' ' . $_SERVER['REQUEST_URI'] . '"');
 	} else {
 		syslog($priority, $message);
+	}
+}
+
+function utf8_clean($str) {
+	// Removes invalid UTF-8 byte sequences from string.
+	return @iconv('UTF-8', 'UTF-8//IGNORE', $str);
+}
+
+function utf8_clean_userinput() {
+	foreach ($_GET as &$item) {
+		$item = utf8_clean($item);
+	}
+	foreach ($_POST as &$item) {
+		$item = utf8_clean($item);
+	}
+	foreach ($_COOKIE as &$item) {
+		$item = utf8_clean($item);
+	}
+	foreach ($_FILES as &$item) {
+		$item['name'] = utf8_clean($item['name']);
 	}
 }
 
