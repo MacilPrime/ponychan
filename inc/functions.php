@@ -529,29 +529,57 @@ function file_write($path, $data, $simple = false, $skip_purge = false) {
 		}
 	}
 	
-	if (!$fp = fopen($path, $simple ? 'w' : 'c'))
-		error('Unable to open file for writing: ' . $path);
-	
-	// File locking
-	if (!$simple && !flock($fp, LOCK_EX)) {
-		error('Unable to lock file: ' . $path);
+	if (!$simple) {
+		// Windows doesn't support atomic renames replacing the original file.
+		if (strncasecmp(PHP_OS, 'WIN', 3) !== 0) {
+			$use_move = true;
+			$use_lock = false;
+		} else {
+			$use_move = false;
+			$use_lock = true;
+		}
+	} else {
+		$use_lock = false;
+		$use_move = false;
 	}
 	
-	// Truncate file
-	if (!$simple && !ftruncate($fp, 0))
-		error('Unable to truncate file: ' . $path);
+	// Path for file we're writing to. If $use_move, then later we'll
+	// rename this temporary file to the final filename.
+	if ($use_move) {
+		$tpath = $path . '.tmp-' . getmypid() . '~';
+	} else {
+		$tpath = $path;
+	}
+	
+	if (!$fp = fopen($tpath, !$use_lock ? 'w' : 'c'))
+		error('Unable to open file for writing: ' . $tpath);
+	
+	if ($use_lock) {
+		// File locking
+		if (!flock($fp, LOCK_EX))
+			error('Unable to lock file: ' . $tpath);
+		
+		// Truncate file
+		if (!ftruncate($fp, 0))
+			error('Unable to truncate file: ' . $tpath);
+	}
 		
 	// Write data
 	if (fwrite($fp, $data) === false)
-		error('Unable to write to file: ' . $path);
+		error('Unable to write to file: ' . $tpath);
 	
 	// Unlock
-	if (!$simple)
+	if ($use_lock)
 		flock($fp, LOCK_UN);
 	
 	// Close
 	if (!fclose($fp))
-		error('Unable to close file: ' . $path);
+		error('Unable to close file: ' . $tpath);
+	
+	if ($use_move) {
+		if (!rename($tpath, $path))
+			error('Unable to move file: ' . $tpath);
+	}
 	
 	if (!$skip_purge && isset($config['purge'])) {
 		// Purge cache
