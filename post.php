@@ -23,7 +23,7 @@ if (isset($_POST['delete'])) {
 	if (!isset($_POST['board'], $_POST['password']))
 		error($config['error']['bot']);
 	
-	$password = &$_POST['password'];
+	$password = $_POST['password'];
 	
 	if ($password == '')
 		error($config['error']['invalidpassword']);
@@ -47,7 +47,7 @@ if (isset($_POST['delete'])) {
 	if (empty($delete))
 		error($config['error']['nodelete']);
 		
-	foreach ($delete as &$id) {
+	foreach ($delete as $id) {
 		$query = prepare(sprintf("SELECT `thread`, `time`,`password` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
 		$query->bindValue(':id', $id, PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
@@ -76,7 +76,7 @@ if (isset($_POST['delete'])) {
 	
 	buildIndex();
 	
-	$is_mod = isset($_POST['mod']) && $_POST['mod'];
+	$is_mod = isset($_POST['mod']) && !!$_POST['mod'];
 	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 	
 	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
@@ -87,7 +87,7 @@ if (isset($_POST['delete'])) {
 	if (!isset($_POST['board'], $_POST['password']))
 		error($config['error']['bot']);
 	
-	$password = &$_POST['password'];
+	$password = $_POST['password'];
 	
 	if ($password == '')
 		error($config['error']['invalidpassword']);
@@ -332,10 +332,10 @@ if (isset($_POST['delete'])) {
 	if (count($report) > $config['report_limit'])
 		error($config['error']['toomanyreports']);
 	
-	$reason = &$_POST['reason'];
+	$reason = $_POST['reason'];
 	markup($reason);
 	
-	foreach ($report as &$id) {
+	foreach ($report as $id) {
 		$query = prepare(sprintf("SELECT `thread` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
 		$query->bindValue(':id', $id, PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
@@ -472,7 +472,7 @@ if (isset($_POST['delete'])) {
 	if ($config['enable_embedding'] && isset($_POST['embed']) && !empty($_POST['embed'])) {
 		// yep; validate it
 		$value = $_POST['embed'];
-		foreach ($config['embedding'] as &$embed) {
+		foreach ($config['embedding'] as $embed) {
 			if ($html = preg_replace($embed[0], $embed[1], $value)) {
 				if ($html == $value) {
 					// Nope.
