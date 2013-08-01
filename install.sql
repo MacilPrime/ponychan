@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `seen` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY (`ip`),
+  KEY (`expires`),
   KEY (`ip_type`,`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 
