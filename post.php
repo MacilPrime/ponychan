@@ -678,7 +678,7 @@ if (isset($_POST['delete'])) {
 		$is_an_image = !in_array($post['extension'], $config['allowed_ext_files']);
 		
 		// Truncate filename if it is too long
-		$post['filename'] = substr($post['filename'], 0, $config['max_filename_len']);
+		$post['filename'] = mb_substr($post['filename'], 0, $config['max_filename_len']);
 		
 		$upload = $_FILES['file']['tmp_name'];
 		
