@@ -67,22 +67,10 @@ class Image {
 		$thumb->original_width = $this->size->width;
 		$thumb->original_height = $this->size->height;
 		
-		$x_ratio = $max_width / $this->size->width;
-		$y_ratio = $max_height / $this->size->height;
-		
-		if (($this->size->width <= $max_width) && ($this->size->height <= $max_height)) {
-			$width = $this->size->width;
-			$height = $this->size->height;
-		} elseif (($x_ratio * $this->size->height) < $max_height) {
-			$height = ceil($x_ratio * $this->size->height);
-			$width = $max_width;
-		} else {
-			$width = ceil($y_ratio * $this->size->width);
-			$height = $max_height;
-		}
+		$newRes = computeResize($this->size->width, $this->size->height, $max_width, $max_height);
 		
 		$thumb->gifsicle = $gifsicle;
-		$thumb->_resize($this->image->image, $width, $height);
+		$thumb->_resize($this->image->image, $newRes['width'], $newRes['height']);
 		
 		return $thumb;
 	}

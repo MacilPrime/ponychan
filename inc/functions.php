@@ -275,6 +275,23 @@ function utf8_clean_userinput() {
 	}
 }
 
+function computeResize($width, $height, $max_width, $max_height) {
+	$x_ratio = $max_width / $width;
+	$y_ratio = $max_height / $height;
+	
+	if (($width > $max_width) || ($height > $max_height)) {
+		if (($x_ratio * $height) < $max_height) {
+			$height = min(ceil($x_ratio * $height), $max_height);
+			$width = $max_width;
+		} else {
+			$width = min(ceil($y_ratio * $width), $max_width);
+			$height = $max_height;
+		}
+	}
+	
+	return array('width' => $width, 'height' => $height);
+}
+
 function check_userid() {
 	global $userid;
 	if (!isset($_COOKIE['userid']))
