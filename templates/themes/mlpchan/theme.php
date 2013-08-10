@@ -8,6 +8,7 @@
 		//	- boards (board list changed)
 		//	- post-thread (a thread has been made)
 		//	- post-reply (a reply has been made)
+		//	- post (possibly a combination of threads and replies and deletions)
 		
 		$t = new tMLPchan();
 		$t->build($action, $settings);
@@ -20,7 +21,7 @@
 			
 			$this->excluded = explode(' ', $settings['exclude']);
 			
-			if ($action == 'all' || $action == 'boards' || $action == 'news' || $action == 'post-reply')
+			if ($action == 'all' || $action == 'boards' || $action == 'news' || $action == 'post-reply' || $action == 'post')
 				file_write($config['dir']['home'] . $settings['file'], tMLPchan::homepage($settings));
 			
 			if ($action == 'all')
