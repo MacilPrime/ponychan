@@ -1,12 +1,13 @@
 <?php
 	require 'info.php';
 	
-	function mlpchan_build($action, $settings) {
+	function mlpchan_build($action, $settings, $board) {
 		// Possible values for $action:
 		//	- all (rebuild everything, initialization)
 		//	- news (news has been updated)
 		//	- boards (board list changed)
-		//	- post (a post has been made)
+		//	- post-thread (a thread has been made)
+		//	- post-reply (a reply has been made)
 		
 		$t = new tMLPchan();
 		$t->build($action, $settings);
@@ -19,7 +20,7 @@
 			
 			$this->excluded = explode(' ', $settings['exclude']);
 			
-			if ($action == 'all' || $action == 'boards' || $action == 'news' || $action == 'post')
+			if ($action == 'all' || $action == 'boards' || $action == 'news' || $action == 'post-reply')
 				file_write($config['dir']['home'] . $settings['file'], tMLPchan::homepage($settings));
 			
 			if ($action == 'all')

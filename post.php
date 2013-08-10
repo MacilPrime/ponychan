@@ -976,7 +976,7 @@ if (isset($_POST['delete'])) {
 		logToFile($config['action_log'], $logline);
 	}
 	
-	rebuildThemes('post');
+	rebuildThemes($post['op'] ? 'post-thread' : 'post-reply', $board['uri']);
 	
 	if ($wantjson) {
 		$response = array();

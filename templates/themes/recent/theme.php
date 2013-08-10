@@ -1,7 +1,7 @@
 <?php
 	require 'info.php';
 	
-	function recentposts_build($action, $settings) {
+	function recentposts_build($action, $settings, $board) {
 		// Possible values for $action:
 		//	- all (rebuild everything, initialization)
 		//	- news (news has been updated)
