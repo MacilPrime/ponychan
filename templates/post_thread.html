@@ -59,7 +59,7 @@ This is a mature content thread. You must have viewing mature content enabled in
 	{% else %}
 		{{ config.uri_thumb }}{{ post.thumb }}
 	{% endif %}"
-	{% if post.mature and post.thumb != 'file' and post.thumb != 'spoiler' %}
+	{% if post.mature and post.thumb != 'file' and post.thumb != 'spoiler' and post.file != 'deleted' %}
 	 data-mature-src="{{ config.uri_thumb }}{{ post.thumb }}"
 	 data-mature-style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px"
 	 style=""
