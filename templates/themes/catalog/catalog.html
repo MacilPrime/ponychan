@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}?v={{ 'stylesheets/style.css'|filemtime }}">
+	{% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.url_favicon }}">{% endif %}
+	<title>{{ board.url }} - {{ board.title|e }} - Catalog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+	{% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
+	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}?v={{ ('stylesheets/' ~ config.default_stylesheet.1)|filemtime }}">{% endif %}
+	{% if not nojavascript %}
+		<script type="text/javascript" src="{{ config.url_javascript }}?v={{ config.file_script|filemtime }}"></script>
+		{% if not config.additional_javascript_compile %}
+		{% for javascript in config.additional_javascript %}<script type="text/javascript" src="{{ config.additional_javascript_url }}{{ javascript }}?v={{ javascript|filemtime }}"></script>{% endfor %}
+		{% endif %}
+	{% endif %}
+	{% if config.recaptcha %}<style type="text/css">{% raw %}
+		.recaptcha_image_cell {
+			background: none !important;
+		}
+		table.recaptchatable {
+			border: none !important;
+		}
+		#recaptcha_logo, #recaptcha_tagline {
+			display: none;
+			float: right;
+		}
+		.recaptchatable a {
+			display: block;
+		}
+	{% endraw %}</style>{% endif %}
+</head>
+<body>
+	{{ boardlist.top }}
+	{% if pm %}<div class="top_notice">You have <a href="?/PM/{{ pm.id }}">an unread PM</a>{% if pm.waiting > 0 %}, plus {{ pm.waiting }} more waiting{% endif %}.</div><hr />{% endif %}
+	{% if config.url_banner %}<img class="banner" src="{{ config.url_banner }}" {% if config.banner_width or config.banner_height %}style="{% if config.banner_width %}width:{{ config.banner_width }}px{% endif %};{% if config.banner_width %}height:{{ config.banner_height }}px{% endif %}" {% endif %}alt="" />{% endif %}
+	<header>
+		<h1>{{ board.url }} - {{ board.title|e }}</h1>
+		<div class="subtitle">
+			Catalog
+			{% if mod %}<p><a href="?/">{% trans %}Return to dashboard{% endtrans %}</a></p>{% endif %}
+		</div>
+	</header>
+	
+	{% if config.blotter %}<hr /><div class="blotter">{{ config.blotter }}</div>{% endif %}
+	<hr />
+
+	<div class="catalog">
+	{% for post in threads %}
+		<div class="catathread{% if post.mature %} mature_thread{% endif %}">
+			<a class="catalink" href="{{post.link}}">
+{% if post.file and post.thumb %}
+		<img src="{% filter remove_whitespace %}
+		{% if post.file == 'deleted' %}
+			{{ config.image_deleted }}
+		{% elseif post.thumb == 'spoiler' %}
+			{{ config.root }}{{ config.spoiler_image }}
+		{% elseif post.mature %}
+			{{ config.root }}{{ config.mature_image }}
+		{% else %}
+			{{ config.uri_thumb }}{{ post.thumb }}
+		{% endif %}
+		{% endfilter %}"
+		{% if post.mature and post.thumb != 'file' and post.thumb != 'spoiler' and post.file != 'deleted' %}
+		 data-mature-src="{{ config.uri_thumb }}{{ post.thumb }}"
+		 data-mature-style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px"
+		 style=""
+		{% else %}
+		 style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px"
+		{% endif %}
+		 class="catalogthumb"
+		 title="{{post.bump|date('%b %d %H:%M')}}">
+{% else %}
+		(No image)
+{% endif %}
+			</a>
+			<div class="catacount">{% trans %}1 reply{% plural post.reply_count %}{{ count }} replies{% endtrans %}</div>
+			<div class="catapreview">
+				{% if post.subject %}<span class="catasubject">{{ post.subject }}</span> {% endif %}{{ post.body }}
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+	
+	<hr/>
+	{{ boardlist.bottom }}
+	<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by <a href="http://tinyboard.org/">Tinyboard</a> {{ config.version }} | <a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2013 Tinyboard Development Group</p>
+</body>
+</html>

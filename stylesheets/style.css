@@ -914,3 +914,39 @@ table.boarddir {
 table.boarddir td {
 	padding: 2px 5px;
 }
+
+/* catalog stuff */
+.catalink {
+	display: block;
+}
+.catalog {
+	text-align: center;
+}
+.catacount {
+	font-size: 0.9em;
+}
+.catasubject {
+	font-weight: bold;
+}
+img.catalogthumb {
+	margin: auto;
+	margin-bottom: 9px;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.55);
+	border: 2px solid rgba(153, 153, 153, 0);
+}
+.catalink img:hover {
+	border: 2px solid rgba(153, 153, 153, 0.27);
+}
+.catathread {
+	display: inline-block;
+	vertical-align: top;
+	margin: 5px 10px 10px;
+	text-align:center;
+	width: 165px;
+	overflow: hidden;
+	font-size: 11px;
+	padding: 5px;
+	background: rgba(182, 182, 182, 0.12);
+	border: 2px solid rgba(111, 111, 111, 0.34);
+	max-height:275px;
+}

@@ -55,8 +55,8 @@
 	{% include 'report_delete.html' %}
 	</form>
 	<div class="pages">{{ btn.prev }} {% for page in pages %}
-		 [<a {% if page.selected %}class="selected"{% endif %}{% if not page.selected %}href="{{ page.link }}"{% endif %}>{{ page.num }}</a>]{% if loop.last %} {% endif %}
-	{% endfor %} {{ btn.next }}</div>
+		 [<a {% if page.selected %}class="selected"{% endif %}{% if not page.selected %}href="{{ page.link }}"{% endif %}>{{ page.num }}</a>]
+	{% endfor %} {{ btn.next }} | <a href="{{ config.root }}{{ board.dir }}catalog.html">Catalog</a></div>
 	{{ boardlist.bottom }}
 	<footer>
 		<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by <a href="http://tinyboard.org/">Tinyboard</a> {{ config.version }} | <a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2013 Tinyboard Development Group</p>
