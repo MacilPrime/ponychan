@@ -550,7 +550,7 @@
 	$config['anonymous'] = 'Anonymous';
 	
 	// How many reports you can create in the same request.
-	$config['report_limit'] = 3;
+	$config['report_limit'] = 30;
 	
 /*
  * ====================
