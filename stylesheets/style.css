@@ -899,6 +899,12 @@ table.mod.config-editor input[type="text"] {
 	white-space: nowrap;
 	overflow-x: hidden;
 }
+.donatebitcoin {
+	font-size: 0.8em;
+}
+.donatebitcoin a, .donatebitcoin a:visited {
+	text-decoration: none;
+}
 .recent_post {
 	display: inline-block;
 	text-align: center;
