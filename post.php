@@ -998,6 +998,22 @@ if (isset($_POST['delete'])) {
 		header('Location: install.php', true, $config['redirect_http']);
 	} else {
 		// They opened post.php in their browser manually.
+		if (isset($config['error_log'])) {
+			$logdata = array();
+			$logdata['userid'] = $userid;
+			$logdata['action'] = 'post-failed-attempt';
+			$logdata['time'] = date(DATE_ATOM);
+			$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
+
+			if (isset($_POST['name']))
+				$_POST['name'] = 'removed';
+			if (isset($_POST['password']))
+				$_POST['password'] = 'removed';
+			$logdata['POST'] = $_POST;
+			
+			$logline = json_encode($logdata);
+			logToFile($config['error_log'], $logline);
+		}
 		error($config['error']['nopost']);
 	}
 }
