@@ -17,6 +17,8 @@ if (get_magic_quotes_gpc()) {
 	$_POST = strip_array($_POST);
 }
 
+header("Cache-Control: no-cache, must-revalidate");
+
 if (isset($_POST['delete'])) {
 	// Delete
 	
