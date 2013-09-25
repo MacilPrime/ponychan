@@ -112,6 +112,7 @@ function loadConfig() {
 			$config['referer_match'] = '/^' .
 				(preg_match($config['url_regex'], $config['root']) ? '' :
 					'https?:\/\/' . $_SERVER['HTTP_HOST']) .
+				str_replace('/', '/+',
 					preg_quote($config['root'], '/') .
 				'(' .
 						str_replace('%s', '\w+', preg_quote($config['board_path'], '/')) .
@@ -128,7 +129,7 @@ function loadConfig() {
 						')' .
 					'|' .
 						preg_quote($config['file_mod'], '/') . '\?\/.*' .
-				')([#?](.+)?)?$/i';
+				')([#?](.+)?)?$') . '/i';
 		} else {
 			// CLI mode
 			$config['referer_match'] = '//';
