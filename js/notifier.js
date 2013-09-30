@@ -78,7 +78,9 @@
 	
 	function notifyCheck($post) {
 		// Only run for actually new autoloaded posts
-		if ($post.is(".preview-hidden, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
+		if ($post.is(".preview-hidden, .post-hover, .post-inline") ||
+		    $post.parent().is(".preview-hidden") ||
+		    $post.parents('.thread').first().attr("data-loaded-late"))
 			return;
 		if ($post.find('.younote').length == 0)
 			return;
