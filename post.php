@@ -587,9 +587,16 @@ if (isset($_POST['delete'])) {
 	$post['trip'] = isset($trip[1]) ? $trip[1] : '';
 	
 	if (strtolower($post['email']) == 'noko') {
-		$noko = true;
-		$post['email'] = '';
-	} else $noko = false;
+		$post['noko'] = true;
+		if ($config['hide_noko'])
+			$post['email'] = '';
+	} else $post['noko'] = false;
+	
+	if (strtolower($post['email']) == 'sage') {
+		$post['sage'] = true;
+		if ($config['hide_sage'])
+			$post['email'] = '';
+	} else $post['sage'] = false;
 	
 	$post['mature'] = $post['op'] ? false : $thread['mature'];
 	
@@ -893,7 +900,7 @@ if (isset($_POST['delete'])) {
 	buildThread($post['op'] ? $id : $post['thread']);
 	timing_mark('build_thread_end');
 	
-	if (!$post['op'] && strtolower($post['email']) != 'sage' && !$thread['sage'] && ($config['reply_limit'] == 0 || $numposts['replies']+1 < $config['reply_limit'])) {
+	if (!$post['op'] && !$post['sage'] && !$thread['sage'] && ($config['reply_limit'] == 0 || $numposts['replies']+1 < $config['reply_limit'])) {
 		bumpThread($post['thread']);
 	}
 	
@@ -921,7 +928,7 @@ if (isset($_POST['delete'])) {
 	
 	$root = $post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 	
-	if ($wantjson || $config['always_noko'] || $noko) {
+	if ($wantjson || $config['always_noko'] || $post['noko']) {
 		$redirect = $root . $board['dir'] . $config['dir']['res'] .
 			sprintf($config['file_page'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
 
