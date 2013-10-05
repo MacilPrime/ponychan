@@ -187,8 +187,10 @@ function mod_edit_board($boardName) {
 			$query->bindValue(':uri', $board['uri']);
 			$query->execute() or error(db_error($query));
 			
-			if ($config['cache']['enabled'])
+			if ($config['cache']['enabled']) {
+				cache::delete('board_' . $board['uri']);
 				cache::delete('all_boards');
+			}
 			
 			modLog('Deleted board: ' . sprintf($config['board_abbreviation'], $board['uri']), false);
 			
@@ -200,25 +202,24 @@ function mod_edit_board($boardName) {
 			
 			// Clear reports
 			$query = prepare('DELETE FROM `reports` WHERE `board` = :id');
-			$query->bindValue(':id', $board['uri'], PDO::PARAM_INT);
+			$query->bindValue(':id', $board['uri']);
 			$query->execute() or error(db_error($query));
 			
 			// Delete from table
 			$query = prepare('DELETE FROM `boards` WHERE `uri` = :uri');
-			$query->bindValue(':uri', $board['uri'], PDO::PARAM_INT);
+			$query->bindValue(':uri', $board['uri']);
 			$query->execute() or error(db_error($query));
 			
-			$query = prepare("SELECT `board`, `post` FROM `cites` WHERE `target_board` = :board");
+			$query = prepare("SELECT `board`, `post` FROM `cites` WHERE `target_board` = :board AND `board` != :board");
 			$query->bindValue(':board', $board['uri']);
 			$query->execute() or error(db_error($query));
+			
+			$old_uri = $board['uri'];
 			while ($cite = $query->fetch(PDO::FETCH_ASSOC)) {
-				if ($board['uri'] != $cite['board']) {
-					if (!isset($tmp_board))
-						$tmp_board = $board;
-					openBoard($cite['board']);
-					rebuildPost($cite['post']);
-				}
+				openBoard($cite['board']);
+				rebuildPost($cite['post']);
 			}
+			openBoard($old_uri);
 			
 			$query = prepare('DELETE FROM `cites` WHERE `board` = :board OR `target_board` = :board');
 			$query->bindValue(':board', $board['uri']);
