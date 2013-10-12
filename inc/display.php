@@ -87,6 +87,13 @@ function error($message, $priority = true) {
 		if (isset($_SERVER['HTTP_REFERER']))
 			$logdata['referrer'] = $_SERVER['HTTP_REFERER'];
 		
+		// Don't ever log tripcodes or passwords
+		if (isset($_POST['name']))
+			$_POST['name'] = 'removed';
+		if (isset($_POST['password']))
+			$_POST['password'] = 'removed';
+		$logdata['POST'] = $_POST;
+		
 		$logline = json_encode($logdata);
 		logToFile($config['error_log'], $logline);
 	}
