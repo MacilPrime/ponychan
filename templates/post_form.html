@@ -3,6 +3,7 @@
 {% if id %}<input type="hidden" name="thread" value="{{ id }}">{% endif %}
 {{ antibot.html() }}
 <input type="hidden" name="board" value="{{ board.uri }}">
+<input type="hidden" name="making_a_post" value="1">
 {{ antibot.html() }}
 {% if mod %}<input type="hidden" name="mod" value="1">{% endif %}
 	<table>

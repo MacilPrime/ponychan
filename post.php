@@ -364,7 +364,7 @@ if (isset($_POST['delete'])) {
 	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 	
 	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
-} elseif (isset($_POST['post'])) {
+} elseif (isset($_POST['post']) || isset($_POST['making_a_post'])) {
 	
 	if (isset($_POST['wantjson']) && $_POST['wantjson'])
 		$wantjson = true;
@@ -394,10 +394,6 @@ if (isset($_POST['delete'])) {
 		$post['thread'] = round($_POST['quick-reply']);
 	} else
 		$post['op'] = true;
-	
-	if (!(($post['op'] && $_POST['post'] == $config['button_newtopic']) ||
-	    (!$post['op'] && $_POST['post'] == $config['button_reply'])))
-		error($config['error']['bot']);
 	
 	// Check the referrer
 	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))

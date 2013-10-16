@@ -251,6 +251,7 @@
 		'thumbdurl',
 		'thumbtime',
 		'wantjson',
+		'making_a_post',
 		'quick-reply'
 	);
 	
