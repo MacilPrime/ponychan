@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file	
-define('VERSION', 'v0.9.6-dev-8');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-1');
 
 require 'inc/functions.php';
 
@@ -233,6 +233,23 @@ if (false) {
 			}
 		case 'v0.9.6-dev-7':
 			query("ALTER TABLE  `bans` ADD  `seen` BOOLEAN NOT NULL") or error(db_error());
+		case 'v0.9.6-dev-8':
+			// to mlpchan-1
+			query("DROP TABLE `antispam`") or error(db_error());
+			query("ALTER TABLE `bans` ADD COLUMN `ip_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:exact, 1:range glob, 2:IPv4 CIDR'") or error(db_error());
+			query("ALTER TABLE `bans` ADD KEY (`expires`)") or error(db_error());
+			query("ALTER TABLE `bans` ADD KEY (`ip_type`,`ip`)") or error(db_error());
+			query("UPDATE `bans` SET `ip_type` = 1 WHERE `ip` LIKE '%*%'") or error(db_error());
+			query("UPDATE `bans` SET `ip_type` = 2 WHERE `ip` LIKE '%/%'") or error(db_error());
+			foreach ($boards as $board) {
+				query(sprintf("ALTER TABLE `posts_%s` ADD `mature` INT(1) NOT NULL AFTER `embed`", $board['uri'])) or error(db_error());
+				query(sprintf("ALTER TABLE `posts_%s` MODIFY `email` VARCHAR(254)", $board['uri'])) or error(db_error());
+				query(sprintf("CREATE INDEX `thread_id` ON `posts_%s` (`thread`, `id`)", $board['uri'])) or error(db_error());
+				query(sprintf("DROP INDEX `thread` ON `posts_%s`", $board['uri'])) or error(db_error());
+				query(sprintf("CREATE INDEX `ip` ON `posts_%s` (`ip`)", $board['uri'])) or error(db_error());
+				// Add bodylink and postlink classes to links in posts
+				query(sprintf("UPDATE `posts_%s` SET `body`=replace( replace(body, '<a target=\"_blank\" rel=\"nofollow\" href=\"', '<a target=\"_blank\" class=\"bodylink\" rel=\"nofollow\" href=\"'), '<a onclick=\"highlightReply(', '<a class=\"bodylink postlink\" onclick=\"highlightReply(')", $board['uri'])) or error(db_error());
+			}
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);

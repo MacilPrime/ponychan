@@ -28,5 +28,6 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `mature` int(1) NOT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `thread_id` (`thread`, `id`),
+  KEY `ip` (`ip`),
   KEY `time` (`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
