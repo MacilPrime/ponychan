@@ -681,7 +681,16 @@ function mod_page_ip($ip) {
 	$args['token'] = make_secure_link_token('ban');
 	
 	if (hasPermission($config['mod']['view_ban'])) {
-		$query = prepare("SELECT `bans`.*, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `ip` = :ip ORDER BY `set` DESC");
+		$query = prepare(
+				"SELECT `bans`.*, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
+				"(`ip_type` = 0 AND `ip` = :ip) OR " .
+				"(`ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
+				"(`ip_type` = 2 AND " .
+					"`ip` REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$' AND " .
+					":ip >= INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) AND " .
+					":ip < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1))" .
+				") ORDER BY `set` DESC"
+				);
 		$query->bindValue(':ip', $ip);
 		$query->execute() or error(db_error($query));
 		$args['bans'] = $query->fetchAll(PDO::FETCH_ASSOC);
