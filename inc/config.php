@@ -965,6 +965,7 @@
 	$config['mod']['link_deletefile'] = '[F]';
 	$config['mod']['link_deletebyip'] = '[D+]';
 	$config['mod']['link_deletebyip_global'] = '[D++]';
+	$config['mod']['link_bump'] = '[Bump]';
 	$config['mod']['link_sticky'] = '[Sticky]';
 	$config['mod']['link_desticky'] = '[-Sticky]';
 	$config['mod']['link_lock'] = '[Lock]';
@@ -1102,6 +1103,8 @@
 	$config['mod']['deletebyip'] = MOD;
 	// Delete all posts by IP across all boards
 	$config['mod']['deletebyip_global'] = ADMIN;
+	// Force-bump a thread
+	$config['mod']['bump'] = MOD;
 	// Sticky a thread
 	$config['mod']['sticky'] = MOD;
 	// Lock a thread

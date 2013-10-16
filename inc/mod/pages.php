@@ -779,6 +779,23 @@ function mod_bans($page_no = 1) {
 	mod_page(_('Ban list'), 'mod/ban_list.html', array('bans' => $bans, 'count' => $count));
 }
 
+function mod_bump($board, $post) {
+	global $config;
+	
+	$post = intval($post);
+	
+	if (!openBoard($board))
+		error($config['error']['noboard']);
+	
+	if (!hasPermission($config['mod']['bump'], $board))
+		error($config['error']['noaccess']);
+	
+	bumpThread($post);
+	buildThread($post);
+	buildIndex();
+	
+	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+}
 
 function mod_lock($board, $unlock, $post) {
 	global $config;

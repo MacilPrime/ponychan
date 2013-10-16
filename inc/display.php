@@ -466,7 +466,7 @@ class Thread {
 		
 		$built = '';
 		if ($this->mod) {
-			// Mod controls (on posts)
+			// Mod controls (on thread posts)
 			// Delete
 			if (hasPermission($config['mod']['delete'], $board['uri'], $this->mod))
 				$built .= ' ' . secure_link_confirm($config['mod']['link_delete'], 'Delete', 'Are you sure you want to delete this?', $board['uri'] . '/delete/' . $this->id);
@@ -490,6 +490,10 @@ class Thread {
 			// Delete file (keep post)
 			if (!empty($this->file) && $this->file != 'deleted' && hasPermission($config['mod']['deletefile'], $board['uri'], $this->mod))
 				$built .= ' ' . secure_link_confirm($config['mod']['link_deletefile'], 'Delete file', 'Are you sure you want to delete this file?', $board['uri'] . '/deletefile/' . $this->id);
+			
+			// Bump
+			if (hasPermission($config['mod']['bump'], $board['uri'], $this->mod))
+				$built .= ' <a title="Force bump thread" href="?/' . secure_link($board['uri'] . '/bump/' . $this->id) . '">' . $config['mod']['link_bump'] . '</a>';
 			
 			// Sticky
 			if (hasPermission($config['mod']['sticky'], $board['uri'], $this->mod))
