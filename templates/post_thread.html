@@ -69,7 +69,8 @@ This is a mature content thread. You must have viewing mature content enabled in
 	 alt="" /></a>
 {% endif %}
 <div class="opMain">
-	<p class="intro"{% if not index %} id="{{ post.id }}"{% endif %}>
+	{% if not index %}<span class="jumpHandle" id="{{ post.id }}"></span>{% endif %}
+	<p class="intro">
 	<input type="checkbox" class="delete" name="delete_{{ post.id }}" id="delete_{{ post.id }}" />
 		{% if post.subject|length > 0 %}
 			{# show subject #}
