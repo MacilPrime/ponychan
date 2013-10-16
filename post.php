@@ -900,7 +900,9 @@ if (isset($_POST['delete'])) {
 	buildThread($post['op'] ? $id : $post['thread']);
 	timing_mark('build_thread_end');
 	
-	if (!$post['op'] && !$post['sage'] && !$thread['sage'] && ($config['reply_limit'] == 0 || $numposts['replies']+1 < $config['reply_limit'])) {
+	if (!$post['op'] && !$post['sage'] && !$thread['sage'] &&
+	    !($config['no_sticky_reply_bump'] && $thread['sticky']) &&
+	    ($config['reply_limit'] == 0 || $numposts['replies']+1 < $config['reply_limit'])) {
 		bumpThread($post['thread']);
 	}
 	

@@ -327,6 +327,10 @@
 	$config['delete_time'] = 10;
 	// How long before you can edit a post after posting, in seconds.
 	$config['edit_time'] = 10;
+	
+	// Disable replies bumping stickied threads
+	$config['no_sticky_reply_bump'] = true;
+	
 	// Reply limit (stops bumping thread when this is reached)
 	$config['reply_limit'] = 250;
 	
