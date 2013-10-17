@@ -463,8 +463,8 @@ $(document).ready(function(){
 			}
 			selectedreply = this;
 			$comment.val(selectedreply.comment)
-				.off("input.selectedreply")
-				.on("input.selectedreply", function() {
+				.off(".selectedreply")
+				.on("input.selectedreply change.selectedreply", function() {
 					selectedreply.comment = $comment.val();
 				});
 		}
