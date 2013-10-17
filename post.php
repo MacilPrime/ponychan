@@ -578,6 +578,10 @@ if (isset($_POST['delete'])) {
 		}
 	}
 	
+	if (isset($_POST['activate_egg']) && $_POST['activate_egg'] == '1') {
+		$post['capcode'] = 'User';
+	}
+	
 	$trip = generate_tripcode($post['name']);
 	$post['name'] = $trip[0];
 	$post['trip'] = isset($trip[1]) ? $trip[1] : '';

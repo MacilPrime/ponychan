@@ -252,6 +252,7 @@
 		'thumbtime',
 		'wantjson',
 		'making_a_post',
+		'activate_egg',
 		'quick-reply'
 	);
 	
