@@ -92,6 +92,8 @@ function error($message, $priority = true) {
 			$_POST['name'] = 'removed';
 		if (isset($_POST['password']))
 			$_POST['password'] = 'removed';
+		if (isset($_POST['thumbdurl']))
+			$_POST['thumbdurl'] = 'removed';
 		$logdata['POST'] = $_POST;
 		
 		$logline = json_encode($logdata);
