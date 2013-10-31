@@ -46,8 +46,11 @@
 				}
 				if (typeof data.playercount === "number") {
 					var mc_online_players = {time: Date.now(), count: data.playercount};
-					if (window.sessionStorage)
-						sessionStorage.mc_online_players = JSON.stringify(mc_online_players);
+					if (window.sessionStorage) {
+						try {
+							sessionStorage.setItem("mc_online_players", JSON.stringify(mc_online_players));
+						} catch(e) {}
+					}
 					updateMessage(mc_online_players.count);
 				}
 				if (callback)
