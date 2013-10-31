@@ -176,10 +176,9 @@
 			console.error("Can not bind checkbox to non-bool setting ("+name+", type:"+settingTypes[name]+")");
 			return;
 		}
-		var value = getSetting(name);
 		
 		$checkbox
-			.prop("checked", value)
+			.prop("checked", getSetting(name))
 			.change(function() {
 				if(!changeGuard) {
 					changeGuard = true;
@@ -204,7 +203,7 @@
 			console.error("Can not bind select to non-select setting ("+name+", type:"+settingTypes[name]+")");
 			return;
 		}
-		var value = getSetting(name);
+		
 		var choices = settingSelectOptions[name];
 		
 		$.each(choices, function(key, text) {
