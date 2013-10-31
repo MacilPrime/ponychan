@@ -32,20 +32,6 @@ $(document).ready(function(){
 	if (Math.random() < 0.0014)
 		betterName();
 	
-	if (window.localStorage && new Date() < new Date("Jul 14 2013 04:00:00")) {
-		if (user_is_noob) {
-			try {
-				localStorage.no_show_pone_note = true;
-			} catch(e) {}
-		} else if (!localStorage.no_show_pone_note && settings.getSetting("style", true) == null) {
-			notice.settingsAd('The old site style "Pone" is still available!', undefined, function() {
-				try {
-					localStorage.no_show_pone_note = true;
-				} catch(e) {}
-			});
-		}
-	}
-	
 	// Change back from second Nightmare theme event
 	if (new Date() >= new Date("2013-11-01T07:00:00Z") && window.localStorage && localStorage.getItem("event_saw_nightmare")) {
 		notice.settingsAd('The Nightmare style is still available!', undefined, function() {
