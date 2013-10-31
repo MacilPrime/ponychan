@@ -83,62 +83,88 @@
 	function getSetting(name, noDefault) {
 		var id = "setting_"+name;
 		
+		// At the end of this if-else block, localVal will either have null, meaning that the
+		// user has not set the setting, or it will be a 2-length array of [value, priority].
+		// See newSetting's extra.defpriority param for explanation of priority.
 		var localVal = null;
 		if (window.localStorage) {
-			if (localStorage.hasOwnProperty(id))
-				localVal = localStorage[id];
+			if (localStorage.getItem(id)) {
+				// settings are now stored in localStorage as a JSON encoded string of the
+				// [value, priority] tuple, but they used to be stored as a simple string
+				// representing value in a way specific to the type. We need to still be
+				// able to read that. Default priority to 0.
+				var rawVal = localStorage.getItem(id);
+				if (rawVal[0] === '[') {
+					try {
+						localVal = JSON.parse(rawVal);
+						if (!isArray(localVal) || localVal.length != 2 || typeof localVal[1] !== "number") {
+							console.error("localVal has bad format:", localVal);
+							localVal = null;
+						}
+					} catch(e) {
+						console.error("Could not parse rawVal:", rawVal);
+					}
+				} else {
+					// compat code
+					var type = settingTypes[name];
+					switch(type) {
+					case "bool":
+						rawVal = (rawVal == "true");
+						break;
+					case "select":
+						// rawVal is a string good as-is
+						break;
+					default:
+						throw Error("Invalid compat property type: "+type+", name: "+name);
+					}
+					
+					if (rawVal != null)
+						localVal = [rawVal, 0];
+				}
+			}
 		} else {
 			if (tempSettingsStorage.hasOwnProperty(id))
 				localVal = tempSettingsStorage[id];
 		}
 		
-		if (localVal == null)
-			return noDefault ? null : defaultValues[name];
+		if (!defaultValues[name])
+			throw Error("No such setting: "+name);
 		
-		var type = settingTypes[name];
-		switch(type) {
-		case "bool":
-			return localVal == "true";
-		case "select":
-			return localVal;
-		}
+		if (localVal == null || defaultValues[name][1] > localVal[1])
+			return noDefault ? null : defaultValues[name][0];
 		
-		console.error("Invalid property type: "+type+", name: "+name);
-		return undefined;
+		return localVal[0];
 	}
 	exports.getSetting = getSetting;
 	
 	function setSetting(name, value, notquiet) {
 		var id = "setting_"+name;
 		
-		if (!window.localStorage) {
-			if (notquiet)
-				alert("Your browser does not support the localStorage standard. Settings will not be saved. Please upgrade your browser!");
-		}
+		if (!window.localStorage && notquiet)
+			alert("Your browser does not support the localStorage standard. Settings will not be saved. Please upgrade your browser!");
+		
+		if (!defaultValues[name])
+			throw Error("No such setting: "+name);
 		
 		if (value == null) {
 			if (window.localStorage)
-				delete localStorage[id];
+				localStorage.removeItem(id);
 			else
 				delete tempSettingsStorage[id];
 		} else {
-			var type = settingTypes[name];
-			var toWrite;
-			switch(type) {
-			case "bool":
-				toWrite = value ? "true" : "false";
-				break;
-			case "select":
-				toWrite = value;
-				break;
-			default:
-				console.error("Invalid property type: "+type+", name: "+name);
-				return;
-			}
-			if (window.localStorage)
-				localStorage[id] = toWrite;
-			else
+			var toWrite = [value, defaultValues[name][1]];
+			
+			if (window.localStorage) {
+				try {
+					localStorage.setItem(id, JSON.stringify(toWrite));
+				} catch(e) {
+					if (notquiet)
+						alert("Failed to set setting: "+e);
+					throw e;
+				}
+			} else {
 				tempSettingsStorage[id] = toWrite;
+			}
 		}
 		$(document).trigger("setting_change", name)
 	}
@@ -263,18 +289,27 @@
 	//   moredetails: extra text about the setting to display under the short description
 	//   orderhint: number that will control the ordering of settings in the same section
 	//   selectOptions: array of strings to show in the drop-down box for "select" type
-	//   validator: TODO
+	//   defpriority: defaults to 0. If this is higher than the value of defpriority at the
+	//                time the user last changed the setting, then the defval will take priority
+	//                over the user's value. This allows the default setting to be changed at a
+	//                future time, optionally overriding an older setting set by the user.
+	//   validator: TODO, planned for future "text" type
 	function newSetting(name, type, defval, description, section, extra) {
 		var orderhint = 0;
 		if (extra && extra.orderhint != null)
 			orderhint = extra.orderhint;
+		
+		var defpriority = 0;
+		if (extra && extra.defpriority != null)
+			defpriority = extra.defpriority;
+		
 		var id = "setting_"+name;
 		
 		if (settingTypes.hasOwnProperty(name))
 			throw new Error('Setting '+name+' has already been defined!');
 		
 		settingTypes[name] = type;
-		defaultValues[name] = defval;
+		defaultValues[name] = [defval, defpriority];
 		if (extra && extra.validator)
 			settingValidators[name] = extra.validator;
 		

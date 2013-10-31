@@ -215,6 +215,10 @@ function get_post_class(postid) {
 	return 'post_'+match[1]+'-'+match[2];
 }
 
+function isArray(o) {
+	return Object.prototype.toString.call(o) === '[object Array]';
+}
+
 function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
