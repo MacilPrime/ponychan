@@ -46,22 +46,10 @@ $(document).ready(function(){
 		}
 	}
 	
-	// Change back from Nightmare theme event
-	try {
-		var old = window.localStorage && localStorage.event_nightmare_old_style;
-		if (old) {
-			if (settings.getSetting("style") == "Nightmare" && old != "Nightmare") {
-				console.log("Resetting to pre-Nightmare style");
-				if (old == "null")
-					settings.setSetting("style", null);
-				else
-					settings.setSetting("style", old);
-				
-				notice.settingsAd('The Nightmare style is still available!');
-			}
-			delete localStorage.event_nightmare_old_style;
-		}
-	} catch (e) {
-		send_error(e);
+	// Change back from second Nightmare theme event
+	if (new Date() >= new Date("2013-11-01T07:00:00Z") && window.localStorage && localStorage.getItem("event_saw_nightmare")) {
+		notice.settingsAd('The Nightmare style is still available!', undefined, function() {
+			localStorage.removeItem("event_saw_nightmare");
+		});
 	}
 });

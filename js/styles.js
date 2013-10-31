@@ -14,8 +14,16 @@
 		styleChoices[name] = name;
 	});
 	
-	settings.newSetting("style", "select", selectedstyle, "Style", 'pagestyle',
-			    {orderhint: 1, selectOptions: styleChoices});
+	// Halloween Nightmare theme
+	var useNight = new Date() < new Date("2013-11-01T07:00:00Z");
+	if (useNight && window.localStorage) {
+		try {
+			localStorage.setItem("event_saw_nightmare", "true");
+		} catch(e) {}
+	}
+	
+	settings.newSetting("style", "select", useNight ? "Nightmare" : selectedstyle, "Style", 'pagestyle',
+			    {orderhint: 1, selectOptions: styleChoices, defpriority: useNight ? 1 : 0});
 	
 	function apply(stylename) {
 		if (styles[stylename] == null) {
