@@ -247,6 +247,7 @@
 		'recaptcha_response_field',
 		'spoiler',
 		'mature',
+		'file',
 		'thumbfile',
 		'thumbdurl',
 		'thumbtime',
