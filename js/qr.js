@@ -424,6 +424,8 @@ $(document).ready(function(){
 			})
 			.appendTo(this.el);
 		this.setfile = function(file) {
+			var _this = this;
+			
 			if (this.file != null)
 				this.rmfile(true);
 			this.file = file;
@@ -449,6 +451,23 @@ $(document).ready(function(){
 							return time;
 						});
 						render_job.resolve(Q.all([thumber, thumber_timing]));
+						
+						// If the original image was really big, then replace the image preview
+						// in the QR with the thumbnail we just made.
+						// Some browsers (webkit) lag when too big of an image is there.
+						if (this.width >= 1000 || this.height >= 1000) {
+							thumber.then(function(filethumb) {
+								// If the image has already been changed by the user, we don't want to replace the wrong thumbnail.
+								if (_this.file === file) {
+									_this.el.css("background-image", 'url("' + filethumb.toDataURL('image/png') + '")');
+									
+									if (typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && _this.fileurl) {
+										wURL.revokeObjectURL(_this.fileurl);
+										delete _this.fileurl;
+									}
+								}
+							});
+						}
 					};
 					fileimg.src = this.fileurl;
 				}
