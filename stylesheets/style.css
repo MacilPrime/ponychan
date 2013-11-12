@@ -989,6 +989,9 @@ img.catalogthumb {
 	.postHider {
 		display: inline;
 	}
+	.post-inline {
+		clear: both;
+	}
 }
 @media all and (max-width: 600px) {
 	img.banner {
