@@ -59,8 +59,10 @@
 	{{ body }}
 	{% include 'report_delete.html' %}
 	</form>
+	<div class="endlinks">
 	 <a href="{{ return }}">[{% trans %}Return{% endtrans %}]</a>
 	 <a href="{{ config.root }}{{ board.dir }}catalog.html">[{% trans %}Catalog{% endtrans %}]</a>
+	</div>
 
 	{{ boardlist.bottom }}
 	<footer>
