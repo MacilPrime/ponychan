@@ -20,7 +20,7 @@ $(document).ready(function(){
 		time_casual = settings.getSetting("time_casual");
 		
 		if (time_casual)
-			time_format_string = "D MMM YYYY hh:mm:ss A";
+			time_format_string = "D MMM YYYY h:mm:ss A";
 		else
 			time_format_string = "D MMM YYYY HH:mm:ss";
 		
