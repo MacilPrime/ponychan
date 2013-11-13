@@ -578,7 +578,7 @@
 	
  	// The format string passed to strftime() for post times
 	// http://www.php.net/manual/en/function.strftime.php
-	$config['post_date'] = '%m/%d/%y (%a) %H:%M:%S';
+	$config['post_date'] = '%d %b %Y %H:%M:%S %Z';
 	
 	// Same as above, but used for "you are banned' pages.
 	$config['ban_date'] = '%A %e %B, %Y';
