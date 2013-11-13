@@ -11,42 +11,37 @@
  *
  */
 
+settings.newSetting("time_casual", "bool", false, "12 hour time display", 'pagestyle', {orderhint: 4});
+
 $(document).ready(function(){
-	function iso8601(s) {
-		s = s.replace(/\.\d\d\d+/,""); // remove milliseconds
-		s = s.replace(/-/,"/").replace(/-/,"/");
-		s = s.replace(/T/," ").replace(/Z/," UTC");
-		s = s.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2"); // -04:00 -> -0400
-		return new Date(s);
+	var time_casual, time_format_string;
+	
+	function init() {
+		time_casual = settings.getSetting("time_casual");
+		
+		if (time_casual)
+			time_format_string = "D MMM YYYY hh:mm:ss A";
+		else
+			time_format_string = "D MMM YYYY HH:mm:ss";
+		
+		formatTimeElements(document.body);
 	}
-	function zeropad(num, count) {
-		var l = num.toString().length;
-		if (l >= count) return num;
-		return [Math.pow(10, count - num.toString().length), num].join('').substr(1);
+	init();
+	
+	$(document).on("setting_change", function(e, setting) {
+		if (setting == "time_casual")
+			init();
+	});
+	
+	function formatTimeElements(context) {
+		$("time", context).each(function() {
+			var $t = $(this);
+			$t.text(moment($t.attr('datetime')).format(time_format_string));
+		});
 	}
 	
-	function makeLocalTime() {
-		var t = iso8601($(this).attr('datetime'));
-		
-		$(this).text(
-			// day
-			["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][t.getDay()] + ", " +
-			// date
-			zeropad(t.getDate(), 2) + " " + 
-			["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
-				"Oct", "Nov", "Dec"][t.getMonth()] + " " + 
-			t.getFullYear() + " " +
-			// time
-			zeropad(t.getHours(), 2) + ":" + 
-			zeropad(t.getMinutes(), 2) + ":" + 
-			zeropad(t.getSeconds(), 2)
-		);
-	}
-
-	$('time').each(makeLocalTime);
-
 	// allow to work with auto-reload.js, etc.
 	$(document).on('new_post', function(e, post) {
-		$('time', post).each(makeLocalTime);
+		formatTimeElements(post);
 	});
 });
