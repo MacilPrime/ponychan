@@ -381,8 +381,8 @@ function watcher_acknowledge_page() {
 	});
 	
 	var last_seen_time = 0;
-	if ($('.thread .reply:not(.post-inline):last').length) {
-		last_seen_time = (new Date($('.thread .reply:not(.post-inline):last .intro:first time').attr('datetime'))).getTime()/1000;
+	if ($('.thread .post:not(.post-inline):last').length) {
+		last_seen_time = (new Date($('.thread .post:not(.post-inline):last .intro:first time').attr('datetime'))).getTime()/1000;
 	}
 	
 	if (watched_threads[threadid].seen_reply_count != reply_count ||
