@@ -780,6 +780,22 @@ table.mod.config-editor input[type="text"] {
     padding: 0 3px 1px 3px !important;
     border-radius: 2px;
 }
+@supports (display: flex) {
+    #qrpersona.useflexstyle {
+        display: flex;
+    }
+    #qrpersona.useflexstyle input[type='text'] {
+        flex: 1;
+        transition: border-color 0.25s, flex 0.25s;
+        min-width: 0%;
+    }
+    #qrpersona.useflexstyle input[type='text']:focus, #qrpersona.useflexstyle input[type='text']:hover {
+        flex: 3;
+    }
+    #qrpersona.useflexstyle input[type='text']:focus {
+        border-color: #e3bc71 !important;
+    }
+}
 /* end qr */
 .postHider {
 	font-size: 13px;

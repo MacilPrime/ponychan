@@ -10,6 +10,7 @@
 
 settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Q is the quick keyboard shortcut.", orderhint:1});
 settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});
+settings.newSetting("QR_flexstyle", "bool", true, "Use small persona fields on QR", 'posting', {orderhint:3});
 
 $(document).ready(function(){
 	var useFile = typeof FileReader != "undefined" && !!FileReader;
@@ -21,6 +22,10 @@ $(document).ready(function(){
 	if(typeof wURL != "undefined" && wURL) {
 		if(typeof wURL.createObjectURL != "undefined" && wURL.createObjectURL)
 			usewURL = true;
+	}
+	
+	if (!(window.CSS && CSS.supports && CSS.supports("display","flex"))) {
+		$("#setting_QR_flexstyle").hide();
 	}
 	
 	var useQueuing = useFile && useFormData && usewURL;
@@ -120,6 +125,11 @@ $(document).ready(function(){
 		.attr("action", $oldForm.attr("action") )
 		.attr("enctype", "multipart/form-data")
 		.appendTo($QR);
+	
+	var $persona = $("<div/>")
+		.attr("id", "qrpersona")
+		.appendTo($QRForm);
+	
 	var $name = $("<input/>")
 		.attr("id", "qrname")
 		.attr("type", "text")
@@ -128,7 +138,7 @@ $(document).ready(function(){
 		.attr("maxlength", 75)
 		.attr("size", 1)
 		.val( $oldName.val() )
-		.appendTo($QRForm);
+		.appendTo($persona);
 	var $email = $("<input/>")
 		.attr("id", "qremail")
 		.attr("type", "text")
@@ -137,7 +147,7 @@ $(document).ready(function(){
 		.attr("maxlength", 254)
 		.attr("size", 1)
 		.val( $oldEmail.val() )
-		.appendTo($QRForm);
+		.appendTo($persona);
 	var $subject = $("<input/>")
 		.attr("id", "qrsubject")
 		.attr("type", "text")
@@ -146,7 +156,7 @@ $(document).ready(function(){
 		.attr("maxlength", 100)
 		.attr("size", 1)
 		.val( $oldSubject.val() )
-		.appendTo($QRForm);
+		.appendTo($persona);
 	var $comment = $("<textarea/>")
 		.attr("id", "qrcomment")
 		.attr("placeholder", "Comment")
@@ -1034,6 +1044,15 @@ $(document).ready(function(){
 			citeReply = oldCiteReply;
 		}
 	}
+	
+	function init_flexstyle() {
+		if (settings.getSetting("QR_flexstyle")) {
+			$persona.addClass("useflexstyle");
+		} else {
+			$persona.removeClass("useflexstyle");
+		}
+	}
+	init_flexstyle();
 
 	QRInit();
 	$(document).on("setting_change", function(e, setting) {
@@ -1041,5 +1060,7 @@ $(document).ready(function(){
 			QRInit();
 		else if (setting == "show_mature")
 			init_mature_button();
+		else if (setting == "QR_flexstyle")
+			init_flexstyle();
 	});
 });
