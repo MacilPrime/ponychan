@@ -842,6 +842,8 @@ function mod_sticky($board, $unsticky, $post) {
 	if (!hasPermission($config['mod']['sticky'], $board))
 		error($config['error']['noaccess']);
 	
+	bumpThread($post);
+	
 	$query = prepare(sprintf('UPDATE `posts_%s` SET `sticky` = :sticky WHERE `id` = :id AND `thread` IS NULL', $board));
 	$query->bindValue(':id', $post);
 	$query->bindValue(':sticky', $unsticky ? 0 : 1);
