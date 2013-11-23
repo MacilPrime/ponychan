@@ -456,7 +456,7 @@ if (isset($_POST['delete'])) {
 	
 	//Check if thread exists
 	if (!$post['op']) {
-		$query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`mature`,`body` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
+		$query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`bump`,`mature`,`body` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
 		$query->bindValue(':id', $post['thread'], PDO::PARAM_INT);
 		$query->execute() or error(db_error());
 		
@@ -902,7 +902,8 @@ if (isset($_POST['delete'])) {
 	
 	if (!$post['op'] && !$post['sage'] && !$thread['sage'] &&
 	    !($config['no_sticky_reply_bump'] && $thread['sticky']) &&
-	    ($config['reply_limit'] == 0 || $numposts['replies']+1 < $config['reply_limit'])) {
+	    ($config['reply_limit'] == 0 || $numposts['replies']+1 < $config['reply_limit'] ||
+	      ($config['old_thread_bump_interval'] != 0 && time()-$thread['bump'] >= $config['old_thread_bump_interval']))) {
 		bumpThread($post['thread']);
 	}
 	
