@@ -903,7 +903,7 @@ if (isset($_POST['delete'])) {
 	if (!$post['op'] && !$post['sage'] && !$thread['sage'] &&
 	    !($config['no_sticky_reply_bump'] && $thread['sticky']) &&
 	    ($config['reply_limit'] == 0 || $numposts['replies']+1 < $config['reply_limit'] ||
-	      ($config['old_thread_bump_interval'] != 0 && time()-$thread['bump'] >= $config['old_thread_bump_interval']))) {
+	      (($obi = calculateOldThreadBumpInterval($post['thread'], $thread['bump'])) && time()-$thread['bump'] >= $obi))) {
 		bumpThread($post['thread']);
 	}
 	

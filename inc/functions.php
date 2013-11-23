@@ -994,6 +994,19 @@ function post(array $post) {
 	return $pdo->lastInsertId();
 }
 
+function calculateOldThreadBumpInterval($id, $lastbump) {
+	global $config;
+	
+	if (!$config['old_thread_bump_interval_min'] || !$config['old_thread_bump_interval_max']) return null;
+	
+	$ma = unpack('l', sha1($config['secure_trip_salt'] . ':' . $id . ':' . $lastbump, true));
+	$m = ($ma[1] & 0x7fffffff) / 0x7fffffff;
+	
+	$r = $config['old_thread_bump_interval_max'] - $config['old_thread_bump_interval_min'];
+	
+	return $config['old_thread_bump_interval_min'] + $m*$r;
+}
+
 function bumpThread($id) {
 	global $board;
 	

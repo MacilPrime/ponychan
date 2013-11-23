@@ -340,10 +340,14 @@
 	// Cyclic thread reply limit (old replies are removed as this is hit)
 	$config['cyclic_reply_limit'] = 500;
 	
+	// A random number between these two values will be calculated for every
+	// thread, and recalculated when the thread is bumped.
 	// If a thread past its bump reply_limit hasn't been bumped for this amount
 	// of time and it gets a reply, then it will be bumped anyway.
-	// Units are seconds. Value of 0 disables old thread bumping.
-	$config['old_thread_bump_interval'] = 12*60*60;
+	// Units are seconds. Setting either to 0 disables old thread bumping.
+	$config['old_thread_bump_interval_min'] = 9*60*60;
+	// See above
+	$config['old_thread_bump_interval_max'] = 14*60*60;
 	
 	// Image hard limit (stops allowing new image replies when this is reached if not zero)
 	$config['image_hard_limit'] = 0;
