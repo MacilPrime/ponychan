@@ -998,7 +998,7 @@ $(document).ready(function(){
 					if (data.threadid == null) {
 						window.location.href = data.url;
 					} else {
-						setTimeout(updateThreadNow, 10, true);
+						setTimeout(reloader.updateThreadNow, 10, true);
 					}
 				} else {
 					if (data.error == 'message') {

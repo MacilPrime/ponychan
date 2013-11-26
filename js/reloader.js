@@ -13,6 +13,10 @@
  *
  */
 
+var reloader = {
+	updateThreadNow: function() {}
+};
+
 $(document).ready(function(){
 	if($('div.banner').length == 0)
 		return; // not index
@@ -34,14 +38,26 @@ $(document).ready(function(){
 		updateInterval = parseInt(localStorage.updateInterval);
 
 	var timeUntilUpdate;
-	var prepareDelayedUpdate = function() {
+	var timeSinceActivity = 0;
+	
+	// adaptive updating constants
+	var multiplierDelay = 15*60; // no updateInterval multiplying happens until the thread has been inactive at least this long.
+	var maxUpdateInterval = 10*60;
+	var multiplier = maxUpdateInterval / (2*60*60); // Takes two hours to get to maxUpdateInterval.
+
+	function prepareDelayedUpdate() {
 		if(updateEnabled) {
 			timeUntilUpdate = updateInterval;
+
+			if (timeSinceActivity > multiplierDelay)
+				timeUntilUpdate = Math.min(maxUpdateInterval, timeUntilUpdate + Math.floor(multiplier*(timeSinceActivity-multiplierDelay)));
+
+ 			timeSinceActivity += updateInterval;
 			tick();
 		}
 	}
-
-	var saveSettings = function() {
+	
+	function saveSettings() {
 		if (!window.localStorage) return;
 		localStorage.updateEnabled = updateEnabled ? "true" : "false";
 		localStorage.updateInterval = updateInterval;
@@ -63,6 +79,7 @@ $(document).ready(function(){
 		.prop("checked", updateEnabled)
 		.change(function() {
 			updateEnabled = $(this).prop("checked");
+			timeSinceActivity = 0;
 			if(updateEnabled) {
 				prepareDelayedUpdate();
 			} else {
@@ -89,6 +106,7 @@ $(document).ready(function(){
 				return;
 			}
 			updateInterval = newVal;
+			timeSinceActivity = 0;
 			saveSettings();
 		}).appendTo($statusSettings);
 	$statusSettings.append("<br/>");
@@ -115,7 +133,7 @@ $(document).ready(function(){
 		$statusSettings.hide();
 	});
 	
-	var loadPosts = function($data) {
+	function loadPosts($data) {
 		var postsAddedCount = 0;
 		
 		var $lastPostC = $('div.postContainer:not(.post-inline-container):not(.preview-hidden):last');
@@ -133,16 +151,17 @@ $(document).ready(function(){
 				lastPostNum = postNum;
 				
 				postsAddedCount++;
+				timeSinceActivity = 0;
 			}
 		});
 		
 		$postsAdded.text("+"+postsAddedCount);
 		$countDown.text("-");
-	};
+	}
 
 	var query = null;
 	var page_etag = null;
-	var updateThread = function(nocache) {
+	function updateThread(nocache) {
 		if(query)
 			query.abort();
 
@@ -201,7 +220,7 @@ $(document).ready(function(){
 		});
 	}
 
-	var tick = function(nocache) {
+	function tick(nocache) {
 		if(tickTimer) {
 			clearTimeout(tickTimer);
 			tickTimer = null;
@@ -214,22 +233,14 @@ $(document).ready(function(){
 		} else {
 			updateThread(nocache);
 		}
-	};
+	}
 
-	updateThreadNow = function(nocache) {
+	function updateThreadNow(nocache) {
+		timeSinceActivity = 0;
 		timeUntilUpdate = 0;
 		tick(nocache);
-	};
-
-	updateThreadNowWithData = function($data) {
-		if(query) {
-			query.abort();
-			query = null;
-		}
-
-		loadPosts($data);
-		prepareDelayedUpdate();
-	};
+	}
+	reloader.updateThreadNow = updateThreadNow;
 
 	$(document).keydown(function(event) {
 		if(/TEXTAREA|INPUT/.test(event.target.nodeName))

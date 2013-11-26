@@ -762,7 +762,7 @@
         $config['additional_javascript'][] = 'js/styles.js';
         $config['additional_javascript'][] = 'js/spoiler-toggle.js';
         $config['additional_javascript'][] = 'js/local-time.js';
-        $config['additional_javascript'][] = 'js/auto-reload.js';
+        $config['additional_javascript'][] = 'js/reloader.js';
         $config['additional_javascript'][] = 'js/post-hover.js';
         $config['additional_javascript'][] = 'js/postlinkinfo.js';
 	$config['additional_javascript'][] = 'js/watcher.js';
