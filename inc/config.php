@@ -32,6 +32,11 @@
  	// Blotter -- the simple version.
 	//$config['blotter'] = 'This is an important announcement!';
  	
+	// Disable posting.
+	$config['readonly_maintenance'] = false;
+	// Message to show when in readonly mode.
+	$config['readonly_maintenance_message'] = 'Posting temporarily disabled for very brief maintenance! Try again in a minute!';
+	
 	// Automatically check if a newer version of Tinyboard is available when an administrator logs in
 	$config['check_updates'] = false;
 	// How often to check for updates

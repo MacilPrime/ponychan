@@ -19,6 +19,13 @@ if (get_magic_quotes_gpc()) {
 
 header("Cache-Control: no-cache, must-revalidate");
 
+if ($config['readonly_maintenance']) {
+	if (isset($_POST['wantjson']) && $_POST['wantjson'])
+		$wantjson = true;
+	
+	error($config['readonly_maintenance_message']);
+}
+
 if (isset($_POST['delete'])) {
 	// Delete
 	
