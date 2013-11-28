@@ -41,9 +41,9 @@ $(document).ready(function(){
 	var timeSinceActivity = 0;
 	
 	// adaptive updating constants
-	var multiplierDelay = 15*60; // no updateInterval multiplying happens until the thread has been inactive at least this long.
-	var maxUpdateInterval = 10*60;
-	var multiplier = maxUpdateInterval / (2*60*60); // Takes two hours to get to maxUpdateInterval.
+	var multiplierDelay = 2*60*60; // no updateInterval multiplying happens until the thread has been inactive at least this long.
+	var maxUpdateInterval = 5*60;
+	var multiplier = maxUpdateInterval / (3*60*60); // Takes three hours to get to maxUpdateInterval.
 
 	function prepareDelayedUpdate() {
 		if(updateEnabled) {
