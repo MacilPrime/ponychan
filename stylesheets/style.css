@@ -643,10 +643,14 @@ table.mod.config-editor input[type="text"] {
 	font-family: Arial, Verdana, sans-serif;
 	font-size: 12px;
 	min-width: 300px;
+	max-width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	position: fixed;
 }
 #qr input[type='text'], #qr textarea {
 	min-width: 100%;
+	max-width: 100%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	display: block;
@@ -783,6 +787,7 @@ table.mod.config-editor input[type="text"] {
 @supports (display: flex) {
     #qrpersona.useflexstyle {
         display: flex;
+        width: 100%;
     }
     #qrpersona.useflexstyle input[type='text'] {
         flex: 1;
