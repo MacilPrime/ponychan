@@ -345,6 +345,8 @@ $(document).ready(function(){
 				$QR.css("top", 0);
 			}
 		}
+		$('head meta[name=viewport]').remove();
+		$('head').prepend('<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">');
 	};
 
 	QR.clear = function() {
@@ -371,6 +373,8 @@ $(document).ready(function(){
 		}
 		$QR.hide();
 		QR.clear();
+		$('head meta[name=viewport]').remove();
+		$('head').prepend('<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">');
 	};
 
 	$QRButton.click(function() {
