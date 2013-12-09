@@ -348,8 +348,12 @@
 		if (extra && extra.moredetails) {
 			var $moredetails = $("<div/>")
 				.addClass("setting_more_details")
-				.text(extra.moredetails)
 				.appendTo($settingDiv);
+			
+			if (extra.moredetails_rawhtml)
+				$moredetails.html(extra.moredetails);
+			else
+				$moredetails.text(extra.moredetails);
 		}
 		
 		var nextname = null;

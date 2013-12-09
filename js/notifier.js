@@ -8,7 +8,14 @@
  */
 
 (function(exports) {
-	settings.newSetting("reply_notify", "bool", true, "Reply Notifier Sound", 'links', {orderhint:7, moredetails:"Audibly alert you when a post by you in a thread you're viewing is replied to."});
+	settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {orderhint:7, moredetails:"Audibly alert you when a post by you in a thread you're viewing is replied to."});
+
+	var soundChoices = {
+		default: "Default",
+		aim: "AIM"
+	};
+
+	settings.newSetting("reply_notify_sound", "select", "default", "Reply Notifier Sound Choice", 'links', {orderhint:7.5, moredetails:'<a href="javascript:notifier.playSound()">Test Sound</a>', moredetails_rawhtml:true, selectOptions: soundChoices});
 	
 	var $au;
 	function prepareNotifySound() {
@@ -16,11 +23,23 @@
 		if (!$au.length) {
 			$au = $("<audio/>")
 				.attr("id", "notify_sound")
-				.append(
-					$("<source/>").attr({src:siteroot+"static/notify.ogg", type:"application/ogg"}),
-					$("<source/>").attr({src:siteroot+"static/notify.mp3", type:"audio/mpeg"})
-				).appendTo(document.body);
+				.appendTo(document.body);
 		}
+		switch (settings.getSetting("reply_notify_sound")) {
+		case "aim":
+			$au.empty().append(
+				$("<source/>").attr({src:siteroot+"static/notify_imrcv.ogg", type:"application/ogg"}),
+				$("<source/>").attr({src:siteroot+"static/notify_imrcv.mp3", type:"audio/mpeg"})
+			);
+			break;
+		case "default":
+		default:
+			$au.empty().append(
+				$("<source/>").attr({src:siteroot+"static/notify.ogg", type:"application/ogg"}),
+				$("<source/>").attr({src:siteroot+"static/notify.mp3", type:"audio/mpeg"})
+			);
+		}
+		$au[0].load();
 	}
 	
 	function playSound() {
@@ -94,7 +113,10 @@
 	$(document).ready(function() {
 		prepareNotifySound();
 		
-		$(document).on('new_post', function(e, post) {
+		$(document).on("setting_change.notifier", function(e, setting) {
+			if (setting == "reply_notify_sound")
+				prepareNotifySound();
+		}).on('new_post.notifier', function(e, post) {
 			notifyCheck($(post));
 		});
 	});
