@@ -565,6 +565,10 @@ table.mod.config-editor input[type="text"] {
 	border-style: solid !important;
 	box-shadow: 1px 1px 1px #999 !important;
 }
+div.post.reply.post-inline .body {
+	margin-left: 0.3em;
+	padding-right: 0.2em;
+}
 .preview-hidden {
 	display: none !important;
 }
@@ -990,6 +994,10 @@ img.catalogthumb {
 		margin-left: 2px;
 		margin-right: 2px;
 		overflow: auto;
+	}
+	div.post.reply .body {
+		margin-left: 0.3em;
+		padding-right: 0.2em;
 	}
 	form[name="post"] input[type="text"], form[name="post"] textarea {
 		width: 220px;
