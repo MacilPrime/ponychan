@@ -39,7 +39,7 @@ $(document).ready(function(){
 		if(/TEXTAREA|INPUT/.test(event.target.nodeName))
 			return true;
 
-		if(!$('#settingsScreen').is(':visible'))
+		if(!$('.settingsScreen').is(':visible'))
 			return true;
 
 		if(event.which == 70 && !event.ctrlKey && !event.shiftKey) {
