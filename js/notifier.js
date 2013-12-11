@@ -24,22 +24,29 @@
 			$au = $("<audio/>")
 				.attr("id", "notify_sound")
 				.appendTo(document.body);
+		} else {
+			$au.empty();
 		}
 		switch (settings.getSetting("reply_notify_sound")) {
 		case "aim":
-			$au.empty().append(
+			$au.append(
 				$("<source/>").attr({src:siteroot+"static/notify_imrcv.ogg", type:"application/ogg"}),
 				$("<source/>").attr({src:siteroot+"static/notify_imrcv.mp3", type:"audio/mpeg"})
 			);
 			break;
 		case "default":
 		default:
-			$au.empty().append(
+			$au.append(
 				$("<source/>").attr({src:siteroot+"static/notify.ogg", type:"application/ogg"}),
 				$("<source/>").attr({src:siteroot+"static/notify.mp3", type:"audio/mpeg"})
 			);
 		}
-		$au[0].load();
+		try {
+			if ($au[0].load)
+				$au[0].load();
+		} catch(e) {
+			log_error(e);
+		}
 	}
 	
 	function playSound() {
