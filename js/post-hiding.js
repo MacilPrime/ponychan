@@ -13,18 +13,10 @@ settings.newSetting("show_hide_buttons", "bool", true, "Show post hiding buttons
 
 $(document).ready(function(){
 	function init_hide_style() {
-		var $hide_style = $("style#hide_button_style");
-		if (!$hide_style.length) {
-			$hide_style = $("<style/>")
-				.attr("id", "hide_button_style")
-				.attr("type", "text/css")
-				.appendTo(document.head);
-		}
-		if (settings.getSetting("show_hide_buttons")) {
-			$hide_style.text("");
-		} else {
-			$hide_style.text(".postHider { display: none; }");
-		}
+		if (settings.getSetting("show_hide_buttons"))
+			setCss("hide_button", "");
+		else
+			setCss("hide_button", ".postHider { display: none; }");
 	}
 	init_hide_style();
 	

@@ -60,18 +60,10 @@
 	}
 	
 	function updateLinkInfo() {
-		var $info_style = $("style#link_info_style");
-		if (!$info_style.length) {
-			$info_style = $("<style/>")
-				.attr("id", "link_info_style")
-				.attr("type", "text/css")
-				.appendTo(document.head);
-		}
-		if (settings.getSetting("link_show_you")) {
-			$info_style.text("");
-		} else {
-			$info_style.text(".younote { display: none; }");
-		}
+		if (settings.getSetting("link_show_you"))
+			setCss("linkinfo", "");
+		else
+			setCss("linkinfo", ".younote { display: none; }");
 	}
 
 	$(document).on('post_submitted', function(e, info) {

@@ -219,6 +219,18 @@ function isArray(o) {
 	return Object.prototype.toString.call(o) === '[object Array]';
 }
 
+function setCss(key, css) {
+	var $style = $("style.setcss#setcss_"+key);
+	if (!$style.length) {
+		$style = $("<style/>")
+			.addClass("setcss")
+			.attr("id", "setcss_"+key)
+			.attr("type", "text/css")
+			.appendTo(document.head);
+	}
+	$style.text(css);
+}
+
 function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
