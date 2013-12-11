@@ -11,11 +11,11 @@
 	settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {orderhint:7, moredetails:"Audibly alert you when a post by you in a thread you're viewing is replied to."});
 
 	var soundChoices = {
-		default: "Default",
+		main: "Default",
 		aim: "AIM"
 	};
 
-	settings.newSetting("reply_notify_sound", "select", "default", "Reply Notifier Sound Choice", 'links', {orderhint:7.5, moredetails:'<a href="javascript:notifier.playSound()">Test Sound</a>', moredetails_rawhtml:true, selectOptions: soundChoices});
+	settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Sound Choice", 'links', {orderhint:7.5, moredetails:'<a href="javascript:notifier.playSound()">Test Sound</a>', moredetails_rawhtml:true, selectOptions: soundChoices});
 	
 	var $au;
 	function prepareNotifySound() {
@@ -34,6 +34,7 @@
 				$("<source/>").attr({src:siteroot+"static/notify_imrcv.mp3", type:"audio/mpeg"})
 			);
 			break;
+		case "main":
 		case "default":
 		default:
 			$au.append(
