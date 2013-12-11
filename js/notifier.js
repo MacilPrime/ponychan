@@ -35,7 +35,6 @@
 			);
 			break;
 		case "main":
-		case "default":
 		default:
 			$au.append(
 				$("<source/>").attr({src:siteroot+"static/notify.ogg", type:"application/ogg"}),

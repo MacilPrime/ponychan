@@ -93,6 +93,7 @@
 				// [value, priority] tuple, but they used to be stored as a simple string
 				// representing value in a way specific to the type. We need to still be
 				// able to read that. Default priority to 0.
+				var type = settingTypes[name];
 				var rawVal = localStorage.getItem(id);
 				if (rawVal[0] === '[') {
 					try {
@@ -101,18 +102,31 @@
 							console.error("localVal has bad format:", localVal);
 							localVal = null;
 						}
+						// setting type checking
+						switch(type) {
+						case "bool":
+							if (typeof localVal[0] !== "boolean") {
+								console.error("setting was expected to be boolean:", localVal);
+								localVal = null;
+							}
+							break;
+						case "select":
+							if (!settingSelectOptions[name].hasOwnProperty(localVal[0]))
+								localVal = null;
+							break;
+						}
 					} catch(e) {
 						console.error("Could not parse rawVal:", rawVal);
 					}
 				} else {
 					// compat code
-					var type = settingTypes[name];
 					switch(type) {
 					case "bool":
 						rawVal = (rawVal == "true");
 						break;
 					case "select":
-						// rawVal is a string good as-is
+						if (!settingSelectOptions[name].hasOwnProperty(rawVal))
+							rawVal = null;
 						break;
 					default:
 						throw Error("Invalid compat property type: "+type+", name: "+name);
