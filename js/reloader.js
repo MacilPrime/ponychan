@@ -13,6 +13,9 @@
  *
  */
 
+settings.newSetting("reloader", "bool", true, "Enable thread auto-updating", 'reloader', {orderhint:1, moredetails:"New posts in threads will appear as they're made."});
+settings.newSetting("reloader_autoscroll", "bool", false, "Scroll page down when new posts are loaded", 'reloader', {orderhint:2, moredetails:"Only happens if page is scrolled to the bottom already."});
+
 var reloader = {
 	updateThreadNow: function() {}
 };
@@ -27,9 +30,8 @@ $(document).ready(function(){
 		.css("right", 0)
 		.appendTo(document.body);
 
-	var updateEnabled = true;
-	if(window.localStorage && localStorage.updateEnabled != null)
-		updateEnabled = (localStorage.updateEnabled == "true");
+	var updateEnabled = settings.getSetting("reloader");
+	var autoScroll = settings.getSetting("reloader_autoscroll");
 
 	var tickTimer = null;
 
@@ -59,7 +61,6 @@ $(document).ready(function(){
 	
 	function saveSettings() {
 		if (!window.localStorage) return;
-		localStorage.updateEnabled = updateEnabled ? "true" : "false";
 		localStorage.updateInterval = updateInterval;
 	}
 
@@ -71,24 +72,21 @@ $(document).ready(function(){
 		.hide();
 	var $updateCheckboxLabel = $("<label/>")
 		.text("Auto-update threads ")
-		.attr("for", "updateCheckbox")
 		.appendTo($statusSettings);
 	var $updateCheckbox = $("<input/>")
 		.attr("id", "updateCheckbox")
 		.attr("type", "checkbox")
-		.prop("checked", updateEnabled)
-		.change(function() {
-			updateEnabled = $(this).prop("checked");
-			timeSinceActivity = 0;
-			if(updateEnabled) {
-				prepareDelayedUpdate();
-			} else {
-				if(tickTimer)
-					clearTimeout(tickTimer);
-			}
-			saveSettings();
-		})
 		.appendTo($updateCheckboxLabel);
+	$statusSettings.append("<br/>");
+	var $autoScrollCheckboxLabel = $("<label/>")
+		.text("Auto-scroll on new posts ")
+		.appendTo($statusSettings);
+	var $autoScrollCheckbox = $("<input/>")
+		.attr("id", "autoScrollCheckbox")
+		.attr("type", "checkbox")
+		.appendTo($autoScrollCheckboxLabel);
+	settings.bindCheckbox($updateCheckbox, "reloader");
+	settings.bindCheckbox($autoScrollCheckbox, "reloader_autoscroll");
 	$statusSettings.append("<br/>");
 	$("<span/>")
 		.text("Update interval")
@@ -136,6 +134,8 @@ $(document).ready(function(){
 	function loadPosts($data) {
 		var postsAddedCount = 0;
 		
+		var scrolledToBottom = ( $(window).scrollTop() + $(window).height() >= $(document).height() );
+
 		var $lastPostC = $('div.postContainer:not(.post-inline-container):not(.preview-hidden):last');
 		var lastPostNum = get_post_num($lastPostC.children('.post').first());
 		
@@ -157,6 +157,10 @@ $(document).ready(function(){
 		
 		$postsAdded.text("+"+postsAddedCount);
 		$countDown.text("-");
+
+		if (autoScroll && postsAddedCount && scrolledToBottom) {
+			$(document).scrollTop($(document).height());
+		}
 	}
 
 	var query = null;
@@ -249,6 +253,21 @@ $(document).ready(function(){
 		if(event.which == 85 && !event.ctrlKey && !event.shiftKey) {
 			updateThreadNow();
 			return false;
+		}
+	});
+
+	$(document).on("setting_change", function(e, setting) {
+		if (setting == "reloader") {
+			updateEnabled = settings.getSetting("reloader");
+			timeSinceActivity = 0;
+			if(updateEnabled) {
+				prepareDelayedUpdate();
+			} else {
+				if(tickTimer)
+					clearTimeout(tickTimer);
+			}
+		} else if (setting == "reloader_autoscroll") {
+			autoScroll = settings.getSetting("reloader_autoscroll");
 		}
 	});
 
