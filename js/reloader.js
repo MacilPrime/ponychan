@@ -33,6 +33,8 @@ $(document).ready(function(){
 	var updateEnabled = settings.getSetting("reloader");
 	var autoScroll = settings.getSetting("reloader_autoscroll");
 
+	var isScrolling = false;
+
 	var tickTimer = null;
 
 	var updateInterval = 30;
@@ -134,7 +136,7 @@ $(document).ready(function(){
 	function loadPosts($data) {
 		var postsAddedCount = 0;
 		
-		var scrolledToBottom = ( $(window).scrollTop() + $(window).height() >= $(document).height() );
+		var scrolledToBottom = isScrolling || ( $(window).scrollTop() + $(window).height() >= $(document).height() );
 
 		var $lastPostC = $('div.postContainer:not(.post-inline-container):not(.preview-hidden):last');
 		var lastPostNum = get_post_num($lastPostC.children('.post').first());
@@ -159,7 +161,12 @@ $(document).ready(function(){
 		$countDown.text("-");
 
 		if (autoScroll && postsAddedCount && scrolledToBottom) {
-			$(document).scrollTop($(document).height());
+			isScrolling = true;
+			$('html, body').stop().animate({
+				scrollTop: $(document).height()-$(window).height()
+			}, 1000, function() {
+				isScrolling = false;
+			});
 		}
 	}
 
