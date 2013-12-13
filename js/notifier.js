@@ -54,66 +54,31 @@
 	}
 	exports.playSound = playSound;
 	
-	var $unseenPosts = $();
-	var scrollHandlerInstalled = false;
-	var pendingScrollHandler = null;
+	var unseenReplies = [];
 	
 	// Sets the title to show the number of unread replies to the
-	// user, and installs or removes the scroll handler to keep it
-	// up-to-date as needed.
+	// user.
 	function updateTitle() {
-		if ($unseenPosts.length == 0) {
+		if (unseenReplies.length == 0) {
 			titlebar.removeTitleFlash('notifier');
-			if (scrollHandlerInstalled) {
-				scrollHandlerInstalled = false;
-				$(window).off('scroll.notifier');
-			}
 		} else {
 			var replymsg;
-			if ($unseenPosts.length == 1)
+			if (unseenReplies.length == 1)
 				replymsg = 'reply';
 			else
 				replymsg = 'replies';
 			
-			titlebar.setTitleFlash('notifier', '('+$unseenPosts.length+' '+replymsg+')');
-			if (!scrollHandlerInstalled) {
-				scrollHandlerInstalled = true;
-				$(window).on('scroll.notifier', function(event) {
-					if(pendingScrollHandler)
-						return;
-					pendingScrollHandler = setTimeout(scrollHandler, 100);
-				});
-			}
+			titlebar.setTitleFlash('notifier', '('+unseenReplies.length+' '+replymsg+')');
 		}
-	}
-	
-	function scrollHandler() {
-		while($unseenPosts.length > 0) {
-			var $post = $($unseenPosts[0]);
-			if($post.is(":visible")) {
-				var postBottom = $post.offset().top+$post.height();
-				var screenBottom = $(window).scrollTop()+$(window).height();
-				if(postBottom > screenBottom)
-					break;
-			}
-			$unseenPosts = $unseenPosts.slice(1);
-		}
-		updateTitle();
-		pendingScrollHandler = null;
 	}
 	
 	function notifyCheck($post) {
-		// Only run for actually new autoloaded posts
-		if ($post.is(".preview-hidden, .post-hover, .post-inline") ||
-		    $post.parent().is(".preview-hidden") ||
-		    $post.parents('.thread').first().attr("data-loaded-late"))
-			return;
 		if ($post.find('.younote').length == 0)
 			return;
 		// Okay, this post is a brand new reply to you
 		if (settings.getSetting("reply_notify"))
 			playSound();
-		$unseenPosts = $unseenPosts.add($post);
+		unseenReplies.push(get_post_id($post));
 		updateTitle();
 	}
 	
@@ -123,8 +88,23 @@
 		$(document).on("setting_change.notifier", function(e, setting) {
 			if (setting == "reply_notify_sound")
 				prepareNotifySound();
-		}).on('new_post.notifier', function(e, post) {
+		}).on('new_unseen_post.notifier', function(e, post) {
 			notifyCheck($(post));
+		}).on('posts_seen.notifier', function(e, data) {
+			var changed = false;
+			var posts = data.posts;
+			for (var i=0; i<posts.length; i++) {
+				if (!unseenReplies.length)
+					break;
+				
+				var ri = unseenReplies.indexOf(posts[i]);
+				if (ri != -1) {
+					unseenReplies.splice(ri, 1);
+					changed = true;
+				}
+			}
+			if (changed)
+				updateTitle();
 		});
 	});
 })(window.notifier||(window.notifier={}));

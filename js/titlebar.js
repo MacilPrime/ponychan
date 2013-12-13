@@ -78,6 +78,7 @@
 			if (Visibility.hidden())
 				return;
 			
+			var seenPosts = [];
 			while($unseenPosts.length > 0) {
 				var $post = $($unseenPosts[0]);
 				if($post.is(":visible")) {
@@ -86,9 +87,14 @@
 					if(postBottom > screenBottom)
 						break;
 				}
+				seenPosts.push(get_post_id($post));
 				$unseenPosts = $unseenPosts.slice(1);
 			}
 			updateTitle();
+			if (seenPosts.length)
+				$(document).trigger('posts_seen', {
+					posts: seenPosts
+				});
 		}
 		
 		$(window).scroll(function(event) {
@@ -109,6 +115,7 @@
 			// Or for posts the user made themselves.
 			if (postlinkinfo.myposts.indexOf( get_post_id($post) ) != -1)
 				return;
+			$(document).trigger('new_unseen_post', post);
 			$unseenPosts = $unseenPosts.add(post);
 			updateTitle();
 		});
