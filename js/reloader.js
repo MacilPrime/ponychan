@@ -161,12 +161,17 @@ $(document).ready(function(){
 		$countDown.text("-");
 
 		if (autoScroll && postsAddedCount && scrolledToBottom) {
-			isScrolling = true;
-			$('html, body').stop().animate({
-				scrollTop: $(document).height()-$(window).height()
-			}, 1000, function() {
+			if (!Visibility.hidden()) {
+				isScrolling = true;
+				$('html, body').stop().animate({
+					scrollTop: $(document).height()-$(window).height()
+				}, 1000, function() {
+					isScrolling = false;
+				});
+			} else {
 				isScrolling = false;
-			});
+				$(document).scrollTop($(document).height()-$(window).height());
+			}
 		}
 	}
 

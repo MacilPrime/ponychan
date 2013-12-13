@@ -71,6 +71,13 @@
 		};
 		
 		function scrollHandler() {
+			pendingScrollHandler = null;
+			
+			// If the page is hidden, we don't want to decrement the unseenPosts count yet,
+			// so that way the tab title is accurate.
+			if (Visibility.hidden())
+				return;
+			
 			while($unseenPosts.length > 0) {
 				var $post = $($unseenPosts[0]);
 				if($post.is(":visible")) {
@@ -82,14 +89,17 @@
 				$unseenPosts = $unseenPosts.slice(1);
 			}
 			updateTitle();
-			pendingScrollHandler = null;
 		}
 		
 		$(window).scroll(function(event) {
 			if(pendingScrollHandler)
 				return;
 			pendingScrollHandler = setTimeout(scrollHandler, 100);
-		}).scroll();
+		});
+
+		Visibility.change(scrollHandler);
+
+		scrollHandler();
 		
 		$(document).on('new_post', function(e, post) {
 			var $post = $(post);
