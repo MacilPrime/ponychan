@@ -200,6 +200,7 @@ function send_usage(retryTime) {
 	usage.supportSharedWorker = typeof SharedWorker != "undefined" && !!SharedWorker;
 	usage.supportWindowScrollTo = typeof window.scrollTo != "undefined" && !!window.scrollTo;
 	usage.supportCanvas = !!window.HTMLCanvasElement;
+	usage.supportVisibility = Visibility.isSupported();
 	
 	var wURL = window.URL || window.webkitURL;
 	usage.supportwURL = typeof wURL != "undefined" && !!wURL;
