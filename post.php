@@ -1013,7 +1013,7 @@ if (isset($_POST['delete'])) {
 	}
 	
 	timing_mark('build_index_start');
-	buildIndex();
+	buildIndex($post['op'] ? false : $thread['bump']);
 	timing_mark('build_index_end');
 } else {
 	if (!file_exists($config['has_installed'])) {

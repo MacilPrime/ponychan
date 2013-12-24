@@ -1191,7 +1191,10 @@ function clean() {
 	}
 }
 
-function index($page, $mod=false) {
+// Builds an index page.
+// $oldbump parameter is used by buildIndex(). Causes this function to return
+// false if the first thread's bump value on this page is older than it.
+function index($page, $mod=false, $oldbump=false) {
 	global $board, $config, $debug;
 
 	$body = '';
@@ -1204,7 +1207,14 @@ function index($page, $mod=false) {
 	
 	if ($query->rowcount() < 1 && $page > 1)
 		return false;
+	
+	$first = true;
 	while ($th = $query->fetch()) {
+		if ($first && !$th['sticky']) {
+			if ($oldbump !== false && $th['bump'] < $oldbump)
+				return false;
+			$first = false;
+		}
 		$thread = new Thread(
 			$th['id'], $th['subject'], $th['email'], $th['name'], $th['trip'], $th['capcode'], $th['body'], $th['time'], $th['thumb'],
 			$th['thumbwidth'], $th['thumbheight'], $th['file'], $th['filewidth'], $th['fileheight'], $th['filesize'], $th['filename'], $th['ip'],
@@ -1445,14 +1455,17 @@ function checkMute() {
 	}
 }
 
-function buildIndex() {
+// Rebuilds the board's index pages.
+// $oldbump can optionally be a timestamp. Only pages up until the page
+// that would contain a thread with that bump value are built.
+function buildIndex($oldbump=false) {
 	global $board, $config;
 	
 	$pages = getPages();
 	$antibot = create_antibot($board['uri']);
 
 	$page = 1;
-	while ($page <= $config['max_pages'] && $content = index($page)) {
+	while ($page <= $config['max_pages'] && $content = index($page, false, $oldbump)) {
 		$filename = $board['dir'] . ($page == 1 ? $config['file_index'] : sprintf($config['file_page'], $page));
 		
 		$antibot->reset();
@@ -1466,7 +1479,7 @@ function buildIndex() {
 		
 		$page++;
 	}
-	if ($page < $config['max_pages']) {
+	if (!$oldbump && $page < $config['max_pages']) {
 		for (;$page<=$config['max_pages'];$page++) {
 			$filename = $board['dir'] . ($page==1 ? $config['file_index'] : sprintf($config['file_page'], $page));
 			file_unlink($filename);
