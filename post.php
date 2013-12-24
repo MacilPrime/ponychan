@@ -919,10 +919,6 @@ if (isset($_POST['delete'])) {
 	
 	event('post-after', $post);
 	
-	timing_mark('build_index_start');
-	buildIndex();
-	timing_mark('build_index_end');
-	
 	if (isset($_SERVER['HTTP_REFERER'])) {
 		// Tell Javascript that we posted successfully
 		if (isset($_COOKIE[$config['cookies']['js']]))
@@ -1006,10 +1002,19 @@ if (isset($_POST['delete'])) {
 		$response['url'] = $redirect;
 		
 		header('Content-Type: application/json');
-		die(json_encode($response));
+		echo json_encode($response);
+	} else {
+		header('Location: ' . $redirect, true, $config['redirect_http']);
 	}
 	
-	header('Location: ' . $redirect, true, $config['redirect_http']);
+	if ($wantjson || $config['always_noko'] || $post['noko']) {
+		timing_mark('fastcgi_finish_request');
+		fastcgi_finish_request();
+	}
+	
+	timing_mark('build_index_start');
+	buildIndex();
+	timing_mark('build_index_end');
 } else {
 	if (!file_exists($config['has_installed'])) {
 		header('Location: install.php', true, $config['redirect_http']);
