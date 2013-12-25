@@ -127,7 +127,7 @@ function refresh_watched_threads(callback) {
 			var threads = data.threads;
 			var changed = false;
 			var alerts = 0;
-			for (id in threads) {
+			for (var id in threads) {
 				if (!watched_threads[id])
 					continue;
 				// If we've never viewed the thread since watching it, assume we've already
@@ -198,7 +198,7 @@ function populate_watcher_screen() {
 	$watcherScreen.html('');
 	var alerts = 0;
 
-	for (id in watched_threads) {
+	for (var id in watched_threads) {
 		var thread = watched_threads[id];
 		
 		var match = /^(\w+):(\d+)$/.exec(id);
