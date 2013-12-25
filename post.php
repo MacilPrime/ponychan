@@ -539,6 +539,7 @@ if (isset($_POST['delete'])) {
 			error($config['error']['locked']);
 		
 		$thread['cyclic'] = (stripos($thread['body'], '<span class="hashtag">#cyclic</span>') !== FALSE);
+		$thread['no_image_reposts'] = (stripos($thread['body'], '<span class="hashtag">#pic</span>') !== FALSE);
 
 		if ($thread['cyclic']) {
 			cyclicThreadCleanup($post['thread']);
@@ -838,7 +839,7 @@ if (isset($_POST['delete'])) {
 						)
 				));
 			}
-		} else if (!$post['op'] && $config['image_reject_repost_in_thread']) {
+		} else if (!$post['op'] && ($thread['no_image_reposts'] || $config['image_reject_repost_in_thread'])) {
 			if ($p = getPostByHashInThread($post['filehash'], $post['thread'])) {
 				undoImage($post);
 				error(sprintf($config['error']['fileexistsinthread'], 
