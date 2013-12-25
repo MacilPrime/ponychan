@@ -1,3 +1,11 @@
+/*
+ * notice.js
+ *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
+ */
+
 (function(exports) {
 	function settingsAd(text, time, cb) {
 		return pop(text+' \u2191', time, cb);

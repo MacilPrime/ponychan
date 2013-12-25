@@ -1,3 +1,11 @@
+/*
+ * show-filenames.js
+ *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
+ */
+
 $(document).ready(function() {
 	function filename_expander(context) {
 		$(".postfilename[title], .postfilename[data-fn-fullname]", context).each(function() {

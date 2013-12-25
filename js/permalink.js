@@ -1,3 +1,14 @@
+/*
+ * permalink.js
+ *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
+ * Necessary so that reply links on noko50 pages to visible posts don't lead
+ * off of the current page.
+ *
+ */
+
 $(document).ready(function() {
 	if($('div.banner').length == 0)
 		return; // not index

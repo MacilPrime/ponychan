@@ -1,13 +1,9 @@
 /*
  * post-hover.js
- * https://github.com/savetheinternet/Tinyboard/blob/master/js/post-hover.js
  *
  * Released under the MIT license
  * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
- *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/post-hover.js';
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
  *
  */
 

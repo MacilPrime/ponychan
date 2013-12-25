@@ -1,11 +1,20 @@
+/*
+ * logger.js
+ *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
+ */
+
 function nop() {}
 
-if (typeof console == "undefined" || !console) {
-	console = {};
-	console.log = nop;
-	console.info = nop;
-	console.warn = nop;
-	console.error = nop;
+if (typeof console == "undefined" || !window.console) {
+	console = {
+		log: nop,
+		info: nop,
+		warn: nop,
+		error: nop
+	};
 }
 
 function basicStringHash(string, prevHash){

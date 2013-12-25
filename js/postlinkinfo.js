@@ -4,6 +4,9 @@
  * Adds " (OP)" to >>X links when the OP is quoted.
  * Adds " (You)" to >>X links when the user is quoted.
  *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
  */
 
 (function(exports) {

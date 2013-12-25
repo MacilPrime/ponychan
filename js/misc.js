@@ -1,10 +1,6 @@
 /*
  * misc.js
  *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/misc.js';
- *
  */
 
 $(document).ready(function(){

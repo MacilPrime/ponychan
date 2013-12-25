@@ -1,3 +1,11 @@
+/*
+ * state.js
+ *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
+ */
+
 (function(exports) {
 	var original_page_title = document.title;
 	if (typeof history != 'undefined' && history && history.state) {

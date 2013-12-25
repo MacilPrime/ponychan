@@ -1,6 +1,9 @@
 /*
  * mc.js
  *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
  * Shows number of players currently online on the minecraft server
  *
  */

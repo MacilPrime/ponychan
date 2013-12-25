@@ -1,6 +1,8 @@
 /*
  * hide-toggle.js
  *
+ * Released under the WTFPLv2 license
+ *
  * Usage:
  *   $config['additional_javascript'][] = 'js/jquery.min.js';
  *   $config['additional_javascript'][] = 'js/hide-toggle.js';

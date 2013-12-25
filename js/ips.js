@@ -1,3 +1,10 @@
+/*
+ * ips.js
+ *
+ * Released under the WTFPLv2 license
+ *
+ */
+
 settings.newSetting("mod_obscure_ips", "bool", true, "Obscure user IP addresses", 'mod', {orderhint:1});
 
 $(document).ready(function() {

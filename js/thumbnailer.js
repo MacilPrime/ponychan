@@ -1,5 +1,14 @@
-// Based on code from
-// http://stackoverflow.com/questions/2303690/resizing-an-image-in-an-html5-canvas/3223466#3223466
+/*
+ * thumbnailer.js
+ *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
+ * Relies on Q.
+ * Based on code from
+ * http://stackoverflow.com/questions/2303690/resizing-an-image-in-an-html5-canvas/3223466#3223466
+ *
+ */
 
 function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
 	var scalex = max_x / orig_width;

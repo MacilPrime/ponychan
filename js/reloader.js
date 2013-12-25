@@ -1,15 +1,8 @@
 /*
  * auto-reload.js
- * https://github.com/savetheinternet/Tinyboard/blob/master/js/auto-reload.js
- *
- * Brings AJAX to Tinyboard.
  *
  * Released under the MIT license
- * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
- *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/auto-reload.js';
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
  *
  */
 

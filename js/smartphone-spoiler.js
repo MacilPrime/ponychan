@@ -1,12 +1,12 @@
 /*
  * smartphone-spoiler.js
- * https://github.com/savetheinternet/Tinyboard/blob/master/js/smartphone-spoiler.js
  *
  * Released under the MIT license
  * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
  *
  * Usage:
  *   $config['additional_javascript'][] = 'js/jquery.min.js';
+ *   $config['additional_javascript'][] = 'js/spoiler-toggle.js';
  *   $config['additional_javascript'][] = 'js/smartphone-spoiler.js';
  *
  */

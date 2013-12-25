@@ -1,14 +1,10 @@
 /*
  * inline-expanding.js
- * https://github.com/savetheinternet/Tinyboard/blob/master/js/inline-expanding.js
  *
  * Released under the MIT license
- * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org> &
- * Alyssa Rowan <alyssa.rowan@gmail.com>
- *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/inline-expanding.js';
+ * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
+ * Copyright (c) 2012 Alyssa Rowan <alyssa.rowan@gmail.com>
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
  *
  */
 
