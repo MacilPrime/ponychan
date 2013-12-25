@@ -1010,7 +1010,10 @@ $(document).ready(function(){
 					}
 				} else {
 					if (data.error == 'message') {
-						$QRwarning.text(data.message);
+						if (data.message_html)
+							$QRwarning.html(data.message_html);
+						else
+							$QRwarning.text(data.message);
 					} else if (data.error == 'ban') {
 						var pageState = {title: 'Ban', banpage: data.banhtml};
 						state.newState(pageState);

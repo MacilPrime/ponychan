@@ -107,7 +107,7 @@ function error($message, $priority = true) {
 	
 	if ($wantjson) {
 		header('Content-Type: application/json');
-		die(json_encode(array('error' => 'message', 'message' => _($message))));
+		die(json_encode(array('error' => 'message', 'message' => strip_tags(_($message)), 'message_html' => _($message))));
 	}
 	
 	die(Element('page.html', array(
