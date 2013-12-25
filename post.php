@@ -608,32 +608,24 @@ if (isset($_POST['delete'])) {
 	$post['mature'] = $post['op'] ? false : $thread['mature'];
 	
 	if (isset($_POST['mature'])) {
-		if (!$post['op']) {
-			undoImage($post);
-			error("Only threads can be set as mature");
-		} elseif (!$config['mature_allowed']) {
-			undoImage($post);
-			error("This board doesn't allow mature content threads");
-		} else {
-			$post['mature'] = true;
-		}
+		$post['mature'] = true;
 	}
 	
-	// Allow replies to mature threads to have the #Mature tag
-	if (!$post['mature'] && stripos($post['body'], '[#mature]') !== false) {
-		if (!$post['op']) {
-			undoImage($post);
-			error("Only threads can be tagged as mature");
-		} elseif (!$config['mature_allowed']) {
-			undoImage($post);
-			error("This board doesn't allow mature content threads");
-		} else {
-			$post['mature'] = true;
-		}
-	}
-	
-	if ($post['mature'] && $post['op'] && stripos($post['body'], '[#mature]') === false) {
+	$has_mature_tag_in_post = (stripos($post['body'], '[#mature]') !== false);
+	if (!$post['mature'] && $has_mature_tag_in_post) {
+		$post['mature'] = true;
+	} elseif ($post['mature'] && $post['op'] && !$has_mature_tag_in_post) {
 		$post['body'] = "[#Mature]\n" . $post['body'];
+	}
+
+	if ($post['mature']) {
+		if (!$config['mature_allowed']) {
+			undoImage($post);
+			error("This board doesn't allow mature content threads");
+		} elseif (!$post['op'] && !$thread['mature']) {
+			undoImage($post);
+			error("Only threads can be marked as mature");
+		}
 	}
 	
 	if ($post['has_file']) {
