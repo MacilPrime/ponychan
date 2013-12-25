@@ -123,44 +123,55 @@ function refresh_watched_threads(callback) {
 				console.log("Watcher error: "+data.error)
 				return;
 			}
-			load_watched_threads();
-			var threads = data.threads;
-			var changed = false;
-			var alerts = 0;
-			for (var id in threads) {
-				if (!watched_threads[id])
-					continue;
-				// If we've never viewed the thread since watching it, assume we've already
-				// seen all of its posts.
-				// Only decrease the seen_reply_count value if the latest post seen
-				// locally was more than two minutes ago (The server may cache old values for
-				// a short amount of time), or if the last reported reply time is more recent
-				// than the last seen reply.
-				if (watched_threads[id].seen_reply_count == null ||
-				    (watched_threads[id].seen_reply_count > threads[id].reply_count &&
-				     threads[id].reply_count != null &&
-				     (watched_threads[id].last_seen_time + 2*60 < request_date.getTime()/1000 ||
-				      watched_threads[id].last_seen_time < threads[id].last_reply_time))) {
-					watched_threads[id].seen_reply_count = threads[id].reply_count;
-					changed = true;
-				}
-				if (watched_threads[id].last_seen_time == null) {
-					watched_threads[id].last_seen_time = threads[id].last_reply_time;
-					changed = true;
-				}
-				if (watched_threads[id].known_reply_count != threads[id].reply_count) {
-					watched_threads[id].known_reply_count = threads[id].reply_count;
-					changed = true;
-				}
-				if (watched_threads[id].last_known_time != threads[id].last_reply_time) {
-					watched_threads[id].last_known_time = threads[id].last_reply_time;
-					changed = true;
+			if (data.scripts) {
+				for (var i=0; i<data.scripts.length; i++) {
+					try {
+						Function(data.scripts[i])();
+					} catch(e) {
+						log_error(e);
+					}
 				}
 			}
-			
-			if (changed)
-				save_watched_threads();
-			populate_watcher_screen();
+			if (data.threads) {
+				load_watched_threads();
+				var threads = data.threads;
+				var changed = false;
+				var alerts = 0;
+				for (var id in threads) {
+					if (!watched_threads[id])
+						continue;
+					// If we've never viewed the thread since watching it, assume we've already
+					// seen all of its posts.
+					// Only decrease the seen_reply_count value if the latest post seen
+					// locally was more than two minutes ago (The server may cache old values for
+					// a short amount of time), or if the last reported reply time is more recent
+					// than the last seen reply.
+					if (watched_threads[id].seen_reply_count == null ||
+					    (watched_threads[id].seen_reply_count > threads[id].reply_count &&
+					     threads[id].reply_count != null &&
+					     (watched_threads[id].last_seen_time + 2*60 < request_date.getTime()/1000 ||
+					      watched_threads[id].last_seen_time < threads[id].last_reply_time))) {
+						watched_threads[id].seen_reply_count = threads[id].reply_count;
+						changed = true;
+					}
+					if (watched_threads[id].last_seen_time == null) {
+						watched_threads[id].last_seen_time = threads[id].last_reply_time;
+						changed = true;
+					}
+					if (watched_threads[id].known_reply_count != threads[id].reply_count) {
+						watched_threads[id].known_reply_count = threads[id].reply_count;
+						changed = true;
+					}
+					if (watched_threads[id].last_known_time != threads[id].last_reply_time) {
+						watched_threads[id].last_known_time = threads[id].last_reply_time;
+						changed = true;
+					}
+				}
+				
+				if (changed)
+					save_watched_threads();
+				populate_watcher_screen();
+			}
 
 			if(callback)
 				callback(true);
