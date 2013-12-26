@@ -311,6 +311,10 @@ div.post .body .spoiler a {
 	padding: 0;
 	overflow: hidden;
 }
+.embed {
+	display: block;
+	margin: 5px;
+}
 .comicsans {
 	font-family: comic sans, comic sans ms;
 }
