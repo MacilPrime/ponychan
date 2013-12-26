@@ -1642,7 +1642,7 @@ function markup(&$body, $track_cites = false) {
 	if ($config['user_url_markup']) {
 		$markup_urls = array();
 		$body = preg_replace_callback(
-			'/\[url="?((?:https?|ftp|irc):\/\/[^\s<>"\[\]]+)"?\](.+?)\[\/url\]/',
+			'/\[url="?((?:https?|ftp|irc):\/\/[^\s<>\'"\[\]]+)"?\](.+?)\[\/url\]/',
 			function($matches) {
 				global $markup_urls;
 				$url = $matches[1];
