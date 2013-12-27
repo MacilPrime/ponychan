@@ -33,7 +33,7 @@ $(document).ready(function(){
 			if (m) {
 				var vid = m[1];
 				var params = get_url_params(href);
-				var embedsrc = "https://www.youtube.com/embed/"+vid+"?html5=1&autoplay=1&rel=0";
+				var embedsrc = "https://www.youtube.com/embed/"+vid+"?html5=1&rel=0";
 				var start = convert_time_to_seconds(params.t || params.start);
 				if (start)
 					embedsrc += '&start='+start;
