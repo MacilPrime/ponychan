@@ -6,14 +6,41 @@
  *
  */
 
+// converts "1m20s" to 80, etc
+function convert_time_to_seconds(s) {
+	if (/^[0-9]+$/.exec(s))
+		return parseInt(s);
+	var m = /^(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+)s)?$/.exec(s);
+	if (!m)
+		return null;
+	var t = 0;
+	if (m[1])
+		t += parseInt(m[1])*60*60;
+	if (m[2])
+		t += parseInt(m[2])*60;
+	if (m[3])
+		t += parseInt(m[3]);
+	return t;
+}
+
 $(document).ready(function(){
 	function init(context) {
 		$(".embedbtnspan", context).remove();
 		$("a.bodylink:not(.postlink)", context).each(function() {
 			var $link = $(this);
-			var m = /^https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?(?:[^&=]+=[^&]+&)*v=|youtu\.be\/)([^?&]+)/.exec($link.attr("href"));
+			var href = $link.attr("href");
+			var m = /^https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?(?:[^&=]+=[^&]+&)*v=|v\/|embed\/)|youtu\.be\/)([^?&]+)/.exec(href);
 			if (m) {
 				var vid = m[1];
+				var params = get_url_params(href);
+				var embedsrc = "https://www.youtube.com/embed/"+vid+"?html5=1&autoplay=1&rel=0";
+				var start = convert_time_to_seconds(params.t || params.start);
+				if (start)
+					embedsrc += '&start='+start;
+				var end = convert_time_to_seconds(params.end);
+				if (end)
+					embedsrc += '&end='+end;
+				
 				var $embed = null;
 				var $embedbtn = $("<a/>")
 					.addClass("embedbtn")
@@ -29,7 +56,7 @@ $(document).ready(function(){
 								.addClass("youtube-embed")
 								.attr("width", 420)
 								.attr("height", 315)
-								.attr("src", "https://www.youtube.com/embed/"+vid+"?html5=1&autoplay=1&rel=0")
+								.attr("src", embedsrc)
 								.appendTo($embedbtnspan);
 						}
 					});

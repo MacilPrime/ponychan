@@ -219,6 +219,23 @@ function get_post_class(postid) {
 	return 'post_'+match[1]+'-'+match[2];
 }
 
+function get_url_params(url) {
+	url = url.replace(/#.*/, '');
+	var params = {};
+	var match_params = /\?(.*)$/.exec(url);
+	if (match_params) {
+		var params_part = match_params[1];
+		function decode (s) {
+			return decodeURIComponent(s.replace(/\+/g, ' '));
+		}
+		var search = /([^&=]+)=?([^&]*)/g;
+		var match;
+		while (match = search.exec(params_part))
+			params[decode(match[1])] = decode(match[2]);
+	}
+	return params;
+}
+
 function isArray(o) {
 	return Object.prototype.toString.call(o) === '[object Array]';
 }
