@@ -1001,8 +1001,7 @@ if (isset($_POST['delete'])) {
 	}
 	
 	if ($wantjson || $config['always_noko'] || $post['noko']) {
-		timing_mark('fastcgi_finish_request');
-		fastcgi_finish_request();
+		close_request();
 	}
 	
 	timing_mark('build_index_start');

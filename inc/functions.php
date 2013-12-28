@@ -310,6 +310,18 @@ function fix_cloudflare_headers() {
 	}
 }
 
+function close_request() {
+	global $config;
+	if ($config['use_fastcgi_finish_request']) {
+		if (fastcgi_finish_request())
+			timing_mark('fastcgi_finish_request');
+		else
+			timing_mark('fastcgi_finish_request_fail');
+	} else {
+		timing_mark('fastcgi_finish_request_unused');
+	}
+}
+
 function timing_mark($name) {
 	global $timings;
 	

@@ -47,6 +47,11 @@
 	// For development purposes. Turns 'display_errors' on. Not recommended for production.
 	$config['verbose_errors'] = true;
 	
+	// Use fastcgi_finish_request() to close client connections as early
+	// as necessary. Can improve performance, but may cause errors that
+	// occur after the connection is closed to not be reported.
+	$config['use_fastcgi_finish_request'] = false;
+	
 	// Directory where temporary files will be created. Not really used much yet except for some experimental stuff.
 	$config['tmp'] = sys_get_temp_dir();
 	
