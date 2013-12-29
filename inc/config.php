@@ -1275,8 +1275,7 @@
 	// Connection timeout, in seconds
 	$config['purge_timeout'] = 3;
 	
-	// Remote servers
-	// http://tinyboard.org/wiki/index.php?title=Multiple_Servers
+	// Remote server definitions
 	//$config['remote']['static'] = array(
 	//	'host' => 'static.example.org',
 	//	'auth' => array(
