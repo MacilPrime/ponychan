@@ -29,10 +29,10 @@ $(document).ready(function(){
 		$("a.bodylink:not(.postlink)", context).each(function() {
 			var $link = $(this);
 			var href = $link.attr("href");
-			var m = /^https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?(?:[^&=]+=[^&]+&)*v=|v\/|embed\/)|youtu\.be\/)([^?&]+)/.exec(href);
+			var m = /^https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?(?:[^&=]+=[^&]+&)*v=|v\/|embed\/)|youtu\.be\/)([^?&#]+)/.exec(href);
 			if (m) {
 				var vid = m[1];
-				var params = get_url_params(href);
+				var params = get_url_params(href, true);
 				var embedsrc = "https://www.youtube.com/embed/"+vid+"?html5=1&rel=0";
 				var start = convert_time_to_seconds(params.t || params.start);
 				if (start)
