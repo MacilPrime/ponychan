@@ -261,6 +261,53 @@ function send_usage(retryTime) {
 		}
 	});
 }
+
+function send_misc(misc, retryTime) {
+	if (typeof misc !== 'object')
+		misc = {value: misc};
+	var miscString = JSON.stringify(misc);
+	var data = {type: "misc", userid: userid, data: miscString};
+	
+	if (!retryTime)
+		retryTime = 3*1000;
+	else if (retryTime > maxRetryTime)
+		retryTime = maxRetryTime;
+	
+	$.ajax({
+		url: logger_url,
+		cache: false,
+		data: data,
+		type: 'POST',
+		success: function(data) {
+			//console.log("sent misc message to server");
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			if (textStatus == "timeout") {
+				console.log("timeout while trying to send misc message, retrying soon");
+				setTimeout(function() {
+					send_misc(misc, retryTime*2);
+				}, retryTime);
+			} else {
+				console.error("could not send misc message. textStatus: "+textStatus+", errorThrown: "+errorThrown);
+			}
+		}
+	});
+}
+
+var _misc_log_rapid_data = [];
+var _misc_log_rapid_timer = null;
+function misc_log_rapid(data) {
+	_misc_log_rapid_data.push([Date.now(), data]);
+	
+	if (!_misc_log_rapid_timer) {
+		_misc_log_rapid_timer = setTimeout(function() {
+			send_misc({type:"rapid", log:_misc_log_rapid_data});
+			_misc_log_rapid_timer = null;
+			_misc_log_rapid_data = [];
+		}, 15*1000);
+	}
+}
+
 $(document).ready(function() {
 	setTimeout(send_usage, 300);
 });

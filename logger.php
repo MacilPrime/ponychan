@@ -22,11 +22,12 @@ if (!$userid)
 elseif ($_POST['userid'] !== $userid)
 	die("Error: invalid values");
 
+if (!preg_match('/^[0-9a-f]{32}$/', $userid))
+	die("Error: userid is formatted incorrectly");
+
 $type = $_POST['type'];
 $data = json_decode($_POST['data']);
 
-if (!preg_match('/^[0-9a-f]{32}$/', $userid))
-	die("Error: userid is formatted incorrectly");
 if ($data === NULL)
 	die("Error: Could not interpret JSON data");
 if (gettype($data) !== 'object')
@@ -46,14 +47,19 @@ if ($type === 'error') {
 		die("Error: JSON data missing a message");
 	
 	if (!isset($config['js_error_log']))
-		die("Error: Server not configured for logging");
+		die("Error: Server does not have error logging enabled");
 	
 	logToFile($config['js_error_log'], $output_line);
 } elseif ($type === 'usage') {
 	if (!isset($config['js_usage_log']))
-		die("Error: Server not configured for logging");
+		die("Error: Server does not have usage logging enabled");
 	
 	logToFile($config['js_usage_log'], $output_line);
+} elseif ($type === 'misc') {
+	if (!isset($config['js_misc_log']))
+		die("Error: Server does not have misc logging enabled");
+	
+	logToFile($config['js_misc_log'], $output_line);
 } else {
 	die("Error: Invalid type");
 }

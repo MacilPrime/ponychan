@@ -76,6 +76,7 @@
 	//$config['error_log'] = '/var/log/tinyboard/error.log';
 	//$config['js_usage_log'] = '/var/log/tinyboard/js_usage.log';
 	//$config['js_error_log'] = '/var/log/tinyboard/js_error.log';
+	//$config['js_misc_log'] = '/var/log/tinyboard/js_misc.log';
 	
 /*
  * ====================
