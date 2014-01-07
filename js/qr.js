@@ -988,7 +988,6 @@ $(document).ready(function(){
 				query = null;
 				setQRFormDisabled(false);
 				if (data.status == 'success') {
-					QRcooldown(10);
 					if (settings.getSetting("QR_persistent") || (replies.length > 1))
 						QR.clear();
 					else
@@ -1002,6 +1001,8 @@ $(document).ready(function(){
 						board: data.board,
 						url: data.url
 					});
+					
+					QRcooldown(10);
 					
 					if (data.threadid == null) {
 						window.location.href = data.url;
