@@ -108,10 +108,12 @@
 					if ($controlsform.length) {
 						$catalog.hide();
 						$controlsform.show();
+						$(".pages").show();
 					}
 				} else {
 					if ($controlsform.length) {
 						$controlsform.hide();
+						$(".pages").hide();
 						$catalog.show();
 					}
 					var terms = searchTermSplitter(text);
