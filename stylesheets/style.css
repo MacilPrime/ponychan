@@ -953,6 +953,14 @@ table.boarddir td {
 	padding: 2px 5px;
 }
 
+.searchblock {
+	text-align: right;
+}
+#threadsearchbox {
+	font-size: 11px;
+	padding: 1px !important;
+}
+
 /* catalog stuff */
 .catalink {
 	display: block;
