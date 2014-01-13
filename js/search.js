@@ -15,13 +15,16 @@
 		var $controlsform = $("form[name='postcontrols']");
 		var $catalog = $(".catalog");
 		
-		// Only run if we're on the catalog
-		if (!$catalog.length)
+		// Only run if we're on the catalog or board index
+		if (!$catalog.length && !$controlsform.length)
 			return;
 
 		var $searchdiv = $("<div/>")
 			.addClass("searchblock")
 			.insertAfter($("header").first());
+		var $status = $("<span/>")
+			.addClass("searchstatus")
+			.appendTo($searchdiv);
 		var $textbox = $("<input/>")
 			.attr("id", "threadsearchbox")
 			.attr("type", "text")
@@ -48,8 +51,37 @@
 			return terms;
 		}
 
-		// Loads the catalog in the background if it's not loaded already
+		var _catalog_loading_promise = null;
+
+		// Loads the catalog in the background if it's not loaded already.
+		// Returns a promise that resolves when the catalog element has been added to the page.
 		function initSearch() {
+			if (_catalog_loading_promise)
+				return _catalog_loading_promise;
+			
+			var job = Q.defer();
+			_catalog_loading_promise = job.promise;
+			
+			if (!$catalog.length) {
+				$.ajax({
+					url: siteroot+board_id+'/catalog.html',
+					success: function(data) {
+						var $html = $($.parseHTML(data));
+						$catalog = $html.filter('.catalog').add( $html.find('.catalog') )
+							.first()
+							.insertAfter($controlsform)
+							.hide();
+						job.resolve();
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.error("Failed to load catalog. textStatus:", textStatus, "errorThrown:", errorThrown);
+						job.reject(new Error(errorThrown));
+					}
+				});
+			} else {
+				job.resolve();
+			}
+			return job.promise;
 		}
 		
 		// queues up a call to search
@@ -63,65 +95,76 @@
 			clearTimeout(queuedSearchTimer);
 			queuedSearchTimer = null;
 			
-			var text = $textbox.val();
-			if (text == currentSearch) return;
-			console.log("TEXT:", text);
-			var $nofound = $('#searchnofound');
-			if (text.length == 0) {
-				if (settings.getSetting("show_mature"))
-					$(".catathread").show();
-				else
-					$(".catathread:not(.mature_thread)").show();
-				$nofound.hide();
-			} else {
-				var terms = searchTermSplitter(text);
-				var countfound = 0;
-				$(".catathread").each(function() {
-					var $this = $(this);
-					var thistext = $this.text().toLowerCase();
-					var matchfound = true;
-					if ($this.hasClass("mature_thread") && !settings.getSetting("show_mature")) {
-						matchfound = false;
-					} else {
-						for (var i=0; i<terms.length; i++) {
-							if (terms[i][0] == "-") {
-								var t = terms[i].slice(1);
-								if (t.length && thistext.indexOf(t) != -1) {
-									matchfound = false;
-									break;
-								}
-							} else {
-								if (thistext.indexOf(terms[i]) == -1) {
-									matchfound = false;
-									break;
+			initSearch().done(function() {
+				var text = $textbox.val();
+				if (text == currentSearch) return;
+				var $nofound = $('#searchnofound');
+				if (text.length == 0) {
+					if (settings.getSetting("show_mature"))
+						$(".catathread").show();
+					else
+						$(".catathread:not(.mature_thread)").show();
+					$nofound.hide();
+					if ($controlsform.length) {
+						$catalog.hide();
+						$controlsform.show();
+					}
+				} else {
+					if ($controlsform.length) {
+						$controlsform.hide();
+						$catalog.show();
+					}
+					var terms = searchTermSplitter(text);
+					var countfound = 0;
+					$(".catathread").each(function() {
+						var $this = $(this);
+						var thistext = $this.text().toLowerCase();
+						var matchfound = true;
+						if ($this.hasClass("mature_thread") && !settings.getSetting("show_mature")) {
+							matchfound = false;
+						} else {
+							for (var i=0; i<terms.length; i++) {
+								if (terms[i][0] == "-") {
+									var t = terms[i].slice(1);
+									if (t.length && thistext.indexOf(t) != -1) {
+										matchfound = false;
+										break;
+									}
+								} else {
+									if (thistext.indexOf(terms[i]) == -1) {
+										matchfound = false;
+										break;
+									}
 								}
 							}
 						}
-					}
-					if (matchfound) {
-						$this.show();
-						countfound++;
+						if (matchfound) {
+							$this.show();
+							countfound++;
+						} else {
+							$this.hide();
+						}
+					});
+					if (countfound == 0) {
+						if (!$nofound.length) {
+							$nofound = $("<div/>")
+								.attr("id", "searchnofound")
+								.text("Nothing found")
+								.appendTo($catalog);
+						}
+						$nofound.show();
 					} else {
-						$this.hide();
+						$nofound.hide();
 					}
-				});
-				if (countfound == 0) {
-					if (!$nofound.length) {
-						$nofound = $("<div/>")
-							.attr("id", "searchnofound")
-							.text("Nothing found")
-							.appendTo($catalog);
-					}
-					$nofound.show();
-				} else {
-					$nofound.hide();
 				}
-			}
-			currentSearch = text;
+				currentSearch = text;
+			}, function(error) {
+				$status.text("Failed to retrieve catalog, try refreshing the page");
+			});
 		}
 
 		$textbox
-			.click(initSearch)
+			.click(function() {initSearch().then(nop, nop);})
 			.on('input', queueSearch)
 			.change(search);
 	});
