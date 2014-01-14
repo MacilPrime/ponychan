@@ -100,10 +100,7 @@
 				if (text == currentSearch) return;
 				var $nofound = $('#searchnofound');
 				if (text.length == 0) {
-					if (settings.getSetting("show_mature"))
-						$(".catathread").show();
-					else
-						$(".catathread:not(.mature_thread)").show();
+					$(".searchhidden").removeClass("searchhidden");
 					$nofound.hide();
 					if ($controlsform.length) {
 						$catalog.hide();
@@ -122,29 +119,25 @@
 						var $this = $(this);
 						var thistext = $this.text().toLowerCase();
 						var matchfound = true;
-						if ($this.hasClass("mature_thread") && !settings.getSetting("show_mature")) {
-							matchfound = false;
-						} else {
-							for (var i=0; i<terms.length; i++) {
-								if (terms[i][0] == "-") {
-									var t = terms[i].slice(1);
-									if (t.length && thistext.indexOf(t) != -1) {
-										matchfound = false;
-										break;
-									}
-								} else {
-									if (thistext.indexOf(terms[i]) == -1) {
-										matchfound = false;
-										break;
-									}
+						for (var i=0; i<terms.length; i++) {
+							if (terms[i][0] == "-") {
+								var t = terms[i].slice(1);
+								if (t.length && thistext.indexOf(t) != -1) {
+									matchfound = false;
+									break;
+								}
+							} else {
+								if (thistext.indexOf(terms[i]) == -1) {
+									matchfound = false;
+									break;
 								}
 							}
 						}
 						if (matchfound) {
-							$this.show();
+							$this.removeClass("searchhidden");
 							countfound++;
 						} else {
-							$this.hide();
+							$this.addClass("searchhidden");
 						}
 					});
 					if (countfound == 0) {

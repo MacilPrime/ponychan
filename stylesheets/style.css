@@ -960,6 +960,9 @@ table.boarddir td {
 	font-size: 11px;
 	padding: 1px !important;
 }
+.searchhidden {
+	display: none !important;
+}
 
 /* catalog stuff */
 .catalink {
