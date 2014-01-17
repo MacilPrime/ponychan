@@ -457,6 +457,13 @@ class Thread {
 		
 		return $this->root . $board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], $this->id) . '#' . $pre . $this->id;
 	}
+	public function linkauto($pre = '') {
+		global $config, $board;
+		
+		if ($this->postCount() >= $config['noko50_min'])
+			return $this->root . $board['dir'] . $config['dir']['res'] . sprintf($config['file_page50'], $this->id) . '#' . $pre . $this->id;
+		return $this->link($pre);
+	}
 	public function add(Post $post) {
 		$this->posts[] = $post;
 	}

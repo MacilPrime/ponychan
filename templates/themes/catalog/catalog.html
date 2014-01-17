@@ -48,7 +48,7 @@
 	<div class="catalog">
 	{% for post in threads %}
 		<div class="catathread{% if post.mature %} mature_thread{% endif %}">
-			<a class="catalink" href="{{post.link}}">
+			<a class="catalink" href="{{post.linkauto}}">
 {% if post.file and post.thumb %}
 		<img src="{% filter remove_whitespace %}
 		{% if post.file == 'deleted' %}

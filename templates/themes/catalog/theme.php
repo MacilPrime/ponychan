@@ -52,7 +52,7 @@
 					$post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 					$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $config['root'], false, false, $post['mature']
 				);
-				$thread->reply_count = $post['reply_count'];
+				$thread->omitted = $thread->reply_count = $post['reply_count'];
 				$threads[] = $thread;
 			}
 			
