@@ -265,6 +265,7 @@ function send_usage(retryTime) {
 function send_misc(misc, retryTime) {
 	if (typeof misc !== 'object')
 		misc = {value: misc};
+	misc.pageurl = document.location.href;
 	var miscString = JSON.stringify(misc);
 	var data = {type: "misc", userid: userid, data: miscString};
 	
