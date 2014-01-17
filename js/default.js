@@ -118,7 +118,7 @@ function rememberStuff() {
 				document.forms.post.elements['email'].value = localStorage.email;
 		}
 		
-		if (window.location.hash.indexOf('q') == 1)
+		if (/^#q\d+$/.exec(window.location.hash))
 			citeReply(window.location.hash.substring(2));
 		
 		if (window.sessionStorage && sessionStorage.body) {
@@ -169,7 +169,7 @@ $(document).ready(function init() {
 		document.forms.postcontrols.password.value = localStorage.password;
 	}
 	
-	if (window.location.hash.indexOf('q') != 1 && window.location.hash.substring(1))
+	if (/^#\d+$/.exec(window.location.hash))
 		highlightReply(window.location.hash.substring(1));
 });
 
