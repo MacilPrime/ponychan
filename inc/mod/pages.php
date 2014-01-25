@@ -1006,7 +1006,8 @@ function mod_move($originBoard, $postID) {
 			}
 		}
 		
-		modLog("Moved thread #${postID} to " . sprintf($config['board_abbreviation'], $targetBoard) . " (#${newID})", $originBoard);
+		modLog("Moved thread &gt;&gt;&gt;/{$originBoard}/{$postID} to &gt;&gt;&gt;/{$targetBoard}/{$newID}");
+		
 		
 		// build new thread
 		buildThread($newID);
@@ -1019,8 +1020,6 @@ function mod_move($originBoard, $postID) {
 		
 		// return to original board
 		openBoard($originBoard);
-		
-		modLog("Moved thread &gt;&gt;&gt;/{$originBoard}/{$postID} to &gt;&gt;&gt;/{$targetBoard}/{$newID}");
 		
 		if ($shadow) {
 			// lock old thread
