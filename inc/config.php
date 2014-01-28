@@ -792,6 +792,7 @@
 	$config['additional_javascript'][] = 'js/mc.js';
 	$config['additional_javascript'][] = 'js/embed.js';
 	$config['additional_javascript'][] = 'js/search.js';
+	$config['additional_javascript'][] = 'js/hide-trip.js';
 	 
 	// Where these script files are located on the web (defaults to $config['root']).
 	// $config['additional_javascript_url'] = '/js/';
