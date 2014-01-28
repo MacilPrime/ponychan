@@ -164,7 +164,9 @@ function rememberStuff() {
 	}
 }
 
-$(document).ready(function init() {
+$(document).ready(function() {
+	rememberStuff();
+
 	if (window.localStorage && localStorage.password && document.forms.postcontrols) {
 		document.forms.postcontrols.password.value = localStorage.password;
 	}
