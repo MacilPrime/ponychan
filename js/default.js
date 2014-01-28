@@ -245,7 +245,7 @@ function isArray(o) {
 
 function setCss(key, css) {
 	var $style = $("style.setcss#setcss_"+key);
-	if (!$style.length) {
+	if (!$style.length && css) {
 		$style = $("<style/>")
 			.addClass("setcss")
 			.attr("id", "setcss_"+key)
