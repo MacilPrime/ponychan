@@ -15,7 +15,8 @@
 
 	var soundChoices = {
 		main: "Default",
-		aim: "AIM"
+		aim: "AIM",
+		yeah: "Yeah!"
 	};
 
 	settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Sound Choice", 'links', {orderhint:7.5, moredetails:'<a href="javascript:notifier.playSound()">Test Sound</a>', moredetails_rawhtml:true, selectOptions: soundChoices});
@@ -35,6 +36,12 @@
 			$au.append(
 				$("<source/>").attr({src:siteroot+"static/notify_imrcv.ogg", type:"application/ogg"}),
 				$("<source/>").attr({src:siteroot+"static/notify_imrcv.mp3", type:"audio/mpeg"})
+			);
+			break;
+		case "yeah":
+			$au.append(
+				$("<source/>").attr({src:siteroot+"static/notify_yeah.ogg", type:"application/ogg"}),
+				$("<source/>").attr({src:siteroot+"static/notify_yeah.mp3", type:"audio/mpeg"})
 			);
 			break;
 		case "main":
