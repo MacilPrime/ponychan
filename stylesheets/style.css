@@ -295,7 +295,7 @@ div.post .body .spoiler a {
 	color: white !important;
 }
 .hidetogglebutton {
-	width: 4em;
+	min-width: 4em;
 }
 .hidetext {
 	border-style: solid;
