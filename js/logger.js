@@ -95,7 +95,7 @@ var send_maxQueued = 7;
 var malformed_errors = {};
 
 function error_to_object(error) {
-	var newError = {message: error.message, url: error.fileName, lineNumber: error.lineNumber};
+	var newError = {message: error.message, url: error.fileName, lineNumber: error.lineNumber, columnNumber: error.columnNumber, stack: error.stack};
 	if (error.constructor && error.constructor.name)
 		newError.type = error.constructor.name;
 	// get anything missed. For some reason error.message doesn't show up in this pass.
@@ -178,17 +178,28 @@ function log_error(error) {
 var old_onerror = window.onerror;
 
 var error_handler_nest_count = 0;
-window.onerror = function(errorMsg, url, lineNumber) {
+window.onerror = function(errorMsg, url, lineNumber, columnNumber, error) {
 	if (error_handler_nest_count <= 1) {
 		error_handler_nest_count++;
 		
-		var error = {message: errorMsg, url: url, lineNumber: lineNumber, caughtBy: "window.onerror"};
-		send_error(error);
+		if (error) {
+			error.caughtBy = "window.onerror with error object";
+			send_error(error);
+		} else {
+			var errorObj = {
+				message: errorMsg,
+				url: url,
+				lineNumber: lineNumber,
+				columnNumber: columnNumber,
+				caughtBy: "window.onerror"
+			};
+			send_error(errorObj);
+		}
 		
 		error_handler_nest_count--;
 	}
 	if (old_onerror)
-		return old_onerror(errorMsg, url, lineNumber);
+		return old_onerror.apply(this, arguments);
 	return false;
 };
 
