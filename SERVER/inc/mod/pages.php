@@ -1633,15 +1633,15 @@ function mod_rebuild() {
 			$twig->clearCacheFiles();
 		}
 		
-		if (isset($_POST['rebuild_themes'])) {
-			echo "Regenerating theme files<br>\n";
-			rebuildThemes('all');
-		}
-		
 		if (isset($_POST['rebuild_javascript'])) {
 			echo 'Rebuilding <strong>' . $config['file_script'] . "</strong><br>\n";
 			buildJavascript();
 			$rebuilt_scripts[] = $config['file_script'];
+		}
+		
+		if (isset($_POST['rebuild_themes'])) {
+			echo "Regenerating theme files<br>\n";
+			rebuildThemes('all');
 		}
 		
 		foreach ($boards as $board) {
