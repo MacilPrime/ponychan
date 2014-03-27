@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>MLPchan is currently offline</title>
+<link rel="shortcut icon" href="https://i.imgur.com/HcsLcLi.png">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<style type="text/css">
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: url("https://i.imgur.com/GDb76bw.png") repeat scroll 0 0 transparent;
+  font-family: "Helvetica Neue",Helvetica,Arial,Sans-serif;
+  font-size: 14px;
+  color: rgb(64, 64, 64);
+}
+h1 {
+  font-size: 24px;
+  color: rgb(61, 85, 102);
+  margin: 10px 0 0;
+}
+p, li {
+  margin: 5px 0;
+}
+.main {
+  text-align: center;
+  margin-top: 5em;
+  padding: 1em;
+
+  background: rgba(200,200,200,0.7);
+  border-width: 1px 0px;
+  border-style: dashed;
+  border-color: rgba(170,170,170,0.7);
+}
+.smallnote {
+  font-size: 12px;
+}
+.suggestions {
+  margin: 15px auto;
+  max-width: 500px;
+  text-align: left;
+}
+.suggestions h3 {
+  font-weight: normal;
+  text-align: center;
+}
+.nocopybox {
+  display: none;
+
+  background: rgba(200,200,200,0.7);
+  border-width: 1px 0px;
+  border-style: dashed;
+  border-color: rgba(170,170,170,0.7);
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+  var images = [
+    'https://i.imgur.com/3gUcHkO.png',
+    'https://i.imgur.com/raNjTDN.png',
+    'https://i.imgur.com/LrTUJH4.png',
+    'https://i.imgur.com/8eFsXYE.png',
+    ]
+  var r = Math.floor(Math.random() * images.length);
+  var imgsrc = images[r];
+  $('#bottomimgstyle').remove();
+  $('<style/>').attr('id','bottomimgstyle').attr('type','text/css').text('body { background: url("'+imgsrc+'") no-repeat center bottom fixed, url("https://i.imgur.com/GDb76bw.png") repeat scroll 0 0 transparent !important; }').appendTo(document.head);
+});
+</script>
+</head>
+<body>
+
+<div class="main">
+<img src="https://mlpchan.net/cdn-cgi/cache-err/exclamation.png" />
+<h1>MLPchan is currently offline</h1>
+
+<p>
+We're currently working on some technical difficulties, so we'll be back soon! Sorry about that!
+</p>
+
+<div class="suggestions">
+<h3>Looking for ways to pass the time?</h3>
+<ul>
+<li>Have you seen <a href="https://www.dailymotion.com/video/x114ygo_friendship-is-witchcraft-episode-4-cute-from-the-hip_fun">Friendship is Witchcraft</a>?
+<li>Go watch <a href="https://www.youtube.com/watch?v=sPW9ki-IfZ8&html5=1">PONIES the Anthology III</a>
+<li>Go watch that <a href="https://www.youtube.com/watch?v=Y1fsiftzzRs&html5=1">new episode</a>!
+<li>Play on our Minecraft server at <em>mlpchan.net</em> (Yes, same domain. It should still be up regardless of the site's current status. Note that it's still on version 1.6.4!)
+</ul>
+</div>
+
+<div class="nocopybox">::ALWAYS_ONLINE_NO_COPY_BOX::</div>
+</div>
+
+</body>
+</html>
