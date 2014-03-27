@@ -396,9 +396,6 @@ if (isset($_POST['delete'])) {
 	if (isset($_POST['thread'])) {
 		$post['op'] = false;
 		$post['thread'] = round($_POST['thread']);
-	} elseif ($config['quick_reply'] && isset($_POST['quick-reply'])) {
-		$post['op'] = false;
-		$post['thread'] = round($_POST['quick-reply']);
 	} else
 		$post['op'] = true;
 	
@@ -449,7 +446,7 @@ if (isset($_POST['delete'])) {
 	}
 	
 	if (!$post['mod']) {
-		$post['antispam_hash'] = checkSpam(array($board['uri'], isset($post['thread']) && !($config['quick_reply'] && isset($_POST['quick-reply'])) ? $post['thread'] : null));
+		$post['antispam_hash'] = checkSpam(array($board['uri'], isset($post['thread']) && $post['thread']));
 		if ($post['antispam_hash'] === true) {
 			if (!$userid) {
 				error($config['error']['spam']);

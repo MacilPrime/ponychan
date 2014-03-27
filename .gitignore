@@ -1,17 +1,14 @@
-# static html
-/*.html
-
 # instance-config
-/inc/instance-config.php
+/SERVER/inc/instance-config.php
 
 # .installed
-/.installed
+/SERVER/.installed
 
-# script file
-/main.js
+# built script files
+/SERVER/js
 
 # templates cache
-/templates/cache
+/SERVER/templates/cache
 
 # other stuff
 .DS_Store
@@ -19,4 +16,4 @@ thumbs.db
 Icon?
 Thumbs.db
 *~
-/inc/instance-config.php
+/node_modules

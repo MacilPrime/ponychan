@@ -67,7 +67,6 @@ function loadConfig() {
 		'file_icons',
 		'footer',
 		'stylesheets',
-		'additional_javascript',
 		'markup',
 		'banners',
 		'custom_pages'
@@ -168,8 +167,6 @@ function loadConfig() {
 		$config['url_stylesheet'] = $config['uri_stylesheets'] . 'style.css';
 	if (!isset($config['url_javascript']))
 		$config['url_javascript'] = $config['root'] . $config['file_script'];
-	if (!isset($config['additional_javascript_url']))
-		$config['additional_javascript_url'] = $config['root'];
 	
 	if (!isset($config['mature_image']))
 		$config['mature_image'] = $config['spoiler_image'];
@@ -1514,16 +1511,7 @@ function buildJavascript() {
 		'config' => $config,
 		'stylesheets' => $stylesheets
 	));
-	if ($config['additional_javascript_compile']) {
-		foreach ($config['additional_javascript'] as $file) {
-			$script .= file_get_contents($file);
-		}
-	}
-	
-	if ($config['minify_js']) {
-		require_once 'inc/lib/minify/JSMin.php';		
-		$script = JSMin::minify($script);
-	}
+	$script .= file_get_contents('js/main-needtb.js');
 	
 	file_write($config['file_script'], $script);
 }

@@ -751,64 +751,6 @@
 
 /*
  * ====================
- *  Javascript
- * ====================
- */
-
-	// Additional Javascript files to include on board index and thread pages.
-        $config['additional_javascript'][] = 'js/jquery.min.js';
-        $config['additional_javascript'][] = 'js/q.min.js';
-        $config['additional_javascript'][] = 'js/moment.min.js';
-        $config['additional_javascript'][] = 'js/visibility.min.js';
-        $config['additional_javascript'][] = 'js/logger.js';
-        $config['additional_javascript'][] = 'js/default.js';
-        $config['additional_javascript'][] = 'js/thumbnailer.js';
-        $config['additional_javascript'][] = 'js/notice.js';
-        $config['additional_javascript'][] = 'js/settings.js';
-        $config['additional_javascript'][] = 'js/state.js';
-        $config['additional_javascript'][] = 'js/styles.js';
-        $config['additional_javascript'][] = 'js/spoiler-toggle.js';
-        $config['additional_javascript'][] = 'js/local-time.js';
-        $config['additional_javascript'][] = 'js/reloader.js';
-        $config['additional_javascript'][] = 'js/post-hover.js';
-        $config['additional_javascript'][] = 'js/postlinkinfo.js';
-	$config['additional_javascript'][] = 'js/watcher.js';
-        $config['additional_javascript'][] = 'js/notifier.js';
-        $config['additional_javascript'][] = 'js/show-filenames.js';
-        $config['additional_javascript'][] = 'js/inline-expanding.js';
-        $config['additional_javascript'][] = 'js/image-hover.js';
-        $config['additional_javascript'][] = 'js/smartphone-spoiler.js';
-        $config['additional_javascript'][] = 'js/show-backlinks.js';
-        $config['additional_javascript'][] = 'js/navbar.js';
-        $config['additional_javascript'][] = 'js/permalink.js';
-        $config['additional_javascript'][] = 'js/qr.js';
-        $config['additional_javascript'][] = 'js/tags.js';
-        $config['additional_javascript'][] = 'js/misc.js';
-        $config['additional_javascript'][] = 'js/titlebar.js';
-        $config['additional_javascript'][] = 'js/hide-toggle.js';
-	$config['additional_javascript'][] = 'js/post-hiding.js';
-	$config['additional_javascript'][] = 'js/ips.js';
-	$config['additional_javascript'][] = 'js/fancy.js';
-	$config['additional_javascript'][] = 'js/mc.js';
-	$config['additional_javascript'][] = 'js/embed.js';
-	$config['additional_javascript'][] = 'js/search.js';
-	$config['additional_javascript'][] = 'js/hide-trip.js';
-	 
-	// Where these script files are located on the web (defaults to $config['root']).
-	// $config['additional_javascript_url'] = '/js/';
-	
-	// Compile all additional scripts into one file ($config['file_script']) instead of including them seperately.
-	$config['additional_javascript_compile'] = false;
-	
-	// Minify Javascript using http://code.google.com/p/minify/
-	$config['minify_js'] = false;
-
-	// Allows js/quick-reply.js to work
-	// This will make your imageboard more vulnerable to flood attacks.
-	$config['quick_reply'] = false;
-
-/*
- * ====================
  *  Video embedding
  * ====================
  */
@@ -933,7 +875,7 @@
 	$config['file_page50'] = '%d+50.html';
 	$config['file_mod'] = 'mod.php';
 	$config['file_post'] = 'post.php';
-	$config['file_script'] = 'main.js';
+	$config['file_script'] = 'js/main.js';
 	
 	// Board directory, followed by a forward-slash (/). (%s is board abbreviation)
 	$config['board_path'] = '%s/';
