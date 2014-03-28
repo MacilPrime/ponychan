@@ -1,10 +1,15 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    concat: {
+    traceur: {
+      options: {
+        experimental: true,
+        modules: false
+      },
       main: {
         nonull: true,
         src: [
+          'jsextra/traceur-runtime.js',
           'jsmain/jquery.min.js',
           'jsmain/q.min.js',
           'jsmain/moment.min.js',
@@ -43,6 +48,16 @@ module.exports = function(grunt) {
           'jsmain/search.js',
           'jsmain/hide-trip.js'
         ],
+        dest: 'tmpbuild/main-needtb.js'
+      }
+    },
+    concat: {
+      main: {
+        nonull: true,
+        src: [
+          'jsextra/traceur-runtime.js',
+          'tmpbuild/main-needtb.js'
+        ],
         dest: 'SERVER/js/main-needtb.js'
       }
     },
@@ -58,9 +73,10 @@ module.exports = function(grunt) {
     }
   });
   
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-traceur');
 
   // Default task(s).
-  grunt.registerTask('default', ['concat','copy']);
+  grunt.registerTask('default', ['traceur','concat','copy']);
 };
