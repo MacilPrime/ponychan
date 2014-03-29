@@ -875,7 +875,7 @@
 	$config['file_page50'] = '%d+50.html';
 	$config['file_mod'] = 'mod.php';
 	$config['file_post'] = 'post.php';
-	$config['file_script'] = 'js/main.js';
+	$config['file_script'] = 'main.js';
 	
 	// Board directory, followed by a forward-slash (/). (%s is board abbreviation)
 	$config['board_path'] = '%s/';
