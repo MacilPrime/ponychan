@@ -6,7 +6,7 @@
  *
  */
 
-var max_watched_threads = 50;
+var max_watched_threads = 70;
 var watcher_poll_time = 30 * 1000;
 
 var watched_threads;
