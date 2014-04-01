@@ -34,4 +34,11 @@ $(document).ready(function(){
 			localStorage.removeItem("event_saw_nightmare");
 		});
 	}
+	
+	// Change back from geocities theme event
+	if (new Date() >= new Date("2014-04-02T08:00:00Z") && window.localStorage && localStorage.getItem("event_saw_gc")) {
+		notice.settingsAd('The Geocities style is still available!', undefined, function() {
+			localStorage.removeItem("event_saw_gc");
+		});
+	}
 });

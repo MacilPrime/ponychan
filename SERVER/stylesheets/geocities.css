@@ -1,0 +1,121 @@
+body {
+    background: url('img/gc/stars.png') #111111 repeat;
+    color: white;
+}
+header, header h1, header div.subtitle, #qrtoggleoptions {
+    text-align: left;
+}
+header h1::before {
+    content: "Welcome to the mlpchan bulletin board!";
+    display: block;
+}
+#settingsScreen h1::after {
+    content: url('img/gc/computer.png');
+    position: relative;
+    left: 6px;
+    top: 4px;
+}
+form table {
+    margin: 5px;
+}
+.blotter::before {
+    content: url('img/gc/construction%20icon.gif');
+    position: relative;
+    right: 5px;
+}
+.blotter::after {
+    display: block;
+    content: "/-- WEBSITE UNDER CONSTRUCTION --/";
+}
+.thread hr {
+    border-width: 2px;
+}
+a.threadviewlink:last-of-type::after {
+    content: url('img/gc/ie.png');
+    margin-left: 4px;
+    position: absolute;
+}
+span.controls.op {
+    margin-left: 40px;
+}
+.thread::before {
+    content: url('img/gc/internet.png');
+    display: block;
+    float: left;
+}
+.opContainer::before {
+    content: "Discussion thread:";
+    display: block;
+    margin-bottom: 1em;
+    margin-left: 40px;
+}
+.boardlist.top {
+    box-shadow: none;
+    background-color: #000;
+}
+#qrmove {
+    background: url('img/gc/stars.png') #111111 repeat;
+}
+#qrtoggleoptions::before {
+    content: url('img/gc/phone.png');
+    float: left;
+}
+#qrbuttonrow + div::after {
+    content: url('img/gc/email.png');
+    display: block;
+    float: right;
+}
+#qrimages::after {
+    content: "/-- TEST TEXT PLEASE IGNORE --/";
+}
+
+div.post.reply {
+    background: url('img/gc/paper.png') #fff9f2 repeat;
+    color: black;
+    border: none;
+    min-width: 500px;
+}
+/*
+div.post.reply[id$="27"] a.post_no:not(.permalink)::after {
+    content: url('img/gc/computer.png');
+    margin-left: 2px;
+    position: absolute;
+}
+*/
+
+a, a:visited {
+    color: rgb(127, 127, 198);
+}
+p.intro span.subject {
+    color: rgb(136, 251, 138);
+}
+p.intro a.email span.name {
+    color: rgb(37, 37, 246);
+}
+
+.hidetext {
+    background: rgba(16,16,16,0.3);
+}
+
+.replyContainer {
+    clear: left;
+}
+.unimportant, .unimportant * {
+    font-size: inherit;
+}
+footer audio.geocities {
+    display: block;
+    position: relative;
+    top: 15px;
+}
+footer p.unimportant:first-of-type::before {
+    content: url("img/gc/ns_logo.gif");
+    display: block;
+}
+footer p.unimportant:first-of-type::after {
+    content: url("img/gc/counter.gif");
+    margin-left: 5em;
+}
+footer * {
+    text-align: left !important;
+}
