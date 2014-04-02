@@ -73,15 +73,12 @@ div.post.reply {
     background: url('img/gc/paper.png') #fff9f2 repeat;
     color: black;
     border: none;
-    min-width: 500px;
 }
-/*
-div.post.reply[id$="27"] a.post_no:not(.permalink)::after {
-    content: url('img/gc/computer.png');
-    margin-left: 2px;
-    position: absolute;
+@media screen and (min-width: 550px) {
+    div.post.reply {
+        min-width: 500px;
+    }
 }
-*/
 
 a, a:visited {
     color: rgb(127, 127, 198);
