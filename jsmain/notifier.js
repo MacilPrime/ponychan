@@ -19,7 +19,7 @@
 		yeah: "Yeah!"
 	};
 
-	settings.newSetting("reply_notify_sound", "select", "aim", "Reply Notifier Sound Choice", 'links', {orderhint:7.5, moredetails:'<a href="javascript:notifier.playSound()">Test Sound</a>', moredetails_rawhtml:true, selectOptions: soundChoices, defpriority: 3});
+	settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Sound Choice", 'links', {orderhint:7.5, moredetails:'<a href="javascript:notifier.playSound()">Test Sound</a>', moredetails_rawhtml:true, selectOptions: soundChoices, defpriority: 0});
 	
 	var $au;
 	function prepareNotifySound() {
