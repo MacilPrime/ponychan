@@ -491,11 +491,14 @@ table.mod.config-editor input[type="text"] {
 	font-size: 75%;
 	margin-top: 1em;
 }
-.diceroll {
+.diceroll, .conch {
 	font-weight: bold;
 }
 .diceroll:before {
 	content: url(img/dice.png);
+}
+.conch:before {
+	content: url(img/Bag_Helix_Fossil_Sprite.png);
 }
 /* Navbar stuff */
 .boardlist.top {
