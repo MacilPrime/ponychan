@@ -9,7 +9,6 @@ module.exports = function(grunt) {
       main: {
         nonull: true,
         src: [
-          'jsextra/traceur-runtime.js',
           'jsmain/jquery.min.js',
           'jsmain/q.min.js',
           'jsmain/moment.min.js',
