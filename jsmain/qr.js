@@ -327,7 +327,8 @@ $(document).ready(function(){
 	var use_QR;
 	var query = null;
 
-	QR = {};
+	// TODO don't be global
+	window.QR = {};
 
 	QR.isEnabled = function() {
 		return use_QR;

@@ -22,7 +22,7 @@ function basicStringHash(string, prevHash){
 	if (prevHash)
 		hash = prevHash;
 	if (string.length == 0) return hash;
-	for (i = 0; i < string.length; i++) {
+	for (var i = 0; i < string.length; i++) {
 		var char = string.charCodeAt(i);
 		hash = ((hash<<5)-hash)+char;
 		hash = hash & hash; // Convert to 32bit integer

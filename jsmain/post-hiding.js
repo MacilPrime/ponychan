@@ -141,7 +141,7 @@ $(document).ready(function(){
 			.click(show_this_post);
 	}
 
-	hide_post = function(board, postnum) {
+	function hide_post(board, postnum) {
 		var postid = board+":"+postnum;
 		load_hidden_posts();
 		if (hidden_posts.indexOf(postid) == -1) {
@@ -163,7 +163,7 @@ $(document).ready(function(){
 		$postC.children(".post, .postSide").show();
 	}
 
-	show_post = function(board, postnum) {
+	function show_post(board, postnum) {
 		var postid = board+":"+postnum;
 		load_hidden_posts();
 		var hidden_index = hidden_posts.indexOf(postid);

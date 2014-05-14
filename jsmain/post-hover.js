@@ -206,7 +206,7 @@ $(document).ready(function(){
 			}
 
 			function start_inline() {
-				$postC = $('#replyC_' + id).first();
+				var $postC = $('#replyC_' + id).first();
 
 				if ($postC.length == 0)
 					return false;

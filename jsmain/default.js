@@ -19,7 +19,7 @@ function get_cookie(cookie_name) {
 		return null;
 }
 
-function highlightReply(id) {
+window.highlightReply = function highlightReply(id) {
 	if (typeof event != "undefined" && event && typeof event.which != "undefined" && event.which == 2) {
 		// don't highlight on middle click
 		return true;
@@ -78,7 +78,7 @@ function dopost(form) {
 	return form.elements['body'].value != "" || form.elements['file'].value != "";
 }
 
-function citeReply(id) {
+window.citeReply = function citeReply(id) {
 	var body = document.getElementById('body');
 	
 	if (document.selection) {

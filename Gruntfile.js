@@ -4,14 +4,11 @@ module.exports = function(grunt) {
     traceur: {
       options: {
         experimental: true,
-        modules: false
+        modules: 'inline'
       },
       main: {
         nonull: true,
         src: [
-          'jsmain/jquery.min.js',
-          'jsmain/q.min.js',
-          'jsmain/moment.min.js',
           'jsmain/visibility.min.js',
           'jsmain/logger.js',
           'jsmain/default.js',
@@ -54,6 +51,9 @@ module.exports = function(grunt) {
       main: {
         nonull: true,
         src: [
+          'node_modules/jquery/dist/jquery.min.js',
+          'node_modules/moment/moment.js',
+          'node_modules/q/q.js',
           'jsextra/traceur-runtime.js',
           'tmpbuild/main-needtb.js'
         ],
