@@ -1,14 +1,10 @@
-# instance-config
+# files made by an in-use server
 /SERVER/inc/instance-config.php
-
-# .installed
 /SERVER/.installed
-
-# built script files
-/SERVER/js
-
-# templates cache
 /SERVER/templates/cache
+
+# built client javascript
+/SERVER/js
 
 # other stuff
 .DS_Store
@@ -17,4 +13,3 @@ Icon?
 Thumbs.db
 *~
 /node_modules
-/tmpbuild

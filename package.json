@@ -1,13 +1,16 @@
 {
   "name": "tinyboard-js",
   "version": "0.1.0",
-  "devDependencies": {
-    "grunt": "^0.4.4",
-    "grunt-contrib-copy": "^0.5.0",
-    "grunt-traceur": "^0.1.1",
-    "grunt-contrib-concat": "^0.3.0",
+  "dependencies": {
     "jquery": "1.11.1",
     "q": "^1.0.1",
     "moment": "^2.6.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.6.2",
+    "gulp-concat": "^2.2.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-traceur": "^0.6.0",
+    "streamqueue": "0.0.7"
   }
 }

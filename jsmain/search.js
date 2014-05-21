@@ -159,7 +159,7 @@
 		}
 
 		$textbox
-			.click(function() {initSearch().then(nop, nop);})
+			.click(function() {initSearch().then($.noop, $.noop);})
 			.on('input', queueSearch)
 			.change(search);
 	});

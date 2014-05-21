@@ -11,7 +11,7 @@
  *
  */
 
-function get_cookie(cookie_name) {
+window.get_cookie = function get_cookie(cookie_name) {
 	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
 	if (results)
 		return (unescape(results[2]));
@@ -30,7 +30,7 @@ window.highlightReply = function highlightReply(id) {
 		$('#reply_'+id).addClass('highlighted');
 }
 
-function confirmDelete() {
+window.confirmDelete = function confirmDelete() {
 	var count = $('form[name="postcontrols"] input.delete:checked').length;
 	if (count == 0) {
 		alert('No posts selected');
@@ -46,7 +46,7 @@ function confirmDelete() {
 	}
 }
 
-function generatePassword() {
+window.generatePassword = function generatePassword() {
 	var pass = '';
 	var chars = genpassword_chars;
 	for (var i = 0; i < 8; i++) {
@@ -56,7 +56,7 @@ function generatePassword() {
 	return pass;
 }
 
-function dopost(form) {
+window.dopost = function dopost(form) {
 	if (window.localStorage) {
 		if (form.elements['name']) {
 			localStorage.name = form.elements['name'].value.replace(/( |^)## .+$/, '');
@@ -97,7 +97,7 @@ window.citeReply = function citeReply(id) {
 	}
 }
 
-function rememberStuff() {
+window.rememberStuff = function rememberStuff() {
 	if (document.forms.post) {
 		if (document.forms.post.password) {
 			var password = window.localStorage && localStorage.password;
@@ -175,8 +175,8 @@ $(document).ready(function() {
 		highlightReply(window.location.hash.substring(1));
 });
 
-var board_id = null;
-var thread_id = null;
+window.board_id = null;
+window.thread_id = null;
 (function() {
 	var path_board_regex = new RegExp("^"+siteroot+"(?:mod\\.php\\?/)?([^/]+)/(?:res/([0-9]+))?");
 	var reg_result = path_board_regex.exec(document.location.pathname+document.location.search);
@@ -189,39 +189,39 @@ var thread_id = null;
 	}
 })();
 
-function make_thread_url(board, postnum) {
+window.make_thread_url = function make_thread_url(board, postnum) {
 	if (document.location.pathname == siteroot+'mod.php')
 		return '?/'+board+'/res/'+postnum+'.html';
 	else
 		return siteroot+board+'/res/'+postnum+'.html';
 }
 	
-function make_thread50_url(board, postnum) {
+window.make_thread50_url = function make_thread50_url(board, postnum) {
 	if (document.location.pathname == siteroot+'mod.php')
 		return '?/'+board+'/res/'+postnum+'+50.html';
 	else
 		return siteroot+board+'/res/'+postnum+'+50.html';
 }
 	
-function get_post_board($post) {
+window.get_post_board = function get_post_board($post) {
 	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
 }
 
-function get_post_num($post) {
+window.get_post_num = function get_post_num($post) {
 	return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
 }
 
-function get_post_id($post) {
+window.get_post_id = function get_post_id($post) {
 	var match = /\bpost_(\w+)-(\d+)\b/.exec($post.attr("class"));
 	return match[1]+':'+match[2];
 }
 
-function get_post_class(postid) {
+window.get_post_class = function get_post_class(postid) {
 	var match = /^(\w+):(\d+)$/.exec(postid);
 	return 'post_'+match[1]+'-'+match[2];
 }
 
-function get_url_params(url, includeHash) {
+window.get_url_params = function get_url_params(url, includeHash) {
 	if (!includeHash)
 		url = url.replace(/#.*/, '');
 	var params = {};
@@ -239,11 +239,11 @@ function get_url_params(url, includeHash) {
 	return params;
 }
 
-function isArray(o) {
+window.isArray = function isArray(o) {
 	return Object.prototype.toString.call(o) === '[object Array]';
 }
 
-function setCss(key, css) {
+window.setCss = function setCss(key, css) {
 	var $style = $("style.setcss#setcss_"+key);
 	if (!$style.length && css) {
 		$style = $("<style/>")
@@ -255,12 +255,12 @@ function setCss(key, css) {
 	$style.text(css);
 }
 
-function htmlEntities(str) {
+window.htmlEntities = function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 // Disables all img, audio, video, and script tags in some html
-function mogrifyHTML(html) {
+window.mogrifyHTML = function mogrifyHTML(html) {
 	function mogrifier(text) {
 		return '<span class="mogrifier" data-data="' + htmlEntities(text) + '"></span>';
 	}
@@ -274,7 +274,7 @@ function mogrifyHTML(html) {
 }
 
 // Re-enables mogrified tags in an element
-function demogrifyEl($el) {
+window.demogrifyEl = function demogrifyEl($el) {
 	$el.find('.mogrifier').each(function() {
 		var $mog = $(this);
 		var html = $mog.attr('data-data');
@@ -287,6 +287,6 @@ $(document).on('new_post', function(e, post) {
 	demogrifyEl($(post));
 });
 
-var RecaptchaOptions = {
+window.RecaptchaOptions = {
 	theme : 'clean'
 };

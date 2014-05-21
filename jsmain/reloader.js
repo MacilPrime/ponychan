@@ -9,7 +9,7 @@
 settings.newSetting("reloader", "bool", true, "Enable thread auto-updating", 'reloader', {orderhint:1, moredetails:"New posts in threads will appear as they're made."});
 settings.newSetting("reloader_autoscroll", "bool", false, "Scroll page down when new posts are loaded", 'reloader', {orderhint:2, moredetails:"Only happens if page is scrolled to the bottom already."});
 
-var reloader = {
+export var reloader = {
 	updateThreadNow: function() {}
 };
 

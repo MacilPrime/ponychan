@@ -12,6 +12,9 @@
  *
  */
 
+import { reloader } from "./reloader";
+import { thumbnailer } from "./thumbnailer";
+
 settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Q is the quick keyboard shortcut.", orderhint:1});
 settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});
 settings.newSetting("QR_flexstyle", "bool", true, "Use small persona fields on QR", 'posting', {orderhint:3});

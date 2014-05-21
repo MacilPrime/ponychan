@@ -20,7 +20,7 @@ function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
 	return {width: dest_width, height: dest_height};
 }
 
-function thumbnailer(image, max_x, max_y) {
+export function thumbnailer(image, max_x, max_y) {
 	var job = Q.defer();
 	
 	try {
