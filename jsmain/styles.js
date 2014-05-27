@@ -19,7 +19,7 @@ import { log_error } from "./logger";
 		styleChoices[name] = name;
 	});
 	
-	settings.newSetting("style", "select", selectedstyle, "Style", 'pagestyle',
+	settings.newSetting("style", "select", selectedstyle, "Theme", 'pagestyle',
 			    {orderhint: 1, selectOptions: styleChoices, defpriority: 0});
 	
 	function apply(stylename) {
