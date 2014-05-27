@@ -13,8 +13,7 @@
 /**
  * Represents a Token.
  *
- * @package twig
- * @author  Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Token
 {
@@ -22,17 +21,19 @@ class Twig_Token
     protected $type;
     protected $lineno;
 
-    const EOF_TYPE         = -1;
-    const TEXT_TYPE        = 0;
-    const BLOCK_START_TYPE = 1;
-    const VAR_START_TYPE   = 2;
-    const BLOCK_END_TYPE   = 3;
-    const VAR_END_TYPE     = 4;
-    const NAME_TYPE        = 5;
-    const NUMBER_TYPE      = 6;
-    const STRING_TYPE      = 7;
-    const OPERATOR_TYPE    = 8;
-    const PUNCTUATION_TYPE = 9;
+    const EOF_TYPE                  = -1;
+    const TEXT_TYPE                 = 0;
+    const BLOCK_START_TYPE          = 1;
+    const VAR_START_TYPE            = 2;
+    const BLOCK_END_TYPE            = 3;
+    const VAR_END_TYPE              = 4;
+    const NAME_TYPE                 = 5;
+    const NUMBER_TYPE               = 6;
+    const STRING_TYPE               = 7;
+    const OPERATOR_TYPE             = 8;
+    const PUNCTUATION_TYPE          = 9;
+    const INTERPOLATION_START_TYPE  = 10;
+    const INTERPOLATION_END_TYPE    = 11;
 
     /**
      * Constructor.
@@ -55,7 +56,7 @@ class Twig_Token
      */
     public function __toString()
     {
-        return sprintf('%s(%s)', self::typeToString($this->type, true, $this->lineno), $this->value);
+        return sprintf('%s(%s)', self::typeToString($this->type, true), $this->value);
     }
 
     /**
@@ -123,7 +124,7 @@ class Twig_Token
      *
      * @return string The string representation
      */
-    static public function typeToString($type, $short = false, $line = -1)
+    public static function typeToString($type, $short = false)
     {
         switch ($type) {
             case self::EOF_TYPE:
@@ -159,8 +160,14 @@ class Twig_Token
             case self::PUNCTUATION_TYPE:
                 $name = 'PUNCTUATION_TYPE';
                 break;
+            case self::INTERPOLATION_START_TYPE:
+                $name = 'INTERPOLATION_START_TYPE';
+                break;
+            case self::INTERPOLATION_END_TYPE:
+                $name = 'INTERPOLATION_END_TYPE';
+                break;
             default:
-                throw new Twig_Error_Syntax(sprintf('Token of type "%s" does not exist.', $type), $line);
+                throw new LogicException(sprintf('Token of type "%s" does not exist.', $type));
         }
 
         return $short ? $name : 'Twig_Token::'.$name;
@@ -169,12 +176,11 @@ class Twig_Token
     /**
      * Returns the english representation of a given type.
      *
-     * @param integer $type  The type as an integer
-     * @param Boolean $short Whether to return a short representation or not
+     * @param integer $type The type as an integer
      *
      * @return string The string representation
      */
-    static public function typeToEnglish($type, $line = -1)
+    public static function typeToEnglish($type)
     {
         switch ($type) {
             case self::EOF_TYPE:
@@ -199,8 +205,12 @@ class Twig_Token
                 return 'operator';
             case self::PUNCTUATION_TYPE:
                 return 'punctuation';
+            case self::INTERPOLATION_START_TYPE:
+                return 'begin of string interpolation';
+            case self::INTERPOLATION_END_TYPE:
+                return 'end of string interpolation';
             default:
-                throw new Twig_Error_Syntax(sprintf('Token of type "%s" does not exist.', $type), $line);
+                throw new LogicException(sprintf('Token of type "%s" does not exist.', $type));
         }
     }
 }

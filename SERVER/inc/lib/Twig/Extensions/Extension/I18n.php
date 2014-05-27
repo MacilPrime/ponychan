@@ -42,4 +42,3 @@ class Twig_Extensions_Extension_I18n extends Twig_Extension
         return 'i18n';
     }
 }
-

@@ -1,6 +1,6 @@
 <?php
 
-class Twig_Extensions_Extension_Tinyboard extends Twig_Extension
+class TwigExt_Tinyboard extends Twig_Extension
 {
 	/**
 	* Returns a list of filters to add to the existing list.
@@ -23,7 +23,6 @@ class Twig_Extensions_Extension_Tinyboard extends Twig_Extension
 			'count' => new Twig_Filter_Function('count'),
 			'ago' => new Twig_Filter_Function('ago'),
 			'until' => new Twig_Filter_Function('until'),
-			'split' => new Twig_Filter_Function('twig_split_filter'),
 			'push' => new Twig_Filter_Function('twig_push_filter'),
 			'filemtime' => new Twig_Filter_Function('filemtime'),
 			'bidi_cleanup' => new Twig_Filter_Function('bidi_cleanup'),
@@ -42,8 +41,6 @@ class Twig_Extensions_Extension_Tinyboard extends Twig_Extension
 			'time' => new Twig_Filter_Function('time'),
 			'floor' => new Twig_Filter_Function('floor'),
 			'timezone' => new Twig_Filter_Function('twig_timezone_function'),
-			'hiddenInputs' => new Twig_Filter_Function('hiddenInputs'),
-			'hiddenInputsHash' => new Twig_Filter_Function('hiddenInputsHash'),
 		);
 	}
 	
@@ -60,10 +57,6 @@ class Twig_Extensions_Extension_Tinyboard extends Twig_Extension
 
 function twig_timezone_function() {
 	return 'Z';
-}
-
-function twig_split_filter($str, $delim) {
-	return explode($delim, $str);
 }
 
 function twig_push_filter($array, $value) {

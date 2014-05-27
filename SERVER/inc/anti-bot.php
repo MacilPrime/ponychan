@@ -9,8 +9,6 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == str_replace('\\', '/', __FILE__)) {
 	exit;
 }
 
-$hidden_inputs_twig = array();
-
 class AntiBot {
 	public $salt, $inputs = array(), $index = 0;
 	private $hasLogged = false;
