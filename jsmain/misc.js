@@ -3,6 +3,8 @@
  *
  */
 
+import { log_error } from "./logger";
+
 $(document).ready(function(){
 	var $secondLine = $("footer .unimportant").slice(1,2);
 	var $targetLink = $("footer .unimportant a").slice(1,2);
@@ -28,17 +30,10 @@ $(document).ready(function(){
 	if (Math.random() < 0.0014)
 		betterName();
 	
-	// Change back from second Nightmare theme event
-	if (new Date() >= new Date("2013-11-01T07:00:00Z") && window.localStorage && localStorage.getItem("event_saw_nightmare")) {
-		notice.settingsAd('The Nightmare style is still available!', undefined, function() {
-			localStorage.removeItem("event_saw_nightmare");
-		});
-	}
-	
-	// Change back from geocities theme event
-	if (new Date() >= new Date("2014-04-02T08:00:00Z") && window.localStorage && localStorage.getItem("event_saw_gc")) {
-		notice.settingsAd('The Geocities style is still available!', undefined, function() {
-			localStorage.removeItem("event_saw_gc");
-		});
+	try {
+		localStorage.removeItem("event_saw_nightmare");
+		localStorage.removeItem("event_saw_gc");
+	} catch (e) {
+		log_error(e);
 	}
 });
