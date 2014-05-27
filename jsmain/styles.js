@@ -11,6 +11,8 @@
  *
  */
 
+import { log_error } from "./logger";
+
 (function(exports) {
 	var styleChoices = {};
 	$.each(styles, function(name, file) {

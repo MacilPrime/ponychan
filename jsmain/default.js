@@ -11,6 +11,8 @@
  *
  */
 
+import { log_error } from "./logger";
+
 window.get_cookie = function get_cookie(cookie_name) {
 	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
 	if (results)

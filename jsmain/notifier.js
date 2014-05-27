@@ -10,6 +10,8 @@
  *
  */
 
+import { log_error } from "./logger";
+
 (function(exports) {
 	settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {orderhint:7, moredetails:"Audibly alert you when a post by you in a thread you're viewing is replied to."});
 
