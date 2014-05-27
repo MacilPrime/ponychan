@@ -21,7 +21,8 @@ body {
 	font-family: serif;
 	font-size: 16px;
 }
-a, a:visited, a#qrDisplayButton, a.bodylink {
+
+a#qrDisplayButton, a.bodylink {
 	color: #FAF9AF;
 }
 a:hover, p.intro a.post_no:hover {
@@ -111,7 +112,7 @@ p.intro a.email:hover span.name {
         color: #DFFFFF;
 }
 span.trip {
-	color: #EBFD89;
+	color: rgb(38, 27, 92);
 }
 .spoiler {
 	background: black;
