@@ -1,0 +1,168 @@
+/*
+PinkiePie.css
+by Wheatley
+inept77@gmail.com
+
+Images used:
+Stare Pinkie Pie by SkyRings (http://skyrings.deviantart.com/)
+Pinkie Pie Cutie Mark by ErisGrim (http://erisgrim.deviantart.com/)
+*/
+
+body {
+	background: url('img/pinkie/pinkie.png') no-repeat fixed right bottom / 400px auto, #E6B0D0;
+	color: rgb(31, 20, 53);
+	font-family: serif;
+	font-size: 16px;
+}
+a, a:visited {
+	color: #FFFFB8;
+}
+a.bodylink {
+	color: #FFFFB8;
+}
+a:hover, p.intro a.post_no:hover {
+	color: rgb(44, 119, 233);
+}
+form table tr th {
+	background: #e693c8;
+}
+textarea#body, #qrcomment {
+	background: url(img/pinkie/balloons.png) bottom right no-repeat white;
+}
+a#qrDisplayButton {
+	color: #db73ad;
+}
+#qrmove {
+        background-color: #66cccc 
+}
+#qrmove a {
+        color: #f7fd77
+}
+header h1{
+	color: #FFFFB8;
+	font-size: 30pt;
+}
+#settingsScreen h1, #settingsScreen h2 {
+        color: rgb(94, 96, 255);
+}
+#settingsScreen {
+        background-color: #e6b0d0;
+}
+header div.subtitle {
+	color: #FFFFB8;
+	font-size: 14px;
+}
+.subtitle {
+	font-size: 14pt;
+}
+.homepage header h1 {
+	font-size: 40pt;
+}
+.homeblock h2 {
+	font-size: 24px;
+}
+div.blotter {
+	color: #FFFFB8;
+}
+div.blotter a {
+	color: #f7fd77;
+}
+div.blotter a:hover {
+	color: #5edcff;
+}
+div.boardlist {
+	color: #FFFFB8;
+	font-size: 11pt;
+}
+div.banner {
+	color: #FFFFB8;
+	padding: 1px 5px;
+	margin-left: auto;
+	margin-right: auto;
+	display: table;
+}
+div.banner a {
+        color: #f7fd77;
+        font-size: 10pt;
+        font-weight: normal;
+}
+div.banner a:hover {
+        color: #66cccc;
+}
+hr, .thread hr {
+	border-color: rgb(128,128,128);
+}
+div.post.reply {
+	background: #EC9DC4;
+	border: none !important;
+	box-shadow: 0 0 2px 1px #B8E6E6 !important;
+	margin-top: 3px;
+}
+div.post.reply.highlighted {
+	background: #EB81B4;
+}
+span.quote {
+	color: #66cccc;
+}
+p.intro span.name {
+	color: rgb(28, 82, 105);
+}
+p.intro a.email span.name {
+	color: #f8fd77;
+}
+p.intro a.email:hover span.name {
+        color: #66cccc;
+}
+span.trip {
+	color: #186F98;
+}
+.spoiler {
+	background: #BE1D77;
+	color: #BE1D77;
+}
+div.post .body .spoiler a {
+	color: #BE1D77;
+}
+p.intro span.subject {
+	color: #ffcc66;
+}
+.hidetext {
+	background-color: #db73ad;
+}
+div.pages {
+	color: #FFFFB8;
+	background: none;
+	border-right: 1px none yellow;
+	border-bottom: 1px none yellow;
+}
+div.pages a.selected {
+        color: #4893B3;
+}
+.homeblock {
+	background-color: rgba(30, 30, 30, 0.5);
+}
+fieldset, div.ban {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.boardlist.top {
+	background-color: #e6b0d0;
+	padding-bottom: 1px;
+	border-bottom: 2px solid #FFFFB8;
+}
+.boardlist.top .boardlistpart a:hover{
+	text-shadow: 1px 1px 4px #FFFFB8;
+	background: none;
+}
+.boardlist.top .boardlistpart a.boardlistactive {
+	padding-top: 0;
+        padding-bottom: 0;
+	border-top: 2px solid #66cccc;
+        border-bottom: 2px solid #66cccc;
+	background: none;
+}
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, .boardlist.top .boardlistpart a[href="/"] {
+	padding: 5px 0 5px 0;
+	color: #FFFFB8;
+	font-size: 12pt;
+	letter-spacing: 1px;
+}

@@ -708,6 +708,8 @@
 	$config['stylesheets']['Australian'] = 'Australian.css';
 	$config['stylesheets']['Chrysalis'] = 'Queen.css';
 	$config['stylesheets']['Tomorrow'] = 'Tomorrow.css';
+	$config['stylesheets']['Derpy'] = 'derpy.css';
+	$config['stylesheets']['Pinkie'] = 'pinkie.css';
 	$config['stylesheets']['Geocities'] = 'geocities.css';
 	
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/

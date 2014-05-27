@@ -1,0 +1,162 @@
+/*
+
+Derpy Style Sheet
+by Wheatley
+inept77@gmail.com
+
+Images Used:
+Derpy Muffin by aman692 (http://aman692.deviantart.com/)
+*/
+
+@font-face {
+	font-family: CELESTIA;
+	src: url("font/celestia.ttf");
+	src: url("font/celestia.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+body {
+	background: url(img/derpy/derpy.png) no-repeat top right, #BABFCD;
+	color: black;
+	font-family: serif;
+	font-size: 16px;
+}
+a, a:visited, a#qrDisplayButton, a.bodylink {
+	color: #FAF9AF;
+}
+a:hover, p.intro a.post_no:hover {
+	color: #DFFFFF;
+}
+form table tr th {
+	background: #AEB2C0;
+}
+textarea#body, #qrcomment {
+	background: url(img/derpy/muffin.png) bottom right no-repeat white;
+}
+
+#qrmove {
+        background-color: #AEB2C0; 
+}
+#qrmove a {
+	color: #E7DD6B;
+}
+header h1{
+        font-family: CELESTIA;
+	color: #FAF9AF;
+	font-size: 30pt;
+}
+#settingsScreen h1, #settingsScreen h2 {
+        color: #FAF9AF;
+}
+#settingsScreen {
+        background-color: #C2C7D6;
+}
+header div.subtitle {
+	color: #FAF9AF;
+	font-size: 14px;
+}
+.homepage header h1 {
+	font-size: 40pt;
+}
+.homeblock h2 {
+	font-size: 24px;
+}
+div.blotter {
+	color: #FAF9AF;
+}
+div.blotter a {
+	color: #E7DD6B;
+}
+div.blotter a:hover {
+	color: #DFFFFF;
+}
+div.boardlist {
+	color: #FAF9AF;
+	font-size: 11pt;
+}
+div.banner {
+	color: #FAF9AF;
+	padding: 1px 5px;
+	margin-left: auto;
+	margin-right: auto;
+	display: table;
+}
+div.banner a {
+        color: #FAF9AF;
+        font-size: 10pt;
+        font-weight: normal;
+}
+div.banner a:hover {
+        color: #DFFFFF;
+}
+hr, .thread hr {
+	border-color: rgb(128,128,128);
+}
+div.post.reply {
+	background: #AEB2C0;
+	border: none !important;
+	box-shadow: 0 0 1px 1px rgb(137, 137, 137) !important;
+	margin-top: 3px;
+}
+div.post.reply.highlighted {
+	background: #838AA8;
+}
+span.quote {
+	color: #2E64C0;
+}
+p.intro span.name, p.intro a.email span.name {
+	color: rgb(74, 75, 77);
+}
+p.intro a.email:hover span.name {
+        color: #DFFFFF;
+}
+span.trip {
+	color: #EBFD89;
+}
+.spoiler {
+	background: black;
+	color: black;
+}
+div.post .body .spoiler a {
+	color: black;
+}
+.hidetext {
+	background-color: #8C8F9A;
+}
+div.pages {
+	color: #FAF9AF;
+	background: none;
+	border-right: 1px none yellow;
+	border-bottom: 1px none yellow;
+}
+div.pages a.selected {
+        color: #b89956;
+}
+.homeblock {
+	background-color: rgba(30, 30, 30, 0.5);
+}
+fieldset, div.ban {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.boardlist.top {
+	background-color: #C2C7D6;
+	padding-bottom: 1px;
+	border-bottom: 2px solid #E7DD6B;
+}
+.boardlist.top .boardlistpart a:hover{
+	text-shadow: 1px 1px 4px #E7DD6B;
+	background: none;
+}
+.boardlist.top .boardlistpart a.boardlistactive {
+	padding-top: 0;
+        padding-bottom: 0;
+	border-top: 2px solid #838AA8;
+        border-bottom: 2px solid #838AA8;
+	background: none;
+}
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, .boardlist.top .boardlistpart a[href="/"] {
+	padding: 5px 0 5px 0;
+	color: #FAF9AF;
+	font-size: 12pt;
+	letter-spacing: 1px;
+}
