@@ -10,7 +10,7 @@
  *
  */
 
-(function(exports) {
+(function (exports) {
 	var $settingsScreen = $("<div/>")
 		.attr("id", "settingsScreen")
 		.addClass("settingsScreen")
@@ -369,6 +369,8 @@
 			
 			if (extra.moredetails_rawhtml)
 				$moredetails.html(extra.moredetails);
+            else if (extra.moredetails_dom_nodes)
+                $moredetails.append(extra.moredetails);
 			else
 				$moredetails.text(extra.moredetails);
 		}
