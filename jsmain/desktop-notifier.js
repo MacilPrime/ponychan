@@ -113,7 +113,7 @@
         var note = new Notification(makeHeadLine(postEl), {
             body: getBody(postEl, youRefEl),
             tag: "desktop_" + postEl.id.split("_")[1],
-            icon: getThumbNail(postEl)
+            icon: getThumbnail(postEl)
         });
         // Tagging notes will silence all duplicate posts for you already.
         // now that we have the note displayed, it would probably make sense
@@ -147,7 +147,7 @@
             text = text.substr(0, 120) + '…';
         return text;
     }
-    function getThumbNail(postEl) {
+    function getThumbnail(postEl) {
         var $img = $(".postimg", postEl).first();
         return $img.length ? $img.attr('src') : siteroot+"static/mlpchanlogo.png";
     }
