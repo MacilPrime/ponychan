@@ -103,7 +103,7 @@
             var note = new Notification("Board settings - MLPchan", {
                 body: "This is a test",
                 tag: "desktop_test",
-                icon: "https://i.imgur.com/cqJPGA0.png"
+                icon: siteroot+"static/mlpchanlogo.png"
             });
             setTimeout(function () {
                 try {
@@ -193,7 +193,7 @@
     }
     function getThumbNail(postEl) {
         var img = postEl.getElementsByClassName("postimg")[0];
-        return (img == undefined) ? "https://i.imgur.com/cqJPGA0.png" : img.src;
+        return (img == undefined) ? siteroot+"static/mlpchanlogo.png" : img.src;
     }
     init();
 })();
