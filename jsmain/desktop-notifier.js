@@ -164,11 +164,10 @@ function desktopNotifier() {
         }, false);
         // sometimes the user will find the window on their own.
         // if this is the case, we need to close the notification ourselves.
-        note.onclick = function () {
+        note.addEventListener("click", function () {
             window.focus();
             window.scrollTo(0, document.body.scrollHeight);
-            this.cancel();
-        };
+        }, false);
     }
     function makeHeadLine(postEl) {
         return getSubject(postEl) + getUserTrip(postEl);
