@@ -52,3 +52,4 @@ import { log_error } from "./logger";
 		}
 	});
 })(window.styles||(window.styles={}));
+// TODO wtf name collision
