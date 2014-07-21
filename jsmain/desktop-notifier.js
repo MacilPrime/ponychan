@@ -14,8 +14,7 @@
     var client = {}; // setting object
     // desktop notifiers have a whole bunch of requirements to run
     function init() {
-        client.support = (window.Notification != undefined);
-        if (client.support) {
+        if (window.Notification) {
             // start reading here!
             checkYourPrivilege();
             makeUI();
@@ -42,12 +41,14 @@
             "notes_on_desktop",
             "bool",
             false,
-            "Display reply notifications in desktop tray",
+            "Show desktop notifications for replies",
             'links',
             {
                 orderhint: 8,
-                moredetails: specialUIContent(),
-                moredetails_dom_nodes: true
+                moredetails: $("<button/>")
+                    .text("Test notification")
+                    .click(buttonEvent),
+                moredetails_rawhtml: true
             }
         );
         $(document).on("setting_change", function (e, setting) {
@@ -55,28 +56,6 @@
                 checkYourPrivilege();
             }
         });
-    }
-    function specialUIContent() {
-        // UI tools for settings upon load
-        var ui = {}; // object for holding elements
-        ui.wrap = document.createDocumentFragment();
-        // this is the outer container
-        ui.note = document.createElement("div");
-        ui.note.textContent = "Migrates contents of replies outside" +
-            " the window when the thread in reference isn't in view.";
-        ui.wrap.appendChild(ui.note);
-        // end 1st container
-        ui.btnWrap = document.createElement("div");
-        ui.button = document.createElement("button");
-        ui.button.textContent = getButtonStatus();
-        ui.button.addEventListener("click", buttonEvent, false);
-        ui.btnWrap.appendChild(ui.button);
-        ui.btnWrap.appendChild(
-            document.createTextNode(" Desktop permission")
-        );
-        ui.wrap.appendChild(ui.btnWrap);
-        // end 2nd container
-        return ui.wrap;
     }
     function buttonEvent(evt) {
         // This is probably the most awkward line of code here. The
@@ -86,7 +65,6 @@
             Notification.requestPermission(function () {
                 if (Notification.hasOwnProperty("permission")) {
                     checkYourPrivilege();
-                    evt.target.textContent = getButtonStatus();
                 }
             });
         } catch (e) {
@@ -113,25 +91,6 @@
                 }
             }, 3000);
         }
-    }
-    function getButtonStatus() {
-        var btnValue;
-        // triggered on load, and whenever a change
-        // in user permissions is triggered
-        switch (client.perm) {
-        case "granted":
-            btnValue = "Click to test";
-            break;
-        case "default":
-            btnValue = "Set permission";
-            break;
-        case "denied":
-            btnValue = "Permission was denied";
-            break;
-        default:
-            btnValue = "Read error.";
-        }
-        return btnValue;
     }
     function listenToNewPosts() {
         // reminder that changes will still have to be made to account
@@ -166,34 +125,31 @@
         // if this is the case, we need to close the notification ourselves.
         note.addEventListener("click", function () {
             window.focus();
+            // TODO scroll to specific reply
             window.scrollTo(0, document.body.scrollHeight);
         }, false);
     }
     function makeHeadLine(postEl) {
-        return getSubject(postEl) + getUserTrip(postEl);
-    }
-    function getSubject(postEl) {
-        var subject = postEl.getElementsByClassName("subject")[0];
-        return (subject == undefined) ? "" : subject.textContent + " — ";
-    }
-    function getUserTrip(postEl) {
-        var userTrip = postEl.getElementsByClassName("namepart")[0];
-        return (userTrip == undefined) ? "" : userTrip.textContent;
+        var $intro = $('.intro', postEl).first();
+        var subject = $intro.find('.subject').first().text();
+        if (subject.length)
+            subject += ' — ';
+        var name = $intro.find('.namepart').first().text();
+        return subject + name;
     }
     function getBody(postEl, youRefEl) {
-        var body = postEl.getElementsByClassName("body")[0].cloneNode(true);
-        body.innerHTML = body.innerHTML.replace(/<br>/g, "; ");
-        body = body.textContent.split(youRefEl.textContent);
-        body.splice(0, 1);
-        body = body.join();
-        if (body.charAt(0) == ";") {
-            body = body.substr(2);
-        }
-        return body.substr(0, 120);
+        // TODO this should be moved to some general function that gets text
+        // from an element while attempting to respect newlines.
+        var $body = $("body", postEl).first().clone();
+        $body.html( $body.html().replace(/<br\b[^>]*>/g, "; ") );
+        var text = $body.text().replace(/^(; )+/, '');
+        if (text.length > 120)
+            text = text.substr(0, 120) + '…';
+        return text;
     }
     function getThumbNail(postEl) {
-        var img = postEl.getElementsByClassName("postimg")[0];
-        return (img == undefined) ? siteroot+"static/mlpchanlogo.png" : img.src;
+        var $img = $(".postimg", postEl).first();
+        return $img.length ? $img.attr('src') : siteroot+"static/mlpchanlogo.png";
     }
     init();
 })();
