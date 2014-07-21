@@ -8,7 +8,7 @@
  * inside settings.newSetting method
  */
 
-function desktopNotifier() {
+(function() {
     // Need documentation for this API?
     // https://developer.mozilla.org/en-US/docs/Web/API/notification#Parameters
     var client = {}; // setting object
@@ -196,5 +196,4 @@ function desktopNotifier() {
         return (img == undefined) ? "https://i.imgur.com/cqJPGA0.png" : img.src;
     }
     init();
-}
-desktopNotifier();
+})();

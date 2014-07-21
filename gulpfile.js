@@ -50,6 +50,7 @@ var SOURCES = {
       'jsmain/mc.js',
       'jsmain/embed.js',
       'jsmain/search.js',
+      'jsmain/desktop-notifier.js',
       'jsmain/hide-trip.js'
     ]
   }
@@ -62,11 +63,11 @@ gulp.task('client-js-extra', function() {
 
 gulp.task('client-js-main', function() {
   var sq = streamqueue({objectMode: true});
-  
+
   sq.queue(gulp.src(SOURCES.CLIENT_JS_MAIN.HEADER));
   sq.queue(gulp.src(SOURCES.CLIENT_JS_MAIN.ES6)
            .pipe(traceur({modules: 'inline', experimental: true})));
-  
+
   return sq.done()
     .pipe(concat('main-needtb.js'))
     .pipe(gulp.dest('SERVER/js/'));
