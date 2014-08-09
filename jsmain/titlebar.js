@@ -14,10 +14,10 @@
 (function(exports) {
 	var flash = {};
 	var flashmessage = '';
-	
+
 	// Temporary dummy function. Gets replaced later.
 	var updateTitle = function() {};
-	
+
 	function updateTitleFlash() {
 		flashmessage = '';
 		$.each(flash, function(i, val) {
@@ -25,19 +25,19 @@
 		});
 		updateTitle();
 	}
-	
+
 	function setTitleFlash(key, message) {
 		flash[key] = message;
 		updateTitleFlash();
 	}
 	exports.setTitleFlash = setTitleFlash;
-	
+
 	function removeTitleFlash(key) {
 		delete flash[key];
 		updateTitleFlash();
 	}
 	exports.removeTitleFlash = removeTitleFlash;
-	
+
 	$(document).ready(function() {
 		if($('div.banner').length == 0)
 			return; // not index
@@ -60,27 +60,27 @@
 					titleEnd = optext;
 			}
 		}
-		
+
 		var mainTitle = titlePrefix+titleEnd;
 
 		var $unseenPosts = $(".thread .post.reply").not(".preview-hidden, .post-hover, .post-inline");
 
 		var pendingScrollHandler = null;
-		
+
 		updateTitle = function() {
 			var newTitle = flashmessage + "("+$unseenPosts.length+") "+mainTitle;
 			if(document.title != newTitle)
 				document.title = newTitle;
 		};
-		
+
 		function scrollHandler() {
 			pendingScrollHandler = null;
-			
+
 			// If the page is hidden, we don't want to decrement the unseenPosts count yet,
 			// so that way the tab title is accurate.
 			if (Visibility.hidden())
 				return;
-			
+
 			var seenPosts = [];
 			while($unseenPosts.length > 0) {
 				var $post = $($unseenPosts[0]);
@@ -99,7 +99,7 @@
 					posts: seenPosts
 				});
 		}
-		
+
 		$(window).scroll(function(event) {
 			if(pendingScrollHandler)
 				return;
@@ -109,7 +109,7 @@
 		Visibility.change(scrollHandler);
 
 		scrollHandler();
-		
+
 		$(document).on('new_post', function(e, post) {
 			var $post = $(post);
 			// Don't increase the counter for post previews
