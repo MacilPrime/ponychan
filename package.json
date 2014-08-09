@@ -2,15 +2,16 @@
   "name": "tinyboard-js",
   "version": "0.1.0",
   "dependencies": {
+    "baconjs": "^0.7.20",
     "jquery": "1.11.1",
-    "q": "^1.0.1",
-    "moment": "^2.6.0"
+    "moment": "^2.8.1",
+    "q": "^1.0.1"
   },
   "devDependencies": {
-    "gulp": "^3.6.2",
-    "gulp-concat": "^2.2.0",
+    "gulp": "^3.8.7",
+    "gulp-concat": "^2.3.4",
     "gulp-rename": "^1.2.0",
-    "gulp-traceur": "^0.6.0",
-    "streamqueue": "0.0.7"
+    "gulp-traceur": "0.6.0",
+    "streamqueue": "0.1.2"
   }
 }

@@ -14,6 +14,7 @@ var SOURCES = {
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/moment/moment.js',
       'node_modules/q/q.js',
+      'node_modules/baconjs/dist/Bacon.min.js',
       traceur.RUNTIME_PATH
     ],
     ES6: [
