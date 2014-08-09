@@ -56,7 +56,11 @@ $(document).ready(function(){
 				});
 			$image.trigger('mousemove');
 		}, function() {
-			$('.image-hover').remove();
+			$('.image-hover').each(function() {
+				if (this.pause) {
+					this.pause();
+				}
+			}).remove();
 		}).mousemove(function(e) {
 			var $hover = $('.image-hover');
 			if($hover.length == 0)

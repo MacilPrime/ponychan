@@ -25,7 +25,11 @@ $(document).ready(function(){
 				.removeAttr('data-old-src')
 				.removeClass('expanded').removeClass('loading')
 				.show();
-			$img.next('video').remove();
+			$img.next('video').each(function() {
+				if (this.pause) {
+					this.pause();
+				}
+			}).remove();
 		}
 
 		$img.click(function(e) {
