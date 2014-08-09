@@ -41,12 +41,6 @@ $(document).ready(function(){
 			$newImage
 				.addClass('image-hover')
 				.attr('src', imageurl)
-				.css('position', 'absolute')
-				.css('margin', '0')
-				.css('padding', '0')
-				.css('maxWidth', '75%')
-				.css('maxHeight', '95%')
-				.css('z-index', 10)
 				.insertAfter($image.parent())
 				.load(function() {
 					$(this).trigger('mousemove');
