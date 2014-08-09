@@ -60,6 +60,7 @@ $(document).ready(function(){
 				if (this.pause) {
 					this.pause();
 				}
+				this.removeAttribute("src");
 			}).remove();
 		}).mousemove(function(e) {
 			var $hover = $('.image-hover');

@@ -468,7 +468,7 @@ $(document).ready(function(){
 							var context = canvas.getContext('2d');
 							context.fillRect(0, 0, canvas.width, canvas.height);
 							context.drawImage(video, 0, 0, canvas.width, canvas.height);
-							video.src = null;
+							video.removeAttribute("src");
 							_this.el.css("background-image", "url(" + canvas.toDataURL('image/png') + ")");
 						});
 						video.play();

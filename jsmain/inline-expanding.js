@@ -29,6 +29,7 @@ $(document).ready(function(){
 				if (this.pause) {
 					this.pause();
 				}
+				this.removeAttribute("src");
 			}).remove();
 		}
 
