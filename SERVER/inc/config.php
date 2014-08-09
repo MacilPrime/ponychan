@@ -842,6 +842,7 @@
 	$config['error']['toomanyedits']	= _('You can only edit one post at once.');
 	$config['error']['invalidpassword']	= _('Wrong password…');
 	$config['error']['invalid_file']		= _('Invalid file.');
+	$config['error']['noisy_video']		= _('Only silent video files are allowed.');
 	$config['error']['unsupported_type']		= _('Unsupported file type.');
 	$config['error']['filesize']		= _('Maximum file size: %maxsz% bytes<br>Your file\'s size: %filesz% bytes');
 	$config['error']['maxsize']		= _('The file was too big.');

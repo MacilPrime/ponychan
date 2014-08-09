@@ -843,7 +843,7 @@ if (isset($_POST['delete'])) {
 				}
 				$image->destroy();
 			} elseif ($file_type === 'video') {
-
+				// Nothing else needs to be done here.
 			} else {
 				die("should not happen, invalid file_type $file_type");
 			}

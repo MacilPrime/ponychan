@@ -512,6 +512,8 @@ function int_to_word($n) {
 
 // returns null if the file was invalid
 function getUploadSize($file, $file_type, $mime_type) {
+	global $config;
+
 	if ($file_type === 'image') {
 		// find dimensions of an image using GD
  		return @getimagesize($file);
@@ -520,7 +522,7 @@ function getUploadSize($file, $file_type, $mime_type) {
 		if (!$result)
 			return NULL;
 		if (preg_match('/^\s+Stream[^:]+: Audio:/im', $result))
-			error("video files with audio not supported");
+			error($config['error']['noisy_video']);
 		if (!preg_match('/^\s+Stream[^:]+: Video:.* (\d+)x(\d+)/im', $result, $matches))
 			return NULL;
 		return array(intval($matches[1]), intval($matches[2]));
