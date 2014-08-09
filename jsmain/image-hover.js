@@ -37,7 +37,16 @@ $(document).ready(function(){
 
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
 
-			var $newImage = $("<img/>");
+			var $newImage;
+			if ($image.hasClass('video')) {
+				$newImage = $("<video/>").attr({
+					loop: true,
+					muted: true,
+					autoplay: true
+				});
+			} else {
+				$newImage = $("<img/>");
+			}
 			$newImage
 				.addClass('image-hover')
 				.attr('src', imageurl)
