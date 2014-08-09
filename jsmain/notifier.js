@@ -13,7 +13,10 @@
 import { log_error } from "./logger";
 
 (function(exports) {
-	settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {orderhint:7, moredetails:"Audibly alert you when a post by you in a thread you're viewing is replied to."});
+	settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {
+		orderhint: 7,
+		moredetails: "Audibly alert you when a post by you in a thread you're viewing is replied to."
+	});
 
 	var soundChoices = {
 		main: "Default",
@@ -21,8 +24,16 @@ import { log_error } from "./logger";
 		yeah: "Yeah!"
 	};
 
-	settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Sound Choice", 'links', {orderhint:7.5, moredetails:'<a href="javascript:notifier.playSound()">Test Sound</a>', moredetails_rawhtml:true, selectOptions: soundChoices, defpriority: 0});
-	
+	settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Sound Choice", 'links', {
+		orderhint: 7.5,
+		moredetails: $("<button/>")
+			.text("Test sound")
+			.click(playSound),
+		moredetails_rawhtml: true,
+		selectOptions: soundChoices,
+		defpriority: 0
+	});
+
 	var $au;
 	function prepareNotifySound() {
 		$au = $("audio#notify_sound");
@@ -60,14 +71,14 @@ import { log_error } from "./logger";
 			log_error(e);
 		}
 	}
-	
+
 	function playSound() {
 		$au[0].play();
 	}
 	exports.playSound = playSound;
-	
+
 	var unseenReplies = [];
-	
+
 	// Sets the title to show the number of unread replies to the
 	// user.
 	function updateTitle() {
@@ -79,11 +90,11 @@ import { log_error } from "./logger";
 				replymsg = 'reply';
 			else
 				replymsg = 'replies';
-			
+
 			titlebar.setTitleFlash('notifier', '('+unseenReplies.length+' '+replymsg+')');
 		}
 	}
-	
+
 	function notifyCheck($post) {
 		if ($post.find('.younote').length == 0)
 			return;
@@ -93,10 +104,10 @@ import { log_error } from "./logger";
 		unseenReplies.push(get_post_id($post));
 		updateTitle();
 	}
-	
+
 	$(document).ready(function() {
 		prepareNotifySound();
-		
+
 		$(document).on("setting_change.notifier", function(e, setting) {
 			if (setting == "reply_notify_sound")
 				prepareNotifySound();
@@ -108,7 +119,7 @@ import { log_error } from "./logger";
 			for (var i=0; i<posts.length; i++) {
 				if (!unseenReplies.length)
 					break;
-				
+
 				var ri = unseenReplies.indexOf(posts[i]);
 				if (ri != -1) {
 					unseenReplies.splice(ri, 1);
