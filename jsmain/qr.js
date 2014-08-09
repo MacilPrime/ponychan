@@ -454,44 +454,65 @@ $(document).ready(function(){
 			this.el.attr("title", file.name + " (" + getFileSizeString(file.size) + ") (Shift+Click to remove image from reply)");
 			if (usewURL) {
 				this.fileurl = wURL.createObjectURL(file);
-				this.el.css("background-image", "url(" + this.fileurl + ")");
-				if (useCanvas && useWorker) {
-					var render_job = Q.defer();
-					this.filethumb = render_job.promise;
 
-					var fileimg = new Image();
-					fileimg.onload = function() {
-						var maxX = parseInt($oldFile.attr("data-thumb-max-width"));
-						var maxY = parseInt($oldFile.attr("data-thumb-max-height"));
-
-						var start = new Date().getTime();
-						var thumber = thumbnailer(fileimg, maxX, maxY);
-						var thumber_timing = thumber.then(function() {
-							var end = new Date().getTime();
-							var time = end-start;
-							console.log('thumbnailing took '+time+' milliseconds');
-							return time;
+				if (file.type && /^video\//.test(file.type)) {
+					var video = document.createElement('video');
+					if (video.canPlayType && video.canPlayType(file.type)) {
+						video.muted = true;
+						video.src = this.fileurl;
+						video.addEventListener('playing', function() {
+							video.pause();
+							var canvas = document.createElement('canvas');
+							canvas.width = video.videoWidth; //|| 100;
+							canvas.height = video.videoHeight; //|| 100;
+							var context = canvas.getContext('2d');
+							context.fillRect(0, 0, canvas.width, canvas.height);
+							context.drawImage(video, 0, 0, canvas.width, canvas.height);
+							video.src = null;
+							_this.el.css("background-image", "url(" + canvas.toDataURL('image/png') + ")");
 						});
-						render_job.resolve(Q.all([thumber, thumber_timing]));
+						video.play();
+					}
+				} else {
+					this.el.css("background-image", "url(" + this.fileurl + ")");
+					if (useCanvas && useWorker) {
+						var render_job = Q.defer();
+						this.filethumb = render_job.promise;
 
-						// If the original image was really big, then replace the image preview
-						// in the QR with the thumbnail we just made.
-						// Some browsers (webkit) lag when too big of an image is there.
-						if (this.width >= 1000 || this.height >= 1000) {
-							thumber.then(function(filethumb) {
-								// If the image has already been changed by the user, we don't want to replace the wrong thumbnail.
-								if (_this.file === file) {
-									_this.el.css("background-image", 'url("' + filethumb.toDataURL('image/png') + '")');
+						var fileimg = new Image();
+						fileimg.onload = function() {
+							var maxX = parseInt($oldFile.attr("data-thumb-max-width"));
+							var maxY = parseInt($oldFile.attr("data-thumb-max-height"));
 
-									if (typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && _this.fileurl) {
-										wURL.revokeObjectURL(_this.fileurl);
-										delete _this.fileurl;
-									}
-								}
+							var start = new Date().getTime();
+							var thumber = thumbnailer(fileimg, maxX, maxY);
+							var thumber_timing = thumber.then(function() {
+								var end = new Date().getTime();
+								var time = end-start;
+								console.log('thumbnailing took '+time+' milliseconds');
+								return time;
 							});
-						}
-					};
-					fileimg.src = this.fileurl;
+							render_job.resolve(Q.all([thumber, thumber_timing]));
+
+							// If the original image was really big, then replace the image preview
+							// in the QR with the thumbnail we just made.
+							// Some browsers (webkit) lag when too big of an image is there.
+							if (this.width >= 1000 || this.height >= 1000) {
+								thumber.then(function(filethumb) {
+									// If the image has already been changed by the user, we don't want to replace the wrong thumbnail.
+									if (_this.file === file) {
+										_this.el.css("background-image", 'url("' + filethumb.toDataURL('image/png') + '")');
+
+										if (typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && _this.fileurl) {
+											wURL.revokeObjectURL(_this.fileurl);
+											delete _this.fileurl;
+										}
+									}
+								});
+							}
+						};
+						fileimg.src = this.fileurl;
+					}
 				}
 			}
 		}
