@@ -517,13 +517,10 @@ function getUploadSize($file, $file_type, $mime_type) {
  		return @getimagesize($file);
 	} elseif ($file_type === 'video') {
 		$result = shell_exec("avprobe " . escapeshellarg($file) . " 2>&1");
-		error_log("result: $result");
 		if (!$result)
 			return NULL;
-		error_log("further");
 		if (preg_match('/^\s+Stream[^:]+: Audio:/im', $result))
 			error("video files with audio not supported");
-		error_log("almost");
 		if (!preg_match('/^\s+Stream[^:]+: Video:.* (\d+)x(\d+)/im', $result, $matches))
 			return NULL;
 		return array(intval($matches[1]), intval($matches[2]));

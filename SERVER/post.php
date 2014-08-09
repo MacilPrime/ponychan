@@ -672,7 +672,6 @@ if (isset($_POST['delete'])) {
 
 			$file_type = 'video';
 			$post['extension'] = $config['allowed_video_types'][$mime_type];
-			error_log("video detected");
 		//} elseif (in_array($given_extension, $config['allowed_ext_files'])) {
 		//	$file_type = 'file';
 		//	$post['extension'] = $given_extension;
@@ -706,7 +705,6 @@ if (isset($_POST['delete'])) {
 			if (!$size = getUploadSize($upload, $file_type, $mime_type)) {
 				error($config['error']['invalid_file']);
 			}
-			error_log("after getUploadSize, " . $size[0] . "x" . $size[1]);
 
 			if ($size[0] > $config['max_width'] || $size[1] > $config['max_height']) {
 				error($config['error']['maxsize']);
