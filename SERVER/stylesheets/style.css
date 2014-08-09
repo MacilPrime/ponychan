@@ -131,7 +131,7 @@ img.banner {
 	margin: 12px auto 0 auto;
 	max-width: 95%;
 }
-img.postimg {
+.postimg {
 	display: block;
 	float: left;
 	margin: 5px 20px 0 0;
@@ -145,7 +145,7 @@ img.loading {
 	opacity: 0.4;
 	filter: alpha(opacity=40);
 }
-img.expanded {
+img.expanded, video.expanded {
 	width: auto !important;
 	height: auto !important;
 	max-width: 95%;

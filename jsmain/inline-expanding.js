@@ -23,7 +23,9 @@ $(document).ready(function(){
 			$img
 				.attr({src: $img.attr('data-old-src')})
 				.removeAttr('data-old-src')
-				.removeClass('expanded').removeClass('loading');
+				.removeClass('expanded').removeClass('loading')
+				.show();
+			$img.next('video').remove();
 		}
 
 		$img.click(function(e) {
@@ -38,17 +40,38 @@ $(document).ready(function(){
 					.attr({
 						'data-old-src': $img.attr('src'),
 						src: $a.attr('href'),
-					})
-					.addClass('expanded')
-					.addClass('loading')
-					.load(function() {
-						$(this).removeClass('loading');
 					});
+				if ($img.hasClass('video')) {
+					$img.hide();
+					$('<video/>')
+						.addClass('postimg')
+						.addClass('expanded')
+						.attr({
+							src: $a.attr('href'),
+							loop: true,
+							muted: true,
+							autoplay: true
+						})
+						.click(function(e) {
+							e.preventDefault();
+							$img.click();
+						})
+						.insertAfter($img);
+				} else {
+					$img
+						.addClass('expanded')
+						.addClass('loading')
+						.load(function() {
+							$(this).removeClass('loading');
+						});
+				}
 			} else {
 				$img
 					.attr({src: $img.attr('data-old-src')})
 					.removeAttr('data-old-src')
-					.removeClass('expanded').removeClass('loading');
+					.removeClass('expanded').removeClass('loading')
+					.show();
+				$img.next('video').remove();
 			}
 			e.stopPropagation();
 			e.preventDefault();
