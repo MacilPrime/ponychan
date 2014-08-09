@@ -625,6 +625,9 @@ div.post.reply.post-inline .body {
 	right: 2.5%;
 	display: none;
 }
+.setting_section {
+	margin-bottom: 1em;
+}
 /* recaptcha */
 .recaptcha_image_cell {
 	background: none !important;
