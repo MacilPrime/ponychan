@@ -812,9 +812,13 @@ if (isset($_POST['delete'])) {
 						timing_mark('thumb_resize_end');
 					} elseif ($file_type === 'video') {
 						timing_mark('video_resize_start');
-						exec('avconv -ss 00:00:00 -i ' . escapeshellarg($upload) . ' -filter:v scale=' .
-							($post['op'] ? $config['thumb_op_width'] : $config['thumb_width']) . ':' .
-							($post['op'] ? $config['thumb_op_height'] : $config['thumb_height']) .
+						$newRes = computeResize(
+							$size[0], $size[1],
+							$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
+							$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
+						);
+						exec('avconv -ss 00:00:00 -i ' . escapeshellarg($upload) .
+							' -filter:v scale=' . $newRes['width'] . ':' . $newRes['height'] .
 							' -vframes 1 ' . escapeshellarg($post['thumb']), $__ignore, $ret);
 						if ($ret !== 0)
 							die('video thumbnailing error');
