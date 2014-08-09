@@ -893,7 +893,8 @@
 	$config['file_page50'] = '%d+50.html';
 	$config['file_mod'] = 'mod.php';
 	$config['file_post'] = 'post.php';
-	$config['file_script'] = 'main.js';
+	$config['file_instance_script'] = 'instance.js';
+	$config['file_main_script'] = 'js/main.js';
 
 	// Board directory, followed by a forward-slash (/). (%s is board abbreviation)
 	$config['board_path'] = '%s/';
@@ -931,7 +932,8 @@
 	// Set custom locations for stylesheets, scripts and maybe a banner.
 	// This can be good for load balancing across multiple servers or hostnames.
 	// $config['url_stylesheet'] = 'http://static.example.org/style.css'; // main/base stylesheet
-	// $config['url_javascript'] = 'http://static.example.org/main.js';
+	// $config['url_instance_script'] = 'http://static.example.org/instance.js';
+	// $config['url_main_script'] = 'http://static.example.org/js/main.js';
 	// $config['url_favicon'] = '/favicon.gif';
 
 /*

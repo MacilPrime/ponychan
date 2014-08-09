@@ -9,7 +9,8 @@
 	{% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
 	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}?v={{ ('stylesheets/' ~ config.default_stylesheet.1)|filemtime }}">{% endif %}
 	{% if not nojavascript %}
-		<script type="text/javascript" src="{{ config.url_javascript }}?v={{ config.file_script|filemtime }}"></script>
+		<script type="text/javascript" src="{{ config.url_instance_script }}?v={{ config.file_instance_script|filemtime }}"></script>
+		<script type="text/javascript" src="{{ config.url_main_script }}?v={{ config.file_main_script|filemtime }}"></script>
 	{% endif %}
 </head>
 <body class="boardpage {% block extra_body_classes %}{% endblock %}">

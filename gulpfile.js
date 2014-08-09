@@ -69,7 +69,7 @@ gulp.task('client-js-main', function() {
            .pipe(traceur({modules: 'inline', experimental: true})));
 
   return sq.done()
-    .pipe(concat('main-needtb.js'))
+    .pipe(concat('main.js'))
     .pipe(gulp.dest('SERVER/js/'));
 });
 
