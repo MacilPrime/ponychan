@@ -2,7 +2,7 @@
 
 /*
  *  Copyright (c) 2010-2013 Tinyboard Development Group
- *  
+ *
  *  WARNING: This is a project-wide configuration file and is overwritten when upgrading to a newer
  *  version of Tinyboard. Please leave this file unchanged, or it will be a lot harder for you to upgrade.
  *  If you would like to make instance-specific changes to your own setup, please use instance-config.php.
@@ -29,47 +29,47 @@
  *  General/misc settings
  * =======================
  */
- 	// Blotter -- the simple version.
+	// Blotter -- the simple version.
 	//$config['blotter'] = 'This is an important announcement!';
- 	
+
 	// Disable posting.
 	$config['readonly_maintenance'] = false;
 	// Message to show when in readonly mode.
 	$config['readonly_maintenance_message'] = 'Posting temporarily disabled for very brief maintenance! Try again in a minute!';
-	
+
 	// Automatically check if a newer version of Tinyboard is available when an administrator logs in
 	$config['check_updates'] = false;
 	// How often to check for updates
 	$config['check_updates_time'] = 43200; // 12 hours
-	
+
 	// Shows some extra information at the bottom of pages. Good for debugging development.
 	$config['debug'] = false;
 	// For development purposes. Turns 'display_errors' on. Not recommended for production.
 	$config['verbose_errors'] = true;
-	
+
 	// Use fastcgi_finish_request() to close client connections as early
 	// as necessary. Can improve performance, but may cause errors that
 	// occur after the connection is closed to not be reported.
 	$config['use_fastcgi_finish_request'] = false;
-	
+
 	// Directory where temporary files will be created. Not really used much yet except for some experimental stuff.
 	$config['tmp'] = sys_get_temp_dir();
-	
+
 	// The HTTP status code to use when redirecting. http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
 	// Can be either 303 "See Other" or 302 "Found". (303 is more correct but both should work.)
 	$config['redirect_http'] = 303;
-	
+
 	// A small file in the main directory indicating that the script has been ran and the board(s) have been generated.
 	// This keeps the script from querying the database and causing strain when not needed.
 	$config['has_installed'] = '.installed';
-	
+
 	// Use syslog() for logging all error messages and unauthorized login attempts.
 	$config['syslog'] = false;
-	
+
 	// Use `host` via shell_exec() to lookup hostnames, avoiding query timeouts. May not work on your system.
 	// Requires safe_mode to be disabled.
 	$config['dns_system'] = false;
-	
+
 	//$config['action_log'] = '/var/log/tinyboard/action.log';
 	//$config['antibot_log'] = '/var/log/tinyboard/antibot.log';
 	//$config['timing_log'] = '/var/log/tinyboard/timing.log';
@@ -77,13 +77,13 @@
 	//$config['js_usage_log'] = '/var/log/tinyboard/js_usage.log';
 	//$config['js_error_log'] = '/var/log/tinyboard/js_error.log';
 	//$config['js_misc_log'] = '/var/log/tinyboard/js_misc.log';
-	
+
 /*
  * ====================
  *  Database settings
  * ====================
  */
-	
+
 	// SQL driver ("mysql", "pgsql", "sqlite", "dblib", etc)
 	// http://www.php.net/manual/en/pdo.drivers.php
 	$config['db']['type'] = 'mysql';
@@ -100,25 +100,25 @@
 	$config['db']['dsn'] = 'charset=UTF8';
 	// Timeout duration in seconds (not all drivers support this)
 	$config['db']['timeout'] = 5;
-	
+
 /*
  * ====================
  *  Cache settings
  * ====================
  */
- 	
- 	$config['cache']['enabled'] = false;
- 	// $config['cache']['enabled'] = 'memcached';
- 	// $config['cache']['enabled'] = 'redis';
- 	// $config['cache']['enabled'] = 'apc';
- 	// $config['cache']['enabled'] = 'xcache';
- 	
- 	// Timeout for cached objects such as posts and HTML
+
+	$config['cache']['enabled'] = false;
+	// $config['cache']['enabled'] = 'memcached';
+	// $config['cache']['enabled'] = 'redis';
+	// $config['cache']['enabled'] = 'apc';
+	// $config['cache']['enabled'] = 'xcache';
+
+	// Timeout for cached objects such as posts and HTML
 	$config['cache']['timeout'] = 43200; // 12 hours
-	
+
 	// Optional prefix if you're running multiple Tinyboard instances on the same machine
 	$config['cache']['prefix'] = '';
-	
+
 	// Memcached servers to use - http://www.php.net/manual/en/memcached.addservers.php
 	$config['cache']['memcached'] = array(
 		array('localhost', 11211)
@@ -128,13 +128,13 @@
 	// Note that Tinyboard may clear the database at times, so you may want to pick a
 	// database id just for Tinyboard to use.
 	$config['cache']['redis'] = array('localhost', 6379, '', 1);
-	
+
 /*
  * ====================
  *  Cookie settings
  * ====================
  */
- 
+
 	// Used for moderation login
 	$config['cookies']['mod'] = 'mod';
 	// Used for communicating with Javascript; telling it when posts were successful.
@@ -163,41 +163,41 @@
  *  Flood/spam settings
  * ====================
  */
-	
+
 	// How many seconds between each post
 	$config['flood_time'] = 10;
 	// How many seconds between each post with exactly the same content and same IP
 	$config['flood_time_ip'] = 120;
 	// Same as above but different IP address
 	$config['flood_time_same'] = 30;
-	
+
 	// DNS blacklists (DNSBL) http://tinyboard.org/docs/?p=Config/DNSBL
-	
+
 	// http://www.sectoor.de/tor.php
 	$config['dnsbl'][] = array('tor.dnsbl.sectoor.de', 1); // Tor exit servers
-	
+
 	// http://www.sorbs.net/using.shtml
 	// $config['dnsbl'][] = array('dnsbl.sorbs.net', array(2, 3, 4, 5, 6, 7, 8, 9));
-	
+
 	// http://www.projecthoneypot.org/httpbl.php
 	// $config['dnsbl'][] = array('<your access key>.%.dnsbl.httpbl.org', function($ip) {
 	//	$octets = explode('.', $ip);
-	//	
+	//
 	//	// days since last activity
 	//	if ($octets[1] > 14)
 	//		return false;
-	//	
+	//
 	//	// "threat score" (http://www.projecthoneypot.org/threat_info.php)
 	//	if ($octets[2] < 5)
 	//		return false;
-	//	
+	//
 	//	return true;
 	// }, 'dnsbl.httpbl.org'); // hide our access key
-	
-	
+
+
 	// Skip checking certain IP addresses against blacklists (for troubleshooting or whatever)
 	$config['dnsbl_exceptions'][] = '127.0.0.1';
-	
+
 	/*
 	 * Introduction to Tinyboard's spam filter:
 	 *
@@ -217,7 +217,7 @@
 	 * See also: http://tinyboard.org/docs/?p=Your_request_looks_automated
 	 *
 	 */
-	
+
 	// Number of hidden fields to generate
 	$config['spam']['hidden_inputs_min'] = 4;
 	$config['spam']['hidden_inputs_max'] = 12;
@@ -267,7 +267,7 @@
 		'activate_egg',
 		'quick-reply'
 	);
-	
+
 	// Custom flood filters. Detect flood attacks and reject new posts if there's a positive match.
 	// See http://tinyboard.org/wiki/index.php?title=Flood_filters for more information.
 	//$config['flood_filters'][] = array(
@@ -280,7 +280,7 @@
 	//	// Display this message
 	//	'message' => 'Your post has been rejected on the suspicion of a flood attack on this board.'
 	//);
-	
+
 	// Another filter
 	//$config['flood_filters'][] = array(
 	//	'condition' => array(
@@ -292,13 +292,13 @@
 	//	'action' => 'reject',
 	//	'message' => 'Your post has been rejected on the suspicion of a flood attack on this board (too many new threads); post a reply instead.'
 	//);
-	
+
 	// Enable reCaptcha to make spam even harder
 	$config['recaptcha'] = false;
 	// Public and private key pair from https://www.google.com/recaptcha/admin/create
 	$config['recaptcha_public'] = '6LcXTcUSAAAAAKBxyFWIt2SO8jwx4W7wcSMRoN3f';
 	$config['recaptcha_private'] = '6LcXTcUSAAAAAOGVbVdhmEM1_SyRF4xTKe8jbzf_';
-	
+
 /*
  * ====================
  *  Post settings
@@ -313,44 +313,44 @@
 	$config['strip_superfluous_returns'] = true;
 	// Require an image for threads?
 	$config['force_image_op'] = true;
-	
+
 	// Max body length
 	$config['max_body'] = 1800;
 	// Amount of post lines to show on the index page
 	$config['body_truncate'] = 15;
 	// Amount of characters to show on the index page
 	$config['body_truncate_char'] = 2500;
-	
+
 	// Typically spambots try to post a lot of links. Refuse a post with X standalone links?
 	$config['max_links'] = 20;
 	// Maximum number of cites per post (protects against abuse)
 	$config['max_cites'] = 45;
 	// Maximum number of cross-board links/cites per post
 	$config['max_cross'] = $config['max_cites'];
-	
+
 	// Track post citations (>>XX). Rebuilds posts after a cited post is deleted, removing broken links.
 	// A little more database load.
 	$config['track_cites'] = true;
-	
+
 	// Maximum filename length (will be truncated)
 	$config['max_filename_len'] = 255;
 	// Maximum filename length to display (the rest can be viewed upon mouseover)
 	$config['max_filename_display'] = 30;
-	
+
 	// How long before you can delete a post after posting, in seconds.
 	$config['delete_time'] = 10;
 	// How long before you can edit a post after posting, in seconds.
 	$config['edit_time'] = 10;
-	
+
 	// Disable replies bumping stickied threads
 	$config['no_sticky_reply_bump'] = true;
-	
+
 	// Reply limit (stops bumping thread when this is reached)
 	$config['reply_limit'] = 250;
-	
+
 	// Cyclic thread reply limit (old replies are removed as this is hit)
 	$config['cyclic_reply_limit'] = 500;
-	
+
 	// A random number between these two values will be calculated for every
 	// thread, and recalculated when the thread is bumped.
 	// If a thread past its bump reply_limit hasn't been bumped for this amount
@@ -359,16 +359,16 @@
 	$config['old_thread_bump_interval_min'] = 9*60*60;
 	// See above
 	$config['old_thread_bump_interval_max'] = 14*60*60;
-	
+
 	// Image hard limit (stops allowing new image replies when this is reached if not zero)
 	$config['image_hard_limit'] = 0;
 	// Reply hard limit (stops allowing new replies when this is reached if not zero)
 	$config['reply_hard_limit'] = 0;
-	
+
 	// Strip repeating characters when making hashes
 	$config['robot_enable'] = false;
 	$config['robot_strip_repeating'] = true;
-	
+
 	// Enable mutes
 	// Tinyboard uses ROBOT9000's original 2^x implementation
 	$config['robot_mute'] = true;
@@ -377,44 +377,44 @@
 	// If you want to alter the algorithm a bit. Default value is 2. n^x
 	$config['robot_mute_multiplier'] = 2;
 	$config['robot_mute_descritpion'] = 'You have been muted for unoriginal content.';
-	
+
 	// Automatically convert things like "..." to Unicode characters ("…")
 	$config['auto_unicode'] = true;
 	// Whether to turn URLs into functional links
 	$config['markup_urls'] = true;
-	
+
 	// Wordfilters are used to automatically replace certain words/phrases with something else.
 	// For a normal string replacement:
 	// $config['wordfilters'][] = array('cat', 'dog');
-	
+
 	// Advanced raplcement (regular expressions):
 	// $config['wordfilters'][] = array('/cat/', 'dog', true); // 'true' means it's a regular expression
-	
+
 	// Allow users to edit their own posts
 	$config['allow_self_edit'] = false;
-	
+
 	// Allow [#Mature] threads
 	$config['mature_allowed'] = false;
-	
+
 	// Always act as if they had typed "noko" in the email field no mattter what
 	$config['always_noko'] = false;
-	
+
 	// Don't show email field when set to noko
 	$config['hide_noko'] = true;
 	// Don't show email field when set to sage
 	$config['hide_sage'] = false;
-	
+
 	// Custom tripcodes. The below example makes a tripcode
 	//  of "#test123" evaluate to "!HelloWorld"
 	// $config['custom_tripcode']['#test123'] = '!HelloWorld';
 	// $config['custom_tripcode']['##securetrip'] = '!!somethingelse';
-	
+
 	// Optional spoiler images
 	$config['spoiler_images'] = false;
-	
-	
+
+
 	// With the following, you can disable certain superfluous fields or enable "forced anonymous".
-	
+
 	// When true, all names will be set to $config['anonymous'].
 	$config['field_disable_name'] = false;
 	// When true, no email will be able to be set.
@@ -425,10 +425,10 @@
 	$config['field_disable_reply_subject'] = false;
 	// When true, a blank password will be used for files (not usable for deletion).
 	$config['field_disable_password'] = false;
-	
+
 	// Require users to see the ban page at least once for a ban even if it has since expired?
 	$config['require_ban_view'] = false;
-	
+
 /*
  * ====================
  *  Markup settings
@@ -441,15 +441,15 @@
 	$config['markup'][] = array("/\[s\](.+?)\[\/s\]/s", "<s>\$1</s>");
 	$config['markup'][] = array("/\[spoiler\](.+?)\[\/spoiler\]/s", "<span class=\"spoiler\">\$1</span>");
 	$config['markup'][] = array("/\[\?\](.+?)\[\/\?\]/s", "<span class=\"spoiler\">\$1</span>");
-        $config['markup'][] = array("/\[h\](?:\s*\n)?(.+?)\[\/h\]/s", "<div class=\"hidetext\">\$1</div>");
-        $config['markup'][] = array('/\[hide\](?:\s*\n)?(.+?)\[\/hide\]/s', "<div class=\"hidetext\">\$1</div>");
+	$config['markup'][] = array("/\[h\](?:\s*\n)?(.+?)\[\/h\]/s", "<div class=\"hidetext\">\$1</div>");
+	$config['markup'][] = array('/\[hide\](?:\s*\n)?(.+?)\[\/hide\]/s', "<div class=\"hidetext\">\$1</div>");
 	$config['markup'][] = array("/\[#(.+?)\]/", "<span class=\"hashtag\">#\$1</span>");
 	$config['markup'][] = array("/^\s*==(.+?)==\s*$/m", "<span class=\"heading\">\$1</span>");
 	$config['markup'][] = array("/\[cs\](.+?)\[\/cs\]/s", "<span class=\"comicsans\">\$1</span>");
 	$config['markup'][] = array("/\[tt\](.+?)\[\/tt\]/s", "<span style=\"font-family: monospace\">\$1</span>");
-	
+
 	$config['user_url_markup'] = true;
-	
+
 	// Highlight PHP code wrapped in <code> tags (PHP 5.3.0+)
 	// $config['markup'][] = array(
 	// 	'/^&lt;code&gt;(.+)&lt;\/code&gt;/ms',
@@ -457,32 +457,32 @@
 	// 		return highlight_string(html_entity_decode($matches[1]), true);
 	// 	}
 	// );
-	
+
 /*
  * ====================
  *  Image settings
  * ====================
  */
- 
+
 	// For resizing, max thumbnail size
 	$config['thumb_width'] = 255;
 	$config['thumb_height'] = 255;
 	// Max thumbnail size for thread images
 	$config['thumb_op_width'] = 255;
 	$config['thumb_op_height'] = 255;
-	
+
 	// Thumbnail extension, empty for inherited (png recommended)
 	$config['thumb_ext'] = 'png';
-	
+
 	// Maximum amount of frames to resize (more frames means more processing power). "1" means no animated thumbnails.
 	// Requires $config['thumb_ext'] to be 'gif' and $config['thumb_method'] to be 'imagick', 'convert', or 'convert+gifsicle'.
 	// Not respected by 'convert'; will just resize all frames if this is > 1.
 	$config['thumb_keep_animation_frames'] = 1;
-	
+
 	// Thumbnailing method:
 	//	- 'gd'			PHP GD (default). Only handles the most basic image formats (GIF, JPEG, PNG).
 	//				This is a prerequisite for Tinyboard no matter what method you choose.
-	//	- 'imagick'		PHP's ImageMagick bindings. Fast and efficient, supporting many image formats. 
+	//	- 'imagick'		PHP's ImageMagick bindings. Fast and efficient, supporting many image formats.
 	//				A few minor bugs. http://pecl.php.net/package/imagick
 	//	- 'convert'		The command line version of ImageMagick (`convert`). Fixes most of the bugs in
 	//				PHP Imagick.
@@ -490,14 +490,14 @@
 	//				instead of `convert` for resizing gifs. It's faster and resulting animated gifs
 	//				have less artifacts than if resized with ImageMagick.
 	$config['thumb_method'] = 'gd';
-	
+
 	// Strip EXIF metadata from JPEG files
 	$config['strip_exif'] = false;
-	
+
 	// Regular expression to check for IE MIME type detection XSS exploit. To disable, comment the line out
 	// https://github.com/savetheinternet/Tinyboard/issues/20
 	$config['ie_mime_type_detection'] = '/<(?:body|head|html|img|plaintext|pre|script|table|title|a href|channel|scriptlet)/i';
-	
+
 	// Allowed image file extensions
 	$config['allowed_ext'][] = 'jpg';
 	$config['allowed_ext'][] = 'jpeg';
@@ -505,35 +505,35 @@
 	$config['allowed_ext'][] = 'gif';
 	$config['allowed_ext'][] = 'png';
 	// $config['allowed_ext'][] = 'svg';
-	
+
 	// Allowed additional file extensions (not images; downloadable files)
 	// $config['allowed_ext_files'][] = 'txt';
 	// $config['allowed_ext_files'][] = 'zip';
-	
+
 	// An alternative function for generating a filename, instead of the default UNIX timestamp.
 	// http://tinyboard.org/wiki/index.php?title=Filenames
 	// $config['filename_func'] = 'some_function_you_have_created';
-	
+
 	// Non-image file icons
 	$config['file_icons']['default'] = 'file.png';
 	$config['file_icons']['zip'] = 'zip.png';
-	
+
 	// Thumbnail to use for the downloadable files (not images)
 	$config['file_thumb'] = 'static/%s';
 	// Thumbnail to use for spoiler images
 	$config['spoiler_image'] = 'static/spoiler.png';
-	
+
 	// Thumbnail quality (compression level), from 0 to 9
 	$config['thumb_quality'] = 8;
-	
+
 	// When a thumbnailed image is going to be the same (in dimension), just copy the entire file and use that as a thumbnail instead of resizing/redrawing
 	$config['minimum_copy_resize'] = false;
-	
+
 	// Store image hash in the database for r9k-like boards implementation soon
 	// Function name for hashing
 	// sha1_file, md5_file, etc. You can also define your own similar function.
 	$config['file_hash'] = 'sha1_file';
-	
+
 	// Maximum image upload size in bytes
 	$config['max_filesize'] = 10*1024*1024; // 10MB
 	// Maximum thumbnail upload size in bytes
@@ -545,16 +545,16 @@
 	$config['image_reject_repost'] = true;
 	// Reject duplicate image uploads within the same thread. Doesn't change anything if image_reject_repost is true.
 	$config['image_reject_repost_in_thread'] = false;
-	
+
 	// Display the aspect ratio in a post's file info
 	$config['show_ratio'] = false;
 	// Display the file's original filename
 	$config['show_filename']= true;
-	
+
 	// Redraw the image using GD functions to strip any excess data (commonly ZIP archives)
 	// WARNING: Currently strips animated GIFs too
 	$config['redraw_image'] = false;
-	
+
 	// Number of posts in a "View Last X Posts" page
 	$config['noko50_count'] = 50;
 	// Number of posts a thread needs before it gets a "View Last X Posts" page
@@ -577,50 +577,50 @@
 	// Name of the boards. Usually '/%s/' (/b/, /mu/, etc)
 	// $config['board_abbreviation'] - BOARD_TITLE
 	$config['board_abbreviation'] = '/%s/';
-	
+
 	// The default name (ie. Anonymous)
 	$config['anonymous'] = 'Anonymous';
-	
+
 	// How many reports you can create in the same request.
 	$config['report_limit'] = 30;
-	
+
 /*
  * ====================
  *  Display settings
  * ====================
  */
- 	
- 	// Locale (en, ru_RU.UTF-8, fi_FI.UTF-8, pl_PL.UTF-8)
- 	$config['locale'] = 'en';
- 	
- 	// Timezone
+
+	// Locale (en, ru_RU.UTF-8, fi_FI.UTF-8, pl_PL.UTF-8)
+	$config['locale'] = 'en';
+
+	// Timezone
 	$config['timezone'] = 'America/Los_Angeles';
-	
- 	// The format string passed to strftime() for post times
+
+	// The format string passed to strftime() for post times
 	// http://www.php.net/manual/en/function.strftime.php
 	$config['post_date'] = '%d %b %Y %H:%M:%S %Z';
-	
+
 	// Same as above, but used for "you are banned' pages.
 	$config['ban_date'] = '%A %e %B, %Y';
-	
+
 	// The names on the post buttons. (On most imageboards, these are both "Post")
 	$config['button_newtopic'] = 'New Topic';
 	$config['button_reply'] = 'New Reply';
-	
+
 	// Assign each poster in a thread a unique ID, shown by "ID: {id}" before the post number.
 	$config['poster_ids'] = false;
 	// Number of characters in the poster ID (maximum is 40)
 	$config['poster_id_length'] = 6;
-	
+
 	// Show thread subject in page title?
 	$config['thread_subject_in_title'] = true;
-	
+
 	// Page footer
 	$config['footer'][] = 'All trademarks, copyrights, comments, and images on this page are owned by and are the responsibility of their respective parties.';
-	
+
 	// Characters used to generate a random password (with Javascript)
 	$config['genpassword_chars'] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
-	
+
 	// Page image banners
 	$config['banner_prefix'] = 'static/banners/';
 	// Array is (filename, width, height)
@@ -693,7 +693,22 @@
 	$config['banners'][] = array('twixie%20-%20paperponi.gif', 600, 150);
 	$config['banners'][] = array('unoriginality%20-%20anon.jpg', 600, 150);
 	$config['banners'][] = array('why%20-%20tpwpf.jpg', 596, 150);
-	
+
+	$config['banners'][] = array('aj%20guns%20-%20sersys.gif', 600, 150);
+	$config['banners'][] = array('eyes%20-%20sersys.gif', 600, 150);
+	$config['banners'][] = array('horse%20comparison%20-%20sersys.jpg', 600, 150);
+	$config['banners'][] = array('letter%20-%20gore.jpg', 600, 150);
+	$config['banners'][] = array('logo%20-%20stagename.png', 440, 150);
+	$config['banners'][] = array('misspelling%20-%20sersys.jpg', 600, 150);
+	$config['banners'][] = array('mlpchan%20derp.jpg', 600, 150);
+	$config['banners'][] = array('mlpchan%20shock%20and%20awe.jpg', 600, 150);
+	$config['banners'][] = array('mlpchan%20slow.jpg', 600, 150);
+	$config['banners'][] = array('obey%20-%20pwnies.png', 600, 150);
+	$config['banners'][] = array('search%20-%20smokey.png', 600, 150);
+	$config['banners'][] = array('she%20isn%27t%20real.png', 600, 150);
+	$config['banners'][] = array('stat%20-%20sersys.jpg', 600, 150);
+	$config['banners'][] = array('top%20secret%20but%20fun.gif', 600, 150);
+
 	// Custom stylesheets available. The prefix for each stylesheet URI is defined below.
 
 	$config['stylesheets']['Cloudsdale'] = 'Cloudsdale.css';
@@ -701,7 +716,7 @@
 	$config['stylesheets']['Yotsuba B'] = ''; // default
 	$config['stylesheets']['Yotsuba'] = 'yotsuba.css';
 	// $config['stylesheets']['Futaba'] = 'futaba.css';
-	
+
 	$config['stylesheets']['Luna'] = 'luna.css';
 	$config['stylesheets']['Wonderbolts'] = 'wonderbolts.css';
 	$config['stylesheets']['Nightmare'] = 'nightmare.css';
@@ -711,16 +726,16 @@
 	$config['stylesheets']['Derpy'] = 'derpy.css';
 	$config['stylesheets']['Pinkie'] = 'pinkie.css';
 	$config['stylesheets']['Geocities'] = 'geocities.css';
-	
+
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/
 	// $config['uri_stylesheets'] = 'http://static.example.org/stylesheets/';
-	
+
 	// The default stylesheet to use
 	//$config['default_stylesheet'] = array('Yotsuba B', $config['stylesheets']['Yotsuba B']);
 	$config['default_stylesheet'] = array('Cloudsdale', $config['stylesheets']['Cloudsdale']);
-	
+
 	// Boardlinks
-	// You can group, order and place the boardlist at the top of every page, using the following template.	
+	// You can group, order and place the boardlist at the top of every page, using the following template.
 	$config['boards'] = array(
 	//	array('a', 'b'),
 	//	array('c', 'd', 'e', 'f', 'g'),
@@ -728,18 +743,18 @@
 	//	array('k', array('l', 'm')),
 	//	array('status' => 'http://status.example.org/')
 	);
-	
+
 	$config['modboards'] = array(
 	//	'mod', 'test'
 	);
-	
+
 	// Categories
 	// Required for the Categories theme.
 	$config['categories'] = array(
 	//	'Group Name' => array('a', 'b', 'c'),
 	//	'Another Group' => array('d')
 	);
-	
+
 	// Custom_categories
 	// Optional for the Categories theme. array of name => (title, url) groups for categories with non-board links.
 	//$config['custom_categories'] = array(
@@ -748,7 +763,7 @@
 	//		'Donate' => 'donate.html'
 	//	)
 	//);
-	
+
 	// Automatically remove unnecessary whitespace when compiling HTML files from templates.
 	$config['minify_html'] = true;
 
@@ -757,10 +772,10 @@
  *  Video embedding
  * ====================
  */
- 
+
 	// Enable embedding (see below)
 	$config['enable_embedding'] = false;
-	
+
 	// Custom embedding (YouTube, vimeo, etc.)
 	// It's very important that you match the full string (with ^ and $) or things will not work correctly.
 	$config['embedding'] = array(
@@ -785,17 +800,17 @@
 			'<embed src="http://video.google.com/googleplayer.swf?docid=$1&hl=en&fs=true" style="width:%%tb_width%%px;height:%%tb_height%%px;float:left;margin:10px 20px" allowFullScreen="true" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>'
 		)
 	);
-	
+
 	// Embedding width and height
 	$config['embed_width'] = 300;
 	$config['embed_height'] = 246;
-	
+
 /*
  * ====================
  *  Error messages
  * ====================
  */
- 
+
 	// Error messages
 	$config['error']['lurk']		= _('Lurk some more before posting.');
 	$config['error']['bot']			= _('You look like a bot.');
@@ -839,7 +854,7 @@
 	$config['error']['mime_exploit']	= _('MIME type detection XSS exploit (IE) detected; post discarded.');
 	$config['error']['invalid_embed']	= _('Couldn\'t make sense of the URL of the video you tried to embed.');
 	$config['error']['captcha']		= _('You seem to have mistyped the verification.');
-	
+
 	// Moderator errors
 	$config['error']['invalid']		= _('Invalid username and/or password.');
 	$config['error']['notamod']		= _('You are not a mod…');
@@ -861,28 +876,28 @@
  *  Directory/file settings
  * =========================
  */
-	
+
 	// The root directory, including the trailing slash, for Tinyboard.
 	// examples: '/', 'http://boards.chan.org/', '/chan/'
 	if (isset($_SERVER['REQUEST_URI']))
 		$config['root']	 = (str_replace('\\', '/', dirname($_SERVER['REQUEST_URI'])) == '/' ? '/' : str_replace('\\', '/', dirname($_SERVER['REQUEST_URI'])) . '/');
 	else
 		$config['root'] = '/'; // CLI mode
-	
+
 	// If for some reason the folders and static HTML index files aren't in the current working direcotry,
 	// enter the directory path here. Otherwise, keep it false.
 	$config['root_file'] = false;
-	
+
 	$config['file_index'] = 'index.html';
 	$config['file_page'] = '%d.html';
 	$config['file_page50'] = '%d+50.html';
 	$config['file_mod'] = 'mod.php';
 	$config['file_post'] = 'post.php';
 	$config['file_script'] = 'main.js';
-	
+
 	// Board directory, followed by a forward-slash (/). (%s is board abbreviation)
 	$config['board_path'] = '%s/';
-	
+
 	$config['dir']['img'] = 'src/';
 	$config['dir']['thumb'] = 'thumb/';
 	$config['dir']['res'] = 'res/';
@@ -897,7 +912,7 @@
 	$config['dir']['themes_uri'] = 'templates/themes';
 	// Homepage directory
 	$config['dir']['home'] = '';
-	
+
 	// Static images
 	// These can be URLs OR base64 (data URI scheme)
 	//$config['image_sticky']	= $config['dir']['static'] . 'sticky.gif';
@@ -905,36 +920,36 @@
 	//$config['image_bumplocked']	= $config['dir']['static'] . 'sage.gif';
 	//$config['image_deleted']	= $config['dir']['static'] . 'deleted.';
 	//$config['image_zip']		= $config['dir']['static'] . 'zip.';
-	
+
 	// If you want to put images and other dynamic-static stuff on another (preferably cookieless) domain, you can use this:
 	// This will override $config['root'] and $config['dir']['...'] directives.
 	// "%s" will get replaced with $board['dir'], which usually includes a trailing slash. To avoid double slashes, you don't need
 	// to put a slash after %s
 	// $config['uri_thumb'] = 'http://images.example.org/%sthumb/';
 	// $config['uri_img'] = 'http://images.example.org/%ssrc/';
-	
+
 	// Set custom locations for stylesheets, scripts and maybe a banner.
 	// This can be good for load balancing across multiple servers or hostnames.
 	// $config['url_stylesheet'] = 'http://static.example.org/style.css'; // main/base stylesheet
 	// $config['url_javascript'] = 'http://static.example.org/main.js';
 	// $config['url_favicon'] = '/favicon.gif';
-	
+
 /*
  * ====================
  *  Mod settings
  * ====================
  */
-	
+
 	// Whether or not to lock moderator sessions to the IP address that was logged in with.
 	$config['mod']['lock_ip'] = true;
-	
+
 	// The page that is first shown when a moderator logs in. Defaults to the dashboard.
 	$config['mod']['default'] = '/';
-	
+
 	// Don't even display MySQL password to administrators (in the configuration page).
 	$config['mod']['never_reveal_password'] = true;
-	
- 	// Mod links (full HTML)
+
+	// Mod links (full HTML)
 	// Correspond to above permission directives
 	$config['mod']['link_delete'] = '[D]';
 	$config['mod']['link_ban'] = '[B]';
@@ -951,36 +966,36 @@
 	$config['mod']['link_bumpunlock'] = '[-Sage]';
 	$config['mod']['link_editpost'] = '[Edit]';
 	$config['mod']['link_move'] = '[Move]';
-	
+
 	// Moderator capcodes
 	$config['capcode'] = ' <span class="capcode">## %s</span>';
-	
+
 	// Custom capcodes, by example:
 	// "## Custom" becomes lightgreen, italic and bold
 	//$config['custom_capcode']['Custom'] ='<span class="capcode" style="color:lightgreen;font-style:italic;font-weight:bold"> ## %s</span>';
-	
+
 	// "## Mod" makes everything purple, including the name and tripcode
 	//$config['custom_capcode']['Mod'] = array(
 	//	'<span class="capcode" style="color:purple"> ## %s</span>',
 	//	'color:purple', // Change name style; optional
 	//	'color:purple' // Change tripcode style; optional
 	//);
-	
+
 	// "## Admin" makes everything red and bold, including the name and tripcode
 	//$config['custom_capcode']['Admin'] = array(
 	//	'<span class="capcode" style="color:red;font-weight:bold"> ## %s</span>',
 	//	'color:red;font-weight:bold', // Change name style; optional
 	//	'color:red;font-weight:bold' // Change tripcode style; optional
 	//);
-	
+
 	// Enable IP range bans (eg. "127.*.0.1", "127.0.0.*", and "12*.0.0.1" all match "127.0.0.1").
 	// A little more load on the database
 	$config['ban_range'] = true;
-	
+
 	// Enable CDIR netmask bans (eg. "10.0.0.0/8" for 10.0.0.0.0 - 10.255.255.255). Useful for stopping persistent spammers.
 	// Again, a little more database load.
 	$config['ban_cidr'] = true;
-	
+
 	// Message to show on posts edited by their author.
 	$config['edit_self_message'] = '<div class="editmsg">This post was edited by its author on %s.</div>';
 	// Message to show on posts edited by a moderator.
@@ -990,26 +1005,26 @@
 	$config['mod']['dns_lookup'] = true;
 	// How many recent posts, per board, to show in the IP summary page
 	$config['mod']['ip_recentposts'] = 5;
-	
+
 	// How many posts to display on the reports page
 	$config['mod']['recent_reports'] = 10;
-	
+
 	// How many actions to show per page in the moderation log
 	$config['mod']['modlog_page'] = 350;
 	// How many bans to show per page in the ban list
 	$config['mod']['banlist_page'] = 350;
-	
+
 	// Number of news entries to display per page
 	$config['mod']['news_page'] = 40;
-	
+
 	// Maximum number of results to display for a search, per board
 	$config['mod']['search_results'] = 75;
-	
+
 	// How many entries to show per page in the moderator noticeboard
 	$config['mod']['noticeboard_page'] = 50;
 	// Number of entries to summarize and display on the dashboard
 	$config['mod']['noticeboard_dashboard'] = 5;
-	
+
 	// Check public ban message by default
 	$config['mod']['check_ban_message'] = false;
 	// Default public ban message
@@ -1024,13 +1039,13 @@
 	$config['mod']['shadow_capcode'] = 'Mod';
 	// Name to use when posting the above message.
 	$config['mod']['shadow_name'] = $config['anonymous'];
-	
+
 	// Wait indefinitely when rebuilding everything
 	$config['mod']['rebuild_timelimit'] = 0;
-	
+
 	// PM snippet (for ?/inbox) length in characters
 	$config['mod']['snippet_length'] = 75;
-	
+
 	// Probably best not to change these:
 	if (!defined('JANITOR')) {
 		define('JANITOR',	0,	true);
@@ -1038,31 +1053,31 @@
 		define('ADMIN',		2,	true);
 		define('DISABLED',	3,	true);
 	}
-	
+
 /*
  * ====================
  *  Mod permissions
  * ====================
  */
- 
- 	// Capcode permissions
+
+	// Capcode permissions
 	$config['mod']['capcode'] = array(
 	//	JANITOR		=> array('Janitor'),
 		MOD		=> array('Mod'),
 		ADMIN		=> true
 	);
-	
+
 	// Example: Allow mods to post with "## Moderator" as well
 	// $config['mod']['capcode'][MOD][] = 'Moderator';
-	
+
 	// Example: Allow janitors to post with any capcode
 	// $config['mod']['capcode'][JANITOR] = true;
- 
- 	// Set any of the below to "DISABLED" to make them unavailable for everyone.
- 
+
+	// Set any of the below to "DISABLED" to make them unavailable for everyone.
+
 	// Don't worry about per-board moderators. Let all mods moderate any board.
 	$config['mod']['skip_per_board'] = false;
-	
+
 	/* Post Controls */
 	// View IP addresses
 	$config['mod']['show_ip'] = MOD;
@@ -1106,7 +1121,7 @@
 	$config['mod']['flood'] = ADMIN;
 	// Raw HTML posting
 	$config['mod']['rawhtml'] = MOD;
-	
+
 	/* Administration */
 	// View the report queue
 	$config['mod']['reports'] = JANITOR;
@@ -1175,12 +1190,12 @@
 	$config['mod']['news_custom'] = ADMIN;
 	// Delete news entries
 	$config['mod']['news_delete'] = ADMIN;
-	
+
 	// View the current configuration
 	$config['mod']['show_config'] = ADMIN;
 	// Edit the current configuration (via web interface)
 	$config['mod']['edit_config'] = ADMIN;
-	
+
 /*
  * ====================
  *  Events (PHP 5.3.0+)
@@ -1192,10 +1207,10 @@
 	// event_handler('post', function($post) {
 	// 	// do something
 	// });
-	
+
 	// event_handler('post', function($post) {
 	// 	// do something else
-	// 	
+	//
 	// 	// return an error (reject post)
 	// 	return 'Sorry, you cannot post that!';
 	// });
@@ -1205,16 +1220,16 @@
  *  Other/uncategorized
  * ====================
  */
- 	
- 	// Meta keywords. It's probably best to include these in per-board configurations.
+
+	// Meta keywords. It's probably best to include these in per-board configurations.
 	//$config['meta_keywords'] = 'chan,anonymous discussion,imageboard,tinyboard';
-	
+
 	// Link imageboard to your Google Analytics account to track users and provide marketing insights.
 	// $config['google_analytics'] = 'UA-xxxxxxx-yy';
 	// Keep the Google Analytics cookies to one domain -- ga._setDomainName()
 	// $config['google_analytics_domain'] = 'www.example.org';
-	
- 	// If you use Varnish, Squid, or any similar caching reverse-proxy in front of Tinyboard,
+
+	// If you use Varnish, Squid, or any similar caching reverse-proxy in front of Tinyboard,
 	// you can configure Tinyboard to PURGE files when they're written to
 	//$config['purge'] = array(
 	//	array('127.0.0.1', 80)
@@ -1222,7 +1237,7 @@
 	//);
 	// Connection timeout, in seconds
 	$config['purge_timeout'] = 3;
-	
+
 	// Remote server definitions
 	//$config['remote']['static'] = array(
 	//	'host' => 'static.example.org',
@@ -1233,7 +1248,6 @@
 	//	),
 	//	'type' => 'scp'
 	//);
-	
+
 	// Complex regular expression to catch URLs
 	$config['url_regex'] = '/' . '(https?|ftp):\/\/' . '(([\w\-]+\.)+[a-zA-Z]{2,6}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' . '(:\d+)?' . '(\/([\w\-~.#\/?=&;:+%!*\[\]@$\'()+,|\^]+)?)?' . '/';
-

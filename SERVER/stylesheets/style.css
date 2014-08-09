@@ -106,6 +106,10 @@ form table tr th {
 	font-size: 12px;
 	margin: 0;
 	padding-right: 7em;
+	word-break: break-all;
+}
+.posterip {
+	word-break: break-all;
 }
 div.banner {
 	background-color: #E04000;
