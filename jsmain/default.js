@@ -19,18 +19,18 @@ window.get_cookie = function get_cookie(cookie_name) {
 		return (unescape(results[2]));
 	else
 		return null;
-}
+};
 
 window.highlightReply = function highlightReply(id) {
 	if (typeof event != "undefined" && event && typeof event.which != "undefined" && event.which == 2) {
 		// don't highlight on middle click
 		return true;
 	}
-	
+
 	$('.highlighted').removeClass('highlighted');
 	if (id)
 		$('#reply_'+id).addClass('highlighted');
-}
+};
 
 window.confirmDelete = function confirmDelete() {
 	var count = $('form[name="postcontrols"] input.delete:checked').length;
@@ -43,10 +43,10 @@ window.confirmDelete = function confirmDelete() {
 			message = 'Are you sure you want to delete the selected post?';
 		else
 			message = 'Are you sure you want to delete the '+count+' selected posts?';
-		
+
 		return confirm(message);
 	}
-}
+};
 
 window.generatePassword = function generatePassword() {
 	var pass = '';
@@ -56,7 +56,7 @@ window.generatePassword = function generatePassword() {
 		pass += chars.substring(rnd, rnd + 1);
 	}
 	return pass;
-}
+};
 
 window.dopost = function dopost(form) {
 	if (window.localStorage) {
@@ -66,23 +66,23 @@ window.dopost = function dopost(form) {
 		if (form.elements['email'] && form.elements['email'].value != 'sage') {
 			localStorage.email = form.elements['email'].value;
 		}
-		
+
 		var saved;
 		if (sessionStorage.body)
 			saved = JSON.parse(sessionStorage.body);
 		else
 			saved = {};
-		
+
 		saved[board_id+":"+thread_id] = form.elements['body'].value;
 		sessionStorage.body = JSON.stringify(saved);
 	}
-	
+
 	return form.elements['body'].value != "" || form.elements['file'].value != "";
-}
+};
 
 window.citeReply = function citeReply(id) {
 	var body = document.getElementById('body');
-	
+
 	if (document.selection) {
 		// IE
 		body.focus();
@@ -97,7 +97,7 @@ window.citeReply = function citeReply(id) {
 		// ???
 		body.value += '>>' + id + '\n';
 	}
-}
+};
 
 window.rememberStuff = function rememberStuff() {
 	if (document.forms.post) {
@@ -112,17 +112,17 @@ window.rememberStuff = function rememberStuff() {
 				} catch(e) {}
 			}
 		}
-		
+
 		if (window.localStorage) {
 			if (localStorage.name && document.forms.post.elements['name'])
 				document.forms.post.elements['name'].value = localStorage.name;
 			if (localStorage.email && document.forms.post.elements['email'])
 				document.forms.post.elements['email'].value = localStorage.email;
 		}
-		
+
 		if (/^#q\d+$/.exec(window.location.hash))
 			citeReply(window.location.hash.substring(2));
-		
+
 		if (window.sessionStorage && sessionStorage.body) {
 			var saved = JSON.parse(sessionStorage.body);
 			if (get_cookie(cookiename)) {
@@ -159,12 +159,12 @@ window.rememberStuff = function rememberStuff() {
 				document.forms.post.body.value = thisBody;
 			}
 		}
-		
+
 		if (get_cookie(cookiename)) {
 			document.cookie = cookiename+'={};expires=0;path='+cookiepath+';';
 		}
 	}
-}
+};
 
 $(document).ready(function() {
 	rememberStuff();
@@ -172,7 +172,7 @@ $(document).ready(function() {
 	if (window.localStorage && localStorage.password && document.forms.postcontrols) {
 		document.forms.postcontrols.password.value = localStorage.password;
 	}
-	
+
 	if (/^#\d+$/.exec(window.location.hash))
 		highlightReply(window.location.hash.substring(1));
 });
@@ -196,54 +196,65 @@ window.make_thread_url = function make_thread_url(board, postnum) {
 		return '?/'+board+'/res/'+postnum+'.html';
 	else
 		return siteroot+board+'/res/'+postnum+'.html';
-}
-	
+};
+
 window.make_thread50_url = function make_thread50_url(board, postnum) {
 	if (document.location.pathname == siteroot+'mod.php')
 		return '?/'+board+'/res/'+postnum+'+50.html';
 	else
 		return siteroot+board+'/res/'+postnum+'+50.html';
-}
-	
+};
+
 window.get_post_board = function get_post_board($post) {
 	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
-}
+};
 
 window.get_post_num = function get_post_num($post) {
 	return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
-}
+};
 
 window.get_post_id = function get_post_id($post) {
 	var match = /\bpost_(\w+)-(\d+)\b/.exec($post.attr("class"));
 	return match[1]+':'+match[2];
-}
+};
 
 window.get_post_class = function get_post_class(postid) {
 	var match = /^(\w+):(\d+)$/.exec(postid);
 	return 'post_'+match[1]+'-'+match[2];
-}
+};
 
 window.get_url_params = function get_url_params(url, includeHash) {
+	function decode (s) {
+		return decodeURIComponent(s.replace(/\+/g, ' '));
+	}
+
 	if (!includeHash)
 		url = url.replace(/#.*/, '');
 	var params = {};
 	var match_params = /[?#](.*)$/.exec(url);
 	if (match_params) {
 		var params_part = match_params[1];
-		function decode (s) {
-			return decodeURIComponent(s.replace(/\+/g, ' '));
-		}
 		var search = /([^&#=]+)=?([^&#]*)/g;
 		var match;
-		while (match = search.exec(params_part))
+		while ((match = search.exec(params_part))) {
 			params[decode(match[1])] = decode(match[2]);
+		}
 	}
 	return params;
-}
+};
 
+window.pageHasFocus = function() {
+	if (document.hasFocus)
+		return document.hasFocus();
+	if (document.visibilityState)
+		return document.visibilityState == 'visible';
+	return true;
+};
+
+// TODO replace with underscore
 window.isArray = function isArray(o) {
 	return Object.prototype.toString.call(o) === '[object Array]';
-}
+};
 
 window.setCss = function setCss(key, css) {
 	var $style = $("style.setcss#setcss_"+key);
@@ -255,25 +266,25 @@ window.setCss = function setCss(key, css) {
 			.appendTo(document.head);
 	}
 	$style.text(css);
-}
+};
 
 window.htmlEntities = function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
+};
 
 // Disables all img, audio, video, and script tags in some html
 window.mogrifyHTML = function mogrifyHTML(html) {
 	function mogrifier(text) {
 		return '<span class="mogrifier" data-data="' + htmlEntities(text) + '"></span>';
 	}
-	
+
 	html = html.replace(/<img\b[^>]*>/g, mogrifier);
 	html = html.replace(/<audio\b[^>]*>.*?<\/audio>/g, mogrifier);
 	html = html.replace(/<video\b[^>]*>.*?<\/video>/g, mogrifier);
 	html = html.replace(/<script\b[^>]*>.*?<\/script>/g, mogrifier);
-	
+
 	return html;
-}
+};
 
 // Re-enables mogrified tags in an element
 window.demogrifyEl = function demogrifyEl($el) {
@@ -283,7 +294,7 @@ window.demogrifyEl = function demogrifyEl($el) {
 		$mog.html(html);
 		$mog.children().unwrap();
 	});
-}
+};
 
 $(document).on('new_post', function(e, post) {
 	demogrifyEl($(post));
