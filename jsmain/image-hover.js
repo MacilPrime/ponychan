@@ -18,7 +18,7 @@ $(document).ready(function(){
 		else if (setting == "image_spoiler_hover_enabled")
 			image_spoiler_hover_enabled = settings.getSetting("image_spoiler_hover_enabled");
 	});
-	
+
 	function init_image_hover() {
 		var $image = $(this);
 		var hovered_at;
@@ -36,7 +36,7 @@ $(document).ready(function(){
 				return;
 
 			hovered_at = {'x': e.pageX, 'y': e.pageY};
-			
+
 			var $newImage = $("<img/>");
 			$newImage
 				.addClass('image-hover')
@@ -58,21 +58,21 @@ $(document).ready(function(){
 			var $hover = $('.image-hover');
 			if($hover.length == 0)
 				return;
-			
+
 			var top = (e.pageY ? e.pageY : hovered_at['y']) - 10;
-			
+
 			if(e.pageY < $(window).scrollTop() + 15) {
 				top = $(window).scrollTop();
 			} else if(e.pageY > $(window).scrollTop() + $(window).height() - $hover.height() - 30) {
 				top = $(window).scrollTop() + $(window).height() - $hover.height() - 30;
 			}
-			
+
 			$hover.css('left', (e.pageX ? e.pageX : hovered_at['x']) + 20).css('top', top);
 		}).click(function() {
 			$image.trigger('mouseleave');
 		});
 	}
-	
+
 	$('a:not([class="file"]) > img.postimg').each(init_image_hover);
 	$(document).on('new_post', function(e, post) {
 		$(post).find('> a:not([class="file"]) > img.postimg').each(init_image_hover);
