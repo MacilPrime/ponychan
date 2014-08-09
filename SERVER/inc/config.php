@@ -494,10 +494,6 @@
 	// Strip EXIF metadata from JPEG files
 	$config['strip_exif'] = false;
 
-	// Regular expression to check for IE MIME type detection XSS exploit. To disable, comment the line out
-	// https://github.com/savetheinternet/Tinyboard/issues/20
-	$config['ie_mime_type_detection'] = '/<(?:body|head|html|img|plaintext|pre|script|table|title|a href|channel|scriptlet)/i';
-
 	// Allowed image file extensions
 	$config['allowed_ext'][] = 'jpg';
 	$config['allowed_ext'][] = 'jpeg';
@@ -851,7 +847,6 @@
 	$config['error']['fileexistsinthread']	= _('That file <a href="%s">already exists</a> in this thread!');
 	$config['error']['delete_too_soon']	= _('You\'ll have to wait another %s before deleting that.');
 	$config['error']['edit_too_soon']	= _('You\'ll have to wait another %s before editing that.');
-	$config['error']['mime_exploit']	= _('MIME type detection XSS exploit (IE) detected; post discarded.');
 	$config['error']['invalid_embed']	= _('Couldn\'t make sense of the URL of the video you tried to embed.');
 	$config['error']['captcha']		= _('You seem to have mistyped the verification.');
 
