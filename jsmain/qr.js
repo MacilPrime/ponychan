@@ -552,7 +552,8 @@ $(document).ready(function(){
 	var selectedreply = null;
 	addReply();
 
-	var maxsize = $oldFile.attr("data-max-filesize");
+	var max_filesize = $oldFile.attr("data-max-filesize");
+	var max_video_filesize = $oldFile.attr("data-max-video-filesize");
 
 	if (!useQueuing) {
 		$QR.addClass("noQueuing");
@@ -566,7 +567,7 @@ $(document).ready(function(){
 			if (!file)
 				return;
 
-			if ('size' in file && file.size > maxsize) {
+			if ('size' in file && (file.size > (/^video\//.test(file.type) ? max_video_filesize : max_filesize))) {
 				$QRwarning.text(file.name + " is too large");
 				resetFileInput();
 				return;
@@ -599,7 +600,7 @@ $(document).ready(function(){
 			for (var i = 0, len = files.length; i < len; i++) {
 				var file = files[i];
 
-				if ('size' in file && file.size > maxsize) {
+				if ('size' in file && (file.size > (/^video\//.test(file.type) ? max_video_filesize : max_filesize))) {
 					$QRwarning.text(file.name + " is too large");
 				} else if ('type' in file && !/^image/.test(file.type) && file.type != 'video/webm') {
 					$QRwarning.text(file.name + " has an unsupported file type");

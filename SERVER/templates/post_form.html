@@ -70,7 +70,9 @@
 				{% trans %}File{% endtrans %}
 			</th>
 			<td>
-				<input type="file" name="file" data-max-filesize="{{ config.max_filesize }}"
+				<input type="file" name="file"
+				 data-max-filesize="{{ config.max_filesize }}"
+				 data-max-video-filesize="{{ config.max_video_filesize }}"
 				{% if id %}
 				 data-thumb-max-width="{{ config.thumb_width }}" data-thumb-max-height="{{ config.thumb_height }}"
 				{% else %}
