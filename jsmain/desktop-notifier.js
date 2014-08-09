@@ -61,7 +61,7 @@
   function makeNote($post) {
     var note = new Notification(makeHeadLine($post), {
       body: getBody($post),
-      tag: "desktop_" + $post.attr('id').split("_")[1],
+      tag: "desktop_" + window.get_post_id($post),
       icon: siteroot + "static/mlpchanlogo.png"
     });
 
