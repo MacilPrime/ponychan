@@ -12,9 +12,15 @@
     "Enable Reply Desktop Notifications",
     'links', {
       orderhint: 8,
-      moredetails: $("<button/>")
-        .text("Test notification")
-        .click(buttonEvent),
+      moredetails: $("<div/>").append(
+        $("<div/>")
+          .text(
+            "Shows a desktop notification when you get a reply in an open " +
+            "thread while you don't have the thread's window focused."),
+        $("<button/>")
+          .text("Test notification")
+          .click(buttonEvent)
+      ),
       moredetails_rawhtml: true
     }
   );
