@@ -495,10 +495,10 @@
 	$config['strip_exif'] = false;
 
 	// Allowed file mime types and their default extensions
-	$config['allowed_types']['image/jpeg'] = 'jpg';
-	$config['allowed_types']['image/bmp'] = 'bmp'; // TODO auto-convert these to png
-	$config['allowed_types']['image/gif'] = 'gif';
-	$config['allowed_types']['image/png'] = 'png';
+	$config['allowed_image_types']['image/jpeg'] = 'jpg';
+	$config['allowed_image_types']['image/bmp'] = 'bmp'; // TODO auto-convert these to png
+	$config['allowed_image_types']['image/gif'] = 'gif';
+	$config['allowed_image_types']['image/png'] = 'png';
 
 	// Allowed additional file extensions (not images; downloadable files)
 	// $config['allowed_ext_files'][] = 'txt';

@@ -62,7 +62,7 @@ function loadConfig() {
 		'dnsbl',
 		'dnsbl_exceptions',
 		'remote',
-		'allowed_types',
+		'allowed_image_types',
 		'allowed_ext_files',
 		'file_icons',
 		'footer',

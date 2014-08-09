@@ -661,10 +661,10 @@ if (isset($_POST['delete'])) {
 
 		$mime_type = trim(shell_exec('file -b --mime-type ' . escapeshellarg($upload)));
 
-		if (!array_key_exists($mime_type, $config['allowed_types']))
+		if (!array_key_exists($mime_type, $config['allowed_image_types']))
 			error($config['error']['unsupported_type']);
 
-		$post['extension'] = $config['allowed_types'][$mime_type];
+		$post['extension'] = $config['allowed_image_types'][$mime_type];
 		if (isset($config['filename_func']))
 			$post['file_id'] = $config['filename_func']($post);
 		else
