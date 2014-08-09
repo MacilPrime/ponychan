@@ -76,7 +76,7 @@
 				{% else %}
 				 data-thumb-max-width="{{ config.thumb_op_width }}" data-thumb-max-height="{{ config.thumb_op_height }}"
 				{% endif %}
-				 accept="image/*">
+				 accept="image/*,video/webm">
 				{{ antibot.html() }}
 			</td>
 		</tr>
@@ -135,8 +135,8 @@
 				<input type="hidden" name="activate_egg" value="0">
 			</th>
 			<td>
-				<input type="password" name="password" size="12" maxlength="18" autocomplete="off"> 
-				<span class="unimportant">{% trans %}(For file deletion.){% endtrans %}</span>
+				<input type="password" name="password" size="12" maxlength="18" autocomplete="off">
+				 <span class="unimportant">{% trans %}(For file deletion.){% endtrans %}</span>
 				{{ antibot.html() }}
 			</td>
 		</tr>{% endif %}
