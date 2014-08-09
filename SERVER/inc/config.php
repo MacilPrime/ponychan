@@ -474,6 +474,8 @@
 	// Thumbnail extension, empty for inherited (png recommended)
 	$config['thumb_ext'] = 'png';
 
+	$config['video_thumb_ext'] = 'jpg';
+
 	// Maximum amount of frames to resize (more frames means more processing power). "1" means no animated thumbnails.
 	// Requires $config['thumb_ext'] to be 'gif' and $config['thumb_method'] to be 'imagick', 'convert', or 'convert+gifsicle'.
 	// Not respected by 'convert'; will just resize all frames if this is > 1.
@@ -499,6 +501,8 @@
 	$config['allowed_image_types']['image/bmp'] = 'bmp'; // TODO auto-convert these to png
 	$config['allowed_image_types']['image/gif'] = 'gif';
 	$config['allowed_image_types']['image/png'] = 'png';
+
+	$config['allowed_video_types']['video/webm'] = 'webm';
 
 	// Allowed additional file extensions (not images; downloadable files)
 	// $config['allowed_ext_files'][] = 'txt';
@@ -530,6 +534,8 @@
 
 	// Maximum image upload size in bytes
 	$config['max_filesize'] = 10*1024*1024; // 10MB
+	// Maximum video upload size in bytes
+	$config['max_video_filesize'] = 2*1024*1024; // 2MB
 	// Maximum thumbnail upload size in bytes
 	$config['max_thumb_filesize'] = 256*1024; // 256KB
 	// Maximum image dimensions
@@ -835,7 +841,7 @@
 	$config['error']['toomanyreports']	= _('You can\'t report that many posts at once.');
 	$config['error']['toomanyedits']	= _('You can only edit one post at once.');
 	$config['error']['invalidpassword']	= _('Wrong password…');
-	$config['error']['invalidimg']		= _('Invalid image.');
+	$config['error']['invalid_file']		= _('Invalid file.');
 	$config['error']['unsupported_type']		= _('Unsupported file type.');
 	$config['error']['filesize']		= _('Maximum file size: %maxsz% bytes<br>Your file\'s size: %filesz% bytes');
 	$config['error']['maxsize']		= _('The file was too big.');

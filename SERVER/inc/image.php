@@ -13,7 +13,7 @@ class Image {
 	public $src, $format, $image, $size;
 	public function __construct($src, $format = false) {
 		global $config;
-		
+
 		$this->src = $src;
 		$this->format = $format;
 
@@ -27,24 +27,24 @@ class Image {
 				error('Unsupported file format: ' . $this->format);
 			}
 		}
-		
+
 		$this->image = new $classname($this);
 
 		if (!$this->image->valid()) {
 			$this->delete();
-			error($config['error']['invalidimg']);
+			error($config['error']['invalid_file']);
 		}
-		
+
 		$this->size = (object)array('width' => $this->image->_width(), 'height' => $this->image->_height());
 		if ($this->size->width < 1 || $this->size->height < 1) {
 			$this->delete();
-			error($config['error']['invalidimg']);
+			error($config['error']['invalid_file']);
 		}
 	}
-	
+
 	public function resize($extension, $max_width, $max_height) {
 		global $config;
-		
+
 		$gifsicle = false;
 
 		if ($config['thumb_method'] == 'imagick') {
@@ -60,25 +60,25 @@ class Image {
 				error('Unsupported file format: ' . $extension);
 			}
 		}
-		
+
 		$thumb = new $classname(false);
 		$thumb->src = $this->src;
 		$thumb->format = $this->format;
 		$thumb->original_width = $this->size->width;
 		$thumb->original_height = $this->size->height;
-		
+
 		$newRes = computeResize($this->size->width, $this->size->height, $max_width, $max_height);
-		
+
 		$thumb->gifsicle = $gifsicle;
 		$thumb->_resize($this->image->image, $newRes['width'], $newRes['height']);
-		
+
 		return $thumb;
 	}
-	
+
 	public function to($dst) {
 		$this->image->to($dst);
 	}
-	
+
 	public function delete() {
 		file_unlink($this->src);
 	}
@@ -101,21 +101,21 @@ class ImageGD {
 }
 
 class ImageBase extends ImageGD {
-	public $image, $src, $original, $original_width, $original_height, $width, $height;		
+	public $image, $src, $original, $original_width, $original_height, $width, $height;
 	public function valid() {
 		return (bool)$this->image;
 	}
-	
+
 	public function __construct($img) {
 		if (method_exists($this, 'init'))
 			$this->init();
-		
+
 		if ($img !== false) {
 			$this->src = $img->src;
 			$this->from();
 		}
 	}
-	
+
 	public function _width() {
 		if (method_exists($this, 'width'))
 			return $this->width();
@@ -138,7 +138,7 @@ class ImageBase extends ImageGD {
 		$this->original = &$original;
 		$this->width = $width;
 		$this->height = $height;
-		
+
 		if (method_exists($this, 'resize'))
 			$this->resize();
 		else
@@ -181,31 +181,31 @@ class ImageImagick extends ImageBase {
 	}
 	public function resize() {
 		global $config;
-		
+
 		if ($this->format == 'gif' && ($config['thumb_ext'] == 'gif' || $config['thumb_ext'] == '')) {
 			$this->image = new Imagick();
 			$this->image->setFormat('gif');
-			
+
 			$keep_frames = array();
 			for ($i = 0; $i < $this->original->getNumberImages(); $i += floor($this->original->getNumberImages() / $config['thumb_keep_animation_frames']))
 				$keep_frames[] = $i;
-			
+
 			$i = 0;
 			$delay = 0;
 			foreach ($this->original as $frame) {
 				$delay += $frame->getImageDelay();
-				
+
 				if (in_array($i, $keep_frames)) {
 					// $frame->scaleImage($this->width, $this->height, false);
 					$frame->sampleImage($this->width, $this->height);
 					$frame->setImagePage($this->width, $this->height, 0, 0);
 					$frame->setImageDelay($delay);
 					$delay = 0;
-					
+
 					$this->image->addImage($frame->getImage());
 				}
 				$i++;
-			}		
+			}
 		} else {
 			$this->image = clone $this->original;
 			$this->image->scaleImage($this->width, $this->height, false);
@@ -216,18 +216,18 @@ class ImageImagick extends ImageBase {
 
 class ImageConvert extends ImageBase {
 	public $width, $height, $temp, $gifsicle;
-	
+
 	public function init() {
 		global $config;
-		
+
 		$this->temp = false;
 	}
 	public function from() {
-		$size = trim(shell_exec('identify -format "%w %h" ' . escapeshellarg($this->src . '[0]')));	
+		$size = trim(shell_exec('identify -format "%w %h" ' . escapeshellarg($this->src . '[0]')));
 		if (preg_match('/^(\d+) (\d+)$/', $size, $m)) {
 			$this->width = $m[1];
 			$this->height = $m[2];
-			
+
 			$this->image = true;
 		} else {
 			// mark as invalid
@@ -236,7 +236,7 @@ class ImageConvert extends ImageBase {
 	}
 	public function to($src) {
 		global $config;
-		
+
 		if (!$this->temp) {
 			if ($config['strip_exif']) {
 				shell_exec('convert ' . escapeshellarg($this->src) . ' -auto-orient -strip ' . escapeshellarg($src));
@@ -260,18 +260,18 @@ class ImageConvert extends ImageBase {
 	}
 	public function resize() {
 		global $config;
-		
+
 		if ($this->temp) {
 			// remove old
 			$this->destroy();
 		}
-		
+
 		$this->temp = tempnam($config['tmp'], 'imagick');
-		
+
 		$quality = $config['thumb_quality'] * 10;
-		
+
 		$config['thumb_keep_animation_frames'] = (int) $config['thumb_keep_animation_frames'];
-		
+
 		if ($this->format == 'gif' && ($config['thumb_ext'] == 'gif' || $config['thumb_ext'] == '') && $config['thumb_keep_animation_frames'] > 1) {
 			if ($this->gifsicle) {
 				if (shell_exec("gifsicle --unoptimize -O2 --resize {$this->width}x{$this->height} < " .
@@ -388,12 +388,12 @@ function imagecreatefrombmp($filename) {
 	 if ($BMP['bits_per_pixel'] == 24)
 		$COLOR = unpack("V",substr($IMG,$P,3).$VIDE);
 	 elseif ($BMP['bits_per_pixel'] == 16)
-	 {  
+	 {
 		$COLOR = unpack("n",substr($IMG,$P,2));
 		$COLOR[1] = $PALETTE[$COLOR[1]+1];
 	 }
 	 elseif ($BMP['bits_per_pixel'] == 8)
-	 {  
+	 {
 		$COLOR = unpack("n",$VIDE.substr($IMG,$P,1));
 		$COLOR[1] = $PALETTE[$COLOR[1]+1];
 	 }
@@ -510,3 +510,23 @@ function int_to_word($n) {
 	return chr($n & 255).chr(($n >> 8) & 255);
 }
 
+// returns null if the file was invalid
+function getUploadSize($file, $file_type, $mime_type) {
+	if ($file_type === 'image') {
+		// find dimensions of an image using GD
+ 		return @getimagesize($file);
+	} elseif ($file_type === 'video') {
+		$result = shell_exec("avprobe " . escapeshellarg($file) . " 2>&1");
+		error_log("result: $result");
+		if (!$result)
+			return NULL;
+		error_log("further");
+		if (preg_match('/^\s+Stream[^:]+: Audio:/im', $result))
+			error("video files with audio not supported");
+		error_log("almost");
+		if (!preg_match('/^\s+Stream[^:]+: Video:.* (\d+)x(\d+)/im', $result, $matches))
+			return NULL;
+		return array(intval($matches[1]), intval($matches[2]));
+	}
+	return null;
+}

@@ -63,6 +63,7 @@ function loadConfig() {
 		'dnsbl_exceptions',
 		'remote',
 		'allowed_image_types',
+		'allowed_video_types',
 		'allowed_ext_files',
 		'file_icons',
 		'footer',
@@ -998,7 +999,7 @@ function post(array $post) {
 	}
 
 	if (!$query->execute()) {
-		undoImage($post);
+		undoFile($post);
 		error(db_error($query));
 	}
 
@@ -2098,7 +2099,7 @@ function getPostByHashInThread($hash, $thread) {
 	return false;
 }
 
-function undoImage(array $post) {
+function undoFile(array $post) {
 	if (!$post['has_file'])
 		return;
 
