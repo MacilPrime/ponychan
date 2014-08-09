@@ -17,10 +17,8 @@ function load_twig() {
 	require 'lib/Twig/Autoloader.php';
 	Twig_Autoloader::register();
 
-	Twig_Autoloader::autoload('Twig_Extensions_Node_Trans');
-	Twig_Autoloader::autoload('Twig_Extensions_TokenParser_Trans');
 	Twig_Autoloader::autoload('Twig_Extensions_Extension_I18n');
-	Twig_Autoloader::autoload('Twig_Extensions_Extension_Tinyboard');
+	Twig_Autoloader::autoload('TwigExt_Tinyboard');
 	
 	$loader = new Twig_Loader_Filesystem($config['dir']['template']);
 	$loader->setPaths($config['dir']['template']);
@@ -29,8 +27,9 @@ function load_twig() {
 		'cache' => "{$config['dir']['template']}/cache",
 		'debug' => $config['debug']
 	));
-	$twig->addExtension(new Twig_Extensions_Extension_Tinyboard());
+
 	$twig->addExtension(new Twig_Extensions_Extension_I18n());
+	$twig->addExtension(new TwigExt_Tinyboard());
 }
 
 function Element($templateFile, array $options) {

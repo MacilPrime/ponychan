@@ -28,7 +28,7 @@ class Twig_Extensions_Extension_I18n extends Twig_Extension
     public function getFilters()
     {
         return array(
-            'trans' => new Twig_Filter_Function('gettext'),
+             new Twig_SimpleFilter('trans', 'gettext'),
         );
     }
 
@@ -42,4 +42,3 @@ class Twig_Extensions_Extension_I18n extends Twig_Extension
         return 'i18n';
     }
 }
-

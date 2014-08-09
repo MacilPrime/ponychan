@@ -1,27 +1,21 @@
-<!doctype html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}?v={{ 'stylesheets/style.css'|filemtime }}">
-	{% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.url_favicon }}">{% endif %}
-	<title>MLPchan</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-	{% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
-	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}?v={{ ('stylesheets/' ~ config.default_stylesheet.1)|filemtime }}">{% endif %}
-	{% if not nojavascript %}
-		<script type="text/javascript" src="{{ config.url_javascript }}?v={{ config.file_script|filemtime }}"></script>
-	{% endif %}
-</head>
-<body class="boardpage homepage">
-	{{ boardlist.top }}
-	{% if pm %}<div class="top_notice">You have <a href="?/PM/{{ pm.id }}">an unread PM</a>{% if pm.waiting > 0 %}, plus {{ pm.waiting }} more waiting{% endif %}.</div><hr />{% endif %}
+{% extends "generic_page.html" %}
+
+{% block title %}MLPchan{% endblock %}
+
+{% block extra_body_classes %}homepage{% endblock %}
+
+{% block banner %}{% endblock %}
+
+{% block header %}
 	<header>
 		<h1>MLPchan</h1>
 		<div class="subtitle">
 			{{ settings.subtitle }}
 		</div>
 	</header>
-	
+{% endblock %}
+
+{% block main_body %}
 	<hr />
 
 	<div class="homeblock mainhomeblock">
@@ -161,10 +155,5 @@ Consider donating to help keep the site running! Everything goes toward site hos
 	      BatBane<span class="trip">!FXDOOMLlfE</span> - <a href="/site/res/10599.html">Site Minecraft server</a></div>
 	  </div>
 	</div>
-	{{ boardlist.bottom }}
-	<footer>
-		<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by <a href="http://tinyboard.org/">Tinyboard</a> {{ config.version }} | <a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2012 Tinyboard Development Group</p>
-		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer }}</p>{% endfor %}
-	</footer>
-</body>
-</html>
+
+{% endblock %}
