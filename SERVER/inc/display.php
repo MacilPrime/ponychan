@@ -340,6 +340,15 @@ class Post {
 		$this->mod = $mod;
 		$this->mature = $mature;
 
+		$file_ext = strtolower(substr($this->file, strrpos($this->file, '.') + 1));
+		if (in_array($file_ext, $config['allowed_image_types'])) {
+			$this->filetype = 'image';
+		} elseif (in_array($file_ext, $config['allowed_video_types'])) {
+			$this->filetype = 'video';
+		} else {
+			$this->filetype = null;
+		}
+
 		if ($this->embed)
 			$this->embed = embed_html($this->embed);
 
@@ -439,7 +448,16 @@ class Thread {
 		$this->mod = $mod;
 		$this->hr = $hr;
 		$this->mature = $mature;
-		
+
+		$file_ext = strtolower(substr($this->file, strrpos($this->file, '.') + 1));
+		if (in_array($file_ext, $config['allowed_image_types'])) {
+			$this->filetype = 'image';
+		} elseif (in_array($file_ext, $config['allowed_video_types'])) {
+			$this->filetype = 'video';
+		} else {
+			$this->filetype = null;
+		}
+
 		if ($this->embed)
 			$this->embed = embed_html($this->embed);
 
