@@ -70,13 +70,15 @@
 				{% trans %}File{% endtrans %}
 			</th>
 			<td>
-				<input type="file" name="file" data-max-filesize="{{ config.max_filesize }}"
+				<input type="file" name="file"
+				 data-max-filesize="{{ config.max_filesize }}"
+				 data-max-video-filesize="{{ config.max_video_filesize }}"
 				{% if id %}
 				 data-thumb-max-width="{{ config.thumb_width }}" data-thumb-max-height="{{ config.thumb_height }}"
 				{% else %}
 				 data-thumb-max-width="{{ config.thumb_op_width }}" data-thumb-max-height="{{ config.thumb_op_height }}"
 				{% endif %}
-				 accept="image/*">
+				 accept="image/*,video/webm">
 				{{ antibot.html() }}
 			</td>
 		</tr>
@@ -135,8 +137,8 @@
 				<input type="hidden" name="activate_egg" value="0">
 			</th>
 			<td>
-				<input type="password" name="password" size="12" maxlength="18" autocomplete="off"> 
-				<span class="unimportant">{% trans %}(For file deletion.){% endtrans %}</span>
+				<input type="password" name="password" size="12" maxlength="18" autocomplete="off">
+				 <span class="unimportant">{% trans %}(For file deletion.){% endtrans %}</span>
 				{{ antibot.html() }}
 			</td>
 		</tr>{% endif %}

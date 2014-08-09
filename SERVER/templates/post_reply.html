@@ -8,7 +8,7 @@
 	<input type="checkbox" class="delete" name="delete_{{ post.id }}" id="delete_{{ post.id }}" />
 		{% if post.subject|length > 0 %}
 			{# show subject #}
-			<span class="subject">{{ post.subject|bidi_cleanup }}</span> 
+			<span class="subject">{{ post.subject|bidi_cleanup }}</span>
 		{% endif %}
 		{% if post.email|length > 0 %}
 			{# start email #}
@@ -63,7 +63,7 @@
 		<p class="fileinfo">File: <a href="{{ config.uri_img }}{{ post.file }}">{{ post.file }}</a> <span class="morefileinfo">
 		(
 			{% if post.thumb == 'spoiler' %}
-				Spoiler Image, 
+				Spoiler Image,
 			{% endif %}
 			{{ post.filesize|filesize }}
 			{% if post.filex and post.filey %}
@@ -73,7 +73,7 @@
 				{% endif %}
 			{% endif %}
 			{% if config.show_filename and post.filename %}
-				, 
+				,
 				{% if post.filename|length > config.max_filename_display %}
 					<span class="postfilename" title="{{ post.filename|bidi_cleanup }}">{{ post.filename|truncate(config.max_filename_display)|bidi_cleanup }}</span>
 				{% else %}
@@ -84,7 +84,7 @@
 		</span>
 </p>
 	<a href="{{ config.uri_img }}{{ post.file }}" target="_blank"{% if post.thumb == 'file' %} class="file"{% endif %}>
-	<img class="postimg" src="
+	<img class="postimg{% if post.filetype == 'video' %} video{% endif %}" src="
 		{% if post.thumb == 'file' %}
 			{{ config.root }}
 			{% if config.file_icons[post.filename|extension] %}

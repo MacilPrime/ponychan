@@ -554,17 +554,6 @@ if (isset($_POST['delete'])) {
 		}
 	}
 
-	if ($post['has_file']) {
-		$size = $_FILES['file']['size'];
-		if ($size > $config['max_filesize'])
-			error(sprintf3($config['error']['filesize'], array(
-				'sz' => number_format($size),
-				'filesz' => number_format($size),
-				'maxsz' => number_format($config['max_filesize'])
-			)));
-	}
-
-
 	$post['capcode'] = false;
 
 	if ($mod && preg_match('/^((.+) )?## (.+)$/', $post['name'], $matches)) {
@@ -618,26 +607,12 @@ if (isset($_POST['delete'])) {
 
 	if ($post['mature']) {
 		if (!$config['mature_allowed']) {
-			undoImage($post);
+			undoFile($post);
 			error("This board doesn't allow mature content threads");
 		} elseif (!$post['op'] && !$thread['mature']) {
-			undoImage($post);
+			undoFile($post);
 			error("Only threads can be marked as mature");
 		}
-	}
-
-	if ($post['has_file']) {
-		$post['extension'] = strtolower(substr($post['filename'], strrpos($post['filename'], '.') + 1));
-		if (isset($config['filename_func']))
-			$post['file_id'] = $config['filename_func']($post);
-		else
-			$post['file_id'] = time() . substr(microtime(), 2, 3);
-
-		if ($post['mature'])
-			$post['file_id'] = 'mtr_' . $post['file_id'];
-
-		$post['file'] = $board['dir'] . $config['dir']['img'] . $post['file_id'] . '.' . $post['extension'];
-		$post['thumb'] = $board['dir'] . $config['dir']['thumb'] . $post['file_id'] . '.' . ($config['thumb_ext'] ? $config['thumb_ext'] : $post['extension']);
 	}
 
 	// Check string lengths
@@ -669,38 +644,76 @@ if (isset($_POST['delete'])) {
 	do_filters($post);
 
 	if ($post['has_file']) {
-		if (!in_array($post['extension'], $config['allowed_ext']) && !in_array($post['extension'], $config['allowed_ext_files']))
-			error($config['error']['unknownext']);
+		$upload = $_FILES['file']['tmp_name'];
+		if (!is_readable($upload))
+			error($config['error']['nomove']);
 
-		$is_an_image = !in_array($post['extension'], $config['allowed_ext_files']);
+		//$given_extension = strtolower(substr($post['filename'], strrpos($post['filename'], '.') + 1));
+		$mime_type = trim(shell_exec('file -b --mime-type ' . escapeshellarg($upload)));
+
+		$file_type = null;
+		if (array_key_exists($mime_type, $config['allowed_image_types'])) {
+			$file_size = $_FILES['file']['size'];
+			if ($file_size > $config['max_filesize'])
+				error(sprintf3($config['error']['filesize'], array(
+					'filesz' => number_format($file_size),
+					'maxsz' => number_format($config['max_filesize'])
+				)));
+
+			$file_type = 'image';
+			$post['extension'] = $config['allowed_image_types'][$mime_type];
+		} elseif (array_key_exists($mime_type, $config['allowed_video_types'])) {
+			$file_size = $_FILES['file']['size'];
+			if ($file_size > $config['max_video_filesize'])
+				error(sprintf3($config['error']['filesize'], array(
+					'filesz' => number_format($file_size),
+					'maxsz' => number_format($config['max_video_filesize'])
+				)));
+
+			$file_type = 'video';
+			$post['extension'] = $config['allowed_video_types'][$mime_type];
+		//} elseif (in_array($given_extension, $config['allowed_ext_files'])) {
+		//	$file_type = 'file';
+		//	$post['extension'] = $given_extension;
+		} else {
+			error($config['error']['unsupported_type']);
+		}
+
+		if (isset($config['filename_func']))
+			$post['file_id'] = $config['filename_func']($post);
+		else
+			$post['file_id'] = time() . substr(microtime(), 2, 3);
+
+		if ($post['mature'])
+			$post['file_id'] = 'mtr_' . $post['file_id'];
+
+		$post['file'] = $board['dir'] . $config['dir']['img'] . $post['file_id'] . '.' . $post['extension'];
+		$post['thumb'] = $board['dir'] . $config['dir']['thumb'] . $post['file_id'] . '.' .
+			($file_type === 'video' ?
+				$config['video_thumb_ext'] :
+				($config['thumb_ext'] ? $config['thumb_ext'] : $post['extension']));
 
 		// Truncate filename if it is too long
 		$post['filename'] = mb_substr($post['filename'], 0, $config['max_filename_len']);
 
-		$upload = $_FILES['file']['tmp_name'];
-
-		if (!is_readable($upload))
-			error($config['error']['nomove']);
-
 		$post['filehash'] = $config['file_hash']($upload);
 		$post['filesize'] = filesize($upload);
 
-		if ($is_an_image) {
+		if ($file_type === 'image' || $file_type === 'video') {
 			require_once 'inc/image.php';
 
-			// find dimensions of an image using GD
-			if (!$size = @getimagesize($upload)) {
-				error($config['error']['invalidimg']);
+			if (!$size = getUploadSize($upload, $file_type, $mime_type)) {
+				error($config['error']['invalid_file']);
 			}
+
 			if ($size[0] > $config['max_width'] || $size[1] > $config['max_height']) {
 				error($config['error']['maxsize']);
 			}
 
-
-			if ($post['extension'] == 'jpg' || $post['extension'] == 'jpeg') {
+			if ($mime_type === 'image/jpeg') {
 				// The following code corrects the image orientation.
 				// Currently only works with the 'convert' option selected but it could easily be expanded to work with the rest if you can be bothered.
-				if (!($config['redraw_image'] || ($config['strip_exif'] && ($post['extension'] == 'jpg' || $post['extension'] == 'jpeg')))) {
+				if (!($config['redraw_image'] || ($config['strip_exif'] && $mime_type === 'image/jpeg'))) {
 					if ($config['thumb_method'] == 'convert' || $config['thumb_method'] == 'convert+gifsicle') {
 						$exif = @exif_read_data($upload);
 						if (isset($exif['Orientation']) && $exif['Orientation'] != 1) {
@@ -710,35 +723,45 @@ if (isset($_POST['delete'])) {
 				}
 			}
 
-			// create image object
-			$image = new Image($upload, $post['extension']);
+			if ($file_type === 'image') {
+				// create image object
+				$image = new Image($upload, $post['extension']);
 
-			if ($image->size->width > $config['max_width'] || $image->size->height > $config['max_height']) {
-				$image->delete();
-				error($config['error']['maxsize']);
+				if ($image->size->width > $config['max_width'] || $image->size->height > $config['max_height']) {
+					$image->delete();
+					error($config['error']['maxsize']);
+				}
+
+				$post['width'] = $image->size->width;
+				$post['height'] = $image->size->height;
+			} elseif ($file_type === 'video') {
+				$post['width'] = $size[0];
+				$post['height'] = $size[1];
+			} else {
+				die("should not happen, invalid file_type $file_type");
 			}
-
-			$post['width'] = $image->size->width;
-			$post['height'] = $image->size->height;
 
 			if ($config['spoiler_images'] && isset($_POST['spoiler'])) {
 				$post['thumb'] = 'spoiler';
 
-				$size = @getimagesize($config['spoiler_image']);
-				$post['thumbwidth'] = $size[0];
-				$post['thumbheight'] = $size[1];
-			} elseif (($config['minimum_copy_resize'] && filesize($upload) < $config['max_thumb_filesize']) &&
-				$image->size->width <= $config['thumb_width'] &&
-				$image->size->height <= $config['thumb_height'] &&
-				(!$config['thumb_ext'] || $post['extension'] == $config['thumb_ext'])) {
-
+				$thumb_size = getimagesize($config['spoiler_image']);
+				$post['thumbwidth'] = $thumb_size[0];
+				$post['thumbheight'] = $thumb_size[1];
+			} elseif (
+				$file_type === 'image' &&
+				($config['minimum_copy_resize'] && filesize($upload) < $config['max_thumb_filesize']) &&
+				$post['width'] <= $config['thumb_width'] &&
+				$post['height'] <= $config['thumb_height'] &&
+				(!$config['thumb_ext'] || $post['extension'] == $config['thumb_ext']))
+			{
 				// Copy, because there's nothing to resize
 				copy($upload, $post['thumb']);
 
-				$post['thumbwidth'] = $image->size->width;
-				$post['thumbheight'] = $image->size->height;
+				$post['thumbwidth'] = $post['width'];
+				$post['thumbheight'] = $post['height'];
 			} else {
 				if ($post['thumb_included']) {
+
 					$post['thumb_included'] = false;
 					timing_mark('thumb_inc_start');
 					if (isset($_POST['thumbdurl'])) {
@@ -754,16 +777,16 @@ if (isset($_POST['delete'])) {
 							}
 						}
 					} else {
-						$size = $_FILES['thumbfile']['size'];
-						if ($size < $config['max_thumb_filesize'])
+						$thumb_filesize = $_FILES['thumbfile']['size'];
+						if ($thumb_filesize < $config['max_thumb_filesize'])
 							copy($_FILES['thumbfile']['tmp_name'], $post['thumb']);
 					}
 					if (is_readable($post['thumb'])) {
 						// find dimensions of an image using GD
-						if ($size = @getimagesize($post['thumb'])) {
+						if ($thumb_size = @getimagesize($post['thumb'])) {
 							$thumb_max_width = $post['op'] ? $config['thumb_op_width'] : $config['thumb_width'];
 							$thumb_max_height = $post['op'] ? $config['thumb_op_height'] : $config['thumb_height'];
-							if ($size[0] <= $thumb_max_width && $size[1] <= $thumb_max_height) {
+							if ($thumb_size[0] <= $thumb_max_width && $thumb_size[1] <= $thumb_max_height) {
 								$post['thumb_included'] = true;
 								$thumb = new Image($post['thumb'], 'png');
 								$thumb = $thumb->image;
@@ -777,16 +800,35 @@ if (isset($_POST['delete'])) {
 				}
 
 				if (!$post['thumb_included']) {
-					timing_mark('thumb_resize_start');
-					$thumb = $image->resize(
-						$config['thumb_ext'] ? $config['thumb_ext'] : $post['extension'],
-						$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
-						$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
-					);
-					timing_mark('thumb_resize_end');
-
-					$thumb->to($post['thumb']);
+					if ($file_type === 'image') {
+						timing_mark('thumb_resize_start');
+						$thumb = $image->resize(
+							$config['thumb_ext'] ? $config['thumb_ext'] : $post['extension'],
+							$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
+							$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
+						);
+						timing_mark('thumb_resize_end');
+					} elseif ($file_type === 'video') {
+						timing_mark('video_resize_start');
+						$newRes = computeResize(
+							$size[0], $size[1],
+							$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
+							$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
+						);
+						exec('avconv -ss 00:00:00 -i ' . escapeshellarg($upload) .
+							' -filter:v scale=' . $newRes['width'] . ':' . $newRes['height'] .
+							' -vframes 1 ' . escapeshellarg($post['thumb']), $__ignore, $ret);
+						if ($ret !== 0)
+							die('video thumbnailing error');
+						$thumb = new Image($post['thumb'], $config['video_thumb_ext']);
+						$thumb = $thumb->image;
+						timing_mark('video_resize_end');
+					} else {
+						die("should not happen, invalid file_type $file_type");
+					}
 				}
+
+				$thumb->to($post['thumb']);
 
 				$post['thumbwidth'] = $thumb->width;
 				$post['thumbheight'] = $thumb->height;
@@ -794,23 +836,29 @@ if (isset($_POST['delete'])) {
 				$thumb->_destroy();
 			}
 
-			if ($config['redraw_image'] || ($config['strip_exif'] && ($post['extension'] == 'jpg' || $post['extension'] == 'jpeg'))) {
-				$image->to($post['file']);
-				$dont_copy_file = true;
+			if ($file_type === 'image') {
+				if ($config['redraw_image'] || ($config['strip_exif'] && $mime_type === 'image/jpeg')) {
+					$image->to($post['file']);
+					$dont_copy_file = true;
+				}
+				$image->destroy();
+			} elseif ($file_type === 'video') {
+				// Nothing else needs to be done here.
+			} else {
+				die("should not happen, invalid file_type $file_type");
 			}
-			$image->destroy();
 		} else {
 			// not an image
-			//copy($config['file_thumb'], $post['thumb']);
+			die("file not really supported, extension is wrong");
 			$post['thumb'] = 'file';
 
-			$size = @getimagesize($config['file_thumb']);
-			$post['thumbwidth'] = $size[0];
-			$post['thumbheight'] = $size[1];
+			$thumb_size = @getimagesize($config['file_thumb']);
+			$post['thumbwidth'] = $thumb_size[0];
+			$post['thumbheight'] = $thumb_size[1];
 		}
 
 		if (!isset($dont_copy_file) || !$dont_copy_file) {
-			if (!@move_uploaded_file($_FILES['file']['tmp_name'], $post['file']))
+			if (!move_uploaded_file($_FILES['file']['tmp_name'], $post['file']))
 				error($config['error']['nomove']);
 		}
 	}
@@ -818,7 +866,7 @@ if (isset($_POST['delete'])) {
 	if ($post['has_file']) {
 		if ($config['image_reject_repost']) {
 			if ($p = getPostByHash($post['filehash'])) {
-				undoImage($post);
+				undoFile($post);
 				error(sprintf($config['error']['fileexists'],
 					( $post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'] ) .
 					$board['dir'] . $config['dir']['res'] .
@@ -831,7 +879,7 @@ if (isset($_POST['delete'])) {
 			}
 		} else if (!$post['op'] && ($thread['no_image_reposts'] || $config['image_reject_repost_in_thread'])) {
 			if ($p = getPostByHashInThread($post['filehash'], $post['thread'])) {
-				undoImage($post);
+				undoFile($post);
 				error(sprintf($config['error']['fileexistsinthread'],
 					( $post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'] ) .
 					$board['dir'] . $config['dir']['res'] .
@@ -846,7 +894,7 @@ if (isset($_POST['delete'])) {
 	}
 
 	if (!hasPermission($config['mod']['postunoriginal'], $board['uri']) && $config['robot_enable'] && checkRobot($post['body_nomarkup'])) {
-		undoImage($post);
+		undoFile($post);
 		if ($config['robot_mute']) {
 			error(sprintf($config['error']['muted'], mute()));
 		} else {
@@ -858,13 +906,13 @@ if (isset($_POST['delete'])) {
 	if ($post['has_file']) {
 		$post['file_path'] = $post['file'];
 		$post['file'] = substr_replace($post['file'], '', 0, mb_strlen($board['dir'] . $config['dir']['img']));
-		if ($is_an_image && $post['thumb'] != 'spoiler')
+		if (($file_type === 'image' || $file_type === 'video') && $post['thumb'] != 'spoiler')
 			$post['thumb'] = substr_replace($post['thumb'], '', 0, mb_strlen($board['dir'] . $config['dir']['thumb']));
 	}
 
 	$post = (object)$post;
 	if ($error = event('post', $post)) {
-		undoImage((array)$post);
+		undoFile((array)$post);
 		error($error);
 	}
 	$post = (array)$post;
