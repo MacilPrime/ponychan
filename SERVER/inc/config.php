@@ -494,13 +494,11 @@
 	// Strip EXIF metadata from JPEG files
 	$config['strip_exif'] = false;
 
-	// Allowed image file extensions
-	$config['allowed_ext'][] = 'jpg';
-	$config['allowed_ext'][] = 'jpeg';
-	$config['allowed_ext'][] = 'bmp';
-	$config['allowed_ext'][] = 'gif';
-	$config['allowed_ext'][] = 'png';
-	// $config['allowed_ext'][] = 'svg';
+	// Allowed file mime types and their default extensions
+	$config['allowed_types']['image/jpeg'] = 'jpg';
+	$config['allowed_types']['image/bmp'] = 'bmp'; // TODO auto-convert these to png
+	$config['allowed_types']['image/gif'] = 'gif';
+	$config['allowed_types']['image/png'] = 'png';
 
 	// Allowed additional file extensions (not images; downloadable files)
 	// $config['allowed_ext_files'][] = 'txt';
@@ -816,7 +814,6 @@
 	$config['error']['tooshort_body']	= _('The body was too short or empty.');
 	$config['error']['noimage']		= _('You must upload an image.');
 	$config['error']['nomove']		= _('The server failed to handle your upload.');
-	$config['error']['fileext']		= _('Unsupported image format.');
 	$config['error']['noboard']		= _('Invalid board!');
 	$config['error']['nonexistant']		= _('Thread specified does not exist.');
 	$config['error']['locked']		= _('Thread locked. You may not reply at this time.');
@@ -839,7 +836,7 @@
 	$config['error']['toomanyedits']	= _('You can only edit one post at once.');
 	$config['error']['invalidpassword']	= _('Wrong password…');
 	$config['error']['invalidimg']		= _('Invalid image.');
-	$config['error']['unknownext']		= _('Unknown file extension.');
+	$config['error']['unsupported_type']		= _('Unsupported file type.');
 	$config['error']['filesize']		= _('Maximum file size: %maxsz% bytes<br>Your file\'s size: %filesz% bytes');
 	$config['error']['maxsize']		= _('The file was too big.');
 	$config['error']['invalidzip']		= _('Invalid archive!');

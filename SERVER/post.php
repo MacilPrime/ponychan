@@ -626,20 +626,6 @@ if (isset($_POST['delete'])) {
 		}
 	}
 
-	if ($post['has_file']) {
-		$post['extension'] = strtolower(substr($post['filename'], strrpos($post['filename'], '.') + 1));
-		if (isset($config['filename_func']))
-			$post['file_id'] = $config['filename_func']($post);
-		else
-			$post['file_id'] = time() . substr(microtime(), 2, 3);
-
-		if ($post['mature'])
-			$post['file_id'] = 'mtr_' . $post['file_id'];
-
-		$post['file'] = $board['dir'] . $config['dir']['img'] . $post['file_id'] . '.' . $post['extension'];
-		$post['thumb'] = $board['dir'] . $config['dir']['thumb'] . $post['file_id'] . '.' . ($config['thumb_ext'] ? $config['thumb_ext'] : $post['extension']);
-	}
-
 	// Check string lengths
 	if (mb_strlen($post['name']) > 75)
 		error(sprintf($config['error']['toolong'], 'name'));
@@ -669,18 +655,31 @@ if (isset($_POST['delete'])) {
 	do_filters($post);
 
 	if ($post['has_file']) {
-		if (!in_array($post['extension'], $config['allowed_ext']) && !in_array($post['extension'], $config['allowed_ext_files']))
-			error($config['error']['unknownext']);
+		$upload = $_FILES['file']['tmp_name'];
+		if (!is_readable($upload))
+			error($config['error']['nomove']);
+
+		$mime_type = trim(shell_exec('file -b --mime-type ' . escapeshellarg($upload)));
+
+		if (!array_key_exists($mime_type, $config['allowed_types']))
+			error($config['error']['unsupported_type']);
+
+		$post['extension'] = $config['allowed_types'][$mime_type];
+		if (isset($config['filename_func']))
+			$post['file_id'] = $config['filename_func']($post);
+		else
+			$post['file_id'] = time() . substr(microtime(), 2, 3);
+
+		if ($post['mature'])
+			$post['file_id'] = 'mtr_' . $post['file_id'];
+
+		$post['file'] = $board['dir'] . $config['dir']['img'] . $post['file_id'] . '.' . $post['extension'];
+		$post['thumb'] = $board['dir'] . $config['dir']['thumb'] . $post['file_id'] . '.' . ($config['thumb_ext'] ? $config['thumb_ext'] : $post['extension']);
 
 		$is_an_image = !in_array($post['extension'], $config['allowed_ext_files']);
 
 		// Truncate filename if it is too long
 		$post['filename'] = mb_substr($post['filename'], 0, $config['max_filename_len']);
-
-		$upload = $_FILES['file']['tmp_name'];
-
-		if (!is_readable($upload))
-			error($config['error']['nomove']);
 
 		$post['filehash'] = $config['file_hash']($upload);
 		$post['filesize'] = filesize($upload);
@@ -697,10 +696,10 @@ if (isset($_POST['delete'])) {
 			}
 
 
-			if ($post['extension'] == 'jpg' || $post['extension'] == 'jpeg') {
+			if ($mime_type === 'image/jpeg') {
 				// The following code corrects the image orientation.
 				// Currently only works with the 'convert' option selected but it could easily be expanded to work with the rest if you can be bothered.
-				if (!($config['redraw_image'] || ($config['strip_exif'] && ($post['extension'] == 'jpg' || $post['extension'] == 'jpeg')))) {
+				if (!($config['redraw_image'] || ($config['strip_exif'] && $mime_type === 'image/jpeg'))) {
 					if ($config['thumb_method'] == 'convert' || $config['thumb_method'] == 'convert+gifsicle') {
 						$exif = @exif_read_data($upload);
 						if (isset($exif['Orientation']) && $exif['Orientation'] != 1) {
@@ -794,7 +793,7 @@ if (isset($_POST['delete'])) {
 				$thumb->_destroy();
 			}
 
-			if ($config['redraw_image'] || ($config['strip_exif'] && ($post['extension'] == 'jpg' || $post['extension'] == 'jpeg'))) {
+			if ($config['redraw_image'] || ($config['strip_exif'] && $mime_type === 'image/jpeg')) {
 				$image->to($post['file']);
 				$dont_copy_file = true;
 			}
