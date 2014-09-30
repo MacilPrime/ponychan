@@ -35,13 +35,13 @@ function hashCode(x, prevHash){
 		var hash = 0;
 		if (prevHash)
 			hash = prevHash;
-		
+
 		var keys = [];
 		$.each(x, function(key, value) {
 			keys.push(key);
 		});
 		keys.sort();
-		
+
 		hash = basicStringHash("object:len:"+keys.length, hash);
 		$.each(keys, function(i, key) {
 			hash = basicStringHash(";"+i+key+":", hash);
@@ -82,7 +82,7 @@ if (!userid || userid.length != 32) {
 	} catch (e) {}
 }
 var expires = new Date();
-expires.setTime((new Date).getTime()+60480000000)
+expires.setTime((new Date()).getTime()+60480000000);
 document.cookie = "userid="+escape(userid)+"; expires="+expires.toGMTString()+"; path="+siteroot;
 
 var maxRetryTime = 3*60*1000;
@@ -116,16 +116,16 @@ function send_error(error, retryTime) {
 		error = {message: error};
 	else if (error instanceof Error)
 		error = error_to_object(error);
-	
+
 	error.pageurl = document.location.href;
 	var errorString = JSON.stringify(error);
 	var data = {type: "error", userid: userid, data: errorString};
-		
+
 	if (!error.hasOwnProperty("message") && !malformed_errors.hasOwnProperty(errorString)) {
 		malformed_errors[errorString] = true;
 		log_error("send_error called without error.message");
 	}
-	
+
 	var now = (new Date()).getTime();
 	if (now < noSendBefore) {
 		if (send_queued < send_maxQueued) {
@@ -137,18 +137,18 @@ function send_error(error, retryTime) {
 		}
 		return;
 	}
-	
+
 	if (!retryTime)
 		retryTime = 3*1000;
 	else if (retryTime > maxRetryTime)
 		retryTime = maxRetryTime;
-	
+
 	noSendBefore = now + noSendDelay;
 
 	noSendDelay *= 2;
 	if (noSendDelay > maxRetryTime)
 		noSendDelay = maxRetryTime;
-	
+
 	$.ajax({
 		url: logger_url,
 		cache: false,
@@ -181,7 +181,7 @@ var error_handler_nest_count = 0;
 window.onerror = function(errorMsg, url, lineNumber, columnNumber, error) {
 	if (error_handler_nest_count <= 1) {
 		error_handler_nest_count++;
-		
+
 		if (error) {
 			error.caughtBy = "window.onerror with error object";
 			send_error(error);
@@ -195,7 +195,7 @@ window.onerror = function(errorMsg, url, lineNumber, columnNumber, error) {
 			};
 			send_error(errorObj);
 		}
-		
+
 		error_handler_nest_count--;
 	}
 	if (old_onerror)
@@ -204,15 +204,15 @@ window.onerror = function(errorMsg, url, lineNumber, columnNumber, error) {
 };
 
 function send_usage(retryTime) {
-	
+
 	// localStorage is used to know if we've already sent in a
 	// usage report to not spam the system.
 	if (!window.localStorage) return;
-	
+
 	var usage = {};
-	
+
 	usage.settings = settings.getAllSettings(true);
-	
+
 	usage.supportFile = typeof FileReader != "undefined" && !!FileReader;
 	usage.supportFormData = typeof FormData != "undefined" && !!FormData;
 	usage.supportPostMessage = typeof window.postMessage != "undefined" && !!window.postMessage;
@@ -221,38 +221,38 @@ function send_usage(retryTime) {
 	usage.supportWindowScrollTo = typeof window.scrollTo != "undefined" && !!window.scrollTo;
 	usage.supportCanvas = !!window.HTMLCanvasElement;
 	usage.supportVisibility = Visibility.isSupported();
-	
+
 	var wURL = window.URL || window.webkitURL;
 	usage.supportwURL = typeof wURL != "undefined" && !!wURL;
-	
+
 	usage.supportGetSelection = typeof window.getSelection != "undefined" && !!window.getSelection;
-	
+
 	if (olduserid)
 		usage.olduserid = olduserid;
-	
+
 	if (document.location.protocol == 'http:') {
 		usage.http_user = true;
 		if (localStorage.last_https_send)
 			usage.last_https_send = parseInt(localStorage.last_https_send);
 	}
-	
+
 	// usage object construction end
-	
+
 	var last_usage_hash_key = "last_usage_data:"+siteroot;
 
-	var usageHash = hashCode(userid + hashCode(usage))
+	var usageHash = hashCode(userid + hashCode(usage));
 	if (usageHash == localStorage.getItem(last_usage_hash_key))
 		return;
-	
+
 	var usageString = JSON.stringify(usage);
-	
+
 	var data = {type: "usage", userid: userid, data: usageString};
-	
+
 	if (!retryTime)
 		retryTime = 3*1000;
 	else if (retryTime > maxRetryTime)
 		retryTime = maxRetryTime;
-	
+
 	$.ajax({
 		url: logger_url,
 		cache: false,
@@ -279,12 +279,12 @@ function send_misc(misc, retryTime) {
 	misc.pageurl = document.location.href;
 	var miscString = JSON.stringify(misc);
 	var data = {type: "misc", userid: userid, data: miscString};
-	
+
 	if (!retryTime)
 		retryTime = 3*1000;
 	else if (retryTime > maxRetryTime)
 		retryTime = maxRetryTime;
-	
+
 	$.ajax({
 		url: logger_url,
 		cache: false,
@@ -310,7 +310,7 @@ var _misc_log_rapid_data = [];
 var _misc_log_rapid_timer = null;
 function misc_log_rapid(data) {
 	_misc_log_rapid_data.push([Date.now(), data]);
-	
+
 	if (!_misc_log_rapid_timer) {
 		_misc_log_rapid_timer = setTimeout(function() {
 			send_misc({type:"rapid", log:_misc_log_rapid_data});

@@ -240,7 +240,7 @@ $(document).ready(function(){
 		.appendTo($row);
 	var $auto = $("<input/>")
 		.attr("id", "qrauto")
-		.attr("type", "checkbox")
+		.attr("type", "checkbox");
 	var $autolabel = $("<label/>")
 		.text("Auto Mode")
 		.attr("title", "Automatically post the next reply in queue")
@@ -515,7 +515,7 @@ $(document).ready(function(){
 					}
 				}
 			}
-		}
+		};
 		this.select = function() {
 			$("#qrthumbselected").removeAttr("id");
 			this.el.attr("id", "qrthumbselected");
@@ -529,7 +529,7 @@ $(document).ready(function(){
 				.on("input.selectedreply change.selectedreply", function() {
 					selectedreply.comment = $comment.val();
 				});
-		}
+		};
 		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
 				delete this.filethumb;
@@ -545,7 +545,7 @@ $(document).ready(function(){
 			if (!dontResetFileInput && selectedreply === this) {
 				resetFileInput();
 			}
-		}
+		};
 		this.rm = function() {
 			this.rmfile();
 			if (replies.length > 1) {
@@ -561,7 +561,7 @@ $(document).ready(function(){
 			// comment field and such gets reset.
 			if (selectedreply === this)
 				replies[0].select();
-		}
+		};
 	}
 
 	function addReply() {
@@ -814,7 +814,7 @@ $(document).ready(function(){
 		} else {
 			QRtopY = 0;
 		}
-	};
+	}
 	setTopY();
 
 	function positionQR(newX, newY) {
@@ -926,9 +926,10 @@ $(document).ready(function(){
 
 		$QRwarning.text("");
 
+		var data;
 		if (useFormData) {
 			try {
-				var data = new FormData($QRForm[0]);
+				data = new FormData($QRForm[0]);
 			} catch(e) {}
 		}
 
