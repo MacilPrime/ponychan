@@ -908,7 +908,16 @@ function threadExists($id) {
 
 function post(array $post) {
 	global $pdo, $board;
-	$query = prepare(sprintf("INSERT INTO `posts_%s` (`id`, `thread`, `subject`, `email`, `name`, `trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, `thumbwidth`, `thumbheight`, `file`, `filewidth`, `fileheight`, `filesize`, `filename`, `filehash`, `password`, `ip`, `sticky`, `locked`, `sage`, `embed`, `mature`) VALUES ( NULL, :thread, :subject, :email, :name, :trip, :capcode, :body, :body_nomarkup, :time, :time, :thumb, :thumbwidth, :thumbheight, :file, :width, :height, :filesize, :filename, :filehash, :password, :ip, :sticky, :locked, 0, :embed, :mature)", $board['uri']));
+	$query = prepare(sprintf(
+		'INSERT INTO `posts_%s` (`id`, `thread`, `subject`, `email`, `name`, ' .
+		'`trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, ' .
+		'`thumbwidth`, `thumbheight`, `file`, `filewidth`, `fileheight`, ' .
+		'`filesize`, `filename`, `filehash`, `password`, `ip`, `sticky`, ' .
+		'`locked`, `sage`, `embed`, `mature`) VALUES ( NULL, :thread, :subject, ' .
+		':email, :name, :trip, :capcode, :body, :body_nomarkup, :time, :time, ' .
+		':thumb, :thumbwidth, :thumbheight, :file, :width, :height, :filesize, ' .
+		':filename, :filehash, :password, :ip, :sticky, :locked, 0, :embed, ' .
+		':mature)', $board['uri']));
 
 	// Basic stuff
 	if (!empty($post['subject'])) {
