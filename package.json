@@ -8,10 +8,14 @@
     "q": "^1.0.1"
   },
   "devDependencies": {
-    "gulp": "^3.8.7",
-    "gulp-concat": "^2.3.4",
-    "gulp-rename": "^1.2.0",
-    "gulp-traceur": "0.6.0",
-    "streamqueue": "0.1.2"
+    "browserify": "^5.12.1",
+    "es6ify": "^1.4.0",
+    "gulp": "^3.8.8",
+    "gulp-sourcemaps": "^1.2.2",
+    "gulp-streamify": "0.0.5",
+    "mold-source-map": "^0.3.0",
+    "stdio": "^0.2.3",
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^1.0.6"
   }
 }
