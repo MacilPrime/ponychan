@@ -170,7 +170,7 @@ function send_error(error, retryTime) {
 	});
 }
 
-function log_error(error) {
+export function log_error(error) {
 	console.error(error);
 	send_error(error);
 }
