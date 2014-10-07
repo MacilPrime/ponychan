@@ -1,9 +1,7 @@
 require('./visibility.min.js');
 
-window.Bacon = require('baconjs');
 window.jQuery = window.$ = require('jquery');
 window.Q = require('q');
-window.moment = require('moment');
 
 require('./logger.js');
 require('./default.js');
@@ -40,4 +38,4 @@ require('./desktop-notifier.js');
 require('./hide-trip.js');
 
 // debugging purposes
-window._require = require;
+window._main_require = require;
