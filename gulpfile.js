@@ -18,7 +18,8 @@ gulp.task('client-js-extra', function() {
 gulp.task('client-js-main', function() {
   var bundler = browserify({
     debug: true,
-    entries: ['./jsmain/main.js']
+    entries: ['./jsmain/main.js'],
+    noparse: ['jquery', 'moment', 'baconjs', 'q']
   });
 
   var bundle = bundler.bundle();
