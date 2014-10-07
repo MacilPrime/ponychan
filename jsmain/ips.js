@@ -9,13 +9,13 @@ settings.newSetting("mod_obscure_ips", "bool", true, "Obscure user IP addresses"
 
 $(document).ready(function() {
 	var obscure_ips = settings.getSetting("mod_obscure_ips");
-	
+
 	function getIPfromlink($a) {
 		var m = /\?\/IP\/(.*)$/.exec($a.attr('href'));
 		return m ? m[1] : "Error";
 	}
 
-	var processIPs = function(context) {
+	function processIPs(context) {
 		if (obscure_ips) {
 			$(".posterip a", context)
 				.text("IP")

@@ -11,10 +11,10 @@
 
 (function(exports) {
 	settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6});
-	
+
 	var myposts = [];
 	exports.myposts = myposts;
-	
+
 	function loadMyPosts() {
 		if (window.sessionStorage && sessionStorage.myposts)
 			exports.myposts = myposts = JSON.parse(sessionStorage.myposts);
@@ -24,44 +24,42 @@
 			sessionStorage.myposts = JSON.stringify(myposts);
 	}
 	loadMyPosts();
-	
+
 	function descLinks() {
 		var $thread;
 		if ($(this).hasClass('thread'))
 			$thread = $(this);
 		else
 			$thread = $(this).parents('.thread').first();
-		
+
 		if (!$thread.length) {
 			if ($('.thread').length == 1)
 				$thread = $('.thread');
 			else
 				return;
 		}
-		
+
 		var $OP = $thread.find('div.post.op');
 		var OP = get_post_num($OP);
 		var board = get_post_board($OP);
-		
+
 		$(this).find('a.bodylink.postlink').each(function() {
-			var postnum;
-			
-			if(postnum = $(this).text().match(/^>>(\d+)/))
-				postnum = parseInt(postnum[1]);
-			else
-				return;
-			
-			if (postnum == OP && !$(this).children(".opnote").length) {
-				$(this).append( $('<span/>').addClass('opnote').text(' (OP)') );
-			}
-			
-			var postid = board+':'+postnum;
-			if (myposts.indexOf(postid) != -1 && !$(this).children(".younote").length) {
-				$(this).append( $('<span/>').addClass('younote').text(' (You)') );
+			var match = $(this).text().match(/^>>(\d+)/);
+			if (match) {
+				var postnum = parseInt(match[1]);
+
+				if (postnum == OP && !$(this).children(".opnote").length) {
+					$(this).append( $('<span/>').addClass('opnote').text(' (OP)') );
+				}
+
+				var postid = board+':'+postnum;
+				if (myposts.indexOf(postid) != -1 && !$(this).children(".younote").length) {
+					$(this).append( $('<span/>').addClass('younote').text(' (You)') );
+				}
 			}
 		});
 	}
-	
+
 	function updateLinkInfo() {
 		if (settings.getSetting("link_show_you"))
 			setCss("linkinfo", "");
@@ -75,9 +73,9 @@
 		saveMyPosts();
 	}).ready(function() {
 		updateLinkInfo();
-		
+
 		$('.thread').each(descLinks);
-		
+
 		$(document).on('new_post', function(e, post) {
 			$(post).each(descLinks);
 		}).on("setting_change", function(e, setting) {

@@ -29,10 +29,10 @@ $(document).ready(function() {
 					.attr('type', 'button')
 					.appendTo($buttonP);
 			}
-			
+
 			$text.addClass('off');
-			$button.text('Show')
-			
+			$button.text('Show');
+
 			$button.on('click.hider', function() {
 				if(!$text.hasClass('off')) {
 					$text.addClass('off');
@@ -42,7 +42,7 @@ $(document).ready(function() {
 					$button.text('Hide');
 				}
 				return false;
-			})
+			});
 		});
 	};
 

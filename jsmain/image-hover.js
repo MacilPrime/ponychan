@@ -67,7 +67,7 @@ $(document).ready(function(){
 			if($hover.length == 0)
 				return;
 
-			var top = (e.pageY ? e.pageY : hovered_at['y']) - 10;
+			var top = (e.pageY ? e.pageY : hovered_at.y) - 10;
 
 			if(e.pageY < $(window).scrollTop() + 15) {
 				top = $(window).scrollTop();
@@ -75,7 +75,7 @@ $(document).ready(function(){
 				top = $(window).scrollTop() + $(window).height() - $hover.height() - 30;
 			}
 
-			$hover.css('left', (e.pageX ? e.pageX : hovered_at['x']) + 20).css('top', top);
+			$hover.css('left', (e.pageX ? e.pageX : hovered_at.x) + 20).css('top', top);
 		}).click(function() {
 			$image.trigger('mouseleave');
 		});

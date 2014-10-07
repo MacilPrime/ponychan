@@ -22,35 +22,35 @@ $(document).ready(function(){
 			setCss("hide_button", ".postHider { display: none; }");
 	}
 	init_hide_style();
-	
+
 	function init_mature() {
 		var expires = new Date();
 		if (settings.getSetting("show_mature")) {
-			expires.setTime((new Date).getTime()+60480000000)
+			expires.setTime((new Date()).getTime()+60480000000);
 			document.cookie = "show_mature=true; expires="+expires.toGMTString()+"; path="+siteroot;
-			
+
 			$(".mature_warning").hide();
 			$(".mature_thread, .mature_post_button, #setting_mature_as_spoiler").show();
 			switch_mature_as_spoiler();
 		} else {
-			expires.setTime((new Date).getTime()-50000)
+			expires.setTime((new Date()).getTime()-50000);
 			document.cookie = "show_mature=false; expires="+expires.toGMTString()+"; path="+siteroot;
-			
+
 			$(".mature_warning").show();
 			$(".mature_thread, .mature_post_button, #setting_mature_as_spoiler").hide();
 		}
 	}
 	init_mature();
-	
+
 	function prep_mature_images(context) {
 		$("img[data-mature-src]", context).each(function() {
 			var $img = $(this);
-			
+
 			if (!settings.getSetting("mature_as_spoiler")) {
 				if ($img.attr("data-spoiler-src") == undefined)
 					$img.attr("data-spoiler-src", $img.attr("src"));
 				$img.attr("src", $img.attr("data-mature-src"));
-				
+
 				if ($img.attr("data-mature-style") != undefined) {
 					if ($img.attr("data-spoiler-style") == undefined)
 						$img.attr("data-spoiler-style", $img.attr("style"));
@@ -90,7 +90,7 @@ $(document).ready(function(){
 			prep_mature_images(document.body);
 		}
 	}
-	
+
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "show_hide_buttons")
 			init_hide_style();
@@ -130,7 +130,7 @@ $(document).ready(function(){
 		$postC.find(".postStub").remove();
 		var $intro = $postC.find(".intro:first");
 		var name = $intro.find(".name").text() + $intro.find(".trip").text();
-		
+
 		var $stub = $("<div/>")
 			.addClass("postStub")
 			.appendTo($postC);
@@ -148,10 +148,10 @@ $(document).ready(function(){
 			hidden_posts.unshift(postid);
 			save_hidden_posts();
 		}
-		
+
 		var $postC = $("#replyC_"+postnum);
 		do_hide_post($postC);
-	};
+	}
 
 	function do_show_post($postC) {
 		if ($postC.hasClass("opContainer")) {
@@ -171,15 +171,15 @@ $(document).ready(function(){
 			hidden_posts.splice(hidden_index, 1);
 			save_hidden_posts();
 		}
-		
+
 		var $postC = $("#replyC_"+postnum);
 		do_show_post($postC);
-	};
+	}
 
 	function is_post_hidden(board, postnum) {
 		var postid = board+":"+postnum;
 		return hidden_posts.indexOf(postid) != -1;
-	};
+	}
 
 	function hide_this_post() {
 		var $pc = $(this).parents(".postContainer").first();
@@ -202,7 +202,7 @@ $(document).ready(function(){
 			if ($post.hasClass("mature_post") && settings.getSetting("show_mature")) {
 				prep_mature_images($post);
 			}
-			
+
 			// Don't hide a thread if we're trying to view
 			// it specifically.
 			if ($post.hasClass("op") && $('div.banner').length)
@@ -213,7 +213,7 @@ $(document).ready(function(){
 			// itself.
 			if (!$post.attr("id"))
 				return;
-			
+
 			// Everything following is for regular post
 			// hiding functionality, which requires a
 			// .postContainer element.
@@ -222,7 +222,7 @@ $(document).ready(function(){
 				return;
 
 			var $thread = $pc.parents(".thread").first();
-			
+
 			place_button($post);
 			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
 			if (is_post_hidden(get_post_board($pc.children(".post")), postnum)) {
@@ -236,7 +236,7 @@ $(document).ready(function(){
 					threads_needed--;
 			}
 		});
-		
+
 		// Load more threads onto the page to make up for
 		// hidden threads if this is an index page. Only load
 		// more threads on page 1 and if a page 2 exists
@@ -250,12 +250,12 @@ $(document).ready(function(){
 					var $threads = $(".thread", data);
 					$threads.each(function() {
 						var $thread = $(this);
-						
+
 						// If this thread already exists on
 						// the current page, ignore it.
 						if ($("#"+$thread.attr("id")).not(".preview-hidden").length > 0)
 							return;
-						
+
 						// It would be silly if we just loaded hidden threads onto this
 						// page to make up for hidden threads.
 						var postnum = /replyC_(\d+)/.exec($thread.find(".opContainer").first().attr("id"))[1];
@@ -265,7 +265,7 @@ $(document).ready(function(){
 						// If it's a mature thread and we can't view those, skip it.
 						if ($thread.hasClass("mature_thread") && !settings.getSetting("show_mature"))
 							return;
-						
+
 						$thread.attr("data-loaded-late", true);
 						$(".thread").not(".preview-hidden").last().after($thread);
 						$thread.find(".post").each(function() {
