@@ -505,6 +505,7 @@ table.mod.config-editor input[type="text"] {
 }
 .diceroll, .conch {
 	font-weight: bold;
+	margin-right: 0.75em;
 }
 .diceroll:before {
 	content: url(img/dice.png);
