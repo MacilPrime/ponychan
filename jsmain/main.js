@@ -7,7 +7,6 @@ window.moment = require('moment');
 
 require('./logger.js');
 require('./default.js');
-require('./thumbnailer.js');
 require('./notice.js');
 require('./settings.js');
 require('./state.js');
@@ -39,3 +38,6 @@ require('./embed.js');
 require('./search.js');
 require('./desktop-notifier.js');
 require('./hide-trip.js');
+
+// debugging purposes
+window._require = require;

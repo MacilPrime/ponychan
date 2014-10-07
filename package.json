@@ -9,15 +9,11 @@
   },
   "devDependencies": {
     "browserify": "^5.12.1",
-    "es6ify": "^1.4.0",
     "gulp": "^3.8.8",
     "gulp-sourcemaps": "^1.2.2",
     "gulp-streamify": "0.0.5",
     "mocha": "^1.21.4",
     "mold-source-map": "^0.3.0",
-    "stdio": "^0.2.3",
-    "traceur": "0.0.62",
-    "vinyl-source-stream": "^1.0.0",
-    "watchify": "^1.0.6"
+    "vinyl-source-stream": "^1.0.0"
   }
 }

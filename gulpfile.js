@@ -1,7 +1,5 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
-var watchify = require('watchify');
-var es6ify = require('es6ify');
 var source = require('vinyl-source-stream');
 var mold = require('mold-source-map');
 var streamify = require('gulp-streamify');
@@ -18,10 +16,10 @@ gulp.task('client-js-extra', function() {
 });
 
 gulp.task('client-js-main', function() {
-  var bundler = browserify({debug: true})
-    .add(es6ify.runtime)
-    .transform(require('es6ify').configure(/^(?!.*node_modules)+.+\.js$/))
-    .require(require.resolve('./jsmain/main.js'), {entry: true});
+  var bundler = browserify({
+    debug: true,
+    entries: ['./jsmain/main.js']
+  });
 
   var bundle = bundler.bundle();
   var result = bundle

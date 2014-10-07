@@ -3,7 +3,7 @@
  *
  */
 
-import { log_error } from "./logger";
+var log_error = require('./logger').log_error;
 
 $(document).ready(function(){
 	var $secondLine = $("footer .unimportant").slice(1,2);
@@ -29,7 +29,7 @@ $(document).ready(function(){
 
 	if (Math.random() < 0.0014)
 		betterName();
-	
+
 	try {
 		localStorage.removeItem("event_saw_nightmare");
 		localStorage.removeItem("event_saw_gc");

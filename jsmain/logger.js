@@ -170,10 +170,11 @@ function send_error(error, retryTime) {
 	});
 }
 
-export function log_error(error) {
+function log_error(error) {
 	console.error(error);
 	send_error(error);
 }
+exports.log_error = log_error;
 
 var old_onerror = window.onerror;
 

@@ -11,7 +11,7 @@
  *
  */
 
-import { log_error } from "./logger";
+var log_error = require('./logger').log_error;
 
 window.get_cookie = function get_cookie(cookie_name) {
 	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');

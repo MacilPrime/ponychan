@@ -11,17 +11,17 @@
  *
  */
 
-import { log_error } from "./logger";
+var log_error = require('./logger').log_error;
 
 (function(exports) {
 	var styleChoices = {};
 	$.each(styles, function(name, file) {
 		styleChoices[name] = name;
 	});
-	
+
 	settings.newSetting("style", "select", selectedstyle, "Theme", 'pagestyle',
 			    {orderhint: 1, selectOptions: styleChoices, defpriority: 0});
-	
+
 	function apply(stylename) {
 		if (styles[stylename] == null) {
 			console.log('Unknown style:', stylename);
@@ -36,15 +36,15 @@ import { log_error } from "./logger";
 				.appendTo(document.head);
 		}
 		$stylesheet.attr("href", styles[stylename]);
-		
+
 		$(document).trigger('style_changed', $stylesheet[0]);
 	}
 	exports.apply = apply;
-	
+
 	function applySelectedStyle() {
 		apply(settings.getSetting("style"));
 	}
-	
+
 	applySelectedStyle();
 	$(document).on("setting_change", function(e, setting) {
 		if (setting === "style") {

@@ -6,7 +6,7 @@
  *
  */
 
-import { log_error } from "./logger";
+var log_error = require('./logger').log_error;
 
 var max_watched_threads = 70;
 var watcher_poll_time = 30 * 1000;
@@ -27,7 +27,7 @@ function save_watched_threads() {
 
 function add_watch($post) {
 	var postid = get_post_id($post);
-	
+
 	load_watched_threads();
 	if (!watched_threads.hasOwnProperty(postid)) {
 		if (Object.keys(watched_threads).length >= max_watched_threads) {
@@ -48,10 +48,10 @@ function add_watch($post) {
 		if (thread_data.post.length > 80) {
 			thread_data.post = thread_data.post.slice(0,80)+'…';
 		}
-		
+
 		watched_threads[postid] = thread_data;
 		save_watched_threads();
-		
+
 		add_watch_buttons($("."+get_post_class(postid)));
 		if ($(".watcherButton").length == 0) {
 			init_watcher_menu();
@@ -68,7 +68,7 @@ function remove_watch(postid) {
 	load_watched_threads();
 	delete watched_threads[postid];
 	save_watched_threads();
-	
+
 	add_watch_buttons($("."+get_post_class(postid)));
 	if (Object.keys(watched_threads).length == 0) {
 		init_watcher_menu();
@@ -76,14 +76,14 @@ function remove_watch(postid) {
 		populate_watcher_screen();
 		run_watcher_refresher();
 	}
-	
+
 	alert("Thread unwatched");
 }
 
 function add_watch_buttons($posts) {
 	$posts.each(function() {
 		var $post = $(this);
-		
+
 		$post.find('.postfooter').remove();
 		var $footer = $("<div/>")
 			.addClass('postfooter')
@@ -91,7 +91,7 @@ function add_watch_buttons($posts) {
 		var $watchlink = $("<a/>")
 			.appendTo($footer)
 			.attr('href', 'javascript:void(0);');
-		
+
 		var postid = get_post_id($post);
 		if (watched_threads.hasOwnProperty(postid)) {
 			$watchlink
@@ -113,7 +113,7 @@ var watcher_query = null;
 function refresh_watched_threads(callback) {
 	if (watcher_query)
 		query.abort();
-	
+
 	var request_date = new Date();
 	watcher_query = $.ajax({
 		url: siteroot+'watcher/threads',
@@ -168,7 +168,7 @@ function refresh_watched_threads(callback) {
 						changed = true;
 					}
 				}
-				
+
 				if (changed)
 					save_watched_threads();
 				populate_watcher_screen();
@@ -212,11 +212,11 @@ function populate_watcher_screen() {
 
 	for (var id in watched_threads) {
 		var thread = watched_threads[id];
-		
+
 		var match = /^(\w+):(\d+)$/.exec(id);
 		var board = match[1];
 		var postnum = match[2];
-		
+
 		var $name = $('<span/>')
 			.addClass('wname')
 			.text(thread.opname);
@@ -261,7 +261,7 @@ function populate_watcher_screen() {
 				$postcounter.append('(', $allposts, ')');
 			}
 		}
-		
+
 		var $postlink = $('<a/>')
 			.addClass('wlink')
 			.attr('href', make_thread_url(board, postnum)+unread_hash)
@@ -321,21 +321,21 @@ var watcher_refresher_running = false;
 var watcher_refresher_timer = null;
 function run_watcher_refresher() {
 	end_watcher_refresher();
-	
+
 	watcher_refresher_running = true;
 	var multiplier = 1;
-	
+
 	function runner(success) {
 		if (Object.keys(watched_threads).length == 0) {
 			watcher_refresher_running = false;
 			return;
 		}
-		
+
 		if (success)
 			multiplier = 1;
 		else
 			multiplier++;
-		
+
 		watcher_refresher_timer = setTimeout(refresh_watched_threads, watcher_poll_time * multiplier, runner);
 	}
 	refresh_watched_threads(runner);
@@ -354,10 +354,10 @@ function end_watcher_refresher() {
 
 function init_watcher_menu() {
 	$(".watcherButton, #watcherScreen").remove();
-	
+
 	if (Object.keys(watched_threads).length == 0)
 		return;
-	
+
 	var $watcherButton = $("<a/>")
 		.addClass("watcherButton")
 		.text("watcher")
@@ -371,7 +371,7 @@ function init_watcher_menu() {
 		.hide();
 
 	populate_watcher_screen();
-	
+
 	$watcherButton.click(open_watcher);
 
 	run_watcher_refresher();
@@ -391,12 +391,12 @@ function watcher_acknowledge_page() {
 		if (match)
 			reply_count += parseInt(match[1]);
 	});
-	
+
 	var last_seen_time = 0;
 	if ($('.thread .post:not(.post-inline):last').length) {
 		last_seen_time = (new Date($('.thread .post:not(.post-inline):last .intro:first time').attr('datetime'))).getTime()/1000;
 	}
-	
+
 	if (watched_threads[threadid].seen_reply_count != reply_count ||
 	    watched_threads[threadid].last_seen_time != last_seen_time) {
 		load_watched_threads();
@@ -435,14 +435,14 @@ var page_thread_id = null;
 
 $(document).ready(function() {
 	if (!window.localStorage) return;
-	
+
 	if ($('div.banner').length && $('.thread .post.op').length)
 		page_thread_id = get_post_id($('.thread .post.op').first());
-	
+
 	if ($('div.banner').length && window.location.hash == '#unread') {
 		jump_to_first_unread_post();
 	}
-	
+
 	watcher_acknowledge_page();
 	init_watcher_menu();
 	add_watch_buttons( $(".post.op") );
@@ -452,7 +452,7 @@ $(document).ready(function() {
 		var $post = $(post);
 		if ($post.is(".op"))
 			add_watch_buttons($post);
-		
+
 		if (!watcher_ack_pending) {
 			watcher_ack_pending = true;
 			setTimeout(function() {

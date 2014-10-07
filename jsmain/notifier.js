@@ -10,7 +10,7 @@
  *
  */
 
-import { log_error } from "./logger";
+var log_error = require('./logger').log_error;
 
 (function(exports) {
 	settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {

@@ -12,8 +12,8 @@
  *
  */
 
-import { reloader } from "./reloader";
-import { thumbnailer } from "./thumbnailer";
+var reloader = require('./reloader').reloader;
+var thumbnailer = require('./thumbnailer').thumbnailer;
 
 settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Q is the quick keyboard shortcut.", orderhint:1});
 settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});

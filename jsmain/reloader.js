@@ -9,9 +9,10 @@
 settings.newSetting("reloader", "bool", true, "Enable thread auto-updating", 'reloader', {orderhint:1, moredetails:"New posts in threads will appear as they're made."});
 settings.newSetting("reloader_autoscroll", "bool", false, "Scroll page down when new posts are loaded", 'reloader', {orderhint:2, moredetails:"Only happens if page is scrolled to the bottom already."});
 
-export var reloader = {
+var reloader = {
 	updateThreadNow: function() {}
 };
+exports.reloader = reloader;
 
 $(document).ready(function(){
 	if($('div.banner').length == 0)
@@ -36,7 +37,7 @@ $(document).ready(function(){
 
 	var timeUntilUpdate;
 	var timeSinceActivity = 0;
-	
+
 	// adaptive updating constants
 	var multiplierDelay = 2*60*60; // no updateInterval multiplying happens until the thread has been inactive at least this long.
 	var maxUpdateInterval = 5*60;
@@ -53,7 +54,7 @@ $(document).ready(function(){
 			tick();
 		}
 	}
-	
+
 	function saveSettings() {
 		if (!window.localStorage) return;
 		localStorage.updateInterval = updateInterval;
@@ -125,31 +126,31 @@ $(document).ready(function(){
 		$statusContainer.prepend($statusBox);
 		$statusSettings.hide();
 	});
-	
+
 	function loadPosts($data) {
 		var postsAddedCount = 0;
-		
+
 		var scrolledToBottom = isScrolling || ( $(window).scrollTop() + $(window).height() >= $(document).height() );
 
 		var $lastPostC = $('div.postContainer:not(.post-inline-container):not(.preview-hidden):last');
 		var lastPostNum = get_post_num($lastPostC.children('.post').first());
-		
+
 		$data.find('div.postContainer.replyContainer').each(function(index) {
 			var $postC = $(this);
 			var postNum = get_post_num($postC.children('.post').first());
-			
+
 			if(postNum > lastPostNum && $('#' + $postC.attr('id')).length == 0) {
 				$postC.insertAfter($lastPostC);
 				$(document).trigger('new_post', $postC.children('.post')[0]);
-				
+
 				$lastPostC = $postC;
 				lastPostNum = postNum;
-				
+
 				postsAddedCount++;
 				timeSinceActivity = 0;
 			}
 		});
-		
+
 		$postsAdded.text("+"+postsAddedCount);
 		$countDown.text("-");
 

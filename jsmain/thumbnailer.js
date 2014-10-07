@@ -20,12 +20,12 @@ function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
 	return {width: dest_width, height: dest_height};
 }
 
-export function thumbnailer(image, max_x, max_y) {
+function thumbnailer(image, max_x, max_y) {
 	var job = Q.defer();
-	
+
 	try {
 		var dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
-		
+
 		if (dest.width >= image.width || dest.height >= image.height) {
 			job.reject(new Error('image already small enough'));
 		} else {
@@ -42,16 +42,17 @@ export function thumbnailer(image, max_x, max_y) {
 	} catch(e) {
 		job.reject(e);
 	}
-	
+
 	return job.promise;
 }
+exports.thumbnailer = thumbnailer;
 
 function thumbnailer_simple(image, max_x, max_y) {
 	var job = Q.defer();
-	
+
 	try {
 		var dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
-		
+
 		if (dest.width >= image.width || dest.height >= image.height) {
 			job.reject(new Error('image already small enough'));
 		} else {
@@ -65,18 +66,18 @@ function thumbnailer_simple(image, max_x, max_y) {
 	} catch(e) {
 		job.reject(e);
 	}
-	
+
 	return job.promise;
 }
 
 function thumbnailer_fancy(image, max_x, max_y, lobes) {
 	if (lobes === undefined)
 		lobes = 3;
-	
+
 	var job = Q.defer();
 	try {
 		var dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
-		
+
 		if (dest.width >= image.width || dest.height >= image.height) {
 			job.reject(new Error('image already small enough'));
 		} else {
@@ -85,10 +86,10 @@ function thumbnailer_fancy(image, max_x, max_y, lobes) {
 			canvas.height = image.height;
 			var ctx = canvas.getContext('2d');
 			ctx.drawImage(image, 0, 0);
-			
+
 			var imageCPA = ctx.getImageData(0, 0, canvas.width, canvas.height);
 			var imagedata = Array.prototype.slice.call(imageCPA.data);
-			
+
 			var worker = new Worker(siteroot+'js/thumbnailer-worker.js?v=10');
 			worker.onmessage = function worker_onmessage(event) {
 				if (event.data.result) {
@@ -107,7 +108,7 @@ function thumbnailer_fancy(image, max_x, max_y, lobes) {
 			worker.onerror = function worker_onerror(e) {
 				job.reject(e);
 			};
-			
+
 			worker.postMessage({
 				dest_width: dest.width,
 				dest_height: dest.height,
@@ -120,6 +121,6 @@ function thumbnailer_fancy(image, max_x, max_y, lobes) {
 	} catch(e) {
 		job.reject(e);
 	}
-	
+
 	return job.promise;
 }
