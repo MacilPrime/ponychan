@@ -6,6 +6,9 @@
  *
  */
 
+var RSVP = require('rsvp');
+var _ = require('underscore');
+
 (function(exports) {
 	$(document).ready(function() {
 		// don't run inside threads
@@ -14,7 +17,7 @@
 
 		var $controlsform = $("form[name='postcontrols']");
 		var $catalog = $(".catalog");
-		
+
 		// Only run if we're on the catalog or board index
 		if (!$catalog.length && !$controlsform.length)
 			return;
@@ -35,7 +38,7 @@
 		// Stores the string of the currently rendered search.
 		// Is falsey if there is no current search.
 		var currentSearch = null;
-		
+
 		var queuedSearchDelay = 150;
 		var queuedSearchTimer = null;
 
@@ -51,50 +54,43 @@
 			return terms;
 		}
 
-		var _catalog_loading_promise = null;
-
 		// Loads the catalog in the background if it's not loaded already.
 		// Returns a promise that resolves when the catalog element has been added to the page.
-		function initSearch() {
-			if (_catalog_loading_promise)
-				return _catalog_loading_promise;
-			
-			var job = Q.defer();
-			_catalog_loading_promise = job.promise;
-			
-			if (!$catalog.length) {
-				$.ajax({
-					url: siteroot+board_id+'/catalog.html',
-					success: function(data) {
-						var $html = $($.parseHTML(data));
-						$catalog = $html.filter('.catalog').add( $html.find('.catalog') )
-							.first()
-							.insertAfter($controlsform)
-							.hide();
-						job.resolve();
-					},
-					error: function(jqXHR, textStatus, errorThrown) {
-						console.error("Failed to load catalog. textStatus:", textStatus, "errorThrown:", errorThrown);
-						job.reject(new Error(errorThrown));
-					}
-				});
-			} else {
-				job.resolve();
-			}
-			return job.promise;
-		}
-		
+		var initSearch = _.memoize(function() {
+			return new RSVP.Promise(function(resolve, reject) {
+				if (!$catalog.length) {
+					$.ajax({
+						url: siteroot+board_id+'/catalog.html',
+						success: function(data) {
+							var $html = $($.parseHTML(data));
+							$catalog = $html.filter('.catalog').add( $html.find('.catalog') )
+								.first()
+								.insertAfter($controlsform)
+								.hide();
+							resolve();
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							console.error("Failed to load catalog. textStatus:", textStatus, "errorThrown:", errorThrown);
+							reject(new Error(errorThrown));
+						}
+					});
+				} else {
+					resolve();
+				}
+			});
+		});
+
 		// queues up a call to search
 		function queueSearch() {
 			if (queuedSearchTimer) return;
 			queuedSearchTimer = setTimeout(search, queuedSearchDelay);
 		}
-		
+
 		// does the search and shows threads
 		function search() {
 			clearTimeout(queuedSearchTimer);
 			queuedSearchTimer = null;
-			
+
 			initSearch().done(function() {
 				var text = $textbox.val();
 				if (text == currentSearch) return;

@@ -2,9 +2,11 @@
  * logger.js
  *
  * Released under the MIT license
- * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ * Copyright (c) 2014 Macil Tech <maciltech@gmail.com>
  *
  */
+
+var RSVP = require('rsvp');
 
 function nop() {}
 
@@ -175,6 +177,10 @@ function log_error(error) {
 	send_error(error);
 }
 exports.log_error = log_error;
+
+RSVP.on('error', function(e) {
+	log_error(e);
+});
 
 var old_onerror = window.onerror;
 

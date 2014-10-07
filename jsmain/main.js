@@ -1,7 +1,6 @@
 require('./visibility.min.js');
 
 window.jQuery = window.$ = require('jquery');
-window.Q = require('q');
 
 require('./logger.js');
 require('./default.js');
@@ -38,4 +37,10 @@ require('./desktop-notifier.js');
 require('./hide-trip.js');
 
 // debugging purposes
-window._main_require = require;
+window._dbg = {
+  main_require: require,
+  RSVP: require('rsvp'),
+  $: require('jquery'),
+  _: require('underscore'),
+  moment: require('moment')
+};
