@@ -2,10 +2,10 @@
   "name": "tinyboard-js",
   "version": "0.1.0",
   "dependencies": {
-    "baconjs": "^0.7.20",
+    "baconjs": "0.7.22",
     "jquery": "1.11.1",
-    "moment": "^2.8.1",
-    "q": "^1.0.1"
+    "moment": "2.8.3",
+    "q": "1.0.1"
   },
   "devDependencies": {
     "browserify": "^5.12.1",
@@ -15,5 +15,10 @@
     "mocha": "^1.21.4",
     "mold-source-map": "^0.3.0",
     "vinyl-source-stream": "^1.0.0"
+  },
+  "browser": {
+    "jquery": "jquery/dist/jquery.min.js",
+    "baconjs": "baconjs/dist/Bacon.min.js",
+    "moment": "moment/min/moment.min.js"
   }
 }
