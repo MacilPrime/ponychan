@@ -90,7 +90,7 @@ $(document).ready(function() {
 		clearTimeout(queuedSearchTimer);
 		queuedSearchTimer = null;
 
-		initSearch().done(function() {
+		initSearch().then(function() {
 			var text = $textbox.val();
 			if (text == currentSearch) return;
 			var $nofound = $('#searchnofound');
