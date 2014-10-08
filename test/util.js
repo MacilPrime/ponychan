@@ -14,6 +14,13 @@ describe('util', function() {
         assert.notEqual(result, '456');
       });
     });
+    it('should pass errors', function() {
+      return util.wait(1, RSVP.reject('failtime')).then(function() {
+        throw new Error("Should not happen");
+      }, function(err) {
+        assert.equal(err, 'failtime');
+      });
+    });
   });
 
   describe('timeout', function() {
