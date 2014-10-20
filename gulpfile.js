@@ -19,7 +19,7 @@ gulp.task('client-js-main', function() {
   var bundler = browserify({
     debug: true,
     entries: ['./jsmain/main.js'],
-    noparse: ['jquery', 'moment', 'baconjs', 'q']
+    noparse: ['jquery', 'moment', 'baconjs', 'rsvp', 'underscore']
   });
 
   var bundle = bundler.bundle();

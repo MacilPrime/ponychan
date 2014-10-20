@@ -5,7 +5,8 @@
     "baconjs": "0.7.22",
     "jquery": "1.11.1",
     "moment": "2.8.3",
-    "q": "1.0.1"
+    "rsvp": "3.0.14",
+    "underscore": "1.7.0"
   },
   "devDependencies": {
     "browserify": "^5.12.1",
@@ -18,6 +19,7 @@
   },
   "browser": {
     "jquery": "jquery/dist/jquery.min.js",
+    "underscore": "underscore/underscore-min.js",
     "baconjs": "baconjs/dist/Bacon.min.js",
     "moment": "moment/min/moment.min.js"
   }

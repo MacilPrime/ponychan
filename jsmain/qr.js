@@ -2,7 +2,7 @@
  * qr.js
  *
  * Released under the MIT license
- * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ * Copyright (c) 2014 Macil Tech <maciltech@gmail.com>
  *
  * Usage:
  *   $config['additional_javascript'][] = 'js/jquery.min.js';
@@ -12,8 +12,11 @@
  *
  */
 
+var RSVP = require('rsvp');
 var reloader = require('./reloader').reloader;
 var thumbnailer = require('./thumbnailer').thumbnailer;
+var util = require('./util');
+var state = require('./state');
 
 settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Q is the quick keyboard shortcut.", orderhint:1});
 settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});
@@ -476,13 +479,17 @@ $(document).ready(function(){
 				} else {
 					this.el.css("background-image", "url(" + this.fileurl + ")");
 					if (useCanvas && useWorker) {
-						var render_job = Q.defer();
+						var render_job = RSVP.defer();
 						this.filethumb = render_job.promise;
 
 						var fileimg = new Image();
 						fileimg.onload = function() {
 							var maxX = parseInt($oldFile.attr("data-thumb-max-width"));
 							var maxY = parseInt($oldFile.attr("data-thumb-max-height"));
+
+							if (fileimg.width <= maxX && fileimg.height <= maxY) {
+								return;
+							}
 
 							var start = new Date().getTime();
 							var thumber = thumbnailer(fileimg, maxX, maxY);
@@ -492,7 +499,7 @@ $(document).ready(function(){
 								console.log('thumbnailing took '+time+' milliseconds');
 								return time;
 							});
-							render_job.resolve(Q.all([thumber, thumber_timing]));
+							render_job.resolve(RSVP.all([thumber, thumber_timing]));
 
 							// If the original image was really big, then replace the image preview
 							// in the QR with the thumbnail we just made.
@@ -533,7 +540,6 @@ $(document).ready(function(){
 		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
 				delete this.filethumb;
-				delete this.filethumboktoskip;
 				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && this.fileurl) {
 					wURL.revokeObjectURL(this.fileurl);
 					delete this.fileurl;
@@ -902,17 +908,17 @@ $(document).ready(function(){
 		if (query) {
 			query.abort();
 			query = null;
-			return false;
+			return;
 		}
 
 		if (!selectedreply.comment && !selectedreply.file && !$file.val()) {
 			$QRwarning.text("Your post must have an image or a comment!");
-			return false;
+			return;
 		}
 
 		if ($captchaPuzzle.length && $QRCaptchaAnswer.val().trim().length == 0) {
 			$QRwarning.text("You forgot to do the CAPTCHA!");
-			return false;
+			return;
 		}
 
 		if (window.localStorage) {
@@ -935,43 +941,34 @@ $(document).ready(function(){
 
 		if (!data) {
 			$QRForm.submit();
-			return true;
+			return;
 		}
 
 		data.append("post", $submit.val());
 		data.append("wantjson", 1);
-		if (selectedreply.file) {
-			if (selectedreply.filethumb && !selectedreply.filethumb.isRejected() && !$spoiler.is(':checked')) {
-				if (selectedreply.filethumb.isPending()) {
-					if (selectedreply.filethumboktoskip) {
-						// We already tried waiting. Give up on it.
-						console.log('took too long to generate thumbnail; skipping');
-						data.append('thumbtime', -1);
-					} else {
-						// thumbnail isn't generated yet, so let's wait until it's ready
-						setQRFormDisabled(true);
-						$submit.val("...").prop("disabled", false);
-						var hasCancelled = false;
-						query = {abort: function() {
-							hasCancelled = true;
-							query = null;
-							prepSubmitButton();
-							$QRwarning.text("Post discarded");
-							setQRFormDisabled(false);
-						}};
-						selectedreply.filethumb.timeout(5000).fin(function() {
-							if (hasCancelled)
-								return;
-							selectedreply.filethumboktoskip = true;
-							query = null;
-							prepSubmitButton();
-							setQRFormDisabled(false);
-							submitPost();
-						});
-						return false;
-					}
-				} else {
-					var result = selectedreply.filethumb.valueOf();
+		if (!$file.val())
+			data.append("file", selectedreply.file);
+
+		setQRFormDisabled(true);
+		$submit.val("...").prop("disabled", false);
+
+		var hasCancelled = false;
+		query = {
+			abort: function() {
+				hasCancelled = true;
+				query = null;
+				prepSubmitButton();
+				$QRwarning.text("Post discarded");
+				setQRFormDisabled(false);
+			}
+		};
+
+		new RSVP.Promise(function(resolve, reject) {
+			if (selectedreply.filethumb && !$spoiler.is(':checked')) {
+				resolve(util.timeout(5000, selectedreply.filethumb).then(function(result) {
+					if (hasCancelled)
+						return;
+
 					var filethumb = result[0];
 					var thumb_timing = result[1];
 					data.append('thumbtime', thumb_timing);
@@ -983,87 +980,92 @@ $(document).ready(function(){
 						data.append('thumbdurl', filethumb.toDataURL('image/png'));
 						console.log('thumbdurl appended');
 					}
-				}
-			}
-			if (!$file.val())
-				data.append("file", selectedreply.file);
-		}
-
-		setQRFormDisabled(true);
-		$submit.val("...").prop("disabled", false);
-
-		var url = $QRForm.attr("action");
-		query = $.ajax({
-			url: url,
-			data: data,
-			cache: false,
-			contentType: false,
-			processData: false,
-			type: 'POST',
-			dataType: 'json',
-			xhr: function() {
-				var xhr = new window.XMLHttpRequest();
-				if (typeof xhr.upload != "undefined" && xhr.upload) {
-					xhr.upload.addEventListener("progress", function(e) {
-						if (e.lengthComputable)
-							$submit.val(Math.round(e.loaded * 100 / e.total).toString() + "%");
-					}, false);
-				}
-				return xhr;
-			},
-			success: function(data) {
-				query = null;
-				setQRFormDisabled(false);
-				if (data.status == 'success') {
-					if (settings.getSetting("QR_persistent") || (replies.length > 1))
-						QR.clear();
-					else
-						QR.close();
-
-					selectedreply.rm();
-
-					$(document).trigger('post_submitted', {
-						postid: data.postid,
-						threadid: data.threadid,
-						board: data.board,
-						url: data.url
-					});
-
-					QRcooldown(10);
-
-					if (data.threadid == null) {
-						window.location.href = data.url;
+				}, function(err) {
+					if (err && err.message == "promise timed out") {
+						console.log('took too long to generate thumbnail; skipping');
+						data.append('thumbtime', -1);
 					} else {
-						setTimeout(reloader.updateThreadNow, 10, true);
+						log_error(err);
 					}
-				} else {
-					if (data.error == 'message') {
-						if (data.message_html)
-							$QRwarning.html(data.message_html);
+				}));
+			} else {
+				resolve();
+			}
+		}).then(function() {
+			if (hasCancelled)
+				return;
+
+			var url = $QRForm.attr("action");
+			query = $.ajax({
+				url: url,
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				type: 'POST',
+				dataType: 'json',
+				xhr: function() {
+					var xhr = new window.XMLHttpRequest();
+					if (xhr.upload) {
+						xhr.upload.addEventListener("progress", function(e) {
+							if (e.lengthComputable)
+								$submit.val(Math.round(e.loaded * 100 / e.total).toString() + "%");
+						}, false);
+					}
+					return xhr;
+				},
+				success: function(data) {
+					query = null;
+					setQRFormDisabled(false);
+					if (data.status == 'success') {
+						if (settings.getSetting("QR_persistent") || (replies.length > 1))
+							QR.clear();
 						else
-							$QRwarning.text(data.message);
-					} else if (data.error == 'ban') {
-						var pageState = {title: 'Ban', banpage: data.banhtml};
-						state.newState(pageState);
+							QR.close();
+
+						selectedreply.rm();
+
+						$(document).trigger('post_submitted', {
+							postid: data.postid,
+							threadid: data.threadid,
+							board: data.board,
+							url: data.url
+						});
+
+						QRcooldown(10);
+
+						if (data.threadid == null) {
+							window.location.href = data.url;
+						} else {
+							setTimeout(reloader.updateThreadNow, 10, true);
+						}
 					} else {
-						$QRwarning.text('Unknown error: '+data.error);
+						if (data.error == 'message') {
+							if (data.message_html)
+								$QRwarning.html(data.message_html);
+							else
+								$QRwarning.text(data.message);
+						} else if (data.error == 'ban') {
+							var pageState = {title: 'Ban', banpage: data.banhtml};
+							state.newState(pageState);
+						} else {
+							$QRwarning.text('Unknown error: '+data.error);
+						}
+						prepSubmitButton();
 					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					query = null;
 					prepSubmitButton();
+					$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
+					setQRFormDisabled(false);
+					var info = {xhrstatus: jqXHR.status, textStatus: textStatus, errorThrown: errorThrown};
+					console.log("Ajax Error", info);
 				}
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				query = null;
-				prepSubmitButton();
-				$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
-				setQRFormDisabled(false);
-				var info = {xhrstatus: jqXHR.status, textStatus: textStatus, errorThrown: errorThrown};
-				console.log("Ajax Error", info);
-			}
+			});
+
+			QRrepair();
 		});
-
-		QRrepair();
-
-		return true;
 	}
 
 	function QRInit() {

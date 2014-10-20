@@ -24,7 +24,7 @@ $(document).ready(function() {
 
 	function permalinkProcess() {
 		$(this).click(permalinkClick);
-	};
+	}
 
 	$('.permalink').each(permalinkProcess);
 

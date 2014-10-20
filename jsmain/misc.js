@@ -30,10 +30,12 @@ $(document).ready(function(){
 	if (Math.random() < 0.0014)
 		betterName();
 
-	try {
-		localStorage.removeItem("event_saw_nightmare");
-		localStorage.removeItem("event_saw_gc");
-	} catch (e) {
-		log_error(e);
+	if (window.localStorage) {
+		try {
+			localStorage.removeItem("event_saw_nightmare");
+			localStorage.removeItem("event_saw_gc");
+		} catch (e) {
+			log_error(e);
+		}
 	}
 });
