@@ -1,25 +1,25 @@
-require('./visibility.min.js');
+require('./legacy/visibility.min.js');
 
 window.jQuery = window.$ = require('jquery');
 
 require('./logger.js');
-require('./default.js');
+require('./legacy/default.js');
 require('./notice.js');
-require('./settings.js');
+require('./legacy/settings.js');
 require('./state.js');
 require('./styles.js');
 require('./spoiler-toggle.js');
 require('./local-time.js');
-require('./reloader.js');
-require('./post-hover.js');
+require('./legacy/reloader.js');
+require('./legacy/post-hover.js');
 require('./postlinkinfo.js');
 require('./watcher.js');
 require('./notifier.js');
 require('./show-filenames.js');
-require('./inline-expanding.js');
-require('./image-hover.js');
-require('./smartphone-spoiler.js');
-require('./show-backlinks.js');
+require('./legacy/inline-expanding.js');
+require('./legacy/image-hover.js');
+require('./legacy/smartphone-spoiler.js');
+require('./legacy/show-backlinks.js');
 require('./navbar.js');
 require('./permalink.js');
 require('./qr.js');

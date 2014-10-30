@@ -13,7 +13,7 @@
  */
 
 var RSVP = require('rsvp');
-var reloader = require('./reloader').reloader;
+var reloader = require('./legacy/reloader').reloader;
 var thumbnailer = require('./thumbnailer').thumbnailer;
 var util = require('./util');
 var state = require('./state');

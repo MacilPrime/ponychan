@@ -5,20 +5,26 @@ var mold = require('mold-source-map');
 var streamify = require('gulp-streamify');
 var sourcemaps = require('gulp-sourcemaps');
 var util = require('util');
+var stdio = require('stdio');
+
+var args = stdio.getopt({
+  // 'watch': {key: 'w', description: 'Automatic rebuild'},
+  // 'minify': {key: 'm', description: 'Minify build'}
+});
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['client-js-extra', 'client-js-main']);
+gulp.task('build', ['client-js-extra', 'main-js']);
 
 gulp.task('client-js-extra', function() {
   return gulp.src('jsextra/**.js')
     .pipe(gulp.dest('SERVER/js/'));
 });
 
-gulp.task('client-js-main', function() {
+gulp.task('main-js', function() {
   var bundler = browserify({
     debug: true,
-    entries: ['./jsmain/main.js'],
+    entries: ['./src/main.js/'],
     noparse: ['jquery', 'moment', 'baconjs', 'rsvp', 'underscore']
   });
 

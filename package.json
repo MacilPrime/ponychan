@@ -2,19 +2,20 @@
   "name": "tinyboard-js",
   "version": "0.1.0",
   "dependencies": {
-    "baconjs": "0.7.22",
+    "baconjs": "0.7.25",
     "jquery": "1.11.1",
     "moment": "2.8.3",
     "rsvp": "3.0.14",
     "underscore": "1.7.0"
   },
   "devDependencies": {
-    "browserify": "^5.12.1",
-    "gulp": "^3.8.8",
-    "gulp-sourcemaps": "^1.2.2",
+    "browserify": "^6.2.0",
+    "gulp": "^3.8.9",
+    "gulp-sourcemaps": "^1.2.4",
     "gulp-streamify": "0.0.5",
-    "mocha": "^1.21.4",
+    "mocha": "^2.0.1",
     "mold-source-map": "^0.3.0",
+    "stdio": "^0.2.3",
     "vinyl-source-stream": "^1.0.0"
   },
   "browser": {
