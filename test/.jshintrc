@@ -7,5 +7,6 @@
     "beforeEach": true,
     "after": true,
     "afterEach": true
-  }
+  },
+  "-W041": true // Use '===' to compare with 'null'.
 }
