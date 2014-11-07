@@ -3,6 +3,7 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var mold = require('mold-source-map');
+var _ = require('underscore');
 var streamify = require('gulp-streamify');
 var sourcemaps = require('gulp-sourcemaps');
 var stdio = require('stdio');
@@ -14,13 +15,16 @@ var args = stdio.getopt({
 });
 
 function copyTask(name, paths) {
+  var setWatch = _.once(function() {
+    if (args.watch) {
+      gulp.watch(paths, [name]);
+    }
+  });
   gulp.task(name, function() {
+    setWatch();
     return gulp.src(paths)
       .pipe(gulp.dest('SERVER/js/'));
   });
-  if (args.watch) {
-    gulp.watch(paths, [name]);
-  }
 }
 
 function browserifyTask(name, entry, destname) {
