@@ -77,4 +77,4 @@ gulp.task('default', ['build']);
 gulp.task('build', ['client-js-extra', 'main-js']);
 
 copyTask('client-js-extra', './src/extra/**.js');
-browserifyTask('main-js', './src/main.js/', 'main.js');
+browserifyTask('main-js', './src/main/', 'main.js');
