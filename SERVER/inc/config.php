@@ -709,6 +709,15 @@
 	$config['banners'][] = array('stat%20-%20sersys.jpg', 600, 150);
 	$config['banners'][] = array('top%20secret%20but%20fun.gif', 600, 150);
 
+	$config['banners'][] = array('moon.jpg', 600, 150);
+	$config['banners'][] = array('nm.jpg', 600, 150);
+	$config['banners'][] = array('season%204.jpg', 600, 150);
+	$config['banners'][] = array('towers.png', 600, 150);
+	$config['banners'][] = array('tiananmen.jpg', 600, 150);
+	$config['banners'][] = array('salute.png', 600, 150);
+	$config['banners'][] = array('mudpony.png', 600, 150);
+	$config['banners'][] = array('lights.jpg', 600, 150);
+
 	// Custom stylesheets available. The prefix for each stylesheet URI is defined below.
 
 	$config['stylesheets']['Cloudsdale'] = 'Cloudsdale.css';
