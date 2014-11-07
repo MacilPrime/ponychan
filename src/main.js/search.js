@@ -55,7 +55,7 @@ $(document).ready(function() {
 
 	// Loads the catalog in the background if it's not loaded already.
 	// Returns a promise that resolves when the catalog element has been added to the page.
-	var initSearch = _.memoize(function() {
+	var initSearch = _.once(function() {
 		return new RSVP.Promise(function(resolve, reject) {
 			if (!$catalog.length) {
 				$.ajax({
