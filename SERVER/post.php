@@ -573,7 +573,7 @@ if (isset($_POST['delete'])) {
 	}
 
 	if (isset($_POST['activate_egg']) && $_POST['activate_egg'] == '1') {
-		$post['capcode'] = 'User';
+		error('egg temporarily disabled');
 	}
 
 	$trip = generate_tripcode($post['name']);
