@@ -1,3 +1,5 @@
 {
+  "node": true,
+  "browser": true,
   "-W041": true // Use '===' to compare with 'null'.
 }
