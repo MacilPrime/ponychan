@@ -1,6 +1,6 @@
 var assert = require('assert');
 var RSVP = require('rsvp');
-var util = require('../jsmain/util.js');
+var util = require('../src/main/util.js');
 
 describe('util', function() {
   describe('wait', function() {
