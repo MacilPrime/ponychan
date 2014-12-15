@@ -472,7 +472,7 @@
 	$config['thumb_op_height'] = 255;
 
 	// Thumbnail extension, empty for inherited (png recommended)
-	$config['thumb_ext'] = 'png';
+	$config['thumb_ext'] = '';
 
 	$config['video_thumb_ext'] = 'jpg';
 
