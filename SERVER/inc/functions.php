@@ -261,16 +261,20 @@ function utf8_clean($str) {
 	return @iconv('UTF-8', 'UTF-8//IGNORE', $str);
 }
 
+function utf8_clean_array(&$arr) {
+	foreach ($arr as &$item) {
+		if (is_array($item)) {
+			utf8_clean_array($item);
+		} else {
+			$item = utf8_clean($item);
+		}
+	}
+}
+
 function utf8_clean_userinput() {
-	foreach ($_GET as &$item) {
-		$item = utf8_clean($item);
-	}
-	foreach ($_POST as &$item) {
-		$item = utf8_clean($item);
-	}
-	foreach ($_COOKIE as &$item) {
-		$item = utf8_clean($item);
-	}
+	utf8_clean_array($_GET);
+	utf8_clean_array($_POST);
+	utf8_clean_array($_COOKIE);
 	foreach ($_FILES as &$item) {
 		$item['name'] = utf8_clean($item['name']);
 	}
