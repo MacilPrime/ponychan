@@ -13,3 +13,4 @@ Icon?
 Thumbs.db
 *~
 /node_modules
+/.vagrant

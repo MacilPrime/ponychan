@@ -1,0 +1,55 @@
+server {
+	listen 80;
+	listen [::]:80;
+
+	server_name tinyboardtest;
+
+	client_max_body_size 12m;
+	index index.php index.html index.htm;
+	root /var/www;
+
+	more_set_headers 'X-Test-Header: boop';
+
+	location ~ ~$ {
+		return 403;
+	}
+
+	location ~ ^/templates/themes/.*/thumb\.png$ {
+	}
+
+	location ~ ^/(templates|inc)/ {
+		return 403;
+	}
+
+	location ~ /config\.php$ {
+		return 403;
+	}
+
+	location ~* \.php$ {
+		include fastcgi_params;
+		more_set_headers 'Cache-Control: private, max-age=5';
+		try_files $uri =404;
+		fastcgi_pass unix:/var/run/php5-fpm.sock;
+	}
+
+	location ~* \.(jpe?g|png|gif|ogg|mp3)$ {
+		expires 30d;
+	}
+
+	location ~* \.(css|js)$ {
+		expires 30m;
+	}
+
+	location ~ ^(/[^/]+/res/([0-9]+))\+50.html$ {
+		try_files $uri $1.html;
+		expires 5s;
+	}
+
+	location ~* \.html?$ {
+		expires 5s;
+	}
+
+	location ~ ^/(js|stylesheets)/ {
+		autoindex on;
+	}
+}
