@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "browserify": "^6.2.0",
-    "gulp": "^3.8.9",
+    "gulp": "^3.8.10",
     "gulp-sourcemaps": "^1.2.4",
     "gulp-streamify": "0.0.5",
     "gulp-util": "^3.0.1",
