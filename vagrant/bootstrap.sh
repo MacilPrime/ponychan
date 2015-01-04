@@ -76,7 +76,7 @@ sed \
   -i /etc/nginx/nginx.conf
 
 rm -f /etc/nginx/sites-enabled/* /etc/nginx/sites-available/tinyboard.nginx
-ln -sf /vagrant/vagrant/tinyboard.nginx /etc/nginx/sites-available/
+cp /vagrant/vagrant/tinyboard.nginx /etc/nginx/sites-available/
 ln -sf /etc/nginx/sites-available/tinyboard.nginx /etc/nginx/sites-enabled/
 service nginx restart
 
