@@ -446,7 +446,7 @@ if (isset($_POST['delete'])) {
 	}
 
 	if (!$post['mod']) {
-		$post['antispam_hash'] = checkSpam(array($board['uri'], isset($post['thread']) && $post['thread']));
+		$post['antispam_hash'] = checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : ''));
 		if ($post['antispam_hash'] === true) {
 			if (!$userid) {
 				error($config['error']['spam']);
