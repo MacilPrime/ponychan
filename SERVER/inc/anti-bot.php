@@ -12,18 +12,18 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == str_replace('\\', '/', __FILE__)) {
 class AntiBot {
 	public $salt, $inputs = array(), $index = 0;
 	private $hasLogged = false;
-	
+
 	public static function randomString($length, $uppercase = false, $special_chars = false) {
 		$chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 		if ($uppercase)
 			$chars .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		if ($special_chars)
 			$chars .= ' ~!@#$%^&*()_+,./;\'[]\\{}|:<>?=-` ';
-		
+
 		$chars = str_split($chars);
-		
+
 		$ch = array();
-		
+
 		// fill up $ch until we reach $length
 		while (count($ch) < $length) {
 			$n = $length - count($ch);
@@ -36,40 +36,40 @@ class AntiBot {
 			foreach ($keys as $key)
 				$ch[] = $chars[$key];
 		}
-		
+
 		$chars = $ch;
-		
+
 		return implode('', $chars);
 	}
-	
+
 	public static function make_confusing($string) {
 		$chars = str_split($string);
-		
+
 		foreach ($chars as &$c) {
 			if (rand(0, 2) != 0)
 				$c = utf8tohtml($c);
 			else
 				$c = mb_encode_numericentity($c, array(0, 0xffff, 0, 0xffff), 'UTF-8');
 		}
-		
+
 		return implode('', $chars);
 	}
-	
+
 	public function __construct(array $salt = array()) {
 		global $config;
-		
+
 		if (!empty($salt)) {
 			// create a salted hash of the "extra salt"
 			$this->salt = implode(':', $salt);
-		} else { 
+		} else {
 			$this->salt = '';
 		}
-		
+
 		shuffle($config['spam']['hidden_input_names']);
-		
+
 		$input_count = rand($config['spam']['hidden_inputs_min'], $config['spam']['hidden_inputs_max']);
 		$hidden_input_names_x = 0;
-		
+
 		for ($x = 0; $x < $input_count ; $x++) {
 			if ($hidden_input_names_x === false || rand(0, 2) == 0) {
 				// Use an obscure name
@@ -80,7 +80,7 @@ class AntiBot {
 				if ($hidden_input_names_x >= count($config['spam']['hidden_input_names']))
 					$hidden_input_names_x = false;
 			}
-			
+
 			if (rand(0, 2) == 0) {
 				// Value must be null
 				$this->inputs[$name] = '';
@@ -93,10 +93,10 @@ class AntiBot {
 			}
 		}
 	}
-	
+
 	public function html($count = false) {
 		global $config;
-		
+
 		$elements = array(
 			'<input type="hidden" name="%name%" value="%value%">',
 			'<input type="hidden" value="%value%" name="%name%">',
@@ -108,13 +108,13 @@ class AntiBot {
 			'<textarea style="display:none" name="%name%">%value%</textarea>',
 			'<textarea name="%name%" style="display:none">%value%</textarea>'
 		);
-		
+
 		$html = '';
-		
+
 		if ($count === false) {
 			$count = rand(1, count($this->inputs) / 15);
 		}
-		
+
 		if ($count === true) {
 			// all elements
 			$inputs = array_slice($this->inputs, $this->index);
@@ -122,7 +122,7 @@ class AntiBot {
 			$inputs = array_slice($this->inputs, $this->index, $count);
 		}
 		$this->index += count($inputs);
-		
+
 		foreach ($inputs as $name => $value) {
 			$element = false;
 			while (!$element) {
@@ -132,37 +132,37 @@ class AntiBot {
 					$element = false;
 				}
 			}
-			
+
 			$element = str_replace('%name%', utf8tohtml($name), $element);
-			
+
 			if (rand(0, 2) == 0)
 				$value = $this->make_confusing($value);
 			else
 				$value = utf8tohtml($value);
-			
+
 			if (strpos($element, 'textarea') === false)
 				$value = str_replace('"', '&quot;', $value);
-			
+
 			$element = str_replace('%value%', $value, $element);
-			
+
 			$html .= $element;
 		}
-		
+
 		return $html;
 	}
-	
+
 	public function reset() {
 		$this->index = 0;
 	}
-	
+
 	public function hash() {
 		global $config;
-		
+
 		// This is the tricky part: create a hash to validate it after
 		// First, sort the keys in alphabetical order (A-Z)
 		$inputs = $this->inputs;
 		ksort($inputs);
-		
+
 		$hash = '';
 		// Iterate through each input
 		foreach ($inputs as $name => $value) {
@@ -170,69 +170,69 @@ class AntiBot {
 		}
 		// Add a salt to the hash
 		$hash .= $config['cookies']['salt'];
-		
+
 		// Use SHA1 for the hash
 		$hash = sha1($hash . $this->salt);
-		
+
 		if (!$this->hasLogged && isset($config['antibot_log'])) {
 			$logdata = array();
 			$logdata['time'] = date(DATE_ATOM);
 			$logdata['action'] = 'hash_made';
-			
+
 			$logdata['inputs'] = $inputs;
 			$logdata['hash'] = $hash;
-			
+
 			$logline = json_encode($logdata);
 			logToFile($config['antibot_log'], $logline);
-			
+
 			$this->hasLogged = true;
 		}
-		
+
 		return $hash;
 	}
 }
 
 function _create_antibot($board, $thread) {
 	global $config;
-	
+
 	$antibot = new AntiBot(array($board, $thread));
-	
+
 if (false) {
 	query('DELETE FROM `antispam` WHERE `expires` < UNIX_TIMESTAMP()') or error(db_error());
-	
+
 	if ($thread)
 		$query = prepare('UPDATE `antispam` SET `expires` = UNIX_TIMESTAMP() + :expires WHERE `board` = :board AND `thread` = :thread AND `expires` IS NULL');
 	else
 		$query = prepare('UPDATE `antispam` SET `expires` = UNIX_TIMESTAMP() + :expires WHERE `board` = :board AND `thread` IS NULL AND `expires` IS NULL');
-	
+
 	$query->bindValue(':board', $board);
 	if ($thread)
 		$query->bindValue(':thread', $thread);
 	$query->bindValue(':expires', $config['spam']['hidden_inputs_expire']);
 	$query->execute() or error(db_error($query));
-	
+
 	$query = prepare('INSERT INTO `antispam` VALUES (:board, :thread, :hash, UNIX_TIMESTAMP(), NULL, 0)');
 	$query->bindValue(':board', $board);
 	$query->bindValue(':thread', $thread);
 	$query->bindValue(':hash', $antibot->hash());
 	$query->execute() or error(db_error($query));
 }
-	
+
 	return $antibot;
 }
 
 function checkSpam(array $extra_salt = array()) {
-	global $config, $pdo;
+	global $config;
 
 	if (!isset($_POST['hash']))
 		return true;
 
-	$hash = $_POST['hash'];
+	$hash_given = $_POST['hash'];
 
 	if (!empty($extra_salt)) {
 		// create a salted hash of the "extra salt"
 		$extra_salt = implode(':', $extra_salt);
-	} else { 
+	} else {
 		$extra_salt = '';
 	}
 
@@ -249,20 +249,20 @@ function checkSpam(array $extra_salt = array()) {
 	// Sort the inputs in alphabetical order (A-Z)
 	ksort($inputs);
 
-	$_hash = '';
+	$hash_expected = '';
 
 	// Iterate through each input
 	foreach ($inputs as $name => $value) {
-		$_hash .= $name . '=' . $value;
+		$hash_expected .= $name . '=' . $value;
 	}
 
 	// Add a salt to the hash
-	$_hash .= $config['cookies']['salt'];
+	$hash_expected .= $config['cookies']['salt'];
 
 	// Use SHA1 for the hash
-	$_hash = sha1($_hash . $extra_salt);
+	$hash_expected = sha1($hash_expected . $extra_salt);
 
-	if ($hash != $_hash) {
+	if ($hash_given !== $hash_expected) {
 		if (isset($config['antibot_log'])) {
 			global $userid;
 			$logdata = array();
@@ -274,27 +274,27 @@ function checkSpam(array $extra_salt = array()) {
 			$logdata['action'] = 'hash_failure';
 
 			$logdata['inputs_given'] = $inputs;
-			$logdata['hash_given'] = $_hash;
-			$logdata['hash_expected'] = $hash;
-			
+			$logdata['hash_expected'] = $hash_expected;
+			$logdata['hash_given'] = $hash_given;
+
 			$logline = json_encode($logdata);
 			logToFile($config['antibot_log'], $logline);
 		}
-		
+
 		return true;
 	}
-	
+
 if (false) {
 	$query = prepare('SELECT `passed` FROM `antispam` WHERE `hash` = :hash');
-	$query->bindValue(':hash', $hash);
+	$query->bindValue(':hash', $hash_given);
 	$query->execute() or error(db_error($query));
 	if ((($passed = $query->fetchColumn(0)) === false) || ($passed > $config['spam']['hidden_inputs_max_pass'])) {
 		// there was no database entry for this hash. most likely expired.
 		return true;
 	}
 }
-	
-	return $hash;
+
+	return $hash_given;
 }
 
 function incrementSpamHash($hash) {
