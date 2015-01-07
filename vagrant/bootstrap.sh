@@ -60,14 +60,14 @@ if ! [ -d /var/www/inc ]; then
   ln -sf \
     /vagrant/SERVER/inc/* \
     /var/www/inc/
-  rm -f /var/www/inc/config.php /var/www/inc/instance-config.php
+  rm -f /var/www/inc/instance-config.php
 
   # Place default vagrant instance-config.php
   cp /vagrant/vagrant/instance-config.php /var/www/inc/
   chown www-data /var/www/inc/instance-config.php
 
-  # Hack to make cache configured by default for vagrant instances
-  ln -s /vagrant/vagrant/config-extra.php /var/www/inc/config.php
+  # Some default settings for vagrant vm
+  ln -s /vagrant/vagrant/site-config.php /var/www/inc/
 fi
 
 # VirtualBox shared folders don't play nicely with sendfile.

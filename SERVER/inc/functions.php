@@ -79,6 +79,8 @@ function loadConfig() {
 	}
 
 	require 'inc/config.php';
+	if (file_exists('inc/site-config.php'))
+		require 'inc/site-config.php';
 	if (!file_exists('inc/instance-config.php'))
 		$error('Tinyboard is not configured! Create inc/instance-config.php.');
 

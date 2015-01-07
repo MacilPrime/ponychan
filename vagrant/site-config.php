@@ -1,6 +1,5 @@
 <?php
 
-  require '/vagrant/SERVER/inc/config.php';
   // Some extra default config stuff for vagrant instances
 
   $config['cache']['enabled'] = 'redis';
