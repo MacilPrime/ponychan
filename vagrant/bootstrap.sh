@@ -47,6 +47,7 @@ ln -sf \
   /vagrant/SERVER/static/ \
   /vagrant/SERVER/stylesheets/ \
   /vagrant/*.md \
+  /vagrant/LICENSE-Macil.txt \
   /vagrant/install.php \
   /vagrant/install.sql \
   /var/www/

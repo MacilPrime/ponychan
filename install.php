@@ -273,7 +273,10 @@ if (false) {
 if ($step == 0) {
 	// Agreeement
 	$page['body'] = '
-	<textarea style="width:700px;height:370px;margin:auto;display:block;background:white;color:black" disabled>' . htmlentities(file_get_contents('LICENSE.md')) . '</textarea>
+	<textarea style="width:700px;height:370px;margin:auto;display:block;background:white;color:black" disabled>' .
+		htmlentities(file_get_contents('LICENSE-Tinyboard.md')) . "\n" .
+		htmlentities(file_get_contents('LICENSE-Macil.txt')) .
+	'</textarea>
 	<p style="text-align:center">
 		<a href="?step=1">I have read and understood the agreement. Proceed to installation.</a>
 	</p>';
