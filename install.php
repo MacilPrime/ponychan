@@ -532,6 +532,7 @@ if ($step == 0) {
 	$instance_config .= "\n";
 
 	if (@file_put_contents('inc/instance-config.php', $instance_config)) {
+		opcache_invalidate('inc/instance-config.php');
 		header('Location: ?step=4', true, $config['redirect_http']);
 	} else {
 		$page['title'] = 'Manual installation required';
