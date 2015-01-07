@@ -1826,9 +1826,9 @@ function mod_config() {
 
 	foreach ($conf as &$var) {
 		if (is_array($var['name'])) {
-			$c = &$config;
+			$c = $config;
 			foreach ($var['name'] as $n)
-				$c = &$c[$n];
+				$c = $c[$n];
 		} else {
 			$c = $config[$var['name']];
 		}
