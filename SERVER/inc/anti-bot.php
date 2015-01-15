@@ -100,13 +100,13 @@ class AntiBot {
 		$elements = array(
 			'<input type="hidden" name="%name%" value="%value%">',
 			'<input type="hidden" value="%value%" name="%name%">',
-			'<input style="display:none" type="text" name="%name%" value="%value%">',
-			'<input style="display:none" type="text" value="%value%" name="%name%">',
-			'<span style="display:none"><input type="text" name="%name%" value="%value%"></span>',
-			'<div style="display:none"><input type="text" name="%name%" value="%value%"></div>',
-			'<div style="display:none"><input type="text" name="%name%" value="%value%"></div>',
-			'<textarea style="display:none" name="%name%">%value%</textarea>',
-			'<textarea name="%name%" style="display:none">%value%</textarea>'
+			'<input style="display:none" type="text" name="%name%" autocomplete="off" value="%value%">',
+			'<input style="display:none" autocomplete="off" type="text" value="%value%" name="%name%">',
+			'<span style="display:none"><input type="text" name="%name%" value="%value%" autocomplete="off"></span>',
+			'<div style="display:none"><input type="text" name="%name%" autocomplete="off" value="%value%"></div>',
+			'<div style="display:none"><input autocomplete="off" type="text" name="%name%" value="%value%"></div>',
+			'<textarea autocomplete="off" style="display:none" name="%name%">%value%</textarea>',
+			'<textarea name="%name%" autocomplete="off" style="display:none">%value%</textarea>'
 		);
 
 		$html = '';
