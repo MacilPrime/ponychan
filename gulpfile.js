@@ -11,6 +11,7 @@ var uglify = require('gulp-uglify');
 var envify = require('envify/custom');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
+var to5ify = require('6to5ify');
 var execSync = require('exec-sync');
 
 var args = stdio.getopt({
@@ -42,10 +43,11 @@ function browserifyTask(name, entry, destname) {
   gulp.task(name, function() {
     var bundler = browserify({
       debug: true,
-      entries: entry,
+      entries: ['6to5/polyfill', entry],
       noparse: ['jquery', 'moment', 'baconjs', 'rsvp', 'underscore'],
       cache: {}, packageCache: {}, fullPaths: args.watch
     });
+    bundler.transform(to5ify);
     bundler.transform(envify({
       VERSION: getVersion()
     }));

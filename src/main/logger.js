@@ -121,7 +121,7 @@ function send_error(error, retryTime) {
 
 	error.pageurl = document.location.href;
 	error.version = process.env.VERSION;
-	var errorString = JSON.stringify(error);
+	const errorString = JSON.stringify(error);
 	var data = {type: "error", userid: userid, data: errorString};
 
 	if (!error.hasOwnProperty("message") && !malformed_errors.hasOwnProperty(errorString)) {
@@ -133,7 +133,7 @@ function send_error(error, retryTime) {
 	if (now < noSendBefore) {
 		if (send_queued < send_maxQueued) {
 			send_queued++;
-			setTimeout(function() {
+			setTimeout(() => {
 				send_queued--;
 				send_error(error, retryTime);
 			}, noSendBefore-now+10);
