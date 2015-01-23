@@ -62,7 +62,7 @@ function browserifyTask(name, entry, destname) {
         .pipe(source(destname))
         .pipe(streamify(sourcemaps.init({loadMaps:true})))
         .pipe(gulpif(args.minify, streamify(uglify())))
-        .pipe(streamify(sourcemaps.write('.')))
+        .pipe(streamify(sourcemaps.write('./maps/'+getVersion())))
         .pipe(gulp.dest('SERVER/js/'));
 
       if (isRebuild) {
