@@ -11,8 +11,10 @@
   "devDependencies": {
     "browserify": "^8.1.1",
     "gulp": "^3.8.10",
+    "gulp-if": "^1.2.5",
     "gulp-sourcemaps": "^1.2.4",
     "gulp-streamify": "0.0.5",
+    "gulp-uglify": "^1.1.0",
     "gulp-util": "^3.0.2",
     "mocha": "^2.1.0",
     "mold-source-map": "^0.3.0",
@@ -23,7 +25,6 @@
   "browser": {
     "jquery": "jquery/dist/jquery.min.js",
     "underscore": "underscore/underscore-min.js",
-    "baconjs": "baconjs/dist/Bacon.min.js",
     "moment": "moment/min/moment.min.js"
   }
 }

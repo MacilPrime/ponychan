@@ -7,11 +7,13 @@ var _ = require('underscore');
 var streamify = require('gulp-streamify');
 var sourcemaps = require('gulp-sourcemaps');
 var stdio = require('stdio');
+var uglify = require('gulp-uglify');
+var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
 
 var args = stdio.getopt({
   'watch': {key: 'w', description: 'Automatic rebuild'},
-  // 'minify': {key: 'm', description: 'Minify build'}
+  'minify': {key: 'm', description: 'Minify build'}
 });
 
 function copyTask(name, paths) {
@@ -47,6 +49,7 @@ function browserifyTask(name, entry, destname) {
         .pipe(mold.transformSourcesRelativeTo('.'))
         .pipe(source(destname))
         .pipe(streamify(sourcemaps.init({loadMaps:true})))
+        .pipe(gulpif(args.minify, streamify(uglify())))
         .pipe(streamify(sourcemaps.write('.')))
         .pipe(gulp.dest('SERVER/js/'));
 
