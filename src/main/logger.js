@@ -120,6 +120,7 @@ function send_error(error, retryTime) {
 		error = error_to_object(error);
 
 	error.pageurl = document.location.href;
+	error.version = process.env.VERSION;
 	var errorString = JSON.stringify(error);
 	var data = {type: "error", userid: userid, data: errorString};
 

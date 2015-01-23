@@ -8,8 +8,10 @@ var streamify = require('gulp-streamify');
 var sourcemaps = require('gulp-sourcemaps');
 var stdio = require('stdio');
 var uglify = require('gulp-uglify');
+var envify = require('envify/custom');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
+var execSync = require('exec-sync');
 
 var args = stdio.getopt({
   'watch': {key: 'w', description: 'Automatic rebuild'},
@@ -29,6 +31,13 @@ function copyTask(name, paths) {
   });
 }
 
+var getVersion = _.once(function() {
+  var commit = execSync('git rev-parse HEAD').trim().slice(0, 16);
+  var status = execSync('git status --porcelain');
+  var isModified = /^\s*M/m.test(status);
+  return commit + (isModified ? '-MODIFIED' : '');
+});
+
 function browserifyTask(name, entry, destname) {
   gulp.task(name, function() {
     var bundler = browserify({
@@ -37,6 +46,9 @@ function browserifyTask(name, entry, destname) {
       noparse: ['jquery', 'moment', 'baconjs', 'rsvp', 'underscore'],
       cache: {}, packageCache: {}, fullPaths: args.watch
     });
+    bundler.transform(envify({
+      VERSION: getVersion()
+    }));
 
     if (args.watch) {
       bundler = watchify(bundler);
