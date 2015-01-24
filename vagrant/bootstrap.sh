@@ -24,12 +24,12 @@ collation-server = utf8mb4_unicode_ci
 default-storage-engine = innodb
 EOF123
 
-service mysql restart
+#service mysql restart
 
 mysql -uroot -e \
 "CREATE DATABASE IF NOT EXISTS tinyboard; \
-GRANT USAGE ON *.* TO tinyboard@localhost IDENTIFIED BY ''; \
-GRANT ALL PRIVILEGES ON tinyboard.* TO tinyboard@localhost; \
+GRANT USAGE ON *.* TO tinyboard IDENTIFIED BY ''; \
+GRANT ALL PRIVILEGES ON tinyboard.* TO tinyboard; \
 FLUSH PRIVILEGES;"
 
 sed \
@@ -40,7 +40,24 @@ sed \
 
 service php5-fpm restart
 
-sudo install -m 775 -o www-data -g www-data -d /var/www
+#
+# vagrant/development specific stuff follows
+#
+
+# Make redis open to connections not from localhost
+sed \
+  -e 's/^bind/#bind/' \
+  -i /etc/redis/redis.conf
+
+# Make mysql open to connections not from localhost
+cat - <<EOF123 >/etc/mysql/conf.d/open.cnf
+[mysqld]
+bind-address = 0.0.0.0
+EOF123
+
+service mysql restart
+
+install -m 775 -o www-data -g www-data -d /var/www
 ln -sf \
   /vagrant/SERVER/*.php \
   /vagrant/SERVER/js/ \
@@ -51,13 +68,13 @@ ln -sf \
   /vagrant/install.php \
   /vagrant/install.sql \
   /var/www/
-sudo install -m 775 -o www-data -g www-data -d /var/www/templates
-sudo install -m 775 -o www-data -g www-data -d /var/www/templates/cache
+install -m 775 -o www-data -g www-data -d /var/www/templates
+install -m 775 -o www-data -g www-data -d /var/www/templates/cache
 ln -sf \
   /vagrant/SERVER/templates/* \
   /var/www/templates/
 if ! [ -d /var/www/inc ]; then
-  sudo install -m 775 -o www-data -g www-data -d /var/www/inc
+  install -m 775 -o www-data -g www-data -d /var/www/inc
   ln -sf \
     /vagrant/SERVER/inc/* \
     /var/www/inc/
