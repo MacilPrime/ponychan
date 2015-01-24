@@ -121,12 +121,13 @@ function refresh_watched_threads(callback) {
 		dataType: "json",
 		success: function(data) {
 			if (data.error) {
-				console.log("Watcher error: "+data.error)
+				console.log("Watcher error: "+data.error);
 				return;
 			}
 			if (data.scripts) {
 				for (var i=0; i<data.scripts.length; i++) {
 					try {
+						// jshint evil:true
 						Function(data.scripts[i])();
 					} catch(e) {
 						log_error(e);
@@ -210,7 +211,7 @@ function populate_watcher_screen() {
 	$watcherScreen.html('');
 	var alerts = 0;
 
-	for (var id in watched_threads) {
+	for (let id in watched_threads) {
 		var thread = watched_threads[id];
 
 		var match = /^(\w+):(\d+)$/.exec(id);
@@ -281,13 +282,8 @@ function populate_watcher_screen() {
 			.addClass('wremove')
 			.attr("href", "javascript:;")
 			.text('X');
-		(function() {
-			// javascript scoping is fun
-			var postid = id;
-			$removebutton.click(function() {
-				remove_watch(postid);
-			});
-		})();
+
+		$removebutton.click(() => {remove_watch(id);});
 
 		var $top = $('<div/>')
 			.addClass('wtop')
