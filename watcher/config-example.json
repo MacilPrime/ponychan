@@ -1,0 +1,28 @@
+{
+  "listen": {
+    "host": "localhost",
+    "port": 4000
+  },
+  "redis": {
+    "prefix": "watcher_",
+    "main": {
+      "socket": false,
+      "host": "localhost",
+      "port": 1234,
+      "pass": "blah",
+      "db": 0
+    },
+    "cache": {
+      "socket": false,
+      "host": "localhost",
+      "port": 1235,
+      "pass": "blah",
+      "db": 0
+    }
+  },
+  "mysql": {
+    "user": "bob",
+    "pass": "pass",
+    "db": "database"
+  }
+}

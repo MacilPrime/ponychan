@@ -12,5 +12,6 @@ thumbs.db
 Icon?
 Thumbs.db
 *~
-/client-core/node_modules
+/*/node_modules
 /.vagrant
+/watcher/config.json
