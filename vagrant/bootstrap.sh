@@ -24,8 +24,6 @@ collation-server = utf8mb4_unicode_ci
 default-storage-engine = innodb
 EOF123
 
-#service mysql restart
-
 mysql -uroot -e \
 "CREATE DATABASE IF NOT EXISTS tinyboard; \
 GRANT USAGE ON *.* TO tinyboard IDENTIFIED BY ''; \
@@ -37,8 +35,6 @@ sed \
   -e 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' \
   -e 's/upload_max_filesize = .*/upload_max_filesize = 15M/' \
   -i /etc/php5/fpm/php.ini
-
-service php5-fpm restart
 
 #
 # vagrant/development specific stuff follows
@@ -55,7 +51,10 @@ cat - <<EOF123 >/etc/mysql/conf.d/open.cnf
 bind-address = 0.0.0.0
 EOF123
 
-service mysql restart
+service redis-server restart &
+service mysql restart &
+service php5-fpm restart &
+wait
 
 install -m 775 -o www-data -g www-data -d /var/www
 ln -sf \
