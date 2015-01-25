@@ -34,12 +34,12 @@ $(document).ready(function(){
 		try {
 			localStorage.removeItem("event_saw_nightmare");
 			localStorage.removeItem("event_saw_gc");
+
+			if ($('div.banner').length && $('.thread_site-15219').length) {
+				localStorage.setItem("saw_proposal", true);
+			}
 		} catch (e) {
 			log_error(e);
 		}
-	}
-
-	if ($('div.banner').length && $('.thread_site-15219').length) {
-		localStorage.setItem("saw_proposal", true);
 	}
 });
