@@ -12,12 +12,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "ubuntu/trusty32"
 
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 3306, host: 8078 #mysql
-  config.vm.network "forwarded_port", guest: 6379, host: 8079 #redis
-  config.vm.network "forwarded_port", guest: 80, host: 8080 #http
+  config.vm.network :private_network, ip: "172.27.0.2"
+  # exposes a few services
+  # 80 http
+  # 3306 mysql
+  # 6379 redis
 
   config.vm.provision :shell, path: "vagrant/bootstrap.sh"
 

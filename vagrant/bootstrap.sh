@@ -97,7 +97,7 @@ ln -sf /etc/nginx/sites-available/tinyboard.nginx /etc/nginx/sites-enabled/
 service nginx restart
 
 echo
-echo "Server set up, please browse to http://localhost:8080/install.php"
+echo "Server set up, please browse to http://172.27.0.2/install.php"
 echo "to complete the installation. Default database settings will work."
 echo "After you complete the installation steps, go to "
-echo "http://localhost:8080/mod.php and log in as admin:password."
+echo "http://172.27.0.2/mod.php and log in as admin:password."
