@@ -92,6 +92,8 @@ sed \
   -i /etc/nginx/nginx.conf
 
 rm -f /etc/nginx/sites-enabled/* /etc/nginx/sites-available/tinyboard.nginx
+# tinyboard.nginx can't be a symlink into /vagrant because nginx starts before
+# /vagrant is mounted.
 cp /vagrant/vagrant/tinyboard.nginx /etc/nginx/sites-available/
 ln -sf /etc/nginx/sites-available/tinyboard.nginx /etc/nginx/sites-enabled/
 service nginx restart
