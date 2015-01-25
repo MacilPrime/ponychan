@@ -38,4 +38,8 @@ $(document).ready(function(){
 			log_error(e);
 		}
 	}
+
+	if ($('div.banner').length && $('.thread_site-15219').length) {
+		localStorage.setItem("saw_proposal", true);
+	}
 });
