@@ -28,7 +28,7 @@ function copyTask(name, paths) {
   gulp.task(name, function() {
     setWatch();
     return gulp.src(paths)
-      .pipe(gulp.dest('SERVER/js/'));
+      .pipe(gulp.dest('../core/js/'));
   });
 }
 
@@ -65,7 +65,7 @@ function browserifyTask(name, entry, destname) {
         .pipe(streamify(sourcemaps.init({loadMaps:true})))
         .pipe(gulpif(args.minify, streamify(uglify())))
         .pipe(streamify(sourcemaps.write('./maps/'+getVersion())))
-        .pipe(gulp.dest('SERVER/js/'));
+        .pipe(gulp.dest('../core/js/'));
 
       if (isRebuild) {
         var wasError = false;

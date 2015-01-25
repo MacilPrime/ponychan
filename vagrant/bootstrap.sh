@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 # Vagrant bootstrap file
 
-set -e
+set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
@@ -59,24 +59,23 @@ service mysql restart
 
 install -m 775 -o www-data -g www-data -d /var/www
 ln -sf \
-  /vagrant/SERVER/*.php \
-  /vagrant/SERVER/js/ \
-  /vagrant/SERVER/static/ \
-  /vagrant/SERVER/stylesheets/ \
-  /vagrant/*.md \
-  /vagrant/LICENSE-Macil.txt \
-  /vagrant/install.php \
-  /vagrant/install.sql \
+  /vagrant/core/*.php \
+  /vagrant/core/js/ \
+  /vagrant/core/static/ \
+  /vagrant/core/stylesheets/ \
+  /vagrant/core/*.md \
+  /vagrant/core/LICENSE-Macil.txt \
+  /vagrant/core/install.sql \
   /var/www/
 install -m 775 -o www-data -g www-data -d /var/www/templates
 install -m 775 -o www-data -g www-data -d /var/www/templates/cache
 ln -sf \
-  /vagrant/SERVER/templates/* \
+  /vagrant/core/templates/* \
   /var/www/templates/
 if ! [ -d /var/www/inc ]; then
   install -m 775 -o www-data -g www-data -d /var/www/inc
   ln -sf \
-    /vagrant/SERVER/inc/* \
+    /vagrant/core/inc/* \
     /var/www/inc/
   rm -f /var/www/inc/instance-config.php
 

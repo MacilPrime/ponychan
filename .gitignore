@@ -1,10 +1,10 @@
 # files made by an in-use server
-/SERVER/inc/instance-config.php
-/SERVER/.installed
-/SERVER/templates/cache
+/core/inc/instance-config.php
+/core/.installed
+/core/templates/cache
 
 # built client javascript
-/SERVER/js
+/core/js
 
 # other stuff
 .DS_Store
@@ -12,5 +12,5 @@ thumbs.db
 Icon?
 Thumbs.db
 *~
-/node_modules
+/client-core/node_modules
 /.vagrant
