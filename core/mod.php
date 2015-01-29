@@ -13,7 +13,7 @@ if (get_magic_quotes_gpc()) {
 	function strip_array($var) {
 		return is_array($var) ? array_map('strip_array', $var) : stripslashes($var);
 	}
-	
+
 	$_GET = strip_array($_GET);
 	$_POST = strip_array($_POST);
 }
@@ -25,7 +25,7 @@ $pages = array(
 	'/'					=> 'dashboard',		// dashboard
 	'/confirm/(.+)'				=> 'confirm',		// confirm action (if javascript didn't work)
 	'/logout'				=> 'logout',		// logout
-	
+
 	'/users'				=> 'users',		// manage users
 	'/users/(\d+)'				=> 'user',		// edit user
 	'/users/(\d+)/(promote|demote)'		=> 'user_promote',	// prmote/demote user
@@ -33,7 +33,7 @@ $pages = array(
 	'/new_PM/([^/]+)'			=> 'new_pm',		// create a new pm
 	'/PM/(\d+)(/reply)?'			=> 'pm',		// read a pm
 	'/inbox'				=> 'inbox',		// pm inbox
-	
+
 	'/noticeboard'				=> 'noticeboard',	// view noticeboard
 	'/noticeboard/(\d+)'			=> 'noticeboard',	// view noticeboard
 	'/noticeboard/delete/(\d+)'		=> 'noticeboard_delete',// delete from noticeboard
@@ -44,19 +44,19 @@ $pages = array(
 	'/news'					=> 'news',		// view news
 	'/news/(\d+)'				=> 'news',		// view news
 	'/news/delete/(\d+)'			=> 'news_delete',	// delete from news
-	
+
 	'/edit/(\w+)'				=> 'edit_board',	// edit board details
 	'/new-board'				=> 'new_board',		// create a new board
-	
+
 	'/rebuild'				=> 'rebuild',		// rebuild static files
 	'/reports'				=> 'reports',		// report queue
 	'/reports/(\d+)/dismiss(all)?'		=> 'report_dismiss',	// dismiss a report
-	
+
 	'/IP/([\w.:]+)'				=> 'ip',		// view ip address
 	'/IP/([\w.:]+)/remove_note/(\d+)'	=> 'ip_remove_note',	// remove note from ip address
 	'/bans'					=> 'bans',		// ban list
 	'/bans/(\d+)'				=> 'bans',		// ban list
-	
+
 	'/(\w+)/edit/(\d+)'			=> 'edit',		// edit post
 
 	// CSRF-protected moderator actions
@@ -70,17 +70,17 @@ $pages = array(
 	'/(\w+)/(un)?lock/(\d+)'		=> 'secure lock',	// lock thread
 	'/(\w+)/(un)?sticky/(\d+)'		=> 'secure sticky',	// sticky thread
 	'/(\w+)/bump(un)?lock/(\d+)'		=> 'secure bumplock',	// "bumplock" thread
-	
+
 	'/themes'				=> 'themes_list',	// manage themes
 	'/themes/(\w+)'				=> 'theme_configure',	// configure/reconfigure theme
 	'/themes/(\w+)/rebuild'			=> 'theme_rebuild',	// rebuild theme
 	'/themes/(\w+)/uninstall'		=> 'theme_uninstall',	// uninstall theme
-	
+
 	'/config'				=> 'config',		// config editor
-	
+
 	// these pages aren't listed in the dashboard without $config['debug']
 	'/debug/antispam'			=> 'debug_antispam',
-	
+
 	// This should always be at the end:
 	'/(\w+)/'										=> 'view_board',
 	'/(\w+)/' . preg_quote($config['file_index'], '!')					=> 'view_board',
@@ -114,12 +114,12 @@ $pages = $new_pages;
 foreach ($pages as $uri => $handler) {
 	if (preg_match($uri, $query, $matches)) {
 		$matches = array_slice($matches, 1);
-		
+
 		if (preg_match('/^secure(_POST)? /', $handler, $m)) {
 			$secure_post_only = isset($m[1]);
 			if (!$secure_post_only || $_SERVER['REQUEST_METHOD'] == 'POST') {
 				$token = isset($matches['token']) ? $matches['token'] : (isset($_POST['token']) ? $_POST['token'] : false);
-				
+
 				if ($token === false) {
 					if ($secure_post_only)
 						error($config['error']['csrf']);
@@ -128,7 +128,7 @@ foreach ($pages as $uri => $handler) {
 						exit;
 					}
 				}
-			
+
 				// CSRF-protected page; validate security token
 				$actual_query = preg_replace('!/([a-f0-9]{8})$!', '', $query);
 				if ($token != make_secure_link_token(substr($actual_query, 1))) {
@@ -137,7 +137,7 @@ foreach ($pages as $uri => $handler) {
 			}
 			$handler = preg_replace('/^secure(_POST)? /', '', $handler);
 		}
-		
+
 		if ($config['debug']) {
 			$debug['mod_page'] = array(
 				'req' => $query,
@@ -145,7 +145,7 @@ foreach ($pages as $uri => $handler) {
 				'handler' => $handler
 			);
 		}
-		
+
 		if (is_string($handler)) {
 			if ($handler[0] == ':') {
 				header('Location: ' . substr($handler, 1),  true, $config['redirect_http']);
@@ -161,10 +161,9 @@ foreach ($pages as $uri => $handler) {
 		} else {
 			error("Mod page '$handler' not a string, and not callable!");
 		}
-		
+
 		exit;
 	}
 }
 
 error($config['error']['404']);
-
