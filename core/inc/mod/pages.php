@@ -611,7 +611,7 @@ function mod_page_ip($ip_url) {
 
 		unban($_POST['ban_id']);
 
-		header('Location: ?/IP/' . $ip . '#bans', true, $config['redirect_http']);
+		header('Location: ?/IP/' . $ip_url . '#bans', true, $config['redirect_http']);
 		return;
 	}
 
