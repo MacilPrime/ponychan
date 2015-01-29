@@ -18,7 +18,8 @@ $(document).ready(function() {
 		if (obscure_ips) {
 			$(".posterip a", context).each(function() {
 				var $this = $(this);
-				$this.attr('data-old-text', $this.text());
+				if (!$this.attr('data-old-text'))
+					$this.attr('data-old-text', $this.text());
 			}).text('IP')
 				.addClass('ip-hidden')
 				.on('mouseenter.iphider', function() {
