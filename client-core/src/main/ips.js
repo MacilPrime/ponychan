@@ -14,29 +14,25 @@ $(document).ready(function() {
 
 	var obscure_ips = settings.getSetting("mod_obscure_ips");
 
-	function getIPfromlink($a) {
-		var m = /\?\/IP\/(.*)$/.exec($a.attr('href'));
-		return m ? m[1] : "Error";
-	}
-
 	function processIPs(context) {
 		if (obscure_ips) {
-			$(".posterip a", context)
-				.text("IP")
+			$(".posterip a", context).each(function() {
+				var $this = $(this);
+				$this.attr('data-old-text', $this.text());
+			}).text('IP')
 				.addClass('ip-hidden')
 				.on('mouseenter.iphider', function() {
 					var $this = $(this);
-					$this.text(getIPfromlink($this));
+					$this.text($this.attr('data-old-text'));
 				})
 				.on('mouseleave.iphider', function() {
-					var $this = $(this);
-					$this.text("IP");
+					$(this).text("IP");
 				});
 		} else {
 			$("a.ip-hidden", context).each(function() {
 				var $this = $(this);
 				$this
-					.text(getIPfromlink($this))
+					.text($this.attr('data-old-text'))
 					.removeClass('ip-hidden')
 					.off('.iphider');
 			});
