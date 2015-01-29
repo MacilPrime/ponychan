@@ -703,7 +703,9 @@ function mod_page_ip($ip) {
 		$args['notes'] = $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 
-	mod_page(sprintf('%s: %s', _('IP'), $ip), 'mod/view_ip.html', $args, $args['hostname']);
+	mod_page(
+		sprintf('%s: %s', _('IP'), $ip),
+		'mod/view_ip.html', $args, isset($args['hostname']) ? $args['hostname'] : '');
 }
 
 function mod_ban() {
