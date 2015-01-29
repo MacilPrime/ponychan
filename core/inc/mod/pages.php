@@ -687,8 +687,8 @@ function mod_page_ip($ip) {
 				"(`ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
 				"(`ip_type` = 2 AND " .
 					"`ip` REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$' AND " .
-					":ip >= INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) AND " .
-					":ip < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1))" .
+					"INET_ATON(:ip) >= INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) AND " .
+					"INET_ATON(:ip) < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1))" .
 				") ORDER BY `set` DESC"
 				);
 		$query->bindValue(':ip', $ip);
