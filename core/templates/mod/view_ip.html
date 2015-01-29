@@ -171,7 +171,7 @@
 {% if mod|hasPermission(config.mod.ban) %}
 	<fieldset>
 		<legend>{% trans 'New ban' %}</legend>
-		{% set redirect = '?/IP/' ~ ip ~ '#bans' %}
+		{% set redirect = '?/IP/' ~ ip_url ~ '#bans' %}
 		{% include 'mod/ban_form.html' %}
 	</fieldset>
 {% endif %}
