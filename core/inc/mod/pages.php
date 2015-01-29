@@ -595,8 +595,7 @@ function mod_ip_remove_note($ip, $id) {
 function mod_page_ip($ip) {
 	global $config, $mod;
 
-	if (filter_var($ip, FILTER_VALIDATE_IP) === false)
-		error("Invalid IP address.");
+	$ip = str_replace('^', '/', $ip);
 
 	if (isset($_POST['ban_id'], $_POST['unban'])) {
 		// Check the referrer
@@ -630,7 +629,7 @@ function mod_page_ip($ip) {
 		$query->bindValue(':body', $_POST['note']);
 		$query->execute() or error(db_error($query));
 
-		modLog("Added a note for <a href=\"?/IP/{$ip}\">{$ip}</a>");
+		modLog("Added a note for <a href=\"?/IP/" . utf8tohtml($ip) . "\">" . utf8tohtml($ip) . "</a>");
 
 		header('Location: ?/IP/' . $ip . '#notes', true, $config['redirect_http']);
 		return;
@@ -640,7 +639,7 @@ function mod_page_ip($ip) {
 	$args['ip'] = $ip;
 	$args['posts'] = array();
 
-	if ($config['mod']['dns_lookup'])
+	if ($config['mod']['dns_lookup'] && filter_var($ip, FILTER_VALIDATE_IP) !== false)
 		$args['hostname'] = rDNS($ip);
 
 	$boards = listBoards();
@@ -649,7 +648,19 @@ function mod_page_ip($ip) {
 		if (!hasPermission($config['mod']['show_ip'], $board['uri']))
 			continue;
 
-		$query = prepare(sprintf('SELECT * FROM `posts_%s` WHERE `ip` = :ip ORDER BY `sticky` DESC, `id` DESC LIMIT :limit', $board['uri']));
+		if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+			$query = prepare(sprintf('SELECT * FROM `posts_%s` WHERE `ip` = :ip ORDER BY `id` DESC LIMIT :limit', $board['uri']));
+		} else {
+			$query = prepare(
+				"SELECT * FROM `posts_" . $board['uri'] . "` WHERE " .
+				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') OR " .
+				"(" .
+					":ip REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$' AND " .
+					"INET_ATON(`ip`) >= INET_ATON(SUBSTRING_INDEX(:ip, '/', 1)) AND " .
+					"INET_ATON(`ip`) < INET_ATON(SUBSTRING_INDEX(:ip, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(:ip, '/', -1))" .
+				") ORDER BY `id` DESC LIMIT :limit"
+			);
+		}
 		$query->bindValue(':ip', $ip);
 		$query->bindValue(':limit', $config['mod']['ip_recentposts'], PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
@@ -681,7 +692,8 @@ function mod_page_ip($ip) {
 	$args['token'] = make_secure_link_token('ban');
 
 	if (hasPermission($config['mod']['view_ban'])) {
-		$query = prepare(
+		if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+			$query = prepare(
 				"SELECT `bans`.*, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
 				"(`ip_type` = 0 AND `ip` = :ip) OR " .
 				"(`ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
@@ -690,7 +702,16 @@ function mod_page_ip($ip) {
 					"INET_ATON(:ip) >= INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) AND " .
 					"INET_ATON(:ip) < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1))" .
 				") ORDER BY `set` DESC"
-				);
+			);
+		} else {
+			$query = prepare(
+				"SELECT `bans`.*, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
+				"(`ip` = :ip) OR " .
+				"(`ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
+				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') " .
+				"ORDER BY `set` DESC"
+			);
+		}
 		$query->bindValue(':ip', $ip);
 		$query->execute() or error(db_error($query));
 		$args['bans'] = $query->fetchAll(PDO::FETCH_ASSOC);
