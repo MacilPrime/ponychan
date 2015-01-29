@@ -810,7 +810,10 @@ function checkBan($board = 0) {
 	event('process-bans', $board, $banlist);
 
 	if (count($banlist->l) < 1 && $config['ban_range']) {
-		$query = prepare("SELECT `set`, `expires`, `reason`, `board`, `seen`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!'");
+		$query = prepare(
+			"SELECT `set`, `expires`, `reason`, `board`, `seen`, `bans`.`id` " .
+			"FROM `bans` WHERE " .
+			"(`board` IS NULL OR `board` = :board) AND `ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!'");
 		$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 		$query->bindValue(':board', $board);
 		$query->execute() or error(db_error($query));
@@ -821,16 +824,17 @@ function checkBan($board = 0) {
 
 	if (count($banlist->l) < 1 && $config['ban_cidr'] && !isIPv6()) {
 		// my most insane SQL query yet
-		$query = prepare("SELECT `set`, `expires`, `reason`, `board`, `seen`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip_type` = 2
-			AND (
-				`ip` REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$'
-					AND
-				:ip >= INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1))
-					AND
-				:ip < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1))
-			)
-			");
-		$query->bindValue(':ip', ip2long($_SERVER['REMOTE_ADDR']));
+		$query = prepare(
+			"SELECT `set`, `expires`, `reason`, `board`, `seen`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip_type` = 2" .
+			"	AND (" .
+			"	`ip` REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$'" .
+			"		AND" .
+			"	INET_ATON(:ip) >= INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1))" .
+			"		AND" .
+			"	INET_ATON(:ip) < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1))" .
+			")"
+		);
+		$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 		$query->bindValue(':board', $board);
 		$query->execute() or error(db_error($query));
 
