@@ -3,7 +3,7 @@
 		<legend>
 			<a href="?/{{ config.board_path|sprintf(board_posts.board.uri) }}{{ config.file_index }}">
 				{{ config.board_abbreviation|sprintf(board_posts.board.uri) }}
-				 - 
+				 -
 				 {{ board_posts.board.title|e }}
 			</a>
 		</legend>
@@ -17,11 +17,12 @@
 			{% set notes_on_record = 'note' ~ (notes|count != 1 ? 's' : '') ~ ' on record' %}
 			<legend>{{ notes|count }} {% trans notes_on_record %}</legend>
 		</legend>
-		
+
 		{% if notes|count > 0 %}
 			<table class="modlog">
 				<tr>
 					<th>{% trans 'Staff' %}</th>
+					<th>{% trans 'IP' %}</th>
 					<th>{% trans 'Note' %}</th>
 					<th>{% trans 'Date' %}</th>
 					{% if mod|hasPermission(config.mod.remove_notes) %}
@@ -37,6 +38,9 @@
 								<em>{% trans 'deleted?' %}</em>
 							{% endif %}
 						</td>
+						<td class="minimal">
+							{{ note.ip }}
+						</td>
 						<td>
 							{{ note.body }}
 						</td>
@@ -45,7 +49,7 @@
 						</td>
 						{% if mod|hasPermission(config.mod.remove_notes) %}
 							<td class="minimal">
-								<a href="?/IP/{{ ip }}/remove_note/{{ note.id }}">
+								<a href="?/IP/{{ note.ip_url }}/remove_note/{{ note.id }}">
 									<small>[{% trans 'remove' %}]</small>
 								</a>
 							</td>
@@ -54,7 +58,7 @@
 				{% endfor %}
 			</table>
 		{% endif %}
-		
+
 		{% if mod|hasPermission(config.mod.create_notes) %}
 			<form action="" method="post" class="noteform">
 				<table>
@@ -84,7 +88,7 @@
 	<fieldset id="bans">
 		{% set bans_on_record = 'ban' ~ (bans|count != 1 ? 's' : '') ~ ' on record' %}
 		<legend>{{ bans|count }} {% trans bans_on_record %}</legend>
-		
+
 		{% for ban in bans %}
 			<form action="" method="post" class="userbanlist">
 				<table>

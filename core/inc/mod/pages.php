@@ -569,33 +569,35 @@ function mod_view_thread50($boardName, $thread) {
 	echo $page;
 }
 
-function mod_ip_remove_note($ip, $id) {
+function mod_ip_remove_note($ip_url, $id) {
 	global $config, $mod;
+
+	$ip = str_replace('^', '/', $ip_url);
 
 	// Check the referrer
 	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
 		error($config['error']['referer']);
 
 	if (!hasPermission($config['mod']['remove_notes']))
-			error($config['error']['noaccess']);
-
-	if (filter_var($ip, FILTER_VALIDATE_IP) === false)
-		error("Invalid IP address.");
+		error($config['error']['noaccess']);
 
 	$query = prepare('DELETE FROM `ip_notes` WHERE `ip` = :ip AND `id` = :id');
 	$query->bindValue(':ip', $ip);
 	$query->bindValue(':id', $id);
 	$query->execute() or error(db_error($query));
+	if ($query->rowCount() === 0) {
+		error("Could not find note");
+	}
 
-	modLog("Removed a note for <a href=\"?/IP/{$ip}\">{$ip}</a>");
+	modLog("Removed a note for <a href=\"?/IP/" . utf8tohtml($ip_url) . "\">" . utf8tohtml($ip) . "</a>");
 
-	header('Location: ?/IP/' . $ip . '#notes', true, $config['redirect_http']);
+	header('Location: ?/IP/' . $ip_url . '#notes', true, $config['redirect_http']);
 }
 
-function mod_page_ip($ip) {
+function mod_page_ip($ip_url) {
 	global $config, $mod;
 
-	$ip = str_replace('^', '/', $ip);
+	$ip = str_replace('^', '/', $ip_url);
 
 	if (isset($_POST['ban_id'], $_POST['unban'])) {
 		// Check the referrer
@@ -629,14 +631,15 @@ function mod_page_ip($ip) {
 		$query->bindValue(':body', $_POST['note']);
 		$query->execute() or error(db_error($query));
 
-		modLog("Added a note for <a href=\"?/IP/" . utf8tohtml($ip) . "\">" . utf8tohtml($ip) . "</a>");
+		modLog("Added a note for <a href=\"?/IP/" . utf8tohtml($ip_url) . "\">" . utf8tohtml($ip) . "</a>");
 
-		header('Location: ?/IP/' . $ip . '#notes', true, $config['redirect_http']);
+		header('Location: ?/IP/' . $ip_url . '#notes', true, $config['redirect_http']);
 		return;
 	}
 
 	$args = array();
 	$args['ip'] = $ip;
+	$args['ip_url'] = $ip_url;
 	$args['posts'] = array();
 
 	if ($config['mod']['dns_lookup'] && filter_var($ip, FILTER_VALIDATE_IP) !== false)
@@ -718,10 +721,29 @@ function mod_page_ip($ip) {
 	}
 
 	if (hasPermission($config['mod']['view_notes'])) {
-		$query = prepare("SELECT `ip_notes`.*, `username` FROM `ip_notes` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `ip` = :ip ORDER BY `time` DESC");
+		if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+			$query = prepare(
+				"SELECT `ip_notes`.*, `username` FROM `ip_notes` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
+				"(`ip` = :ip) OR " .
+				"(`ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
+				"(`ip` REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$' AND " .
+					"INET_ATON(:ip) >= INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) AND " .
+					"INET_ATON(:ip) < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1)))" .
+				"ORDER BY `time` DESC");
+		} else {
+			$query = prepare(
+				"SELECT `ip_notes`.*, `username` FROM `ip_notes` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
+				"(`ip` = :ip) OR " .
+				"(`ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
+				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') " .
+				"ORDER BY `time` DESC");
+		}
 		$query->bindValue(':ip', $ip);
 		$query->execute() or error(db_error($query));
 		$args['notes'] = $query->fetchAll(PDO::FETCH_ASSOC);
+		foreach($args['notes'] as &$note) {
+			$note['ip_url'] = str_replace('/', '^', $note['ip']);
+		}
 	}
 
 	mod_page(
