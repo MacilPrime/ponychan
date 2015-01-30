@@ -696,6 +696,7 @@ function mod_page_ip($ip_url) {
 
 	if (hasPermission($config['mod']['view_ban'])) {
 		if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+			// If we're viewing an exact IP, then show all the exact IP and range bans that apply to the user.
 			$query = prepare(
 				"SELECT `bans`.*, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
 				"(`ip_type` = 0 AND `ip` = :ip) OR " .
@@ -707,12 +708,15 @@ function mod_page_ip($ip_url) {
 				") ORDER BY `set` DESC"
 			);
 		} else {
+			// If we're viewing a range IP, then show all the exact IP bans that land within the range, and
+			// if the IP we're viewing is a glob expression, then view glob range bans that match our glob, or that
+			// our glob matches.
 			$query = prepare(
 				"SELECT `bans`.*, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
 				"(`ip` = :ip) OR " .
 				"(`ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
 				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') " .
-				"ORDER BY `set` DESC"
+				"ORDER BY `set` DESC LIMIT 50"
 			);
 		}
 		$query->bindValue(':ip', $ip);
@@ -736,7 +740,7 @@ function mod_page_ip($ip_url) {
 				"(`ip` = :ip) OR " .
 				"(`ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
 				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') " .
-				"ORDER BY `time` DESC");
+				"ORDER BY `time` DESC LIMIT 100");
 		}
 		$query->bindValue(':ip', $ip);
 		$query->execute() or error(db_error($query));
