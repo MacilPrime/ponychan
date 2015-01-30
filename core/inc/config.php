@@ -1056,6 +1056,11 @@
 	// PM snippet (for ?/inbox) length in characters
 	$config['mod']['snippet_length'] = 75;
 
+	// Maximum number of notes to show on an IP range search page.
+	$config['mod']['ip_range_page_max_notes'] = 100;
+	// Maximum number of bans to show on an IP range search page.
+	$config['mod']['ip_range_page_max_bans'] = 50;
+
 	// Probably best not to change these:
 	if (!defined('JANITOR')) {
 		define('JANITOR',	0,	true);

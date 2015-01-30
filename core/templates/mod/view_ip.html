@@ -15,7 +15,8 @@
 	<fieldset id="notes">
 		<legend>
 			{% set notes_on_record = 'note' ~ (notes|count != 1 ? 's' : '') ~ ' on record' %}
-			<legend>{{ notes|count }} {% trans notes_on_record %}</legend>
+			{% set notes_count_plus = notes|count == config.mod.ip_range_page_max_notes ? '&gt;' : '' %}
+			<legend>{{ notes_count_plus }}{{ notes|count }} {% trans notes_on_record %}</legend>
 		</legend>
 
 		{% if notes|count > 0 %}
@@ -87,7 +88,8 @@
 {% if bans|count > 0 and mod|hasPermission(config.mod.view_ban) %}
 	<fieldset id="bans">
 		{% set bans_on_record = 'ban' ~ (bans|count != 1 ? 's' : '') ~ ' on record' %}
-		<legend>{{ bans|count }} {% trans bans_on_record %}</legend>
+		{% set bans_count_plus = bans|count == config.mod.ip_range_page_max_bans ? '&gt;' : '' %}
+		<legend>{{ bans_count_plus }}{{ bans|count }} {% trans bans_on_record %}</legend>
 
 		{% for ban in bans %}
 			<form action="" method="post" class="userbanlist">

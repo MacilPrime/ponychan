@@ -721,10 +721,11 @@ function mod_page_ip($ip_url) {
 				") OR " .
 				"(`ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
 				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') " .
-				"ORDER BY `set` DESC LIMIT 50"
+				"ORDER BY `set` DESC LIMIT :limit"
 			);
 		}
 		$query->bindValue(':ip', $ip);
+		$query->bindValue(':limit', $config['mod']['ip_range_page_max_bans'], PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
 		$args['bans'] = $query->fetchAll(PDO::FETCH_ASSOC);
 	}
@@ -750,9 +751,10 @@ function mod_page_ip($ip_url) {
 				") OR " .
 				"(`ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
 				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') " .
-				"ORDER BY `time` DESC LIMIT 100");
+				"ORDER BY `time` DESC LIMIT :limit");
 		}
 		$query->bindValue(':ip', $ip);
+		$query->bindValue(':limit', $config['mod']['ip_range_page_max_notes'], PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
 		$args['notes'] = $query->fetchAll(PDO::FETCH_ASSOC);
 		foreach($args['notes'] as &$note) {
