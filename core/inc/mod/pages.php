@@ -714,6 +714,11 @@ function mod_page_ip($ip_url) {
 			$query = prepare(
 				"SELECT `bans`.*, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
 				"(`ip` = :ip) OR " .
+				"(" .
+					":ip REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$' AND " .
+					"INET_ATON(`ip`) >= INET_ATON(SUBSTRING_INDEX(:ip, '/', 1)) AND " .
+					"INET_ATON(`ip`) < INET_ATON(SUBSTRING_INDEX(:ip, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(:ip, '/', -1))" .
+				") OR " .
 				"(`ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
 				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') " .
 				"ORDER BY `set` DESC LIMIT 50"
@@ -738,6 +743,11 @@ function mod_page_ip($ip_url) {
 			$query = prepare(
 				"SELECT `ip_notes`.*, `username` FROM `ip_notes` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE " .
 				"(`ip` = :ip) OR " .
+				"(" .
+					":ip REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$' AND " .
+					"INET_ATON(`ip`) >= INET_ATON(SUBSTRING_INDEX(:ip, '/', 1)) AND " .
+					"INET_ATON(`ip`) < INET_ATON(SUBSTRING_INDEX(:ip, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(:ip, '/', -1))" .
+				") OR " .
 				"(`ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!') OR " .
 				"(:ip LIKE '%*%' AND `ip` LIKE REPLACE(REPLACE(:ip, '%', '!%'), '*', '%') ESCAPE '!') " .
 				"ORDER BY `time` DESC LIMIT 100");
