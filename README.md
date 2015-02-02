@@ -24,8 +24,9 @@ client javascript:
 
 1. Install Node.js onto your system.
 2. Install gulp and mocha onto your system with `npm install -g gulp mocha`.
-3. Install MLPchan's local javascript dependencies by running `npm install`
- inside this repository's directory.
+3. `cd client-core`
+4. Install MLPchan's local javascript dependencies by running `npm install`
+ inside the client-core directory.
 
 Now run `gulp` to build the client javascript. You may pass the `--watch` (`-w`)
 option to make gulp continue running and automatically rebuild the javascript
