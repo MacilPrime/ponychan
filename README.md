@@ -4,9 +4,9 @@
 2. Run "vagrant up" to start up a local virtual machine that will run a copy of
  MLPchan on yur local computer for development.
 3. When that completes, (as it instructs you to) visit
- http://localhost:8080/install.php to complete the Tinyboard installation,
+ http://172.27.0.2/install.php to complete the Tinyboard installation,
  while leaving the database settings as default, and then browse to
- http://localhost:8080/mod.php and log in as admin:password.
+ http://172.27.0.2/mod.php and log in as admin:password.
 
 All changes to PHP files will immediately take effect in the Vagrant virtual
 machine. The one exception is that the virtual machine has its own
