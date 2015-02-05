@@ -21,6 +21,7 @@
     }
   },
   "mysql": {
+    "host": "localhost",
     "user": "bob",
     "pass": "pass",
     "db": "database"
