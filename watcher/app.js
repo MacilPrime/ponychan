@@ -90,7 +90,7 @@ function conn_query(query, vars=[]) {
 function getThreadCount(thread) {
   const match = /^(\w+):(\d+)$/.exec(thread);
   if (!match) {
-    return {error: 'Improper thread specification'};
+    return RSVP.Promise.reject(new Error('Improper thread specification'));
   }
 
   const [, board, threadid] = match;
