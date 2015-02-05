@@ -1,11 +1,17 @@
-var util = require('util');
-var express = require('express');
-var swig = require('swig');
-var nconf = require('nconf');
-var redis = require('redis');
-var mysql = require('mysql');
-var toobusy = require('toobusy');
-var Q = require('q');
+const _ = require('lodash');
+const util = require('util');
+const express = require('express');
+const swig = require('swig');
+const nconf = require('nconf');
+const redis = require('redis');
+const mysql = require('mysql');
+const toobusy = require('toobusy');
+const RSVP = require('rsvp');
+
+RSVP.on('error', function(err) {
+  console.error('uncaught RSVP promise rejection');
+  throw err;
+});
 
 nconf
   .argv()
@@ -44,17 +50,17 @@ nconf
     }
   });
 
-var cdb = redis.createClient(nconf.get('redis:cache:socket') || nconf.get('redis:cache:port'), nconf.get('redis:cache:host'));
+const cdb = redis.createClient(nconf.get('redis:cache:socket') || nconf.get('redis:cache:port'), nconf.get('redis:cache:host'));
 if (nconf.get('redis:cache:pass'))
   cdb.auth(nconf.get('redis:cache:pass'));
 cdb.select(nconf.get('redis:cache:db'));
 
-var pdb = redis.createClient(nconf.get('redis:main:socket') || nconf.get('redis:main:port'), nconf.get('redis:main:host'));
+const pdb = redis.createClient(nconf.get('redis:main:socket') || nconf.get('redis:main:port'), nconf.get('redis:main:host'));
 if (nconf.get('redis:main:pass'))
   pdb.auth(nconf.get('redis:main:pass'));
 pdb.select(nconf.get('redis:main:db'));
 
-var conn = mysql.createConnection({
+const conn = mysql.createConnection({
   host: nconf.get('mysql:host'),
   user: nconf.get('mysql:user'),
   password: nconf.get('mysql:pass'),
@@ -62,15 +68,24 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-var app = express();
+const app = express();
 
-var max_watched_threads = nconf.get('max_watched_threads');
-var redis_prefix = nconf.get('redis:prefix');
-var cache_expire_time = nconf.get('redis:cache:expire_time');
-var http_cache_time = nconf.get('http_cache_time');
+const max_watched_threads = nconf.get('max_watched_threads');
+const redis_prefix = nconf.get('redis:prefix');
+const cache_expire_time = nconf.get('redis:cache:expire_time');
+const http_cache_time = nconf.get('http_cache_time');
 
-var cdb_get = Q.nfbind(cdb.get.bind(cdb));
-var conn_query = Q.nfbind(conn.query.bind(conn));
+const cdb_get = RSVP.denodeify(cdb.get.bind(cdb));
+function conn_query(query, vars=[]) {
+  return new RSVP.Promise((resolve, reject) => {
+    conn.query(query, vars, (err, ...results) => {
+      if (err)
+        reject(err);
+      else
+        resolve(results);
+    });
+  });
+}
 
 function getThreadCount(thread) {
   var match = /^(\w+):(\d+)$/.exec(thread);
@@ -83,24 +98,21 @@ function getThreadCount(thread) {
 
   var thread_redis_entry = redis_prefix+'thread_'+thread+'_reply_count';
 
-  var thread_value_job = cdb_get(thread_redis_entry).then(function(value) {
+  return cdb_get(thread_redis_entry).then(function(value) {
     if (value != null)
       return JSON.parse(value);
 
     var sql_query = conn_query('SELECT COUNT(*) AS `count` FROM `posts_'+board+'` WHERE `id` = ? AND `thread` IS NULL', [threadid]).then(function(check_result) {
       if (check_result[0][0].count == 0)
         return {reply_count: null, last_reply_time: null};
-      return Q.all([
+      return RSVP.Promise.all([
         conn_query('SELECT COUNT(*) AS `replies` FROM `posts_'+board+'` WHERE `thread` = ?', [threadid]),
         conn_query('SELECT `time` FROM `posts_'+board+'` WHERE `thread` = ? OR `id` = ? ORDER BY `id` DESC LIMIT 1', [threadid, threadid])
-      ]).then(function(results) {
-        var count_result = results[0];
-        var time_result = results[1];
-
-        var last_time = (time_result[0].length ? parseInt(time_result[0][0].time) : null);
+      ]).then(function([count_result, time_result]) {
+        const last_time = (time_result[0].length ? parseInt(time_result[0][0].time) : null);
         return {reply_count: parseInt(count_result[0][0].replies), last_reply_time: last_time};
       });
-    }).fail(function(err) {
+    }).catch(function(err) {
       if (!err.fatal && err.code == 'ER_NO_SUCH_TABLE')
         return {reply_count: null, last_reply_time: null};
       else
@@ -111,7 +123,6 @@ function getThreadCount(thread) {
     });
     return sql_query;
   });
-  return thread_value_job;
 }
 
 function getThreadCounts(threads) {
@@ -121,7 +132,7 @@ function getThreadCounts(threads) {
     promises.push(getThreadCount(thread).then(function(value) {return [thread, value];}));
   });
 
-  return Q.all(promises).then(function(all) {
+  return RSVP.Promise.all(promises).then(function(all) {
     var threads = {};
     for (var i in all) {
       var thread = all[i][0];
@@ -133,20 +144,18 @@ function getThreadCounts(threads) {
 }
 
 function getScripts(userid) {
-  var defer = Q.defer();
+  return new RSVP.Promise((resolve, reject) => {
+    var sets = [redis_prefix+'scripts_all'];
+    if (userid)
+      sets.push(redis_prefix+'scripts_user_'+userid);
 
-  var sets = [redis_prefix+'scripts_all'];
-  if (userid)
-    sets.push(redis_prefix+'scripts_user_'+userid);
-
-  cdb.sunion(sets, function(err, scripts) {
-    if (err)
-      defer.reject(err);
-    else
-      defer.resolve(scripts);
+    cdb.sunion(sets, (err, scripts) => {
+      if (err)
+        reject(err);
+      else
+        resolve(scripts);
+    });
   });
-
-  return defer.promise;
 }
 
 function checkUserid(req, res, next) {
@@ -192,7 +201,7 @@ app.get('/threads', checkUserid, function(req, res, next) {
         data.scripts = scripts;
       res.send(data);
     });
-  }).fail(next);
+  }).catch(next);
 });
 
 var port = nconf.get('listen:port');
