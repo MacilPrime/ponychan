@@ -88,29 +88,28 @@ function conn_query(query, vars=[]) {
 }
 
 function getThreadCount(thread) {
-  var match = /^(\w+):(\d+)$/.exec(thread);
+  const match = /^(\w+):(\d+)$/.exec(thread);
   if (!match) {
     return {error: 'Improper thread specification'};
   }
 
-  var board = match[1];
-  var threadid = match[2];
+  const [, board, threadid] = match;
 
-  var thread_redis_entry = redis_prefix+'thread_'+thread+'_reply_count';
+  const thread_redis_entry = redis_prefix+'thread_'+thread+'_reply_count';
 
   return cdb_get(thread_redis_entry).then(function(value) {
     if (value != null)
       return JSON.parse(value);
 
-    var sql_query = conn_query('SELECT COUNT(*) AS `count` FROM `posts_'+board+'` WHERE `id` = ? AND `thread` IS NULL', [threadid]).then(function(check_result) {
+    const sql_query = conn_query('SELECT COUNT(*) AS `count` FROM `posts_'+board+'` WHERE `id` = ? AND `thread` IS NULL', [threadid]).then(function(check_result) {
       if (check_result[0][0].count == 0)
         return {reply_count: null, last_reply_time: null};
       return RSVP.Promise.all([
         conn_query('SELECT COUNT(*) AS `replies` FROM `posts_'+board+'` WHERE `thread` = ?', [threadid]),
         conn_query('SELECT `time` FROM `posts_'+board+'` WHERE `thread` = ? OR `id` = ? ORDER BY `id` DESC LIMIT 1', [threadid, threadid])
       ]).then(function([count_result, time_result]) {
-        const last_time = (time_result[0].length ? parseInt(time_result[0][0].time) : null);
-        return {reply_count: parseInt(count_result[0][0].replies), last_reply_time: last_time};
+        const last_reply_time = (time_result[0].length ? parseInt(time_result[0][0].time) : null);
+        return {reply_count: parseInt(count_result[0][0].replies), last_reply_time};
       });
     }).catch(function(err) {
       if (!err.fatal && err.code == 'ER_NO_SUCH_TABLE')
@@ -126,20 +125,12 @@ function getThreadCount(thread) {
 }
 
 function getThreadCounts(threads) {
-  var promises = [];
+  const promises = threads.map(thread =>
+    getThreadCount(thread).then(value => [thread, value])
+  );
 
-  threads.forEach(function(thread) {
-    promises.push(getThreadCount(thread).then(function(value) {return [thread, value];}));
-  });
-
-  return RSVP.Promise.all(promises).then(function(all) {
-    var threads = {};
-    for (var i in all) {
-      var thread = all[i][0];
-      var data = all[i][1];
-      threads[thread] = data;
-    }
-    return threads;
+  return RSVP.Promise.all(promises).then((all) => {
+    return _.zipObject(all.map(item => item[0]), all.map(item => item[1]));
   });
 }
 
@@ -204,8 +195,8 @@ app.get('/threads', checkUserid, function(req, res, next) {
   }).catch(next);
 });
 
-var port = nconf.get('listen:port');
-var host = nconf.get('listen:host');
+const port = nconf.get('listen:port');
+const host = nconf.get('listen:host');
 
 app.listen(port, host, function() {
   console.log("Now listening on "+host+":"+port);
