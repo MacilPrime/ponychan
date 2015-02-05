@@ -72,8 +72,6 @@ var http_cache_time = nconf.get('http_cache_time');
 var cdb_get = Q.nfbind(cdb.get.bind(cdb));
 var conn_query = Q.nfbind(conn.query.bind(conn));
 
-var SEND_JS = require('fs').readFileSync(__dirname+'/send.js', 'utf8');
-
 function getThreadCount(thread) {
   var match = /^(\w+):(\d+)$/.exec(thread);
   if (!match) {
@@ -189,7 +187,7 @@ app.get('/threads', checkUserid, function(req, res, next) {
 
   getThreadCounts(threads).then(function(threadcounts) {
     return getScripts(req.userid).then(function(scripts) {
-      var data = {threads: threadcounts, scripts: [SEND_JS]};
+      var data = {threads: threadcounts};
       if (scripts && scripts.length)
         data.scripts = scripts;
       res.send(data);
