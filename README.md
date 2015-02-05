@@ -1,4 +1,20 @@
+MLPchan's code is split into several different interdependent modules.
+
+* core is based on Tinyboard, contains PHP code, and is placed in the
+  webserver's publicly accessible document root. When using Vagrant to run the
+  site locally, core is run within the Vagrant virtual machine.
+
+* client-core contains the source of the javascript bundles served to users.
+  Browserify, 6to5, and gulp are used to build the bundles. The output bundles
+  are automatically placed into core/js/ when built.
+
+* watcher contains the server side code for the /watcher/threads endpoint.
+  Nodejs and 6to5 are used. If you don't run this module, then the thread
+  watcher will not work.
+
 ## Quick Development Start
+
+### core
 
 1. Install Vagrant and VirtualBox.
 2. Run "vagrant up" to start up a local virtual machine that will run a copy of
@@ -18,6 +34,10 @@ any PHP errors. This is extremely recommended when doing any server work!
 
     vagrant ssh -- sudo tail --follow=name /var/log/nginx/error.log
 
+There are no PHP unit tests yet. This is an issue.
+
+### client-core
+
 The client javascript is stored under `src/` and Gulp and Browserify are used to
 build it into the output file served by the site. Prerequisites for building the
 client javascript:
@@ -36,4 +56,15 @@ Mocha is used for javascript unit tests. Just run `mocha` to execute all of the
 javascript tests in the test/ directory. We don't have that many yet and can
 always use more.
 
-There are no PHP unit tests yet. This is an issue.
+### watcher
+
+The Vagrant virtual machine must already be running on your computer. When you
+run watcher on your computer, it will connect to the virtual machine and access
+its mysql and redis databases. The virtual machine's webserver will redirect
+connections for /watcher/threads to the watcher instance on your computer. If
+you don't run watcher, then those calls will fail and the thread watcher
+feature just won't work.
+
+1. `cd watcher`
+2. `npm install`
+3. `npm start`
