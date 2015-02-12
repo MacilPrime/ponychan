@@ -1109,7 +1109,7 @@
 	// Delete all posts by IP
 	$config['mod']['deletebyip'] = MOD;
 	// Delete all posts by IP across all boards
-	$config['mod']['deletebyip_global'] = ADMIN;
+	$config['mod']['deletebyip_global'] = MOD;
 	// Force-bump a thread
 	$config['mod']['bump'] = MOD;
 	// Sticky a thread
