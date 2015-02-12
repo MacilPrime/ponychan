@@ -722,6 +722,7 @@
 
 	$config['stylesheets']['Cloudsdale'] = 'Cloudsdale.css';
 	$config['stylesheets']['Pone'] = 'pone.css';
+	$config['stylesheets']['Colgate'] = 'colgate.css';
 	$config['stylesheets']['Yotsuba B'] = ''; // default
 	$config['stylesheets']['Yotsuba'] = 'yotsuba.css';
 	// $config['stylesheets']['Futaba'] = 'futaba.css';
