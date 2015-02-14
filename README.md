@@ -55,6 +55,10 @@ Now run `gulp` to build the client javascript. You may pass the `--watch` (`-w`)
 option to make gulp continue running and automatically rebuild the javascript
 when any of the source files change.
 
+The javascript codebase was only recently transitioned to Browserify, and many
+modules still rely on global variables exposed by other modules. The
+CommonJS/ES6 module style should be used going further.
+
 Mocha is used for javascript unit tests. Just run `mocha` to execute all of the
 javascript tests in the test/ directory. We don't have that many yet and can
 always use more.
