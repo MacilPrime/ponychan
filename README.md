@@ -18,7 +18,7 @@ MLPchan's code is split into several different interdependent modules.
 
 1. Install Vagrant and VirtualBox.
 2. Run "vagrant up" to start up a local virtual machine that will run a copy of
- MLPchan on yur local computer for development.
+ MLPchan on your local computer for development.
 3. When that completes, (as it instructs you to) visit
  http://172.27.0.2/install.php to complete the Tinyboard installation,
  while leaving the database settings as default, and then browse to
