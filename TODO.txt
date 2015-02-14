@@ -17,6 +17,8 @@ ponychan css themes
 user filters
 - needs settings page re-work. Using react for settings page.
 
+thread tags and board thread filter toggle buttons
+
 /anon/: make name field default to blank
 - dropdown for remembered names+trips? https://helgesverre.com/blog/textbox-dropdown-html5/
 
