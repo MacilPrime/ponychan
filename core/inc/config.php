@@ -465,11 +465,11 @@
  */
 
 	// For resizing, max thumbnail size
-	$config['thumb_width'] = 255;
-	$config['thumb_height'] = 255;
+	$config['thumb_width'] = 125;
+	$config['thumb_height'] = 125;
 	// Max thumbnail size for thread images
-	$config['thumb_op_width'] = 255;
-	$config['thumb_op_height'] = 255;
+	$config['thumb_op_width'] = 250;
+	$config['thumb_op_height'] = 250;
 
 	// Thumbnail extension, empty for inherited (png recommended)
 	$config['thumb_ext'] = '';
