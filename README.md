@@ -23,6 +23,9 @@ MLPchan's code is split into several different interdependent modules.
  http://172.27.0.2/install.php to complete the Tinyboard installation,
  while leaving the database settings as default, and then browse to
  http://172.27.0.2/mod.php and log in as admin:password.
+4. In the Administration section's "Manage themes" page, click install on the
+ "Categories" and "MLPchan" themes and use the default settings. (TODO:
+ Automatically do this in the install process.)
 
 All changes to PHP files will immediately take effect in the Vagrant virtual
 machine. The one exception is that the virtual machine has its own
