@@ -43,7 +43,11 @@ function browserifyTask(name, entry, destname) {
   gulp.task(name, function() {
     var bundler = browserify({
       debug: true,
-      entries: ['babel/polyfill', entry],
+      entries: [
+        'console-polyfill',
+        'babel/polyfill',
+        entry
+      ],
       noparse: ['jquery', 'moment', 'baconjs', 'rsvp'],
       cache: {}, packageCache: {}, fullPaths: args.watch
     });

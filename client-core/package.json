@@ -13,6 +13,7 @@
     "babel-core": "^4.0.1",
     "babelify": "^5.0.3",
     "browserify": "^8.1.1",
+    "console-polyfill": "^0.2.0",
     "envify": "^3.2.0",
     "exec-sync": "^0.1.6",
     "gulp": "^3.8.10",
