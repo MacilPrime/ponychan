@@ -44,7 +44,7 @@ function browserifyTask(name, entry, destname) {
     var bundler = browserify({
       debug: true,
       entries: ['babel/polyfill', entry],
-      noparse: ['jquery', 'moment', 'baconjs', 'rsvp', 'underscore'],
+      noparse: ['jquery', 'moment', 'baconjs', 'rsvp'],
       cache: {}, packageCache: {}, fullPaths: args.watch
     });
     bundler.transform(babelify);
