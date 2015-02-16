@@ -9,8 +9,9 @@
     "underscore": "1.7.0"
   },
   "devDependencies": {
-    "6to5": "^2.13.5",
-    "6to5ify": "^3.1.2",
+    "babel": "^4.0.1",
+    "babel-core": "^4.0.1",
+    "babelify": "^5.0.3",
     "browserify": "^8.1.1",
     "envify": "^3.2.0",
     "exec-sync": "^0.1.6",
