@@ -1291,23 +1291,25 @@ function mod_deletebyip($boardName, $post, $global = false) {
 	set_time_limit($config['mod']['rebuild_timelimit']);
 
 	$threads_to_rebuild = array();
-	$threads_deleted = array();
 	while ($post = $query->fetch()) {
 		openBoard($post['board']);
-
 		deletePost($post['id'], false, false);
 
-		if ($post['thread'])
-			$threads_to_rebuild[$post['board']][$post['thread']] = true;
-		else
-			$threads_deleted[$post['board']][$post['id']] = true;
+		if ($post['thread']) {
+			if (!isset($threads_to_rebuild[$post['board']][$post['thread']])) {
+				$threads_to_rebuild[$post['board']][$post['thread']] = true;
+			}
+		} else {
+			$threads_to_rebuild[$post['board']][$post['id']] = false;
+		}
 	}
 
 	foreach ($threads_to_rebuild as $_board => $_threads) {
 		openBoard($_board);
-		foreach ($_threads as $_thread => $_dummy) {
-			if ($_dummy && !isset($threads_deleted[$_board][$_thread]))
+		foreach ($_threads as $_thread => $_shouldRebuildThread) {
+			if ($_shouldRebuildThread) {
 				buildThread($_thread);
+			}
 		}
 		buildIndex();
 	}
