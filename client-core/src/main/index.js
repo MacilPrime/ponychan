@@ -41,6 +41,6 @@ window._dbg = {
   main_require: require,
   RSVP: require('rsvp'),
   $: require('jquery'),
-  _: require('underscore'),
+  _: require('lodash'),
   moment: require('moment')
 };

@@ -4,9 +4,9 @@
   "dependencies": {
     "baconjs": "0.7.42",
     "jquery": "1.11.2",
+    "lodash": "3.2.0",
     "moment": "2.9.0",
-    "rsvp": "3.0.14",
-    "underscore": "1.7.0"
+    "rsvp": "3.0.14"
   },
   "devDependencies": {
     "babel": "^4.0.1",

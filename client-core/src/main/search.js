@@ -7,7 +7,7 @@
  */
 
 var RSVP = require('rsvp');
-var _ = require('underscore');
+var _ = require('lodash');
 
 $(document).ready(function() {
 	// don't run inside threads

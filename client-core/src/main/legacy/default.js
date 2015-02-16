@@ -251,7 +251,7 @@ window.pageHasFocus = function() {
 	return true;
 };
 
-// TODO replace with underscore
+// TODO replace with lodash
 window.isArray = function isArray(o) {
 	return Object.prototype.toString.call(o) === '[object Array]';
 };
