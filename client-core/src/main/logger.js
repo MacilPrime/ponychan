@@ -8,17 +8,6 @@
 
 var RSVP = require('rsvp');
 
-function nop() {}
-
-if (typeof console == "undefined" || !window.console) {
-	console = {
-		log: nop,
-		info: nop,
-		warn: nop,
-		error: nop
-	};
-}
-
 function basicStringHash(string, prevHash){
 	var hash = 0;
 	if (prevHash)
