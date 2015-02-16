@@ -30,7 +30,6 @@
   },
   "browser": {
     "jquery": "jquery/dist/jquery.min.js",
-    "underscore": "underscore/underscore-min.js",
     "moment": "moment/min/moment.min.js"
   }
 }
