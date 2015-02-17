@@ -9,6 +9,8 @@
  *
  */
 
+import settings from './settings';
+
 (function(exports) {
 	settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6});
 

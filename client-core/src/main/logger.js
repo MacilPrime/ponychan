@@ -6,6 +6,7 @@
  *
  */
 
+import settings from './settings';
 var RSVP = require('rsvp');
 
 function basicStringHash(string, prevHash){

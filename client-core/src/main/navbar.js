@@ -11,6 +11,8 @@
  *
  */
 
+import settings from './settings';
+
 (function() {
 	var defval = true;
 	if(navigator.userAgent.match(/iPhone|iPod|Android|Opera Mini|Blackberry|PlayBook/i)) {
@@ -22,7 +24,7 @@
 $(document).ready(function(){
 	var navbarApplySettings = function() {
 		var $navbar = $(".boardlist.top");
-		
+
 		if (settings.getSetting("fixed_navbar")) {
 			$navbar.css("position", "fixed");
 			setCss("navbar", ".jumpHandle { position: relative; top: "+(-16-$navbar.outerHeight())+"px; }");

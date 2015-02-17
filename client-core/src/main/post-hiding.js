@@ -10,6 +10,8 @@
  *
  */
 
+import settings from './settings';
+
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {moredetails:"Only available on certain boards", orderhint:1});
 settings.newSetting("mature_as_spoiler", "bool", false, "Treat mature content images as spoilered images", 'filters', {orderhint:2});
 settings.newSetting("show_hide_buttons", "bool", true, "Show post hiding buttons", 'filters', {orderhint:3});

@@ -1,3 +1,4 @@
+import settings from './settings';
 
 settings.newSetting(
   "desktop_notifications",

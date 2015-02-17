@@ -11,6 +11,8 @@
  *
  */
 
+import settings from './settings';
+
 var log_error = require('./logger').log_error;
 
 var styleChoices = {};

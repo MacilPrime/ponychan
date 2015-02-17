@@ -12,6 +12,8 @@
  *
  */
 
+import settings from './settings';
+
 var RSVP = require('rsvp');
 var reloader = require('./legacy/reloader').reloader;
 var thumbnailer = require('./thumbnailer').thumbnailer;

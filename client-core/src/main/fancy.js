@@ -12,6 +12,8 @@
  *
  */
 
+import settings from './settings';
+
 settings.newSetting("fancy_mode", "bool", false, "Fancy mode", 'pagestyle', {orderhint:20});
 
 $(document).ready(function(){
@@ -19,7 +21,7 @@ $(document).ready(function(){
 	var show_fancy = false;
 	var fancy_pends = [];
 	init_fancy_option();
-	
+
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "fancy_mode") {
 			fancy_mode = settings.getSetting("fancy_mode");

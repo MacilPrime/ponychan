@@ -6,7 +6,9 @@
  *
  */
 
-var moment = require("moment");
+import moment from "moment";
+import $ from 'jquery';
+import settings from './settings';
 
 settings.newSetting("time_casual", "bool", false, "12 hour time display", 'pagestyle', {orderhint: 4});
 
