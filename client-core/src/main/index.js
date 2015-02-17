@@ -5,7 +5,7 @@ window.jQuery = window.$ = require('jquery');
 require('./logger.js');
 require('./legacy/default.js');
 require('./notice.js');
-require('./legacy/settings.js');
+require('./settings.js');
 require('./state.js');
 require('./styles.js');
 require('./spoiler-toggle.js');
