@@ -15,36 +15,36 @@
 		.attr("id", "settingsScreen")
 		.addClass("settingsScreen")
 		.hide();
-	
+
 	var $settingsTitle = $("<h1/>")
 		.text("Board Settings")
 		.appendTo($settingsScreen);
-	
+
 	var $settingsCloseButton = $("<a/>")
 		.text("X")
 		.addClass("settings-close-button")
 		.attr("href", "javascript:;")
 		.appendTo($settingsTitle);
-	
+
 	var $settingsTopHR = $("<hr/>").appendTo($settingsScreen);
-	
+
 	var $settingsButton = $("<a/>")
 		.addClass("settingsButton")
 		.text("settings");
-	
+
 	var $settingsSection = $("<span/>")
 		.addClass("settingsSection")
 		.addClass("boardlistpart")
 		.append('[ ', $settingsButton, ' ]');
-	
+
 	var $settingsOverlay = $("<div/>")
 		.attr("id", "settings-overlay")
 		.hide();
-	
+
 	// DOM setup over
-	
+
 	var isSettingsPage = false;
-	
+
 	function shouldCompatSettingsPage() {
 		// Returns true if we don't think the normal settings
 		// screen pop-up can be scrolled correctly by the
@@ -57,35 +57,35 @@
 		}
 		return false;
 	}
-	
+
 	function showWindow() {
 		if (isSettingsPage) return;
 		$settingsOverlay.show();
 		$settingsScreen.fadeIn("fast");
 	}
 	exports.showWindow = showWindow;
-	
+
 	function hideWindow() {
 		if (isSettingsPage) return;
 		$settingsScreen.hide();
 		$settingsOverlay.hide();
 	}
 	exports.hideWindow = hideWindow;
-	
+
 	$settingsOverlay.click(hideWindow);
 	$settingsCloseButton.click(hideWindow);
-	
+
 	if (!window.localStorage)
 		var tempSettingsStorage = {};
-	
+
 	var settingTypes = {};
 	var defaultValues = {};
 	var settingSelectOptions = {};
 	var settingValidators = {};
-	
+
 	function getSetting(name, noDefault) {
 		var id = "setting_"+name;
-		
+
 		// At the end of this if-else block, localVal will either have null, meaning that the
 		// user has not set the setting, or it will be a 2-length array of [value, priority].
 		// See newSetting's extra.defpriority param for explanation of priority.
@@ -101,7 +101,7 @@
 				if (rawVal[0] === '[') {
 					try {
 						localVal = JSON.parse(rawVal);
-						if (!isArray(localVal) || localVal.length != 2 || typeof localVal[1] !== "number") {
+						if (!Array.isArray(localVal) || localVal.length != 2 || typeof localVal[1] !== "number") {
 							console.error("localVal has bad format:", localVal);
 							localVal = null;
 						}
@@ -134,7 +134,7 @@
 					default:
 						throw Error("Invalid compat property type: "+type+", name: "+name);
 					}
-					
+
 					if (rawVal != null)
 						localVal = [rawVal, 0];
 				}
@@ -143,26 +143,26 @@
 			if (tempSettingsStorage.hasOwnProperty(id))
 				localVal = tempSettingsStorage[id];
 		}
-		
+
 		if (!defaultValues[name])
 			throw Error("No such setting: "+name);
-		
+
 		if (localVal == null || defaultValues[name][1] > localVal[1])
 			return noDefault ? null : defaultValues[name][0];
-		
+
 		return localVal[0];
 	}
 	exports.getSetting = getSetting;
-	
+
 	function setSetting(name, value, notquiet) {
 		var id = "setting_"+name;
-		
+
 		if (!window.localStorage && notquiet)
 			alert("Your browser does not support the localStorage standard. Settings will not be saved. Please upgrade your browser!");
-		
+
 		if (!defaultValues[name])
 			throw Error("No such setting: "+name);
-		
+
 		if (value == null) {
 			if (window.localStorage)
 				localStorage.removeItem(id);
@@ -170,7 +170,7 @@
 				delete tempSettingsStorage[id];
 		} else {
 			var toWrite = [value, defaultValues[name][1]];
-			
+
 			if (window.localStorage) {
 				try {
 					localStorage.setItem(id, JSON.stringify(toWrite));
@@ -186,14 +186,14 @@
 		$(document).trigger("setting_change", name)
 	}
 	exports.setSetting = setSetting;
-	
+
 	function bindCheckbox($checkbox, name) {
 		var changeGuard = false;
 		if (settingTypes[name] !== "bool") {
 			console.error("Can not bind checkbox to non-bool setting ("+name+", type:"+settingTypes[name]+")");
 			return;
 		}
-		
+
 		$checkbox
 			.prop("checked", getSetting(name))
 			.change(function() {
@@ -203,7 +203,7 @@
 					changeGuard = false;
 				}
 			});
-		
+
 		$(document).on("setting_change", function(e, setting) {
 			if (name == setting) {
 				changeGuard = true;
@@ -213,20 +213,20 @@
 		});
 	}
 	exports.bindCheckbox = bindCheckbox;
-	
+
 	function bindSelect($select, name) {
 		var changeGuard = false;
 		if (settingTypes[name] !== "select") {
 			console.error("Can not bind select to non-select setting ("+name+", type:"+settingTypes[name]+")");
 			return;
 		}
-		
+
 		var choices = settingSelectOptions[name];
-		
+
 		$.each(choices, function(key, text) {
 			$("<option/>").attr("value", key).text(text).appendTo($select);
 		});
-		
+
 		$select
 			.val(getSetting(name))
 			.change(function() {
@@ -236,7 +236,7 @@
 					changeGuard = false;
 				}
 			});
-		
+
 		$(document).on("setting_change", function(e, setting) {
 			if (name == setting) {
 				changeGuard = true;
@@ -246,33 +246,33 @@
 		});
 	}
 	exports.bindSelect = bindSelect;
-	
+
 	// Contains an array of tuples of [orderhint, name]
 	var section_order = [];
 	// Contains a key for each section, and then an array of tuples of the above format.
 	var section_prop_order = {};
-	
+
 	function newSection(name, displayName, orderhint, modOnly) {
 		if (orderhint == null)
 			orderhint = 0;
 		var id = "settings_section_"+name;
-		
+
 		if ($('#'+id).length)
 			throw new Error('Section '+name+' already exists!');
-		
+
 		var $sectionDiv = $("<div/>")
 			.addClass("setting_section")
 			.attr("id", id);
 		var $sectionHeader = $("<h2/>")
 			.text(displayName)
 			.prependTo($sectionDiv);
-		
+
 		if (modOnly) {
 			$sectionDiv.addClass('mod_settings_section');
 			if (document.location.pathname != siteroot+'mod.php')
 				$sectionDiv.hide();
 		}
-		
+
 		var nextname = null;
 		for(var i=0; i<section_order.length; i++) {
 			if (orderhint < section_order[i][0]) {
@@ -294,7 +294,7 @@
 		section_prop_order[name] = [];
 	}
 	exports.newSection = newSection;
-	
+
 	// Adds a setting to the settings menu.
 	// parameters:
 	//  name: setting id string. Needs to be unique against other settings.
@@ -314,30 +314,30 @@
 		var orderhint = 0;
 		if (extra && extra.orderhint != null)
 			orderhint = extra.orderhint;
-		
+
 		var defpriority = 0;
 		if (extra && extra.defpriority != null)
 			defpriority = extra.defpriority;
-		
+
 		var id = "setting_"+name;
-		
+
 		if (settingTypes.hasOwnProperty(name))
 			throw new Error('Setting '+name+' has already been defined!');
-		
+
 		settingTypes[name] = type;
 		defaultValues[name] = [defval, defpriority];
 		if (extra && extra.validator)
 			settingValidators[name] = extra.validator;
-		
+
 		var section_id = "settings_section_"+section;
 		var $sectionDiv = $settingsScreen.find("#"+section_id);
 		if (!$sectionDiv.length || !section_prop_order.hasOwnProperty(section))
 			throw new Error('Section '+section+' does not exist!');
-		
+
 		var $settingDiv = $("<div/>")
 			.addClass("setting_part")
 			.attr("id", id);
-		
+
 		if (type==="bool") {
 			var $label = $("<label/>")
 				.attr("for", "cb_"+id)
@@ -347,12 +347,12 @@
 				.attr("type", "checkbox")
 				.attr("id", "cb_"+id)
 				.prependTo($label);
-			
+
 			bindCheckbox($checkbox, name);
 		} else if (type==="select") {
 			if (!extra || !extra.selectOptions)
 				throw new Error('Select setting type needs selectOptions parameter!');
-			
+
 			settingSelectOptions[name] = extra.selectOptions;
 			$settingDiv.text(" "+description);
 			var $settingSelect = $("<select/>").prependTo($settingDiv);
@@ -361,18 +361,18 @@
 			$settingDiv.remove();
 			throw new Error("Unknown setting type ("+name+", type:"+type+")");
 		}
-		
+
 		if (extra && extra.moredetails) {
 			var $moredetails = $("<div/>")
 				.addClass("setting_more_details")
 				.appendTo($settingDiv);
-			
+
 			if (extra.moredetails_rawhtml)
 				$moredetails.html(extra.moredetails);
 			else
 				$moredetails.text(extra.moredetails);
 		}
-		
+
 		var nextname = null;
 		var prop_order = section_prop_order[section];
 		for(var i=0; i<prop_order.length; i++) {
@@ -394,7 +394,7 @@
 		}
 	}
 	exports.newSetting = newSetting;
-	
+
 	function getAllSettings(noDefault) {
 		var allSettings = {};
 		$.each(settingTypes, function(index) {
@@ -403,13 +403,13 @@
 		return allSettings;
 	}
 	exports.getAllSettings = getAllSettings;
-	
+
 	$(document).ready(function() {
 		// If the settings stuff already is on the page, then remove
 		// it. This can happen if the user saves the page from a web
 		// browser and opens it again.
 		$(".settingsScreen, .settingsSection, #settings-overlay").remove();
-		
+
 		var $settingsPage = $("#settingsPage");
 		if ($settingsPage.length) {
 			isSettingsPage = true;
@@ -420,7 +420,7 @@
 		} else {
 			$(document.body).append($settingsOverlay, $settingsScreen);
 			$(".boardlist").append($settingsSection);
-			
+
 			if(shouldCompatSettingsPage()) {
 				$(".settingsButton").attr("href", siteroot+"settings.html");
 			} else {
@@ -437,7 +437,7 @@
 			return fn.apply(this, arguments);
 		}
 	}
-	
+
 	// Use newSetting instead.
 	function newProp(name, type, defval, description, moredetails, section, orderhint) {
 		var extra = {moredetails: moredetails, orderhint: orderhint};

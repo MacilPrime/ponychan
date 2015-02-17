@@ -251,11 +251,6 @@ window.pageHasFocus = function() {
 	return true;
 };
 
-// TODO replace with lodash
-window.isArray = function isArray(o) {
-	return Object.prototype.toString.call(o) === '[object Array]';
-};
-
 window.setCss = function setCss(key, css) {
 	var $style = $("style.setcss#setcss_"+key);
 	if (!$style.length && css) {
