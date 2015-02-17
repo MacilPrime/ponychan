@@ -59,13 +59,13 @@ function shouldCompatSettingsPage() {
 	return false;
 }
 
-export function showWindow() {
+function showWindow() {
 	if (isSettingsPage) return;
 	$settingsOverlay.show();
 	$settingsScreen.fadeIn("fast");
 }
 
-export function hideWindow() {
+function hideWindow() {
 	if (isSettingsPage) return;
 	$settingsScreen.hide();
 	$settingsOverlay.hide();
@@ -82,7 +82,7 @@ var defaultValues = {};
 var settingSelectOptions = {};
 var settingValidators = {};
 
-export function getSetting(name, noDefault) {
+function getSetting(name, noDefault) {
 	var id = "setting_"+name;
 
 	// At the end of this if-else block, localVal will either have null, meaning that the
@@ -152,7 +152,7 @@ export function getSetting(name, noDefault) {
 	return localVal[0];
 }
 
-export function setSetting(name, value, notquiet) {
+function setSetting(name, value, notquiet) {
 	var id = "setting_"+name;
 
 	if (!window.localStorage && notquiet)
@@ -181,10 +181,10 @@ export function setSetting(name, value, notquiet) {
 			tempSettingsStorage[id] = toWrite;
 		}
 	}
-	$(document).trigger("setting_change", name)
+	$(document).trigger("setting_change", name);
 }
 
-export function bindCheckbox($checkbox, name) {
+function bindCheckbox($checkbox, name) {
 	var changeGuard = false;
 	if (settingTypes[name] !== "bool") {
 		console.error("Can not bind checkbox to non-bool setting ("+name+", type:"+settingTypes[name]+")");
@@ -210,7 +210,7 @@ export function bindCheckbox($checkbox, name) {
 	});
 }
 
-export function bindSelect($select, name) {
+function bindSelect($select, name) {
 	var changeGuard = false;
 	if (settingTypes[name] !== "select") {
 		console.error("Can not bind select to non-select setting ("+name+", type:"+settingTypes[name]+")");
@@ -247,7 +247,7 @@ var section_order = [];
 // Contains a key for each section, and then an array of tuples of the above format.
 var section_prop_order = {};
 
-export function newSection(name, displayName, orderhint, modOnly) {
+function newSection(name, displayName, orderhint, modOnly) {
 	if (orderhint == null)
 		orderhint = 0;
 	var id = "settings_section_"+name;
@@ -304,7 +304,7 @@ export function newSection(name, displayName, orderhint, modOnly) {
 //                over the user's value. This allows the default setting to be changed at a
 //                future time, optionally overriding an older setting set by the user.
 //   validator: TODO, planned for future "text" type
-export function newSetting(name, type, defval, description, section, extra) {
+function newSetting(name, type, defval, description, section, extra) {
 	var orderhint = 0;
 	if (extra && extra.orderhint != null)
 		orderhint = extra.orderhint;
@@ -388,7 +388,7 @@ export function newSetting(name, type, defval, description, section, extra) {
 	}
 }
 
-export function getAllSettings(noDefault) {
+function getAllSettings(noDefault) {
 	var allSettings = {};
 	$.each(settingTypes, function(index) {
 		allSettings[index] = getSetting(index, noDefault);
@@ -416,10 +416,19 @@ $(document).ready(function() {
 		if(shouldCompatSettingsPage()) {
 			$(".settingsButton").attr("href", siteroot+"settings.html");
 		} else {
-			$(".settingsButton").attr("href", "javascript:;").click(settings.showWindow);
+			$(".settingsButton").attr("href", "javascript:;").click(showWindow);
 		}
 	}
 });
+
+const settings = {
+	showWindow, hideWindow,
+	getSetting, setSetting,
+	bindCheckbox, bindSelect,
+	newSection, newSetting,
+	getAllSettings
+};
+export default settings;
 
 newSection('pagestyle', 'Page Formatting', 1);
 newSection('mod', 'Moderation', 1.5, true);

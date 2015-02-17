@@ -11,6 +11,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from './settings';
 import {log_error} from './logger';
 
