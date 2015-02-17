@@ -5,14 +5,11 @@
  * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
  * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
  *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/default.js';
- *
  */
 
 import $ from 'jquery';
 import {log_error} from '../logger';
+import myPosts from '../my-posts';
 
 window.get_cookie = function get_cookie(cookie_name) {
 	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
@@ -141,7 +138,7 @@ window.rememberStuff = function rememberStuff() {
 							var postid = successful[id];
 							var threadid = (split[1] == 0) ? null : parseInt(split[1]);
 							var board = split[0];
-							if (postlinkinfo.myposts.indexOf(board+":"+postid) == -1) {
+							if (!myPosts.contains(board+":"+postid)) {
 								var url = make_thread_url(board, (threadid == null) ? postid : threadid);
 								$(document).trigger('post_submitted', {
 									postid: postid,

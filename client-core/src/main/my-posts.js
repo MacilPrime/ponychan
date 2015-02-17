@@ -9,18 +9,26 @@
  *
  */
 
+var myposts = [];
+
+const myPosts = {
+	contains(id) {
+		return myposts.indexOf(id) !== -1;
+	}
+};
+
+export default myPosts;
+
 import $ from 'jquery';
 import settings from './settings';
 import {get_post_num, get_post_board} from './post-info';
 
 settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6});
 
-var myposts = [];
-exports.myposts = myposts;
-
 function loadMyPosts() {
-	if (window.sessionStorage && sessionStorage.myposts)
-		exports.myposts = myposts = JSON.parse(sessionStorage.myposts);
+	if (window.sessionStorage && sessionStorage.myposts) {
+		myposts = JSON.parse(sessionStorage.myposts);
+	}
 }
 function saveMyPosts() {
 	if (window.sessionStorage)

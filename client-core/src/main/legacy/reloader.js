@@ -7,16 +7,18 @@
  */
 
 import $ from 'jquery';
+import Bacon from 'baconjs';
 import settings from '../settings';
 import {get_post_num} from '../post-info';
 
 settings.newSetting("reloader", "bool", true, "Enable thread auto-updating", 'reloader', {orderhint:1, moredetails:"New posts in threads will appear as they're made."});
 settings.newSetting("reloader_autoscroll", "bool", false, "Scroll page down when new posts are loaded", 'reloader', {orderhint:2, moredetails:"Only happens if page is scrolled to the bottom already."});
 
-var reloader = {
-	updateThreadNow: function() {}
-};
-exports.reloader = reloader;
+const updateNoCache = new Bacon.Bus();
+
+export function updateThreadNow(nocache=false) {
+	updateNoCache.push(nocache);
+}
 
 $(document).ready(function(){
 	if($('div.banner').length == 0)
@@ -111,7 +113,7 @@ $(document).ready(function(){
 	$("<input/>")
 		.attr("type", "button")
 		.val("Update Now")
-		.click(function() {
+		.click(() => {
 			updateThreadNow();
 		})
 		.appendTo($statusSettings);
@@ -249,12 +251,11 @@ $(document).ready(function(){
 		}
 	}
 
-	function updateThreadNow(nocache) {
+	updateNoCache.onValue(nocache => {
 		timeSinceActivity = 0;
 		timeUntilUpdate = 0;
 		tick(nocache);
-	}
-	reloader.updateThreadNow = updateThreadNow;
+	});
 
 	$(document).keydown(function(event) {
 		if(/TEXTAREA|INPUT/.test(event.target.nodeName))

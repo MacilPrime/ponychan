@@ -16,7 +16,7 @@ import $ from 'jquery';
 import RSVP from 'rsvp';
 
 import settings from './settings';
-import {reloader} from './legacy/reloader';
+import {updateThreadNow} from './legacy/reloader';
 import {thumbnailer} from './thumbnailer';
 
 import util from './util';
@@ -1041,7 +1041,7 @@ $(document).ready(function(){
 						if (data.threadid == null) {
 							window.location.href = data.url;
 						} else {
-							setTimeout(reloader.updateThreadNow, 10, true);
+							setTimeout(updateThreadNow, 10, true);
 						}
 					} else {
 						if (data.error == 'message') {

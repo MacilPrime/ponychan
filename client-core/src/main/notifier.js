@@ -3,8 +3,6 @@
  *
  * Notifies user of replies to them in open threads
  *
- * Must be loaded after postlinkinfo.js
- *
  * Released under the MIT license
  * Copyright (c) 2014 Macil Tech <maciltech@gmail.com>
  *
@@ -12,7 +10,6 @@
 
 import $ from 'jquery';
 import settings from './settings';
-
 import {log_error} from './logger';
 import titlebar from './titlebar';
 import {get_post_id} from './post-info';

@@ -9,7 +9,7 @@ require('./spoiler-toggle.js');
 require('./local-time.js');
 require('./legacy/reloader.js');
 require('./legacy/post-hover.js');
-require('./postlinkinfo.js');
+require('./my-posts.js');
 require('./watcher.js');
 require('./notifier.js');
 require('./show-filenames.js');
