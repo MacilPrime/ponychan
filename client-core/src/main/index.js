@@ -4,7 +4,6 @@ window.jQuery = window.$ = require('jquery');
 
 require('./logger.js');
 require('./legacy/default.js');
-require('./notice.js');
 require('./settings.js');
 require('./state.js');
 require('./styles.js');
