@@ -15,6 +15,7 @@ import settings from './settings';
 
 import {log_error} from './logger';
 import titlebar from './titlebar';
+import {get_post_id} from './post-info';
 
 settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {
 	orderhint: 7,

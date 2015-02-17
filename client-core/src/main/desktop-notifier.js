@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import settings from './settings';
+import {get_post_id} from './post-info';
 
 settings.newSetting(
   "desktop_notifications",

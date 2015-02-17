@@ -13,6 +13,7 @@
  */
 
 import $ from 'jquery';
+import {get_post_num} from '../post-info';
 
 $(document).ready(function(){
 	function showBackLinks() {

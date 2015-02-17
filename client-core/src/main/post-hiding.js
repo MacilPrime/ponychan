@@ -12,6 +12,7 @@
 
 import $ from 'jquery';
 import settings from './settings';
+import {get_post_board} from './post-info';
 
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {moredetails:"Only available on certain boards", orderhint:1});
 settings.newSetting("mature_as_spoiler", "bool", false, "Treat mature content images as spoilered images", 'filters', {orderhint:2});

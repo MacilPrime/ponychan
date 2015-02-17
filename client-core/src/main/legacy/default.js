@@ -206,24 +206,6 @@ window.make_thread50_url = function make_thread50_url(board, postnum) {
 		return siteroot+board+'/res/'+postnum+'+50.html';
 };
 
-window.get_post_board = function get_post_board($post) {
-	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
-};
-
-window.get_post_num = function get_post_num($post) {
-	return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
-};
-
-window.get_post_id = function get_post_id($post) {
-	var match = /\bpost_(\w+)-(\d+)\b/.exec($post.attr("class"));
-	return match[1]+':'+match[2];
-};
-
-window.get_post_class = function get_post_class(postid) {
-	var match = /^(\w+):(\d+)$/.exec(postid);
-	return 'post_'+match[1]+'-'+match[2];
-};
-
 window.get_url_params = function get_url_params(url, includeHash) {
 	function decode (s) {
 		return decodeURIComponent(s.replace(/\+/g, ' '));

@@ -12,6 +12,7 @@
  */
 
 import $ from 'jquery';
+import {get_post_id} from './post-info';
 
 var flash = {};
 var flashmessage = '';
