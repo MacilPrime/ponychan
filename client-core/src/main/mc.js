@@ -8,6 +8,8 @@
  *
  */
 
+import $ from 'jquery';
+
 var MC_POLL_TIME = 2*60*1000;
 var MC_MAX_CACHE_TIME = 3*60*1000;
 var MC_STALE_TIME = 5*60*1000;

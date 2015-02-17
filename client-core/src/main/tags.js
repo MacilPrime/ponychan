@@ -12,6 +12,8 @@
  *
  */
 
+import $ from 'jquery';
+
 $(document).ready(function(){
 	$(document).keydown(function(event) {
 		if(!/TEXTAREA/.test(event.target.nodeName))

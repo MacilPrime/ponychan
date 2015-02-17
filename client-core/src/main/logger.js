@@ -6,8 +6,9 @@
  *
  */
 
+import $ from 'jquery';
 import settings from './settings';
-var RSVP = require('rsvp');
+import RSVP from 'rsvp';
 
 function basicStringHash(string, prevHash){
 	var hash = 0;

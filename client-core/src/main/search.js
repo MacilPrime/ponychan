@@ -6,8 +6,9 @@
  *
  */
 
-var RSVP = require('rsvp');
-var _ = require('lodash');
+import $ from 'jquery';
+import RSVP from 'rsvp';
+import _ from 'lodash';
 
 $(document).ready(function() {
 	// don't run inside threads

@@ -6,6 +6,8 @@
  *
  */
 
+import $ from 'jquery';
+
 // converts "1m20s" to 80, etc
 function convert_time_to_seconds(s) {
 	if (/^[0-9]+$/.exec(s))
@@ -40,7 +42,7 @@ $(document).ready(function(){
 				var end = convert_time_to_seconds(params.end);
 				if (end)
 					embedsrc += '&end='+end;
-				
+
 				var $embed = null;
 				var $embedbtn = $("<a/>")
 					.addClass("embedbtn")

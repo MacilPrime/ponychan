@@ -8,6 +8,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from '../settings';
 
 settings.newSetting("image_expand_enabled", "bool", true, "Expand image on click", 'links', {orderhint:3});

@@ -3,7 +3,8 @@
  *
  */
 
-var log_error = require('./logger').log_error;
+import $ from 'jquery';
+import {log_error} from './logger';
 
 $(document).ready(function(){
 	var $secondLine = $("footer .unimportant").slice(1,2);

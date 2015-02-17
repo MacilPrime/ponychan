@@ -5,6 +5,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from './settings';
 
 settings.newSetting("mod_obscure_ips", "bool", true, "Obscure user IP addresses", 'mod', {orderhint:1});

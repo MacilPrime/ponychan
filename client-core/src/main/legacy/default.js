@@ -11,7 +11,8 @@
  *
  */
 
-var log_error = require('../logger').log_error;
+import $ from 'jquery';
+import {log_error} from '../logger';
 
 window.get_cookie = function get_cookie(cookie_name) {
 	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');

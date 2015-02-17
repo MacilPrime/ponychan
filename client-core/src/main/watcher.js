@@ -6,7 +6,8 @@
  *
  */
 
-var log_error = require('./logger').log_error;
+import $ from 'jquery';
+import {log_error} from './logger';
 
 var max_watched_threads = 70;
 var watcher_poll_time = 30 * 1000;

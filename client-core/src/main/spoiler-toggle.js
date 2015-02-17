@@ -11,6 +11,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from './settings';
 
 settings.newSetting("reveal_spoilers", "bool", false, "Reveal spoiler text", 'pagestyle',

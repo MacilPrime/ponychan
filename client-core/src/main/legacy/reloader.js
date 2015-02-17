@@ -6,6 +6,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from '../settings';
 
 settings.newSetting("reloader", "bool", true, "Enable thread auto-updating", 'reloader', {orderhint:1, moredetails:"New posts in threads will appear as they're made."});

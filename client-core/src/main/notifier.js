@@ -13,8 +13,8 @@
 import $ from 'jquery';
 import settings from './settings';
 
-var log_error = require('./logger').log_error;
-var titlebar = require('./titlebar');
+import {log_error} from './logger';
+import titlebar from './titlebar';
 
 settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {
 	orderhint: 7,

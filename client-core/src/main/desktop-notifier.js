@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import settings from './settings';
 
 settings.newSetting(

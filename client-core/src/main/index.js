@@ -1,7 +1,5 @@
 require('./legacy/visibility.min.js');
 
-window.jQuery = window.$ = require('jquery');
-
 require('./logger.js');
 require('./legacy/default.js');
 import './settings.js';

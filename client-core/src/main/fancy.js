@@ -12,6 +12,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from './settings';
 
 settings.newSetting("fancy_mode", "bool", false, "Fancy mode", 'pagestyle', {orderhint:20});

@@ -11,6 +11,8 @@
  *
  */
 
+import $ from 'jquery';
+
 var flash = {};
 var flashmessage = '';
 

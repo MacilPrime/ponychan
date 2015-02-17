@@ -6,6 +6,8 @@
  *
  */
 
+import $ from 'jquery';
+
 var original_page_title = document.title;
 if (typeof history != 'undefined' && history && history.state) {
 	applyState(history.state);

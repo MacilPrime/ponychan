@@ -9,6 +9,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from './settings';
 
 (function(exports) {

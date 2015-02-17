@@ -10,6 +10,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from './settings';
 
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {moredetails:"Only available on certain boards", orderhint:1});

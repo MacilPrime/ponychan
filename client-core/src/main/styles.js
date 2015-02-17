@@ -12,8 +12,7 @@
  */
 
 import settings from './settings';
-
-var log_error = require('./logger').log_error;
+import {log_error} from './logger';
 
 var styleChoices = {};
 $.each(styles, function(name, file) {

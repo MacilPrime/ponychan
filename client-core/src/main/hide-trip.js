@@ -5,6 +5,7 @@
  *
  */
 
+import $ from 'jquery';
 import settings from './settings';
 
 settings.newSetting("hide_trip_field", "bool", false, "Hide the name/tripcode input field", 'posting', {orderhint:4, moredetails:"Good to use if others can see your screen."});
