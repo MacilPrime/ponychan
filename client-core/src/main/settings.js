@@ -264,7 +264,7 @@ function newSection(name, displayName, orderhint, modOnly) {
 
 	if (modOnly) {
 		$sectionDiv.addClass('mod_settings_section');
-		if (document.location.pathname != siteroot+'mod.php')
+		if (document.location.pathname != SITE_DATA.siteroot+'mod.php')
 			$sectionDiv.hide();
 	}
 
@@ -414,7 +414,7 @@ $(document).ready(function() {
 		$(".boardlist").append($settingsSection);
 
 		if(shouldCompatSettingsPage()) {
-			$(".settingsButton").attr("href", siteroot+"settings.html");
+			$(".settingsButton").attr("href", SITE_DATA.siteroot+"settings.html");
 		} else {
 			$(".settingsButton").attr("href", "javascript:;").click(showWindow);
 		}

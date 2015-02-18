@@ -78,7 +78,7 @@ function thumbnailer_fancy(image, max_x, max_y, lobes) {
 			var imageCPA = ctx.getImageData(0, 0, canvas.width, canvas.height);
 			var imagedata = Array.prototype.slice.call(imageCPA.data);
 
-			var worker = new Worker(siteroot+'js/thumbnailer-worker.js?v=10');
+			var worker = new Worker(SITE_DATA.siteroot+'js/thumbnailer-worker.js?v=10');
 			worker.onmessage = function worker_onmessage(event) {
 				if (event.data.result) {
 					canvas.width = dest.width;

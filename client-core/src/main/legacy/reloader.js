@@ -184,7 +184,7 @@ $(document).ready(function(){
 		$postsAdded.text("...");
 
 		var headers = {};
-		if (page_etag && document.location.pathname == siteroot+'mod.php') {
+		if (page_etag && document.location.pathname == SITE_DATA.siteroot+'mod.php') {
 			headers['X-CF-Dodge-If-None-Match'] = page_etag;
 		}
 

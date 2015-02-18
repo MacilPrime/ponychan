@@ -49,7 +49,7 @@ window.confirmDelete = function confirmDelete() {
 
 function generatePassword() {
 	var pass = '';
-	var chars = genpassword_chars;
+	var chars = SITE_DATA.genpassword_chars;
 	for (var i = 0; i < 8; i++) {
 		var rnd = Math.floor(Math.random() * chars.length);
 		pass += chars.substring(rnd, rnd + 1);
@@ -124,10 +124,10 @@ function rememberStuff() {
 
 		if (window.sessionStorage && sessionStorage.body) {
 			var saved = JSON.parse(sessionStorage.body);
-			if (get_cookie(cookiename)) {
+			if (get_cookie(SITE_DATA.cookiename)) {
 				// Remove successful posts
 				try {
-					var successful = JSON.parse(get_cookie(cookiename));
+					var successful = JSON.parse(get_cookie(SITE_DATA.cookiename));
 				} catch(e) {
 					log_error(e);
 				}
@@ -159,8 +159,8 @@ function rememberStuff() {
 			}
 		}
 
-		if (get_cookie(cookiename)) {
-			document.cookie = cookiename+'={};expires=0;path='+cookiepath+';';
+		if (get_cookie(SITE_DATA.cookiename)) {
+			document.cookie = SITE_DATA.cookiename+'={};expires=0;path='+SITE_DATA.cookiepath+';';
 		}
 	}
 }
@@ -179,7 +179,7 @@ $(document).ready(function() {
 window.board_id = null;
 window.thread_id = null;
 (function() {
-	var path_board_regex = new RegExp("^"+siteroot+"(?:mod\\.php\\?/)?([^/]+)/(?:res/([0-9]+))?");
+	var path_board_regex = new RegExp("^"+SITE_DATA.siteroot+"(?:mod\\.php\\?/)?([^/]+)/(?:res/([0-9]+))?");
 	var reg_result = path_board_regex.exec(document.location.pathname+document.location.search);
 	if (reg_result) {
 		board_id = reg_result[1];
@@ -191,17 +191,17 @@ window.thread_id = null;
 })();
 
 window.make_thread_url = function make_thread_url(board, postnum) {
-	if (document.location.pathname == siteroot+'mod.php')
+	if (document.location.pathname == SITE_DATA.siteroot+'mod.php')
 		return '?/'+board+'/res/'+postnum+'.html';
 	else
-		return siteroot+board+'/res/'+postnum+'.html';
+		return SITE_DATA.siteroot+board+'/res/'+postnum+'.html';
 };
 
 window.make_thread50_url = function make_thread50_url(board, postnum) {
-	if (document.location.pathname == siteroot+'mod.php')
+	if (document.location.pathname == SITE_DATA.siteroot+'mod.php')
 		return '?/'+board+'/res/'+postnum+'+50.html';
 	else
-		return siteroot+board+'/res/'+postnum+'+50.html';
+		return SITE_DATA.siteroot+board+'/res/'+postnum+'+50.html';
 };
 
 window.get_url_params = function get_url_params(url, includeHash) {

@@ -28,7 +28,7 @@ function buttonEvent(evt) {
       var note = new Notification("Board settings - MLPchan", {
         body: "This is a test",
         tag: "desktop_test",
-        icon: siteroot + "static/mlpchanlogo.png"
+        icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
       });
       setTimeout(function() {
         note.close();
@@ -65,7 +65,7 @@ function makeNote($post) {
   var note = new Notification(makeHeadLine($post), {
     body: getBody($post),
     tag: "desktop_" + window.get_post_id($post),
-    icon: siteroot + "static/mlpchanlogo.png"
+    icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
   });
 
   // TODO bacon

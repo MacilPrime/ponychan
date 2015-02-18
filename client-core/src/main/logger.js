@@ -76,10 +76,10 @@ if (!userid || userid.length != 32) {
 }
 var expires = new Date();
 expires.setTime((new Date()).getTime()+60480000000);
-document.cookie = "userid="+escape(userid)+"; expires="+expires.toGMTString()+"; path="+siteroot;
+document.cookie = "userid="+escape(userid)+"; expires="+expires.toGMTString()+"; path="+SITE_DATA.siteroot;
 
 var maxRetryTime = 3*60*1000;
-var logger_url = siteroot + 'logger.php';
+var logger_url = SITE_DATA.siteroot + 'logger.php';
 
 var noSendBefore = 0;
 var noSendDelay = 10;
@@ -236,7 +236,7 @@ function send_usage(retryTime) {
 
 	// usage object construction end
 
-	var last_usage_hash_key = "last_usage_data:"+siteroot;
+	var last_usage_hash_key = "last_usage_data:"+SITE_DATA.siteroot;
 
 	var usageHash = hashCode(userid + hashCode(usage));
 	if (usageHash == localStorage.getItem(last_usage_hash_key))

@@ -48,21 +48,21 @@ function prepareNotifySound() {
 	switch (settings.getSetting("reply_notify_sound")) {
 	case "aim":
 		$au.append(
-			$("<source/>").attr({src:siteroot+"static/notify_imrcv.ogg", type:"audio/ogg"}),
-			$("<source/>").attr({src:siteroot+"static/notify_imrcv.mp3", type:"audio/mpeg"})
+			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify_imrcv.ogg", type:"audio/ogg"}),
+			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify_imrcv.mp3", type:"audio/mpeg"})
 		);
 		break;
 	case "yeah":
 		$au.append(
-			$("<source/>").attr({src:siteroot+"static/notify_yeah.ogg", type:"audio/ogg"}),
-			$("<source/>").attr({src:siteroot+"static/notify_yeah.mp3", type:"audio/mpeg"})
+			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify_yeah.ogg", type:"audio/ogg"}),
+			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify_yeah.mp3", type:"audio/mpeg"})
 		);
 		break;
 	//case "main":
 	default:
 		$au.append(
-			$("<source/>").attr({src:siteroot+"static/notify.ogg", type:"audio/ogg"}),
-			$("<source/>").attr({src:siteroot+"static/notify.mp3", type:"audio/mpeg"})
+			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify.ogg", type:"audio/ogg"}),
+			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify.mp3", type:"audio/mpeg"})
 		);
 	}
 	try {

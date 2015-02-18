@@ -118,7 +118,7 @@ function refresh_watched_threads(callback) {
 
 	var request_date = new Date();
 	watcher_query = $.ajax({
-		url: siteroot+'watcher/threads',
+		url: SITE_DATA.siteroot+'watcher/threads',
 		data: {ids: Object.keys(watched_threads).sort()},
 		dataType: "json",
 		success: function(data) {
