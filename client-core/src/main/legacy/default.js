@@ -8,6 +8,7 @@
  */
 
 import $ from 'jquery';
+import _ from 'lodash';
 import {log_error} from '../logger';
 import myPosts from '../my-posts';
 
@@ -243,14 +244,10 @@ window.setCss = function setCss(key, css) {
 	$style.text(css);
 };
 
-window.htmlEntities = function htmlEntities(str) {
-	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-};
-
 // Disables all img, audio, video, and script tags in some html
 window.mogrifyHTML = function mogrifyHTML(html) {
 	function mogrifier(text) {
-		return '<span class="mogrifier" data-data="' + htmlEntities(text) + '"></span>';
+		return '<span class="mogrifier" data-data="' + _.escape(text) + '"></span>';
 	}
 
 	html = html.replace(/<img\b[^>]*>/g, mogrifier);
