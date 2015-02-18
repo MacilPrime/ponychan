@@ -12,6 +12,7 @@
 
 import $ from 'jquery';
 import settings from './settings';
+import setCss from './set-css';
 import {get_post_board} from './post-info';
 
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {moredetails:"Only available on certain boards", orderhint:1});

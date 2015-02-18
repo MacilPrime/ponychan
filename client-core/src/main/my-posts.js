@@ -21,6 +21,7 @@ export default myPosts;
 
 import $ from 'jquery';
 import settings from './settings';
+import setCss from './set-css';
 import {get_post_num, get_post_board} from './post-info';
 
 settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6});

@@ -13,6 +13,7 @@
 
 import $ from 'jquery';
 import settings from './settings';
+import setCss from './set-css';
 
 (function() {
 	var defval = true;
