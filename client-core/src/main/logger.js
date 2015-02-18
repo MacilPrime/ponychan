@@ -164,11 +164,10 @@ function send_error(error, retryTime) {
 	});
 }
 
-function log_error(error) {
+export function log_error(error) {
 	console.error(error);
 	send_error(error);
 }
-exports.log_error = log_error;
 
 RSVP.on('error', function(e) {
 	log_error(e);

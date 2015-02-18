@@ -1,6 +1,6 @@
 require('./legacy/visibility.min.js');
 
-require('./logger.js');
+import './logger.js';
 require('./legacy/default.js');
 import './settings.js';
 require('./state.js');
