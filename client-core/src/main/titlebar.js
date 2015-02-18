@@ -24,17 +24,15 @@ function updateTitleFlash() {
 	updateTitle();
 }
 
-function setTitleFlash(key, message) {
+export function setTitleFlash(key, message) {
 	flash[key] = message;
 	updateTitleFlash();
 }
-exports.setTitleFlash = setTitleFlash;
 
-function removeTitleFlash(key) {
+export function removeTitleFlash(key) {
 	delete flash[key];
 	updateTitleFlash();
 }
-exports.removeTitleFlash = removeTitleFlash;
 
 $(document).ready(function() {
 	if($('div.banner').length == 0)

@@ -13,7 +13,7 @@ if (typeof history != 'undefined' && history && history.state) {
 	applyState(history.state);
 }
 
-function newState(state, url) {
+export function newState(state, url) {
 	applyState(state);
 
 	if (typeof history != 'undefined' && history && history.pushState) {
@@ -23,7 +23,6 @@ function newState(state, url) {
 			history.pushState(state, document.title);
 	}
 }
-exports.newState = newState;
 
 function applyState(state) {
 	$(document).ready(function() {
