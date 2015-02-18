@@ -58,7 +58,7 @@ function prepareNotifySound() {
 			$("<source/>").attr({src:siteroot+"static/notify_yeah.mp3", type:"audio/mpeg"})
 		);
 		break;
-	case "main":
+	//case "main":
 	default:
 		$au.append(
 			$("<source/>").attr({src:siteroot+"static/notify.ogg", type:"audio/ogg"}),
