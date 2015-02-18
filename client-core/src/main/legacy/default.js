@@ -12,13 +12,13 @@ import _ from 'lodash';
 import {log_error} from '../logger';
 import myPosts from '../my-posts';
 
-window.get_cookie = function get_cookie(cookie_name) {
+function get_cookie(cookie_name) {
 	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
 	if (results)
 		return (unescape(results[2]));
 	else
 		return null;
-};
+}
 
 window.highlightReply = function highlightReply(id) {
 	if (typeof event != "undefined" && event && typeof event.which != "undefined" && event.which == 2) {
@@ -47,7 +47,7 @@ window.confirmDelete = function confirmDelete() {
 	}
 };
 
-window.generatePassword = function generatePassword() {
+function generatePassword() {
 	var pass = '';
 	var chars = genpassword_chars;
 	for (var i = 0; i < 8; i++) {
@@ -55,7 +55,7 @@ window.generatePassword = function generatePassword() {
 		pass += chars.substring(rnd, rnd + 1);
 	}
 	return pass;
-};
+}
 
 window.dopost = function dopost(form) {
 	if (window.localStorage) {
@@ -98,7 +98,7 @@ window.citeReply = function citeReply(id) {
 	}
 };
 
-window.rememberStuff = function rememberStuff() {
+function rememberStuff() {
 	if (document.forms.post) {
 		if (document.forms.post.password) {
 			var password = window.localStorage && localStorage.password;
@@ -163,7 +163,7 @@ window.rememberStuff = function rememberStuff() {
 			document.cookie = cookiename+'={};expires=0;path='+cookiepath+';';
 		}
 	}
-};
+}
 
 $(document).ready(function() {
 	rememberStuff();
