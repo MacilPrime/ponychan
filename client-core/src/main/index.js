@@ -34,12 +34,15 @@ require('./desktop-notifier.js');
 require('./hide-trip.js');
 
 // for debugging and inline scripts
-window._dbg = {
-  main_require: require,
+window.mlpchan = {
+  _dbg_require: require,
   Bacon: require('baconjs'),
   RSVP: require('rsvp'),
   $: require('jquery'),
   _: require('lodash'),
-  moment: require('moment')
+  moment: require('moment'),
+  settings: require('./settings.js')
 };
-window.$ = require('jquery');
+
+window.$ = window.mlpchan.$;
+window.settings = window.mlpchan.settings;
