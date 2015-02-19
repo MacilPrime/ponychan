@@ -33,11 +33,13 @@ require('./search.js');
 require('./desktop-notifier.js');
 require('./hide-trip.js');
 
-// debugging purposes
+// for debugging and inline scripts
 window._dbg = {
   main_require: require,
+  Bacon: require('baconjs'),
   RSVP: require('rsvp'),
   $: require('jquery'),
   _: require('lodash'),
   moment: require('moment')
 };
+window.$ = require('jquery');
