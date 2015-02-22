@@ -3,6 +3,8 @@ persist deleted threads and posts
 - allow mods to revert
 - include threads that were recently pushed off of the board
 
+ban appeals
+
 persist past bans on IP page
 
 image bans
