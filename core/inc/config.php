@@ -37,11 +37,6 @@
 	// Message to show when in readonly mode.
 	$config['readonly_maintenance_message'] = 'Posting temporarily disabled for very brief maintenance! Try again in a minute!';
 
-	// Automatically check if a newer version of Tinyboard is available when an administrator logs in
-	$config['check_updates'] = false;
-	// How often to check for updates
-	$config['check_updates_time'] = 43200; // 12 hours
-
 	// Shows some extra information at the bottom of pages. Good for debugging development.
 	$config['debug'] = false;
 	// For development purposes. Turns 'display_errors' on. Not recommended for production.

@@ -1,12 +1,12 @@
 <fieldset>
 	<legend>{% trans 'Boards' %}</legend>
-	
+
 	<ul>
 		{% for board in boards %}
 			<li>
 				<a href="?/{{ config.board_path|sprintf(board.uri) }}{{ config.file_index }}">{{ config.board_abbreviation|sprintf(board.uri) }}</a>
-					 - 
-				{{ board.title|e }}
+					 -
+				 {{ board.title|e }}
 				{% if board.subtitle %}
 					 <small>&mdash; {{ board.subtitle|e }}</small>
 				{% endif %}
@@ -15,7 +15,7 @@
 				{% endif %}
 			</li>
 		{% endfor %}
-		
+
 		{% if mod|hasPermission(config.mod.newboard) %}
 			<li style="margin-top:15px"><a href="?/new-board"><strong>{% trans 'Create new board' %}</strong></a></li>
 		{% endif %}
@@ -38,16 +38,16 @@
 									{% else %}
 										<em>{% trans 'no subject' %}</em>
 									{% endif %}
-								</a> 
-								<small class="unimportant">
-									&mdash; by 
+								</a>
+								 <small class="unimportant">
+									&mdash; by
 									{% if post.username %}
 										{{ post.username|e }}
 									{% else %}
 										<em>deleted?</em>
-									{% endif %} 
-									at 
-									{{ post.time|date(config.post_date) }} 
+									 {% endif %}
+									at
+									 {{ post.time|date(config.post_date) }}
 								</small>
 							</li>
 						{% endfor %}
@@ -59,8 +59,8 @@
 		<li><a href="?/news">{% trans 'News' %}</a></li>
 		<li>
 			<a href="?/inbox">
-				{% trans 'PM inbox' %} 
-				{% if unread_pms > 0 %}<strong>{%endif %}({{ unread_pms }} unread){% if unread_pms > 0 %}</strong>{%endif %}
+				{% trans 'PM inbox' %}
+				 {% if unread_pms > 0 %}<strong>{%endif %}({{ unread_pms }} unread){% if unread_pms > 0 %}</strong>{%endif %}
 			</a>
 		</li>
 	</ul>
@@ -68,7 +68,7 @@
 
 <fieldset>
 	<legend>{% trans 'Administration' %}</legend>
-	
+
 	<ul>
 		{% if mod|hasPermission(config.mod.reports) %}
 			<li>
@@ -97,19 +97,19 @@
 		{% if mod|hasPermission(config.mod.show_config) %}
 			<li><a href="?/config">{% trans 'Configuration' %}</a></li>
 		{% endif %}
-		
+
 	</ul>
 </fieldset>
 
 {#
 <fieldset>
 	<legend>{% trans 'Search' %}</legend>
-	
+
 	<ul>
 		<li>
 			<form style="display:inline" action="?/search" method="post">
-				<label style="display:inline" for="search">{% trans 'Phrase:' %}</label> 
-				<input id="search" name="search" type="text" size="35">
+				<label style="display:inline" for="search">{% trans 'Phrase:' %}</label>
+				 <input id="search" name="search" type="text" size="35">
 				<input type="submit" value="{% trans 'Search' %}">
 			</form>
 			<p class="unimportant">{% trans '(Search is case-insensitive, and based on keywords. To match exact phrases, use "quotes". Use an asterisk (*) for wildcard.)' %}</p>
@@ -127,24 +127,10 @@
 	</fieldset>
 {% endif %}
 
-{% if newer_release %}
-	<fieldset>
-		<legend>Update</legend>
-		<ul>
-			<li>
-				A newer version of Tinyboard 
-				(<strong>v{{ newer_release.massive }}.{{ newer_release.major }}.{{ newer_release.minor }}</strong>) is available! 
-				See <a href="http://tinyboard.org">http://tinyboard.org/</a> for upgrade instructions.
-			</li>
-		</ul>
-	</fieldset>
-{% endif %}
-
 <fieldset>
 	<legend>{% trans 'User account' %}</legend>
-	
+
 	<ul>
 		<li><a href="?/logout">{% trans 'Logout' %}</a></li>
 	</ul>
 </fieldset>
-
