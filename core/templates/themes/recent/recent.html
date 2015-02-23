@@ -14,7 +14,7 @@
 		<h1>{{ settings.title }}</h1>
 		<div class="subtitle">{{ settings.subtitle }}</div>
 	</header>
-	
+
 	<div class="box-wrap">
 		<div class="box left">
 			<h2>Recent Images</h2>
@@ -33,7 +33,7 @@
 			<ul>
 				{% for post in recent_posts %}
 					<li>
-						<strong>{{ post.board_name }}</strong>: 
+						<strong>{{ post.board_name }}</strong>:
 						<a href="{{ post.link }}">
 							{{ post.snippet }}
 						</a>
@@ -50,9 +50,9 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<hr/>
-	<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by <a href="http://tinyboard.org/">Tinyboard</a> {{ config.version }} | <a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2012 Tinyboard Development Group</p>
+	<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by Tinyboard {{ config.version }} | Tinyboard Copyright &copy; 2010-2012 Tinyboard Development Group</p>
 </body>
 </html>
 {% endfilter %}

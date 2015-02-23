@@ -12,7 +12,7 @@
 		<h1>{{ settings.title }}</h1>
 		<div class="subtitle">{{ settings.subtitle }}</div>
 	</header>
-	
+
 	<div class="ban">
 		{% if news|count == 0 %}
 			<p style="text-align:center" class="unimportant">(No news to show.)</p>
@@ -30,9 +30,9 @@
 			{% endfor %}
 		{% endif %}
 	</div>
-	
+
 	<hr/>
-	<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by <a href="http://tinyboard.org/">Tinyboard</a> {{ config.version }} | <a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2012 Tinyboard Development Group</p>
+	<p class="unimportant" style="margin-top:20px;text-align:center;">Powered by Tinyboard {{ config.version }} | Tinyboard Copyright &copy; 2010-2012 Tinyboard Development Group</p>
 </body>
 </html>
 {% endfilter %}
