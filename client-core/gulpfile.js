@@ -19,6 +19,8 @@ var args = stdio.getopt({
   'minify': {key: 'm', description: 'Minify build'}
 });
 
+process.env.NODE_ENV = args.minify ? 'production' : 'development';
+
 function copyTask(name, paths) {
   var setWatch = _.once(function() {
     if (args.watch) {

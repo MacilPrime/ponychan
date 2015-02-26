@@ -2,7 +2,7 @@ require('./legacy/visibility.min.js');
 
 import './logger.js';
 require('./legacy/default.js');
-import './settings.js';
+import settings from './settings.js';
 require('./state.js');
 require('./styles.js');
 require('./spoiler-toggle.js');
@@ -33,15 +33,21 @@ require('./search.js');
 require('./desktop-notifier.js');
 require('./hide-trip.js');
 
+//import './settings-screen.jsx';
+
 // for debugging and inline scripts
 window.mlpchan = {
   _dbg_require: require,
-  Bacon: require('baconjs'),
-  RSVP: require('rsvp'),
-  $: require('jquery'),
-  _: require('lodash'),
-  moment: require('moment'),
-  settings: require('./settings.js')
+  libs: {
+    Bacon: require('baconjs'),
+    React: require('react/addons'),
+    Immutable: require('immutable'),
+    RSVP: require('rsvp'),
+    $: require('jquery'),
+    _: require('lodash'),
+    moment: require('moment')
+  },
+  settings: settings
 };
 
 window.$ = window.mlpchan.$;

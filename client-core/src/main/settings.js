@@ -2,172 +2,113 @@
  * settings.js
  *
  * Released under the MIT license
- * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
- *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/settings.js';
+ * Copyright (c) 2015 Macil Tech <maciltech@gmail.com>
  *
  */
 
 import $ from 'jquery';
+import _ from 'lodash';
+import Bacon from 'baconjs';
+import Immutable from 'immutable';
 
-var $settingsScreen = $("<div/>")
-	.attr("id", "settingsScreen")
-	.addClass("settingsScreen")
-	.hide();
+let settingsMetadata = Immutable.Map();
+let settingsValues = Immutable.Map();
+let settingsSectionsList = Immutable.List();
 
-var $settingsTitle = $("<h1/>")
-	.text("Board Settings")
-	.appendTo($settingsScreen);
+const getSettingStream = _.memoize(name =>
+	settingsMetadata.get(name).get('bus')
+		.toProperty()
+		.map(() => getSetting(name))
+);
 
-var $settingsCloseButton = $("<a/>")
-	.text("X")
-	.addClass("settings-close-button")
-	.attr("href", "javascript:;")
-	.appendTo($settingsTitle);
+function _readSetting(name) {
+	const settingData = settingsMetadata.get(name);
 
-var $settingsTopHR = $("<hr/>").appendTo($settingsScreen);
-
-var $settingsButton = $("<a/>")
-	.addClass("settingsButton")
-	.text("settings");
-
-var $settingsSection = $("<span/>")
-	.addClass("settingsSection")
-	.addClass("boardlistpart")
-	.append('[ ', $settingsButton, ' ]');
-
-var $settingsOverlay = $("<div/>")
-	.attr("id", "settings-overlay")
-	.hide();
-
-// DOM setup over
-
-var isSettingsPage = false;
-
-function shouldCompatSettingsPage() {
-	// Returns true if we don't think the normal settings
-	// screen pop-up can be scrolled correctly by the
-	// browser.
-
-	// Check if we're on Android
-	if (navigator.userAgent.match(/^Mozilla[^(]+\(Linux; U; Android[^)]*\).*Mobile Safari/)) {
-		// Make sure we only match the stock browser, not Chrome
-		return navigator.userAgent.indexOf("Chrome") == -1;
-	}
-	return false;
-}
-
-function showWindow() {
-	if (isSettingsPage) return;
-	$settingsOverlay.show();
-	$settingsScreen.fadeIn("fast");
-}
-
-function hideWindow() {
-	if (isSettingsPage) return;
-	$settingsScreen.hide();
-	$settingsOverlay.hide();
-}
-
-$settingsOverlay.click(hideWindow);
-$settingsCloseButton.click(hideWindow);
-
-if (!window.localStorage)
-	var tempSettingsStorage = {};
-
-var settingTypes = {};
-var defaultValues = {};
-var settingSelectOptions = {};
-var settingValidators = {};
-
-function getSetting(name, noDefault) {
-	var id = "setting_"+name;
+	if (!settingData)
+		throw new Error("No such setting: "+name);
 
 	// At the end of this if-else block, localVal will either have null, meaning that the
 	// user has not set the setting, or it will be a 2-length array of [value, priority].
 	// See newSetting's extra.defpriority param for explanation of priority.
-	var localVal = null;
+	let localVal = null;
 	if (window.localStorage) {
+		const id = "setting_"+name;
+
 		if (localStorage.getItem(id)) {
 			// settings are now stored in localStorage as a JSON encoded string of the
 			// [value, priority] tuple, but they used to be stored as a simple string
 			// representing value in a way specific to the type. We need to still be
 			// able to read that. Default priority to 0.
-			var type = settingTypes[name];
-			var rawVal = localStorage.getItem(id);
-			if (rawVal[0] === '[') {
-				try {
-					localVal = JSON.parse(rawVal);
-					if (!Array.isArray(localVal) || localVal.length != 2 || typeof localVal[1] !== "number") {
-						console.error("localVal has bad format:", localVal);
-						localVal = null;
-					}
-					// setting type checking
-					switch(type) {
-					case "bool":
-						if (typeof localVal[0] !== "boolean") {
-							console.error("setting was expected to be boolean:", localVal);
-							localVal = null;
-						}
-						break;
-					case "select":
-						if (!settingSelectOptions[name].hasOwnProperty(localVal[0]))
-							localVal = null;
-						break;
-					}
-				} catch(e) {
-					console.error("Could not parse rawVal:", rawVal);
+			const type = settingData.get('type');
+			let rawVal = localStorage.getItem(id);
+			try {
+				localVal = JSON.parse(rawVal);
+				if (!Array.isArray(localVal) || localVal.length != 2 || typeof localVal[1] !== "number") {
+					console.error("localVal has bad format:", localVal);
+					localVal = null;
 				}
-			} else {
-				// compat code
+				// setting type checking
 				switch(type) {
 				case "bool":
-					rawVal = (rawVal == "true");
+					if (typeof localVal[0] !== "boolean") {
+						console.error("setting was expected to be boolean:", localVal);
+						localVal = null;
+					}
 					break;
 				case "select":
-					if (!settingSelectOptions[name].hasOwnProperty(rawVal))
-						rawVal = null;
+					if (!settingData.get('selectOptions').has(localVal[0])) {
+						localVal = null;
+					}
 					break;
-				default:
-					throw Error("Invalid compat property type: "+type+", name: "+name);
 				}
-
-				if (rawVal != null)
-					localVal = [rawVal, 0];
+			} catch(e) {
+				console.error("Could not parse rawVal:", rawVal);
+				localVal = null;
 			}
 		}
-	} else {
-		if (tempSettingsStorage.hasOwnProperty(id))
-			localVal = tempSettingsStorage[id];
 	}
 
-	if (!defaultValues[name])
-		throw Error("No such setting: "+name);
-
-	if (localVal == null || defaultValues[name][1] > localVal[1])
-		return noDefault ? null : defaultValues[name][0];
-
-	return localVal[0];
+	if (localVal != null) {
+		const [value, defpriority] = localVal;
+		if (defpriority >= settingData.get('defpriority')) {
+			return value;
+		}
+	}
+	return null;
 }
 
-function setSetting(name, value, notquiet) {
-	var id = "setting_"+name;
+function getSetting(name, noDefault=false) {
+	const settingData = settingsMetadata.get(name);
+	const settingValue = settingsValues.get(name);
+
+	if (!settingData)
+		throw new Error("No such setting: "+name);
+
+	if (settingValue != null) {
+		return settingValue;
+	} else if (noDefault) {
+		return null;
+	} else {
+		return settingData.get('defval');
+	}
+}
+
+function setSetting(name, value, notquiet=false) {
+	const id = "setting_"+name;
+	const settingData = settingsMetadata.get(name);
+
+	if (!settingData)
+		throw new Error("No such setting: "+name);
 
 	if (!window.localStorage && notquiet)
 		alert("Your browser does not support the localStorage standard. Settings will not be saved. Please upgrade your browser!");
 
-	if (!defaultValues[name])
-		throw Error("No such setting: "+name);
-
 	if (value == null) {
-		if (window.localStorage)
+		if (window.localStorage) {
 			localStorage.removeItem(id);
-		else
-			delete tempSettingsStorage[id];
+		}
 	} else {
-		var toWrite = [value, defaultValues[name][1]];
+		const toWrite = [value, settingData.get('defpriority')];
 
 		if (window.localStorage) {
 			try {
@@ -177,18 +118,21 @@ function setSetting(name, value, notquiet) {
 					alert("Failed to set setting: "+e);
 				throw e;
 			}
-		} else {
-			tempSettingsStorage[id] = toWrite;
 		}
 	}
+
+	settingsValues = settingsValues.set(name, value);
+	settingsMetadata.get(name).get('bus').push();
 	$(document).trigger("setting_change", name);
 }
 
 function bindCheckbox($checkbox, name) {
 	var changeGuard = false;
-	if (settingTypes[name] !== "bool") {
-		console.error("Can not bind checkbox to non-bool setting ("+name+", type:"+settingTypes[name]+")");
-		return;
+	const settingData = settingsMetadata.get(name);
+	const type = settingData.get('type');
+
+	if (type !== "bool") {
+		throw new Error("Can not bind checkbox to non-bool setting ("+name+", type:"+type+")");
 	}
 
 	$checkbox
@@ -201,92 +145,20 @@ function bindCheckbox($checkbox, name) {
 			}
 		});
 
-	$(document).on("setting_change", function(e, setting) {
-		if (name == setting) {
-			changeGuard = true;
-			$checkbox.prop("checked", getSetting(name));
-			changeGuard = false;
-		}
+	getSettingStream(name).onValue(value => {
+		changeGuard = true;
+		$checkbox.prop("checked", value);
+		changeGuard = false;
 	});
 }
-
-function bindSelect($select, name) {
-	var changeGuard = false;
-	if (settingTypes[name] !== "select") {
-		console.error("Can not bind select to non-select setting ("+name+", type:"+settingTypes[name]+")");
-		return;
-	}
-
-	var choices = settingSelectOptions[name];
-
-	$.each(choices, function(key, text) {
-		$("<option/>").attr("value", key).text(text).appendTo($select);
-	});
-
-	$select
-		.val(getSetting(name))
-		.change(function() {
-			if(!changeGuard) {
-				changeGuard = true;
-				setSetting(name, $(this).val(), true);
-				changeGuard = false;
-			}
-		});
-
-	$(document).on("setting_change", function(e, setting) {
-		if (name == setting) {
-			changeGuard = true;
-			$select.val(getSetting(name));
-			changeGuard = false;
-		}
-	});
-}
-
-// Contains an array of tuples of [orderhint, name]
-var section_order = [];
-// Contains a key for each section, and then an array of tuples of the above format.
-var section_prop_order = {};
 
 function newSection(name, displayName, orderhint, modOnly) {
-	if (orderhint == null)
-		orderhint = 0;
-	var id = "settings_section_"+name;
+	settingsSectionsList = settingsSectionsList.push(Immutable.Map({
+		name, displayName, orderhint, modOnly,
+		settings: Immutable.List()
+	})).sortBy(section => section.get('orderhint'));
 
-	if ($('#'+id).length)
-		throw new Error('Section '+name+' already exists!');
-
-	var $sectionDiv = $("<div/>")
-		.addClass("setting_section")
-		.attr("id", id);
-	var $sectionHeader = $("<h2/>")
-		.text(displayName)
-		.prependTo($sectionDiv);
-
-	if (modOnly) {
-		$sectionDiv.addClass('mod_settings_section');
-		if (document.location.pathname != SITE_DATA.siteroot+'mod.php')
-			$sectionDiv.hide();
-	}
-
-	var nextname = null;
-	for(var i=0; i<section_order.length; i++) {
-		if (orderhint < section_order[i][0]) {
-			nextname = section_order[i][1];
-			section_order.splice(i, 0, [orderhint, name]);
-			break;
-		}
-	}
-	if (nextname == null) {
-		section_order.push([orderhint, name]);
-		$sectionDiv.appendTo($settingsScreen);
-	} else {
-		var next_section_id = "settings_section_"+nextname;
-		var $nextSectionDiv = $settingsScreen.find('#'+next_section_id);
-		if (!$nextSectionDiv.length)
-			throw new Error('Could not find next section: '+nextname);
-		$sectionDiv.insertBefore($nextSectionDiv);
-	}
-	section_prop_order[name] = [];
+	// TODO signal settingsSectionsList change
 }
 
 // Adds a setting to the settings menu.
@@ -303,132 +175,55 @@ function newSection(name, displayName, orderhint, modOnly) {
 //                time the user last changed the setting, then the defval will take priority
 //                over the user's value. This allows the default setting to be changed at a
 //                future time, optionally overriding an older setting set by the user.
-//   validator: TODO, planned for future "text" type
-function newSetting(name, type, defval, description, section, extra) {
-	var orderhint = 0;
-	if (extra && extra.orderhint != null)
-		orderhint = extra.orderhint;
+function newSetting(name, type, defval, description, section, extra={}) {
+	const moredetails = extra.moredetails;
+	const selectOptions = extra.selectOptions && Immutable.Map(extra.selectOptions);
+	const orderhint = extra.orderhint || 0;
+	const defpriority = extra.defpriority || 0;
 
-	var defpriority = 0;
-	if (extra && extra.defpriority != null)
-		defpriority = extra.defpriority;
+	if (settingsMetadata.has(name))
+		throw new Error(`Setting ${name} has already been defined!`);
 
-	var id = "setting_"+name;
+	const sectionEntryIndex = settingsSectionsList
+		.findIndex(sectionEntry => sectionEntry.get('name') === section);
+	if (sectionEntryIndex == null)
+		throw new Error(`Section ${section} does not exist!`);
 
-	if (settingTypes.hasOwnProperty(name))
-		throw new Error('Setting '+name+' has already been defined!');
+	if (Boolean(selectOptions) != (type === 'select'))
+		throw new Error('selectOptions required for select type');
 
-	settingTypes[name] = type;
-	defaultValues[name] = [defval, defpriority];
-	if (extra && extra.validator)
-		settingValidators[name] = extra.validator;
-
-	var section_id = "settings_section_"+section;
-	var $sectionDiv = $settingsScreen.find("#"+section_id);
-	if (!$sectionDiv.length || !section_prop_order.hasOwnProperty(section))
-		throw new Error('Section '+section+' does not exist!');
-
-	var $settingDiv = $("<div/>")
-		.addClass("setting_part")
-		.attr("id", id);
-
-	if (type==="bool") {
-		var $label = $("<label/>")
-			.attr("for", "cb_"+id)
-			.text(" "+description)
-			.appendTo($settingDiv);
-		var $checkbox = $("<input/>")
-			.attr("type", "checkbox")
-			.attr("id", "cb_"+id)
-			.prependTo($label);
-
-		bindCheckbox($checkbox, name);
-	} else if (type==="select") {
-		if (!extra || !extra.selectOptions)
-			throw new Error('Select setting type needs selectOptions parameter!');
-
-		settingSelectOptions[name] = extra.selectOptions;
-		$settingDiv.text(" "+description);
-		var $settingSelect = $("<select/>").prependTo($settingDiv);
-		bindSelect($settingSelect, name);
-	} else {
-		$settingDiv.remove();
-		throw new Error("Unknown setting type ("+name+", type:"+type+")");
-	}
-
-	if (extra && extra.moredetails) {
-		var $moredetails = $("<div/>")
-			.addClass("setting_more_details")
-			.appendTo($settingDiv);
-
-		if (extra.moredetails_rawhtml)
-			$moredetails.html(extra.moredetails);
-		else
-			$moredetails.text(extra.moredetails);
-	}
-
-	var nextname = null;
-	var prop_order = section_prop_order[section];
-	for(var i=0; i<prop_order.length; i++) {
-		if (orderhint < prop_order[i][0]) {
-			nextname = prop_order[i][1];
-			prop_order.splice(i, 0, [orderhint, name]);
-			break;
-		}
-	}
-	if (nextname == null) {
-		prop_order.push([orderhint, name]);
-		$settingDiv.appendTo($sectionDiv);
-	} else {
-		var next_setting_id = "setting_"+nextname;
-		var $nextSettingDiv = $settingsScreen.find('#'+next_setting_id);
-		if (!$nextSettingDiv.length)
-			throw new Error('Could not find next setting: '+nextname);
-		$settingDiv.insertBefore($nextSettingDiv);
-	}
-}
-
-function getAllSettings(noDefault) {
-	var allSettings = {};
-	$.each(settingTypes, function(index) {
-		allSettings[index] = getSetting(index, noDefault);
+	const settingMetadata = Immutable.Map({
+		name, section, orderhint, type,
+		description, moredetails, selectOptions,
+		defval, defpriority,
+		bus: new Bacon.Bus(),
 	});
-	return allSettings;
+
+	settingsMetadata = settingsMetadata.set(name, settingMetadata);
+	settingsValues = settingsValues.set(name, _readSetting(name));
+
+	settingsSectionsList = settingsSectionsList.updateIn(
+		[sectionEntryIndex, 'settings'],
+		settingsList =>
+			settingsList.push(settingMetadata).sortBy(setting => setting.get('orderhint'))
+	);
+
+	// TODO signal that settingsMetadata has updated
 }
 
-$(document).ready(function() {
-	// If the settings stuff already is on the page, then remove
-	// it. This can happen if the user saves the page from a web
-	// browser and opens it again.
-	$(".settingsScreen, .settingsSection, #settings-overlay").remove();
-
-	var $settingsPage = $("#settingsPage");
-	if ($settingsPage.length) {
-		isSettingsPage = true;
-		$settingsPage.text("");
-		$settingsTitle.remove();
-		$settingsTopHR.remove();
-		$settingsScreen.removeAttr('id').show().appendTo($settingsPage);
+function getAllSettingValues(noDefault=false) {
+	if (noDefault) {
+		return settingsValues.toJS();
 	} else {
-		$(document.body).append($settingsOverlay, $settingsScreen);
-		$(".boardlist").append($settingsSection);
-
-		if(shouldCompatSettingsPage()) {
-			$(".settingsButton").attr("href", SITE_DATA.siteroot+"settings.html");
-		} else {
-			$(".settingsButton").attr("href", "javascript:;").click(showWindow);
-		}
+		return settingsValues
+			.map((value, name) => value !== null ? value : getSetting(name))
+			.toJS();
 	}
-});
+}
 
-const settings = {
-	showWindow, hideWindow,
-	getSetting, setSetting,
-	bindCheckbox, bindSelect,
-	newSection, newSetting,
-	getAllSettings
-};
-export default settings;
+function getAllSettingsMetadata() {
+	return {settingsMetadata,	settingsValues,	settingsSectionsList};
+}
 
 newSection('pagestyle', 'Page Formatting', 1);
 newSection('mod', 'Moderation', 1.5, true);
@@ -436,3 +231,12 @@ newSection('links', 'Link Behavior', 2);
 newSection('posting', 'Posting', 3);
 newSection('reloader', 'Thread Auto-Updater', 4);
 newSection('filters', 'Filters', 5);
+
+const settings = {
+	getSetting, getSettingStream, setSetting,
+	bindCheckbox,
+	newSection, newSetting,
+	getAllSettingValues,
+	getAllSettingsMetadata
+};
+export default settings;
