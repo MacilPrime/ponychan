@@ -33,7 +33,7 @@ require('./search.js');
 require('./desktop-notifier.js');
 require('./hide-trip.js');
 
-//import './settings-screen.jsx';
+import './settings-screen.jsx';
 
 // for debugging and inline scripts
 window.mlpchan = {

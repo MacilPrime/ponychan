@@ -15,6 +15,8 @@ let settingsMetadata = Immutable.Map();
 let settingsValues = Immutable.Map();
 let settingsSectionsList = Immutable.List();
 
+const refresher = new Bacon.Bus();
+
 const getSettingStream = _.memoize(name =>
 	settingsMetadata.get(name).get('bus')
 		.toProperty()
@@ -158,7 +160,7 @@ function newSection(name, displayName, orderhint, modOnly) {
 		settings: Immutable.List()
 	})).sortBy(section => section.get('orderhint'));
 
-	// TODO signal settingsSectionsList change
+	refresher.push();
 }
 
 // Adds a setting to the settings menu.
@@ -192,11 +194,13 @@ function newSetting(name, type, defval, description, section, extra={}) {
 	if (Boolean(selectOptions) != (type === 'select'))
 		throw new Error('selectOptions required for select type');
 
+	const bus = new Bacon.Bus();
+
 	const settingMetadata = Immutable.Map({
 		name, section, orderhint, type,
 		description, moredetails, selectOptions,
 		defval, defpriority,
-		bus: new Bacon.Bus(),
+		bus
 	});
 
 	settingsMetadata = settingsMetadata.set(name, settingMetadata);
@@ -208,7 +212,8 @@ function newSetting(name, type, defval, description, section, extra={}) {
 			settingsList.push(settingMetadata).sortBy(setting => setting.get('orderhint'))
 	);
 
-	// TODO signal that settingsMetadata has updated
+	refresher.plug(bus);
+	refresher.push();
 }
 
 function getAllSettingValues(noDefault=false) {
@@ -221,9 +226,9 @@ function getAllSettingValues(noDefault=false) {
 	}
 }
 
-function getAllSettingsMetadata() {
-	return {settingsMetadata,	settingsValues,	settingsSectionsList};
-}
+const getAllSettingsMetadata = _.once(() =>
+	refresher.toProperty(null).map(() => ({settingsMetadata, settingsValues, settingsSectionsList}))
+);
 
 newSection('pagestyle', 'Page Formatting', 1);
 newSection('mod', 'Moderation', 1.5, true);
