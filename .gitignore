@@ -2,6 +2,7 @@
 /core/inc/instance-config.php
 /core/.installed
 /core/templates/cache
+npm-debug.log
 
 # built client javascript
 /core/js
