@@ -4,6 +4,11 @@
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
+# Add mariadb 10.0 deb repo
+apt-get install software-properties-common
+apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+add-apt-repository 'deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main'
+
 apt-get update
 apt-get -y install nginx-extras imagemagick libav-tools php5 php5-cli php5-curl php5-imagick php5-geoip php5-gd php5-fpm redis-server mariadb-server mariadb-client php5-mysql php5-redis graphicsmagick gifsicle libimage-exiftool-perl
 
