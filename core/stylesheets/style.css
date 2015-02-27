@@ -580,6 +580,7 @@ table.mod.config-editor input[type="text"] {
 	position: absolute !important;
 	display: block !important;
 	z-index: 10;
+	pointer-events: none;
 }
 .post-inline {
 	margin: 2px !important;
