@@ -5,7 +5,7 @@ set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
-apt-get -y install nginx-extras imagemagick php5 php5-cli php5-curl php5-imagick php5-geoip php5-gd php5-fpm redis-server mariadb-server mariadb-client php5-mysql php5-redis graphicsmagick gifsicle libimage-exiftool-perl
+apt-get -y install nginx-extras imagemagick libav-tools php5 php5-cli php5-curl php5-imagick php5-geoip php5-gd php5-fpm redis-server mariadb-server mariadb-client php5-mysql php5-redis graphicsmagick gifsicle libimage-exiftool-perl
 
 # Make sure any imported database is utf8mb4
 # http://mathiasbynens.be/notes/mysql-utf8mb4
