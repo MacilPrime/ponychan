@@ -119,7 +119,6 @@ function loadConfig() {
 				'(' .
 						str_replace('%s', '\w+', preg_quote($config['board_path'], '/')) .
 						'(' .
-							preg_quote($config['file_index'], '/') . '|' .
 							str_replace('%d', '\d+', preg_quote($config['file_page'])) .
 						')?' .
 					'|' .
@@ -1316,7 +1315,7 @@ function getPageButtons($pages, $mod=false) {
 			} else {
 				$loc = ($mod ? '?/' . $board['uri'] . '/' : '') .
 					($num == 1 ?
-						$config['file_index']
+						''
 					:
 						sprintf($config['file_page'], $num)
 					);
@@ -1363,7 +1362,7 @@ function getPages($mod=false) {
 	for ($x=0;$x<$count && $x<$config['max_pages'];$x++) {
 		$pages[] = array(
 			'num' => $x+1,
-			'link' => $x==0 ? ($mod ? '?/' : $config['root']) . $board['dir'] . $config['file_index'] : ($mod ? '?/' : $config['root']) . $board['dir'] . sprintf($config['file_page'], $x+1)
+			'link' => $x==0 ? ($mod ? '?/' : $config['root']) . $board['dir'] : ($mod ? '?/' : $config['root']) . $board['dir'] . sprintf($config['file_page'], $x+1)
 		);
 	}
 
@@ -1672,7 +1671,7 @@ function markup(&$body, $track_cites = false) {
 						}
 					} else {
 						$replacement = '<a class="bodylink" href="' .
-							$config['root'] . $board['dir'] . $config['file_index'] . '">' .
+							$config['root'] . $board['dir'] . '">' .
 								'&gt;&gt;&gt;/' . $_board . '/' .
 								'</a>';
 						$body = str_replace($cites[0][$index], $cites[1][$index] . $replacement . $cites[4][$index], $body);
@@ -1751,7 +1750,7 @@ function buildThread($id, $return=false, $mod=false) {
 		'isnoko50' => false,
 		'antibot' => $mod ? false : create_antibot($board['uri'], $id),
 		'boardlist' => createBoardlist($mod),
-		'return' => ($mod ? '?' . $board['url'] . $config['file_index'] : $config['root'] . $board['uri'] . '/' . $config['file_index'])
+		'return' => ($mod ? '?' . $board['url'] : $config['root'] . $board['uri'] . '/')
 	));
 
 	if ($return)
@@ -1839,7 +1838,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 		'isnoko50' => true,
 		'antibot' => $mod ? false : create_antibot($board['uri'], $id),
 		'boardlist' => createBoardlist($mod),
-		'return' => ($mod ? '?' . $board['url'] . $config['file_index'] : $config['root'] . $board['uri'] . '/' . $config['file_index'])
+		'return' => ($mod ? '?' . $board['url'] : $config['root'] . $board['uri'] . '/')
 	));
 
 	if ($return)

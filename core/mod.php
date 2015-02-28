@@ -80,7 +80,6 @@ $pages = array(
 
 	// This should always be at the end:
 	'/(\w+)/'										=> 'view_board',
-	'/(\w+)/' . preg_quote($config['file_index'], '!')					=> 'view_board',
 	'/(\w+)/' . str_replace('%d', '(\d+)', preg_quote($config['file_page'], '!'))		=> 'view_board',
 	'/(\w+)/' . preg_quote($config['dir']['res'], '!') .
 			str_replace('%d', '(\d+)', preg_quote($config['file_page50'], '!'))	=> 'view_thread50',

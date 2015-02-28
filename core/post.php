@@ -88,7 +88,7 @@ if (isset($_POST['delete'])) {
 	$is_mod = isset($_POST['mod']) && !!$_POST['mod'];
 	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 
-	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ' . $root . $board['dir'], true, $config['redirect_http']);
 
 } elseif (isset($_POST['edit'])) {
 	// User picked a post to edit
@@ -306,7 +306,7 @@ if (isset($_POST['delete'])) {
 	$is_mod = isset($_POST['mod']) && $_POST['mod'];
 	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 
-	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ' . $root . $board['dir'], true, $config['redirect_http']);
 } elseif (isset($_POST['report'])) {
 	if (!isset($_POST['board'], $_POST['password'], $_POST['reason']))
 		error($config['error']['bot']);
@@ -362,7 +362,7 @@ if (isset($_POST['delete'])) {
 	$is_mod = isset($_POST['mod']) && $_POST['mod'];
 	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 
-	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ' . $root . $board['dir'], true, $config['redirect_http']);
 } elseif (isset($_POST['post']) || isset($_POST['making_a_post'])) {
 
 	if (isset($_POST['wantjson']) && $_POST['wantjson'])
@@ -954,7 +954,7 @@ if (isset($_POST['delete'])) {
 			}
 		}
 	} else {
-		$redirect = $root . $board['dir'] . $config['file_index'];
+		$redirect = $root . $board['dir'];
 
 	}
 

@@ -39,7 +39,7 @@ function doBoardListPart($list, $root, $noactive=false) {
 			} else {
 				if ($board && !$noactive && $boarduri === $board['uri'])
 					$class = 'class="boardlistactive" ';
-				$body .= ' <a ' . $class . 'href="' . $root . $boarduri . '/' . $config['file_index'] . '">' . $boarduri . '</a> /';
+				$body .= ' <a ' . $class . 'href="' . $root . $boarduri . '/">' . $boarduri . '</a> /';
 			}
 		}
 	}
@@ -123,7 +123,7 @@ function error($message, $priority = true) {
 			(isset($board) ?
 				"<p><a href=\"" . $config['root'] .
 					($mod ? $config['file_mod'] . '?/' : '') .
-					$board['dir'] . $config['file_index'] . "\">Go back</a>.</p>" : '') .
+					$board['dir'] . "\">Go back</a>.</p>" : '') .
 		        '</center>'
 	)));
 }

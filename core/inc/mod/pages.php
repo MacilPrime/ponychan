@@ -249,7 +249,7 @@ function mod_new_board() {
 
 		rebuildThemes('boards');
 
-		header('Location: ?/' . $board['uri'] . '/' . $config['file_index'], true, $config['redirect_http']);
+		header('Location: ?/' . $board['uri'] . '/', true, $config['redirect_http']);
 	}
 
 	mod_page(_('New board'), 'mod/board.html', array('new' => true));
@@ -804,7 +804,7 @@ function mod_bump($board, $post) {
 	buildThread($post);
 	buildIndex();
 
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_lock($board, $unlock, $post) {
@@ -826,7 +826,7 @@ function mod_lock($board, $unlock, $post) {
 		buildIndex();
 	}
 
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 
 	if ($unlock)
 		event('unlock', $post);
@@ -855,7 +855,7 @@ function mod_sticky($board, $unsticky, $post) {
 		buildIndex();
 	}
 
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_bumplock($board, $unbumplock, $post) {
@@ -877,7 +877,7 @@ function mod_bumplock($board, $unbumplock, $post) {
 		buildIndex();
 	}
 
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_move($originBoard, $postID) {
@@ -1123,7 +1123,7 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 			buildIndex();
 		}
 
-		header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+		header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 	}
 
 	$args = array(
@@ -1156,7 +1156,7 @@ function mod_delete($board, $post) {
 	buildIndex();
 
 	// Redirect
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_deletefile($board, $post) {
@@ -1177,7 +1177,7 @@ function mod_deletefile($board, $post) {
 	buildIndex();
 
 	// Redirect
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_edit($boardName, $post) {
@@ -1262,7 +1262,7 @@ function mod_deletebyip($boardName, $post, $global = false) {
 	modLog("Deleted all posts by IP address: <a href=\"?/IP/$ip\">$ip</a>");
 
 	// Redirect
-	header('Location: ?/' . sprintf($config['board_path'], $boardName) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $boardName), true, $config['redirect_http']);
 }
 
 function mod_user($uid) {

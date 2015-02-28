@@ -32,16 +32,16 @@
 				<td>
 					<ul style="padding:5px 8px;list-style:none">
 						<li>
-							<input type="radio" name="type" id="janitor" value="{{ constant('JANITOR') }}"> 
-							<label for="janitor">{% trans 'Janitor' %}</label>
+							<input type="radio" name="type" id="janitor" value="{{ constant('JANITOR') }}">
+							 <label for="janitor">{% trans 'Janitor' %}</label>
 						</li>
 						<li>
-							<input type="radio" name="type" id="mod" value="{{ constant('MOD') }}" checked> 
-							<label for="mod">{% trans 'Mod' %}</label>
+							<input type="radio" name="type" id="mod" value="{{ constant('MOD') }}" checked>
+							 <label for="mod">{% trans 'Mod' %}</label>
 						</li>
 						<li>
-							<input type="radio" name="type" id="admin" value="{{ constant('Admin') }}"> 
-							<label for="admin">{% trans 'Admin' %}</label>
+							<input type="radio" name="type" id="admin" value="{{ constant('Admin') }}">
+							 <label for="admin">{% trans 'Admin' %}</label>
 						</li>
 					</ul>
 				</td>
@@ -57,8 +57,8 @@
 						{% if not mod|hasPermission(config.mod.editusers) %}
 						 disabled
 						{% endif %}
-						> 
-						<label for="allboards">"*" - {% trans 'All boards' %}</label>
+						>
+						 <label for="allboards">"*" - {% trans 'All boards' %}</label>
 					</li>
 					{% for board in boards %}
 						<li>
@@ -67,11 +67,11 @@
 								{% if not mod|hasPermission(config.mod.editusers) %}
 								 disabled
 								{% endif %}
-								> 
-							<label for="board_{{ board.uri }}">
+								>
+							 <label for="board_{{ board.uri }}">
 								{{ config.board_abbreviation|sprintf(board.uri) }}
-								 - 
-								{{ board.title|e }}
+								 -
+								 {{ board.title|e }}
 							</label>
 						</li>
 					{% endfor %}
@@ -79,7 +79,7 @@
 			</td>
 		</tr>
 	</table>
-	
+
 	<ul style="padding:0;text-align:center;list-style:none">
 		{% if new %}
 			<li><input type="submit" value="{% trans 'Create user' %}"></li>
@@ -95,7 +95,7 @@
 {% if logs|count > 0  %}
 	<table class="modlog" style="width:600px">
 		<tr>
-			<th>{% trans 'IP address' %}</th>			
+			<th>{% trans 'IP address' %}</th>
 			<th>{% trans 'Time' %}</th>
 			<th>{% trans 'Board' %}</th>
 			<th>{% trans 'Action' %}</th>
@@ -110,7 +110,7 @@
 				</td>
 				<td class="minimal">
 					{% if log.board %}
-						<a href="?/{{ config.board_path|sprintf(log.board) }}{{ config.file_index }}">{{ config.board_abbreviation|sprintf(log.board) }}</a>
+						<a href="?/{{ config.board_path|sprintf(log.board) }}">{{ config.board_abbreviation|sprintf(log.board) }}</a>
 					{% else %}
 						-
 					{% endif %}
@@ -125,4 +125,3 @@
 		<a href="?/log:{{ user.username|e }}">{% trans 'View more logs for this user.' %}</a>
 	</p>
 {% endif %}
-
