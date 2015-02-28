@@ -1404,7 +1404,7 @@ function checkRobot($body) {
 	}
 
 	// Insert new hash
-	$query = prepare("INSERT INTO `robot` VALUES (:hash)");
+	$query = prepare("INSERT INTO `robot` (`hash`) VALUES (:hash)");
 	$query->bindValue(':hash', $body);
 	$query->execute() or error(db_error($query));
 	return false;
@@ -1444,7 +1444,7 @@ function muteTime() {
 
 function mute() {
 	// Insert mute
-	$query = prepare("INSERT INTO `mutes` VALUES (:ip, :time)");
+	$query = prepare("INSERT INTO `mutes` (`ip`, `time`) VALUES (:ip, :time)");
 	$query->bindValue(':time', time(), PDO::PARAM_INT);
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->execute() or error(db_error($query));

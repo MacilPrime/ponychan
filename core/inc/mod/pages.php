@@ -234,7 +234,7 @@ function mod_new_board() {
 			error(sprintf($config['error']['boardexists'], $board['url']));
 		}
 
-		$query = prepare('INSERT INTO `boards` VALUES (:uri, :title, :subtitle)');
+		$query = prepare('INSERT INTO `boards` (`uri`, `title`, `subtitle`) VALUES (:uri, :title, :subtitle)');
 		$query->bindValue(':uri', $_POST['uri']);
 		$query->bindValue(':title', $_POST['title']);
 		$query->bindValue(':subtitle', $_POST['subtitle']);
@@ -280,7 +280,7 @@ function mod_noticeboard($page_no = 1) {
 
 		markup($_POST['body']);
 
-		$query = prepare('INSERT INTO `noticeboard` VALUES (NULL, :mod, :time, :subject, :body)');
+		$query = prepare('INSERT INTO `noticeboard` (`id`, `mod`, `time`, `subject`, `body`) VALUES (NULL, :mod, :time, :subject, :body)');
 		$query->bindValue(':mod', $mod['id']);
 		$query->bindvalue(':time', time());
 		$query->bindValue(':subject', $_POST['subject']);
@@ -349,7 +349,7 @@ function mod_news($page_no = 1) {
 
 		markup($_POST['body']);
 
-		$query = prepare('INSERT INTO `news` VALUES (NULL, :name, :time, :subject, :body)');
+		$query = prepare('INSERT INTO `news` (`id`, `name`, `time`, `subject`, `body`) VALUES (NULL, :name, :time, :subject, :body)');
 		$query->bindValue(':name', isset($_POST['name']) && hasPermission($config['mod']['news_custom']) ? $_POST['name'] : $mod['username']);
 		$query->bindvalue(':time', time());
 		$query->bindValue(':subject', $_POST['subject']);
@@ -570,7 +570,7 @@ function mod_page_ip($ip_url) {
 			error($config['error']['noaccess']);
 
 		markup($_POST['note']);
-		$query = prepare('INSERT INTO `ip_notes` VALUES (NULL, :ip, :mod, :time, :body)');
+		$query = prepare('INSERT INTO `ip_notes` (`id`, `ip`, `mod`, `time`, `body`) VALUES (NULL, :ip, :mod, :time, :body)');
 		$query->bindValue(':ip', $ip);
 		$query->bindValue(':mod', $mod['id']);
 		$query->bindValue(':time', time());
@@ -1004,7 +1004,7 @@ function mod_move($originBoard, $postID) {
 			}
 
 			foreach ($post['tracked_cites'] as $cite) {
-				$query = prepare('INSERT INTO `cites` VALUES (:board, :post, :target_board, :target)');
+				$query = prepare('INSERT INTO `cites` (`board`, `post`, `target_board`, `target`) VALUES (:board, :post, :target_board, :target)');
 				$query->bindValue(':board', $board['uri']);
 				$query->bindValue(':post', $newPostID, PDO::PARAM_INT);
 				$query->bindValue(':target_board',$cite[0]);
@@ -1428,7 +1428,7 @@ function mod_user_new() {
 		if ($_POST['type'] !== JANITOR && $_POST['type'] !== MOD && $_POST['type'] !== ADMIN)
 			error(sprintf($config['error']['invalidfield'], 'type'));
 
-		$query = prepare('INSERT INTO `mods` VALUES (NULL, :username, SHA1(:password), :type, :boards)');
+		$query = prepare('INSERT INTO `mods` (`id`, `username`, `password`, `type`, `boards`) VALUES (NULL, :username, SHA1(:password), :type, :boards)');
 		$query->bindValue(':username', $_POST['username']);
 		$query->bindValue(':password', $_POST['password']);
 		$query->bindValue(':type', $_POST['type']);
@@ -1585,7 +1585,7 @@ function mod_new_pm($username) {
 
 		markup($_POST['message']);
 
-		$query = prepare("INSERT INTO `pms` VALUES (NULL, :me, :id, :message, :time, 1)");
+		$query = prepare("INSERT INTO `pms` (`id`, `senders`, `to`, `message`, `time`, `unread`) VALUES (NULL, :me, :id, :message, :time, 1)");
 		$query->bindValue(':me', $mod['id']);
 		$query->bindValue(':id', $id);
 		$query->bindValue(':message', $_POST['message']);
@@ -2003,14 +2003,14 @@ function mod_theme_configure($theme_name) {
 		$query->execute() or error(db_error($query));
 
 		foreach ($theme['config'] as &$conf) {
-			$query = prepare("INSERT INTO `theme_settings` VALUES(:theme, :name, :value)");
+			$query = prepare("INSERT INTO `theme_settings` (`theme`, `name`, `value`) VALUES(:theme, :name, :value)");
 			$query->bindValue(':theme', $theme_name);
 			$query->bindValue(':name', $conf['name']);
 			$query->bindValue(':value', $_POST[$conf['name']]);
 			$query->execute() or error(db_error($query));
 		}
 
-		$query = prepare("INSERT INTO `theme_settings` VALUES(:theme, NULL, NULL)");
+		$query = prepare("INSERT INTO `theme_settings` (`theme`, `name`, `value`) VALUES(:theme, NULL, NULL)");
 		$query->bindValue(':theme', $theme_name);
 		$query->execute() or error(db_error($query));
 

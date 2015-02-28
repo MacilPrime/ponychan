@@ -211,7 +211,7 @@ if (false) {
 	$query->bindValue(':expires', $config['spam']['hidden_inputs_expire']);
 	$query->execute() or error(db_error($query));
 
-	$query = prepare('INSERT INTO `antispam` VALUES (:board, :thread, :hash, UNIX_TIMESTAMP(), NULL, 0)');
+	$query = prepare('INSERT INTO `antispam` (`board`, `thread`, `hash`, `created`, `expires`, `passed`) VALUES (:board, :thread, :hash, UNIX_TIMESTAMP(), NULL, 0)');
 	$query->bindValue(':board', $board);
 	$query->bindValue(':thread', $thread);
 	$query->bindValue(':hash', $antibot->hash());

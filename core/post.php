@@ -277,7 +277,7 @@ if (isset($_POST['delete'])) {
 
 	if (isset($post['tracked_cites'])) {
 		foreach ($post['tracked_cites'] as $cite) {
-			$query = prepare('INSERT INTO `cites` VALUES (:board, :post, :target_board, :target)');
+			$query = prepare('INSERT INTO `cites` (`board`, `post`, `target_board`, `target`) VALUES(:board, :post, :target_board, :target)');
 			$query->bindValue(':board', $board['uri']);
 			$query->bindValue(':post', $id, PDO::PARAM_INT);
 			$query->bindValue(':target_board',$cite[0]);
@@ -357,7 +357,7 @@ if (isset($_POST['delete'])) {
 					'/' . $board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], $post['thread'] ? $post['thread'] : $id) . ($post['thread'] ? '#' . $id : '') .
 					' for "' . $reason . '"'
 				);
-			$query = prepare("INSERT INTO `reports` VALUES (NULL, :time, :ip, :board, :post, :reason)");
+			$query = prepare("INSERT INTO `reports` (`id`, `time`, `ip`, `board`, `post`, `reason`) VALUES (NULL, :time, :ip, :board, :post, :reason)");
 			$query->bindValue(':time', time(), PDO::PARAM_INT);
 			$query->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 			$query->bindValue(':board', $board['uri'], PDO::PARAM_INT);
@@ -923,7 +923,7 @@ if (isset($_POST['delete'])) {
 
 	if (isset($post['tracked_cites'])) {
 		foreach ($post['tracked_cites'] as $cite) {
-			$query = prepare('INSERT INTO `cites` VALUES (:board, :post, :target_board, :target)');
+			$query = prepare('INSERT INTO `cites` (`board`, `post`, `target_board`, `target`) VALUES (:board, :post, :target_board, :target)');
 			$query->bindValue(':board', $board['uri']);
 			$query->bindValue(':post', $id, PDO::PARAM_INT);
 			$query->bindValue(':target_board',$cite[0]);
