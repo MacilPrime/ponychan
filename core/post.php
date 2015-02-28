@@ -250,14 +250,6 @@ if (isset($_POST['delete'])) {
 		$post['body'] .= "\n" . sprintf(isset($password) ? $config['edit_self_message'] : $config['edit_mod_message'], $time);
 	}
 
-	if (!hasPermission($config['mod']['postunoriginal'], $board['uri']) && $config['robot_enable'] && checkRobot($post['body_nomarkup'])) {
-		if ($config['robot_mute']) {
-			error(sprintf($config['error']['muted'], mute()));
-		} else {
-			error($config['error']['unoriginal']);
-		}
-	}
-
 	$post = (object)$post;
 	if ($error = event('post-edit', $post)) {
 		error($error);
@@ -448,10 +440,6 @@ if (isset($_POST['delete'])) {
 	if (!$post['mod']) {
 		if (checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : '')))
 			error($config['error']['spam']);
-	}
-
-	if ($config['robot_enable'] && $config['robot_mute']) {
-		checkMute();
 	}
 
 	//Check if thread exists
@@ -886,15 +874,6 @@ if (isset($_POST['delete'])) {
 						)
 				));
 			}
-		}
-	}
-
-	if (!hasPermission($config['mod']['postunoriginal'], $board['uri']) && $config['robot_enable'] && checkRobot($post['body_nomarkup'])) {
-		undoFile($post);
-		if ($config['robot_mute']) {
-			error(sprintf($config['error']['muted'], mute()));
-		} else {
-			error($config['error']['unoriginal']);
 		}
 	}
 

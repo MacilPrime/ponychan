@@ -345,19 +345,6 @@
 	// Reply hard limit (stops allowing new replies when this is reached if not zero)
 	$config['reply_hard_limit'] = 0;
 
-	// Strip repeating characters when making hashes
-	$config['robot_enable'] = false;
-	$config['robot_strip_repeating'] = true;
-
-	// Enable mutes
-	// Tinyboard uses ROBOT9000's original 2^x implementation
-	$config['robot_mute'] = true;
-	// How many mutes x hours ago to include in the algorithm
-	$config['robot_mute_hour'] = 336; // 2 weeks
-	// If you want to alter the algorithm a bit. Default value is 2. n^x
-	$config['robot_mute_multiplier'] = 2;
-	$config['robot_mute_descritpion'] = 'You have been muted for unoriginal content.';
-
 	// Automatically convert things like "..." to Unicode characters ("…")
 	$config['auto_unicode'] = true;
 	// Whether to turn URLs into functional links
@@ -817,9 +804,6 @@
 	$config['error']['nopost']		= _('You didn\'t make a post.');
 	$config['error']['flood']		= _('Flood detected; Post discarded.');
 	$config['error']['spam']		= _('Your request looks automated; Post discarded.');
-	$config['error']['unoriginal']		= _('Unoriginal content!');
-	$config['error']['muted']		= _('Unoriginal content! You have been muted for %d seconds.');
-	$config['error']['youaremuted']		= _('You are muted! Expires in %d seconds.');
 	$config['error']['dnsbl']		= _('Your IP address is listed in %s.');
 	$config['error']['toomanylinks']	= _('Too many links; flood detected.');
 	$config['error']['toomanycites']	= _('Too many cites; post discarded.');
@@ -1110,8 +1094,6 @@
 	$config['mod']['move'] = DISABLED;
 	// Bypass "field_disable_*" (forced anonymity, etc.)
 	$config['mod']['bypass_field_disable'] = MOD;
-	// Post bypass unoriginal content check on robot-enabled boards
-	$config['mod']['postunoriginal'] = ADMIN;
 	// Bypass flood check
 	$config['mod']['flood'] = ADMIN;
 	// Raw HTML posting
