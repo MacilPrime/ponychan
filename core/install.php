@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-1-cleanup');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-2-prepare');
 
 require 'inc/functions.php';
 
@@ -249,6 +249,31 @@ if (file_exists($config['has_installed'])) {
 		case 'v0.9.6-dev-8-mlpchan-1':
 			query("DROP TABLE `mutes`") or error(db_error());
 			query("DROP TABLE `robot`") or error(db_error());
+		case 'v0.9.6-dev-8-mlpchan-1-cleanup':
+			query("ALTER TABLE `bans`
+				ADD COLUMN `range_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6' AFTER `ip_type`,
+				ADD COLUMN `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data' AFTER `range_type`,
+				ADD COLUMN `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data' AFTER `range_start`,
+				ADD KEY `range` (`range_type`, `range_start`, `range_end`)") or error(db_error());
+			query("ALTER TABLE `ip_notes`
+				ADD COLUMN `range_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6' AFTER `ip`,
+				ADD COLUMN `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data' AFTER `range_type`,
+				ADD COLUMN `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data' AFTER `range_start`,
+				ADD KEY `range` (`range_type`, `range_start`, `range_end`)") or error(db_error());
+			query("ALTER TABLE `modlogs`
+				ADD COLUMN `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6' AFTER `ip`,
+				ADD COLUMN `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data' AFTER `ip_type`") or error(db_error());
+			query("ALTER TABLE `reports`
+				ADD COLUMN `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6' AFTER `ip`,
+				ADD COLUMN `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data' AFTER `ip_type`") or error(db_error());
+			foreach ($boards as $board) {
+				query(sprintf(
+					"ALTER TABLE `posts_%s`
+						ADD COLUMN `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6' AFTER `ip`,
+						ADD COLUMN `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data' AFTER `ip_type`,
+						ADD KEY `ip_type_data` (`ip_type`, `ip_data`)"
+				, $board['uri'])) or error(db_error());
+			}
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);

@@ -30,6 +30,9 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `ip` varchar(45) NOT NULL,
   `ip_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:exact, 1:range glob, 2:IPv4 CIDR',
+  `range_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `mod` int(11) NOT NULL COMMENT 'which mod made the ban',
   `set` int(11) NOT NULL COMMENT 'when the ban was set',
   `expires` int(11) DEFAULT NULL,
@@ -39,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `bans` (
   PRIMARY KEY (`id`),
   KEY (`ip`),
   KEY (`expires`),
+  KEY `range` (`range_type`, `range_start`, `range_end`),
   KEY (`ip_type`,`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 
@@ -86,10 +90,14 @@ CREATE TABLE IF NOT EXISTS `cites` (
 CREATE TABLE IF NOT EXISTS `ip_notes` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `ip` varchar(45) NOT NULL,
+  `range_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `mod` int(11) DEFAULT NULL,
   `time` int(11) NOT NULL,
   `body` text NOT NULL,
   UNIQUE KEY `id` (`id`),
+  KEY (`range_type`, `range_start`, `range_end`),
   KEY `ip` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 
@@ -102,6 +110,8 @@ CREATE TABLE IF NOT EXISTS `ip_notes` (
 CREATE TABLE IF NOT EXISTS `modlogs` (
   `mod` int(11) NOT NULL,
   `ip` varchar(45) NOT NULL,
+  `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `board` varchar(120) DEFAULT NULL,
   `time` int(11) NOT NULL,
   `text` text NOT NULL,
@@ -188,6 +198,8 @@ CREATE TABLE IF NOT EXISTS `reports` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `time` int(11) NOT NULL,
   `ip` varchar(45) NOT NULL,
+  `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `board` varchar(120) DEFAULT NULL,
   `post` int(11) NOT NULL,
   `reason` text NOT NULL,
