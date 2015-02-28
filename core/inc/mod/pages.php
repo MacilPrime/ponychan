@@ -171,12 +171,6 @@ function mod_edit_board($boardName) {
 			$query->bindValue(':board', $board['uri']);
 			$query->execute() or error(db_error($query));
 
-if (false) {
-			$query = prepare('DELETE FROM `antispam` WHERE `board` = :board');
-			$query->bindValue(':board', $board['uri']);
-			$query->execute() or error(db_error($query));
-}
-
 			// Remove board from users/permissions table
 			$query = query('SELECT `id`,`boards` FROM `mods`') or error(db_error());
 			while ($user = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -1909,42 +1903,6 @@ function mod_config() {
 	}
 
 	mod_page(_('Config editor'), 'mod/config-editor.html', array('conf' => $conf));
-}
-
-function mod_debug_antispam() {
-	global $pdo, $config;
-
-	$args = array();
-
-if (false) {
-	if (isset($_POST['board'], $_POST['thread'])) {
-		$where = '`board` = ' . $pdo->quote($_POST['board']);
-		if ($_POST['thread'] != '')
-			$where .= ' AND `thread` = ' . $pdo->quote($_POST['thread']);
-
-		if (isset($_POST['purge'])) {
-			$query = prepare('UPDATE `antispam` SET `expires` = UNIX_TIMESTAMP() + :expires WHERE' . $where);
-			$query->bindValue(':expires', $config['spam']['hidden_inputs_expire']);
-			$query->execute() or error(db_error());
-		}
-
-		$args['board'] = $_POST['board'];
-		$args['thread'] = $_POST['thread'];
-	} else {
-		$where = '';
-	}
-
-	$query = query('SELECT COUNT(*) FROM `antispam`' . ($where ? " WHERE $where" : '')) or error(db_error());
-	$args['total'] = number_format($query->fetchColumn(0));
-
-	$query = query('SELECT COUNT(*) FROM `antispam` WHERE `expires` IS NOT NULL' . ($where ? " AND $where" : '')) or error(db_error());
-	$args['expiring'] = number_format($query->fetchColumn(0));
-
-	$query = query('SELECT * FROM `antispam` ' . ($where ? "WHERE $where" : '') . ' ORDER BY `passed` DESC LIMIT 40') or error(db_error());
-	$args['top'] = $query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-	mod_page(_('Debug: Anti-spam'), 'mod/debug/antispam.html', $args);
 }
 
 function mod_themes_list() {

@@ -446,10 +446,8 @@ if (isset($_POST['delete'])) {
 	}
 
 	if (!$post['mod']) {
-		$post['antispam_hash'] = checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : ''));
-		if ($post['antispam_hash'] === true) {
+		if (checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : '')))
 			error($config['error']['spam']);
-		}
 	}
 
 	if ($config['robot_enable'] && $config['robot_mute']) {
@@ -916,10 +914,6 @@ if (isset($_POST['delete'])) {
 	$post = (array)$post;
 
 	$post['id'] = $id = post($post);
-
-	if (isset($post['antispam_hash'])) {
-		incrementSpamHash($post['antispam_hash']);
-	}
 
 	if (isset($post['tracked_cites'])) {
 		foreach ($post['tracked_cites'] as $cite) {
