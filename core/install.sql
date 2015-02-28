@@ -134,18 +134,6 @@ INSERT INTO `mods` (`id`, `username`, `password`, `type`, `boards`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mutes`
---
-
-CREATE TABLE IF NOT EXISTS `mutes` (
-  `ip` varchar(45) NOT NULL,
-  `time` int(11) NOT NULL,
-  KEY `ip` (`ip`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `news`
 --
 
@@ -205,17 +193,6 @@ CREATE TABLE IF NOT EXISTS `reports` (
   `reason` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `robot`
---
-
-CREATE TABLE IF NOT EXISTS `robot` (
-  `hash` varchar(40) NOT NULL COMMENT 'SHA1',
-  PRIMARY KEY (`hash`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
