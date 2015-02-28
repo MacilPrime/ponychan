@@ -14,7 +14,7 @@ server {
 
 	more_set_headers 'X-Test-Header: boop';
 
-	if ($request_uri ~ ^(.*?/)index.html(\?.*)?$) {
+	if ($request_uri ~ ^(.*?/)index\.html(\?.*)?$) {
 		return 301 $1$2;
 	}
 
