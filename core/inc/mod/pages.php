@@ -1579,7 +1579,7 @@ function mod_new_pm($username) {
 
 		markup($_POST['message']);
 
-		$query = prepare("INSERT INTO `pms` (`id`, `senders`, `to`, `message`, `time`, `unread`) VALUES (NULL, :me, :id, :message, :time, 1)");
+		$query = prepare("INSERT INTO `pms` (`id`, `sender`, `to`, `message`, `time`, `unread`) VALUES (NULL, :me, :id, :message, :time, 1)");
 		$query->bindValue(':me', $mod['id']);
 		$query->bindValue(':id', $id);
 		$query->bindValue(':message', $_POST['message']);
