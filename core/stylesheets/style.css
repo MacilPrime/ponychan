@@ -158,6 +158,7 @@ img.expanded, video.expanded {
 	max-width: 75%;
 	max-height: 95%;
 	z-index: 10;
+	pointer-events: none;
 }
 .opMain {
 	margin-right: 20px;
@@ -579,6 +580,7 @@ table.mod.config-editor input[type="text"] {
 	position: absolute !important;
 	display: block !important;
 	z-index: 10;
+	pointer-events: none;
 }
 .post-inline {
 	margin: 2px !important;

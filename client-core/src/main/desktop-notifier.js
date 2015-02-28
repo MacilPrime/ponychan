@@ -74,8 +74,8 @@ function makeNote($post) {
   const noteClicks = Bacon.fromEvent(note, 'click');
 
   Bacon.mergeAll(
-    Bacon.fromEvent(window, 'focus').take(1), noteClicks
-  ).onValue(() => {
+    Bacon.fromEvent(window, 'focus'), noteClicks
+  ).take(1).onValue(() => {
     note.close();
   });
 
