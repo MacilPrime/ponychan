@@ -78,12 +78,8 @@ $pages = array(
 
 	'/config'				=> 'config',		// config editor
 
-	// these pages aren't listed in the dashboard without $config['debug']
-	'/debug/antispam'			=> 'debug_antispam',
-
 	// This should always be at the end:
 	'/(\w+)/'										=> 'view_board',
-	'/(\w+)/' . preg_quote($config['file_index'], '!')					=> 'view_board',
 	'/(\w+)/' . str_replace('%d', '(\d+)', preg_quote($config['file_page'], '!'))		=> 'view_board',
 	'/(\w+)/' . preg_quote($config['dir']['res'], '!') .
 			str_replace('%d', '(\d+)', preg_quote($config['file_page50'], '!'))	=> 'view_thread50',

@@ -1,7 +1,7 @@
 {% for board_posts in posts %}
 	<fieldset>
 		<legend>
-			<a href="?/{{ config.board_path|sprintf(board_posts.board.uri) }}{{ config.file_index }}">
+			<a href="?/{{ config.board_path|sprintf(board_posts.board.uri) }}">
 				{{ config.board_abbreviation|sprintf(board_posts.board.uri) }}
 				 -
 				 {{ board_posts.board.title|e }}

@@ -119,7 +119,6 @@ function loadConfig() {
 				'(' .
 						str_replace('%s', '\w+', preg_quote($config['board_path'], '/')) .
 						'(' .
-							preg_quote($config['file_index'], '/') . '|' .
 							str_replace('%d', '\d+', preg_quote($config['file_page'])) .
 						')?' .
 					'|' .
@@ -1149,13 +1148,6 @@ function deletePosts($ids, $error_if_doesnt_exist=true, $rebuild_after=true) {
 			// Delete thread HTML page
 			file_unlink($board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], $post['id']));
 			file_unlink($board['dir'] . $config['dir']['res'] . sprintf($config['file_page50'], $post['id']));
-
-if (false) {
-			$antispam_query = prepare('DELETE FROM `antispam` WHERE `board` = :board AND `thread` = :thread');
-			$antispam_query->bindValue(':board', $board['uri']);
-			$antispam_query->bindValue(':thread', $post['id']);
-			$antispam_query->execute() or error(db_error($antispam_query));
-}
 		} else {
 			// Mark thread for rebuild
 			$threads_to_rebuild[ $board['uri'] ][ $post['thread'] ] = true;
@@ -1323,7 +1315,7 @@ function getPageButtons($pages, $mod=false) {
 			} else {
 				$loc = ($mod ? '?/' . $board['uri'] . '/' : '') .
 					($num == 1 ?
-						$config['file_index']
+						''
 					:
 						sprintf($config['file_page'], $num)
 					);
@@ -1370,44 +1362,11 @@ function getPages($mod=false) {
 	for ($x=0;$x<$count && $x<$config['max_pages'];$x++) {
 		$pages[] = array(
 			'num' => $x+1,
-			'link' => $x==0 ? ($mod ? '?/' : $config['root']) . $board['dir'] . $config['file_index'] : ($mod ? '?/' : $config['root']) . $board['dir'] . sprintf($config['file_page'], $x+1)
+			'link' => $x==0 ? ($mod ? '?/' : $config['root']) . $board['dir'] : ($mod ? '?/' : $config['root']) . $board['dir'] . sprintf($config['file_page'], $x+1)
 		);
 	}
 
 	return $pages;
-}
-
-function makerobot($body) {
-	global $config;
-	$body = strtolower($body);
-
-	// Leave only letters
-	$body = preg_replace('/[^a-z]/i', '', $body);
-	// Remove repeating characters
-	if ($config['robot_strip_repeating'])
-		$body = preg_replace('/(.)\\1+/', '$1', $body);
-
-	return sha1($body);
-}
-
-function checkRobot($body) {
-	if (empty($body) || event('check-robot', $body))
-		return true;
-
-	$body = makerobot($body);
-	$query = prepare("SELECT 1 FROM `robot` WHERE `hash` = :hash LIMIT 1");
-	$query->bindValue(':hash', $body);
-	$query->execute() or error(db_error($query));
-
-	if ($query->fetch()) {
-		return true;
-	}
-
-	// Insert new hash
-	$query = prepare("INSERT INTO `robot` VALUES (:hash)");
-	$query->bindValue(':hash', $body);
-	$query->execute() or error(db_error($query));
-	return false;
 }
 
 // Returns an associative array with 'replies' and 'images' keys
@@ -1425,68 +1384,6 @@ function numPosts($id) {
 	return array('replies' => $num_posts, 'images' => $num_images);
 }
 
-function muteTime() {
-	global $config;
-
-	if ($time = event('mute-time'))
-		return $time;
-
-	// Find number of mutes in the past X hours
-	$query = prepare("SELECT COUNT(*) as `count` FROM `mutes` WHERE `time` >= :time AND `ip` = :ip");
-	$query->bindValue(':time', time()-($config['robot_mute_hour']*3600), PDO::PARAM_INT);
-	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
-	$query->execute() or error(db_error($query));
-
-	$result = $query->fetch();
-	if ($result['count'] == 0) return 0;
-	return pow($config['robot_mute_multiplier'], $result['count']);
-}
-
-function mute() {
-	// Insert mute
-	$query = prepare("INSERT INTO `mutes` VALUES (:ip, :time)");
-	$query->bindValue(':time', time(), PDO::PARAM_INT);
-	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
-	$query->execute() or error(db_error($query));
-
-	return muteTime();
-}
-
-function checkMute() {
-	global $config, $debug;
-
-	if ($config['cache']['enabled']) {
-		// Cached mute?
-		if (($mute = cache::get("mute_${_SERVER['REMOTE_ADDR']}")) && ($mutetime = cache::get("mutetime_${_SERVER['REMOTE_ADDR']}"))) {
-			error(sprintf($config['error']['youaremuted'], $mute['time'] + $mutetime - time()));
-		}
-	}
-
-	$mutetime = muteTime();
-	if ($mutetime > 0) {
-		// Find last mute time
-		$query = prepare("SELECT `time` FROM `mutes` WHERE `ip` = :ip ORDER BY `time` DESC LIMIT 1");
-		$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
-		$query->execute() or error(db_error($query));
-
-		if (!$mute = $query->fetch()) {
-			// What!? He's muted but he's not muted...
-			return;
-		}
-
-		if ($mute['time'] + $mutetime > time()) {
-			if ($config['cache']['enabled']) {
-				cache::set("mute_${_SERVER['REMOTE_ADDR']}", $mute, $mute['time'] + $mutetime - time());
-				cache::set("mutetime_${_SERVER['REMOTE_ADDR']}", $mutetime, $mute['time'] + $mutetime - time());
-			}
-			// Not expired yet
-			error(sprintf($config['error']['youaremuted'], $mute['time'] + $mutetime - time()));
-		} else {
-			// Already expired
-			return;
-		}
-	}
-}
 
 // Rebuilds the board's index pages.
 // $oldbump can optionally be a timestamp. Only pages up until the page
@@ -1774,7 +1671,7 @@ function markup(&$body, $track_cites = false) {
 						}
 					} else {
 						$replacement = '<a class="bodylink" href="' .
-							$config['root'] . $board['dir'] . $config['file_index'] . '">' .
+							$config['root'] . $board['dir'] . '">' .
 								'&gt;&gt;&gt;/' . $_board . '/' .
 								'</a>';
 						$body = str_replace($cites[0][$index], $cites[1][$index] . $replacement . $cites[4][$index], $body);
@@ -1853,7 +1750,7 @@ function buildThread($id, $return=false, $mod=false) {
 		'isnoko50' => false,
 		'antibot' => $mod ? false : create_antibot($board['uri'], $id),
 		'boardlist' => createBoardlist($mod),
-		'return' => ($mod ? '?' . $board['url'] . $config['file_index'] : $config['root'] . $board['uri'] . '/' . $config['file_index'])
+		'return' => ($mod ? '?' . $board['url'] : $config['root'] . $board['uri'] . '/')
 	));
 
 	if ($return)
@@ -1941,7 +1838,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 		'isnoko50' => true,
 		'antibot' => $mod ? false : create_antibot($board['uri'], $id),
 		'boardlist' => createBoardlist($mod),
-		'return' => ($mod ? '?' . $board['url'] . $config['file_index'] : $config['root'] . $board['uri'] . '/' . $config['file_index'])
+		'return' => ($mod ? '?' . $board['url'] : $config['root'] . $board['uri'] . '/')
 	));
 
 	if ($return)

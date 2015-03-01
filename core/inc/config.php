@@ -199,27 +199,12 @@
 	 * In simple terms, whenever a posting form on a page is generated (which happens whenever a
 	 * post is made), Tinyboard will add a random amount of hidden, obscure fields to it to
 	 * confuse bots and upset hackers. These fields and their respective obscure values are
-	 * validated upon posting with a 160-bit "hash". That hash can only be used as many times
-	 * as you specify; otherwise, flooding bots could just keep reusing the same hash.
-	 * Once a new set of inputs (and the hash) are generated, old hashes for the same thread
-	 * and board are set to expire. Because you have to reload the page to get the new set
-	 * of inputs and hash, if they expire too quickly and more than one person is viewing the
-	 * page at a given time, Tinyboard would return false positives (depending on how long the
-	 * user sits on the page before posting). If your imageboard is quite fast/popular, set
-	 * $config['spam']['hidden_inputs_max_pass'] and $config['spam']['hidden_inputs_expire'] to
-	 * something higher to avoid false positives.
-	 *
-	 * See also: http://tinyboard.org/docs/?p=Your_request_looks_automated
-	 *
+	 * validated upon posting with a 160-bit "hash".
 	 */
 
 	// Number of hidden fields to generate
 	$config['spam']['hidden_inputs_min'] = 4;
 	$config['spam']['hidden_inputs_max'] = 12;
-	// How many times can a "hash" be used to post?
-	$config['spam']['hidden_inputs_max_pass'] = 12;
-	// How soon after regeneration do hashes expire (in seconds)?
-	$config['spam']['hidden_inputs_expire'] = 60 * 60 * 3; // three hours
 	// These are fields used to confuse the bots. Make sure they aren't actually used by Tinyboard, or it won't work.
 	$config['spam']['hidden_input_names'] = array(
 		'user',
@@ -359,19 +344,6 @@
 	$config['image_hard_limit'] = 0;
 	// Reply hard limit (stops allowing new replies when this is reached if not zero)
 	$config['reply_hard_limit'] = 0;
-
-	// Strip repeating characters when making hashes
-	$config['robot_enable'] = false;
-	$config['robot_strip_repeating'] = true;
-
-	// Enable mutes
-	// Tinyboard uses ROBOT9000's original 2^x implementation
-	$config['robot_mute'] = true;
-	// How many mutes x hours ago to include in the algorithm
-	$config['robot_mute_hour'] = 336; // 2 weeks
-	// If you want to alter the algorithm a bit. Default value is 2. n^x
-	$config['robot_mute_multiplier'] = 2;
-	$config['robot_mute_descritpion'] = 'You have been muted for unoriginal content.';
 
 	// Automatically convert things like "..." to Unicode characters ("…")
 	$config['auto_unicode'] = true;
@@ -832,9 +804,6 @@
 	$config['error']['nopost']		= _('You didn\'t make a post.');
 	$config['error']['flood']		= _('Flood detected; Post discarded.');
 	$config['error']['spam']		= _('Your request looks automated; Post discarded.');
-	$config['error']['unoriginal']		= _('Unoriginal content!');
-	$config['error']['muted']		= _('Unoriginal content! You have been muted for %d seconds.');
-	$config['error']['youaremuted']		= _('You are muted! Expires in %d seconds.');
 	$config['error']['dnsbl']		= _('Your IP address is listed in %s.');
 	$config['error']['toomanylinks']	= _('Too many links; flood detected.');
 	$config['error']['toomanycites']	= _('Too many cites; post discarded.');
@@ -1125,8 +1094,6 @@
 	$config['mod']['move'] = DISABLED;
 	// Bypass "field_disable_*" (forced anonymity, etc.)
 	$config['mod']['bypass_field_disable'] = MOD;
-	// Post bypass unoriginal content check on robot-enabled boards
-	$config['mod']['postunoriginal'] = ADMIN;
 	// Bypass flood check
 	$config['mod']['flood'] = ADMIN;
 	// Raw HTML posting
