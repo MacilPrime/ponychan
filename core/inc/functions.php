@@ -705,6 +705,146 @@ function listBoards() {
 	return $boards;
 }
 
+function isIPv6($ip) {
+	return strstr($ip, ':') !== false;
+}
+
+define('IP_TYPE_IPV4', 0);
+define('IP_TYPE_IPV6', 1);
+
+function ipType($ip) {
+	return isIPv6($ip) ? IP_TYPE_IPV6 : IP_TYPE_IPV4;
+}
+
+function parse_mask($mask) {
+	/*
+	 * We support three types of ban ranges: single IPs, cidr ranges, and glob expressions.
+	 * All can apply to either ipv4 or ipv6 addresses.
+	 *
+	 * In all cases, we return a pair of strings containing the start and end addresses
+	 * of the range.
+	 */
+	
+	if (strpos($mask, '*') !== false) {
+		// For a glob expression, we need to manually parse the ip address. Ugh.
+		
+		if (strpos($mask, ':') !== false) {
+			// ipv6
+			$parts = explode(':', $mask);
+			if (count($parts) < 2 || count($parts) > 8)
+				return null;
+			
+			$packed = "";
+			$starSeen = false;
+			$emptySeen = false;
+			foreach ($parts as $chunk) {
+				if ($starSeen && $chunk != '*')
+					return null;
+				if ($chunk == '*') {
+					$starSeen = true;
+					continue;
+				}
+				if ($emptySeen)
+					return null;
+				if ($chunk == '') {
+					$emptySeen = true;
+					continue;
+				}
+				
+				if (!ctype_xdigit($chunk) || strlen($chunk) > 4)
+					return null;
+				$bioctet = intval($chunk, 16);
+				if ($bioctet > 65535)
+					return null;
+				$packed .= chr($bioctet >> 8);
+				$packed .= chr($bioctet & 0xff);
+			}
+			
+			$start = $packed;
+			$end = $packed;
+			while (strlen($start) < 16) {
+				$start .= chr(0);
+				$end .= chr(255);
+			}
+			return array('range_type'=>IP_TYPE_IPV6, 'range_start'=>inet_ntop($start), 'range_end'=>inet_ntop($end));
+		} else {
+			// ipv4
+			$parts = explode('.', $mask);
+			if (count($parts) < 2 || count($parts) > 4)
+				return null;
+			
+			$packed = "";
+			$seen = false;
+			foreach ($parts as $chunk) {
+				if ($seen && $chunk != '*')
+					return null;
+				if ($chunk == '*') {
+					$seen = true;
+					continue;
+				}
+				
+				if (!ctype_digit($chunk) || strlen($chunk) > 3)
+					return null;
+				$byte = intval($chunk);
+				if ($byte > 0xff)
+					return null;
+				$packed .= chr($byte);
+			}
+			
+			$start = $packed;
+			$end = $packed;
+			while (strlen($start) < 4) {
+				$start .= chr(0);
+				$end .= chr(255);
+			}
+			return array('range_type'=>IP_TYPE_IPV4, 'range_start'=>inet_ntop($start), 'range_end'=>inet_ntop($end));
+		}
+	} else {
+		$parts = explode('/', $mask);
+		if (count($parts) == 1) {
+			$ip = $parts[0];
+			$rangeString = null;
+		} else if (count($parts) == 2) {
+			$ip = $parts[0];
+			$rangeString = $parts[1];
+		} else {
+			return null;
+		}
+		
+		$packed = @inet_pton($ip);
+		if ($packed === false)
+			return null;
+		
+		$maxRange = strlen($packed) * 8;
+		if ($rangeString === null) {
+			$range = $maxRange;
+		} else {
+			if (!ctype_digit($rangeString) || strlen($rangeString) > 3)
+				return null;
+			$range = intval($rangeString);
+			if ($range > $maxRange)
+				return null;
+		}
+		
+		$start = "";
+		$end = "";
+		for ($i = 0; $i < strlen($packed); $i++) {
+			$byte = ord($packed[$i]);
+			if ($range <= $i * 8)
+				$mask = 0xff;
+			else if ($range >= ($i + 1) * 8)
+				$mask = 0;
+			else
+				$mask = (1 << ((($i + 1) * 8) - $range)) - 1;
+			
+			$start .= chr($byte & ~$mask);
+			$end .= chr($byte | $mask);
+		}
+		
+		return array('range_type'=>(strlen($packed) == 4 ? IP_TYPE_IPV4 : IP_TYPE_IPV6), 'range_start'=>inet_ntop($start), 'range_end'=>inet_ntop($end));
+	}
+}
+
 function checkFlood($post) {
 	global $board, $config;
 
@@ -821,7 +961,7 @@ function checkBan($board = 0) {
 		event('process-bans', $board, $banlist);
 	}
 
-	if (count($banlist->l) < 1 && $config['ban_cidr'] && !isIPv6()) {
+	if (count($banlist->l) < 1 && $config['ban_cidr'] && !isIPv6($_SERVER['REMOTE_ADDR'])) {
 		// my most insane SQL query yet
 		$query = prepare(
 			"SELECT `set`, `expires`, `reason`, `board`, `seen`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip_type` = 2" .
@@ -923,11 +1063,11 @@ function post(array $post) {
 		'INSERT INTO `posts_%s` (`id`, `thread`, `subject`, `email`, `name`, ' .
 		'`trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, ' .
 		'`thumbwidth`, `thumbheight`, `file`, `filewidth`, `fileheight`, ' .
-		'`filesize`, `filename`, `filehash`, `password`, `ip`, `sticky`, ' .
+		'`filesize`, `filename`, `filehash`, `password`, `ip`, `ip_type`, `ip_data`, `sticky`, ' .
 		'`locked`, `sage`, `embed`, `mature`) VALUES ( NULL, :thread, :subject, ' .
 		':email, :name, :trip, :capcode, :body, :body_nomarkup, :time, :time, ' .
 		':thumb, :thumbwidth, :thumbheight, :file, :width, :height, :filesize, ' .
-		':filename, :filehash, :password, :ip, :sticky, :locked, 0, :embed, ' .
+		':filename, :filehash, :password, :ip, :ip_type, INET6_ATON(:ip), :sticky, :locked, 0, :embed, ' .
 		':mature)', $board['uri']));
 
 	// Basic stuff
@@ -954,7 +1094,9 @@ function post(array $post) {
 	$query->bindValue(':body_nomarkup', $post['body_nomarkup']);
 	$query->bindValue(':time', isset($post['time']) ? $post['time'] : time(), PDO::PARAM_INT);
 	$query->bindValue(':password', $post['password']);
-	$query->bindValue(':ip', isset($post['ip']) ? $post['ip'] : $_SERVER['REMOTE_ADDR']);
+	$ip = isset($post['ip']) ? $post['ip'] : $_SERVER['REMOTE_ADDR'];
+	$query->bindValue(':ip', $ip);
+	$query->bindValue(':ip_type', ipType($ip));
 
 	if ($post['op'] && isset($post['sticky']) && $post['sticky']) {
 		$query->bindValue(':sticky', 1, PDO::PARAM_INT);
@@ -1440,7 +1582,7 @@ function checkDNSBL() {
 	global $config;
 
 
-	if (isIPv6())
+	if (isIPv6($_SERVER['REMOTE_ADDR']))
 		return; // No IPv6 support yet.
 
 	if (!isset($_SERVER['REMOTE_ADDR']))
@@ -1479,10 +1621,6 @@ function checkDNSBL() {
 				error(sprintf($config['error']['dnsbl'], $blacklist_name));
 		}
 	}
-}
-
-function isIPv6() {
-	return strstr($_SERVER['REMOTE_ADDR'], ':') !== false;
 }
 
 function ReverseIPOctets($ip) {
