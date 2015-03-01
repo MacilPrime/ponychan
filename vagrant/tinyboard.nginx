@@ -22,6 +22,10 @@ server {
 		return 403;
 	}
 
+	location ~ /\.installed$ {
+		return 403;
+	}
+
 	location ~ ^/templates/themes/.*/thumb\.png$ {
 	}
 
