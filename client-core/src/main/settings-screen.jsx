@@ -18,8 +18,8 @@ const CheckboxItem = React.createClass({
 		const {value, setting} = this.props;
 		const name = setting.get('name');
 		const desc = setting.get('description');
-		const toggle = () => {
-			settings.setSetting(name, !value);
+		const toggle = (event) => {
+			settings.setSetting(name, event.target.checked);
 		};
 		return (
 			<div>
