@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-2-prepare');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-2-migrate');
 
 require 'inc/functions.php';
 
@@ -273,6 +273,59 @@ if (file_exists($config['has_installed'])) {
 						ADD COLUMN `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data' AFTER `ip_type`,
 						ADD KEY `ip_type_data` (`ip_type`, `ip_data`)"
 				, $board['uri'])) or error(db_error());
+			}
+		case 'v0.9.6-dev-8-mlpchan-2-prepare':
+			foreach (query("SELECT `id`, `ip` FROM `bans` WHERE length(`range_start`) = 0")->fetchAll(PDO::FETCH_ASSOC) as $ban) {
+				$range = parse_mask($ban["ip"]);
+				if ($range === null) {
+					$query = prepare("DELETE FROM `bans` WHERE `id` = :id");
+					$query->bindValue(':id', $ban['id']);
+					$query->execute() or error(db_error($query));
+				} else {
+					$query = prepare("UPDATE `bans` SET `range_type` = :range_type, `range_start` = INET6_ATON(:range_start), `range_end` = INET6_ATON(:range_end) WHERE `id` = :id");
+					$query->bindValue(':id', $ban['id']);
+					$query->bindValue(':range_type', $range['range_type']);
+					$query->bindValue(':range_start', $range['range_start']);
+					$query->bindValue(':range_end', $range['range_end']);
+					$query->execute() or error(db_error($query));
+				}
+			}
+			foreach (query("SELECT `id`, `ip` FROM `ip_notes` WHERE length(`range_start`) = 0")->fetchAll(PDO::FETCH_ASSOC) as $note) {
+				$range = parse_mask($note["ip"]);
+				if ($range === null) {
+					$query = prepare("DELETE FROM `ip_notes` WHERE `id` = :id");
+					$query->bindValue(':id', $note['id']);
+					$query->execute() or error(db_error($query));
+				} else {
+					$query = prepare("UPDATE `ip_notes` SET `range_type` = :range_type, `range_start` = INET6_ATON(:range_start), `range_end` = INET6_ATON(:range_end) WHERE `id` = :id");
+					$query->bindValue(':id', $note['id']);
+					$query->bindValue(':range_type', $range['range_type']);
+					$query->bindValue(':range_start', $range['range_start']);
+					$query->bindValue(':range_end', $range['range_end']);
+					$query->execute() or error(db_error($query));
+				}
+			}
+			foreach (query("SELECT DISTINCT `ip` FROM `modlogs` WHERE length(`ip_data`) = 0")->fetchAll(PDO::FETCH_ASSOC) as $ip) {
+				$query = prepare("UPDATE `modlogs` SET `ip_type` = :ip_type, `ip_data` = INET6_ATON(:ip) WHERE `ip` = :ip AND length(`ip_data`) = 0");
+				$query->bindValue(':ip', $ip['ip']);
+				$query->bindValue(':ip_type', ipType($ip['ip']));
+				$query->execute() or error(db_error($query));
+			}
+			foreach (query("SELECT `id`, `ip` FROM `reports` WHERE length(`ip_data`) = 0")->fetchAll(PDO::FETCH_ASSOC) as $report) {
+				$query = prepare("UPDATE `reports` SET `ip_type` = :ip_type, `ip_data` = INET6_ATON(:ip) WHERE `id` = :id");
+				$query->bindValue(':id', $report['id']);
+				$query->bindValue(':ip_type', ipType($report['ip']));
+				$query->bindValue(':ip', $report['ip']);
+				$query->execute() or error(db_error($query));
+			}
+			foreach ($boards as $board) {
+				foreach (query(sprintf("SELECT `id`, `ip` FROM `posts_%s` WHERE length(`ip_data`) = 0", $board['uri']))->fetchAll(PDO::FETCH_ASSOC) as $post) {
+					$query = prepare(sprintf("UPDATE `posts_%s` SET `ip_type` = :ip_type, `ip_data` = INET6_ATON(:ip) WHERE `id` = :id", $board['uri']));
+					$query->bindValue(':id', $post['id']);
+					$query->bindValue(':ip_type', ipType($post['ip']));
+					$query->bindValue(':ip', $post['ip']);
+					$query->execute() or error(db_error($query));
+				}
 			}
 		case false:
 			// Update version number
