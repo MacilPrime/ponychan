@@ -18,6 +18,8 @@ if (get_magic_quotes_gpc()) {
 	$_POST = strip_array($_POST);
 }
 
+header('X-Frame-Options: SAMEORIGIN');
+
 $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
 
 $pages = array(
