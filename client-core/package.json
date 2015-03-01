@@ -2,19 +2,19 @@
   "name": "tinyboard-js",
   "version": "0.1.0",
   "dependencies": {
-    "baconjs": "0.7.49",
+    "baconjs": "0.7.53",
     "immutable": "3.6.2",
     "jquery": "1.11.2",
-    "lodash": "3.2.0",
+    "lodash": "3.3.1",
     "moment": "2.9.0",
     "react": "0.12.2",
-    "rsvp": "3.0.14"
+    "rsvp": "3.0.17"
   },
   "devDependencies": {
-    "babel": "^4.0.1",
-    "babel-core": "^4.0.1",
+    "babel": "^4.6.3",
+    "babel-core": "^4.6.3",
     "babelify": "^5.0.3",
-    "browserify": "^8.1.1",
+    "browserify": "^9.0.3",
     "console-polyfill": "^0.2.0",
     "envify": "^3.2.0",
     "exec-sync": "^0.1.6",
