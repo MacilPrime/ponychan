@@ -7,9 +7,6 @@ ban appeals
 
 persist past bans on IP page
 
-image bans
-- type of ban that only prevents a user from including images in their posts
-
 /all/
 - json api
 - static page that uses ajax and react

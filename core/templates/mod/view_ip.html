@@ -129,6 +129,14 @@
 						</td>
 					</tr>
 					<tr>
+						<th>{% trans 'Type' %}</th>
+						<td>
+							{% if ban.ban_type == constant('FULL_BAN') %}{% trans 'Full ban' %}
+							{% elseif ban.ban_type == constant('IMAGE_BAN') %}{% trans 'Image ban' %}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
 						<th>{% trans 'Set' %}</th>
 						<td>{{ ban.set|date(config.post_date) }}</td>
 					</tr>
