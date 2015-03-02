@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `expires` int(11) DEFAULT NULL,
   `reason` text,
   `board` varchar(120) DEFAULT NULL,
+  `ban_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:full, 1:image only',
   `seen` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY (`expires`),
