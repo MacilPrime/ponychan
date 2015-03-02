@@ -154,7 +154,7 @@ function bindCheckbox($checkbox, name) {
 	});
 }
 
-function newSection(name, displayName, orderhint, modOnly) {
+function newSection(name, displayName, orderhint, modOnly=false) {
 	settingsSectionsList = settingsSectionsList.push(Immutable.Map({
 		name, displayName, orderhint, modOnly,
 		settings: Immutable.List()

@@ -12,6 +12,8 @@ const PureRenderMixin = React.addons.PureRenderMixin;
 
 import settings from './settings';
 
+const isModPage = (document.location.pathname == SITE_DATA.siteroot+'mod.php');
+
 const CheckboxItem = React.createClass({
 	mixins: [PureRenderMixin],
 	render() {
@@ -58,13 +60,15 @@ const SettingsWindow = React.createClass({
 	mixins: [PureRenderMixin],
   render() {
 		const {values, sections} = this.props;
-		const sectionNodes = sections.map(section =>
-			<SettingsSection
-				values={values}
-				section={section}
-				key={section.get('name')}
-				/>
-		).toArray();
+		const sectionNodes = sections
+			.filter(section => isModPage || !section.get('modOnly'))
+			.map(section =>
+				<SettingsSection
+					values={values}
+					section={section}
+					key={section.get('name')}
+					/>
+			).toArray();
     return (
 			<div>
 	      <h1>Board Settings</h1>
