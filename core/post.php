@@ -349,7 +349,7 @@ if (isset($_POST['delete'])) {
 					'/' . $board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], $post['thread'] ? $post['thread'] : $id) . ($post['thread'] ? '#' . $id : '') .
 					' for "' . $reason . '"'
 				);
-			$query = prepare("INSERT INTO `reports` (`id`, `time`, `ip`, `ip_type`, `ip_data`, `board`, `post`, `reason`) VALUES (NULL, :time, :ip, :ip_type, INET6_ATON(:ip), :board, :post, :reason)");
+			$query = prepare("INSERT INTO `reports` (`id`, `time`, `ip_type`, `ip_data`, `board`, `post`, `reason`) VALUES (NULL, :time, :ip_type, INET6_ATON(:ip), :board, :post, :reason)");
 			$query->bindValue(':time', time(), PDO::PARAM_INT);
 			$query->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 			$query->bindValue(':ip_type', ipType($_SERVER['REMOTE_ADDR']));

@@ -40,7 +40,7 @@
 							{% endif %}
 						</td>
 						<td class="minimal">
-							{{ note.ip }}
+							{{ note|mask }}
 						</td>
 						<td>
 							{{ note.body }}
@@ -50,7 +50,7 @@
 						</td>
 						{% if mod|hasPermission(config.mod.remove_notes) %}
 							<td class="minimal">
-								<a href="?/IP/{{ note.ip_url }}/remove_note/{{ note.id }}">
+								<a href="?/IP/{{ note|mask_uri }}/remove_note/{{ note.id }}">
 									<small>[{% trans 'remove' %}]</small>
 								</a>
 							</td>
@@ -106,7 +106,7 @@
 					</tr>
 					<tr>
 						<th>{% trans 'IP' %}</th>
-						<td>{{ ban.ip }}</td>
+						<td>{{ ban|mask }}</td>
 					</tr>
 					<tr>
 						<th>{% trans 'Reason' %}</th>

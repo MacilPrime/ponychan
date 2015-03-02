@@ -17,11 +17,7 @@
 				<tr{% if ban.expires != 0 and ban.expires < time() %} style="text-decoration:line-through"{% endif %}>
 					<td style="white-space: nowrap">
 						<input type="checkbox" name="ban_{{ ban.id }}"> 
-						{% if ban.real_ip %}
-							<a href="?/IP/{{ ban.ip }}">{{ ban.ip }}</a>
-						{% else %}
-							{{ ban.ip|e }}
-						{% endif %}
+						<a href="?/IP/{{ ban|mask_uri }}">{{ ban|mask }}</a>
 					</td>
 					<td>
 						{% if ban.reason %}

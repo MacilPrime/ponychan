@@ -845,6 +845,32 @@ function parse_mask($mask) {
 	}
 }
 
+function render_mask($mask) {
+	$base = $mask['range_start'];
+	$start = inet_pton($mask['range_start']);
+	$end = inet_pton($mask['range_end']);
+	$range = null;
+	for ($i = 0; $i < strlen($start); $i++) {
+		if (ord($start[$i]) != ord($end[$i])) {
+			for ($j = 0; $j < 8; $j++) {
+				if (ord($start[$i]) >> (7 - $j) != ord($end[$i]) >> (7 - $j)) {
+					$range = $i * 8 + $j;
+					break 2;
+				}
+			}
+		}
+	}
+	if ($range === null) {
+		return $base;
+	} else {
+		return "$base/$range";
+	}
+}
+
+function render_mask_uri($mask) {
+	return str_replace('/', '^', render_mask($mask));
+}
+
 function checkFlood($post) {
 	global $board, $config;
 
@@ -852,7 +878,7 @@ function checkFlood($post) {
 		return true;
 
 	$query = prepare(sprintf(
-		"SELECT * FROM `posts_%s` WHERE (`ip` = :ip AND `time` >= :floodtime) OR (`ip` = :ip AND `body` != '' AND `body` = :body AND `time` >= :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` >= :floodsametime) LIMIT 1",
+		"SELECT * FROM `posts_%s` WHERE (`ip_data` = INET6_ATON(:ip) AND `time` >= :floodtime) OR (`ip_data` = INET6_ATON(:ip) AND `body` != '' AND `body` = :body AND `time` >= :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` >= :floodsametime) LIMIT 1",
 		$board['uri']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':body', $post['body']);
@@ -938,62 +964,26 @@ function checkBan($board = 0) {
 	if (event('check-ban', $board))
 		return true;
 
-	$query = prepare("SELECT `set`, `expires`, `reason`, `board`, `seen`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip_type` = 0 AND `ip` = :ip");
+	$query = prepare("SELECT `id`, `set`, `expires`, `reason`, `board`, `seen` FROM `bans`
+		WHERE `range_type` = :ip_type AND `range_start` <= INET6_ATON(:ip) AND INET6_ATON(:ip) <= `range_end`
+		AND (`board` IS NULL OR `board` = :board)");
+	$query->bindValue(':ip_type', ipType($_SERVER['REMOTE_ADDR']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':board', $board);
 	$query->execute() or error(db_error($query));
-
-	$banlist = new stdClass;
-
-	$banlist->l = $query->fetchAll();
-	event('process-bans', $board, $banlist);
-
-	if (count($banlist->l) < 1 && $config['ban_range']) {
-		$query = prepare(
-			"SELECT `set`, `expires`, `reason`, `board`, `seen`, `bans`.`id` " .
-			"FROM `bans` WHERE " .
-			"(`board` IS NULL OR `board` = :board) AND `ip_type` = 1 AND `ip` LIKE '%*%' AND :ip LIKE REPLACE(REPLACE(`ip`, '%', '!%'), '*', '%') ESCAPE '!'");
-		$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
-		$query->bindValue(':board', $board);
-		$query->execute() or error(db_error($query));
-
-		$banlist->l = $query->fetchAll();
-		event('process-bans', $board, $banlist);
-	}
-
-	if (count($banlist->l) < 1 && $config['ban_cidr'] && !isIPv6($_SERVER['REMOTE_ADDR'])) {
-		// my most insane SQL query yet
-		$query = prepare(
-			"SELECT `set`, `expires`, `reason`, `board`, `seen`, `bans`.`id` FROM `bans` WHERE (`board` IS NULL OR `board` = :board) AND `ip_type` = 2" .
-			"	AND (" .
-			"	`ip` REGEXP '^(\[0-9]+\.\[0-9]+\.\[0-9]+\.\[0-9]+\)\/(\[0-9]+)$'" .
-			"		AND" .
-			"	INET_ATON(:ip) >= INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1))" .
-			"		AND" .
-			"	INET_ATON(:ip) < INET_ATON(SUBSTRING_INDEX(`ip`, '/', 1)) + POW(2, 32 - SUBSTRING_INDEX(`ip`, '/', -1))" .
-			")"
-		);
-		$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
-		$query->bindValue(':board', $board);
-		$query->execute() or error(db_error($query));
-
-		$banlist->l = $query->fetchAll();
-		event('process-bans', $board, $banlist);
-	}
-
-	foreach ($banlist->l as $ban) {
+	
+	foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $ban) {
 		if ($ban['expires'] && $ban['expires'] < time()) {
 			// Ban expired
 			$query = prepare("DELETE FROM `bans` WHERE `id` = :id");
 			$query->bindValue(':id', $ban['id'], PDO::PARAM_INT);
 			$query->execute() or error(db_error($query));
-
-			if ($config['require_ban_view'] && !$ban['seen']) {
-				displayBan($ban);
-			}
-		} else {
-			displayBan($ban);
+			
+			if ($ban['seen'] && !$config['require_ban_view'])
+				continue;
 		}
+		
+		displayBan($ban);
 	}
 
 	// I'm not sure where else to put this. It doesn't really matter where; it just needs to be called every now and then to keep the ban list tidy.
@@ -1063,11 +1053,11 @@ function post(array $post) {
 		'INSERT INTO `posts_%s` (`id`, `thread`, `subject`, `email`, `name`, ' .
 		'`trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, ' .
 		'`thumbwidth`, `thumbheight`, `file`, `filewidth`, `fileheight`, ' .
-		'`filesize`, `filename`, `filehash`, `password`, `ip`, `ip_type`, `ip_data`, `sticky`, ' .
+		'`filesize`, `filename`, `filehash`, `password`, `ip_type`, `ip_data`, `sticky`, ' .
 		'`locked`, `sage`, `embed`, `mature`) VALUES ( NULL, :thread, :subject, ' .
 		':email, :name, :trip, :capcode, :body, :body_nomarkup, :time, :time, ' .
 		':thumb, :thumbwidth, :thumbheight, :file, :width, :height, :filesize, ' .
-		':filename, :filehash, :password, :ip, :ip_type, INET6_ATON(:ip), :sticky, :locked, 0, :embed, ' .
+		':filename, :filehash, :password, :ip_type, INET6_ATON(:ip), :sticky, :locked, 0, :embed, ' .
 		':mature)', $board['uri']));
 
 	// Basic stuff
@@ -1367,7 +1357,7 @@ function index($page, $mod=false, $oldbump=false) {
 	$body = '';
 	$offset = round($page*$config['threads_per_page']-$config['threads_per_page']);
 
-	$query = prepare(sprintf("SELECT * FROM `posts_%s` WHERE `thread` IS NULL ORDER BY `sticky` DESC, `bump` DESC LIMIT :offset,:threads_per_page", $board['uri']));
+	$query = prepare(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE `thread` IS NULL ORDER BY `sticky` DESC, `bump` DESC LIMIT :offset,:threads_per_page", $board['uri']));
 	$query->bindValue(':offset', $offset, PDO::PARAM_INT);
 	$query->bindValue(':threads_per_page', $config['threads_per_page'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
@@ -1392,7 +1382,7 @@ function index($page, $mod=false, $oldbump=false) {
 			$replies = $cached['replies'];
 			$omitted = $cached['omitted'];
 		} else {
-			$posts = prepare(sprintf("SELECT * FROM `posts_%s` WHERE `thread` = :id ORDER BY `id` DESC LIMIT :limit", $board['uri']));
+			$posts = prepare(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE `thread` = :id ORDER BY `id` DESC LIMIT :limit", $board['uri']));
 			$posts->bindValue(':id', $th['id']);
 			$posts->bindValue(':limit', ($th['sticky'] ? $config['threads_preview_sticky'] : $config['threads_preview']), PDO::PARAM_INT);
 			$posts->execute() or error(db_error($posts));
@@ -1851,7 +1841,7 @@ function buildThread($id, $return=false, $mod=false) {
 		cache::delete("thread_{$board['uri']}_{$id}");
 	}
 
-	$query = prepare(sprintf("SELECT * FROM `posts_%s` WHERE (`thread` IS NULL AND `id` = :id) OR `thread` = :id ORDER BY `thread`,`id`", $board['uri']));
+	$query = prepare(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE (`thread` IS NULL AND `id` = :id) OR `thread` = :id ORDER BY `thread`,`id`", $board['uri']));
 	$query->bindValue(':id', $id, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 
@@ -1913,7 +1903,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 		return;
 
 	if (!$thread) {
-		$query = prepare(sprintf("SELECT * FROM `posts_%s` WHERE (`thread` IS NULL AND `id` = :id) OR `thread` = :id ORDER BY `thread`,`id` DESC LIMIT :limit", $board['uri']));
+		$query = prepare(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE (`thread` IS NULL AND `id` = :id) OR `thread` = :id ORDER BY `thread`,`id` DESC LIMIT :limit", $board['uri']));
 		$query->bindValue(':id', $id, PDO::PARAM_INT);
 		$query->bindValue(':limit', $config['noko50_count']+1, PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
@@ -1988,7 +1978,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 function editPostForm($postid, $password=false, $mod=false) {
 	global $config, $board;
 
-	$query = prepare(sprintf("SELECT * FROM `posts_%s` WHERE `id` = :id", $board['uri']));
+	$query = prepare(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
 	$query->bindValue(':id', $postid, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 
