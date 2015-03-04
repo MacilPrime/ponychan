@@ -54,10 +54,17 @@ $pages = array(
 	'/reports'				=> 'reports',		// report queue
 	'/reports/(\d+)/dismiss(all)?'		=> 'report_dismiss',	// dismiss a report
 
-	'/IP/([\w.:*^]+)'				=> 'ip',		// view ip address
+	'/IP/([\w.:*^]+)'			=> 'ip',		// view ip address
 	'/IP/([\w.:*^]+)/remove_note/(\d+)'	=> 'ip_remove_note',	// remove note from ip address
-	'/bans'					=> 'bans',		// ban list
-	'/bans/(\d+)'				=> 'bans',		// ban list
+	'/bans'					=> 'all_bans',		// ban list
+	'/bans/(\d+)'				=> 'all_bans',		// ban list
+	'/bans/([\w.:*^]+)'			=> 'bans',		// ip ban list
+	'/bans/([\w.:*^]+)/(\d+)'		=> 'bans',		// ip ban list
+	'/notes/([\w.:*^]+)'			=> 'notes',		// ip notes list
+	'/notes/([\w.:*^]+)/(\d+)'		=> 'notes',		// ip notes list
+	'/posts/([\w.:*^]+)/(\w+)'		=> 'posts',		// ip post list
+	'/posts/([\w.:*^]+)/(\w+)/(\d+)'	=> 'posts',		// ip post list
+	
 
 	'/(\w+)/edit/(\d+)'			=> 'edit',		// edit post
 

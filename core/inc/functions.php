@@ -867,8 +867,8 @@ function render_mask($mask) {
 	}
 }
 
-function render_mask_uri($mask) {
-	return str_replace('/', '^', render_mask($mask));
+function mask_url($mask) {
+	return str_replace('/', '^', $mask);
 }
 
 function checkFlood($post) {

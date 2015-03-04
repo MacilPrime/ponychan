@@ -6,6 +6,8 @@
 				 -
 				 {{ board_posts.board.title|e }}
 			</a>
+			 - 
+			<a href="?/posts/{{ mask|mask_url }}/{{ board_posts.board.uri }}">{% trans 'Show all' %}</a>
 		</legend>
 		{{ board_posts.posts|join('<hr>') }}
 	</fieldset>
@@ -15,8 +17,13 @@
 	<fieldset id="notes">
 		<legend>
 			{% set notes_on_record = 'note' ~ (notes|count != 1 ? 's' : '') ~ ' on record' %}
-			{% set notes_count_plus = notes|count == config.mod.ip_range_page_max_notes ? '&gt;' : '' %}
-			<legend>{{ notes_count_plus }}{{ notes|count }} {% trans notes_on_record %}</legend>
+			{% if notes|count == config.mod.ip_range_page_max_notes %}
+				&gt;{{ notes|count }} {% trans notes_on_record %}
+				 - 
+				<a href="?/notes/{{ mask|mask_url }}">{% trans 'Show all' %}</a>
+			{% else %}
+				{{ notes|count }} {% trans notes_on_record %}
+			{% endif %}
 		</legend>
 
 		{% if notes|count > 0 %}
@@ -50,7 +57,7 @@
 						</td>
 						{% if mod|hasPermission(config.mod.remove_notes) %}
 							<td class="minimal">
-								<a href="?/IP/{{ note|mask_uri }}/remove_note/{{ note.id }}">
+								<a href="?/IP/{{ note|mask|mask_url }}/remove_note/{{ note.id }}">
 									<small>[{% trans 'remove' %}]</small>
 								</a>
 							</td>
@@ -87,9 +94,16 @@
 
 {% if bans|count > 0 and mod|hasPermission(config.mod.view_ban) %}
 	<fieldset id="bans">
-		{% set bans_on_record = 'ban' ~ (bans|count != 1 ? 's' : '') ~ ' on record' %}
-		{% set bans_count_plus = bans|count == config.mod.ip_range_page_max_bans ? '&gt;' : '' %}
-		<legend>{{ bans_count_plus }}{{ bans|count }} {% trans bans_on_record %}</legend>
+		<legend>
+			{% set bans_on_record = 'ban' ~ (bans|count != 1 ? 's' : '') ~ ' on record' %}
+			{% if bans|count == config.mod.ip_range_page_max_bans %}
+				&gt;{{ bans|count }} {% trans bans_on_record %}
+				 - 
+				<a href="?/bans/{{ mask|mask_url }}">{% trans 'Show all' %}</a>
+			{% else %}
+				{{ bans|count }} {% trans bans_on_record %}
+			{% endif %}
+		</legend>
 
 		{% for ban in bans %}
 			<form action="" method="post" class="userbanlist">
@@ -181,7 +195,7 @@
 {% if mod|hasPermission(config.mod.ban) %}
 	<fieldset>
 		<legend>{% trans 'New ban' %}</legend>
-		{% set redirect = '?/IP/' ~ ip_url ~ '#bans' %}
+		{% set redirect = '?/IP/' ~ mask|mask_url ~ '#bans' %}
 		{% include 'mod/ban_form.html' %}
 	</fieldset>
 {% endif %}

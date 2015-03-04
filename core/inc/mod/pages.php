@@ -509,10 +509,8 @@ function mod_view_thread50($boardName, $thread) {
 	echo $page;
 }
 
-function mod_ip_remove_note($ip_url, $id) {
+function mod_ip_remove_note($mask_url, $id) {
 	global $config, $mod;
-
-	$mask = str_replace('^', '/', $ip_url);
 
 	// Check the referrer
 	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
@@ -521,22 +519,29 @@ function mod_ip_remove_note($ip_url, $id) {
 	if (!hasPermission($config['mod']['remove_notes']))
 		error($config['error']['noaccess']);
 
+	$query = prepare('SELECT `range_type`, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end` FROM `ip_notes` WHERE `id` = :id');
+	$query->bindValue(':id', $id);
+	$query->execute() or error(db_error($query));
+	$range = $query->fetch(PDO::FETCH_ASSOC);
+	if ($range === false) {
+		error("Could not find note");
+	}
+	$mask = render_mask($range);
+	$mask_url = mask_url($mask);
+
 	$query = prepare('DELETE FROM `ip_notes` WHERE `id` = :id');
 	$query->bindValue(':id', $id);
 	$query->execute() or error(db_error($query));
-	if ($query->rowCount() === 0) {
-		error("Could not find note");
-	}
 
-	modLog("Removed a note for <a href=\"?/IP/" . utf8tohtml($ip_url) . "\">" . utf8tohtml($mask) . "</a>");
+	modLog("Removed a note for <a href=\"?/IP/$mask_url\">$mask</a>");
 
-	header('Location: ?/IP/' . $ip_url . '#notes', true, $config['redirect_http']);
+	header('Location: ?/IP/' . $mask_url . '#notes', true, $config['redirect_http']);
 }
 
-function mod_page_ip($ip_url) {
+function mod_page_ip($mask_url) {
 	global $config, $mod;
 
-	$mask = str_replace('^', '/', $ip_url);
+	$mask = str_replace('^', '/', $mask_url);
 	$range = parse_mask($mask);
 	if ($range === null)
 		error('Invalid IP range.');
@@ -553,7 +558,7 @@ function mod_page_ip($ip_url) {
 
 		unban($_POST['ban_id']);
 
-		header('Location: ?/IP/' . $ip_url . '#bans', true, $config['redirect_http']);
+		header("Location: ?/IP/$mask_url#bans", true, $config['redirect_http']);
 		return;
 	}
 
@@ -575,15 +580,14 @@ function mod_page_ip($ip_url) {
 		$query->bindValue(':body', $_POST['note']);
 		$query->execute() or error(db_error($query));
 
-		modLog("Added a note for <a href=\"?/IP/" . utf8tohtml($ip_url) . "\">" . utf8tohtml($mask) . "</a>");
+		modLog("Added a note for <a href=\"?/IP/$mask_url\">$mask</a>");
 
-		header('Location: ?/IP/' . $ip_url . '#notes', true, $config['redirect_http']);
+		header("Location: ?/IP/$mask_url#notes", true, $config['redirect_http']);
 		return;
 	}
 
 	$args = array();
 	$args['mask'] = $mask;
-	$args['ip_url'] = $ip_url;
 	$args['posts'] = array();
 
 	if ($config['mod']['dns_lookup'] && filter_var($mask, FILTER_VALIDATE_IP) !== false)
@@ -631,7 +635,7 @@ function mod_page_ip($ip_url) {
 	$args['token'] = make_secure_link_token('ban');
 
 	if (hasPermission($config['mod']['view_ban'])) {
-		$query = prepare('SELECT `bans`.*, INET6_NTOA(`bans`.`range_start`) AS `range_start`, INET6_NTOA(`bans`.`range_end`) AS `range_end`, `username`
+		$query = prepare('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`, `username`
 			FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id`
 			WHERE `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)
 			ORDER BY `set` DESC LIMIT :limit');
@@ -644,7 +648,7 @@ function mod_page_ip($ip_url) {
 	}
 
 	if (hasPermission($config['mod']['view_notes'])) {
-		$query = prepare('SELECT `ip_notes`.*, INET6_NTOA(`ip_notes`.`range_start`) AS `range_start`, INET6_NTOA(`ip_notes`.`range_end`) AS `range_end`, `username`
+		$query = prepare('SELECT `ip_notes`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`, `username`
 			FROM `ip_notes` LEFT JOIN `mods` ON `mod` = `mods`.`id`
 			WHERE `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)
 			ORDER BY `time` DESC LIMIT :limit');
@@ -668,7 +672,7 @@ function mod_ban() {
 		error($config['error']['noaccess']);
 
 	if (!isset($_POST['mask'], $_POST['reason'], $_POST['length'], $_POST['board'], $_POST['ban_type'])) {
-		mod_page(_('New ban'), 'mod/ban_form.html', array('token' => make_secure_link_token('ban')));
+		mod_page(_('New ban'), 'mod/ban_form.html', array('token' => make_secure_link_token('ban'), 'boards' => listBoards()));
 		return;
 	}
 
@@ -682,13 +686,18 @@ function mod_ban() {
 		header('Location: ?/', true, $config['redirect_http']);
 }
 
-function mod_bans($page_no = 1) {
+function mod_bans($mask_url, $page = null) {
 	global $config;
+
+	if ($page === null)
+		$page_no = 1;
+	else
+		$page_no = $page;
 
 	if ($page_no < 1)
 		error($config['error']['404']);
 
-	if (!hasPermission($config['mod']['view_banlist']))
+	if (!hasPermission($config['mod']['view_ban']))
 		error($config['error']['noaccess']);
 
 	if (isset($_POST['unban'])) {
@@ -713,16 +722,46 @@ function mod_bans($page_no = 1) {
 			}
 		}
 
-		header('Location: ?/bans', true, $config['redirect_http']);
+		$url = "?/bans";
+		if ($mask_url != "") {
+			$url .= "/$mask_url";
+		}
+		if ($page !== null) {
+			$url .= "/$page";
+		}
+		header("Location: $url", true, $config['redirect_http']);
+	}
+
+	if ($mask_url == "" || $mask_url == "*") {
+		$mask = null;
+		$range = null;
+		$range_query = "TRUE";
+	} else {
+		$mask = str_replace('^', '/', $mask_url);
+		$range = parse_mask($mask);
+		if ($range === null)
+			error('Invalid IP range.');
+		$range_query = "`range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)";
 	}
 
 	if ($config['mod']['view_banexpired']) {
-		$query = prepare("SELECT `bans`.*, INET6_NTOA(`bans`.`range_start`) AS `range_start`, INET6_NTOA(`bans`.`range_end`) AS `range_end`, `username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` ORDER BY (`expires` IS NOT NULL AND `expires` < :time), `set` DESC LIMIT :offset, :limit");
+		$expired_query = "TRUE";
 	} else {
-		// Filter out expired bans
-		$query = prepare("SELECT `bans`.*, INET6_NTOA(`bans`.`range_start`) AS `range_start`, INET6_NTOA(`bans`.`range_end`) AS `range_end`,`username` FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `expires` = 0 OR `expires` > :time ORDER BY `set` DESC LIMIT :offset, :limit");
+		$expired_query = "(`expires` IS NULL OR `expires` = 0 OR `expires` > :time)";
 	}
-	$query->bindValue(':time', time(), PDO::PARAM_INT);
+
+	$time = time();
+
+	$query = prepare("SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`,`username`
+		FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id`
+		WHERE $range_query AND $expired_query
+		ORDER BY (`expires` IS NOT NULL AND `expires` < :time), `set` DESC LIMIT :offset, :limit");
+	if ($range !== null) {
+		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+		$query->bindValue(':range_start', $range['range_start']);
+		$query->bindValue(':range_end', $range['range_end']);
+	}
+	$query->bindValue(':time', $time, PDO::PARAM_INT);
 	$query->bindValue(':limit', $config['mod']['banlist_page'], PDO::PARAM_INT);
 	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['banlist_page'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
@@ -731,11 +770,179 @@ function mod_bans($page_no = 1) {
 	if (empty($bans) && $page_no > 1)
 		error($config['error']['404']);
 
-	$query = prepare("SELECT COUNT(*) FROM `bans`");
+	$query = prepare("SELECT COUNT(*) FROM `bans` WHERE $range_query AND $expired_query");
+	if ($range !== null) {
+		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+		$query->bindValue(':range_start', $range['range_start']);
+		$query->bindValue(':range_end', $range['range_end']);
+	}
+	if (!$config['mod']['view_banexpired']) {
+		$query->bindValue(':time', $time, PDO::PARAM_INT);
+	}
 	$query->execute() or error(db_error($query));
 	$count = $query->fetchColumn(0);
 
-	mod_page(_('Ban list'), 'mod/ban_list.html', array('bans' => $bans, 'count' => $count));
+	mod_page($mask ? sprintf(_('Bans for %s'), $mask) :_('Ban list'), 'mod/ban_list.html', array('bans' => $bans, 'count' => $count, 'mask' => $mask));
+}
+
+function mod_all_bans($page_no = 1) {
+	mod_bans('', $page_no);
+}
+
+function mod_notes($mask_url, $page = null) {
+	global $config;
+
+	if ($page === null)
+		$page_no = 1;
+	else
+		$page_no = $page;
+
+	if ($page_no < 1)
+		error($config['error']['404']);
+
+	if (!hasPermission($config['mod']['view_notes']))
+		error($config['error']['noaccess']);
+
+	if (isset($_POST['remove_notes'])) {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
+		if (!hasPermission($config['mod']['remove_notes']))
+			error($config['error']['noaccess']);
+
+		$notes = array();
+		foreach ($_POST as $name => $unused) {
+			if (preg_match('/^note_(\d+)$/', $name, $match))
+				$notes[] = $match[1];
+		}
+
+		foreach ($notes as $note) {
+			$query = prepare('SELECT `range_type`, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end` FROM `ip_notes` WHERE `id` = :id');
+			$query->bindValue(':id', $note);
+			$query->execute() or error(db_error($query));
+			$range = $query->fetch(PDO::FETCH_ASSOC);
+			if ($range === false) {
+				continue;
+			}
+			$mask = render_mask($range);
+			$mask_url = mask_url($mask);
+			
+			$query = prepare('DELETE FROM `ip_notes` WHERE `id` = :id');
+			$query->bindValue(':id', $note);
+			$query->execute() or error(db_error($query));
+		
+			modLog("Removed a note for <a href=\"?/IP/$mask_url\">$mask</a>");
+		}
+
+		$url = "?/notes/$mask_url";
+		if ($page !== null) {
+			$url .= "/$page";
+		}
+		header("Location: $url", true, $config['redirect_http']);
+	}
+
+	$mask = str_replace('^', '/', $mask_url);
+	$range = parse_mask($mask);
+	if ($range === null)
+		error('Invalid IP range.');
+
+	$query = prepare('SELECT `ip_notes`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`, `username`
+		FROM `ip_notes` LEFT JOIN `mods` ON `mod` = `mods`.`id`
+		WHERE `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)
+		ORDER BY `time` DESC LIMIT :offset, :limit');
+	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+	$query->bindValue(':range_start', $range['range_start']);
+	$query->bindValue(':range_end', $range['range_end']);
+	$query->bindValue(':limit', $config['mod']['noteslist_page'], PDO::PARAM_INT);
+	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['noteslist_page'], PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+	$notes = $query->fetchAll(PDO::FETCH_ASSOC);
+
+	if (empty($bans) && $page_no > 1)
+		error($config['error']['404']);
+
+	$query = prepare("SELECT COUNT(*) FROM `ip_notes`
+		WHERE `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)");
+	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+	$query->bindValue(':range_start', $range['range_start']);
+	$query->bindValue(':range_end', $range['range_end']);
+	$query->execute() or error(db_error($query));
+	$count = $query->fetchColumn(0);
+
+	mod_page(sprintf(_('Notes for %s'), $mask), 'mod/notes_list.html', array('notes' => $notes, 'count' => $count, 'mask' => $mask));
+}
+
+function mod_posts($mask_url, $boardName, $page = null) {
+	global $config, $board, $mod;
+
+	if (!openBoard($boardName))
+		error($config['error']['noboard']);
+
+	if (!hasPermission($config['mod']['show_ip'], $board['uri']))
+		error($config['error']['noaccess']);
+
+	if ($page === null)
+		$page_no = 1;
+	else
+		$page_no = $page;
+
+	if ($page_no < 1)
+		error($config['error']['404']);
+
+	$mask = str_replace('^', '/', $mask_url);
+	$range = parse_mask($mask);
+	if ($range === null)
+		error('Invalid IP range.');
+
+	$query = prepare(sprintf('SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s`
+		WHERE `ip_type` = :range_type AND INET6_ATON(:range_start) <= `ip_data` AND `ip_data` <= INET6_ATON(:range_end)
+		ORDER BY `id` DESC LIMIT :offset, :limit', $board['uri']));
+	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+	$query->bindValue(':range_start', $range['range_start']);
+	$query->bindValue(':range_end', $range['range_end']);
+	$query->bindValue(':limit', $config['mod']['postlist_page'], PDO::PARAM_INT);
+	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['postlist_page'], PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+
+	$posts = array();
+	while ($post = $query->fetch(PDO::FETCH_ASSOC)) {
+		if (!$post['thread']) {
+			// TODO: There is no reason why this should be such a fucking mess.
+			$po = new Thread(
+				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
+				$post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
+				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['sticky'], $post['locked'],
+				$post['sage'], $post['embed'], '?/', $mod, false, $post['mature']
+			);
+		} else {
+			$po = new Post(
+				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
+				$post['body'], $post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
+				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
+			);
+		}
+
+		$posts[] = $po->build(true);
+	}
+
+	if (empty($posts) && $page_no > 1)
+		error($config['error']['404']);
+
+	$query = prepare(sprintf('SELECT COUNT(*) FROM `posts_%s`
+		WHERE `ip_type` = :range_type AND INET6_ATON(:range_start) <= `ip_data` AND `ip_data` <= INET6_ATON(:range_end)', $board['uri']));
+	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+	$query->bindValue(':range_start', $range['range_start']);
+	$query->bindValue(':range_end', $range['range_end']);
+	$query->execute() or error(db_error($query));
+	$count = $query->fetchColumn(0);
+
+	mod_page(sprintf(_('Posts in /%s/ for %s'), $board['uri'], $mask), 'mod/post_list.html', array(
+		'posts' => $posts,
+		'count' => $count,
+		'mask' => $mask,
+		'board' => $board['uri'],
+		'token'=>make_secure_link_token('ban')));
 }
 
 function mod_bump($board, $post) {

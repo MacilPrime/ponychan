@@ -1,0 +1,54 @@
+<header><div class="subtitle"><p><a href="?/IP/{{ mask|mask_url }}">Return to IP page</a></p></div></header>
+
+{% if notes|count == 0 %}
+	<p style="text-align:center" class="unimportant">
+		({% trans %}There are no notes for {{ mask }}.{% endtrans %})
+	</p>
+{% else %}
+	<form action="" method="post">
+		<table class="modlog" style="width:100%">
+			<tr>
+				<th>{% trans 'IP address/mask' %}</th>
+				<th>{% trans 'Staff' %}</th>
+				<th>{% trans 'Note' %}</th>
+				<th>{% trans 'Date' %}</th>
+			</tr>
+			{% for note in notes %}
+				<tr>
+					<td style="white-space: nowrap">
+						{% if mod|hasPermission(config.mod.remove_notes) %}<input type="checkbox" name="note_{{ note.id }}"> {% endif %}
+						<a href="?/IP/{{ note|mask|mask_url }}">{{ note|mask }}</a>
+					</td>
+					<td style="white-space: nowrap">
+						{% if note.username %}
+							<a href="?/new_PM/{{ note.username|e }}">{{ note.username|e }}</a>
+						{% else %}
+							<em>{% trans 'deleted?' %}</em>
+						{% endif %}
+					</td>
+					<td>
+						{{ note.body }}
+					</td>
+					<td style="white-space: nowrap">
+						{{ note.time|date(config.post_date) }}
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+		
+		{% if mod|hasPermission(config.mod.remove_notes) %}
+			<p style="text-align:center">
+				<input type="submit" name="remove_notes" value="{% trans 'Remove notes' %}">
+			</p>
+		{% endif %}
+	</form>
+{% endif %}
+
+{% if count > notes|count %}
+	<p class="unimportant" style="text-align:center;word-wrap:break-word">
+		{% for i in range(0, (count - 1) / config.mod.noteslist_page) %}
+			<a href="?/notes/{{ mask|mask_url }}/{{ i + 1 }}">[{{ i + 1 }}]</a> 
+		{% endfor %}
+	</p>
+{% endif %}
+

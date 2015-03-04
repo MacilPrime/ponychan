@@ -77,7 +77,7 @@
 				{% if reports > 0 %}</strong>{% endif %}
 			</li>
 		{% endif %}
-		{% if mod|hasPermission(config.mod.view_banlist) %}
+		{% if mod|hasPermission(config.mod.view_ban) %}
 			<li><a href="?/bans">{% trans 'Ban list' %}</a></li>
 		{% endif %}
 		{% if mod|hasPermission(config.mod.manageusers) %}
