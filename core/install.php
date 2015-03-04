@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-3');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-4');
 
 require 'inc/functions.php';
 
@@ -337,6 +337,12 @@ if (file_exists($config['has_installed'])) {
 			}
 		case 'v0.9.6-dev-8-mlpchan-2':
 			query("ALTER TABLE `bans` ADD COLUMN `ban_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:full, 1:image only' AFTER `board`") or error(db_error());
+		case 'v0.9.6-dev-8-mlpchan-3':
+			query("ALTER TABLE `bans`
+				ADD COLUMN `status` int(11) NOT NULL COMMENT '0:active, 1:expired, 2:lifted' AFTER `id`,
+				ADD COLUMN `lifted` int(11) DEFAULT NULL AFTER `expires`,
+				DROP INDEX `range`,
+				ADD INDEX `status_range` (`status`, `range_type`, `range_start`, `range_end`)") or error(db_error());
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);
