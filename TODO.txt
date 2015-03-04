@@ -5,8 +5,6 @@ persist deleted threads and posts
 
 ban appeals
 
-persist past bans on IP page
-
 /all/
 - json api
 - static page that uses ajax and react

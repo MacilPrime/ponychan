@@ -929,6 +929,10 @@ function ago($timestamp) {
 define('FULL_BAN', 0);
 define('IMAGE_BAN', 1);
 
+define('BAN_STATUS_ACTIVE', 0);
+define('BAN_STATUS_EXPIRED', 1);
+define('BAN_STATUS_LIFTED', 2);
+
 function displayBan($ban) {
 	global $config, $wantjson;
 
@@ -973,6 +977,7 @@ function checkBan($board = 0, $types = null) {
 	$query = prepare("SELECT `id`, `set`, `expires`, `reason`, `board`, `seen`, `ban_type` FROM `bans`
 		WHERE `range_type` = :ip_type AND `range_start` <= INET6_ATON(:ip) AND INET6_ATON(:ip) <= `range_end`
 		AND (`board` IS NULL OR `board` = :board)
+		AND `status` = 0
 		AND `ban_type` IN (" . implode(', ', $types) . ")
 		ORDER BY `ban_type` ASC, `id` ASC"
 		);
@@ -984,7 +989,7 @@ function checkBan($board = 0, $types = null) {
 	foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $ban) {
 		if ($ban['expires'] && $ban['expires'] < time()) {
 			// Ban expired
-			$query = prepare("DELETE FROM `bans` WHERE `id` = :id");
+			$query = prepare("UPDATE `bans` SET `status` = 1 WHERE `id` = :id");
 			$query->bindValue(':id', $ban['id'], PDO::PARAM_INT);
 			$query->execute() or error(db_error($query));
 			
@@ -994,16 +999,6 @@ function checkBan($board = 0, $types = null) {
 		
 		displayBan($ban);
 	}
-
-	// I'm not sure where else to put this. It doesn't really matter where; it just needs to be called every now and then to keep the ban list tidy.
-	purge_bans();
-}
-
-// No reason to keep expired bans in the database (except those that haven't been viewed yet)
-function purge_bans() {
-	$query = prepare("DELETE FROM `bans` WHERE `expires` IS NOT NULL AND `expires` < :time AND `seen` = 1");
-	$query->bindValue(':time', time());
-	$query->execute() or error(db_error($query));
 }
 
 function threadLocked($id) {

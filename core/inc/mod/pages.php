@@ -509,6 +509,15 @@ function mod_view_thread50($boardName, $thread) {
 	echo $page;
 }
 
+function expire_old_bans() {
+	global $config;
+	if (!$config['require_ban_view']) {
+		$query = prepare("UPDATE `bans` SET `status` = 1 WHERE `status` = 0 AND `expires` IS NOT NULL AND `expires` < :time");
+		$query->bindValue(':time', time());
+		$query->execute() or error(db_error($query));
+	}
+}
+
 function mod_ip_remove_note($mask_url, $id) {
 	global $config, $mod;
 
@@ -586,6 +595,8 @@ function mod_page_ip($mask_url) {
 		return;
 	}
 
+	expire_old_bans();
+
 	$args = array();
 	$args['mask'] = $mask;
 	$args['posts'] = array();
@@ -637,14 +648,28 @@ function mod_page_ip($mask_url) {
 	if (hasPermission($config['mod']['view_ban'])) {
 		$query = prepare('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`, `username`
 			FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id`
-			WHERE `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)
+			WHERE `status` = 0 AND `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)
+			ORDER BY (`expires` IS NOT NULL AND `expires` < :time), `set` DESC LIMIT :limit');
+		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+		$query->bindValue(':range_start', $range['range_start']);
+		$query->bindValue(':range_end', $range['range_end']);
+		$query->bindValue(':time', time());
+		$query->bindValue(':limit', $config['mod']['ip_range_page_max_bans'], PDO::PARAM_INT);
+		$query->execute() or error(db_error($query));
+		$args['bans'] = $query->fetchAll(PDO::FETCH_ASSOC);
+	}
+	
+	if (hasPermission($config['mod']['view_banhistory'])) {
+		$query = prepare('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`, `username`
+			FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id`
+			WHERE `status` <> 0 AND `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)
 			ORDER BY `set` DESC LIMIT :limit');
 		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 		$query->bindValue(':range_start', $range['range_start']);
 		$query->bindValue(':range_end', $range['range_end']);
-		$query->bindValue(':limit', $config['mod']['ip_range_page_max_bans'], PDO::PARAM_INT);
+		$query->bindValue(':limit', $config['mod']['ip_range_page_max_banhistory'], PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
-		$args['bans'] = $query->fetchAll(PDO::FETCH_ASSOC);
+		$args['ban_history'] = $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	if (hasPermission($config['mod']['view_notes'])) {
@@ -714,12 +739,10 @@ function mod_bans($mask_url, $page = null) {
 				$unban[] = $match[1];
 		}
 
-		if (!empty($unban)) {
-			query('DELETE FROM `bans` WHERE `id` = ' . implode(' OR `id` = ', $unban)) or error(db_error());
+		require_once 'inc/mod/ban.php';
 
-			foreach ($unban as $id) {
-				modLog("Removed ban #{$id}");
-			}
+		foreach ($unban as $id) {
+			unban($id);
 		}
 
 		$url = "?/bans";
@@ -731,6 +754,8 @@ function mod_bans($mask_url, $page = null) {
 		}
 		header("Location: $url", true, $config['redirect_http']);
 	}
+
+	expire_old_bans();
 
 	if ($mask_url == "" || $mask_url == "*") {
 		$mask = null;
@@ -744,24 +769,16 @@ function mod_bans($mask_url, $page = null) {
 		$range_query = "`range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)";
 	}
 
-	if ($config['mod']['view_banexpired']) {
-		$expired_query = "TRUE";
-	} else {
-		$expired_query = "(`expires` IS NULL OR `expires` = 0 OR `expires` > :time)";
-	}
-
-	$time = time();
-
-	$query = prepare("SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`,`username`
+	$query = prepare(sprintf('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`,`username`
 		FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id`
-		WHERE $range_query AND $expired_query
-		ORDER BY (`expires` IS NOT NULL AND `expires` < :time), `set` DESC LIMIT :offset, :limit");
+		WHERE `status` = 0 AND %s
+		ORDER BY (`expires` IS NOT NULL AND `expires` < :time), `set` DESC LIMIT :offset, :limit', $range_query));
 	if ($range !== null) {
 		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 		$query->bindValue(':range_start', $range['range_start']);
 		$query->bindValue(':range_end', $range['range_end']);
 	}
-	$query->bindValue(':time', $time, PDO::PARAM_INT);
+	$query->bindValue(':time', time(), PDO::PARAM_INT);
 	$query->bindValue(':limit', $config['mod']['banlist_page'], PDO::PARAM_INT);
 	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['banlist_page'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
@@ -770,14 +787,11 @@ function mod_bans($mask_url, $page = null) {
 	if (empty($bans) && $page_no > 1)
 		error($config['error']['404']);
 
-	$query = prepare("SELECT COUNT(*) FROM `bans` WHERE $range_query AND $expired_query");
+	$query = prepare(sprintf('SELECT COUNT(*) FROM `bans` WHERE `status` = 0 AND %s', $range_query));
 	if ($range !== null) {
 		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 		$query->bindValue(':range_start', $range['range_start']);
 		$query->bindValue(':range_end', $range['range_end']);
-	}
-	if (!$config['mod']['view_banexpired']) {
-		$query->bindValue(':time', $time, PDO::PARAM_INT);
 	}
 	$query->execute() or error(db_error($query));
 	$count = $query->fetchColumn(0);
@@ -787,6 +801,53 @@ function mod_bans($mask_url, $page = null) {
 
 function mod_all_bans($page_no = 1) {
 	mod_bans('', $page_no);
+}
+
+function mod_ban_history($mask_url, $page = null) {
+	global $config;
+
+	if ($page === null)
+		$page_no = 1;
+	else
+		$page_no = $page;
+
+	if ($page_no < 1)
+		error($config['error']['404']);
+
+	if (!hasPermission($config['mod']['view_banhistory']))
+		error($config['error']['noaccess']);
+
+	expire_old_bans();
+
+	$mask = str_replace('^', '/', $mask_url);
+	$range = parse_mask($mask);
+	if ($range === null)
+		error('Invalid IP range.');
+
+	$query = prepare('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`,`username`
+		FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id`
+		WHERE `status` <> 0 AND `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)
+		ORDER BY `set` DESC LIMIT :offset, :limit');
+	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+	$query->bindValue(':range_start', $range['range_start']);
+	$query->bindValue(':range_end', $range['range_end']);
+	$query->bindValue(':limit', $config['mod']['banhistory_page'], PDO::PARAM_INT);
+	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['banhistory_page'], PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+	$ban_history = $query->fetchAll(PDO::FETCH_ASSOC);
+
+	if (empty($bans) && $page_no > 1)
+		error($config['error']['404']);
+
+	$query = prepare('SELECT COUNT(*) FROM `bans`
+		WHERE `status` <> 0 AND `range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)');
+	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+	$query->bindValue(':range_start', $range['range_start']);
+	$query->bindValue(':range_end', $range['range_end']);
+	$query->execute() or error(db_error($query));
+	$count = $query->fetchColumn(0);
+
+	mod_page(sprintf(_('Ban history for %s'), $mask), 'mod/ban_history.html', array('ban_history' => $ban_history, 'count' => $count, 'mask' => $mask));
 }
 
 function mod_notes($mask_url, $page = null) {

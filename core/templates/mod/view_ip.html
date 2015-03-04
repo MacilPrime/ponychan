@@ -111,7 +111,7 @@
 					<tr>
 						<th>{% trans 'Status' %}</th>
 						<td>
-							{% if config.mod.view_banexpired and ban.expires != 0 and ban.expires < time() %}
+							{% if ban.expires != 0 and ban.expires < time() %}
 								{% trans 'Expired' %}
 							{% else %}
 								{% trans 'Active' %}
@@ -197,5 +197,115 @@
 		<legend>{% trans 'New ban' %}</legend>
 		{% set redirect = '?/IP/' ~ mask|mask_url ~ '#bans' %}
 		{% include 'mod/ban_form.html' %}
+	</fieldset>
+{% endif %}
+
+{% if ban_history|count > 0 and mod|hasPermission(config.mod.view_banhistory) %}
+	<fieldset id="banhistory">
+		<legend>
+			{% set bans_on_record = 'historic ban' ~ (ban_history|count != 1 ? 's' : '') ~ ' on record' %}
+			{% if ban_history|count == config.mod.ip_range_page_max_banhistory %}
+				&gt;{{ ban_history|count }} {% trans bans_on_record %}
+				 - 
+				<a href="?/banhistory/{{ mask|mask_url }}">{% trans 'Show all' %}</a>
+			{% else %}
+				{{ ban_history|count }} {% trans bans_on_record %}
+			{% endif %}
+		</legend>
+		
+		<form> {# This is silly, but the form tag triggers certain styles that we want to apply to this table. #}
+			<table class="banlist" style="width:100%">
+				<tr>
+					<th>{% trans 'IP address/mask' %}</th>
+					<th>{% trans 'Status' %}</th>
+					<th>{% trans 'Reason' %}</th>
+					<th>{% trans 'Board' %}</th>
+					<th>{% trans 'Type' %}</th>
+					<th>{% trans 'Set' %}</th>
+					<th>{% trans 'Duration' %}</th>
+					<th>{% trans 'Expires' %}</th>
+					<th>{% trans 'Seen' %}</th>
+					<th>{% trans 'Staff' %}</th>
+				</tr>
+				{% for ban in ban_history %}
+					<tr>
+						<td style="white-space: nowrap">
+							<a href="?/IP/{{ ban|mask|mask_url }}">{{ ban|mask }}</a>
+						</td>
+						<td>
+							{% if ban.status == constant('BAN_STATUS_ACTIVE') %}{% trans 'Active' %}
+							{% elseif ban.status == constant('BAN_STATUS_EXPIRED') %}{% trans 'Expired' %}
+							{% elseif ban.status == constant('BAN_STATUS_LIFTED') %}{% trans 'Lifted on ' %}{{ ban.lifted|date(config.post_date) }}
+							{% endif %}
+						</td>
+						<td>
+							{% if ban.reason %}
+								{{ ban.reason }}
+							{% else %}
+								-
+							{% endif %}
+						</td>
+						<td  style="white-space: nowrap">
+							{% if ban.board %}
+								{{ config.board_abbreviation|sprintf(ban.board) }}
+							{% else %}
+								<em>{% trans 'all boards' %}</em>
+							{% endif %}					
+						</td>
+						<td style="white-space: nowrap">
+							{% if ban.ban_type == constant('FULL_BAN') %}{% trans 'Full ban' %}
+							{% elseif ban.ban_type == constant('IMAGE_BAN') %}{% trans 'Image ban' %}
+							{% endif %}
+						</td>
+						<td style="white-space: nowrap">
+							<span title="{{ ban.set|date(config.post_date) }}">
+								{{ ban.set|ago }} ago
+							</span>
+						</td>
+						<td style="white-space: nowrap">
+							{% if ban.expires == 0 %}
+								-
+							{% else %}
+								{{ (ban.expires - ban.set + time()) | until }}
+							{% endif %}
+						</td>
+						<td style="white-space: nowrap">
+							{% if ban.expires == 0 %}
+								<em>{% trans 'never' %}</em>
+							{% else %}
+								{{ ban.expires|date(config.post_date) }}
+								{% if ban.expires > time() %}
+										<small>(in {{ ban.expires|until }})</small>
+								{% endif %}
+							{% endif %}
+						</td>
+						<td>
+							{%  if ban.seen %}
+								{% trans 'Yes' %}
+							{%  else %}
+								{% trans 'No' %}
+							{%  endif %}
+						</td>
+						<td>
+							{% if ban.username %}
+								{% if mod|hasPermission(config.mod.view_banstaff) %}
+									<a href="?/new_PM/{{ ban.username|e }}">{{ ban.username|e }}</a>
+								{% else %}
+									{% if mod|hasPermission(config.mod.view_banquestionmark) %}
+										<em>?</em>
+									{% else %}
+								
+									{% endif %}
+								{% endif %}
+							{% elseif ban.mod == -1 %}
+								<em>system</em>
+							{% else %}
+								<em>{% trans 'deleted?' %}</em>
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</form>
 	</fieldset>
 {% endif %}
