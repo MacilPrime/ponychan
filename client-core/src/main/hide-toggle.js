@@ -11,6 +11,8 @@
  *
  */
 
+import $ from 'jquery';
+
 $(document).ready(function() {
 	var togglifier = function(context) {
 		$('.hidetext', context).each(function() {

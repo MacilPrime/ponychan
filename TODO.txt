@@ -1,0 +1,44 @@
+persist deleted threads and posts
+- allow mods to see (with [deleted] in the post header bright red maybe)
+- allow mods to revert
+- include threads that were recently pushed off of the board
+
+ban appeals
+
+persist past bans on IP page
+
+image bans
+- type of ban that only prevents a user from including images in their posts
+
+/all/
+- json api
+- static page that uses ajax and react
+
+ponychan css themes
+
+user filters
+- needs settings page re-work. Using react for settings page.
+
+thread tags and board thread filter toggle buttons
+
+/anon/: make name field default to blank
+- dropdown for remembered names+trips? https://helgesverre.com/blog/textbox-dropdown-html5/
+
+moderator capcode checkbox
+- the "remember to put ' ## Mod' after your name" thing is pretty silly
+
+Remove [D+] button, rename [D++] to [D+]
+- "Delete all posts by IP on one board" is not useful enough to exist and take
+  screen space on every post.
+
+AJAX for moderator actions
+- should be able to delete a post or ban a user without leaving the thread.
+
+themes page for users to see screenshots of all themes at once
+- maybe just iframes of the actual site showing the themes. (Can you use css to
+  resize an iframe?)
+
+Use Content-Security-Policy headers
+- need to phase out all inline javascript and javascript: links
+- put some side channel for mods/admins to put scripts with posts besides just
+  having the script in the post html

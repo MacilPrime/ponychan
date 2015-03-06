@@ -4,12 +4,11 @@
  * Released under the MIT license
  * Copyright (c) 2014 Macil Tech <maciltech@gmail.com>
  *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/postlinkinfo.js';
- *   $config['additional_javascript'][] = 'js/titlebar.js';
- *
  */
+
+import $ from 'jquery';
+import {get_post_id} from './post-info';
+import myPosts from './my-posts';
 
 var flash = {};
 var flashmessage = '';
@@ -25,17 +24,15 @@ function updateTitleFlash() {
 	updateTitle();
 }
 
-function setTitleFlash(key, message) {
+export function setTitleFlash(key, message) {
 	flash[key] = message;
 	updateTitleFlash();
 }
-exports.setTitleFlash = setTitleFlash;
 
-function removeTitleFlash(key) {
+export function removeTitleFlash(key) {
 	delete flash[key];
 	updateTitleFlash();
 }
-exports.removeTitleFlash = removeTitleFlash;
 
 $(document).ready(function() {
 	if($('div.banner').length == 0)
@@ -115,7 +112,7 @@ $(document).ready(function() {
 		if ($post.is(".preview-hidden, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
 			return;
 		// Or for posts the user made themselves.
-		if (postlinkinfo.myposts.indexOf( get_post_id($post) ) != -1)
+		if (myPosts.contains(get_post_id($post)))
 			return;
 		$(document).trigger('new_unseen_post', post);
 		$unseenPosts = $unseenPosts.add(post);

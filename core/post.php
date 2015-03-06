@@ -88,7 +88,7 @@ if (isset($_POST['delete'])) {
 	$is_mod = isset($_POST['mod']) && !!$_POST['mod'];
 	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 
-	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ' . $root . $board['dir'], true, $config['redirect_http']);
 
 } elseif (isset($_POST['edit'])) {
 	// User picked a post to edit
@@ -250,14 +250,6 @@ if (isset($_POST['delete'])) {
 		$post['body'] .= "\n" . sprintf(isset($password) ? $config['edit_self_message'] : $config['edit_mod_message'], $time);
 	}
 
-	if (!hasPermission($config['mod']['postunoriginal'], $board['uri']) && $config['robot_enable'] && checkRobot($post['body_nomarkup'])) {
-		if ($config['robot_mute']) {
-			error(sprintf($config['error']['muted'], mute()));
-		} else {
-			error($config['error']['unoriginal']);
-		}
-	}
-
 	$post = (object)$post;
 	if ($error = event('post-edit', $post)) {
 		error($error);
@@ -277,7 +269,7 @@ if (isset($_POST['delete'])) {
 
 	if (isset($post['tracked_cites'])) {
 		foreach ($post['tracked_cites'] as $cite) {
-			$query = prepare('INSERT INTO `cites` VALUES (:board, :post, :target_board, :target)');
+			$query = prepare('INSERT INTO `cites` (`board`, `post`, `target_board`, `target`) VALUES(:board, :post, :target_board, :target)');
 			$query->bindValue(':board', $board['uri']);
 			$query->bindValue(':post', $id, PDO::PARAM_INT);
 			$query->bindValue(':target_board',$cite[0]);
@@ -314,7 +306,7 @@ if (isset($_POST['delete'])) {
 	$is_mod = isset($_POST['mod']) && $_POST['mod'];
 	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 
-	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ' . $root . $board['dir'], true, $config['redirect_http']);
 } elseif (isset($_POST['report'])) {
 	if (!isset($_POST['board'], $_POST['password'], $_POST['reason']))
 		error($config['error']['bot']);
@@ -357,7 +349,7 @@ if (isset($_POST['delete'])) {
 					'/' . $board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], $post['thread'] ? $post['thread'] : $id) . ($post['thread'] ? '#' . $id : '') .
 					' for "' . $reason . '"'
 				);
-			$query = prepare("INSERT INTO `reports` VALUES (NULL, :time, :ip, :board, :post, :reason)");
+			$query = prepare("INSERT INTO `reports` (`id`, `time`, `ip`, `board`, `post`, `reason`) VALUES (NULL, :time, :ip, :board, :post, :reason)");
 			$query->bindValue(':time', time(), PDO::PARAM_INT);
 			$query->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 			$query->bindValue(':board', $board['uri'], PDO::PARAM_INT);
@@ -370,7 +362,7 @@ if (isset($_POST['delete'])) {
 	$is_mod = isset($_POST['mod']) && $_POST['mod'];
 	$root = $is_mod ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 
-	header('Location: ' . $root . $board['dir'] . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ' . $root . $board['dir'], true, $config['redirect_http']);
 } elseif (isset($_POST['post']) || isset($_POST['making_a_post'])) {
 
 	if (isset($_POST['wantjson']) && $_POST['wantjson'])
@@ -446,14 +438,8 @@ if (isset($_POST['delete'])) {
 	}
 
 	if (!$post['mod']) {
-		$post['antispam_hash'] = checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : ''));
-		if ($post['antispam_hash'] === true) {
+		if (checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : '')))
 			error($config['error']['spam']);
-		}
-	}
-
-	if ($config['robot_enable'] && $config['robot_mute']) {
-		checkMute();
 	}
 
 	//Check if thread exists
@@ -891,15 +877,6 @@ if (isset($_POST['delete'])) {
 		}
 	}
 
-	if (!hasPermission($config['mod']['postunoriginal'], $board['uri']) && $config['robot_enable'] && checkRobot($post['body_nomarkup'])) {
-		undoFile($post);
-		if ($config['robot_mute']) {
-			error(sprintf($config['error']['muted'], mute()));
-		} else {
-			error($config['error']['unoriginal']);
-		}
-	}
-
 	// Remove board directories before inserting them into the database.
 	if ($post['has_file']) {
 		$post['file_path'] = $post['file'];
@@ -917,13 +894,9 @@ if (isset($_POST['delete'])) {
 
 	$post['id'] = $id = post($post);
 
-	if (isset($post['antispam_hash'])) {
-		incrementSpamHash($post['antispam_hash']);
-	}
-
 	if (isset($post['tracked_cites'])) {
 		foreach ($post['tracked_cites'] as $cite) {
-			$query = prepare('INSERT INTO `cites` VALUES (:board, :post, :target_board, :target)');
+			$query = prepare('INSERT INTO `cites` (`board`, `post`, `target_board`, `target`) VALUES (:board, :post, :target_board, :target)');
 			$query->bindValue(':board', $board['uri']);
 			$query->bindValue(':post', $id, PDO::PARAM_INT);
 			$query->bindValue(':target_board',$cite[0]);
@@ -981,7 +954,7 @@ if (isset($_POST['delete'])) {
 			}
 		}
 	} else {
-		$redirect = $root . $board['dir'] . $config['file_index'];
+		$redirect = $root . $board['dir'];
 
 	}
 

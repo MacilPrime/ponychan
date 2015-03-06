@@ -10,6 +10,11 @@
  *
  */
 
+import $ from 'jquery';
+import settings from './settings';
+import setCss from './set-css';
+import {get_post_board} from './post-info';
+
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {moredetails:"Only available on certain boards", orderhint:1});
 settings.newSetting("mature_as_spoiler", "bool", false, "Treat mature content images as spoilered images", 'filters', {orderhint:2});
 settings.newSetting("show_hide_buttons", "bool", true, "Show post hiding buttons", 'filters', {orderhint:3});
@@ -27,14 +32,14 @@ $(document).ready(function(){
 		var expires = new Date();
 		if (settings.getSetting("show_mature")) {
 			expires.setTime((new Date()).getTime()+60480000000);
-			document.cookie = "show_mature=true; expires="+expires.toGMTString()+"; path="+siteroot;
+			document.cookie = "show_mature=true; expires="+expires.toGMTString()+"; path="+SITE_DATA.siteroot;
 
 			$(".mature_warning").hide();
 			$(".mature_thread, .mature_post_button, #setting_mature_as_spoiler").show();
 			switch_mature_as_spoiler();
 		} else {
 			expires.setTime((new Date()).getTime()-50000);
-			document.cookie = "show_mature=false; expires="+expires.toGMTString()+"; path="+siteroot;
+			document.cookie = "show_mature=false; expires="+expires.toGMTString()+"; path="+SITE_DATA.siteroot;
 
 			$(".mature_warning").show();
 			$(".mature_thread, .mature_post_button, #setting_mature_as_spoiler").hide();

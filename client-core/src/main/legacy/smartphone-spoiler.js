@@ -11,6 +11,8 @@
  *
  */
 
+import $ from 'jquery';
+
 $(document).ready(function(){
 	function init_spoiler_show() {
 		$(this).click(function(event) {

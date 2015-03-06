@@ -7,6 +7,9 @@
  *
  */
 
+import $ from 'jquery';
+import settings from '../settings';
+
 settings.newSetting("preview_inline", "bool", true, "Preview post inline on link click", 'links', {orderhint:1});
 settings.newSetting("preview_hover", "bool", true, "Preview post on link hover", 'links', {orderhint:2});
 

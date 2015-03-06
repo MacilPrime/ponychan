@@ -12,11 +12,15 @@
  *
  */
 
-var RSVP = require('rsvp');
-var reloader = require('./legacy/reloader').reloader;
-var thumbnailer = require('./thumbnailer').thumbnailer;
-var util = require('./util');
-var state = require('./state');
+import $ from 'jquery';
+import RSVP from 'rsvp';
+
+import settings from './settings';
+import {updateThreadNow} from './legacy/reloader';
+import {thumbnailer} from './thumbnailer';
+
+import * as util from './util';
+import * as state from './state';
 
 settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Q is the quick keyboard shortcut.", orderhint:1});
 settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});
@@ -1037,7 +1041,7 @@ $(document).ready(function(){
 						if (data.threadid == null) {
 							window.location.href = data.url;
 						} else {
-							setTimeout(reloader.updateThreadNow, 10, true);
+							setTimeout(updateThreadNow, 10, true);
 						}
 					} else {
 						if (data.error == 'message') {

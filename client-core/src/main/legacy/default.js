@@ -5,21 +5,20 @@
  * Copyright (c) 2012 Michael Save <savetheinternet@tinyboard.org>
  * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
  *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/default.js';
- *
  */
 
-var log_error = require('../logger').log_error;
+import $ from 'jquery';
+import _ from 'lodash';
+import {log_error} from '../logger';
+import myPosts from '../my-posts';
 
-window.get_cookie = function get_cookie(cookie_name) {
+function get_cookie(cookie_name) {
 	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
 	if (results)
 		return (unescape(results[2]));
 	else
 		return null;
-};
+}
 
 window.highlightReply = function highlightReply(id) {
 	if (typeof event != "undefined" && event && typeof event.which != "undefined" && event.which == 2) {
@@ -48,15 +47,15 @@ window.confirmDelete = function confirmDelete() {
 	}
 };
 
-window.generatePassword = function generatePassword() {
+function generatePassword() {
 	var pass = '';
-	var chars = genpassword_chars;
+	var chars = SITE_DATA.genpassword_chars;
 	for (var i = 0; i < 8; i++) {
 		var rnd = Math.floor(Math.random() * chars.length);
 		pass += chars.substring(rnd, rnd + 1);
 	}
 	return pass;
-};
+}
 
 window.dopost = function dopost(form) {
 	if (window.localStorage) {
@@ -99,7 +98,7 @@ window.citeReply = function citeReply(id) {
 	}
 };
 
-window.rememberStuff = function rememberStuff() {
+function rememberStuff() {
 	if (document.forms.post) {
 		if (document.forms.post.password) {
 			var password = window.localStorage && localStorage.password;
@@ -125,10 +124,10 @@ window.rememberStuff = function rememberStuff() {
 
 		if (window.sessionStorage && sessionStorage.body) {
 			var saved = JSON.parse(sessionStorage.body);
-			if (get_cookie(cookiename)) {
+			if (get_cookie(SITE_DATA.cookiename)) {
 				// Remove successful posts
 				try {
-					var successful = JSON.parse(get_cookie(cookiename));
+					var successful = JSON.parse(get_cookie(SITE_DATA.cookiename));
 				} catch(e) {
 					log_error(e);
 				}
@@ -140,7 +139,7 @@ window.rememberStuff = function rememberStuff() {
 							var postid = successful[id];
 							var threadid = (split[1] == 0) ? null : parseInt(split[1]);
 							var board = split[0];
-							if (postlinkinfo.myposts.indexOf(board+":"+postid) == -1) {
+							if (!myPosts.contains(board+":"+postid)) {
 								var url = make_thread_url(board, (threadid == null) ? postid : threadid);
 								$(document).trigger('post_submitted', {
 									postid: postid,
@@ -160,11 +159,11 @@ window.rememberStuff = function rememberStuff() {
 			}
 		}
 
-		if (get_cookie(cookiename)) {
-			document.cookie = cookiename+'={};expires=0;path='+cookiepath+';';
+		if (get_cookie(SITE_DATA.cookiename)) {
+			document.cookie = SITE_DATA.cookiename+'={};expires=0;path='+SITE_DATA.cookiepath+';';
 		}
 	}
-};
+}
 
 $(document).ready(function() {
 	rememberStuff();
@@ -180,7 +179,7 @@ $(document).ready(function() {
 window.board_id = null;
 window.thread_id = null;
 (function() {
-	var path_board_regex = new RegExp("^"+siteroot+"(?:mod\\.php\\?/)?([^/]+)/(?:res/([0-9]+))?");
+	var path_board_regex = new RegExp("^"+SITE_DATA.siteroot+"(?:mod\\.php\\?/)?([^/]+)/(?:res/([0-9]+))?");
 	var reg_result = path_board_regex.exec(document.location.pathname+document.location.search);
 	if (reg_result) {
 		board_id = reg_result[1];
@@ -192,35 +191,17 @@ window.thread_id = null;
 })();
 
 window.make_thread_url = function make_thread_url(board, postnum) {
-	if (document.location.pathname == siteroot+'mod.php')
+	if (document.location.pathname == SITE_DATA.siteroot+'mod.php')
 		return '?/'+board+'/res/'+postnum+'.html';
 	else
-		return siteroot+board+'/res/'+postnum+'.html';
+		return SITE_DATA.siteroot+board+'/res/'+postnum+'.html';
 };
 
 window.make_thread50_url = function make_thread50_url(board, postnum) {
-	if (document.location.pathname == siteroot+'mod.php')
+	if (document.location.pathname == SITE_DATA.siteroot+'mod.php')
 		return '?/'+board+'/res/'+postnum+'+50.html';
 	else
-		return siteroot+board+'/res/'+postnum+'+50.html';
-};
-
-window.get_post_board = function get_post_board($post) {
-	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
-};
-
-window.get_post_num = function get_post_num($post) {
-	return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
-};
-
-window.get_post_id = function get_post_id($post) {
-	var match = /\bpost_(\w+)-(\d+)\b/.exec($post.attr("class"));
-	return match[1]+':'+match[2];
-};
-
-window.get_post_class = function get_post_class(postid) {
-	var match = /^(\w+):(\d+)$/.exec(postid);
-	return 'post_'+match[1]+'-'+match[2];
+		return SITE_DATA.siteroot+board+'/res/'+postnum+'+50.html';
 };
 
 window.get_url_params = function get_url_params(url, includeHash) {
@@ -251,31 +232,10 @@ window.pageHasFocus = function() {
 	return true;
 };
 
-// TODO replace with underscore
-window.isArray = function isArray(o) {
-	return Object.prototype.toString.call(o) === '[object Array]';
-};
-
-window.setCss = function setCss(key, css) {
-	var $style = $("style.setcss#setcss_"+key);
-	if (!$style.length && css) {
-		$style = $("<style/>")
-			.addClass("setcss")
-			.attr("id", "setcss_"+key)
-			.attr("type", "text/css")
-			.appendTo(document.head);
-	}
-	$style.text(css);
-};
-
-window.htmlEntities = function htmlEntities(str) {
-	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-};
-
 // Disables all img, audio, video, and script tags in some html
 window.mogrifyHTML = function mogrifyHTML(html) {
 	function mogrifier(text) {
-		return '<span class="mogrifier" data-data="' + htmlEntities(text) + '"></span>';
+		return '<span class="mogrifier" data-data="' + _.escape(text) + '"></span>';
 	}
 
 	html = html.replace(/<img\b[^>]*>/g, mogrifier);

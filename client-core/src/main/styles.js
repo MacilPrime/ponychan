@@ -4,25 +4,22 @@
  * Released under the MIT license
  * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
  *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/settings.js';
- *   $config['additional_javascript'][] = 'js/styles.js';
- *
  */
 
-var log_error = require('./logger').log_error;
+import $ from 'jquery';
+import settings from './settings';
+import {log_error} from './logger';
 
 var styleChoices = {};
-$.each(styles, function(name, file) {
+$.each(SITE_DATA.styles, function(name, file) {
 	styleChoices[name] = name;
 });
 
-settings.newSetting("style", "select", selectedstyle, "Theme", 'pagestyle',
+settings.newSetting("style", "select", SITE_DATA.selectedstyle, "Theme", 'pagestyle',
 		    {orderhint: 1, selectOptions: styleChoices, defpriority: 0});
 
 function apply(stylename) {
-	if (styles[stylename] == null) {
+	if (SITE_DATA.styles[stylename] == null) {
 		console.log('Unknown style:', stylename);
 		return;
 	}
@@ -34,7 +31,7 @@ function apply(stylename) {
 			.attr("id", "stylesheet")
 			.appendTo(document.head);
 	}
-	$stylesheet.attr("href", styles[stylename]);
+	$stylesheet.attr("href", SITE_DATA.styles[stylename]);
 
 	$(document).trigger('style_changed', $stylesheet[0]);
 }

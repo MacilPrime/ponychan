@@ -6,6 +6,9 @@
  *
  */
 
+import $ from 'jquery';
+import settings from '../settings';
+
 settings.newSetting("image_hover_enabled", "bool", true, "Expand image on hover", 'links', {orderhint:4});
 settings.newSetting("image_spoiler_hover_enabled", "bool", false, "Expand spoiler image on hover", 'links', {orderhint:5});
 

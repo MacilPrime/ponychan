@@ -9,6 +9,8 @@
  *
  */
 
+import $ from 'jquery';
+
 $(document).ready(function() {
 	if($('div.banner').length == 0)
 		return; // not index

@@ -1,3 +1,8 @@
+import $ from 'jquery';
+import Bacon from 'baconjs';
+import settings from './settings';
+import {jumpToPost} from './post-utils';
+import {get_post_id} from './post-info';
 
 settings.newSetting(
   "desktop_notifications",
@@ -25,7 +30,7 @@ function buttonEvent(evt) {
       var note = new Notification("Board settings - MLPchan", {
         body: "This is a test",
         tag: "desktop_test",
-        icon: siteroot + "static/mlpchanlogo.png"
+        icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
       });
       setTimeout(function() {
         note.close();
@@ -59,26 +64,27 @@ function init() {
 }
 
 function makeNote($post) {
-  var note = new Notification(makeHeadLine($post), {
+  const postId = get_post_id($post);
+  const note = new Notification(makeHeadLine($post), {
     body: getBody($post),
-    tag: "desktop_" + window.get_post_id($post),
-    icon: siteroot + "static/mlpchanlogo.png"
+    tag: "desktop_" + postId,
+    icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
   });
 
-  // TODO bacon
-  function closer() {
-    note.close();
-    $(window).off('focus', closer);
-  }
-  $(window).on('focus', closer);
+  const noteClicks = Bacon.fromEvent(note, 'click');
 
-  note.addEventListener("click", function() {
-    // sometimes calling window.focus() doesn't trigger the focus event on chrome
-    closer();
+  Bacon.mergeAll(
+    Bacon.fromEvent(window, 'focus'), noteClicks
+  ).take(1).onValue(() => {
+    note.close();
+  });
+
+  noteClicks.onValue(() => {
+    // sometimes calling window.focus() doesn't trigger the focus event on
+    // chrome, hence letting the click event close the note above too.
     window.focus();
-    // TODO scroll to specific reply
-    window.scrollTo(0, document.body.scrollHeight);
-  }, false);
+    jumpToPost(postId);
+  });
 }
 
 function makeHeadLine(postEl) {

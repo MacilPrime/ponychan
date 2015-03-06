@@ -6,6 +6,8 @@
  *
  */
 
+import $ from 'jquery';
+
 $(document).ready(function() {
 	function filename_expander(context) {
 		$(".postfilename[title], .postfilename[data-fn-fullname]", context).each(function() {
@@ -24,7 +26,7 @@ $(document).ready(function() {
 				});
 		});
 	}
-	
+
 	filename_expander(document);
 	$(document).on('new_post.showfn', function(e, post) {
 		filename_expander(post);

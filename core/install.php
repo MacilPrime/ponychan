@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-1');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-1-cleanup');
 
 require 'inc/functions.php';
 
@@ -175,7 +175,6 @@ if (file_exists($config['has_installed'])) {
 				CHANGE  `title`  `title` TINYTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 				CHANGE  `subtitle`  `subtitle` TINYTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL") or error(db_error());
 		case 'v0.9.6-dev-1':
-if (false) {
 			query("CREATE TABLE IF NOT EXISTS `antispam` (
 				  `board` varchar(255) NOT NULL,
 				  `thread` int(11) DEFAULT NULL,
@@ -186,7 +185,6 @@ if (false) {
 				  PRIMARY KEY (`hash`),
 				  KEY `board` (`board`,`thread`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8;") or error(db_error());
-}
 		case 'v0.9.6-dev-2':
 			query("ALTER TABLE `boards`
 				DROP `id`,
@@ -211,9 +209,7 @@ if (false) {
 				$query->execute() or error(db_error($query));
 			}
 		case 'v0.9.6-dev-3':
-if (false) {
 			query("ALTER TABLE  `antispam` CHANGE  `hash`  `hash` CHAR( 40 ) NOT NULL") or error(db_error());
-}
 		case 'v0.9.6-dev-4':
 			query("ALTER TABLE  `news` DROP INDEX  `id`, ADD PRIMARY KEY ( `id` )") or error(db_error());
 		case 'v0.9.6-dev-5':
@@ -250,6 +246,9 @@ if (false) {
 				// Add bodylink and postlink classes to links in posts
 				query(sprintf("UPDATE `posts_%s` SET `body`=replace( replace(body, '<a target=\"_blank\" rel=\"nofollow\" href=\"', '<a target=\"_blank\" class=\"bodylink\" rel=\"nofollow\" href=\"'), '<a onclick=\"highlightReply(', '<a class=\"bodylink postlink\" onclick=\"highlightReply(')", $board['uri'])) or error(db_error());
 			}
+		case 'v0.9.6-dev-8-mlpchan-1':
+			query("DROP TABLE `mutes`") or error(db_error());
+			query("DROP TABLE `robot`") or error(db_error());
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);
@@ -552,6 +551,7 @@ if ($step == 0) {
 	buildJavascript();
 
 	$sql = @file_get_contents('install.sql') or error("Couldn't load install.sql.");
+	$sql = str_replace(array("\r\n", "\n", "\r"), "\n", $sql);
 
 	// This code is probably horrible, but what I'm trying
 	// to do is find all of the SQL queires and put them

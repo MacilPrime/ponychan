@@ -1,0 +1,97 @@
+/*
+ * postlink-info.js
+ *
+ * Adds " (OP)" to >>X links when the OP is quoted.
+ * Adds " (You)" to >>X links when the user is quoted.
+ *
+ * Released under the MIT license
+ * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ *
+ */
+
+var myposts = [];
+
+const myPosts = {
+	contains(id) {
+		return myposts.indexOf(id) !== -1;
+	}
+};
+
+export default myPosts;
+
+import $ from 'jquery';
+import settings from './settings';
+import setCss from './set-css';
+import {get_post_num, get_post_board} from './post-info';
+
+settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6});
+
+function loadMyPosts() {
+	if (window.sessionStorage && sessionStorage.myposts) {
+		myposts = JSON.parse(sessionStorage.myposts);
+	}
+}
+function saveMyPosts() {
+	if (window.sessionStorage)
+		sessionStorage.myposts = JSON.stringify(myposts);
+}
+loadMyPosts();
+
+function descLinks() {
+	var $thread;
+	if ($(this).hasClass('thread'))
+		$thread = $(this);
+	else
+		$thread = $(this).parents('.thread').first();
+
+	if (!$thread.length) {
+		if ($('.thread').length == 1)
+			$thread = $('.thread');
+		else
+			return;
+	}
+
+	var $OP = $thread.find('div.post.op');
+	var OP = get_post_num($OP);
+	var board = get_post_board($OP);
+
+	$(this).find('a.bodylink.postlink').each(function() {
+		var match = $(this).text().match(/^>>(\d+)/);
+		if (match) {
+			var postnum = parseInt(match[1]);
+
+			if (postnum == OP && !$(this).children(".opnote").length) {
+				$(this).append( $('<span/>').addClass('opnote').text(' (OP)') );
+			}
+
+			var postid = board+':'+postnum;
+			if (myposts.indexOf(postid) != -1 && !$(this).children(".younote").length) {
+				$(this).append( $('<span/>').addClass('younote').text(' (You)') );
+			}
+		}
+	});
+}
+
+function updateLinkInfo() {
+	if (settings.getSetting("link_show_you"))
+		setCss("linkinfo", "");
+	else
+		setCss("linkinfo", ".younote { display: none; }");
+}
+
+$(document).on('post_submitted', function(e, info) {
+	loadMyPosts();
+	myposts.push(info.board+':'+info.postid);
+	saveMyPosts();
+}).ready(function() {
+	updateLinkInfo();
+
+	$('.thread').each(descLinks);
+
+	$(document).on('new_post', function(e, post) {
+		$(post).each(descLinks);
+	}).on("setting_change", function(e, setting) {
+		if (setting == "link_show_you")
+			updateLinkInfo();
+	});
+});

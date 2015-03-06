@@ -1,18 +1,15 @@
 require('./legacy/visibility.min.js');
 
-window.jQuery = window.$ = require('jquery');
-
-require('./logger.js');
+import './logger.js';
 require('./legacy/default.js');
-require('./notice.js');
-require('./legacy/settings.js');
+import './settings.js';
 require('./state.js');
 require('./styles.js');
 require('./spoiler-toggle.js');
 require('./local-time.js');
 require('./legacy/reloader.js');
 require('./legacy/post-hover.js');
-require('./postlinkinfo.js');
+require('./my-posts.js');
 require('./watcher.js');
 require('./notifier.js');
 require('./show-filenames.js');
@@ -36,11 +33,16 @@ require('./search.js');
 require('./desktop-notifier.js');
 require('./hide-trip.js');
 
-// debugging purposes
-window._dbg = {
-  main_require: require,
+// for debugging and inline scripts
+window.mlpchan = {
+  _dbg_require: require,
+  Bacon: require('baconjs'),
   RSVP: require('rsvp'),
   $: require('jquery'),
-  _: require('underscore'),
-  moment: require('moment')
+  _: require('lodash'),
+  moment: require('moment'),
+  settings: require('./settings.js')
 };
+
+window.$ = window.mlpchan.$;
+window.settings = window.mlpchan.settings;

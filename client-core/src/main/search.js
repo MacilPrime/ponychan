@@ -6,8 +6,9 @@
  *
  */
 
-var RSVP = require('rsvp');
-var _ = require('underscore');
+import $ from 'jquery';
+import RSVP from 'rsvp';
+import _ from 'lodash';
 
 $(document).ready(function() {
 	// don't run inside threads
@@ -59,7 +60,7 @@ $(document).ready(function() {
 		return new RSVP.Promise(function(resolve, reject) {
 			if (!$catalog.length) {
 				$.ajax({
-					url: siteroot+board_id+'/catalog.html',
+					url: SITE_DATA.siteroot+board_id+'/catalog.html',
 					success: function(data) {
 						var $html = $($.parseHTML(data));
 						$catalog = $html.filter('.catalog').add( $html.find('.catalog') )

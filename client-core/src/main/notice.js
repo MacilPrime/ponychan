@@ -6,12 +6,13 @@
  *
  */
 
-function settingsAd(text, time, cb) {
+import $ from 'jquery';
+
+export function settingsAd(text, time, cb) {
 	return pop(text+' \u2191', time, cb);
 }
-exports.settingsAd = settingsAd;
 
-function pop(text, time, cb) {
+export function pop(text, time, cb) {
 	if (time === undefined) time = 30;
 
 	var $navbar = $(".boardlist.top").first();
@@ -54,4 +55,3 @@ function pop(text, time, cb) {
 		});
 	}, 1500);
 }
-exports.pop = pop;

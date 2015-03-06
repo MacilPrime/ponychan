@@ -193,32 +193,7 @@ class AntiBot {
 }
 
 function _create_antibot($board, $thread) {
-	global $config;
-
-	$antibot = new AntiBot(array($board, $thread));
-
-if (false) {
-	query('DELETE FROM `antispam` WHERE `expires` < UNIX_TIMESTAMP()') or error(db_error());
-
-	if ($thread)
-		$query = prepare('UPDATE `antispam` SET `expires` = UNIX_TIMESTAMP() + :expires WHERE `board` = :board AND `thread` = :thread AND `expires` IS NULL');
-	else
-		$query = prepare('UPDATE `antispam` SET `expires` = UNIX_TIMESTAMP() + :expires WHERE `board` = :board AND `thread` IS NULL AND `expires` IS NULL');
-
-	$query->bindValue(':board', $board);
-	if ($thread)
-		$query->bindValue(':thread', $thread);
-	$query->bindValue(':expires', $config['spam']['hidden_inputs_expire']);
-	$query->execute() or error(db_error($query));
-
-	$query = prepare('INSERT INTO `antispam` VALUES (:board, :thread, :hash, UNIX_TIMESTAMP(), NULL, 0)');
-	$query->bindValue(':board', $board);
-	$query->bindValue(':thread', $thread);
-	$query->bindValue(':hash', $antibot->hash());
-	$query->execute() or error(db_error($query));
-}
-
-	return $antibot;
+	return new AntiBot(array($board, $thread));
 }
 
 function checkSpam(array $extra_salt = array()) {
@@ -284,23 +259,5 @@ function checkSpam(array $extra_salt = array()) {
 		return true;
 	}
 
-if (false) {
-	$query = prepare('SELECT `passed` FROM `antispam` WHERE `hash` = :hash');
-	$query->bindValue(':hash', $hash_given);
-	$query->execute() or error(db_error($query));
-	if ((($passed = $query->fetchColumn(0)) === false) || ($passed > $config['spam']['hidden_inputs_max_pass'])) {
-		// there was no database entry for this hash. most likely expired.
-		return true;
-	}
-}
-
-	return $hash_given;
-}
-
-function incrementSpamHash($hash) {
-if (false) {
-	$query = prepare('UPDATE `antispam` SET `passed` = `passed` + 1 WHERE `hash` = :hash');
-	$query->bindValue(':hash', $hash);
-	$query->execute() or error(db_error($query));
-}
+	return false;
 }

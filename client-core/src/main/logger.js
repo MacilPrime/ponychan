@@ -6,18 +6,9 @@
  *
  */
 
-var RSVP = require('rsvp');
-
-function nop() {}
-
-if (typeof console == "undefined" || !window.console) {
-	console = {
-		log: nop,
-		info: nop,
-		warn: nop,
-		error: nop
-	};
-}
+import $ from 'jquery';
+import settings from './settings';
+import RSVP from 'rsvp';
 
 function basicStringHash(string, prevHash){
 	var hash = 0;
@@ -85,10 +76,10 @@ if (!userid || userid.length != 32) {
 }
 var expires = new Date();
 expires.setTime((new Date()).getTime()+60480000000);
-document.cookie = "userid="+escape(userid)+"; expires="+expires.toGMTString()+"; path="+siteroot;
+document.cookie = "userid="+escape(userid)+"; expires="+expires.toGMTString()+"; path="+SITE_DATA.siteroot;
 
 var maxRetryTime = 3*60*1000;
-var logger_url = siteroot + 'logger.php';
+var logger_url = SITE_DATA.siteroot + 'logger.php';
 
 var noSendBefore = 0;
 var noSendDelay = 10;
@@ -173,11 +164,10 @@ function send_error(error, retryTime) {
 	});
 }
 
-function log_error(error) {
+export function log_error(error) {
 	console.error(error);
 	send_error(error);
 }
-exports.log_error = log_error;
 
 RSVP.on('error', function(e) {
 	log_error(e);
@@ -246,7 +236,7 @@ function send_usage(retryTime) {
 
 	// usage object construction end
 
-	var last_usage_hash_key = "last_usage_data:"+siteroot;
+	var last_usage_hash_key = "last_usage_data:"+SITE_DATA.siteroot;
 
 	var usageHash = hashCode(userid + hashCode(usage));
 	if (usageHash == localStorage.getItem(last_usage_hash_key))

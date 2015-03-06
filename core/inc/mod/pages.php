@@ -108,60 +108,6 @@ function mod_dashboard() {
 	$query = query('SELECT COUNT(*) FROM `reports`') or error(db_error($query));
 	$args['reports'] = $query->fetchColumn(0);
 
-	if ($mod['type'] >= ADMIN && $config['check_updates']) {
-		if (!$config['version'])
-			error(_('Could not find current version! (Check .installed)'));
-
-		if (isset($_COOKIE['update'])) {
-			$latest = unserialize($_COOKIE['update']);
-		} else {
-			$ctx = stream_context_create(array('http' => array('timeout' => 5)));
-			if ($code = @file_get_contents('http://tinyboard.org/version.txt', 0, $ctx)) {
-				$ver = strtok($code, "\n");
-
-				if (preg_match('@^// v(\d+)\.(\d+)\.(\d+)\s*?$@', $ver, $matches)) {
-					$latest = array(
-						'massive' => $matches[1],
-						'major' => $matches[2],
-						'minor' => $matches[3]
-					);
-					if (preg_match('/v(\d+)\.(\d)\.(\d+)(-dev.+)?$/', $config['version'], $matches)) {
-						$current = array(
-							'massive' => (int) $matches[1],
-							'major' => (int) $matches[2],
-							'minor' => (int) $matches[3]
-						);
-						if (isset($m[4])) {
-							// Development versions are always ahead in the versioning numbers
-							$current['minor'] --;
-						}
-						// Check if it's newer
-						if (!(	$latest['massive'] > $current['massive'] ||
-							$latest['major'] > $current['major'] ||
-								($latest['massive'] == $current['massive'] &&
-									$latest['major'] == $current['major'] &&
-									$latest['minor'] > $current['minor']
-								)))
-							$latest = false;
-					} else {
-						$latest = false;
-					}
-				} else {
-					// Couldn't get latest version
-					$latest = false;
-				}
-			} else {
-				// Couldn't get latest version
-				$latest = false;
-			}
-
-			setcookie('update', serialize($latest), time() + $config['check_updates_time'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
-		}
-
-		if ($latest)
-			$args['newer_release'] = $latest;
-	}
-
 	mod_page(_('Dashboard'), 'mod/dashboard.html', $args);
 }
 
@@ -225,12 +171,6 @@ function mod_edit_board($boardName) {
 			$query->bindValue(':board', $board['uri']);
 			$query->execute() or error(db_error($query));
 
-if (false) {
-			$query = prepare('DELETE FROM `antispam` WHERE `board` = :board');
-			$query->bindValue(':board', $board['uri']);
-			$query->execute() or error(db_error($query));
-}
-
 			// Remove board from users/permissions table
 			$query = query('SELECT `id`,`boards` FROM `mods`') or error(db_error());
 			while ($user = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -288,7 +228,7 @@ function mod_new_board() {
 			error(sprintf($config['error']['boardexists'], $board['url']));
 		}
 
-		$query = prepare('INSERT INTO `boards` VALUES (:uri, :title, :subtitle)');
+		$query = prepare('INSERT INTO `boards` (`uri`, `title`, `subtitle`) VALUES (:uri, :title, :subtitle)');
 		$query->bindValue(':uri', $_POST['uri']);
 		$query->bindValue(':title', $_POST['title']);
 		$query->bindValue(':subtitle', $_POST['subtitle']);
@@ -309,7 +249,7 @@ function mod_new_board() {
 
 		rebuildThemes('boards');
 
-		header('Location: ?/' . $board['uri'] . '/' . $config['file_index'], true, $config['redirect_http']);
+		header('Location: ?/' . $board['uri'] . '/', true, $config['redirect_http']);
 	}
 
 	mod_page(_('New board'), 'mod/board.html', array('new' => true));
@@ -334,7 +274,7 @@ function mod_noticeboard($page_no = 1) {
 
 		markup($_POST['body']);
 
-		$query = prepare('INSERT INTO `noticeboard` VALUES (NULL, :mod, :time, :subject, :body)');
+		$query = prepare('INSERT INTO `noticeboard` (`id`, `mod`, `time`, `subject`, `body`) VALUES (NULL, :mod, :time, :subject, :body)');
 		$query->bindValue(':mod', $mod['id']);
 		$query->bindvalue(':time', time());
 		$query->bindValue(':subject', $_POST['subject']);
@@ -403,7 +343,7 @@ function mod_news($page_no = 1) {
 
 		markup($_POST['body']);
 
-		$query = prepare('INSERT INTO `news` VALUES (NULL, :name, :time, :subject, :body)');
+		$query = prepare('INSERT INTO `news` (`id`, `name`, `time`, `subject`, `body`) VALUES (NULL, :name, :time, :subject, :body)');
 		$query->bindValue(':name', isset($_POST['name']) && hasPermission($config['mod']['news_custom']) ? $_POST['name'] : $mod['username']);
 		$query->bindvalue(':time', time());
 		$query->bindValue(':subject', $_POST['subject']);
@@ -624,7 +564,7 @@ function mod_page_ip($ip_url) {
 			error($config['error']['noaccess']);
 
 		markup($_POST['note']);
-		$query = prepare('INSERT INTO `ip_notes` VALUES (NULL, :ip, :mod, :time, :body)');
+		$query = prepare('INSERT INTO `ip_notes` (`id`, `ip`, `mod`, `time`, `body`) VALUES (NULL, :ip, :mod, :time, :body)');
 		$query->bindValue(':ip', $ip);
 		$query->bindValue(':mod', $mod['id']);
 		$query->bindValue(':time', time());
@@ -864,7 +804,7 @@ function mod_bump($board, $post) {
 	buildThread($post);
 	buildIndex();
 
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_lock($board, $unlock, $post) {
@@ -886,7 +826,7 @@ function mod_lock($board, $unlock, $post) {
 		buildIndex();
 	}
 
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 
 	if ($unlock)
 		event('unlock', $post);
@@ -915,7 +855,7 @@ function mod_sticky($board, $unsticky, $post) {
 		buildIndex();
 	}
 
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_bumplock($board, $unbumplock, $post) {
@@ -937,7 +877,7 @@ function mod_bumplock($board, $unbumplock, $post) {
 		buildIndex();
 	}
 
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_move($originBoard, $postID) {
@@ -1058,7 +998,7 @@ function mod_move($originBoard, $postID) {
 			}
 
 			foreach ($post['tracked_cites'] as $cite) {
-				$query = prepare('INSERT INTO `cites` VALUES (:board, :post, :target_board, :target)');
+				$query = prepare('INSERT INTO `cites` (`board`, `post`, `target_board`, `target`) VALUES (:board, :post, :target_board, :target)');
 				$query->bindValue(':board', $board['uri']);
 				$query->bindValue(':post', $newPostID, PDO::PARAM_INT);
 				$query->bindValue(':target_board',$cite[0]);
@@ -1183,7 +1123,7 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 			buildIndex();
 		}
 
-		header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+		header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 	}
 
 	$args = array(
@@ -1216,7 +1156,7 @@ function mod_delete($board, $post) {
 	buildIndex();
 
 	// Redirect
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_deletefile($board, $post) {
@@ -1237,7 +1177,7 @@ function mod_deletefile($board, $post) {
 	buildIndex();
 
 	// Redirect
-	header('Location: ?/' . sprintf($config['board_path'], $board) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
 function mod_edit($boardName, $post) {
@@ -1291,23 +1231,25 @@ function mod_deletebyip($boardName, $post, $global = false) {
 	set_time_limit($config['mod']['rebuild_timelimit']);
 
 	$threads_to_rebuild = array();
-	$threads_deleted = array();
 	while ($post = $query->fetch()) {
 		openBoard($post['board']);
-
 		deletePost($post['id'], false, false);
 
-		if ($post['thread'])
-			$threads_to_rebuild[$post['board']][$post['thread']] = true;
-		else
-			$threads_deleted[$post['board']][$post['id']] = true;
+		if ($post['thread']) {
+			if (!isset($threads_to_rebuild[$post['board']][$post['thread']])) {
+				$threads_to_rebuild[$post['board']][$post['thread']] = true;
+			}
+		} else {
+			$threads_to_rebuild[$post['board']][$post['id']] = false;
+		}
 	}
 
 	foreach ($threads_to_rebuild as $_board => $_threads) {
 		openBoard($_board);
-		foreach ($_threads as $_thread => $_dummy) {
-			if ($_dummy && !isset($threads_deleted[$_board][$_thread]))
+		foreach ($_threads as $_thread => $_shouldRebuildThread) {
+			if ($_shouldRebuildThread) {
 				buildThread($_thread);
+			}
 		}
 		buildIndex();
 	}
@@ -1320,7 +1262,7 @@ function mod_deletebyip($boardName, $post, $global = false) {
 	modLog("Deleted all posts by IP address: <a href=\"?/IP/$ip\">$ip</a>");
 
 	// Redirect
-	header('Location: ?/' . sprintf($config['board_path'], $boardName) . $config['file_index'], true, $config['redirect_http']);
+	header('Location: ?/' . sprintf($config['board_path'], $boardName), true, $config['redirect_http']);
 }
 
 function mod_user($uid) {
@@ -1480,7 +1422,7 @@ function mod_user_new() {
 		if ($_POST['type'] !== JANITOR && $_POST['type'] !== MOD && $_POST['type'] !== ADMIN)
 			error(sprintf($config['error']['invalidfield'], 'type'));
 
-		$query = prepare('INSERT INTO `mods` VALUES (NULL, :username, SHA1(:password), :type, :boards)');
+		$query = prepare('INSERT INTO `mods` (`id`, `username`, `password`, `type`, `boards`) VALUES (NULL, :username, SHA1(:password), :type, :boards)');
 		$query->bindValue(':username', $_POST['username']);
 		$query->bindValue(':password', $_POST['password']);
 		$query->bindValue(':type', $_POST['type']);
@@ -1637,7 +1579,7 @@ function mod_new_pm($username) {
 
 		markup($_POST['message']);
 
-		$query = prepare("INSERT INTO `pms` VALUES (NULL, :me, :id, :message, :time, 1)");
+		$query = prepare("INSERT INTO `pms` (`id`, `sender`, `to`, `message`, `time`, `unread`) VALUES (NULL, :me, :id, :message, :time, 1)");
 		$query->bindValue(':me', $mod['id']);
 		$query->bindValue(':id', $id);
 		$query->bindValue(':message', $_POST['message']);
@@ -1963,42 +1905,6 @@ function mod_config() {
 	mod_page(_('Config editor'), 'mod/config-editor.html', array('conf' => $conf));
 }
 
-function mod_debug_antispam() {
-	global $pdo, $config;
-
-	$args = array();
-
-if (false) {
-	if (isset($_POST['board'], $_POST['thread'])) {
-		$where = '`board` = ' . $pdo->quote($_POST['board']);
-		if ($_POST['thread'] != '')
-			$where .= ' AND `thread` = ' . $pdo->quote($_POST['thread']);
-
-		if (isset($_POST['purge'])) {
-			$query = prepare('UPDATE `antispam` SET `expires` = UNIX_TIMESTAMP() + :expires WHERE' . $where);
-			$query->bindValue(':expires', $config['spam']['hidden_inputs_expire']);
-			$query->execute() or error(db_error());
-		}
-
-		$args['board'] = $_POST['board'];
-		$args['thread'] = $_POST['thread'];
-	} else {
-		$where = '';
-	}
-
-	$query = query('SELECT COUNT(*) FROM `antispam`' . ($where ? " WHERE $where" : '')) or error(db_error());
-	$args['total'] = number_format($query->fetchColumn(0));
-
-	$query = query('SELECT COUNT(*) FROM `antispam` WHERE `expires` IS NOT NULL' . ($where ? " AND $where" : '')) or error(db_error());
-	$args['expiring'] = number_format($query->fetchColumn(0));
-
-	$query = query('SELECT * FROM `antispam` ' . ($where ? "WHERE $where" : '') . ' ORDER BY `passed` DESC LIMIT 40') or error(db_error());
-	$args['top'] = $query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-	mod_page(_('Debug: Anti-spam'), 'mod/debug/antispam.html', $args);
-}
-
 function mod_themes_list() {
 	global $config;
 
@@ -2055,14 +1961,14 @@ function mod_theme_configure($theme_name) {
 		$query->execute() or error(db_error($query));
 
 		foreach ($theme['config'] as &$conf) {
-			$query = prepare("INSERT INTO `theme_settings` VALUES(:theme, :name, :value)");
+			$query = prepare("INSERT INTO `theme_settings` (`theme`, `name`, `value`) VALUES(:theme, :name, :value)");
 			$query->bindValue(':theme', $theme_name);
 			$query->bindValue(':name', $conf['name']);
 			$query->bindValue(':value', $_POST[$conf['name']]);
 			$query->execute() or error(db_error($query));
 		}
 
-		$query = prepare("INSERT INTO `theme_settings` VALUES(:theme, NULL, NULL)");
+		$query = prepare("INSERT INTO `theme_settings` (`theme`, `name`, `value`) VALUES(:theme, NULL, NULL)");
 		$query->bindValue(':theme', $theme_name);
 		$query->execute() or error(db_error($query));
 

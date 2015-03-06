@@ -3,7 +3,7 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var mold = require('mold-source-map');
-var _ = require('underscore');
+var _ = require('lodash');
 var streamify = require('gulp-streamify');
 var sourcemaps = require('gulp-sourcemaps');
 var stdio = require('stdio');
@@ -11,7 +11,7 @@ var uglify = require('gulp-uglify');
 var envify = require('envify/custom');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
-var to5ify = require('6to5ify');
+var babelify = require('babelify');
 var execSync = require('exec-sync');
 
 var args = stdio.getopt({
@@ -43,11 +43,15 @@ function browserifyTask(name, entry, destname) {
   gulp.task(name, function() {
     var bundler = browserify({
       debug: true,
-      entries: ['6to5/polyfill', entry],
-      noparse: ['jquery', 'moment', 'baconjs', 'rsvp', 'underscore'],
+      entries: [
+        'console-polyfill',
+        'babel/polyfill',
+        entry
+      ],
+      noparse: ['jquery', 'moment', 'baconjs', 'rsvp'],
       cache: {}, packageCache: {}, fullPaths: args.watch
     });
-    bundler.transform(to5ify);
+    bundler.transform(babelify);
     bundler.transform(envify({
       VERSION: getVersion()
     }));

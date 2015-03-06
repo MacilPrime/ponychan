@@ -6,7 +6,9 @@
  *
  */
 
-var log_error = require('./logger').log_error;
+import $ from 'jquery';
+import {log_error} from './logger';
+import {get_post_num, get_post_id, get_post_class} from './post-info';
 
 var max_watched_threads = 70;
 var watcher_poll_time = 30 * 1000;
@@ -116,7 +118,7 @@ function refresh_watched_threads(callback) {
 
 	var request_date = new Date();
 	watcher_query = $.ajax({
-		url: siteroot+'watcher/threads',
+		url: SITE_DATA.siteroot+'watcher/threads',
 		data: {ids: Object.keys(watched_threads).sort()},
 		dataType: "json",
 		success: function(data) {

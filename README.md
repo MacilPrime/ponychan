@@ -5,11 +5,11 @@ MLPchan's code is split into several different interdependent modules.
   site locally, core is run within the Vagrant virtual machine.
 
 * client-core contains the source of the javascript bundles served to users.
-  Browserify, 6to5, and gulp are used to build the bundles. The output bundles
+  Browserify, babel, and gulp are used to build the bundles. The output bundles
   are automatically placed into core/js/ when built.
 
 * watcher contains the server side code for the /watcher/threads endpoint.
-  Nodejs and 6to5 are used. If you don't run this module, then the thread
+  Nodejs and babel are used. If you don't run this module, then the thread
   watcher will not work.
 
 ## Quick Development Start
