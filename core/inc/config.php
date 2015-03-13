@@ -690,6 +690,10 @@
 	$config['stylesheets']['Cloudsdale'] = 'Cloudsdale.css';
 	$config['stylesheets']['Pone'] = 'pone.css';
 	$config['stylesheets']['Colgate'] = 'colgate.css';
+    $config['stylesheets']['Twilight'] = 'twilight.css';
+    $config['stylesheets']['Twilight Tackle'] = 'twilight-tackle.css';
+    $config['stylesheets']['Rainbow Dash'] = 'rainbow-dash.css';
+    $config['stylesheets']['Fluttershy'] = 'fluttershy.css';
 	$config['stylesheets']['Yotsuba B'] = ''; // default
 	$config['stylesheets']['Yotsuba'] = 'yotsuba.css';
 	// $config['stylesheets']['Futaba'] = 'futaba.css';

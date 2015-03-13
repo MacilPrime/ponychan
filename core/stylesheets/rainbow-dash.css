@@ -1,0 +1,650 @@
+
+/* TODO strip off the common kusaba css and replace it with an import tag. */
+
+@import "http://fonts.googleapis.com/css?family=Allan:bold";
+/* Use this until you get the local font files working.*/
+
+@font-face {
+    font-family: 'Allan';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Allan Bold'),
+         local('Allan-Bold'),
+         url("font/a") format('woff2');
+    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB,
+                   U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+
+
+body {
+    background:
+    url("http://www.ponychan.net/chan/css/images/rainbow_dash/clouds_fg.png") no-repeat right top,
+    url("http://www.ponychan.net/chan/css/images/rainbow_dash/bg.png") repeat-x right top,
+    linear-gradient(to bottom, rgb(210, 238, 251) 0px, rgb(232, 247, 254) 400px);
+    background-color: rgb(210, 238, 251);
+}
+/* Indiscriminate tags */
+a {
+    text-decoration: none; /* remove the underline */
+}
+a, a:visited, a:active {
+    color: rgb(197, 28, 113);
+}
+form a, form a:visited, form a:active {
+    color :rgb(0,0,208);
+}
+form a:hover {
+    color : rgb(0, 0, 230);
+}
+a:hover {
+    color: rgb(211, 84, 148);
+}
+input[type=text], input[type=password], textarea {
+    outline: none;
+    border: 1px solid #90a0d0;
+    padding: 2px;
+    transition: all .25s ease-in-out;
+    transition-property: box-shadow, border;
+    line-height: 140%;
+    box-shadow: inset 0 0 7px rgba(0,0,0,0.0);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    border: 1px solid #0020c0;
+    outline: none;
+    box-shadow: inset 0 0 7px rgba(0,0,0,0.1)
+}
+hr {
+    border-color: #c0c0c0;
+}
+*::-webkit-input-placeholder {
+    color: rgb(119, 131, 168);
+}
+*:-moz-placeholder { /* Firefox 18- */
+    color: rgb(119, 131, 168);
+}
+*::-moz-placeholder {  /* Firefox 19+ */
+    color: rgb(119, 131, 168);
+}
+*:-ms-input-placeholder {
+    color: rgb(119, 131, 168);
+}
+
+
+/* Setting the color scheme */
+.wthread, .hashtag {
+    background-color: rgb(243, 250, 254);
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #000080;
+    font-family: sans-serif;
+    letter-spacing: 0;
+}
+.heading {
+    color: #A92D8C;
+}
+header h1 {
+    color: black;
+    font: 5em "Allan";
+    text-shadow: 0 0 0 rgb(233, 247, 253),
+                 -70px 0 5px rgba(255, 0, 0, 0.2),
+                 -40px 0 5px rgba(255, 165, 0, 0.2),
+                 -10px 0 5px rgba(255, 255, 0, 0.2),
+                 20px 0 5px rgba(0, 255, 0, 0.2),
+                 50px 1px 5px rgba(0, 0, 255, 0.2),
+                 90px 1px 5px rgba(165, 0, 255, 0.2) !important;
+}
+.top, #qrmove, #updateSettings {
+    color: white;
+    background-color: rgb(18, 53, 85) !important;
+}
+.top a, #qrmove a {
+    color: #DADCF0;
+    border-color: #45a;
+}
+.top a:hover, #qrmove a:hover {
+    color: #e8f0ff;
+}
+
+
+
+/* Navigation bar */
+.top {
+    background: rgb(18, 53, 85)
+                linear-gradient(to bottom, rgba(0,0,0,0) ,rgba(0,0,0,0.15));
+}
+.top a {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    color: #D1D4F2;
+    border-top: 3px solid rgb(42, 73, 102);
+}
+.top a:hover {
+    background-color: rgba(0,0,0,0.3);
+}
+.top a:nth-of-type(6n+1):hover, .top .boardlistactive:nth-of-type(6n+1) {
+    border-top-color: rgb(252, 151, 157);
+}
+
+.top a:nth-of-type(6n+2):hover, .top .boardlistactive:nth-of-type(6n+2) {
+    border-top-color: rgb(252, 183, 151);
+}
+
+.top a:nth-of-type(6n+3):hover, .top .boardlistactive:nth-of-type(6n+3) {
+    border-top-color: rgb(252, 249, 150);
+}
+
+.top a:nth-of-type(6n+4):hover, .top .boardlistactive:nth-of-type(6n+4) {
+    border-top-color: rgb(189, 252, 151);
+}
+
+.top a:nth-of-type(6n+5):hover, .top .boardlistactive:nth-of-type(6n+5) {
+    border-top-color: rgb(151, 222, 252);
+}
+
+.top a:nth-of-type(6n):hover, .top .boardlistactive:nth-of-type(6n) {
+    border-top-color: rgb(239, 151, 252);
+}
+.top .boardlistactive {
+    padding-top: 6px;
+}
+.top .boardlistactive, .watcherButton.open {
+    background: inherit;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+    text-shadow: 0 0 2px rgba(0,0,0,0.6);
+}
+.top a[href="/"] {
+    color: #D1D4F2;
+}
+
+
+
+
+/* Board Page header */
+.frontpage header h1 {
+    color: white;
+}
+.banner {
+    background: rgba(63, 121, 139, 0.1);
+    color: #fff;
+    letter-spacing: 3px;
+    font-weight: normal;
+    text-transform: lowercase;
+}
+
+img.banner {
+    display: none !important;
+}
+.banner .unimportant {
+    float: left;
+    font-size: 90%;
+    letter-spacing: normal; /* This will revert the spacing on the links*/
+}
+.banner .unimportant + .unimportant {
+    float: right;
+}
+
+body > header {
+    padding-top: 3em;
+}
+body > header h1 {
+    font-weight: normal;
+}
+.subtitle {
+    font: bold oblique 80%/130% sans-serif;
+    letter-spacing: 1px;
+    color: rgb(189, 71, 56); /* This should match her eye color */
+}
+
+
+
+/* Buttons */
+input[type=button],
+input[type=submit]:not(#qrsubmit),
+button:not(#qrfilebutton) {
+    color: rgb(90, 85, 85);
+    height: 1.8em;
+    box-shadow: inset 0 1px 2px white;
+    border: 1px solid rgb(153,153,153);
+    background: rgb(246,246,246)
+                linear-gradient(to bottom, rgb(239, 239, 239), rgb(215, 215, 215));
+    border-radius: 0.5rem 0.2rem;
+    cursor: pointer;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    margin: -2px 0.15em 0;
+    font-weight: bold;
+    outline: none;
+    text-shadow: 0 1px 0 rgb(248, 248, 248);
+    transition: background 0.2s ease-in-out;
+}
+input[type=button]:hover,
+input[type=submit]:not(#qrsubmit):hover,
+button:not(#qrfilebutton):hover {
+    box-shadow: inset 0 1px 1px rgb(240, 240, 240);
+    background: rgb(246,246,246)
+                linear-gradient(to bottom, rgb(232, 232, 232), rgb(204, 204, 204));
+    text-shadow: 0 1px 0 rgb(234, 234, 234);
+}
+input[type=button]:active,
+input[type=submit]:not(#qrsubmit):active,
+button:not(#qrfilebutton):active {
+    box-shadow: inset 0 0 5px rgb(190, 192, 194);
+}
+input::-webkit-file-upload-button {
+    color: rgb(90, 85, 85);
+    height: 1.7em;
+    box-shadow: inset 0px 1px 2px white;
+    border: 1px solid rgb(153,153,153);
+    background: rgb(246,246,246)
+    linear-gradient(to bottom, rgb(239, 239, 239), rgb(215, 215, 215));
+    border-radius: 0.5rem 0.2rem;
+    cursor: pointer;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    margin: 0 0.15em 0;
+    font-weight: bold;
+    outline: none;
+    text-shadow: 0 1px 0 rgb(248, 248, 248);
+    transition: background 0.2s ease-in-out;
+}
+input::-webkit-file-upload-button:hover {
+    box-shadow: 0 1px 1px rgb(240, 240, 240);
+    background: rgb(246,246,246)
+    linear-gradient(to bottom, rgb(232, 232, 232), rgb(204, 204, 204));
+    text-shadow: 0 1px 0 rgb(234, 234, 234);
+}
+input::-webkit-file-upload-button:active {
+    box-shadow: inset 0 0 5px rgb(190, 192, 194);
+}
+/* Post form */
+form th {
+    text-align: right !important;
+}
+form th, .reply, .catathread {
+    border-radius: 0.5rem 0;
+}
+input[type=text], input[type=email], input[type=search],
+input[type=password], textarea, #watcherScreen {
+    border-radius: 3px 0;
+}
+
+/* Rainbow row headers */
+tr:nth-of-type(6n+1) th {
+    background-color: rgb(252, 151, 157);
+    border: 1px solid rgb(126, 75, 78);
+}
+
+tr:nth-of-type(6n+2) th {
+    background-color: rgb(252, 183, 151);
+    border: 1px solid rgb(126, 91, 75);
+}
+
+tr:nth-of-type(6n+3) th {
+    background-color: rgb(252, 249, 150);
+    border: 1px solid rgb(126, 124, 75);
+}
+
+tr:nth-of-type(6n+4) th {
+    background-color: rgb(189, 252, 151);
+    border: 1px solid rgb(94, 126, 75);
+}
+
+tr:nth-of-type(6n+5) th {
+    background-color: rgb(151, 222, 252);
+    border: 1px solid rgb(75, 111, 126);
+}
+
+tr:nth-of-type(6n) th {
+    background-color: rgb(239, 151, 252);
+    border: 1px solid rgb(119, 75, 126);
+}
+
+/* Announcements */
+.blotter {
+    color: rgb(56, 56, 155);
+}
+
+/* Posts */
+.post {
+    line-height: 140%;
+}
+.reply, .hashtag, .catathread {
+    border: 1px solid rgb(169, 174, 177);
+}
+.reply, .wthread, .catathread {
+    padding: 3px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+.reply .intro {
+    padding-left: 0.3em;
+}
+.postHider {
+    margin-top: -2px;
+}
+.intro {
+    margin: 0;
+}
+.subject, .wsubject {
+    color: rgb(16, 16, 224);
+    font-weight: normal;
+    font-style: italic;
+}
+.intro .subject:after {
+    content: " — ";
+    color: gray;
+}
+.name, .email .name, .email:hover .name, .wname {
+    color: rgb(32, 48, 144) !important;
+    font-weight: bold;
+}
+.email {
+    border-bottom: 1px dashed #6080e0;
+}
+.trip, .wtrip {
+    color: rgb(64, 96, 176);
+    font-family: monospace;
+}
+.post_no {
+    text-decoration: underline;
+    color: #09147E;
+}
+.post_no:hover {
+    text-decoration: underline;
+    color: #2F3CC2;
+}
+.fileinfo {
+    font-size: 80%;
+}
+.reply .fileinfo {
+    line-height: 120%;
+}
+/*.helphover div, .reply, .highlight, .reflinkpreview {*/
+/*background: #d4dcf0;*/
+/*}*/
+.reply.highlighted {
+    background: rgba(255, 255, 255, 0.9)
+                url("http://www.ponychan.net/chan/css/images/rainbow_dash/highlight.png") no-repeat bottom left;
+    transition: background-color 0.4s ease-out;
+
+}
+.reply.highlighted .body {
+    padding-left: 1em;
+    transition: padding 0.4s cubic-bezier(.3,-0.23,.29,1);
+}
+.reply.highlighted .postimg {
+    margin-left: 1em;
+    transition: margin 0.4s cubic-bezier(.3,-0.23,.29,1);
+}
+.op .delete {
+    /* Realigns the checkboxes */
+    margin-top: 4px;
+}
+.omitted, .toolong {
+    color: rgb(64, 64, 64);
+    padding: 0.3em 2em;
+}
+.hashtag {
+    box-shadow: none;
+    color: rgb(117, 122, 152);
+    text-transform: lowercase;
+    border-radius: 0.5rem 0;
+}
+.bodylink {
+    color: #CA1C57;
+}
+.quote {
+    color: rgb(74, 134, 30);
+}
+
+
+/* Footer */
+.pages {
+    background: transparent;
+    border: none;
+}
+.boardlist.bottom {
+    font-size: 120%;
+}
+
+
+
+/* -- Front page specifics -- */
+.homepage {
+    background: rgb(232, 247, 254);
+}
+.homepage header {
+    margin: 0 -1em !important;
+    background: rgb(241, 250, 255);
+    border-bottom: 1px solid rgb(185, 210, 221);
+}
+.homepage header h1 {
+    font-size: 6em;
+}
+.homepage header + hr {
+    display: none;
+}
+.homeblock {
+    margin: 1.3em auto;
+    padding: 1.5em;
+    border-radius: 1.5em;
+    box-shadow: inset 1px 1px 2px rgb(248, 253, 255);
+}
+.homeblock h2 {
+    display: inline-block;
+    background-color: rgb(232, 247, 254);
+    padding: 0.3em 0.3em 0.2em;
+    position: absolute;
+    margin: -1.8em 0.6em;
+}
+
+
+
+
+/* -- Manipulated DOM -- */
+
+/*Settings page*/
+#settingsScreen {
+    box-shadow: 0 0 3em rgba(0,0,0,0.4);
+    border-radius: 2rem 0 0 0;
+    border: 1px solid rgb(131, 159, 171);
+    background-image: linear-gradient(to bottom, rgb(229, 229, 229), rgb(215, 215, 215));
+    color: rgb(123, 123, 123);
+}
+#settingsScreen label {
+    color: rgb(67, 102, 115);
+    font-size: 105%;
+    /* font-weight: bold; */
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+#settingsScreen h1 {
+    border-radius: 1.1em 0 0 0;
+    font: 2em "Allan";
+    background-color: rgb(23, 67, 105);
+    text-shadow: 0 -2px 2px rgba(0,0,0,0.2);
+    padding: 0.1em;
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2));
+    margin: -2px -1px;
+    color: rgb(194, 194, 194);
+    font-weight: normal;
+    text-transform: lowercase;
+}
+#settingsScreen h2 {
+    color: rgb(57,95,129);
+}
+.settings-close-button {
+    color: rgb(208, 208, 208);
+}
+
+/* Thread search */
+#threadsearchbox {
+    font-size: 100%;
+}
+
+/* -- Quick Reply -- */
+
+/* Toggle */
+#qrtoggleoptions label {
+    text-transform: lowercase;
+    font-size: 150%;
+    font-weight: bold;
+    color: rgb(29, 66, 100);
+}
+#qrDisplayButton {
+    text-transform: lowercase;
+    color: rgb(196, 86, 140);
+    letter-spacing: 0px;
+    transition: letter-spacing 0.5s cubic-bezier(.64,-0.81,.36,1.34),
+                color 0.3s ease-in-out;
+}
+#qrDisplayButton:hover {
+    letter-spacing: 2px;
+    color: rgb(211, 133, 176);
+}
+#qrDisplayButton:before {
+    content: "[";
+    margin-right: 2px;
+    transition: margin 1s cubic-bezier(.45,-0.15,.19,1.14);
+}
+#qrDisplayButton:hover:before {
+    margin-right: 8px;
+}
+#qrDisplayButton:after {
+    content: "]";
+    margin-left: 2px;
+    transition: margin 1s cubic-bezier(.45,-0.15,.19,1.14);
+}
+#qrDisplayButton:hover:after {
+    margin-left: 8px;
+}
+
+/* QR box */
+#qr {
+    border-radius: 0;
+    padding: 2px;
+    border-color: rgb(163, 163, 163);
+}
+#qr input[type=text], textarea {
+    transition-property: border, flex, box-shadow;
+    border-color: rgb(205, 201, 201);
+    outline: none;
+}
+#qraddimage {
+    color: inherit;
+}
+.qrremovethumb {
+    color: #fff;
+}
+.mature_note {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+
+/* Posts*/
+.post-hover {
+    line-height: 110%;
+}
+.post-hover input, .post-hover .postfooter {
+    /* "Look at me! You can't press me! I'm just here to torture you." */
+    display: none;
+    /* That's enough of that. */
+}
+.wthread, .post-hover {
+    background-color: rgb(232, 246, 252);
+}
+.mentioned:before {
+    content: " Replies:";
+    padding-left: 3px;
+    font-size: 80%;
+    opacity: 0.7;
+}
+
+/* Thread watcher */
+#watcherScreen {
+    color: inherit;
+    margin: 0;
+    right: 0;
+    border-radius: 0;
+    border-color: rgb(107, 119, 169);
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    font-size: inherit;
+}
+.wlink {
+    color: rgb(197, 28, 113);
+}
+.wthread {
+    border-bottom: 1px dashed gray;
+}
+.wpost {
+    color: #000;
+}
+.wlinkpart + .wname:before {
+    /* The element is always there. If no nickname is given, it'll leave
+        you an empty element. */
+    content: " by ";
+    color: #607ba3;
+}
+.wremove {
+
+}
+.post-inline {
+    /* This should make the inline posts brighter depending on how deep it's nested. */
+    background-color: rgba(255,255,255,0.05);
+    box-shadow: none;
+}
+
+
+/* Animated Collapsible spoilers */
+.hidetext {
+    transition: transform 0.4s cubic-bezier(.29,.11,.04,1.18),
+                max-height 0.4s cubic-bezier(.29,.11,.04,1.18);
+    overflow: hidden;
+    transform: scaleY(1) scaleZ(1);
+    transform-origin: top;
+    max-height: 2000px;
+    border: 2px dashed rgba(0, 0, 0, 0.14);
+    border-radius: 0.5rem;
+    background: rgb(242, 250, 253);
+    padding: 0.5em;
+    /* This should give the transitions a reference frame. */
+}
+.hidetext:before {
+    /*display: none;*/
+    content: "click to view text";
+    clear: both;
+    display: block;
+    overflow: hidden;
+    height: 0;
+    /* This will make the placeholder appear to hide "underneath the content" */
+    /*transition: height 0.5s ease-in-out;*/
+    opacity: 0.7;
+
+}
+
+/*.hidetext.off:before {*/
+/*position: absolute;*/
+/*height: 1.0em;*/
+/*margin-top: 50%;*/
+/*}*/
+.hidetext.off {
+    transition: transform 0.6s ease-in-out,
+                max-height 0.6s ease-in-out;
+    height: inherit;
+    padding: 0 5px;
+    max-height: 1.0em;
+    transform: scaleY(0) scaleZ(0);
+}
+
+/* Countdown */
+#updateSettings {
+    color: white;
+    padding: 0.5em;
+    border-radius: 2rem 0 0 0;
+    border: 1px solid rgb(169, 174, 177);
+    border-width: 1px 0 0 1px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+#updateSettings input {
+    margin: 0.2em;
+}

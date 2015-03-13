@@ -1,0 +1,199 @@
+
+@import "common/pony-kusaba.css";
+
+
+/* Indiscriminate tags */
+body {
+    background: #f0e0f0;
+}
+a, a:visited, a:active {
+    color: rgb(34,0,170);
+}
+a:hover {
+    color: rgb(221,0,221);
+}
+input[type=button], input[type=submit], input[type=file], button {
+    height: 1.8em;
+    margin: 0 2px;
+}
+input[type=text], input[type=password], input[type=search], textarea {
+    border: 1px solid rgb(176, 96, 176);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    outline: 2px solid rgb(176,96,176);
+}
+hr {
+    border-color: #C3A8A8 !important;
+}
+/* Setting the color scheme */
+h1, h2, h3, h4, h5, h6, header h1, .heading {
+    color: rgb(96, 16, 96);
+}
+.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathread {
+    background-color: rgb(232, 192, 232);
+}
+.boardlist.top, #qrmove {
+    background-color: rgb(80, 32, 80);
+}
+.boardlist.top a {
+    color: rgb(224,144,224);
+}
+#qrmove a {
+    color: rgb(208, 193, 208);
+}
+.boardlist.top a:hover, #qrmove a:hover {
+    color: #ffe0ff;
+}
+/* Semantics */
+
+
+
+/* Navigation bar */
+.boardlist.top a:hover {
+    background-color: rgb(64, 16, 64);
+}
+.boardlist.top .boardlistactive, .watcherButton.open {
+    border-color: rgb(136,85,136);
+}
+.boardlist.top a[href="/"] {
+    color: rgb(226,166,226);
+}
+
+
+
+
+/* Board Page header */
+.banner {
+    background: rgb(226, 202, 226);
+    color: rgb(255, 255, 255);
+}
+
+body > header .subtitle {
+    color: rgb(178, 143, 165);
+}
+
+/* Post form */
+#threadsearchbox:focus {
+    outline: none;
+    border-color: rgb(107, 66, 104)
+}
+
+form table th {
+    background: rgb(204, 136, 204);
+}
+
+#qrDisplayButton {
+    color: rgb(34,0,170);
+}
+
+.blotter {
+    color: inherit;
+}
+
+
+/* Posts */
+.reply, .wthread, .hashtag, #updateSettings, .catathread {
+    border-color: rgb(189,141,189);
+    line-height: 140%;
+    padding: 3px;
+}
+.postHider {
+    margin-top: -2px;
+}
+.intro {
+    margin: 0;
+}
+.subject, .wsubject {
+    color: rgb(214, 16, 144);
+    font-weight: normal;
+    font-style: italic;
+}
+.intro .subject:after {
+    color: rgb(155, 155, 155);
+    content: " — ";
+}
+.name, .email .name, .wname, .email:hover .name {
+    color: rgb(96, 0, 160);
+    font-weight: bold;
+}
+.email {
+    border-bottom: 1px dashed rgb(126, 0, 204);
+}
+
+.trip, .wtrip {
+    color: rgb(160, 64, 160);
+    font-family: monospace;
+}
+.post_no {
+    text-decoration: underline;
+    color: rgb(88, 41, 103);
+}
+.post_no:hover {
+    color: rgb(150, 73, 174);
+}
+.fileinfo {
+    font-size: 80%;
+    color: rgb(50, 50, 50)
+}
+.reply .fileinfo {
+    line-height: 120%;
+}
+
+.reply.highlighted {
+    background: rgb(246, 236, 247);
+    border: 1px solid rgb(222, 202, 215);
+}
+.op .delete {
+    /* Realigns the checkboxes */
+    margin-top: 4px;
+}
+.omitted, .toolong {
+    color: gray;
+    padding: 0.3em 2em;
+}
+.bodylink {
+    color: rgb(108, 0, 170);
+}
+.quote {
+    color: rgb(160, 48, 192);
+}
+
+
+/* Footer */
+.pages {
+    background-color: inherit;
+    border: 0;
+}
+.boardlist.bottom {
+    font-size: 120%;
+}
+
+
+
+/* -- Manipulated DOM -- */
+
+/*Settings page*/
+#settingsScreen {
+    background: rgb(223, 204, 223);
+}
+
+/* Thread watcher */
+#watcherScreen {
+    border-color: rgb(169, 114, 166);
+}
+.wthread {
+    border-bottom: 1px dashed gray;
+}
+.wpost {
+    color: black;
+}
+.wlink {
+    color: rgb(48, 48, 173)
+}
+.wlinkpart + .wname:before {
+    /* The element is always there. If no nickname is given, it'll leave
+        you an empty element. */
+    content: " by ";
+    color: rgb(163, 102, 158);
+}
+
