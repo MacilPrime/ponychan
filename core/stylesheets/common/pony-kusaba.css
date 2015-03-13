@@ -1,0 +1,282 @@
+
+
+
+
+/* -- Indiscriminate tags -- */
+a {
+    text-decoration: none; /* remove the underline */
+}
+h1, h2, h3, h4, h5, h6, header h1 {
+    font-family: sans-serif;
+    letter-spacing: 0;
+}
+hr {
+    border-color: #c0c0c0;
+}
+input[type=text], input[type=password], textarea {
+    outline: none;
+    padding: 2px;
+    transition: all .25s ease-in-out;
+    transition-property: box-shadow, border;
+    line-height: 140%;
+    box-shadow: inset 0 0 7px rgba(0,0,0,0.0);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    outline: none;
+    box-shadow: inset 0 0 7px rgba(0,0,0,0.1)
+}
+
+
+/* -- Head -- */
+
+/* - Navigation bar - */
+.boardlist.top a {
+    padding-left: 0.3em !important;
+    padding-right: 0.3em !important;
+}
+
+.top a:hover {
+    background-color: rgba(0,0,0,0.3) !important;
+}
+
+.top .boardlistactive, .watcherButton.open {
+    background: inherit;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    text-shadow: 0 0 1px rgba(0,0,0,0.5);
+}
+
+
+/* - Title - */
+
+/* Banner */
+img.banner {
+    display: none !important;
+    /* Yes, we are hiding the banner by default in pony-kusaba.
+       Old ponychan substituted banners with typography. */
+}
+
+/* Headline */
+body > header {
+    padding-top: 3em;
+}
+body > header h1 {
+    font-size: 4em !important;
+    font-weight: normal;
+}
+body > header .subtitle {
+    font-size: 110%;
+}
+
+/* Stripe */
+.banner {
+    letter-spacing: 3px;
+    font-weight: normal !important;
+    text-transform: lowercase;
+}
+.banner .unimportant {
+    float: left;
+    font-size: 90%;
+    letter-spacing: normal; /* This will revert the spacing on the links*/
+}
+.banner .unimportant + .unimportant {
+    /* move the catalog link to the right */
+    float: right;
+}
+
+/* - Post form - */
+form [name="post"] {
+    text-align: right;
+}
+/* - Blotter - */
+.blotter {
+    color: inherit;
+}
+
+
+/* -- Board content -- */
+
+/* - Threads - */
+
+/* - Posts - */
+.post {
+    line-height: 140%;
+}
+.intro {
+    margin: 0 !important;
+}
+.subject, .wsubject {
+    font-weight: normal;
+    font-style: italic;
+}
+.intro .subject:after {
+    content: " — ";
+}
+.name, a .name, .wname {
+    font-weight: bold;
+}
+.email {
+    border-bottom: 1px dashed inherit;
+}
+.trip, .wtrip {
+    font-family: monospace;
+}
+.fileinfo {
+    font-size: 80%;
+}
+.hashtag {
+    color: inherit;
+    padding: 0.2rem 0.3rem;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+    text-transform: lowercase;
+    box-shadow: none;
+}
+.omitted, .toolong {
+    color: gray;
+    padding: 0.3em 2em;
+}
+
+/* - Opening posts - */
+.op .delete {
+    /* Realigns the checkboxes */
+    margin-top: 4px;
+}
+
+/* - Reply posts - */
+.reply, .wthread {
+    line-height: 140%;
+    padding: 3px;
+}
+.post_no, .post_no:hover, .post_no:active {
+    text-decoration: underline;
+}
+
+/* -- Footer -- */
+.boardlist.bottom {
+    font-size: 120%;
+    /* upscales the board links at the bottom. */
+}
+
+/* - Post controls - */
+
+/* - Page numbers - */
+
+/* - Board links - */
+
+/* - Site footer - */
+
+
+
+/* -- Javascript DOM Manipulation -- */
+
+/* - Per-post - */
+.postHider {
+    margin-top: -2px;
+}
+.post-hover input, .post-hover .postfooter {
+    /* No point of showing unreachable input buttons */
+    display: none;
+    /* That's enough of that. */
+}
+.mature_note {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.7);
+}
+.mentioned:before {
+    content: " Replies:";
+    padding-left: 3px;
+    font-size: 80%;
+    opacity: 0.7;
+}
+.hidetext {
+    transition: transform 0.25s ease-in-out,
+                max-height 0.25s ease-in-out;
+    overflow: hidden;
+    transform: scaleY(1) scaleZ(1);
+    transform-origin: top;
+    max-height: 2000px;
+    border: 1px solid rgba(0,0,0,0.3) !important;
+    background: rgba(0,0,0,0.1) !important;
+    /* This should give the transitions a reference frame. */
+}
+.hidetext.off {
+    height: inherit;
+    padding: 0 5px;
+    max-height: 1.0em;
+    transform: scaleY(0) scaleZ(0);
+}
+
+.reply.highlighted {
+    border-style: solid none none solid !important;
+}
+.post-hover {
+    line-height: 110%;
+}
+.post-inline {
+    /* This should make the inline posts brighter depending on how deep it's nested. */
+    background-color: rgba(255,255,255,0.05) !important;
+    box-shadow: none !important;
+}
+
+/* - Quick reply - */
+#qr {
+    border-radius: 0;
+    padding: 2px;
+    border-color: rgb(163, 163, 163);
+}
+#qr input[type=text], #qr textarea {
+    transition-property: border, flex, box-shadow;
+    border-color: rgb(205, 201, 201);
+    outline: none;
+}
+#qraddimage {
+    color: inherit !important;
+}
+.qrremovethumb {
+    color: #fff !important;
+}
+
+/* - Settings - */
+#settingsScreen {
+    right: 0;
+    top: 30px;
+    /* We're going to orient the settings so it's similar to Ponychan's */
+}
+
+@media (max-width: 800px) {
+    #settingsScreen {
+        /* Reorient so it aligns to the center when the screen is too small */
+        right: 30px;
+    }
+}
+
+/* - Watcher - */
+#watcherScreen {
+    color: inherit;
+    margin: 0;
+    right: 0;
+    border-radius: 0;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    font-size: inherit;
+}
+.wthread {
+    border-bottom: 1px dashed gray;
+}
+.wpost {
+    color: black;
+}
+.wlinkpart + .wname:before {
+    /* The element is always there. If no nickname is given, it'll leave
+        you an empty element. */
+    content: " by ";
+}
+
+
+
+/* -- Page-specifics -- */
+
+/* - Home - */
+
+/* - Ban page - */
+
+/* - Dashboard - */
