@@ -1,4 +1,8 @@
-
+/**
+  * pony-kusaba.css
+  *
+  * Ports kusaba css from old ponychan
+**/
 
 
 
@@ -84,7 +88,7 @@ body > header .subtitle {
 }
 
 /* - Post form - */
-form [name="post"] {
+form[name="post"] th {
     text-align: right;
 }
 /* - Blotter - */
