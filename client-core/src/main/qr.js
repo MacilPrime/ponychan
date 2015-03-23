@@ -256,6 +256,7 @@ $(document).ready(function(){
 		.prepend($auto)
 		.appendTo($row);
 	var $modrow = $("<div/>")
+        .attr("class", "qr-options")
 		.css("min-width", "100%")
 		.appendTo($QRForm);
 	var $sticky = $("<input/>")
