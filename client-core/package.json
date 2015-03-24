@@ -2,18 +2,18 @@
   "name": "tinyboard-js",
   "version": "0.1.0",
   "dependencies": {
-    "baconjs": "0.7.49",
+    "baconjs": "0.7.53",
     "jquery": "1.11.2",
-    "lodash": "3.2.0",
+    "lodash": "3.5.0",
     "moment": "2.9.0",
-    "rsvp": "3.0.14"
+    "rsvp": "3.0.17"
   },
   "devDependencies": {
     "babel": "^4.0.1",
     "babel-core": "^4.0.1",
     "babelify": "^5.0.3",
-    "browserify": "^8.1.1",
-    "console-polyfill": "^0.2.0",
+    "browserify": "^9.0.3",
+    "console-polyfill": "^0.2.1",
     "envify": "^3.2.0",
     "gulp": "^3.8.10",
     "gulp-if": "^1.2.5",
@@ -25,7 +25,7 @@
     "mold-source-map": "^0.3.0",
     "stdio": "^0.2.7",
     "vinyl-source-stream": "^1.0.0",
-    "watchify": "^2.2.1"
+    "watchify": "^2.6.0"
   },
   "browser": {
     "jquery": "jquery/dist/jquery.min.js",
