@@ -12,7 +12,8 @@ var envify = require('envify/custom');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
 var babelify = require('babelify');
-var execSync = require('exec-sync');
+var RSVP = require('./test/lib/rsvp');
+var exec = require('./src/build/exec');
 
 var args = stdio.getopt({
   'watch': {key: 'w', description: 'Automatic rebuild'},
@@ -34,15 +35,27 @@ function copyTask(name, paths) {
   });
 }
 
-var getVersion = _.once(function() {
-  var commit = execSync('git rev-parse HEAD').trim().slice(0, 16);
-  var status = execSync('git status --porcelain');
-  var isModified = /^\s*M/m.test(status);
-  return commit + (isModified ? '-MODIFIED' : '');
+// TODO make getVersion return a promise instead.
+var getVersion = function() {
+  throw new Error("can only be called after getVersion task is run");
+};
+
+gulp.task('getVersion', function() {
+  return RSVP.Promise.all([
+    exec('git rev-parse HEAD'),
+    exec('git status --porcelain')
+  ]).then(function(parts) {
+    var commit = parts[0].trim().slice(0, 16);
+    var status = parts[1];
+    var isModified = /^\s*M/m.test(status);
+    var version = commit + (isModified ? '-MODIFIED' : '');
+
+    getVersion = _.constant(version);
+  });
 });
 
 function browserifyTask(name, entry, destname) {
-  gulp.task(name, function() {
+  gulp.task(name, ['getVersion'], function() {
     var bundler = browserify({
       debug: true,
       entries: [

@@ -5,9 +5,8 @@
     "baconjs": "0.7.53",
     "immutable": "3.6.2",
     "jquery": "1.11.2",
-    "lodash": "3.3.1",
+    "lodash": "3.5.0",
     "moment": "2.9.0",
-    "react": "0.12.2",
     "rsvp": "3.0.17"
   },
   "devDependencies": {
@@ -15,9 +14,8 @@
     "babel-core": "^4.6.3",
     "babelify": "^5.0.3",
     "browserify": "^9.0.3",
-    "console-polyfill": "^0.2.0",
+    "console-polyfill": "^0.2.1",
     "envify": "^3.2.0",
-    "exec-sync": "^0.1.6",
     "gulp": "^3.8.10",
     "gulp-if": "^1.2.5",
     "gulp-sourcemaps": "^1.2.4",
@@ -28,7 +26,7 @@
     "mold-source-map": "^0.3.0",
     "stdio": "^0.2.7",
     "vinyl-source-stream": "^1.0.0",
-    "watchify": "^2.2.1"
+    "watchify": "^2.6.0"
   },
   "browser": {
     "jquery": "jquery/dist/jquery.min.js",

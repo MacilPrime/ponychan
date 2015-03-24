@@ -551,6 +551,7 @@ if ($step == 0) {
 	buildJavascript();
 
 	$sql = @file_get_contents('install.sql') or error("Couldn't load install.sql.");
+	$sql = str_replace(array("\r\n", "\n", "\r"), "\n", $sql);
 
 	// This code is probably horrible, but what I'm trying
 	// to do is find all of the SQL queires and put them
