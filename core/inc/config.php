@@ -694,11 +694,15 @@
     $config['stylesheets']['Twilight Tackle'] = 'twilight-tackle.css';
     $config['stylesheets']['Rainbow Dash'] = 'rainbow-dash.css';
     $config['stylesheets']['Fluttershy'] = 'fluttershy.css';
+    $config['stylesheets']['Applejack'] = 'applejack.css';
+    $config['stylesheets']['Rarity'] = 'rarity.css';
 	$config['stylesheets']['Yotsuba B'] = ''; // default
 	$config['stylesheets']['Yotsuba'] = 'yotsuba.css';
 	// $config['stylesheets']['Futaba'] = 'futaba.css';
-
-	$config['stylesheets']['Luna'] = 'luna.css';
+    $config['stylesheets']['Season 1 Luna'] = 'season-one-luna.css';
+	$config['stylesheets']['Season 2 Luna'] = 'luna.css';
+    $config['stylesheets']['Nightmare Moon'] = 'nightmare-moon.css';
+    $config['stylesheets']['Vinyl Trance'] = 'vinyl.css';
 	$config['stylesheets']['Wonderbolts'] = 'wonderbolts.css';
 	$config['stylesheets']['Nightmare'] = 'nightmare.css';
 	$config['stylesheets']['Australian'] = 'Australian.css';
@@ -706,6 +710,9 @@
 	$config['stylesheets']['Tomorrow'] = 'Tomorrow.css';
 	$config['stylesheets']['Derpy'] = 'derpy.css';
 	$config['stylesheets']['Pinkie'] = 'pinkie.css';
+
+
+    $config['stylesheets']['Vinyl'] = 'vinyl.css';
 	$config['stylesheets']['Geocities'] = 'geocities.css';
 
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/
