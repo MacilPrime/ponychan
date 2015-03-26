@@ -17,26 +17,26 @@ a:hover {
     color: rgb(95, 137, 172);
 }
 
-a.bodylink {
+.bodylink {
     color: rgb(95, 137, 172);
 }
-a.bodylink:hover {
+.bodylink:hover {
     color: rgb(129, 162, 190);
 }
 
-span.trip {
+.trip {
     color:#8398A3;
 }
 
-header h1, header div.subtitle, div.blotter {
+header h1, header .subtitle, .blotter {
     color:#D9D9D9;
 }
 
-div.post.reply, div.banner, form table tr th {
+.reply, .banner, th {
     background: rgb(40, 42, 46);
     border: none;
 }
-div.post.reply.highlighted{
+.reply.highlighted{
     background:#3E3F43;
 }
 .post-hover, .post-inline {
@@ -47,33 +47,33 @@ div.post.reply.highlighted{
     background-color: rgba(0, 0, 0, 0.14) !important;
 }
 
-p.intro span.name{
+.name{
     color: rgb(197, 200, 198);
 }
-p.intro a.email span.name {
+.email .name {
     color: rgb(129, 162, 190);
 }
-p.intro a.email:hover span.name {
+.email:hover .name {
     color: rgb(95, 137, 172);
 }
-span.quote{
+.quote{
     color:#99BF87;
 }
-p.intro span.subject{
+.subject{
     color:#C4AADE;
 }
 
-div.pages {
+.pages {
     background: none;
     border: none;
 }
 
 
-.boardlist.top{
+.top{
     background: rgb(185, 185, 185);
     box-shadow: 0 -1px 5px rgb(150, 150, 150);
 }
-.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
+.top a, .top a:visited {
     font-size: 14px;
     padding-top: 0;
     padding-bottom: 0;
@@ -81,25 +81,25 @@ div.pages {
     border-bottom: 2px solid transparent;
     color: rgb(75, 90, 110);
 }
-.boardlist.top .boardlistpart a[href="/"] {
+.top a:hover {
+    background: none;
+    border-top: 2px solid rgb(100, 100, 190);
+    padding-top: 0;
+}
+.top a[href="/"] {
     padding-top: 0;
     padding-bottom: 0;
 }
 
-.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
+.top .boardlistactive, .top .watcherButton.open {
     background: none;
     border-top: 2px solid rgb(98, 98, 98);
     border-bottom: 2px solid rgb(98, 98, 98);
     padding-top: 0;
     padding-bottom: 0;
 }
-.boardlist.top .boardlistpart a:hover {
-    background: none;
-    border-top: 2px solid rgb(100, 100, 190);
-    padding-top: 0;
-}
 
-div.hidetext{
+.hidetext{
     background:#47533C;
 }
 #settingsScreen h1{

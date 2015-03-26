@@ -1,0 +1,197 @@
+@import "common/pony-kusaba.css";
+@import "common/ghost-buttons.css";
+@import "common/enigma-settings.css";
+
+/* Celestia Medium */
+@font-face {
+    font-family: 'Celestia';
+    src: url("font/celestia.ttf");
+    src: url("font/celestia.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Indiscriminate tags */
+body {
+    background: url(img/nightmare-moon/bg.png)
+                no-repeat right bottom fixed rgb(36, 36, 36);
+    background-size: cover;
+    color: white;
+}
+a, a:visited, a:active, .bodylink {
+    color: rgb(52, 86, 221);
+}
+a:hover, .reflink a:hover {
+    color: rgb(98, 137, 233);
+    text-shadow: 0 0 2px rgb(171, 171, 255)
+}
+input[type=text], input[type=password], textarea {
+    border: 2px solid rgb(42, 54, 93);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    border: 2px solid rgb(81, 102, 174);
+}
+/* Setting the color scheme */
+h1, h2, h3, h4, h5, h6, header h1 {
+    color: rgb(255, 255, 255);
+    font-family: 'Celestia', sans-serif;
+    text-shadow: 0 0 10px white;
+}
+th, .ban h2 {
+    background: rgb(19, 20, 51);
+    color: rgb(219, 233, 233)
+}
+
+.top, #qrmove, #updateSettings {
+    background-color: rgb(2, 19, 52);
+    color: white;
+}
+.top a, #qrmove a {
+    color: rgb(204, 204, 221);
+    border-color: rgb(69, 69, 137);
+}
+.top a:hover, #qrmove a:hover {
+    color: rgb(228, 240, 255);
+    background-color: rgb(69, 69, 137);
+    text-shadow: 0 0 2px white;
+}
+
+
+/* Navigation bar */
+.top a {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    /*color: rgb(0,0,0);*/
+    /*border-top-color: rgb(0,0,0);*/
+}
+.top .boardlistactive {
+    border-color: rgb(69, 69, 137);
+}
+.top a[href="/"] {
+    color: rgb(212, 224, 238);
+}
+
+
+
+/* Board Page header */
+.banner {
+    background: rgb(2, 20, 43);
+    color: white;
+}
+
+body > header h1 {
+    font-family: 'Celestia', sans-serif;
+}
+
+body > header .subtitle {
+    color: rgb(241, 241, 241);
+}
+
+/* Blotter */
+.blotter {
+    color: rgb(255,255,255);
+}
+
+/* Posts */
+.post {
+    border: 1px solid rgba(0,0,20,0.7);
+}
+.reply {
+    border-radius: 0.5rem;
+}
+.reply, .pages {
+    background: rgba(0,0,20,0.5);
+    padding:0.5em;
+}
+.selected {
+    color: white;
+}
+.post.op {
+    background: rgba(28, 31, 61, 0.54)
+        linear-gradient(to right,
+            rgba(0, 0, 0, 0.54),
+            rgba(18, 21, 53, 1));
+    padding: 0.8em;
+    overflow-y: hidden;
+}
+.postimg {
+    background-color: rgb(17, 17, 48);
+    border-radius: 5px;
+    transition: background-color 0.25s ease-in-out;
+ }
+.postimg:hover {
+    background-color: rgb(32, 32, 90);
+}
+.fileinfo {
+    color: rgb(167, 171, 165)
+}
+.subject, .wsubject {
+    color: rgb(204,202,51);
+}
+.name, a .name, .wname {
+    color: rgb(37, 89, 255);
+}
+.email {
+    border-bottom: 1px dashed rgb(39, 90, 255);
+}
+.trip, .wtrip {
+    color: rgb(125, 117, 169);
+}
+.post_no {
+    color: rgb(152, 170, 202);
+}
+.post_no:hover {
+    color: rgb(193, 206, 229);
+}
+.reply .fileinfo {
+    line-height: 120%;
+}
+/*.helphover div, .reply, .highlight, .reflinkpreview {*/
+/*background: rgb(0,0,0);*/
+/*}*/
+.reply.highlighted {
+    background: rgb(0,0,0);
+    border-color: rgb(0,0,0);
+}
+.quote {
+    color: rgb(65, 113, 192);
+}
+.spoiler {
+    background-color: rgb(36, 36, 86);
+}
+
+
+/* -- Manipulated DOM -- */
+
+/* Posts*/
+
+/* Thread watcher */
+#watcherScreen {
+    color: white;
+    margin: 0;
+    right: 0;
+    border-radius: 0;
+    background: rgba(0,0,0,0.9);
+    border-color: rgb(107, 119, 169);
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    font-size: inherit;
+}
+.wthread {
+    border-bottom: 1px dashed gray;
+}
+.wpost {
+    color: white;
+}
+.wlinkpart + .wname:before {
+    color: gray;
+}
+
+/* Settings screen */
+/* Imported with import tag. */
+
+/* Individual pages */
+/* ban */
+
+.ban {
+    border-color: black;
+}

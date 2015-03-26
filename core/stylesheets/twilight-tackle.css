@@ -6,8 +6,11 @@ body {
     font-family: "Trebuchet MS", sans-serif;
     background: linear-gradient(to bottom, rgb(148, 55, 131) 0px, rgb(84, 17, 71) 700px);
 }
-a, h1, h2, h3, h4, h5, h6, .heading {
+a, h1, h2, h3, h4, h5, h6, .heading, header h1 {
     font-family:  "Century", "Times New Roman", serif;
+}
+body > header h1 {
+    font-weight: bold;
 }
 a, a:visited, a:active {
     color: rgb(231,129,213);

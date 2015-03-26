@@ -1,0 +1,74 @@
+/**
+ * enigma-settings.css
+ * 
+ * Created on 3/25/2015
+ * Inspired by Rainmeter theme 'Enigma' on Windows.
+ *
+ */
+
+#settingsScreen {
+    background-color: rgba(0,0,0,0.8);
+    border: 1px solid rgb(52, 53, 52);
+    left: 50%;
+    top: 3em;
+    margin-left: -200px;
+    font-family: "Calibri", sans-serif;
+    color: rgb(141, 141, 141);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.9);
+}
+#settingsScreen h1 {
+    color: white;
+    font: normal 140%/170% "Trebuchet MS", "Calibri", sans-serif;
+    background: rgb(22, 22, 22)
+    linear-gradient(to bottom, rgb(23, 23, 23), rgb(16, 16, 16));
+    margin: -0.3em -0.3em 0;
+    padding: 0.3em 0.3em 0.1em;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: rgb(51, 51, 51);
+}
+#settingsScreen h2, #settingsScreen h3 {
+    color: white;
+}
+#settingsScreen hr {
+    border-color: rgb(90, 90, 90);
+}
+#settingsScreen hr:first-of-type {
+    display: none;
+}
+#settingsScreen select, #settingsScreen label, #settingsScreen option {
+    background-color: transparent;
+    color: rgb(116, 170, 223);
+    border-color: rgb(142, 142, 142);
+}
+
+@media (min-width: 800px) {
+    #settingsScreen {
+        width: 600px;
+        margin-left: -300px;
+        -webkit-columns: 2;
+        columns: 2;
+        /* This should adjust the width while re-centering this element */
+    }
+    #settingsScreen h1 {
+        border-width: 1px 1px 1px 1px;
+        margin: 0;
+    }
+    .setting_section {
+        -webkit-column-gap: 1px;
+        column-gap: 1px;
+        -webkit-column-rule: 1px solid rgb(139, 139, 139);
+        column-rule: 1px solid rgb(139, 139, 139);
+    }
+}
+.settings-close-button {
+    background: rgb(0,0,0);
+    border: 1px solid rgb(52, 53, 52);
+    padding: 0 0.2em 0 0.4em;
+    color: rgb(162, 160, 216);
+    text-align: center;
+    position: absolute;
+    right: 0;
+}

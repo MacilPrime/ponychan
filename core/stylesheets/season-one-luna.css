@@ -1,0 +1,189 @@
+@import "common/pony-kusaba.css";
+@import "common/bubble-buttons.css";
+
+/* Fonts */
+@font-face {
+    font-family: 'Josefin Sans';
+    font-style: normal;
+    font-weight: 700;
+    src:    local('Josefin Sans Bold'),
+            local('JosefinSans-Bold'),
+            url('font/josefin-sans.woff2')
+            format('woff2');
+    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF,
+            U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'Josefin Sans';
+    font-style: normal;
+    font-weight: 700;
+    src:    local('Josefin Sans Bold'),
+            local('JosefinSans-Bold'),
+            url('font/josefin-sans-bold.woff2')
+            format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215,
+    U+E0FF, U+EFFD, U+F000;
+}
+
+/* Indiscriminate tags */
+body {
+    background:
+        url(http://fc08.deviantart.net/fs70/i/2012/145/e/4/request___flying_luna_by_ra…sma-d512rzq.png) no-repeat right bottom,
+        url(img/season-one-luna/bg.png);
+    background-size: 20%;
+    font: 95%/130% "Calibri", "Arial", sans-serif;
+    color: rgb(232, 232, 232);
+}
+a, a:visited, a:active {
+    color: rgb(219, 255, 255);
+}
+a:hover, .reflink a:hover {
+    color: white;
+    text-shadow: 0 0 4px white;
+}
+input[type=text], input[type=password], textarea {
+    border: 1px solid rgb(30, 44, 99);
+    background-color: rgb(236, 231, 231);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    border: 1px solid rgb(89, 104, 181);
+}
+/* Setting the color scheme */
+h1, h2, h3, h4, h5, h6, header h1 {
+    color: rgb(2, 2, 2);
+    line-height: 120%;
+}
+body > header h1 {
+    font-family: "Josefin Sans",
+        "Century Gothic Medium", "Calibri", sans-serif;
+}
+.top, #qrmove, #updateSettings {
+    background-color: rgb(10, 18, 38);
+    color: rgb(255,255,241);
+}
+.top a, #qrmove a {
+    color: rgb(255, 255, 220);
+    border-color: rgb(90, 107, 171);
+}
+.top a:hover, #qrmove a:hover {
+    background-color: rgb(89,106,170);
+    color: rgb(159,163,208);
+}
+/* Semantics */
+
+
+
+/* Navigation bar */
+.top a {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    border-top-color: rgb(91,108,172);
+}
+.boardlist.top a[href="/"] {
+    color: rgb(203,206,233);
+}
+.top .boardlistactive {
+    border-top-color: rgb(91,108,172);
+}
+
+
+
+/* Board Page header */
+.banner {
+    background: rgb(39, 39, 77);
+    color: white;
+}
+
+body > header .subtitle {
+    color: rgb(140,154,152);
+}
+/* Post form */
+
+th {
+    background: rgb(49,49,80);
+}
+
+
+
+/* Posts */
+.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+    background-color: rgb(28,42,98);
+}
+.reply, .reply.highlighted {
+    border-style: solid !important;
+}
+.subject, .wsubject {
+    color: rgb(2,146,188);
+}
+.name, a .name, .wname {
+    color: white;
+}
+.email {
+    border-bottom: 1px dashed #1e88d7;
+}
+.trip, .wtrip {
+    color: rgb(227,227,227);
+}
+.post_no {
+    color: rgb(210,216,241);
+}
+.post_no:hover {
+    color: rgb(224,230,255);
+}
+.reply .fileinfo {
+    line-height: 120%;
+}
+
+.bodylink {
+    color: rgb(138,138,189);
+}
+.reply.highlighted {
+    background: rgb(74,104,168);
+    border-color: rgb(207,218,232);
+}
+.quote {
+    color: rgb(255,240,200);
+}
+
+/* -- Manipulated DOM -- */
+
+/* Posts*/
+
+/* Settings screen */
+#settingsScreen {
+    background: rgb(213, 216, 224)
+        linear-gradient(to bottom,
+            rgb(239, 239, 239),
+            rgb(215, 215, 215));
+    display: block;
+    box-shadow: 0 0 2em rgba(0,0,0,0.9);
+    border-radius: 1rem;
+}
+.settings-close-button {
+    color: rgb(71, 95, 155);
+}
+/* Thread watcher */
+#watcherScreen {
+    color: white;
+    margin: 0;
+    right: 0;
+    border-radius: 0;
+    border-color: rgb(107, 119, 169);
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    font-size: inherit;
+}
+.wthread {
+    border-bottom: 1px dashed gray;
+}
+.wpost {
+    color: white;
+}
+.wlinkpart + .wname:before {
+    color: rgb(96,123,163);
+}
+.wremove {
+
+}
+

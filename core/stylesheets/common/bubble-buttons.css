@@ -1,0 +1,48 @@
+
+
+
+/* Buttons */
+input[type=button],
+input[type=submit]:not(#qrsubmit),
+button:not(#qrfilebutton) {
+    cursor: pointer;
+    height: 2.2em;
+    border: 1px solid rgb(153,153,153);
+    border-radius: 0.2rem;
+    padding: 0 0.7em;
+    font-weight: bold;
+    margin: 0 2px;
+    color: rgb(153,153,153) !important;
+    font-size: 85%;
+    background-color: rgb(246,246,246);
+    outline: rgb(73, 111, 171);
+}
+
+input[type=button]:hover,
+input[type=submit]:not(#qrsubmit):hover,
+button:not(#qrfilebutton):hover {
+    background: rgb(246,246,246)
+        linear-gradient(to bottom, white, rgb(235,235,235));
+    text-shadow: 0 1px 0 rgb(234, 234, 234);
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+}
+
+input::-webkit-file-upload-button {
+    cursor: pointer;
+    height: 2.2em;
+    border: 1px solid rgb(153,153,153);
+    border-radius: 0.2rem;
+    padding: 0 0.7em;
+    font-weight: bold;
+    margin: 0 2px;
+    color: rgb(153,153,153) !important;
+    font-size: 85%;
+    background-color: rgb(246,246,246);
+    outline: rgb(73, 111, 171);
+}
+input::-webkit-file-upload-button:hover {
+    background: rgb(246,246,246)
+    linear-gradient(to bottom, white, rgb(235,235,235));
+    text-shadow: 0 1px 0 white;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+}

@@ -230,7 +230,7 @@ form[name="post"] th {
 }
 #qr input[type=text], #qr textarea {
     transition-property: border, flex, box-shadow;
-    border-color: rgb(205, 201, 201);
+    border: 1px solid rgb(205, 201, 201);
     outline: none;
 }
 #qraddimage {

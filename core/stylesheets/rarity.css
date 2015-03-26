@@ -1,67 +1,105 @@
 
 @import "common/pony-kusaba.css";
+@import "common/bubble-buttons.css";
+
+/* Setting the fonts */
+@font-face {
+    font-family: 'Goudy Bookletter 1911';
+    font-style: normal;
+    font-weight: 400;
+    src:    local('Goudy Bookletter 1911'),
+            local('GoudyBookletter1911'),
+            url('font/goudy-bookletter-1911.woff2')
+            format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6,
+    U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212,
+    U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+@font-face {
+    font-family: 'Dancing Script';
+    font-style: normal;
+    font-weight: 400;
+    src:    local('Dancing Script'),
+            local('DancingScript'),
+            url('font/dancing-script.woff2')
+            format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6,
+    U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215,
+    U+E0FF, U+EFFD, U+F000;
+}
+
 
 
 /* Indiscriminate tags */
 body {
-    background: #f0e0f0;
+    background: #eef2f5;
 }
 a, a:visited, a:active {
-    color: rgb(34,0,170);
+    font-family: 'Goudy Bookletter 1911', serif;
+    color: rgb(46, 97, 152);
 }
 a:hover {
-    color: rgb(221,0,221);
+    color: rgb(157, 114, 235);
+}
+th {
+    background: rgb(111, 206, 244);
 }
 input[type=button], input[type=submit], input[type=file], button {
     height: 1.8em;
     margin: 0 2px;
 }
 input[type=text], input[type=password], input[type=search], textarea {
-    border: 1px solid rgb(176, 96, 176);
+    border: 1px solid rgb(35, 159, 206);
 }
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-    outline: 2px solid rgb(176,96,176);
+    outline: 1px solid rgb(31, 114, 156);
 }
 hr {
-    border-color: #C3A8A8 !important;
+    border-color: rgb(192,192,192) !important;
 }
 
 /* Setting the color scheme */
 /* Tone 1 - Heads */
 h1, h2, h3, h4, h5, h6, header h1, .heading {
-    color: #4c166e;
+    color: rgb(77, 24, 111);
 }
 /* Tone 2 - Cells */
 .reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathread {
-    background-color: #9de9fc;
+    background-color: rgb(222, 239, 244);
 }
-.reply
+.replyContainer:nth-of-type(2n) .reply {
+    background-color: rgb(205, 235, 242);
+}
 /* Tone 3 - Bars */
-.boardlist.top, #qrmove {
-    background-color: #9de9fc;
+.top, #qrmove {
+    background-color: rgb(106, 53, 139);
 }
-.boardlist.top a {
-    color: rgb(224,144,224);
+.top a {
+    color: rgb(191, 163, 245);
 }
 #qrmove a {
     color: rgb(208, 193, 208);
 }
-.boardlist.top a:hover, #qrmove a:hover {
-    color: #ffe0ff;
+.top a:hover, #qrmove a:hover {
+    color: #f2e2f2;
 }
 /* Semantics */
 
 
 
 /* Navigation bar */
-.boardlist.top a:hover {
-    background-color: rgb(64, 16, 64);
+.top {
+    background-image: linear-gradient(to bottom, rgb(134, 80, 164), rgb(113, 54, 142))
 }
-.boardlist.top .boardlistactive, .watcherButton.open {
-    border-color: rgb(136,85,136);
+.top a:hover {
+    background-color: rgb(114, 204, 242);
 }
-.boardlist.top a[href="/"] {
-    color: rgb(226,166,226);
+.top .boardlistactive, .watcherButton.open {
+    border-color: rgb(114, 204, 242);
+}
+.top a[href="/"] {
+    color: rgb(250, 241, 255);
 }
 
 
@@ -69,12 +107,15 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 
 /* Board Page header */
 .banner {
-    background: rgb(226, 202, 226);
+    background: rgb(177, 211, 237);
     color: rgb(255, 255, 255);
 }
-
+body > header h1 {
+    font-family: "Dancing Script", cursive;
+    text-shadow: 0 0 3px rgb(77, 24, 111);
+}
 body > header .subtitle {
-    color: rgb(178, 143, 165);
+    color: rgb(107, 96, 116);
 }
 
 /* Post form */
@@ -83,12 +124,8 @@ body > header .subtitle {
     border-color: rgb(107, 66, 104)
 }
 
-form table th {
-    background: rgb(204, 136, 204);
-}
-
 #qrDisplayButton {
-    color: rgb(34,0,170);
+    color: rgb(46, 97, 152);
 }
 
 .blotter {
@@ -98,9 +135,14 @@ form table th {
 
 /* Posts */
 .reply, .wthread, .hashtag, #updateSettings, .catathread {
-    border-color: rgb(189,141,189);
+    border-color: rgb(150, 202, 240);
     line-height: 140%;
     padding: 3px;
+    border-radius: 0.3rem;
+}
+.reply {
+    padding: 0.4em;
+    border: 1px solid rgb(145, 219, 238);
 }
 .postHider {
     margin-top: -2px;
@@ -109,9 +151,10 @@ form table th {
     margin: 0;
 }
 .subject, .wsubject {
-    color: rgb(214, 16, 144);
-    font-weight: normal;
-    font-style: italic;
+    color: rgb(52, 122, 191);
+}
+.intro .subject {
+    font: italic bold 150%/100% "Dancing Script", cursive;
 }
 .intro .subject:after {
     color: rgb(155, 155, 155);
@@ -120,16 +163,21 @@ form table th {
 .name, .email .name, .wname, .email:hover .name {
     color: rgb(96, 0, 160);
     font-weight: bold;
+    font-family: 'Goudy Bookletter 1911', serif;
+    font-size: 110%;
 }
 .email {
-    border-bottom: 1px dashed rgb(126, 0, 204);
+    border-bottom: 1px dashed rgb(77, 24, 111);
 }
 
 .trip, .wtrip {
-    color: rgb(160, 64, 160);
+    color: rgb(102, 79, 161);
     font-family: monospace;
+    font-size: 110%;
+    letter-spacing: -1px;
 }
 .post_no {
+    font-size: 110%;
     text-decoration: underline;
     color: rgb(88, 41, 103);
 }
@@ -145,6 +193,7 @@ form table th {
 }
 
 .reply.highlighted {
+    border-left-color: #4c166e;
     background: rgb(246, 236, 247);
     border: 1px solid rgb(222, 202, 215);
 }
@@ -181,7 +230,10 @@ form table th {
 #settingsScreen {
     background: rgb(223, 204, 223);
 }
-
+/* Mod links */
+.controls {
+    font-size: 90%;
+}
 /* Thread watcher */
 #watcherScreen {
     border-color: rgb(169, 114, 166);

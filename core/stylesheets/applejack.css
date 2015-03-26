@@ -1,0 +1,260 @@
+@import "common/pony-kusaba.css";
+@import "common/razor-buttons.css";
+
+/* TODO host these fonts locally */
+
+
+/* Indiscriminate tags */
+body {
+    background-color: rgb(255,239,173);
+    background-image: radial-gradient(
+        ellipse at bottom,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(0,0,0,0) 50%,
+            rgba(0, 0, 0, 0) 100%),
+        linear-gradient(to bottom,
+            rgba(145, 47, 47, 0.1),
+            rgba(0,0,0,0.0) 10em)
+
+}
+a, a:visited {
+    color: #d92525;
+}
+a:hover		{
+    color: #fc7272;
+}
+header, header > h1 {
+    font-family: "Adobe Caslon Pro", "Times New Roman", serif;
+}
+input[type=text], input[type=password], textarea {
+    border: 1px solid rgb(173, 128, 65);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    border: 1px solid black;
+}
+th {
+    background: #fdbc60;
+}
+
+
+/* Setting the color scheme */
+h1, h2, h3, h4, h5, h6, header h1, .heading {
+    color: rgb(115, 32, 21);
+}
+hr {
+    background-color: #E4D5B5;
+    border: 0px;
+    height: 1px;
+    margin: 0px;
+}
+.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings, #settingsScreen  {
+    padding: 0.5em;
+    border-radius: 0.5rem;
+    border-style: solid;
+    background: rgb(247,237,196);
+    border-color: rgb(229, 214, 139);
+}
+.top, #qrmove, #updateSettings {
+    background-color: #91ca40;
+}
+.top a, .top a:visited, #qrmove a, #qrmove a:visited {
+    color: #203f0c;
+}
+.top a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
+    color: rgb(32, 63, 12);
+    box-shadow: inset 0 0 1em rgba(0,0,0,0.3);
+}
+
+
+
+/* Navigation bar */
+.top a:hover {
+    background: rgb(0,64,64);
+}
+.top .boardlistactive, .watcherButton.open {
+    border-color: #f3d634;
+}
+.top a[href="/"] {
+    color: rgb(53, 86, 6);
+}
+
+
+
+
+/* Board Page header */
+body > header h1 {
+    font-weight: bold;
+    text-transform: lowercase;
+    color: #fdbc61;
+}
+body > header h1:before, body > header h1:after {
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0 4%;
+    content: url('img/applejack/applejack_freckles_l.png');
+}
+body > header h1:after {
+    transform: rotateZ(180deg) translateY(15px);
+    transform-origin: center;
+}
+.subtitle {
+    color: rgb(139, 130, 93);
+}
+
+.banner {
+    background: #E7D794;;
+    color: white;
+}
+
+
+/* Post form */
+.blotter {
+    color: inherit;
+}
+form th:after {
+    color: #fff;
+    font-size: 120%;
+    content: " :";
+}
+/* Threads */
+.postfooter a:first-child:before {
+    content: url(img/applejack/applejack_quickreply.png);
+    position: relative;
+    right: 2px;
+    top: 2px;
+}
+/* Posts */
+.post {
+    line-height: 140%;
+}
+.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+    line-height: 150%;
+}
+.hashtag {
+    font-weight: bold;
+    padding: 0.1em 0.5em;
+}
+
+.postHider {
+    margin-top: -2px;
+}
+
+.postHider a {
+    color: rgb(182, 170, 105);
+}
+
+.intro {
+    margin: 0;
+}
+.subject, .wsubject {
+    color: rgb(153,136,34);
+    font-weight: normal;
+    font-style: italic;
+}
+.intro .subject:after {
+    content: " — ";
+}
+.name, .email .name, .email:hover .name, .wname {
+    color: rgb(55, 45, 35);
+    font-weight: bold;
+}
+.email {
+    border-bottom: 1px dashed #382f25;
+}
+
+.trip, .wtrip {
+    color: rgb(87,147,43);
+    font-family: monospace;
+}
+.post_no {
+    text-decoration: underline;
+    color: #09147E;
+}
+.post_no:hover {
+    color: #2F3CC2;
+}
+.fileinfo {
+    font-size: 80%;
+}
+.reply .fileinfo {
+    line-height: 120%;
+}
+/*.helphover div, .reply, .highlight, .reflinkpreview {*/
+/*background: #d4dcf0;*/
+/*}*/
+.reply.highlighted {;
+    border: 1px solid rgb(201, 189, 67);
+    background: rgb(255,245,205);
+}
+.op .delete {
+    /* Realigns the checkboxes */
+    margin-top: 4px;
+}
+
+.quote {
+    color: rgb(93,157,9);
+}
+.omitted, .toolong {
+    color: rgb(182, 156, 45);
+}
+
+
+
+/* -- Manipulated DOM -- */
+
+/*Settings page*/
+#settingsScreen h1, #settingsScreen h2 {
+    color: rgb(197, 112, 146);
+}
+
+/* Quick Reply */
+
+/* Toggle QR */
+#qrDisplayButton {
+    text-transform: lowercase;
+    color: rgb(44, 101, 176);
+    letter-spacing: 0px;
+    transition: letter-spacing 0.5s ease-out,
+    color 0.3s ease-in-out;
+}
+#qrDisplayButton:hover {
+    letter-spacing: 2px;
+    color: rgb(104, 102, 177);
+}
+#qrDisplayButton:before {
+    content: "[";
+    margin-right: 2px;
+    transition: margin 1s ease-in-out;
+}
+#qrDisplayButton:hover:before {
+    margin-right: 8px;
+}
+#qrDisplayButton:after {
+    content: "]";
+    margin-left: 2px;
+    transition: margin 1s ease-in-out;
+}
+#qrDisplayButton:hover:after {
+    margin-left: 8px;
+}
+
+/* Thread watcher */
+#watcherScreen {
+    border-color: #b3352f;
+}
+.wlinkpart + .wname:before {
+    /* The element is always there. If no nickname is given, it'll leave
+        you an empty element. */
+    color: #b3352f;
+}
+
+#settingsScreen, #watcherScreen {
+    box-shadow: none;
+}
+
+
+/* Page-specific */
+.homepage > header h1 {
+    text-shadow: none;
+    /* Removes the default shadow. */
+}
