@@ -3,7 +3,17 @@
 
 /* TODO host these fonts locally */
 
-
+/* Fonts */
+@font-face {
+	font-family: 'Philosopher';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Philosopher'),
+	url(font/philosopher.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
+	U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF,
+	U+EFFD, U+F000;
+}
 /* Indiscriminate tags */
 body {
     background-color: rgb(255,239,173);
@@ -257,4 +267,41 @@ form th:after {
 .homepage > header h1 {
     text-shadow: none;
     /* Removes the default shadow. */
+}
+/* homepage */
+.homeblock {
+	border: 2px solid rgb(215, 99, 96);
+	background-color: rgb(255, 249, 226);
+	line-height: 140%;
+	margin-top: 2em;
+}
+.homeblock > h2 {
+	font-family: "Philosopher", serif;
+	font-size: 150%;
+	margin: -25px -17px 0;
+	/* We must use pixels here because we */
+	/* need something that scales linear with zoom functions */
+	color: white;
+	padding: 0.2em 0.7em;
+	border-radius: 0 0.5em 0 0;
+	background-color: rgb(215, 98, 95);
+}
+.homeblock > h2 + div {
+	/* The body container */
+	margin-top: 1em;
+}
+.homeblock .unimportant {
+	font-family: monospace;
+}
+/* Flex recent posts */
+#recent_posts {
+	overflow-x: visible;
+}
+.recent_posts_parent {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+}
+.recent_post {
+	flex: 1 0 auto;
 }

@@ -164,7 +164,12 @@ body > header .subtitle {
 /* -- Manipulated DOM -- */
 
 /* Posts*/
-
+.post-hover {
+    background-color: rgb(19, 22, 52);
+}
+.post-inline {
+    background: rgba(0,0,0,0.1);
+}
 /* Thread watcher */
 #watcherScreen {
     color: white;
@@ -194,4 +199,7 @@ body > header .subtitle {
 
 .ban {
     border-color: black;
+}
+.homeblock {
+	background-color: rgba(10, 11, 21, 0.8);
 }

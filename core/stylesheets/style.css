@@ -697,7 +697,6 @@ form[name="post"] input[name="submit"] {
     text-align: left;
     padding: 4px 15px 5px 5px;
     white-space: nowrap;
-    background: #98E;
 }
 .config-editor {
     font-size: 9pt;

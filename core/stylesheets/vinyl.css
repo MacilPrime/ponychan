@@ -5,6 +5,7 @@
  * Mint couldn't have made this theme without it,or them.
  *
  **/
+@import "common/razor-buttons.css";
 
 body {
     background:black url("http://www.ponychan.net/chan/css/images/vinyl-bg1a.png") no-repeat fixed right top
@@ -33,7 +34,7 @@ a:hover {
 }
 .top .boardlistpart a {
     border-top:solid #30364D;
-    margin:0px !important;
+    margin:0 !important;
 }
 .top .boardlistpart a:hover {
     background:#30364D !important;

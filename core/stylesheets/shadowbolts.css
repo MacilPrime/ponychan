@@ -1,0 +1,361 @@
+/**
+ * octavia
+ *
+ * Created on 3/26/2015
+ * Ported from old Ponychan. Originally written by LoveFluttershy.
+ *
+ *
+ */
+/* Imports */
+@import "common/pony-kusaba.css";
+@import "common/razor-buttons.css";
+
+/* Fonts */
+@font-face {
+	font-family: 'Molengo';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Molengo'),
+		local('Molengo-Regular'),
+		url(font/molengo.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+@font-face {
+	font-family: 'Josefin Sans';
+	font-style: normal;
+	font-weight: 700;
+	src:    local('Josefin Sans Bold'),
+	local('JosefinSans-Bold'),
+	url('font/josefin-sans-bold.woff2')
+	format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
+	U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215,
+	U+E0FF, U+EFFD, U+F000;
+}
+@font-face {
+	font-family: 'Ubuntu';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Ubuntu'),
+	url(font/ubuntu.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
+	U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF,
+	U+EFFD, U+F000;
+}
+/* Indiscriminate tags */
+body {
+	background: url(img/shadowbolts/cm.png) bottom 30px right 30px no-repeat,
+	radial-gradient(
+			circle at bottom,
+			rgb(74, 53, 105),
+			rgb(74, 60, 98),
+			rgb(48, 31, 72));
+	color: white;
+}
+
+/* All links, including the ref-links inside the post body. */
+a, a:visited, a:active, .bodylink {
+	color: rgb(192, 207, 228);
+	font-family: "Molengo", sans-serif;
+}
+
+/* Mouse over link */
+a:hover {
+	color: rgb(201, 209, 125);
+}
+time {
+	color: rgb(192, 198, 207);
+}
+/* Set the border here */
+input[type=text], input[type=password], textarea {
+	border: 1px solid #91a1d0;
+}
+
+/* What color do you want the border to glow here */
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+	outline: 2px solid rgb(2, 34, 192);
+}
+hr {
+	border-color: rgb(180, 178, 129);
+	box-shadow: 0 1px 0 rgba(192, 192, 192, 0.3);
+}
+/* Table headers, including the post form */
+/* as well as many staff dashboard headers */
+th {
+	background-color: rgb(50, 78, 127);
+	color: rgb(188, 213, 210);
+}
+label {
+	color: rgb(188, 213, 210);
+}
+
+
+/* All things with black shadows */
+a, th, .op, .intro, h1, h2, h3, h4, h5, h6, header h1, .heading {
+	text-shadow: 0.05rem 0.05rem black;
+}
+
+
+/* -- Setting the common color scheme -- */
+/* Heading colors */
+h1, h2, h3, h4, h5, h6, header h1, .heading {
+	font-family: "Molengo", sans-serif;
+	color: rgb(70, 123, 197);
+}
+/* Head bar backgrounds */
+.top, #qrmove, .ban h2 {
+	background-color: rgb(36, 23, 54);
+	color: white;
+}
+
+/* Head bar links */
+.top a, .top a:visited, #qrmove a, #qrmove a:visited {
+	color: rgb(198, 213, 234);
+}
+
+/* Head bar links on hover */
+.top a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
+	color: rgb(212, 209, 152);
+}
+
+/* Block items */
+.reply, .blotter, .hashtag, #watcherScreen, .post-hover, .pages, #updateSettings, #settingsScreen {
+	background-color: rgb(35, 25, 59);
+}
+
+/* -- Navigation bar -- */
+.top a {
+	border-top-color: rgb(50, 78, 127);
+	border-top-style: solid;
+}
+.top a:hover {
+	background-color: rgb(44, 46, 86);
+}
+
+/* set the border-color property to show that the button is 'lit' */
+.top .boardlistactive, .watcherButton.open {
+	border-color: rgb(148, 156, 203) !important;
+}
+
+/* Color of the 'home' link */
+.top a[href="/"] {
+	color: rgb(255, 218, 252);
+}
+
+/* Toggle links on the right */
+.top .watcherButton, .top .settingsButton {
+	color: rgb(231, 234, 247);
+}
+/* Settings page */
+#settingsScreen {
+	background: rgb(86, 72, 118)
+	linear-gradient(to bottom,
+			rgb(87, 73, 119),
+			rgb(48, 31, 72));
+	color: rgb(221, 221, 221);
+}
+/* Settings headers */
+#settingsScreen h1, #settingsScreen h2 {
+	/* Color */
+	color: rgb(70, 123, 197);
+}
+.setting_more_details {
+	color: rgb(231, 231, 231);
+}
+
+/* Watcher frame. Set a bright border. */
+#watcherScreen {
+	border: 2px solid rgb(50, 78, 127);
+	border-radius: 0.75rem;
+}
+
+/* the color of 'by' in watcher */
+.wlinkpart + .wname:before {
+	/* The element is always there. If no nickname is given, it'll leave
+		you an empty element. */
+	color: gray;
+}
+
+/* -- Board Page header -- */
+/* Board headline */
+body > header h1 {
+	/*font-family: "Molengo", sans-serif;*/
+}
+
+/* Board description */
+body > header .subtitle {
+	color: rgb(188, 213, 204);
+	font: bold 130% "Josefin Sans", sans-serif;
+}
+
+/* 'Posting mode: reply' bar */
+.banner {
+	background-color: rgb(18, 15, 31);
+}
+
+/* -- Post form -- */
+/* 'Open the Quick reply dialog' */
+/* Make a good button out of this. */
+#qrDisplayButton {
+	font-family: "Josefin Sans", sans-serif;
+	color: rgb(61, 111, 170);
+	text-transform: lowercase;
+	background-color: rgb(62, 51, 77);
+	border: 1px solid rgb(50, 78, 127);
+	margin: 2em;
+	padding: 0.3em 1em;
+	border-radius: 0.4rem;
+	position: relative;
+	top: 0.5em;
+}
+#qrDisplayButton:hover {
+	border-color: rgb(78, 110, 166);
+	color: rgb(84, 119, 179);
+	background-color: rgb(73, 64, 91);
+	box-shadow: 0 0 0.1rem rgba(0,0,0,0.8);
+}
+.reply, .post-hover, .post-inline, .pages, #settingsScreen, #watcherScreen,
+#updateSettings, .blotter, .catathread, .homeblock, .hashtag {
+	border: 2px solid rgb(50, 78, 127);
+	border-radius: 0.75rem;
+}
+form[name="post"] th, .reply, .pages {
+	padding: 0.4em;
+}
+/* Staff notice */
+.blotter {
+	border: 2px solid rgb(151, 90, 129);
+	color: white;
+}
+
+/* -- Posts -- */
+.wthread, .post-hover {
+	padding: 3px;
+}
+.wpost {
+	color: white;
+}
+.hashtag {
+	padding: 0.2em 0.9em;
+	background-color: rgb(0,0,0);
+}
+
+.subject, .wsubject {
+	font-family: "Molengo", sans-serif;
+	color: rgb(181, 198, 233);
+}
+
+.name, .email .name, .email:hover .name, .wname {
+	color: rgb(203, 218, 239);
+}
+
+.email {
+	border-bottom: 1px dotted rgb(177, 213, 234);
+	/* change the underline color. */
+}
+
+.trip, .wtrip {
+	font-family: "Ubuntu", monospace;
+	color: rgb(160, 195, 216);
+}
+
+.post_no {
+	/* Make this a deeper color than most links */
+	color: rgb(234, 167, 211);
+}
+.post_no:hover {
+	color: rgb(234, 194, 209);
+}
+
+.fileinfo {
+	color: rgb(74, 117, 186);
+}
+.reply.highlighted, .post-inline {
+	border: 1px solid #4567aa !important;
+}
+.reply.highlighted {
+	/* Makes all borders solid. */
+	border-color: rgb(115, 37, 102);
+}
+.post-inline {
+	/* 	as nesting iterations approach infinity,
+	 	what background color does it approach? */
+	background-color: rgba(255,255,255,0.1);
+}
+
+.quote {
+	color: rgb(159, 171, 121);
+	font: bold 110% "Philosopher", "Calibri", sans-serif;
+}
+.omitted, .toolong {
+	font-style: italic;
+	color: rgb(228, 228, 228);
+}
+
+/* Footer */
+.boardlist.bottom {
+	color: inherit;
+}
+
+
+.wlinkpart + .wname:before {
+	color: rgb(235, 235, 235);
+}
+
+/* The color of the ban page table */
+.ban {
+	border-color: rgb(167, 109, 158);
+}
+
+/* Page numbers */
+.pages {
+	color: rgb(50, 78, 127);
+}
+/* homepage */
+.homepage > header h1 {
+	color: rgb(70, 123, 197);
+	text-shadow: 0.05rem 0.05rem black;
+}
+.homepage hr {
+	border-top: 2px solid rgb(50, 78, 127);
+}
+.homepage .subtitle {
+	color: rgb(165, 175, 197);
+	font-size: 180%;
+}
+.homeblock {
+	line-height: 140%;
+	margin-top: 2em;
+	border-color: rgb(35, 25, 59);
+}
+.homeblock > h2 {
+	font-family: "Josefin Sans", sans-serif;
+	font-size: 150%;
+	margin: -25px -17px 0;
+	/* We must use pixels here because we */
+	/* need something that scales linear with zoom functions */
+	color: rgb(198, 213, 219);
+	padding: 0.2em 0.7em;
+	border-radius: 0.5em 0.5em 0 0;
+	background-color: rgb(35, 25, 59);
+}
+.homeblock > h2 + div {
+	/* The body container */
+	margin-top: 1em;
+}
+.homeblock .unimportant {
+	font-family: monospace;
+	text-transform: uppercase;
+}
+/* Flex recent posts */
+#recent_posts {
+	overflow-x: visible;
+}
+.recent_posts_parent {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+}
+.recent_post {
+	flex: 1 0 auto;
+}

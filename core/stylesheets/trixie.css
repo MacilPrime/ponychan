@@ -1,0 +1,365 @@
+/**
+ * octavia
+ *
+ * Created on 3/27/2015
+ * Ported from old Ponychan. Originally written by Kitty Awesome.
+ *
+ *
+ */
+/* Imports */
+@import "common/pony-kusaba.css";
+@import "common/bubble-buttons.css";
+
+@font-face {
+	font-family: "Sabrina";
+	src:url('font/sabrina.ttf')
+		format('truetype');
+}
+@font-face {
+	font-family: 'Ubuntu';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Ubuntu'),
+	url(font/ubuntu.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
+	U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF,
+	U+EFFD, U+F000;
+}
+
+/* Keyframes for animations */
+@keyframes notification {
+	0% {
+		color: #db8696;
+	}
+	50% {
+		color: rgb(237, 89, 96);
+	}
+	100% {
+		color: #db8797;
+	}
+}
+
+/* Indiscriminate tags */
+body {
+	background: url(img/trixie/trixie_yay.png) bottom 30px right 30px/50% no-repeat,
+	radial-gradient(
+			circle at bottom 5em right 5em,
+			rgb(123, 196, 236),
+			rgb(75, 182, 239),
+			rgb(131, 200, 237));
+}
+
+/* All links, including the ref-links inside the post body. */
+a, a:visited, a:active, .bodylink {
+	color: rgb(88, 42, 183);
+}
+
+/* Mouse over link */
+a:hover {
+	color: rgb(136, 89, 215);
+	text-shadow: 0 0 1px rgb(221, 241, 249);
+}
+fieldset {
+	border-color: rgba(126, 82, 217, 0.2);
+}
+/* Set the border here */
+input[type=text], input[type=password], textarea {
+	border-radius: 0.3rem;
+	border: 1px solid rgb(127, 83, 217);
+}
+
+/* What color do you want the border to glow here */
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+	border: 1px solid black;
+}
+hr {
+	border-color: rgb(96, 28, 107);
+}
+/* Table headers, including the post form */
+/* as well as many staff dashboard headers */
+th {
+	background-color: rgb(117, 181, 233);
+	text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+}
+
+/* -- Setting the common color scheme -- */
+/* Heading colors */
+h1, h2, h3, h4, h5, h6, header h1, .heading {
+	color: rgb(127, 83, 217);
+	text-shadow: 0 0 2px rgb(193, 177, 228);
+}
+
+/* Head bar backgrounds */
+.top, #qrmove, .ban h2 {
+	background: rgb(55, 168, 223)
+		linear-gradient(to bottom, rgb(92, 152, 200), rgb(140, 191, 232));
+	color: white;
+}
+
+/* Head bar links */
+.top a, .top a:visited, #qrmove a, #qrmove a:visited {
+	color: rgb(209, 236, 247);
+}
+
+/* Head bar links on hover */
+.top a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
+	color: rgb(212, 240, 251);
+	box-shadow: inset 0 0 14px rgba(0,0,0,0.2);
+}
+
+/* Block items */
+.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
+	background-color: rgb(104, 178, 222)
+}
+
+/* -- Navigation bar -- */
+.top a:hover {
+	background-color: rgb(217, 244, 255);
+}
+
+/* set the border-color property to show that the button is 'lit' */
+.top .boardlistactive, .watcherButton.open {
+	border-color: rgb(113, 89, 216);
+}
+
+/* Color of the 'home' link */
+.top a[href="/"] {
+	color: rgb(234, 248, 255);
+}
+
+/* Toggle links on the right */
+.top .watcherButton, .top .settingsButton {
+	color: rgb(236, 251, 245);
+}
+/* Settings page */
+#settingsScreen {
+	background: rgb(117, 181, 233)
+	linear-gradient(to bottom,
+			rgb(127, 191, 243),
+			rgb(114, 176, 227));
+}
+/* Settings headers */
+#settingsScreen h1, #settingsScreen h2 {
+	/* Color */
+	color: rgb(102, 66, 174);
+	text-shadow: 1px 1px 2px rgba(228, 226, 229,0.4);
+}
+
+/* Watcher frame. Set a bright border. */
+#watcherScreen {
+	border: 2px solid rgb(116, 76, 199);
+}
+
+/* the color of 'by' in watcher */
+.wlinkpart + .wname:before {
+	/* The element is always there. If no nickname is given, it'll leave
+		you an empty element. */
+	color: #d9a9ff;
+}
+
+/* -- Board Page header -- */
+/* Board headline */
+body > header h1 {
+	font-family: "Sabrina", sans-serif;
+}
+
+/* Board description */
+body > header .subtitle {
+	color: rgb(212, 235, 249);
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+	font: 140% "AR Christy", sans-serif;
+}
+
+/* 'Posting mode: reply' bar */
+.banner {
+	background-color: rgb(61, 188, 233);
+}
+
+/* -- Post form -- */
+/* 'Open the Quick reply dialog' */
+/* Make a good button out of this. */
+#qrDisplayButton {
+	font-family: "Ubuntu", monospace;
+	color: rgb(17, 89, 121);
+	text-transform: lowercase;
+	background-color: rgb(119, 193, 232);
+	border: 1px solid rgb(2, 106, 153);
+	margin: 2em;
+	padding: 0.3em 1em;
+	border-radius: 0.4rem;
+	position: relative;
+	top: 0.5em;
+}
+#qrDisplayButton:hover {
+	color: rgb(19, 108, 146);
+	background-color: rgb(147, 207, 239);
+	box-shadow: 0 0 0.1rem rgba(0,0,0,0.3);
+}
+th, .reply, .pages {
+	box-shadow: 0.1rem 0.1rem 0.1rem rgba(0,0,0,0.4);
+}
+form[name="post"] th, .reply, .pages {
+	padding: 0.4em;
+	border-radius: 0.3rem 0.3rem 0.5rem 0.3rem;
+}
+form:not(#qrform) input[type=text],
+form:not(#qrform) input[type=password],
+form:not(#qrform) textarea,
+#threadsearchbox {
+	box-shadow: 0.1rem 0.1rem 0.1rem rgb(2, 116, 169);
+}
+form:not(#qrform) input[type=text]:focus,
+form:not(#qrform) input[type=password]:focus,
+form:not(#qrform) textarea:focus,
+#threadsearchbox:focus {
+	box-shadow: 0.1rem 0.1rem 0.1rem rgb(4, 103, 150),
+	inset 0 0 7px rgba(0,0,0,0.3);
+}
+/* Staff notice */
+.blotter {
+	border: 1px solid rgb(68, 50, 110);
+	background-color: rgb(130, 195, 247);
+	color: rgb(0,0,0);
+}
+
+/* -- Posts -- */
+.reply {
+	border-style: solid;
+	border-color: rgb(56, 99, 124);
+}
+.wthread, .post-hover {
+	padding: 3px;
+}
+.post-hover, .hashtag {
+	border-color: rgb(3, 48, 70);
+	background-color: rgb(193, 221, 244);
+}
+.hashtag {
+	padding: 0.2em 0.9em;
+}
+
+.subject, .wsubject {
+	font-family: "Philosopher", sans-serif;
+	color: rgb(37, 53, 106);
+}
+
+.name, .email .name, .email:hover .name, .wname {
+	color: rgb(2, 19, 69);
+}
+
+.email {
+	border-bottom: 1px dotted rgb(2, 19, 69);
+	/* change the underline color. */
+}
+
+.trip, .wtrip {
+	font-family: "Ubuntu", monospace;
+	color: rgb(3, 28, 102);
+}
+
+.post_no {
+	/* Make this a deeper color than most links */
+	color: rgb(102, 40, 116);
+}
+
+.post_no:hover {
+	color: rgb(123, 50, 139);
+}
+.reply.highlighted, .post-inline {
+	border: 1px solid #304f64 !important;
+}
+.reply.highlighted {
+	/* Makes all borders solid. */
+	background-color: rgb(50, 80, 101);
+}
+.post-inline {
+	/* 	as nesting iterations approach infinity,
+	 	what background color does it approach? */
+	background-color: rgba(255,255,255,0.1);
+}
+
+.quote {
+	color: rgb(181, 220, 244);
+	font: bold 110% "Philosopher", "Calibri", sans-serif;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.40);
+}
+.spoiler {
+	background-color: rgb(127, 83, 217);
+	color: rgb(127, 83, 217);
+}
+.omitted, .toolong {
+	font-style: italic;
+	color: rgb(228, 228, 228);
+}
+
+/* Footer */
+.boardlist.bottom {
+	color: inherit;
+}
+
+
+.wlinkpart + .wname:before {
+	color: rgb(174, 192, 222);
+}
+
+/* The color of the ban page table */
+.ban {
+	border-color: rgb(134, 124, 174);
+}
+
+/* Page numbers */
+.pages {
+	color: rgb(72, 72, 72);
+}
+/* homepage */
+.homepage > header h1 {
+	color: rgb(56, 88, 181);
+	text-shadow: 	1px 1px 1px rgb(59, 85, 179),
+	0 0 16px rgb(177, 188, 230);
+}
+.homepage hr {
+	border-top: 2px solid rgb(0, 147, 218);
+}
+.homepage .subtitle {
+	color: rgb(210, 235, 249);
+	font-size: 180%;
+}
+.homeblock {
+	border: 2px solid rgb(0, 147, 218);
+	line-height: 140%;
+	margin-top: 2em;
+}
+.homeblock > h2 {
+	font-family: "Ubuntu", monospace;
+	font-size: 150%;
+	margin: -25px -17px 0;
+	/* We must use pixels here because we */
+	/* need something that scales linear with zoom functions */
+	color: rgb(208, 223, 243);
+	padding: 0.2em 0.7em;
+	border-radius: 0.5em 0.5em 0 0;
+	background-color: rgb(0, 147, 218);
+}
+.homeblock > h2 + div {
+	/* The body container */
+	margin-top: 1em;
+}
+.homeblock .unimportant {
+	font-family: monospace;
+	text-transform: uppercase;
+}
+/* Flex recent posts */
+#recent_posts {
+	overflow-x: visible;
+}
+.recent_posts_parent {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+}
+.recent_post {
+	flex: 1 0 auto;
+}
+#watcherAlerts {
+	animation: notification 3.5s;
+}

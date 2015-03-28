@@ -703,7 +703,13 @@
 	$config['stylesheets']['Season 2 Luna'] = 'luna.css';
     $config['stylesheets']['Nightmare Moon'] = 'nightmare-moon.css';
     $config['stylesheets']['Vinyl Trance'] = 'vinyl.css';
+    $config['stylesheets']['Timelord'] = 'timelord.css';
+    $config['stylesheets']['Octavia'] = 'octavia.css';
+    $config['stylesheets']['Great and Powerful'] = 'trixie.css';
+    $config['stylesheets']['Aloe and Lotus'] = 'aloe-and-lotus.css';
 	$config['stylesheets']['Wonderbolts'] = 'wonderbolts.css';
+    $config['stylesheets']['Shadowbolts'] = 'shadowbolts.css';
+    $config['stylesheets']['Scootaloo'] = 'scootaloo.css';
 	$config['stylesheets']['Nightmare'] = 'nightmare.css';
 	$config['stylesheets']['Australian'] = 'Australian.css';
 	$config['stylesheets']['Chrysalis'] = 'Queen.css';
@@ -712,7 +718,6 @@
 	$config['stylesheets']['Pinkie'] = 'pinkie.css';
 
 
-    $config['stylesheets']['Vinyl'] = 'vinyl.css';
 	$config['stylesheets']['Geocities'] = 'geocities.css';
 
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/

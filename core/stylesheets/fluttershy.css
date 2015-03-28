@@ -21,23 +21,32 @@ input[type=text], input[type=password], textarea {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 1px solid #0020c0;
 }
+th {
+    background: rgb(248,184,209);
+}
 
-
-/* Setting the color scheme */
-/* tone 1 */
+/* -- Setting the common color scheme -- */
+/* Heading colors */
 h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: rgb(240,160,192);
 }
-.top, #qrmove {
+/* Head bar backgrounds */
+.top, #qrmove, .ban h2 {
     background: rgb(17,85,85);
 }
+/* Head bar links */
 .top a, .top a:visited, #qrmove a, #qrmove a:visited {
     color: rgb(144,192,192);
 }
+/* Head bar links on hover */
 .top a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
     color: #e0e8e8;
 }
-
+/* Block items */
+.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+    border-color: rgb(229, 214, 139);
+    background-color: rgb(255,238,153);
+}
 
 
 /* Navigation bar */
@@ -52,18 +61,17 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 
-
-
-/* Board Page header */
+/* -- Board Page header -- */
+/* Board headline */
 body > header h1 {
     color: rgb(226,122,178);
     font-family: "Indie Flower", cursive;
 }
-
+/* Board description */
 .subtitle {
     color: rgb(226, 174, 196);
 }
-
+/* 'Posting mode: reply' bar */
 .banner {
     background: #E8E2A6;
     color: white;
@@ -71,9 +79,6 @@ body > header h1 {
 
 
 /* Post form */
-form tr th {
-    background: rgb(248,184,209);
-}
 .blotter {
     color: inherit;
 }
@@ -86,8 +91,6 @@ form tr th {
 .reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
     line-height: 150%;
     padding: 3px;
-    border-color: rgb(229, 214, 139);
-    background-color: rgb(255,238,153);
 }
 
 .postHider {
@@ -128,9 +131,6 @@ form tr th {
 .reply .fileinfo {
     line-height: 120%;
 }
-/*.helphover div, .reply, .highlight, .reflinkpreview {*/
-/*background: #d4dcf0;*/
-/*}*/
 .reply.highlighted {
     background: rgb(255, 245, 187);
     border-style: solid none none solid;
@@ -169,4 +169,9 @@ form tr th {
     /* The element is always there. If no nickname is given, it'll leave
         you an empty element. */
     color: #607ba3;
+}
+
+/* Other pages */
+.ban {
+    border-color: black;
 }
