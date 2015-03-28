@@ -38,8 +38,10 @@ const CheckboxItem = React.createClass({
 const SettingsSection = React.createClass({
 	mixins: [PureRenderMixin],
 	render() {
-		const {values, section} = this.props;
+		const {metadata, values, section} = this.props;
 		const items = section.get('settings')
+			.map(name => metadata.get(name))
+			.filter(setting => !setting.get('hidden'))
 			.filter(setting => setting.get('type') === 'bool')
 			.map(setting => {
 				const name = setting.get('name');
@@ -59,11 +61,12 @@ const SettingsSection = React.createClass({
 const SettingsWindow = React.createClass({
 	mixins: [PureRenderMixin],
   render() {
-		const {values, sections} = this.props;
+		const {metadata, values, sections} = this.props;
 		const sectionNodes = sections
 			.filter(section => isModPage || !section.get('modOnly'))
 			.map(section =>
 				<SettingsSection
+					metadata={metadata}
 					values={values}
 					section={section}
 					key={section.get('name')}
@@ -167,9 +170,10 @@ function doStuff() {
 	$settingsCloseButton.click(hideWindow);
 
 	settings.getAllSettingsMetadata().onValue(
-		function({settingsValues, settingsSectionsList}) {
+		function({settingsMetadata, settingsValues, settingsSectionsList}) {
 			React.render(
 				<SettingsWindow
+					metadata={settingsMetadata}
 					values={settingsValues}
 					sections={settingsSectionsList}
 					/>,

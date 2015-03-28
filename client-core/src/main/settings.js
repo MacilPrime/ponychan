@@ -177,6 +177,8 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 //                time the user last changed the setting, then the defval will take priority
 //                over the user's value. This allows the default setting to be changed at a
 //                future time, optionally overriding an older setting set by the user.
+//   hidden: If set to a Bacon stream, then the setting won't be visible until
+//           this stream emits an event, or has a non-default value set.
 function newSetting(name, type, defval, description, section, extra={}) {
 	const moredetails = extra.moredetails;
 	const selectOptions = extra.selectOptions && Immutable.Map(extra.selectOptions);
@@ -199,21 +201,33 @@ function newSetting(name, type, defval, description, section, extra={}) {
 	const settingMetadata = Immutable.Map({
 		name, section, orderhint, type,
 		description, moredetails, selectOptions,
+		hidden: !!extra.hidden,
 		defval, defpriority,
 		bus
 	});
 
 	settingsMetadata = settingsMetadata.set(name, settingMetadata);
-	settingsValues = settingsValues.set(name, _readSetting(name));
+	const userValue = _readSetting(name);
+	settingsValues = settingsValues.set(name, userValue);
 
 	settingsSectionsList = settingsSectionsList.updateIn(
 		[sectionEntryIndex, 'settings'],
 		settingsList =>
-			settingsList.push(settingMetadata).sortBy(setting => setting.get('orderhint'))
+			settingsList.push(name).sortBy(name => settingsMetadata.get(name).get('orderhint'))
 	);
 
 	refresher.plug(bus);
 	refresher.push();
+
+	if (extra.hidden) {
+		Bacon.mergeAll([
+			Bacon.once(null).filter(() => userValue != null && userValue != defval),
+			extra.hidden
+		]).take(1).onValue(() => {
+			settingsMetadata = settingsMetadata.setIn([name, 'hidden'], false);
+			refresher.push();
+		});
+	}
 }
 
 function getAllSettingValues(noDefault=false) {
