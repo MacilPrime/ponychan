@@ -603,6 +603,17 @@ div.post.reply.post-inline .body {
 	text-decoration: none !important;
 	border-bottom: 1px dashed !important;
 }
+.settings-close-button {
+	user-select: none;
+	cursor: pointer;
+	float: right;
+	margin-right: 5px;
+	font-size: 20pt;
+	font-family: sans-serif;
+}
+.settings-close-button:hover {
+	opacity: 0.5;
+}
 #settings-overlay {
 	background-color: black;
 	opacity: 0.5;
@@ -614,8 +625,12 @@ div.post.reply.post-inline .body {
 	height: 100%;
 	display: none;
 }
-#settingsScreen label {
+.settingsScreen label {
 	cursor: pointer;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 #settingsScreen h1 a {
 	float: right;

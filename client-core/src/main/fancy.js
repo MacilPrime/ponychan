@@ -13,45 +13,40 @@
  */
 
 import $ from 'jquery';
+import Bacon from 'baconjs';
 import settings from './settings';
 
-settings.newSetting("fancy_mode", "bool", false, "Fancy mode", 'pagestyle', {orderhint:20});
+{
+	const revealer = new Bacon.Bus();
+	const hider = revealer.map(false).take(1).toProperty(true);
+	settings.newSetting("fancy_mode", "bool", false, "Fancy mode", 'pagestyle', {
+		orderhint: 20, hider});
+
+	// Unhide if the setting is ever true, or the user does a certain thing.
+	revealer.plug(
+		Bacon.mergeAll([
+			settings.getSettingStream("fancy_mode").toEventStream().filter(Boolean),
+			Bacon.fromEvent(document, 'keydown')
+				.filter(event =>
+					event.which == 70 && !event.ctrlKey && !event.altKey &&
+					!event.shiftKey && !event.metaKey
+				)
+				.filter(event => !/TEXTAREA|INPUT/.test(event.target.nodeName))
+				.filter(() => $('.settingsScreen').is(':visible'))
+				.doAction(event => event.preventDefault())
+		])
+	);
+}
 
 $(document).ready(function(){
 	var fancy_mode = settings.getSetting("fancy_mode");
-	var show_fancy = false;
 	var fancy_pends = [];
-	init_fancy_option();
 
 	$(document).on("setting_change", function(e, setting) {
 		if (setting == "fancy_mode") {
 			fancy_mode = settings.getSetting("fancy_mode");
-			init_fancy_option();
 			cancelFancyPends();
 			fancify(document);
-		}
-	});
-
-	function init_fancy_option() {
-		if (fancy_mode) show_fancy = true;
-		if (show_fancy) {
-			$("#setting_fancy_mode").show();
-		} else {
-			$("#setting_fancy_mode").hide();
-		}
-	}
-
-	$(document).keydown(function(event) {
-		if(/TEXTAREA|INPUT/.test(event.target.nodeName))
-			return true;
-
-		if(!$('.settingsScreen').is(':visible'))
-			return true;
-
-		if(event.which == 70 && !event.ctrlKey && !event.shiftKey) {
-			show_fancy = true;
-			init_fancy_option();
-			return false;
 		}
 	});
 

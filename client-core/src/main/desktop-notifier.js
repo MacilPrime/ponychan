@@ -11,20 +11,13 @@ settings.newSetting(
   "Enable Reply Desktop Notifications",
   'links', {
     orderhint: 8,
-    moredetails: $("<div/>").append(
-      $("<div/>")
-        .text(
-          "Shows a desktop notification when you get a reply in an open " +
-          "thread while you don't have the thread's window focused."),
-      $("<button/>")
-        .text("Test notification")
-        .click(buttonEvent)
-    ),
-    moredetails_rawhtml: true
+    moredetails: "Shows a desktop notification when you get a reply in an open " +
+      "thread while you don't have the thread's window focused.",
+    testButton: {label: "Test notification", fn: buttonEvent}
   }
 );
 
-function buttonEvent(evt) {
+function buttonEvent() {
   Notification.requestPermission(function() {
     if (Notification.permission == "granted") {
       var note = new Notification("Board settings - MLPchan", {

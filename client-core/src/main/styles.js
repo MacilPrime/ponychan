@@ -6,14 +6,15 @@
  *
  */
 
+import _ from 'lodash';
 import $ from 'jquery';
 import settings from './settings';
 import {log_error} from './logger';
 
-var styleChoices = {};
-$.each(SITE_DATA.styles, function(name, file) {
-	styleChoices[name] = name;
-});
+const styleChoices = _.map(
+	SITE_DATA.styles,
+	(file, name) => ({value: name, displayName: name})
+);
 
 settings.newSetting("style", "select", SITE_DATA.selectedstyle, "Theme", 'pagestyle',
 		    {orderhint: 1, selectOptions: styleChoices, defpriority: 0});
