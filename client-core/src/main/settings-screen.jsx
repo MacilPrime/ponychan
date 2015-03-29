@@ -13,6 +13,7 @@ const PureRenderMixin = React.addons.PureRenderMixin;
 import settings from './settings';
 
 const isModPage = (document.location.pathname == SITE_DATA.siteroot+'mod.php');
+const isSettingsPage = (document.location.pathname == SITE_DATA.siteroot+'settings.html');
 
 const InvalidItem = React.createClass({
 	mixins: [PureRenderMixin],
@@ -144,9 +145,12 @@ const SettingsCloseButton = React.createClass({
 	mixins: [PureRenderMixin],
 	render() {
 		return (
-			<span onClick={this.props.onClick} className="settings-close-button">
+			<button
+				aria-label="Close"
+				onClick={this.props.onClick}
+				className="settings-close-button">
 				X
-			</span>
+			</button>
 		);
 	}
 });
@@ -165,9 +169,11 @@ const SettingsWindow = React.createClass({
 					key={section.get('name')}
 					/>
 			).toArray();
+		const closeButton = isSettingsPage ? null :
+			<SettingsCloseButton onClick={closeWindow}/>;
     return (
 			<div>
-				<SettingsCloseButton onClick={closeWindow}/>
+				{closeButton}
 	      <h1>Board Settings</h1>
 				<hr/>
 				{sectionNodes}
@@ -211,8 +217,6 @@ function setup() {
 		.click(hideWindow)
 		.hide();
 
-	let isSettingsPage = false;
-
 	function showWindow(event) {
 		if(!shouldDoCompatSettingsPage()) {
 			event.preventDefault();
@@ -235,9 +239,8 @@ function setup() {
 		// browser and opens it again.
 		$(".settingsScreen, .settingsSection, #settings-overlay").remove();
 
-		const $settingsPage = $("#settingsPage");
-		if ($settingsPage.length) {
-			isSettingsPage = true;
+		if (isSettingsPage) {
+			const $settingsPage = $("#settingsPage");
 			$settingsPage.empty();
 			$settingsScreen.removeAttr('id').show().appendTo($settingsPage);
 		} else {
