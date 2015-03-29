@@ -723,7 +723,6 @@
 	$config['stylesheets']['Scootaloo'] = array('Scootaloo', 'scootaloo.css');
 
 	$config['stylesheets']['Geocities'] = array('Geocities', 'geocities.css');
->>>>>>> master
 
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/
 	// $config['uri_stylesheets'] = 'http://static.example.org/stylesheets/';
