@@ -14,6 +14,18 @@ import settings from './settings';
 
 const isModPage = (document.location.pathname == SITE_DATA.siteroot+'mod.php');
 
+const InvalidItem = React.createClass({
+	mixins: [PureRenderMixin],
+	render() {
+		const {value, setting} = this.props;
+		const name = setting.get('name');
+		const type = setting.get('type');
+		return (
+			<div>{name}, unsupported type: {type}</div>
+		);
+	}
+});
+
 const SelectItem = React.createClass({
 	mixins: [PureRenderMixin],
 	render() {
@@ -37,7 +49,8 @@ const SelectItem = React.createClass({
 				<select onChange={onChange} value={value}>
 					{options}
 				</select>
-				{' '+desc}
+				{' '}
+				<span>{desc}</span>
 			</div>
 		);
 	}
@@ -53,12 +66,51 @@ const CheckboxItem = React.createClass({
 			settings.setSetting(name, event.target.checked);
 		};
 		return (
+			<label>
+				<input type="checkbox" ref="input"
+					checked={value} onChange={toggle} />
+				<span className="setting_description">{desc}</span>
+			</label>
+		);
+	}
+});
+
+const SettingItem = React.createClass({
+	mixins: [PureRenderMixin],
+	render() {
+		const {setting, value} = this.props;
+		const name = setting.get('name');
+
+		const moredetails = setting.get('moredetails');
+		if (setting.get('moredetails_rawhtml') || (moredetails && typeof moredetails !== 'string')) {
+			console.log('bad setting', name);
+		}
+		const moredetailsComponent = typeof moredetails !== 'string' ? null :
+			<div>{moredetails}</div>;
+
+		const testButton = setting.get('testButton');
+		const testButtonFn = event => {
+			event.preventDefault();
+			testButton.get('fn')();
+		};
+		const testButtonComponent = !testButton ? null :
 			<div>
-				<label>
-					<input type="checkbox" ref="input"
-						checked={value} onChange={toggle} />
-					{desc}
-				</label>
+				<button onClick={testButtonFn}>{testButton.get('label')}</button>
+			</div>;
+
+		const extraComponent = !(moredetailsComponent || testButtonComponent) ? null :
+			<div className="setting_more_details">
+				{moredetailsComponent}
+				{testButtonComponent}
+			</div>;
+
+		const ITEM_TYPES = {bool: CheckboxItem, select: SelectItem};
+		const Tag = ITEM_TYPES[setting.get('type')] || InvalidItem;
+
+		return (
+			<div className="setting_item">
+				<Tag {...this.props} />
+				{extraComponent}
 			</div>
 		);
 	}
@@ -75,13 +127,10 @@ const SettingsSection = React.createClass({
 				const name = setting.get('name');
 				const userValue = values.get(name);
 				const value = userValue != null ? userValue : setting.get('defval');
-				switch (setting.get('type')) {
-					case 'bool':
-						return <CheckboxItem key={name} value={value} setting={setting} />;
-					case 'select':
-						return <SelectItem key={name} value={value} setting={setting} />;
-				}
-			}).filter(Boolean).toArray();
+				return (
+					<SettingItem key={name} setting={setting} value={value} />
+				);
+			}).toArray();
 		return (
 			<section>
 				<h2>{section.get('displayName')}</h2>

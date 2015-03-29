@@ -27,10 +27,7 @@ var soundChoices = [
 
 settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Sound Choice", 'links', {
 	orderhint: 7.5,
-	moredetails: $("<button/>")
-		.text("Test sound")
-		.click(playSound),
-	moredetails_rawhtml: true,
+	testButton: {label: "Test sound", fn: playSound},
 	selectOptions: soundChoices,
 	defpriority: 0
 });

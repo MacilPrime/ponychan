@@ -171,6 +171,7 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 //  description: the visible title shown in the settings menu for the setting.
 //  extra: is an object containing zero or more of the following properties:
 //   moredetails: extra text about the setting to display under the short description
+//   testButton: can be an object of the form {label:String, fn:Function}
 //   orderhint: number that will control the ordering of settings in the same section
 //   selectOptions: required if type is "select". Should be an array of objects with
 //                  value and displayName properties.
@@ -183,6 +184,7 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 function newSetting(name, type, defval, description, section, extra={}) {
 	const moredetails = extra.moredetails;
 	const selectOptions = extra.selectOptions && Immutable.fromJS(extra.selectOptions);
+	const testButton = extra.testButton && Immutable.fromJS(extra.testButton);
 	const orderhint = extra.orderhint || 0;
 	const defpriority = extra.defpriority || 0;
 
@@ -202,7 +204,7 @@ function newSetting(name, type, defval, description, section, extra={}) {
 	const settingMetadata = Immutable.Map({
 		name, section, orderhint, type,
 		description, moredetails, selectOptions,
-		hidden: !!extra.hidden,
+		hidden: !!extra.hidden, testButton,
 		defval, defpriority,
 		bus
 	});
