@@ -7,7 +7,9 @@
 	<title>{% block title %}{% endblock %}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
 	{% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
-	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}?v={{ ('stylesheets/' ~ config.default_stylesheet.1)|filemtime }}">{% endif %}
+	{% if config.stylesheets[config.default_stylesheet].1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{
+		config.uri_stylesheets }}{{ config.stylesheets[config.default_stylesheet].1 }}?v={{
+		('stylesheets/' ~ config.stylesheets[config.default_stylesheet].1)|filemtime }}">{% endif %}
 	{% if not nojavascript %}
 		<script type="text/javascript" src="{{ config.url_instance_script }}?v={{ config.file_instance_script|filemtime }}"></script>
 		<script type="text/javascript" src="{{ config.url_main_script }}?v={{ config.file_main_script|filemtime }}"></script>
