@@ -6,20 +6,37 @@
  *
  */
 
+import _ from 'lodash';
 import $ from 'jquery';
 import settings from './settings';
 import {log_error} from './logger';
 
-var styleChoices = {};
-$.each(SITE_DATA.styles, function(name, file) {
-	styleChoices[name] = name;
-});
+const styleChoices = Array.isArray(SITE_DATA.styles) ?
+	SITE_DATA.styles.map(({name, displayName}) => ({value: name, displayName}))
+	:
+	_.map( // temp compat code
+		SITE_DATA.styles,
+		(file, name) => ({value: name, displayName: name})
+	);
 
-settings.newSetting("style", "select", SITE_DATA.selectedstyle, "Theme", 'pagestyle',
-		    {orderhint: 1, selectOptions: styleChoices, defpriority: 0});
+settings.newSetting(
+	"style", "select",
+	SITE_DATA.default_stylesheet || SITE_DATA.selectedstyle, // temp compat code
+	"Theme", 'pagestyle',
+	{orderhint: 1, selectOptions: styleChoices, defpriority: 0});
+
+function getStyleURI(stylename) {
+	if (Array.isArray(SITE_DATA.styles)) {
+		const entry = _.find(SITE_DATA.styles, entry => entry.name === stylename);
+		return !entry ? null : entry.uri;
+	} else {
+		return SITE_DATA.styles[stylename];
+	}
+}
 
 function apply(stylename) {
-	if (SITE_DATA.styles[stylename] == null) {
+	const uri = getStyleURI(stylename);
+	if (uri == null) {
 		console.log('Unknown style:', stylename);
 		return;
 	}
@@ -31,7 +48,7 @@ function apply(stylename) {
 			.attr("id", "stylesheet")
 			.appendTo(document.head);
 	}
-	$stylesheet.attr("href", SITE_DATA.styles[stylename]);
+	$stylesheet.attr("href", uri);
 
 	$(document).trigger('style_changed', $stylesheet[0]);
 }

@@ -609,6 +609,18 @@ form[name="post"] input[name="submit"] {
 
 
 /* ----- Settings box ----- */
+.settings-close-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	float: right;
+	margin: 2px;
+	font-size: 20pt;
+	font-family: sans-serif;
+}
+.settings-close-button:hover {
+	opacity: 0.5;
+}
 #settings-overlay {
     background-color: black;
     opacity: 0.5;
@@ -620,8 +632,12 @@ form[name="post"] input[name="submit"] {
     height: 100%;
     display: none;
 }
-#settingsScreen label {
-    cursor: pointer;
+.settingsScreen label {
+	cursor: pointer;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 #settingsScreen h1 a {
     float: right;

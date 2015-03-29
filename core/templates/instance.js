@@ -1,17 +1,6 @@
 {% raw %}
 
-window.SITE_DATA = {
-	selectedstyle: '{% endraw %}{{ config.default_stylesheet.0|e('js') }}{% raw %}',
-	styles: {
-		{% endraw %}
-		{% for stylesheet in stylesheets %}{% raw %}'{% endraw %}{{ stylesheet.name|e('js') }}{% raw %}' : '{% endraw %}{{ stylesheet.uri|e('js') }}{{ stylesheet.version|e('js') }}{% raw %}',
-		{% endraw %}{% endfor %}{% raw %}
-	},
-	cookiename: '{% endraw %}{{ config.cookies.js|e('js') }}{% raw %}',
-	cookiepath: '{% endraw %}{% if config.cookies.jail %}{{ config.cookies.path|e('js') }}{% else %}/{% endif %}{% raw %}',
-	genpassword_chars: '{% endraw %}{{ config.genpassword_chars|e('js') }}{% raw %}',
-	siteroot: '{% endraw %}{{ config.root|e('js') }}{% raw %}'
-};
+window.SITE_DATA = {% endraw %}{{ SITE_DATA }}{% raw %};
 
 {% endraw %}{% if config.google_analytics %}{% raw %}
 

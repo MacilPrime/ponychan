@@ -1420,17 +1420,30 @@ function buildIndex($oldbump=false) {
 function buildJavascript() {
 	global $config;
 
-	$stylesheets = array();
-	foreach ($config['stylesheets'] as $name => $uri) {
-		$stylesheets[] = array(
+	$styles = array();
+	foreach ($config['stylesheets'] as $name => $item) {
+		$displayName = $item[0];
+		$file = $item[1];
+		$styles[] = array(
 			'name' => $name,
-			'uri' => (!empty($uri) ? $config['uri_stylesheets'] : '') . $uri,
-			'version' => (!empty($uri) ? '?v=' . filemtime('stylesheets/' . $uri) : ''));
+			'displayName' => $displayName,
+			'uri' => empty($file) ? '' :
+				$config['uri_stylesheets'] . $file . '?v=' . filemtime('stylesheets/' . $file)
+		);
 	}
+
+	$SITE_DATA = array(
+		'default_stylesheet' => $config['default_stylesheet'],
+		'styles' => $styles,
+		'cookiename' => $config['cookies']['js'],
+		'cookiepath' => $config['cookies']['jail'] ? $config['cookies']['path'] : '/',
+		'genpassword_chars' => $config['genpassword_chars'],
+		'siteroot' => $config['root']
+	);
 
 	$script = Element('instance.js', array(
 		'config' => $config,
-		'stylesheets' => $stylesheets
+		'SITE_DATA' => json_encode($SITE_DATA)
 	));
 
 	file_write($config['file_instance_script'], $script);
