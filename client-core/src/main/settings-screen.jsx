@@ -6,6 +6,7 @@
  *
  */
 
+import cx from 'classnames';
 import Immutable from 'immutable';
 import React from 'react/addons';
 const PureRenderMixin = React.addons.PureRenderMixin;
@@ -30,7 +31,7 @@ const InvalidItem = React.createClass({
 const SelectItem = React.createClass({
 	mixins: [PureRenderMixin],
 	render() {
-		const {value, setting} = this.props;
+		const {value, setting, disabled} = this.props;
 		const name = setting.get('name');
 		const desc = setting.get('description');
 		const options = setting.get('selectOptions').map(item => {
@@ -47,7 +48,7 @@ const SelectItem = React.createClass({
 		};
 		return (
 			<div>
-				<select onChange={onChange} value={value}>
+				<select disabled={disabled} onChange={onChange} value={value}>
 					{options}
 				</select>
 				{' '}
@@ -60,7 +61,7 @@ const SelectItem = React.createClass({
 const CheckboxItem = React.createClass({
 	mixins: [PureRenderMixin],
 	render() {
-		const {value, setting} = this.props;
+		const {value, setting, disabled} = this.props;
 		const name = setting.get('name');
 		const desc = setting.get('description');
 		const toggle = event => {
@@ -69,6 +70,7 @@ const CheckboxItem = React.createClass({
 		return (
 			<label>
 				<input type="checkbox" ref="input"
+					disabled={disabled}
 					checked={value} onChange={toggle} />
 				<span className="setting_description">{desc}</span>
 			</label>
@@ -81,6 +83,8 @@ const SettingItem = React.createClass({
 	render() {
 		const {setting, value} = this.props;
 		const name = setting.get('name');
+		const disableMessage = setting.get('disableMessage');
+		const disabled = !!disableMessage;
 
 		const moredetails = setting.get('moredetails');
 		if (setting.get('moredetails_rawhtml') || (moredetails && typeof moredetails !== 'string')) {
@@ -95,22 +99,30 @@ const SettingItem = React.createClass({
 			testButton.get('fn')();
 		};
 		const testButtonComponent = !testButton ? null :
-			<div>
-				<button onClick={testButtonFn}>{testButton.get('label')}</button>
-			</div>;
+			<div><button disabled={disabled} onClick={testButtonFn}>
+				{testButton.get('label')}
+			</button></div>;
 
-		const extraComponent = !(moredetailsComponent || testButtonComponent) ? null :
+		const disabledMessageComponent = !disabled ? null :
+			<div className="disable_message">{disableMessage}</div>;
+
+		const extraComponent = !(
+				moredetailsComponent || testButtonComponent || disabledMessageComponent
+		) ? null :
 			<div className="setting_more_details">
 				{moredetailsComponent}
 				{testButtonComponent}
+				{disabledMessageComponent}
 			</div>;
 
 		const ITEM_TYPES = {bool: CheckboxItem, select: SelectItem};
 		const Tag = ITEM_TYPES[setting.get('type')] || InvalidItem;
 
+		const classes = cx('setting_item', {disabled});
+
 		return (
-			<div className="setting_item">
-				<Tag {...this.props} />
+			<div className={classes}>
+				<Tag {...this.props} disabled={disabled} />
 				{extraComponent}
 			</div>
 		);

@@ -181,6 +181,8 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 //                future time, optionally overriding an older setting set by the user.
 //   hider: If set to a Bacon stream, then the setting will be hidden as long
 //					as it emits true.
+//   notSupported: If true, then the setting will be disabled and a message will be shown
+//                 to the user explaining that their browser does not support the setting.
 function newSetting(name, type, defval, description, section, extra={}) {
 	const moredetails = extra.moredetails;
 	const selectOptions = extra.selectOptions && Immutable.fromJS(extra.selectOptions);
@@ -199,12 +201,15 @@ function newSetting(name, type, defval, description, section, extra={}) {
 	if (Boolean(selectOptions) != (type === 'select'))
 		throw new Error('selectOptions required for select type');
 
+	const disableMessage = !extra.notSupported ? null :
+		'Your browser does not support this setting. Firefox or Chrome are recommended.';
+
 	const bus = new Bacon.Bus();
 
 	const settingMetadata = Immutable.Map({
 		name, section, orderhint, type,
 		description, moredetails, selectOptions,
-		hidden: !!extra.hider, testButton,
+		hidden: !!extra.hider, testButton, disableMessage,
 		defval, defpriority,
 		bus
 	});

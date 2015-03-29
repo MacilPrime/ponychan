@@ -9,6 +9,7 @@
 import $ from 'jquery';
 import {log_error} from './logger';
 import {get_post_num, get_post_id, get_post_class} from './post-info';
+import './settings-screen.jsx'; // has to come after this
 
 var max_watched_threads = 70;
 var watcher_poll_time = 30 * 1000;
