@@ -19,7 +19,7 @@ const refresher = new Bacon.Bus();
 
 const getSettingStream = _.memoize(name =>
 	settingsMetadata.get(name).get('bus')
-		.toProperty()
+		.toProperty(null)
 		.map(() => getSetting(name))
 );
 
