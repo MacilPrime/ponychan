@@ -633,6 +633,9 @@ div.post.reply.post-inline .body {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+.settingsScreen .disable_message {
+  color: blue;
+}
 #settingsScreen h1 a {
 	float: right;
 	margin: 0 11px 2px 2px;

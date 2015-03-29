@@ -13,7 +13,8 @@ settings.newSetting(
     orderhint: 8,
     moredetails: "Shows a desktop notification when you get a reply in an open " +
       "thread while you don't have the thread's window focused.",
-    testButton: {label: "Test notification", fn: buttonEvent}
+    testButton: {label: "Test notification", fn: buttonEvent},
+    notSupported: !window.Notification
   }
 );
 
@@ -38,9 +39,7 @@ function canNotify() {
 }
 
 function init() {
-  if (!window.Notification) {
-    $("#setting_desktop_notifications").hide();
-  } else {
+  if (window.Notification) {
     if (settings.getSetting("desktop_notifications")) {
       Notification.requestPermission();
     }

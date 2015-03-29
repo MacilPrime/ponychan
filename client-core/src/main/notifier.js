@@ -16,10 +16,11 @@ import {get_post_id} from './post-info';
 
 settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {
 	orderhint: 7,
-	moredetails: "Audibly alert you when a post by you in a thread you're viewing is replied to."
+	moredetails: "Audibly alert you when a post by you in a thread you're viewing is replied to.",
+	notSupported: !document.createElement('audio').canPlayType
 });
 
-var soundChoices = [
+const soundChoices = [
 	{value: "main", displayName: "Default"},
 	{value: "aim", displayName: "AIM"},
 	{value: "yeah", displayName: "Yeah!"}
@@ -29,6 +30,7 @@ settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Soun
 	orderhint: 7.5,
 	testButton: {label: "Test sound", fn: playSound},
 	selectOptions: soundChoices,
+	notSupported: !document.createElement('audio').canPlayType,
 	defpriority: 0
 });
 
