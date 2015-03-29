@@ -14,13 +14,42 @@ import settings from './settings';
 
 const isModPage = (document.location.pathname == SITE_DATA.siteroot+'mod.php');
 
+const SelectItem = React.createClass({
+	mixins: [PureRenderMixin],
+	render() {
+		const {value, setting} = this.props;
+		const name = setting.get('name');
+		const desc = setting.get('description');
+		const options = setting.get('selectOptions').map(item => {
+			const itemValue = item.get('value');
+			const displayName = item.get('displayName');
+			return (
+				<option key={itemValue} value={itemValue}>
+					{displayName}
+				</option>
+			);
+		}).toArray();
+		const onChange = event => {
+			settings.setSetting(name, event.target.value);
+		};
+		return (
+			<div>
+				<select onChange={onChange} value={value}>
+					{options}
+				</select>
+				{' '+desc}
+			</div>
+		);
+	}
+});
+
 const CheckboxItem = React.createClass({
 	mixins: [PureRenderMixin],
 	render() {
 		const {value, setting} = this.props;
 		const name = setting.get('name');
 		const desc = setting.get('description');
-		const toggle = (event) => {
+		const toggle = event => {
 			settings.setSetting(name, event.target.checked);
 		};
 		return (
@@ -42,13 +71,17 @@ const SettingsSection = React.createClass({
 		const items = section.get('settings')
 			.map(name => metadata.get(name))
 			.filter(setting => !setting.get('hidden'))
-			.filter(setting => setting.get('type') === 'bool')
 			.map(setting => {
 				const name = setting.get('name');
 				const userValue = values.get(name);
 				const value = userValue != null ? userValue : setting.get('defval');
-				return <CheckboxItem value={value} setting={setting} key={name} />;
-			}).toArray();
+				switch (setting.get('type')) {
+					case 'bool':
+						return <CheckboxItem key={name} value={value} setting={setting} />;
+					case 'select':
+						return <SelectItem key={name} value={value} setting={setting} />;
+				}
+			}).filter(Boolean).toArray();
 		return (
 			<section>
 				<h2>{section.get('displayName')}</h2>

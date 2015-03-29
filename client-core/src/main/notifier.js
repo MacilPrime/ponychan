@@ -19,11 +19,11 @@ settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound",
 	moredetails: "Audibly alert you when a post by you in a thread you're viewing is replied to."
 });
 
-var soundChoices = {
-	main: "Default",
-	aim: "AIM",
-	yeah: "Yeah!"
-};
+var soundChoices = [
+	{value: "main", displayName: "Default"},
+	{value: "aim", displayName: "AIM"},
+	{value: "yeah", displayName: "Yeah!"}
+];
 
 settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Sound Choice", 'links', {
 	orderhint: 7.5,

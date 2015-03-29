@@ -58,7 +58,7 @@ function _readSetting(name) {
 					}
 					break;
 				case "select":
-					if (!settingData.get('selectOptions').has(localVal[0])) {
+					if (!settingData.get('selectOptions').find(item => item.get('value') === localVal[0])) {
 						localVal = null;
 					}
 					break;
@@ -172,7 +172,8 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 //  extra: is an object containing zero or more of the following properties:
 //   moredetails: extra text about the setting to display under the short description
 //   orderhint: number that will control the ordering of settings in the same section
-//   selectOptions: array of strings to show in the drop-down box for "select" type
+//   selectOptions: required if type is "select". Should be an array of objects with
+//                  value and displayName properties.
 //   defpriority: defaults to 0. If this is higher than the value of defpriority at the
 //                time the user last changed the setting, then the defval will take priority
 //                over the user's value. This allows the default setting to be changed at a
@@ -181,7 +182,7 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 //           this stream emits an event, or has a non-default value set.
 function newSetting(name, type, defval, description, section, extra={}) {
 	const moredetails = extra.moredetails;
-	const selectOptions = extra.selectOptions && Immutable.Map(extra.selectOptions);
+	const selectOptions = extra.selectOptions && Immutable.fromJS(extra.selectOptions);
 	const orderhint = extra.orderhint || 0;
 	const defpriority = extra.defpriority || 0;
 
