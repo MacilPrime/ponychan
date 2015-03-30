@@ -1191,3 +1191,10 @@ img.catalogthumb {
   src: local('Allan Bold'), local('Allan-Bold'),
     url(font/allan-bold.woff) format('woff');
 }
+@font-face {
+  font-family: 'Indie Flower';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Indie Flower'), local('IndieFlower'),
+		url(font/indie-flower.woff) format('woff');
+}
