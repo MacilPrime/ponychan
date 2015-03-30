@@ -1104,7 +1104,6 @@ img.catalogthumb {
   font-weight: 700;
   src:
     local('Josefin Sans Bold'), local('JosefinSans-Bold'),
-    url(font/josefin-sans-bold.woff2) format('woff2'),
     url(font/josefin-sans-bold.woff) format('woff');
 }
 @font-face {
@@ -1112,92 +1111,83 @@ img.catalogthumb {
   font-style: normal;
   font-weight: 400;
   src: local('La Belle Aurore'), local('LaBelleAurore'),
-    url(https://fonts.gstatic.com/s/labelleaurore/v6/Irdbc4ASuUoWDjd_Wc3md8dxVGbf3qyhvoXHfU-LjZg.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/labelleaurore/v6/Irdbc4ASuUoWDjd_Wc3mdyPuxW3DwjEqq93dVR72jP4.woff) format('woff');
+    url(font/la-belle-aurore.woff) format('woff');
 }
 @font-face {
   font-family: 'Modern Antiqua';
   font-style: normal;
   font-weight: 400;
-  src: local('Modern Antiqua Regular'), local('ModernAntiqua-Regular'), url(https://fonts.gstatic.com/s/modernantiqua/v6/8qX_tr6Xzy4t9fvZDXPkh-gUwfPtwj-Vn2gQvo3pfoE.woff2) format('woff2'), url(https://fonts.gstatic.com/s/modernantiqua/v6/8qX_tr6Xzy4t9fvZDXPkh9K4x0DJI-T8q5ozNuxBQHo.woff) format('woff');
+  src: local('Modern Antiqua Regular'), local('ModernAntiqua-Regular'),
+    url(font/modern-antiqua.woff) format('woff');
 }
 @font-face {
   font-family: 'Philosopher';
   font-style: normal;
   font-weight: 400;
   src: local('Philosopher'),
-    url(https://fonts.gstatic.com/s/philosopher/v7/OttjxgcoEsufOGSINYBGLY4P5ICox8Kq3LLUNMylGO4.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/philosopher/v7/OttjxgcoEsufOGSINYBGLYbN6UDyHWBl620a-IRfuBk.woff) format('woff');
+    url(font/philosopher.woff) format('woff');
 }
 @font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 400;
   src: local('Ubuntu'),
-    url(https://fonts.gstatic.com/s/ubuntu/v7/sDGTilo5QRsfWu6Yc11AXg.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/ubuntu/v7/_xyN3apAT_yRRDeqB3sPRg.woff) format('woff');
+    url(font/ubuntu.woff) format('woff');
 }
 @font-face {
   font-family: 'Molengo';
   font-style: normal;
   font-weight: 400;
   src: local('Molengo'), local('Molengo-Regular'),
-    url(https://fonts.gstatic.com/s/molengo/v7/pqkjY4KeO1LHeSjFqV3Zsg.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/molengo/v7/z1JWuCBrQt_Ta83eqIo6Dg.woff) format('woff');
+    url(font/molengo.woff) format('woff');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   src: local('Open Sans'), local('OpenSans'),
-    url(https://fonts.gstatic.com/s/opensans/v10/cJZKeOuBrn4kERxqtaUH3VtXRa8TVwTICgirnJhmVJw.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/opensans/v10/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+    url(font/open-sans.woff) format('woff');
 }
 @font-face {
   font-family: 'Neucha';
   font-style: normal;
   font-weight: 400;
   src: local('Neucha'),
-    url(https://fonts.gstatic.com/s/neucha/v7/irvP3TB0tsoy_UMHmCQlTw.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/neucha/v7/Z14xx5NkAnXABtaPytVZVA.woff) format('woff');
+    url(font/neucha.woff) format('woff');
 }
 @font-face {
   font-family: 'Cabin Sketch';
   font-style: normal;
   font-weight: 700;
   src: local('CabinSketch Bold'), local('CabinSketch-Bold'),
-    url(https://fonts.gstatic.com/s/cabinsketch/v8/ki3SSN5HMOO0-IOLOj069HNuWYKPzoeKl5tYj8yhly0.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/cabinsketch/v8/ki3SSN5HMOO0-IOLOj069Hl4twXkwp3_u9ZoePkT564.woff) format('woff');
+    url(font/cabinsketch-bold.woff2) format('woff2'),
+    url(font/cabinsketch-bold.woff) format('woff');
 }
 @font-face {
   font-family: 'Fontdiner Swanky';
   font-style: normal;
   font-weight: 400;
   src: local('Fontdiner Swanky'), local('FontdinerSwanky'),
-    url(https://fonts.gstatic.com/s/fontdinerswanky/v6/8_GxIO5ixMtn5P6COsF3Tsy4Bvmor6GKUp1XJvzweTE.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/fontdinerswanky/v6/8_GxIO5ixMtn5P6COsF3TsjICbAXuUS7AO0pfTwi7Ho.woff) format('woff');
+    url(font/fontdiner-swanky.woff) format('woff');
 }
 @font-face {
   font-family: 'Goudy Bookletter 1911';
   font-style: normal;
   font-weight: 400;
   src: local('Goudy Bookletter 1911'), local('GoudyBookletter1911'),
-    url(https://fonts.gstatic.com/s/goudybookletter1911/v6/l5lwlGTN3pEY5Bf-rQEuIAQibyVIKv8boZ0oFv0g-Lo.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/goudybookletter1911/v6/l5lwlGTN3pEY5Bf-rQEuIMvsW7MYFVYsuLRj6jSUyb0.woff) format('woff');
+    url(font/goudy-bookletter-1911.woff) format('woff');
 }
 @font-face {
   font-family: 'Dancing Script';
   font-style: normal;
   font-weight: 400;
   src: local('Dancing Script'), local('DancingScript'),
-    url(https://fonts.gstatic.com/s/dancingscript/v6/DK0eTGXiZjN6yA8zAEyM2Ud0sm1ffa_JvZxsF_BEwQk.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/dancingscript/v6/DK0eTGXiZjN6yA8zAEyM2VhlQWQpSCpzb2Peu3I-Q34.woff) format('woff');
+    url(font/dancing-script.woff) format('woff');
 }
 @font-face {
   font-family: 'Allan';
   font-style: normal;
   font-weight: 700;
   src: local('Allan Bold'), local('Allan-Bold'),
-    url(https://fonts.gstatic.com/s/allan/v7/XrS3DTpK5zGDCQZc8I2ynvesZW2xOQ-xsNqO47m55DA.woff2) format('woff2'),
-    url(https://fonts.gstatic.com/s/allan/v7/HDuJMALbbJ3Ny_JtXeABSfesZW2xOQ-xsNqO47m55DA.woff) format('woff');
+    url(font/allan-bold.woff) format('woff');
 }
