@@ -331,16 +331,6 @@ div.post .body .spoiler a {
 .comicsans {
 	font-family: comic sans, comic sans ms;
 }
-div.styles {
-	float: right;
-	padding-bottom: 20px;
-}
-div.styles a {
-	margin: 0 10px;
-}
-div.styles a.selected {
-	text-decoration: none;
-}
 table.test {
 	width: 100%;
 }
