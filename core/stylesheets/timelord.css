@@ -1,10 +1,10 @@
 /**
  * timelord
- * 
+ *
  * Created on 3/26/2015
  * Write the name and origin of this theme here.
- * 
- * 
+ *
+ *
  */
 /* Imports */
 @import "common/pony-kusaba.css";
@@ -195,7 +195,7 @@ body > header .subtitle {
 }
 
 /* 'Posting mode: reply' bar */
-.banner {
+div.banner {
 	background-color: rgb(154, 139, 102);
 }
 

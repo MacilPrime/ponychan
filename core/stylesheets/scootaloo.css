@@ -112,7 +112,7 @@ body > header h1 {
 	text-shadow: 0.05rem 0.05rem 0.1rem rgb(246, 220, 211);
 }
 /* 'Posting mode: reply' bar */
-.banner {
+div.banner {
 	background: #e6ad89;
 	color: white;
 }

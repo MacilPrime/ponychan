@@ -91,7 +91,7 @@ body > header h1 {
 
 
 /* Board Page header */
-.banner {
+div.banner {
     background: rgb(39, 39, 77);
     color: white;
 }
@@ -186,4 +186,3 @@ th {
 .wremove {
 
 }
-

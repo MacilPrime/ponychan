@@ -189,7 +189,7 @@ body > header .subtitle {
 }
 
 /* 'Posting mode: reply' bar */
-.banner {
+div.banner {
 	background-color: rgb(18, 15, 31);
 }
 

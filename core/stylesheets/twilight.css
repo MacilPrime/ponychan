@@ -63,7 +63,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 
 
 /* Board Page header */
-.banner {
+div.banner {
     background: rgb(226, 202, 226);
     color: rgb(255, 255, 255);
 }
@@ -196,4 +196,3 @@ form table th {
     content: " by ";
     color: rgb(163, 102, 158);
 }
-

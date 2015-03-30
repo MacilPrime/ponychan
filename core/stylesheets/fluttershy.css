@@ -72,7 +72,7 @@ body > header h1 {
     color: rgb(226, 174, 196);
 }
 /* 'Posting mode: reply' bar */
-.banner {
+div.banner {
     background: #E8E2A6;
     color: white;
 }

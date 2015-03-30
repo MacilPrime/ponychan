@@ -106,7 +106,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 
 
 /* Board Page header */
-.banner {
+div.banner {
     background: rgb(177, 211, 237);
     color: rgb(255, 255, 255);
 }
@@ -253,4 +253,3 @@ body > header .subtitle {
     content: " by ";
     color: rgb(163, 102, 158);
 }
-

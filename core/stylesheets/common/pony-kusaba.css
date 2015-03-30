@@ -72,19 +72,19 @@ body > header .subtitle {
 }
 
 /* Stripe */
-.banner {
+div.banner {
     letter-spacing: 3px;
-    font-weight: normal !important;
+    font-weight: normal;
     text-transform: lowercase;
 }
 /* override the white font in style.css */
-.banner .unimportant {
+div.banner .unimportant {
 	color: initial;
     float: left;
     font-size: 90%;
     letter-spacing: normal; /* This will revert the spacing on the links*/
 }
-.banner .unimportant + .unimportant {
+div.banner .unimportant + .unimportant {
     /* move the catalog link to the right */
     float: right;
 }

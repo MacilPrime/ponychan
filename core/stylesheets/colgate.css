@@ -52,9 +52,9 @@ h1, h2, h3, h4, h5, h6, header h1 {
 
 
 /* Board Page header */
-.banner {
-    background: #D2D2ED !important;
-    color: white !important;
+div.banner {
+    background: #D2D2ED;
+    color: white;
 }
 
 body > header .subtitle {

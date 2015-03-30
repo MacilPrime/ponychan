@@ -74,7 +74,7 @@ th, .ban h2 {
 
 
 /* Board Page header */
-.banner {
+div.banner {
     background: rgb(2, 20, 43);
     color: white;
 }

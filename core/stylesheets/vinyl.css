@@ -63,8 +63,8 @@ form[name="post"] table tr th,textarea,input[type="text"],input[type="password"]
 div.post.reply.highlighted {
     border-color:#8F0304
 }
-.banner {
-    background: #8F0304 !important
+div.banner {
+    background: #8F0304;
 }
 /* text decorations */
 .subject,.name,.trip {

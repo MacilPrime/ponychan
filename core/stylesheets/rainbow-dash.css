@@ -162,7 +162,7 @@ header h1 {
 .frontpage header h1 {
     color: white;
 }
-.banner {
+div.banner {
     background: rgba(63, 121, 139, 0.1);
     color: #fff;
     letter-spacing: 3px;
@@ -170,18 +170,18 @@ header h1 {
     text-transform: lowercase;
 }
 /* override the white font in style.css */
-.banner a {
+div.banner a {
     color: inherit;
 }
 img.banner {
     display: none !important;
 }
-.banner .unimportant {
+div.banner .unimportant {
     float: left;
     font-size: 90%;
     letter-spacing: normal; /* This will revert the spacing on the links*/
 }
-.banner .unimportant + .unimportant {
+div.banner .unimportant + .unimportant {
     float: right;
 }
 
