@@ -1235,8 +1235,8 @@ function index($page, $mod=false, $oldbump=false) {
 
 	$first = true;
 	while ($th = $query->fetch()) {
-		if ($first && !$th['sticky']) {
-			if ($oldbump !== false && $th['bump'] < $oldbump)
+		if ($first) {
+			if (!$th['sticky'] && $oldbump !== false && $th['bump'] < $oldbump)
 				return false;
 			$first = false;
 		}
