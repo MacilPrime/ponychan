@@ -2,7 +2,7 @@
 
 *------------------*
 | ~!!!CREDITS !!!~ |
-*------------------* 
+*------------------*
 Cloudsdale.css for MLPchan.net
 By Pegasi - 2012 (pegasi@derpymail.com)
 Clouds vectors taken from various dA galleries
@@ -10,26 +10,18 @@ Clouds vectors taken from various dA galleries
 *---------------------*
 | ~!!!DISCLAIMER !!!~ |
 *---------------------*
-While I am glad to be of good use, I maintain the right to may use and or alter 
+While I am glad to be of good use, I maintain the right to may use and or alter
 this document for future projects, unrelated to mlpchan.net.
-    
+
 Do NOT alter or redistribute this document without my permission.
-The administrative staff of mlpchan.net maintains the right to alter, but not to reuse 
+The administrative staff of mlpchan.net maintains the right to alter, but not to reuse
 this document for other projects without my permission.
-	
+
 This document is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    
-*/
 
-@font-face {
-	font-family: CELESTIA;
-	src: url("font/celestia.ttf");
-	src: url("font/celestia.ttf") format("truetype");
-	font-weight: normal;
-	font-style: normal;
-}
+*/
 
 body {
 	background: url("img/cloudsdale/cloudsgradient.png") repeat-x scroll 50% 0 #D7F0FF;
@@ -69,7 +61,7 @@ form table tr th {
 	background: #F0FFFF;
 	border-style: solid;
 	border-width: 1px;
-	border-color: #ccc;	
+	border-color: #ccc;
 }
 
 p.intro span.subject {
@@ -87,7 +79,7 @@ a.bodylink {
 
 /* OP is always a faggot */
 
-div.post.reply 
+div.post.reply
 {
 	background: #F0FFFF;
 	border-color: #B7C5D9;

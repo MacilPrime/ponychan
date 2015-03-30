@@ -10,38 +10,6 @@
 @import "common/pony-kusaba.css";
 @import "common/ghost-buttons.css";
 
-/* Fonts */
-@font-face {
-	font-family: 'La Belle Aurore';
-	font-style: normal;
-	font-weight: 400;
-	src: local('La Belle Aurore'),
-		local('LaBelleAurore'),
-		url(font/la-belle-aurore.woff2)
-		format('woff2');
-	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-}
-@font-face {
-	font-family: 'Modern Antiqua';
-	font-style: normal;
-	font-weight: 400;
-	src: local('Modern Antiqua Regular'),
-		local('ModernAntiqua-Regular'),
-		url(font/modern-antiqua.woff2)
-		format('woff2');
-	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-}
-@font-face {
-	font-family: 'Philosopher';
-	font-style: normal;
-	font-weight: 400;
-	src: local('Philosopher'),
-	url(font/philosopher.woff2) format('woff2');
-	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
-	U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF,
-	U+EFFD, U+F000;
-}
-
 /* Indiscriminate tags */
 body {
 	background: url(img/octavia/octavia-cutie-mark.png) bottom 30px right 30px no-repeat,

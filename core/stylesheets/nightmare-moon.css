@@ -2,15 +2,6 @@
 @import "common/ghost-buttons.css";
 @import "common/enigma-settings.css";
 
-/* Celestia Medium */
-@font-face {
-    font-family: 'Celestia';
-    src: url("font/celestia.ttf");
-    src: url("font/celestia.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
-}
-
 /* Indiscriminate tags */
 body {
     background: url(img/nightmare-moon/bg.png)

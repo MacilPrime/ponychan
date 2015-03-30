@@ -3,18 +3,6 @@
 
 @import "common/razor-buttons.css";
 
-@font-face {
-    font-family: 'Allan';
-    font-style: normal;
-    font-weight: 700;
-    src: local('Allan Bold'),
-         local('Allan-Bold'),
-         url(font/allan.woff2) format('woff2');
-    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB,
-                   U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-
-
 body {
     background:
     url("http://www.ponychan.net/chan/css/images/rainbow_dash/clouds_fg.png") no-repeat right top,
