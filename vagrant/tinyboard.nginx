@@ -57,6 +57,10 @@ server {
 		fastcgi_pass unix:/var/run/php5-fpm.sock;
 	}
 
+	location ~* \.(woff2?|ttf)$ {
+		expires 180d;
+	}
+
 	location ~* \.(jpe?g|png|gif|ogg|mp3)$ {
 		expires 30d;
 	}
