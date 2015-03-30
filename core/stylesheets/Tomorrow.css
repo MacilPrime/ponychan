@@ -17,26 +17,26 @@ a:hover {
     color: rgb(95, 137, 172);
 }
 
-.bodylink {
+a.bodylink {
     color: rgb(95, 137, 172);
 }
-.bodylink:hover {
+a.bodylink:hover {
     color: rgb(129, 162, 190);
 }
 
-.trip {
+span.trip {
     color:#8398A3;
 }
 
-header h1, header .subtitle, .blotter {
+header h1, header div.subtitle, div.blotter {
     color:#D9D9D9;
 }
 
-.reply, .banner, th {
+div.post.reply, div.banner, form table tr th {
     background: rgb(40, 42, 46);
     border: none;
 }
-.reply.highlighted{
+div.post.reply.highlighted{
     background:#3E3F43;
 }
 .post-hover, .post-inline {
@@ -47,33 +47,33 @@ header h1, header .subtitle, .blotter {
     background-color: rgba(0, 0, 0, 0.14) !important;
 }
 
-.name{
+p.intro span.name{
     color: rgb(197, 200, 198);
 }
-.email .name {
+p.intro a.email span.name {
     color: rgb(129, 162, 190);
 }
-.email:hover .name {
+p.intro a.email:hover span.name {
     color: rgb(95, 137, 172);
 }
-.quote{
+span.quote{
     color:#99BF87;
 }
-.subject{
+p.intro span.subject{
     color:#C4AADE;
 }
 
-.pages {
+div.pages {
     background: none;
     border: none;
 }
 
 
-.top{
+.boardlist.top{
     background: rgb(185, 185, 185);
     box-shadow: 0 -1px 5px rgb(150, 150, 150);
 }
-.top a, .top a:visited {
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
     font-size: 14px;
     padding-top: 0;
     padding-bottom: 0;
@@ -81,25 +81,25 @@ header h1, header .subtitle, .blotter {
     border-bottom: 2px solid transparent;
     color: rgb(75, 90, 110);
 }
-.top a:hover {
-    background: none;
-    border-top: 2px solid rgb(100, 100, 190);
-    padding-top: 0;
-}
-.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
     padding-top: 0;
     padding-bottom: 0;
 }
 
-.top .boardlistactive, .top .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
     background: none;
     border-top: 2px solid rgb(98, 98, 98);
     border-bottom: 2px solid rgb(98, 98, 98);
     padding-top: 0;
     padding-bottom: 0;
 }
+.boardlist.top .boardlistpart a:hover {
+    background: none;
+    border-top: 2px solid rgb(100, 100, 190);
+    padding-top: 0;
+}
 
-.hidetext{
+div.hidetext{
     background:#47533C;
 }
 #settingsScreen h1{
