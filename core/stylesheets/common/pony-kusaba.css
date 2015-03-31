@@ -95,7 +95,7 @@ div.banner .unimportant + .unimportant {
 }
 
 /* - Blotter - */
-.blotter {
+div.blotter {
     color: inherit;
 }
 
@@ -105,26 +105,26 @@ div.banner .unimportant + .unimportant {
 /* - Threads - */
 
 /* - Posts - */
-.post {
+div.post {
     line-height: 140%;
 }
-.intro {
-    margin: 0 !important;
+p.intro {
+    margin: 0;
 }
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
     font-weight: normal;
     font-style: italic;
 }
-.intro .subject:after {
+p.intro span.subject:after {
     content: " — ";
 }
-.name, a .name, .wname {
+.wname {
     font-weight: bold;
 }
-.email {
+a.email {
     border-bottom: 1px dashed inherit;
 }
-.trip, .wtrip {
+span.trip, .wtrip {
     font-family: monospace;
 }
 .fileinfo {
@@ -158,13 +158,10 @@ div.banner .unimportant + .unimportant {
     line-height: 140%;
     padding: 3px;
 }
-.post_no, .post_no:hover, .post_no:active {
-    text-decoration: underline;
-}
 
 /* -- Footer -- */
 .boardlist.bottom {
-    font-size: 120%;
+    font-size: 1.2em;
     /* upscales the board links at the bottom. */
 }
 
@@ -241,10 +238,7 @@ div.banner .unimportant + .unimportant {
     outline: none;
 }
 #qraddimage {
-    color: inherit !important;
-}
-.qrremovethumb {
-    color: #fff !important;
+    color: inherit;
 }
 
 /* - Settings - */

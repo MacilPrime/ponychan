@@ -67,6 +67,8 @@ div.post.reply, .wthread {
 }
 p.intro span.subject, .wsubject {
     color: #3F31C0;
+    font-weight: bold;
+    font-style: normal;
 }
 p.intro span.name, p.intro a.email span.name, .wname {
     color: #203090;
