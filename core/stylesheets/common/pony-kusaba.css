@@ -4,7 +4,11 @@
   * Ports kusaba css from old ponychan
 **/
 
-
+body {
+  background: #e8e8ff;
+  font-family: serif;
+  font-size: 12pt;
+}
 
 /* -- Indiscriminate tags -- */
 a {
