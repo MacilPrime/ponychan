@@ -8,13 +8,6 @@ Images Used:
 Derpy Muffin by aman692 (http://aman692.deviantart.com/)
 */
 
-@font-face {
-	font-family: CELESTIA;
-	src: url("font/celestia.ttf");
-	src: url("font/celestia.ttf") format("truetype");
-	font-weight: normal;
-	font-style: normal;
-}
 body {
 	background: #BABFCD;
 	color: black;
@@ -36,7 +29,7 @@ textarea#body, #qrcomment {
 }
 
 #qrmove {
-        background-color: #AEB2C0; 
+        background-color: #AEB2C0;
 }
 #qrmove a {
 	color: #E7DD6B;

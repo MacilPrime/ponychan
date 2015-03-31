@@ -1,0 +1,227 @@
+
+@import "common/pony-kusaba.css";
+@import "common/bubble-buttons.css";
+
+
+/* Indiscriminate tags */
+body {
+    background: #eef2f5;
+}
+a, a:visited, a:active {
+    font-family: 'Goudy Bookletter 1911', serif;
+    color: rgb(46, 97, 152);
+}
+a:hover {
+    color: rgb(157, 114, 235);
+}
+th {
+    background: rgb(111, 206, 244);
+}
+input[type=button], input[type=submit], input[type=file], button {
+    height: 1.8em;
+    margin: 0 2px;
+}
+input[type=text], input[type=password], input[type=search], textarea {
+    border: 1px solid rgb(35, 159, 206);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    outline: 1px solid rgb(31, 114, 156);
+}
+hr {
+    border-color: rgb(192,192,192) !important;
+}
+
+/* Setting the color scheme */
+/* Tone 1 - Heads */
+h1, h2, h3, h4, h5, h6, header h1, .heading {
+    color: rgb(77, 24, 111);
+}
+/* Tone 2 - Cells */
+.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathread {
+    background-color: rgb(222, 239, 244);
+}
+.replyContainer:nth-of-type(2n) .reply {
+    background-color: rgb(205, 235, 242);
+}
+/* Tone 3 - Bars */
+.top, #qrmove {
+    background-color: rgb(106, 53, 139);
+}
+.top a {
+    color: rgb(191, 163, 245);
+}
+#qrmove a {
+    color: rgb(208, 193, 208);
+}
+.top a:hover, #qrmove a:hover {
+    color: #f2e2f2;
+}
+/* Semantics */
+
+
+
+/* Navigation bar */
+.top {
+    background-image: linear-gradient(to bottom, rgb(134, 80, 164), rgb(113, 54, 142))
+}
+.top a:hover {
+    background-color: rgb(114, 204, 242);
+}
+.top .boardlistactive, .watcherButton.open {
+    border-color: rgb(114, 204, 242);
+}
+.top a[href="/"] {
+    color: rgb(250, 241, 255);
+}
+
+
+
+
+/* Board Page header */
+div.banner {
+    background: rgb(177, 211, 237);
+    color: rgb(255, 255, 255);
+}
+body > header h1 {
+    font-family: "Dancing Script", cursive;
+    text-shadow: 0 0 3px rgb(77, 24, 111);
+}
+body > header .subtitle {
+    color: rgb(107, 96, 116);
+}
+
+/* Post form */
+#threadsearchbox:focus {
+    outline: none;
+    border-color: rgb(107, 66, 104)
+}
+
+#qrDisplayButton {
+    color: rgb(46, 97, 152);
+}
+
+.blotter {
+    color: inherit;
+}
+
+
+/* Posts */
+.reply, .wthread, .hashtag, #updateSettings, .catathread {
+    border-color: rgb(150, 202, 240);
+    line-height: 140%;
+    padding: 3px;
+    border-radius: 0.3rem;
+}
+.reply {
+    padding: 0.4em;
+    border: 1px solid rgb(145, 219, 238);
+}
+.postHider {
+    margin-top: -2px;
+}
+.intro {
+    margin: 0;
+}
+.subject, .wsubject {
+    color: rgb(52, 122, 191);
+}
+.intro .subject {
+    font: italic bold 150%/100% "Dancing Script", cursive;
+}
+.intro .subject:after {
+    color: rgb(155, 155, 155);
+    content: " — ";
+}
+.name, .email .name, .wname, .email:hover .name {
+    color: rgb(96, 0, 160);
+    font-weight: bold;
+    font-family: 'Goudy Bookletter 1911', serif;
+    font-size: 110%;
+}
+.email {
+    border-bottom: 1px dashed rgb(77, 24, 111);
+}
+
+.trip, .wtrip {
+    color: rgb(102, 79, 161);
+    font-family: monospace;
+    font-size: 110%;
+    letter-spacing: -1px;
+}
+.post_no {
+    font-size: 110%;
+    text-decoration: underline;
+    color: rgb(88, 41, 103);
+}
+.post_no:hover {
+    color: rgb(150, 73, 174);
+}
+.fileinfo {
+    font-size: 80%;
+    color: rgb(50, 50, 50)
+}
+.reply .fileinfo {
+    line-height: 120%;
+}
+
+.reply.highlighted {
+    border-left-color: #4c166e;
+    background: rgb(246, 236, 247);
+    border: 1px solid rgb(222, 202, 215);
+}
+.op .delete {
+    /* Realigns the checkboxes */
+    margin-top: 4px;
+}
+.omitted, .toolong {
+    color: gray;
+    padding: 0.3em 2em;
+}
+.bodylink {
+    color: rgb(108, 0, 170);
+}
+.quote {
+    color: rgb(160, 48, 192);
+}
+
+
+/* Footer */
+.pages {
+    background-color: inherit;
+    border: 0;
+}
+.boardlist.bottom {
+    font-size: 120%;
+}
+
+
+
+/* -- Manipulated DOM -- */
+
+/*Settings page*/
+#settingsScreen {
+    background: rgb(223, 204, 223);
+}
+/* Mod links */
+.controls {
+    font-size: 90%;
+}
+/* Thread watcher */
+#watcherScreen {
+    border-color: rgb(169, 114, 166);
+}
+.wthread {
+    border-bottom: 1px dashed gray;
+}
+.wpost {
+    color: black;
+}
+.wlink {
+    color: rgb(48, 48, 173)
+}
+.wlinkpart + .wname:before {
+    /* The element is always there. If no nickname is given, it'll leave
+        you an empty element. */
+    content: " by ";
+    color: rgb(163, 102, 158);
+}

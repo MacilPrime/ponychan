@@ -1,0 +1,172 @@
+@import "common/pony-kusaba.css";
+
+/* Indiscriminate tags */
+body {
+    background: rgb(255,250,201);
+}
+a, a:visited, a:active, .bodylink {
+    color: rgb(0,68,153);
+}
+a:hover {
+    color: rgb(238,85,170);
+}
+input[type=text], input[type=password], textarea {
+    border: 1px solid #90a0d0;
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    border: 1px solid #0020c0;
+}
+th {
+    background: rgb(248,184,209);
+}
+
+/* -- Setting the common color scheme -- */
+/* Heading colors */
+h1, h2, h3, h4, h5, h6, header h1, .heading {
+    color: rgb(240,160,192);
+}
+/* Head bar backgrounds */
+.top, #qrmove, .ban h2 {
+    background: rgb(17,85,85);
+}
+/* Head bar links */
+.top a, .top a:visited, #qrmove a, #qrmove a:visited {
+    color: rgb(144,192,192);
+}
+/* Head bar links on hover */
+.top a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
+    color: #e0e8e8;
+}
+/* Block items */
+.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+    border-color: rgb(229, 214, 139);
+    background-color: rgb(255,238,153);
+}
+
+
+/* Navigation bar */
+.top a:hover {
+    background: rgb(0,64,64);
+}
+.top .boardlistactive, .watcherButton.open {
+    border-color: #9ee;
+}
+.top a[href="/"] {
+    color: rgb(187, 210, 201);
+}
+
+
+/* -- Board Page header -- */
+/* Board headline */
+body > header h1 {
+    color: rgb(226,122,178);
+    font-family: "Indie Flower", cursive;
+}
+/* Board description */
+.subtitle {
+    color: rgb(226, 174, 196);
+}
+/* 'Posting mode: reply' bar */
+div.banner {
+    background: #E8E2A6;
+    color: white;
+}
+
+
+/* Post form */
+.blotter {
+    color: inherit;
+}
+
+
+/* Posts */
+.post {
+    line-height: 140%;
+}
+.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+    line-height: 150%;
+    padding: 3px;
+}
+
+.postHider {
+    margin-top: -2px;
+}
+.intro {
+    margin: 0;
+}
+.subject, .wsubject {
+    color: rgb(153,136,34);
+    font-weight: normal;
+    font-style: italic;
+}
+.intro .subject:after {
+    content: " — ";
+}
+.name, .email .name, .email:hover .name, .wname {
+    color: rgb(34,136,136);
+    font-weight: bold;
+}
+.email {
+    border-bottom: 1px dashed #288;
+}
+.trip, .wtrip {
+    color: rgb(221,102,153);
+    font-family: monospace;
+}
+.post_no {
+    text-decoration: underline;
+    color: #09147E;
+}
+.post_no:hover {
+    color: #2F3CC2;
+}
+.fileinfo {
+    font-size: 80%;
+}
+.reply .fileinfo {
+    line-height: 120%;
+}
+.reply.highlighted {
+    background: rgb(255, 245, 187);
+    border-style: solid none none solid;
+    border-color: rgb(201, 189, 67);
+}
+.op .delete {
+    /* Realigns the checkboxes */
+    margin-top: 4px;
+}
+
+.quote {
+    color: rgb(208,96,160);
+}
+
+
+
+
+/* -- Manipulated DOM -- */
+
+/*Settings page*/
+#settingsScreen h1, #settingsScreen h2 {
+    color: rgb(197, 112, 146);
+}
+
+/* Quick Reply */
+#qrDisplayButton {
+    color: rgb(44, 101, 176);
+}
+
+
+/* Thread watcher */
+#watcherScreen {
+    border-color: rgb(107, 119, 169);
+}
+.wlinkpart + .wname:before {
+    /* The element is always there. If no nickname is given, it'll leave
+        you an empty element. */
+    color: #607ba3;
+}
+
+/* Other pages */
+.ban {
+    border-color: black;
+}

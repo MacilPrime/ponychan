@@ -331,16 +331,6 @@ div.post .body .spoiler a {
 .comicsans {
 	font-family: comic sans, comic sans ms;
 }
-div.styles {
-	float: right;
-	padding-bottom: 20px;
-}
-div.styles a {
-	margin: 0 10px;
-}
-div.styles a.selected {
-	text-decoration: none;
-}
 table.test {
 	width: 100%;
 }
@@ -671,6 +661,15 @@ table.recaptchatable {
 }
 .recaptchatable a {
 	display: block;
+}
+/* reloader */
+#updateSettings {
+	background-color: grey;
+	text-align: right;
+	padding: 2px;
+}
+#updateIntervalField {
+	width: 3em;
 }
 /* qr */
 #qrtoggleoptions {
@@ -1098,4 +1097,113 @@ img.catalogthumb {
 	img.banner {
 		height: auto !important;
 	}
+}
+
+/* Fonts */
+@font-face {
+	font-family: CELESTIA;
+	src: url("font/celestia.ttf");
+	src: url("font/celestia.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+  font-family: 'Josefin Sans';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    local('Josefin Sans Bold'), local('JosefinSans-Bold'),
+    url(font/josefin-sans-bold.woff) format('woff');
+}
+@font-face {
+  font-family: 'La Belle Aurore';
+  font-style: normal;
+  font-weight: 400;
+  src: local('La Belle Aurore'), local('LaBelleAurore'),
+    url(font/la-belle-aurore.woff) format('woff');
+}
+@font-face {
+  font-family: 'Modern Antiqua';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Modern Antiqua Regular'), local('ModernAntiqua-Regular'),
+    url(font/modern-antiqua.woff) format('woff');
+}
+@font-face {
+  font-family: 'Philosopher';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Philosopher'),
+    url(font/philosopher.woff) format('woff');
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Ubuntu'),
+    url(font/ubuntu.woff) format('woff');
+}
+@font-face {
+  font-family: 'Molengo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Molengo'), local('Molengo-Regular'),
+    url(font/molengo.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'),
+    url(font/open-sans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Neucha';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Neucha'),
+    url(font/neucha.woff) format('woff');
+}
+@font-face {
+  font-family: 'Cabin Sketch';
+  font-style: normal;
+  font-weight: 700;
+  src: local('CabinSketch Bold'), local('CabinSketch-Bold'),
+    url(font/cabinsketch-bold.woff2) format('woff2'),
+    url(font/cabinsketch-bold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Fontdiner Swanky';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Fontdiner Swanky'), local('FontdinerSwanky'),
+    url(font/fontdiner-swanky.woff) format('woff');
+}
+@font-face {
+  font-family: 'Goudy Bookletter 1911';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Goudy Bookletter 1911'), local('GoudyBookletter1911'),
+    url(font/goudy-bookletter-1911.woff) format('woff');
+}
+@font-face {
+  font-family: 'Dancing Script';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Dancing Script'), local('DancingScript'),
+    url(font/dancing-script.woff) format('woff');
+}
+@font-face {
+  font-family: 'Allan';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Allan Bold'), local('Allan-Bold'),
+    url(font/allan-bold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Indie Flower';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Indie Flower'), local('IndieFlower'),
+		url(font/indie-flower.woff) format('woff');
 }

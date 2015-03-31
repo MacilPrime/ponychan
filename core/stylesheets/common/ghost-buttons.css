@@ -1,0 +1,55 @@
+/**
+ * ghost-buttons.css
+ *
+ * A recent popular design trend where the input is a border
+ * with a transparent background fill, that fills its color
+ * when you hover over it.
+ *
+**/
+
+
+input[type=button],
+input[type=submit]:not(#qrsubmit),
+button:not(#qrfilebutton), #qrDisplayButton, select {
+    font: bold 80%/140% 'Arial Narrow', 'Arial', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: inherit;
+    background: transparent;
+    border: 1px solid;
+    padding: 0.4em 0.6em;
+    margin: 0 2px;
+    cursor: pointer;
+    transition: color 0.25s ease-in-out,
+    background-color 0.25s ease-in-out;
+}
+#qrDisplayButton {
+    position: relative;
+    top: 0.4em;
+    font-size: 100%;
+}
+
+input[type=button]:hover,
+input[type=submit]:not(#qrsubmit):hover,
+button:not(#qrfilebutton):hover, #qrDisplayButton:hover, select:hover {
+    background-color: white;
+    color: black;
+}
+
+input::-webkit-file-upload-button {
+    font: bold 80%/140% 'Arial Narrow', 'Arial', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: inherit;
+    background: transparent;
+    border: 1px solid;
+    padding: 0.4em 0.6em;
+    margin: 0 2px;
+    cursor: pointer;
+    transition: color 0.25s ease-in-out,
+        background-color 0.25s ease-in-out;
+}
+input::-webkit-file-upload-button:hover {
+    background-color: white;
+    color: black;
+}

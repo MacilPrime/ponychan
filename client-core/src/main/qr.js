@@ -226,6 +226,7 @@ $(document).ready(function(){
 		.attr("accesskey", "s")
 		.appendTo($buttonrow);
 	var $row = $("<div/>")
+        .attr("class", "qr-options")
 		.css("min-width", "100%")
 		.appendTo($QRForm);
 	var $spoiler = $("<input/>")
@@ -257,6 +258,7 @@ $(document).ready(function(){
 		.prepend($auto)
 		.appendTo($row);
 	var $modrow = $("<div/>")
+        .attr("class", "qr-options")
 		.css("min-width", "100%")
 		.appendTo($QRForm);
 	var $sticky = $("<input/>")

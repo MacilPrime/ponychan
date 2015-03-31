@@ -68,8 +68,6 @@ $(document).ready(function(){
 
 	var $statusSettings = $("<div/>")
 		.attr("id", "updateSettings")
-		.css("background-color", "grey")
-		.css("text-align", "right")
 		.appendTo($statusContainer)
 		.hide();
 	var $updateCheckboxLabel = $("<label/>")
@@ -97,7 +95,6 @@ $(document).ready(function(){
 	var $updateIntervalField = $("<input/>")
 		.attr("id", "updateIntervalField")
 		.attr("type", "text")
-		.css("width", "3em")
 		.val(updateInterval)
 		.blur(function() {
 			var newVal = parseInt($(this).val());

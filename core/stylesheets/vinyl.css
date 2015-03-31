@@ -1,0 +1,89 @@
+/**
+ * Original Design:Vanilla Mint
+ *
+ * Background picture illustrated by ClaustrophobicVamp on D/A,
+ * Mint couldn't have made this theme without it,or them.
+ *
+ **/
+@import "common/razor-buttons.css";
+
+body {
+    background:black url("http://www.ponychan.net/chan/css/images/vinyl-bg1a.png") no-repeat fixed right top
+}
+body,body h1,header div.subtitle,div.blotter,h2 {
+    color:#98B1D7
+}
+body h1 {
+    font-family:"Capacitor",Courier,monospace
+}
+.pages {
+    background:transparent !important
+}
+div.pages {
+    border:none
+}
+a,a:visited {
+    color:#98B1D7 !important
+}
+a:hover {
+    color: #E3ECF2 !important
+}
+/* top navbar */
+.boardlist.top {
+    background:black
+}
+.top .boardlistpart a {
+    border-top:solid #30364D;
+    margin:0 !important;
+}
+.top .boardlistpart a:hover {
+    background:#30364D !important;
+    border-top:solid #7479BD;
+}
+.top a.boardlistactive,a.watcherButton.open {
+    background:black !important;
+    border-top:solid #7479BD !important;
+    padding-top: 6px !important;
+}
+/* postarea */
+form[name="post"] table tr th,textarea,input[type="text"],input[type="password"] {
+    border:2px solid #56658E;
+    background:url("http://www.ponychan.net/chan/css/images/vinyl-bg1b.png") no-repeat fixed right top;
+    border-radius:10px;
+    color: #98B1D7;
+}
+/* boxes n stuff */
+.thread div.reply,.homeblock,#qr,#settingsScreen,#watcherScreen,div.reply.post-hover,div.post.reply.highlighted {
+    background:black url("http://www.ponychan.net/chan/css/images/vinyl-bg1b.png") no-repeat fixed right top;
+    color:#98B1D7;
+    border:2px solid #C7D9E5;
+    border-bottom-right-radius:12px;
+    border-top-left-radius:12px;
+}
+div.post.reply.highlighted {
+    border-color:#8F0304
+}
+div.banner {
+    background: #8F0304;
+}
+/* text decorations */
+.subject,.name,.trip {
+    color:white !important
+}
+a.email {
+    text-decoration-style:dashed
+}
+span.quote,.wname {
+    color:white
+}
+#qr label {
+    color:#98B1D7 !important
+}
+#qrmove {
+    background:#8F0304;
+    border-top-left-radius:10px;
+}
+.hidetext {
+    background:inherit;
+    border-color: #8F0304;
+}
