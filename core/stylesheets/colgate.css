@@ -50,66 +50,61 @@ div.banner {
     color: white;
 }
 
-body > header .subtitle {
+header div.subtitle {
     color: #465A99;
 }
 /* Post form */
 
-th {
-    background: #a8b8f0 !important;
+form table tr th {
+    background: #a8b8f0;
 }
 
 
 
 /* Posts */
-.reply, .wthread {
-    background-color: #d4dcf0 !important;
+div.post.reply, .wthread {
+    background-color: #d4dcf0;
 }
-.subject, .wsubject {
-    color: #3F31C0 !important;
+p.intro span.subject, .wsubject {
+    color: #3F31C0;
 }
-.name, a .name, .wname {
-    color: #203090 !important;
+p.intro span.name, p.intro a.email span.name, .wname {
+    color: #203090;
 }
-.email {
-    border-bottom: 1px dashed #6080e0 !important;
+a.email {
+    border-bottom: 1px dashed #6080e0;
 }
-.trip, .wtrip {
-    color: #4060b0 !important;
+span.trip, .wtrip {
+    color: #4060b0;
 }
-.post_no {
-    color: #09147E !important;
+p.intro a.post_no {
+    color: #09147E;
 }
-.post_no:hover {
-    color: #2F3CC2 !important;
+p.intro a.post_no:hover {
+    color: #2F3CC2;
 }
 .reply .fileinfo {
     line-height: 120%;
 }
-/*.helphover div, .reply, .highlight, .reflinkpreview {*/
-/*background: #d4dcf0;*/
-/*}*/
-.reply.highlighted {
-    background: #E9ECF7 !important;
+
+div.post.reply.highlighted {
+    background: #EDEDF9;
     border-color: #CFDAE8;
 }
-.quote {
-    color: #4070c0 !important;
+span.quote {
+    color: #4070c0;
 }
-
 
 
 /* -- Manipulated DOM -- */
-
-/* Posts*/
 
 /* Thread watcher */
 #watcherScreen {
     color: black;
     margin: 0;
     right: 0;
-    border-radius: 0 !important;
-    border-color: rgb(107, 119, 169) !important;
+    border-radius: 0;
+    border-color: rgb(107, 119, 169);
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
     font-size: inherit;
 }
@@ -119,9 +114,6 @@ th {
 .wpost {
     color: #000;
 }
-.wlinkpart + .wname:before {
+.wname:before {
     color: #607ba3;
-}
-.wremove {
-
 }
