@@ -1,7 +1,5 @@
 
-
-@import "common/pony-kusaba.css";
-
+@import "common/pony-kusaba.css?1";
 
 /* Indiscriminate tags */
 body {
