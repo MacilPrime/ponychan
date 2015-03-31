@@ -537,7 +537,7 @@
 	// Maximum number of pages. Content past the last page is automatically purged.
 	$config['max_pages'] = 10;
 	// Replies to show per thread on the board index page.
-	$config['threads_preview'] = 5;
+	$config['threads_preview'] = 3;
 	// Same as above, but for stickied threads.
 	$config['threads_preview_sticky'] = 1;
 
