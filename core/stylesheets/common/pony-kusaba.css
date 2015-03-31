@@ -34,10 +34,11 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 /* -- Head -- */
 
 /* - Navigation bar - */
-.boardlist.top a {
-    padding-left: 0.3em !important;
-    padding-right: 0.3em !important;
+.boardlist.top .boardlistpart a {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
 }
+
 
 .top a:hover {
     background-color: rgba(0,0,0,0.3) !important;

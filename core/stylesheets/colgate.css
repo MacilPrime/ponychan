@@ -7,11 +7,14 @@
 body {
     background: #e8e8ff;
 }
-a, a:visited, a:active {
-    color: #0010B0 !important;
+a, a:visited, a:active, a.bodylink {
+    color: #0010B0;
 }
-a:hover, .reflink a:hover {
-    color: #35E !important;
+a:hover,
+a.bodylink:hover,
+div.banner a:hover,
+p.intro a.post_no:hover {
+    color: #35E;
 }
 input[type=text], input[type=password], textarea {
     border: 1px solid #90a0d0;
@@ -28,26 +31,16 @@ h1, h2, h3, h4, h5, h6, header h1 {
     background-color: #152051;
     color: white;
 }
-.boardlist.top a, #qrmove a {
-    color: #DADCF0 !important;
-    border-color: #45a !important;
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited,
+.boardlist.top .boardlistpart a[href="/"], #qrmove a {
+    color: #c0c0ff;
+    border-color: #45a;
 }
-.boardlist.top a:hover, #qrmove a:hover {
-    color: #e8f0ff !important;
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover {
+    color: #e8f0ff;
 }
-/* Semantics */
-
-
-
-/* Navigation bar */
-.boardlist.top a {
-    padding-left: 0.3em !important;
-    padding-right: 0.3em !important;
-    color: #c0c0ff !important;
-    border-top-color: #45a;
-}
-.boardlist.top a[href="/"] {
-    color: #D1D4F2 !important;
+.boardlist.top .boardlistpart a[href="/"] {
+    color: #D1D4F2;
 }
 
 
