@@ -13,7 +13,7 @@ class Cache {
 	private static $cache;
 	public static function init() {
 		global $config;
-		
+
 		switch ($config['cache']['enabled']) {
 			case 'memcached':
 				self::$cache = new Memcached();
@@ -34,9 +34,9 @@ class Cache {
 	}
 	public static function get($key) {
 		global $config, $debug;
-		
+
 		$key = $config['cache']['prefix'] . $key;
-		
+
 		$data = false;
 		switch ($config['cache']['enabled']) {
 			case 'memcached':
@@ -59,22 +59,27 @@ class Cache {
 				$data = json_decode(self::$cache->get($key), true);
 				break;
 		}
-		
+
 		// debug
 		if ($data !== false && $config['debug']) {
 			$debug['cached'][] = $key;
 		}
-		
+
 		return $data;
 	}
 	public static function set($key, $value, $expires = false) {
 		global $config;
-		
+
 		$key = $config['cache']['prefix'] . $key;
-		
+
 		if (!$expires)
 			$expires = $config['cache']['timeout'];
-		
+
+		if (json_encode($value) === FALSE) {
+			error_log('cached value was not jsonifiable!');
+			return;
+		}
+
 		switch ($config['cache']['enabled']) {
 			case 'memcached':
 				if (!self::$cache)
@@ -95,13 +100,13 @@ class Cache {
 			case 'php':
 				self::$cache[$key] = $value;
 				break;
-		}			
+		}
 	}
 	public static function delete($key) {
 		global $config;
-		
+
 		$key = $config['cache']['prefix'] . $key;
-		
+
 		switch ($config['cache']['enabled']) {
 			case 'memcached':
 			case 'redis':
@@ -122,7 +127,7 @@ class Cache {
 	}
 	public static function flush() {
 		global $config;
-		
+
 		switch ($config['cache']['enabled']) {
 			case 'memcached':
 				if (!self::$cache)
@@ -138,8 +143,7 @@ class Cache {
 					self::init();
 				return self::$cache->flushDB();
 		}
-		
+
 		return false;
 	}
 }
-
