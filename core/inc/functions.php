@@ -1382,7 +1382,7 @@ function index($page, $mod=false, $oldbump=false) {
 			$replies = $cached['replies'];
 			$omitted = $cached['omitted'];
 		} else {
-			$posts = prepare(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE `thread` = :id ORDER BY `id` DESC LIMIT :limit", $board['uri']));
+			$posts = prepare(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip`, NULL AS `ip_data` FROM `posts_%s` WHERE `thread` = :id ORDER BY `id` DESC LIMIT :limit", $board['uri']));
 			$posts->bindValue(':id', $th['id']);
 			$posts->bindValue(':limit', ($th['sticky'] ? $config['threads_preview_sticky'] : $config['threads_preview']), PDO::PARAM_INT);
 			$posts->execute() or error(db_error($posts));
