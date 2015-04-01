@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-2-migrate');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-2');
 
 require 'inc/functions.php';
 
@@ -317,6 +317,14 @@ if (file_exists($config['has_installed'])) {
 				query(sprintf("UPDATE `posts_%s`
 					SET `ip_type` = IF(`ip` LIKE '%%.%%', 0, 1), `ip_data` = INET6_ATON(`ip`)
 					WHERE LENGTH(`ip_data`) = 0", $board['uri'])) or error(db_error());
+			}
+		case 'v0.9.6-dev-8-mlpchan-2-migrate':
+			query("ALTER TABLE `bans` DROP COLUMN `ip`, DROP COLUMN `ip_type`") or error(db_error());
+			query("ALTER TABLE `ip_notes` DROP COLUMN `ip`") or error(db_error());
+			query("ALTER TABLE `reports` DROP COLUMN `ip`") or error(db_error());
+			query("ALTER TABLE `modlogs` DROP COLUMN `ip`") or error(db_error());
+			foreach ($boards as $board) {
+				query(sprintf("ALTER TABLE `posts_%s` DROP COLUMN `ip`", $board['uri'])) or error(db_error());
 			}
 		case false:
 			// Update version number
