@@ -53,8 +53,8 @@ function parse_time($str) {
 	return time() + $expire;
 }
 
-function ban($mask, $reason, $length, $board) {
-	global $mod, $pdo;
+function ban($mask, $reason, $length, $board, $ban_type) {
+	global $mod, $pdo, $config;
 	
 	if(mb_strlen(trim($reason)) == 0) {
 		error('Reason must be given for ban!');
@@ -65,12 +65,18 @@ function ban($mask, $reason, $length, $board) {
 		error('Invalid ban mask.');
 	}
 	
-	$query = prepare("INSERT INTO `bans` (`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`seen`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, 0)");
+	$ban_type = (int)$ban_type;
+	if ($ban_type !== FULL_BAN && $ban_type !== IMAGE_BAN) {
+		error(sprintf($config['error']['invalidfield'], 'ban_type'));
+	}
+	
+	$query = prepare("INSERT INTO `bans` (`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`ban_type`,`seen`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, :ban_type, 0)");
 	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 	$query->bindValue(':range_start', $range['range_start']);
 	$query->bindValue(':range_end', $range['range_end']);
 	$query->bindValue(':mod', $mod['id'], PDO::PARAM_INT);
 	$query->bindValue(':time', time(), PDO::PARAM_INT);
+	$query->bindValue(':ban_type', $ban_type, PDO::PARAM_INT);
 	if ($reason !== '') {
 		markup($reason);
 		$query->bindValue(':reason', $reason);
@@ -92,6 +98,7 @@ function ban($mask, $reason, $length, $board) {
 	$mask_url = str_replace('/', '^', $mask);
 	modLog('Created a new ' .
 		($length > 0 ? preg_replace('/^(\d+) (\w+?)s?$/', '$1-$2', until($length)) : 'permanent') .
+		($ban_type == IMAGE_BAN ? ' image' : '') .
 		' ban (<small>#' . $pdo->lastInsertId() . "</small>) for <a href=\"?/IP/$mask_url\">$mask</a> with " .
 		($reason ? 'reason: ' . utf8tohtml($reason) . '' : 'no reason'));
 }

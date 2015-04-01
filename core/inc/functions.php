@@ -926,6 +926,9 @@ function ago($timestamp) {
 	return ($num = round($difference/(60*60*24*365))) . ' year' . ($num != 1 ? 's' : '');
 }
 
+define('FULL_BAN', 0);
+define('IMAGE_BAN', 1);
+
 function displayBan($ban) {
 	global $config, $wantjson;
 
@@ -953,7 +956,7 @@ function displayBan($ban) {
 	die($banhtml);
 }
 
-function checkBan($board = 0) {
+function checkBan($board = 0, $types = null) {
 	global $config;
 
 	if (!isset($_SERVER['REMOTE_ADDR'])) {
@@ -964,9 +967,15 @@ function checkBan($board = 0) {
 	if (event('check-ban', $board))
 		return true;
 
-	$query = prepare("SELECT `id`, `set`, `expires`, `reason`, `board`, `seen` FROM `bans`
+	if ($types === null)
+		$types = array(FULL_BAN);
+
+	$query = prepare("SELECT `id`, `set`, `expires`, `reason`, `board`, `seen`, `ban_type` FROM `bans`
 		WHERE `range_type` = :ip_type AND `range_start` <= INET6_ATON(:ip) AND INET6_ATON(:ip) <= `range_end`
-		AND (`board` IS NULL OR `board` = :board)");
+		AND (`board` IS NULL OR `board` = :board)
+		AND `ban_type` IN (" . implode(', ', $types) . ")
+		ORDER BY `ban_type` ASC, `id` ASC"
+		);
 	$query->bindValue(':ip_type', ipType($_SERVER['REMOTE_ADDR']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':board', $board);

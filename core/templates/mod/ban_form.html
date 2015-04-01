@@ -84,6 +84,25 @@
 			</td>
 		</tr>
 		<tr>
+			<th>{% trans 'Type' %}</th>
+			<td>
+				<ul style="padding:0 5px;list-style:none">
+					<li>
+						<input type="radio" id="bantype-fullban" name="ban_type" value="0" checked>
+						<label style="display:inline" for="bantype-fullban">
+							{% trans 'Full ban' %}
+						</label>
+					</li>
+					<li>
+						<input type="radio" id="bantype-imageban" name="ban_type" value="1">
+						<label style="display:inline" for="bantype-imageban">
+							{% trans 'Image ban' %}
+						</label>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
 			<td></td>
 			<td><input name="new_ban" type="submit" value="{% trans 'New Ban' %}"></td>
 		</tr>

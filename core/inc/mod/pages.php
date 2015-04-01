@@ -667,14 +667,14 @@ function mod_ban() {
 	if (!hasPermission($config['mod']['ban']))
 		error($config['error']['noaccess']);
 
-	if (!isset($_POST['mask'], $_POST['reason'], $_POST['length'], $_POST['board'])) {
+	if (!isset($_POST['mask'], $_POST['reason'], $_POST['length'], $_POST['board'], $_POST['ban_type'])) {
 		mod_page(_('New ban'), 'mod/ban_form.html', array('token' => make_secure_link_token('ban')));
 		return;
 	}
 
 	require_once 'inc/mod/ban.php';
 
-	ban($_POST['mask'], $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board']);
+	ban($_POST['mask'], $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board'], $_POST['ban_type']);
 
 	if (isset($_POST['redirect']))
 		header('Location: ' . $_POST['redirect'], true, $config['redirect_http']);
@@ -1042,7 +1042,7 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 	$thread = $_post['thread'];
 	$mask = $_post['ip'];
 
-	if (isset($_POST['new_ban'], $_POST['reason'], $_POST['length'], $_POST['board'])) {
+	if (isset($_POST['new_ban'], $_POST['reason'], $_POST['length'], $_POST['board'], $_POST['ban_type'])) {
 		require_once 'inc/mod/ban.php';
 
 		// Check the referrer
@@ -1052,7 +1052,7 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 		if (isset($_POST['mask']))
 			$mask = $_POST['mask'];
 
-		ban($mask, $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board']);
+		ban($mask, $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board'], $_POST['ban_type']);
 
 		if (isset($_POST['public_message'], $_POST['message'])) {
 			// public ban message

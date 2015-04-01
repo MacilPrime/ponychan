@@ -83,12 +83,18 @@ class Filter {
 				
 				$range = parse_mask($_SERVER['REMOTE_ADDR']);
 				
-				$query = prepare("INSERT INTO `bans` (`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :set, :expires, :reason, :board)");
+				if (isset($this->ban_type))
+					$ban_type = $this->ban_type;
+				else
+					$ban_type = FULL_BAN;
+				
+				$query = prepare("INSERT INTO `bans` (`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`ban_type`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :set, :expires, :reason, :board, :ban_type)");
 				$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 				$query->bindValue(':range_start', $range['range_start']);
 				$query->bindValue(':range_end', $range['range_end']);
 				$query->bindValue(':mod', -1);
 				$query->bindValue(':set', time(), PDO::PARAM_INT);
+				$query->bindValue(':ban_type', $ban_type);
 				
 				if ($expires)
 					$query->bindValue(':expires', $expires);

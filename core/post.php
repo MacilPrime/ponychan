@@ -403,7 +403,10 @@ if (isset($_POST['delete'])) {
 		error($config['error']['noboard']);
 
 	// Check if banned
-	checkBan($board['uri']);
+	$ban_types = array(FULL_BAN);
+	if (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != '')
+		$ban_types[] = IMAGE_BAN;
+	checkBan($board['uri'], $ban_types);
 
 	// Check for CAPTCHA right after opening the board so the "return" link is in there
 	if ($config['recaptcha']) {

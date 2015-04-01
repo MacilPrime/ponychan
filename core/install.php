@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-2');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-3');
 
 require 'inc/functions.php';
 
@@ -326,6 +326,8 @@ if (file_exists($config['has_installed'])) {
 			foreach ($boards as $board) {
 				query(sprintf("ALTER TABLE `posts_%s` DROP COLUMN `ip`", $board['uri'])) or error(db_error());
 			}
+		case 'v0.9.6-dev-8-mlpchan-2':
+			query("ALTER TABLE `bans` ADD COLUMN `ban_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:full, 1:image only' AFTER `board`") or error(db_error());
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);
