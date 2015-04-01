@@ -17,6 +17,8 @@ $page = array(
 $config['minify_html'] = false;
 
 if (file_exists($config['has_installed'])) {
+	// Upgrading can take a while.
+	set_time_limit(0);
 
 	// Check the version number
 	$version = trim(file_get_contents($config['has_installed']));
