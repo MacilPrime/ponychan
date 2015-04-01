@@ -26,7 +26,9 @@ class TwigExt_Tinyboard extends Twig_Extension
 			'push' => new Twig_Filter_Function('twig_push_filter'),
 			'filemtime' => new Twig_Filter_Function('filemtime'),
 			'bidi_cleanup' => new Twig_Filter_Function('bidi_cleanup'),
-			'addslashes' => new Twig_Filter_Function('addslashes')
+			'addslashes' => new Twig_Filter_Function('addslashes'),
+			'mask' => new Twig_Filter_Function('render_mask'),
+			'mask_uri' => new Twig_Filter_Function('render_mask_uri')
 		);
 	}
 	

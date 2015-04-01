@@ -83,9 +83,7 @@ class Filter {
 				
 				$range = parse_mask($_SERVER['REMOTE_ADDR']);
 				
-				$query = prepare("INSERT INTO `bans` (`ip`,`ip_type`,`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`) VALUES (:ip, :type, :range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :set, :expires, :reason, :board)");
-				$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
-				$query->bindValue(':type', 0);
+				$query = prepare("INSERT INTO `bans` (`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :set, :expires, :reason, :board)");
 				$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 				$query->bindValue(':range_start', $range['range_start']);
 				$query->bindValue(':range_end', $range['range_end']);

@@ -92,7 +92,7 @@ function destroyCookies() {
 
 function modLog($action, $_board=null) {
 	global $mod, $board, $config;
-	$query = prepare("INSERT INTO `modlogs` (`mod`, `ip`, `ip_type`, `ip_data`, `board`, `time`, `text`) VALUES (:id, :ip, :ip_type, INET6_ATON(:ip), :board, :time, :text)");
+	$query = prepare("INSERT INTO `modlogs` (`mod`, `ip_type`, `ip_data`, `board`, `time`, `text`) VALUES (:id, :ip_type, INET6_ATON(:ip), :board, :time, :text)");
 	$query->bindValue(':id', $mod['id'], PDO::PARAM_INT);
 	$query->bindValue(':ip_type', ipType($_SERVER['REMOTE_ADDR']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);

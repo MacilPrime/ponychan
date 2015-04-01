@@ -37,7 +37,7 @@
 		public function build($settings) {
 			global $config, $board;
 			
-			$query = query(sprintf("SELECT *, `id` AS `thread_id`, (SELECT COUNT(*) FROM `posts_%s` WHERE `thread` = `thread_id`) AS `reply_count` FROM `posts_%s` WHERE `thread` IS NULL ORDER BY `bump` DESC", $board['uri'], $board['uri'])) or error(db_error());
+			$query = query(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip`, `id` AS `thread_id`, (SELECT COUNT(*) FROM `posts_%s` WHERE `thread` = `thread_id`) AS `reply_count` FROM `posts_%s` WHERE `thread` IS NULL ORDER BY `bump` DESC", $board['uri'], $board['uri'])) or error(db_error());
 			
 			$threads = array();
 			

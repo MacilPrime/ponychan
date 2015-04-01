@@ -17,11 +17,11 @@
 		
 		<tr>
 			<th>
-				<label for="ip">{% trans 'IP' %} <span class="unimportant">{% trans '(or subnet)' %}</span></label>
+				<label for="mask">{% trans 'IP' %} <span class="unimportant">{% trans '(or subnet)' %}</span></label>
 			</th>
 			<td>
 				{% if not hide_ip %}
-					<input type="text" name="ip" id="ip" size="30" maxlength="40" value="{{ ip }}">
+					<input type="text" name="mask" id="mask" size="30" maxlength="40" value="{{ mask }}">
 				{% else %}
 					<em>{% trans 'hidden' %}</em>
 				{% endif %}

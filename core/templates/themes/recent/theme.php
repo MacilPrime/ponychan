@@ -41,7 +41,7 @@
 			foreach ($boards as &$_board) {
 				if (in_array($_board['uri'], $this->excluded))
 					continue;
-				$query .= sprintf("SELECT *, '%s' AS `board` FROM `posts_%s` WHERE `file` IS NOT NULL AND `file` != 'deleted' AND `thumb` != 'spoiler' UNION ALL ", $_board['uri'], $_board['uri']);
+				$query .= sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip`, '%s' AS `board` FROM `posts_%s` WHERE `file` IS NOT NULL AND `file` != 'deleted' AND `thumb` != 'spoiler' UNION ALL ", $_board['uri'], $_board['uri']);
 			}
 			$query = preg_replace('/UNION ALL $/', 'ORDER BY `time` DESC LIMIT ' . (int)$settings['limit_images'], $query);
 			$query = query($query) or error(db_error());
@@ -61,7 +61,7 @@
 			foreach ($boards as &$_board) {
 				if (in_array($_board['uri'], $this->excluded))
 					continue;
-				$query .= sprintf("SELECT *, '%s' AS `board` FROM `posts_%s` UNION ALL ", $_board['uri'], $_board['uri']);
+				$query .= sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip`, '%s' AS `board` FROM `posts_%s` UNION ALL ", $_board['uri'], $_board['uri']);
 			}
 			$query = preg_replace('/UNION ALL $/', 'ORDER BY `time` DESC LIMIT ' . (int)$settings['limit_posts'], $query);
 			$query = query($query) or error(db_error());
@@ -89,11 +89,11 @@
 			$stats['total_posts'] = number_format($res['count']);
 			
 			// Unique IPs
-			$query = 'SELECT COUNT(DISTINCT(`ip`)) AS `count` FROM (';
+			$query = 'SELECT COUNT(DISTINCT(`ip_data`)) AS `count` FROM (';
 			foreach ($boards as &$_board) {
 				if (in_array($_board['uri'], $this->excluded))
 					continue;
-				$query .= sprintf("SELECT `ip` FROM `posts_%s` UNION ALL ", $_board['uri']);
+				$query .= sprintf("SELECT `ip_data` FROM `posts_%s` UNION ALL ", $_board['uri']);
 			}
 			$query = preg_replace('/UNION ALL $/', ') AS `posts_all`', $query);
 			$query = query($query) or error(db_error());

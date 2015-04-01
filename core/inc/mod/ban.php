@@ -60,21 +60,12 @@ function ban($mask, $reason, $length, $board) {
 		error('Reason must be given for ban!');
 	}
 	
-	if (strpos($mask, '*') !== FALSE)
-		$type = 1;
-	elseif (strpos($mask, '/') !== FALSE)
-		$type = 2;
-	else
-		$type = 0;
-	
 	$range = parse_mask($mask);
 	if ($range === null) {
 		error('Invalid ban mask.');
 	}
 	
-	$query = prepare("INSERT INTO `bans` (`ip`,`ip_type`,`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`seen`) VALUES (:ip, :type, :range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, 0)");
-	$query->bindValue(':ip', $mask);
-	$query->bindValue(':type', $type, PDO::PARAM_INT);
+	$query = prepare("INSERT INTO `bans` (`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`seen`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, 0)");
 	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 	$query->bindValue(':range_start', $range['range_start']);
 	$query->bindValue(':range_end', $range['range_end']);
@@ -98,11 +89,11 @@ function ban($mask, $reason, $length, $board) {
 	
 	$query->execute() or error(db_error($query));
 	
+	$mask_url = str_replace('/', '^', $mask);
 	modLog('Created a new ' .
 		($length > 0 ? preg_replace('/^(\d+) (\w+?)s?$/', '$1-$2', until($length)) : 'permanent') .
-		' ban (<small>#' . $pdo->lastInsertId() . '</small>) for ' .
-		(filter_var($mask, FILTER_VALIDATE_IP) !== false ? "<a href=\"?/IP/$mask\">$mask</a>" : utf8tohtml($mask)) .
-		' with ' . ($reason ? 'reason: ' . utf8tohtml($reason) . '' : 'no reason'));
+		' ban (<small>#' . $pdo->lastInsertId() . "</small>) for <a href=\"?/IP/$mask_url\">$mask</a> with " .
+		($reason ? 'reason: ' . utf8tohtml($reason) . '' : 'no reason'));
 }
 
 function unban($id) {	
