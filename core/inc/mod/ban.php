@@ -67,9 +67,17 @@ function ban($mask, $reason, $length, $board) {
 	else
 		$type = 0;
 	
-	$query = prepare("INSERT INTO `bans` (`ip`,`ip_type`,`mod`,`set`,`expires`,`reason`,`board`,`seen`) VALUES (:ip, :type, :mod, :time, :expires, :reason, :board, 0)");
+	$range = parse_mask($mask);
+	if ($range === null) {
+		error('Invalid ban mask.');
+	}
+	
+	$query = prepare("INSERT INTO `bans` (`ip`,`ip_type`,`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`seen`) VALUES (:ip, :type, :range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, 0)");
 	$query->bindValue(':ip', $mask);
 	$query->bindValue(':type', $type, PDO::PARAM_INT);
+	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+	$query->bindValue(':range_start', $range['range_start']);
+	$query->bindValue(':range_end', $range['range_end']);
 	$query->bindValue(':mod', $mod['id'], PDO::PARAM_INT);
 	$query->bindValue(':time', time(), PDO::PARAM_INT);
 	if ($reason !== '') {

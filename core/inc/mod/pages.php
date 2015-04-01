@@ -563,9 +563,14 @@ function mod_page_ip($ip_url) {
 		if (!hasPermission($config['mod']['create_notes']))
 			error($config['error']['noaccess']);
 
+		$range = parse_mask($ip);
+		
 		markup($_POST['note']);
-		$query = prepare('INSERT INTO `ip_notes` (`id`, `ip`, `mod`, `time`, `body`) VALUES (NULL, :ip, :mod, :time, :body)');
+		$query = prepare('INSERT INTO `ip_notes` (`id`, `ip`, `range_type`, `range_start`, `range_end`, `mod`, `time`, `body`) VALUES (NULL, :ip, :range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :body)');
 		$query->bindValue(':ip', $ip);
+		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+		$query->bindValue(':range_start', $range['range_start']);
+		$query->bindValue(':range_end', $range['range_end']);
 		$query->bindValue(':mod', $mod['id']);
 		$query->bindValue(':time', time());
 		$query->bindValue(':body', $_POST['note']);
