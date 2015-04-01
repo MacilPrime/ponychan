@@ -307,27 +307,16 @@ if (file_exists($config['has_installed'])) {
 					$query->execute() or error(db_error($query));
 				}
 			}
-			foreach (query("SELECT DISTINCT `ip` FROM `modlogs` WHERE length(`ip_data`) = 0")->fetchAll(PDO::FETCH_ASSOC) as $ip) {
-				$query = prepare("UPDATE `modlogs` SET `ip_type` = :ip_type, `ip_data` = INET6_ATON(:ip) WHERE `ip` = :ip AND length(`ip_data`) = 0");
-				$query->bindValue(':ip', $ip['ip']);
-				$query->bindValue(':ip_type', ipType($ip['ip']));
-				$query->execute() or error(db_error($query));
-			}
-			foreach (query("SELECT `id`, `ip` FROM `reports` WHERE length(`ip_data`) = 0")->fetchAll(PDO::FETCH_ASSOC) as $report) {
-				$query = prepare("UPDATE `reports` SET `ip_type` = :ip_type, `ip_data` = INET6_ATON(:ip) WHERE `id` = :id");
-				$query->bindValue(':id', $report['id']);
-				$query->bindValue(':ip_type', ipType($report['ip']));
-				$query->bindValue(':ip', $report['ip']);
-				$query->execute() or error(db_error($query));
-			}
+			query("UPDATE `modlogs`
+				SET `ip_type` = IF(`ip` LIKE '%.%', 0, 1), `ip_data` = INET6_ATON(`ip`)
+				WHERE LENGTH(`ip_data`) = 0") or error(db_error());
+			query("UPDATE `reports`
+				SET `ip_type` = IF(`ip` LIKE '%.%', 0, 1), `ip_data` = INET6_ATON(`ip`)
+				WHERE LENGTH(`ip_data`) = 0") or error(db_error());
 			foreach ($boards as $board) {
-				foreach (query(sprintf("SELECT `id`, `ip` FROM `posts_%s` WHERE length(`ip_data`) = 0", $board['uri']))->fetchAll(PDO::FETCH_ASSOC) as $post) {
-					$query = prepare(sprintf("UPDATE `posts_%s` SET `ip_type` = :ip_type, `ip_data` = INET6_ATON(:ip) WHERE `id` = :id", $board['uri']));
-					$query->bindValue(':id', $post['id']);
-					$query->bindValue(':ip_type', ipType($post['ip']));
-					$query->bindValue(':ip', $post['ip']);
-					$query->execute() or error(db_error($query));
-				}
+				query(sprintf("UPDATE `posts_%s`
+					SET `ip_type` = IF(`ip` LIKE '%%.%%', 0, 1), `ip_data` = INET6_ATON(`ip`)
+					WHERE LENGTH(`ip_data`) = 0", $board['uri'])) or error(db_error());
 			}
 		case false:
 			// Update version number
