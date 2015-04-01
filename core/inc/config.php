@@ -999,6 +999,13 @@
 	$config['mod']['dns_lookup'] = true;
 	// How many recent posts, per board, to show in the IP summary page
 	$config['mod']['ip_recentposts'] = 5;
+	// Maximum number of notes to show on an IP range search page.
+	$config['mod']['ip_range_page_max_notes'] = 20;
+	// Maximum number of bans to show on an IP range search page.
+	$config['mod']['ip_range_page_max_bans'] = 5;
+	// Maximum number of historic bans to show on an IP range search page.
+	$config['mod']['ip_range_page_max_banhistory'] = 20;
+
 
 	// How many posts to display on the reports page
 	$config['mod']['recent_reports'] = 10;
@@ -1007,6 +1014,12 @@
 	$config['mod']['modlog_page'] = 350;
 	// How many bans to show per page in the ban list
 	$config['mod']['banlist_page'] = 350;
+	// How many bans to show per page in the ban list
+	$config['mod']['banhistory_page'] = 350;
+	// How many notes to show per page in the notes list
+	$config['mod']['noteslist_page'] = 350;
+	// How many post to show per page in the post list
+	$config['mod']['postlist_page'] = 50;
 
 	// Number of news entries to display per page
 	$config['mod']['news_page'] = 40;
@@ -1039,11 +1052,6 @@
 
 	// PM snippet (for ?/inbox) length in characters
 	$config['mod']['snippet_length'] = 75;
-
-	// Maximum number of notes to show on an IP range search page.
-	$config['mod']['ip_range_page_max_notes'] = 100;
-	// Maximum number of bans to show on an IP range search page.
-	$config['mod']['ip_range_page_max_bans'] = 50;
 
 	// Probably best not to change these:
 	if (!defined('JANITOR')) {
@@ -1126,17 +1134,15 @@
 	$config['mod']['report_dismiss'] = JANITOR;
 	// Dismiss all abuse reports by an IP
 	$config['mod']['report_dismiss_ip'] = JANITOR;
-	// View list of bans
-	$config['mod']['view_banlist'] = MOD;
+	// View bans
+	$config['mod']['view_ban'] = MOD;
+	// View ban history
+	$config['mod']['view_banhistory'] = MOD;
 	// View the username of the mod who made a ban
 	$config['mod']['view_banstaff'] = MOD;
 	// If the moderator doesn't fit the $config['mod']['view_banstaff''] (previous) permission,
 	// show him just a "?" instead. Otherwise, it will be "Mod" or "Admin"
 	$config['mod']['view_banquestionmark'] = false;
-	// Show expired bans in the ban list (they are kept in cache until the culprit returns)
-	$config['mod']['view_banexpired'] = true;
-	// View ban for IP address
-	$config['mod']['view_ban'] = $config['mod']['view_banlist'];
 	// View IP address notes
 	$config['mod']['view_notes'] = JANITOR;
 	// Create notes

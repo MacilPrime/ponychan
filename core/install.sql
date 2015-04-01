@@ -28,19 +28,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `bans` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `status` int(11) NOT NULL COMMENT '0:active, 1:expired, 2:lifted',
   `range_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
   `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `mod` int(11) NOT NULL COMMENT 'which mod made the ban',
   `set` int(11) NOT NULL COMMENT 'when the ban was set',
   `expires` int(11) DEFAULT NULL,
+  `lifted` int(11) DEFAULT NULL,
   `reason` text,
   `board` varchar(120) DEFAULT NULL,
   `ban_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:full, 1:image only',
   `seen` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY (`expires`),
-  KEY `range` (`range_type`, `range_start`, `range_end`)
+  KEY `status_range` (`status`, `range_type`, `range_start`, `range_end`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

@@ -28,7 +28,7 @@ class TwigExt_Tinyboard extends Twig_Extension
 			'bidi_cleanup' => new Twig_Filter_Function('bidi_cleanup'),
 			'addslashes' => new Twig_Filter_Function('addslashes'),
 			'mask' => new Twig_Filter_Function('render_mask'),
-			'mask_uri' => new Twig_Filter_Function('render_mask_uri')
+			'mask_url' => new Twig_Filter_Function('mask_url')
 		);
 	}
 	

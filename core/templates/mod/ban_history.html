@@ -1,20 +1,15 @@
-{% if mask %}
-	<header><div class="subtitle"><p><a href="?/IP/{{ mask|mask_url }}">Return to IP page</a></p></div></header>
-{% endif %}
+<header><div class="subtitle"><p><a href="?/IP/{{ mask|mask_url }}">Return to IP page</a></p></div></header>
 
-{% if bans|count == 0 %}
+{% if ban_history|count == 0 %}
 	<p style="text-align:center" class="unimportant">
-	{% if mask %}
-		({% trans %}There are no active bans for {{ mask }}.{% endtrans %})
-	{% else %}
-		({% trans 'There are no active bans.' %})
-	{% endif %}
+	({% trans %}There is no ban history  for {{ mask }}.{% endtrans %})
 	</p>
 {% else %}
-	<form action="" method="post">
+	<form> {# This is silly, but the form tag triggers certain styles that we want to apply to this table. #}
 		<table class="banlist" style="width:100%">
 			<tr>
 				<th>{% trans 'IP address/mask' %}</th>
+				<th>{% trans 'Status' %}</th>
 				<th>{% trans 'Reason' %}</th>
 				<th>{% trans 'Board' %}</th>
 				<th>{% trans 'Type' %}</th>
@@ -24,11 +19,16 @@
 				<th>{% trans 'Seen' %}</th>
 				<th>{% trans 'Staff' %}</th>
 			</tr>
-			{% for ban in bans %}
-				<tr{% if ban.expires != 0 and ban.expires < time() %} style="text-decoration:line-through"{% endif %}>
+			{% for ban in ban_history %}
+				<tr>
 					<td style="white-space: nowrap">
-						<input type="checkbox" name="ban_{{ ban.id }}"> 
 						<a href="?/IP/{{ ban|mask|mask_url }}">{{ ban|mask }}</a>
+					</td>
+					<td>
+						{% if ban.status == constant('BAN_STATUS_ACTIVE') %}{% trans 'Active' %}
+						{% elseif ban.status == constant('BAN_STATUS_EXPIRED') %}{% trans 'Expired' %}
+						{% elseif ban.status == constant('BAN_STATUS_LIFTED') %}{% trans 'Lifted on ' %}{{ ban.lifted|date(config.post_date) }}
+						{% endif %}
 					</td>
 					<td>
 						{% if ban.reason %}
@@ -67,7 +67,7 @@
 						{% else %}
 							{{ ban.expires|date(config.post_date) }}
 							{% if ban.expires > time() %}
-								 <small>(in {{ ban.expires|until }})</small>
+									<small>(in {{ ban.expires|until }})</small>
 							{% endif %}
 						{% endif %}
 					</td>
@@ -98,17 +98,13 @@
 				</tr>
 			{% endfor %}
 		</table>
-		
-		<p style="text-align:center">
-			<input type="submit" name="unban" value="{% trans 'Unban selected' %}">
-		</p>
 	</form>
 {% endif %}
 
-{% if count > bans|count %}
+{% if count > ban_history|count %}
 	<p class="unimportant" style="text-align:center;word-wrap:break-word">
-		{% for i in range(0, (count - 1) / config.mod.banlist_page) %}
-			<a href="?/bans{% if mask %}/{{ mask|mask_url }}{% endif %}/{{ i + 1 }}">[{{ i + 1 }}]</a> 
+		{% for i in range(0, (count - 1) / config.mod.banhistory_page) %}
+			<a href="?/banhistory/{{ mask|mask_url }}/{{ i + 1 }}">[{{ i + 1 }}]</a> 
 		{% endfor %}
 	</p>
 {% endif %}

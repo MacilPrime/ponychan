@@ -70,7 +70,7 @@ function ban($mask, $reason, $length, $board, $ban_type) {
 		error(sprintf($config['error']['invalidfield'], 'ban_type'));
 	}
 	
-	$query = prepare("INSERT INTO `bans` (`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`ban_type`,`seen`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, :ban_type, 0)");
+	$query = prepare("INSERT INTO `bans` (`status`,`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`ban_type`,`seen`) VALUES (0, :range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, :ban_type, 0)");
 	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 	$query->bindValue(':range_start', $range['range_start']);
 	$query->bindValue(':range_end', $range['range_end']);
@@ -103,9 +103,10 @@ function ban($mask, $reason, $length, $board, $ban_type) {
 		($reason ? 'reason: ' . utf8tohtml($reason) . '' : 'no reason'));
 }
 
-function unban($id) {	
-	$query = prepare("DELETE FROM `bans` WHERE `id` = :id");
+function unban($id) {
+	$query = prepare("UPDATE `bans` SET `status` = 2, `lifted` = :time WHERE `id` = :id");
 	$query->bindValue(':id', $id);
+	$query->bindValue(':time', time());
 	$query->execute() or error(db_error($query));
 	
 	modLog("Removed ban #{$id}");

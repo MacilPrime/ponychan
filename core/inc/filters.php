@@ -88,7 +88,7 @@ class Filter {
 				else
 					$ban_type = FULL_BAN;
 				
-				$query = prepare("INSERT INTO `bans` (`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`ban_type`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :set, :expires, :reason, :board, :ban_type)");
+				$query = prepare("INSERT INTO `bans` (`status`, `range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`ban_type`) VALUES (0, :range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :set, :expires, :reason, :board, :ban_type)");
 				$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 				$query->bindValue(':range_start', $range['range_start']);
 				$query->bindValue(':range_end', $range['range_end']);
