@@ -37,3 +37,16 @@
   // 		'Donate' => 'donate.html'
   // 	)
   // );
+
+  $LOGDIR = '/var/www/logs';
+  if (!file_exists($LOGDIR)) {
+    mkdir($LOGDIR, 0755, true);
+  }
+
+  $config['action_log'] = $LOGDIR . '/action.log';
+  //$config['antibot_log'] = $LOGDIR . '/antibot.log';
+  //$config['timing_log'] = $LOGDIR . '/timing.log';
+  $config['error_log'] = $LOGDIR . '/error.log';
+  $config['js_usage_log'] = $LOGDIR . '/js_usage.log';
+  $config['js_error_log'] = $LOGDIR . '/js_error.log';
+  $config['js_misc_log'] = $LOGDIR . '/js_misc.log';
