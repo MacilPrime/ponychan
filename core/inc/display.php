@@ -90,6 +90,7 @@ function error($message, $priority = true) {
 			$logdata['uri'] = $_SERVER['REQUEST_URI'];
 		if (isset($_SERVER['HTTP_REFERER']))
 			$logdata['referrer'] = $_SERVER['HTTP_REFERER'];
+		$logdata['backtrace'] = debug_backtrace();
 
 		// Don't ever log tripcodes or passwords
 		if (isset($_POST['name']))
