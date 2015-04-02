@@ -122,7 +122,8 @@ p.intro span.subject:after {
     font-weight: bold;
 }
 a.email {
-    border-bottom: 1px dashed inherit;
+  border-bottom-width: 1px;
+  border-bottom-style: dashed;
 }
 .fileinfo {
     font-size: 80%;

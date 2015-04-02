@@ -9,10 +9,10 @@ body {
     background-size: cover;
     color: white;
 }
-a, a:visited, a:active, .bodylink {
+a, a:visited, a.bodylink {
     color: rgb(52, 86, 221);
 }
-a:hover, .reflink a:hover {
+a:hover {
     color: rgb(98, 137, 233);
     text-shadow: 0 0 2px rgb(171, 171, 255)
 }
@@ -26,39 +26,33 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 h1, h2, h3, h4, h5, h6, header h1 {
     color: rgb(255, 255, 255);
     font-family: 'Celestia', sans-serif;
-    text-shadow: 0 0 10px white;
+    text-shadow: 0 0 5px white;
 }
-th, .ban h2 {
+form table tr th, .ban h2 {
     background: rgb(19, 20, 51);
     color: rgb(219, 233, 233)
 }
 
-.top, #qrmove, #updateSettings {
-    background-color: rgb(2, 19, 52);
+.boardlist.top, #qrmove, #updateSettings {
+    background: rgb(2, 19, 52);
     color: white;
 }
-.top a, #qrmove a {
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, #qrmove a {
     color: rgb(204, 204, 221);
     border-color: rgb(69, 69, 137);
 }
-.top a:hover, #qrmove a:hover {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover {
     color: rgb(228, 240, 255);
-    background-color: rgb(69, 69, 137);
+    background: rgb(69, 69, 137);
     text-shadow: 0 0 2px white;
 }
 
 
 /* Navigation bar */
-.top a {
-    padding-left: 0.3em;
-    padding-right: 0.3em;
-    /*color: rgb(0,0,0);*/
-    /*border-top-color: rgb(0,0,0);*/
-}
-.top .boardlistactive {
+.boardlist.top .boardlistpart a.boardlistactive {
     border-color: rgb(69, 69, 137);
 }
-.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
     color: rgb(212, 224, 238);
 }
 
@@ -67,37 +61,34 @@ th, .ban h2 {
 /* Board Page header */
 div.banner {
     background: rgb(2, 20, 43);
+}
+div.banner, div.banner a.unimportant {
     color: white;
 }
 
-body > header h1 {
+header h1 {
     font-family: 'Celestia', sans-serif;
 }
 
-body > header .subtitle {
+header div.subtitle {
     color: rgb(241, 241, 241);
 }
 
-/* Blotter */
-.blotter {
-    color: rgb(255,255,255);
-}
-
 /* Posts */
-.post {
+div.post, div.post.reply {
     border: 1px solid rgba(0,0,20,0.7);
 }
-.reply {
-    border-radius: 0.5rem;
+div.post.reply {
+    border-radius: 4px;
 }
-.reply, .pages {
+div.post.reply, div.pages {
     background: rgba(0,0,20,0.5);
     padding:0.5em;
 }
-.selected {
+div.pages a.selected {
     color: white;
 }
-.post.op {
+div.post.op {
     background: rgba(28, 31, 61, 0.54)
         linear-gradient(to right,
             rgba(0, 0, 0, 0.54),
@@ -110,45 +101,42 @@ body > header .subtitle {
     border-radius: 5px;
     transition: background-color 0.25s ease-in-out;
  }
-.postimg:hover {
-    background-color: rgb(32, 32, 90);
-}
 .fileinfo {
     color: rgb(167, 171, 165)
 }
-.subject, .wsubject {
-    color: rgb(204,202,51);
+p.intro span.subject, .wsubject {
+    color: #33C;
 }
-.name, a .name, .wname {
+p.intro span.name, p.intro a.email span.name, .wname {
     color: rgb(37, 89, 255);
 }
 .email {
     border-bottom: 1px dashed rgb(39, 90, 255);
 }
-.trip, .wtrip {
+span.trip, .wtrip {
     color: rgb(125, 117, 169);
 }
-.post_no {
+p.intro a.post_no {
     color: rgb(152, 170, 202);
 }
-.post_no:hover {
+p.intro a.post_no:hover {
     color: rgb(193, 206, 229);
 }
 .reply .fileinfo {
     line-height: 120%;
 }
-/*.helphover div, .reply, .highlight, .reflinkpreview {*/
-/*background: rgb(0,0,0);*/
-/*}*/
-.reply.highlighted {
+div.post.reply.highlighted {
     background: rgb(0,0,0);
     border-color: rgb(0,0,0);
 }
-.quote {
+span.quote {
     color: rgb(65, 113, 192);
 }
 .spoiler {
     background-color: rgb(36, 36, 86);
+}
+.spoiler, div.post .body .spoiler a {
+    color: rgb(36, 36, 86);
 }
 
 
@@ -156,7 +144,7 @@ body > header .subtitle {
 
 /* Posts*/
 .post-hover {
-    background-color: rgb(19, 22, 52);
+    background-color: rgb(19, 22, 52) !important;
 }
 .post-inline {
     background: rgba(0,0,0,0.1);
@@ -178,18 +166,13 @@ body > header .subtitle {
 .wpost {
     color: white;
 }
-.wlinkpart + .wname:before {
+.wname:before {
     color: gray;
 }
 
-/* Settings screen */
-/* Imported with import tag. */
-
-/* Individual pages */
-/* ban */
-
-.ban {
-    border-color: black;
+div.ban {
+  border-color: black;
+  background: rgb(19, 20, 51);
 }
 .homeblock {
 	background-color: rgba(10, 11, 21, 0.8);
