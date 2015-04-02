@@ -65,7 +65,7 @@ div.banner a:hover {
 p.intro span.name {
 	color: #d6fcff;
 }
-.reply p.intro span.name {
+div.post.reply p.intro span.name {
 	color: #B2E6FF;
 }
 div.post.reply.highlighted {

@@ -5,7 +5,7 @@
 body {
     background: #e8e8ff;
 }
-a, a:visited, a:active, a.bodylink {
+a, a:visited, a.bodylink {
     color: #0010B0;
 }
 a:hover,

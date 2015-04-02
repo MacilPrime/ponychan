@@ -254,7 +254,7 @@ p.intro a.post_no:hover {
 .fileinfo {
     color: rgb(228, 228, 228)
 }
-div.post.reply .fileinfo {
+.reply .fileinfo {
     line-height: 120%;
 }
 .hashtag {

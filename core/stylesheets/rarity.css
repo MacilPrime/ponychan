@@ -7,14 +7,14 @@
 body {
     background: #eef2f5;
 }
-a, a:visited, a:active {
+a, a:visited, a.bodylink {
     font-family: 'Goudy Bookletter 1911', serif;
     color: rgb(46, 97, 152);
 }
 a:hover {
     color: rgb(157, 114, 235);
 }
-th {
+form table tr th {
     background: rgb(111, 206, 244);
 }
 input[type=button], input[type=submit], input[type=file], button {
@@ -37,7 +37,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: rgb(77, 24, 111);
 }
 /* Tone 2 - Cells */
-.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathread {
+div.post.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathread {
     background-color: rgb(222, 239, 244);
 }
 .replyContainer:nth-of-type(2n) .reply {
@@ -86,7 +86,7 @@ body > header h1 {
     font-family: "Dancing Script", cursive;
     text-shadow: 0 0 3px rgb(77, 24, 111);
 }
-body > header .subtitle {
+header div.subtitle {
     color: rgb(107, 96, 116);
 }
 
@@ -106,13 +106,13 @@ body > header .subtitle {
 
 
 /* Posts */
-.reply, .wthread, .hashtag, #updateSettings, .catathread {
+div.post.reply, .wthread, .hashtag, #updateSettings, .catathread {
     border-color: rgb(150, 202, 240);
     line-height: 140%;
     padding: 3px;
     border-radius: 0.3rem;
 }
-.reply {
+div.post.reply {
     padding: 0.4em;
     border: 1px solid rgb(145, 219, 238);
 }
@@ -128,11 +128,11 @@ p.intro span.subject, .wsubject {
 .intro .subject {
     font: italic bold 150%/100% "Dancing Script", cursive;
 }
-.intro .subject:after {
+p.intro span.subject::after {
     color: rgb(155, 155, 155);
     content: " — ";
 }
-p.intro span.name, .email .name, .wname, .email:hover .name {
+p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.name {
     color: rgb(96, 0, 160);
     font-weight: bold;
     font-family: 'Goudy Bookletter 1911', serif;

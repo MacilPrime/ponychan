@@ -18,7 +18,7 @@ body {
 			rgb(249, 208, 182),
 			rgb(229, 198, 168));
 }
-a, a:visited, a:active, .bodylink {
+a, a:visited, a.bodylink {
 	color: rgb(2, 2, 208);
 }
 a:hover {
@@ -33,7 +33,7 @@ input[type=text], input[type=password], textarea {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
 	border: 1px solid #0020c0;
 }
-th {
+form table tr th {
 	background: rgb(230, 119, 45);
 	border-radius: 0.2rem;
 }
@@ -57,7 +57,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 	color: #da8951;
 }
 /* Block items */
-.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
 	background-color: rgb(245, 185, 144);
 	border-color: rgb(230, 120, 47);
 }
@@ -103,7 +103,7 @@ div.banner {
 .post {
 	line-height: 140%;
 }
-.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
 	line-height: 150%;
 	padding: 3px;
 }
@@ -119,10 +119,10 @@ p.intro span.subject, .wsubject {
 	font-weight: normal;
 	font-style: italic;
 }
-.intro .subject:after {
+p.intro span.subject::after {
 	content: " — ";
 }
-p.intro span.name, .email .name, .email:hover .name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
 	color: rgb(44, 69, 148);
 	font-weight: bold;
 }

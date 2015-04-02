@@ -10,7 +10,7 @@ body {
     font: 95%/130% "Calibri", "Arial", sans-serif;
     color: rgb(232, 232, 232);
 }
-a, a:visited, a:active {
+a, a:visited, a.bodylink {
     color: rgb(219, 255, 255);
 }
 a:hover, .reflink a:hover {
@@ -55,7 +55,7 @@ body > header h1 {
     padding-right: 0.3em;
     border-top-color: rgb(91,108,172);
 }
-.boardlist.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
     color: rgb(203,206,233);
 }
 .top .boardlistactive {
@@ -70,22 +70,22 @@ div.banner {
     color: white;
 }
 
-body > header .subtitle {
+header div.subtitle {
     color: rgb(140,154,152);
 }
 /* Post form */
 
-th {
+form table tr th {
     background: rgb(49,49,80);
 }
 
 
 
 /* Posts */
-.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
     background-color: rgb(28,42,98);
 }
-.reply, .reply.highlighted {
+div.post.reply, .reply.highlighted {
     border-style: solid !important;
 }
 p.intro span.subject, .wsubject {

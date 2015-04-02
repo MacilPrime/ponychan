@@ -22,7 +22,7 @@ body {
 }
 
 /* All links, including the ref-links inside the post body. */
-a, a:visited, a:active, .bodylink {
+a, a:visited, a.bodylink {
 	color: rgb(192, 207, 228);
 	font-family: "Molengo", sans-serif;
 }
@@ -49,7 +49,7 @@ hr {
 }
 /* Table headers, including the post form */
 /* as well as many staff dashboard headers */
-th {
+form table tr th {
 	background-color: rgb(50, 78, 127);
 	color: rgb(188, 213, 210);
 }
@@ -87,7 +87,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* Block items */
-.reply, .blotter, .hashtag, #watcherScreen, .post-hover, .pages, #updateSettings, #settingsScreen {
+div.post.reply, .blotter, .hashtag, #watcherScreen, .post-hover, .pages, #updateSettings, #settingsScreen {
 	background-color: rgb(35, 25, 59);
 }
 
@@ -151,7 +151,7 @@ body > header h1 {
 }
 
 /* Board description */
-body > header .subtitle {
+header div.subtitle {
 	color: rgb(188, 213, 204);
 	font: bold 130% "Josefin Sans", sans-serif;
 }
@@ -182,7 +182,7 @@ div.banner {
 	background-color: rgb(73, 64, 91);
 	box-shadow: 0 0 0.1rem rgba(0,0,0,0.8);
 }
-.reply, .post-hover, .post-inline, .pages, #settingsScreen, #watcherScreen,
+div.post.reply, .post-hover, .post-inline, .pages, #settingsScreen, #watcherScreen,
 #updateSettings, .blotter, .catathread, .homeblock, .hashtag {
 	border: 2px solid rgb(50, 78, 127);
 	border-radius: 0.75rem;
@@ -213,7 +213,7 @@ p.intro span.subject, .wsubject {
 	color: rgb(181, 198, 233);
 }
 
-p.intro span.name, .email .name, .email:hover .name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
 	color: rgb(203, 218, 239);
 }
 
