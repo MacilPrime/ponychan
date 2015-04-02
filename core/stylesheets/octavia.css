@@ -243,9 +243,7 @@ div.post.reply.highlighted {
 }
 
 span.quote {
-	color: rgb(226, 216, 231);
-	font: bold 110% "Philosopher", "Calibri", sans-serif;
-	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
+	color: #a660c9;
 }
 span.omitted, .toolong {
 	font-style: italic;
@@ -288,16 +286,16 @@ div.pages {
 	border: 2px solid rgb(151, 112, 145);
 	line-height: 140%;
 	margin-top: 2em;
+	overflow: hidden;
 }
 .homeblock > h2 {
 	font-family: "Modern Antiqua", serif;
 	font-size: 150%;
-	margin: -25px -17px 0;
+	margin: -20px -20px 0;
 	/* We must use pixels here because we */
 	/* need something that scales linear with zoom functions */
 	color: rgb(247, 247, 247);
 	padding: 0.2em 0.7em;
-	border-radius: 0.5em 0.5em 0 0;
 	background-color: rgb(151, 112, 145);
 }
 .homeblock > h2 + div {
@@ -307,16 +305,4 @@ div.pages {
 .homeblock .unimportant {
 	font-family: monospace;
 	text-transform: uppercase;
-}
-/* Flex recent posts */
-#recent_posts {
-	overflow-x: visible;
-}
-.recent_posts_parent {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-}
-.recent_post {
-	flex: 1 0 auto;
 }
