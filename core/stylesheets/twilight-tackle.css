@@ -12,7 +12,7 @@ a, h1, h2, h3, h4, h5, h6, .heading, header h1 {
 body > header h1 {
     font-weight: bold;
 }
-a, a:visited, a:active {
+a, a:visited, a.bodylink {
     color: rgb(231,129,213);
 }
 a:hover {
@@ -43,10 +43,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 input::-webkit-input-placeholder {
     color: rgb(115, 47, 126);
 }
-input:-moz-placeholder { /* Firefox 18- */
-    color: rgb(115, 47, 126);
-}
-input::-moz-placeholder {  /* Firefox 19+ */
+input::-moz-placeholder {
     color: rgb(115, 47, 126);
 }
 input:-ms-input-placeholder {
@@ -59,18 +56,18 @@ li {
 
 
 /* Setting the color scheme */
-.reply, .wthread, #settingsScreen, .hashtag, #updateSettings, .catathread {
+div.post.reply, .wthread, #settingsScreen, .hashtag, #updateSettings, .catathread {
     border: 2px solid rgb(121,24,103);
     background: linear-gradient(to bottom, rgb(121, 24, 103) 0px, rgb(90, 18, 77) 300px);
 }
 input[type=text], input[type=password], input[type=search], textarea {
     background: linear-gradient(to bottom, rgb(237, 226, 232) 0px, rgb(230, 218, 223) 300px);
 }
-h1, h2, h3, h4, h5, h6 {
+header h1, h1, h2, h3, h4, h5, h6 {
     color: white;
     letter-spacing: 0;
 }
-.heading {
+span.heading {
     color: rgb(225,225,225);
 }
 #settingsScreen {
@@ -79,16 +76,16 @@ h1, h2, h3, h4, h5, h6 {
 .boardlist.top {
     background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.15));
 }
-.boardlist.top a {
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
     color: rgb(151,164,225);
 }
-.boardlist.top a:hover {
+.boardlist.top .boardlistpart a:hover {
     background-color: rgb(64, 16, 64);
 }
 .boardlist.top, #qrmove {
     background-color: rgb(22,31,72);
 }
-.boardlist.top a:hover, #qrmove a:hover {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover {
     color: white;
 }
 
@@ -157,13 +154,13 @@ button:not(#qrfilebutton):active {
 
 
 /* Navigation bar */
-.boardlist.top .boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .watcherButton.open {
     border-color: rgb(151,164,225);
     background: rgba(0,0,0,0.3);
     box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     text-shadow: 0 0 1px rgba(0,0,0,0.5);
 }
-.boardlist.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
     color: rgb(218, 222, 236);
 }
 
@@ -177,17 +174,10 @@ div.banner {
     color: rgb(194, 152, 173);
 }
 
-img.banner {
-    display: none !important;
-}
-
 body > header {
     padding-top: 3em;
 }
-body > header h1 {
-    font-size: 4em;
-}
-body > header .subtitle {
+header div.subtitle {
     font-size: 110%;
     color: rgb(237, 235, 240);
 }
@@ -197,12 +187,11 @@ body > header .subtitle {
     outline: none;
     border-color: rgb(61, 52, 61)
 }
-form table th {
+form table tr th {
     color: rgb(218, 204, 219);
     background: linear-gradient(to bottom, rgb(142, 77, 130) 0px, rgb(131, 82, 122) 300px);
     box-shadow: inset 0 1px 7px rgba(114, 35, 100, 1);
     text-shadow: 0 1px 1px rgb(0,0,0);
-    text-align: right;
 }
 form:not(#qrform) input[type=submit] {
     position: relative;
@@ -236,11 +225,11 @@ p.intro span.subject, .wsubject {
     font-weight: normal;
     font-style: italic;
 }
-.intro .subject:after {
+p.intro span.subject::after {
     color: rgb(155, 155, 155);
     content: " — ";
 }
-p.intro span.name, .email .name, .wname, .email:hover .name {
+p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.name {
     color: rgb(234, 126, 185);
     font-weight: normal;
 }
@@ -252,7 +241,7 @@ span.trip, .wtrip {
     color: rgb(195, 93, 148);
     font-family: monospace;
 }
-.capcode, .nametag {
+p.intro span.capcode, p.intro a.capcode, p.intro a.nametag {
     color: rgb(218,180,210);
     text-transform: lowercase;
 }
@@ -265,7 +254,7 @@ p.intro a.post_no:hover {
 .fileinfo {
     color: rgb(228, 228, 228)
 }
-.reply .fileinfo {
+div.post.reply .fileinfo {
     line-height: 120%;
 }
 .hashtag {
@@ -284,9 +273,6 @@ div.post.reply.highlighted {
 span.omitted, .toolong {
     color: rgb(218, 155, 206);
     padding: 0.3em 2em;
-}
-.bodylink {
-    color: rgb(236, 152, 226);
 }
 span.quote {
     color: rgb(173, 135, 213);
@@ -367,16 +353,10 @@ div.pages {
 }
 .mature_note {
     font-style: italic;
-    color: rgba(0, 0, 0, 0.7);
-}
-
-
-/* Posts*/
-.mature_note {
     color: rgba(207, 196, 196, 0.7);
 }
 .post-hover {
-    border-color: rgb(145, 75, 132);
+    border-color: rgb(145, 75, 132) !important;
 }
 
 /* Thread watcher */
@@ -402,7 +382,7 @@ div.pages {
 }
 .post-inline {
     /* This should make the inline posts brighter depending on how deep it's nested. */
-    background: rgba(0,0,0,0.05) none;
+    background: rgba(0,0,0,0.05) none !important;
 }
 
 
@@ -412,7 +392,3 @@ div.pages {
     background: rgba(0,0,0,0.1);
     /* This should give the transitions a reference frame. */
 }
-
-
-/* Filter */
-.f-tag {background-color: transparent;}
