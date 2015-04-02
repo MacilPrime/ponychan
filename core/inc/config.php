@@ -928,7 +928,7 @@
 	// $config['url_stylesheet'] = 'http://static.example.org/style.css'; // main/base stylesheet
 	// $config['url_instance_script'] = 'http://static.example.org/instance.js';
 	// $config['url_main_script'] = 'http://static.example.org/js/main.js';
-	// $config['url_favicon'] = '/favicon.gif';
+	$config['url_favicon'] = '/static/sun-icon.png';
 
 /*
  * ====================
