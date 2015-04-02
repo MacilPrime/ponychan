@@ -95,6 +95,7 @@ div.post.reply, .blotter, .hashtag, #watcherScreen, .post-hover, .pages, #update
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
 	border-top-color: rgb(50, 78, 127);
 	border-top-style: solid;
+	padding-top: 3px;
 }
 .boardlist.top .boardlistpart a:hover {
 	background-color: rgb(44, 46, 86);
@@ -102,12 +103,13 @@ div.post.reply, .blotter, .hashtag, #watcherScreen, .post-hover, .pages, #update
 
 /* set the border-color property to show that the button is 'lit' */
 .boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
-	border-color: rgb(148, 156, 203) !important;
+	border-color: rgb(148, 156, 203);
 }
 
 /* Color of the 'home' link */
 .boardlist.top .boardlistpart a[href="/"] {
 	color: rgb(255, 218, 252);
+	padding-top: 3px;
 }
 
 /* Toggle links on the right */
@@ -190,11 +192,6 @@ div.post.reply, .post-hover, .post-inline, .pages, #settingsScreen, #watcherScre
 form[name="post"] th, .reply, .pages {
 	padding: 0.4em;
 }
-/* Staff notice */
-div.blotter {
-	border: 2px solid rgb(151, 90, 129);
-	color: white;
-}
 
 /* -- Posts -- */
 .wthread, .post-hover {
@@ -244,16 +241,17 @@ div.post.reply.highlighted, .post-inline {
 div.post.reply.highlighted {
 	/* Makes all borders solid. */
 	border-color: rgb(115, 37, 102);
+	background-color: rgb(22, 22, 47);
 }
 .post-inline {
 	/* 	as nesting iterations approach infinity,
 	 	what background color does it approach? */
-	background-color: rgba(255,255,255,0.1);
+	background-color: rgba(255,255,255,0.1) !important;
 }
 
 span.quote {
 	color: rgb(159, 171, 121);
-	font: bold 110% "Philosopher", "Calibri", sans-serif;
+	font-family: "Philosopher", "Calibri", sans-serif;
 }
 span.omitted, .toolong {
 	font-style: italic;
@@ -295,11 +293,12 @@ div.pages {
 	line-height: 140%;
 	margin-top: 2em;
 	border-color: rgb(35, 25, 59);
+	overflow: hidden;
 }
 .homeblock > h2 {
 	font-family: "Josefin Sans", sans-serif;
 	font-size: 150%;
-	margin: -25px -17px 0;
+	margin: -20px -20px 0;
 	/* We must use pixels here because we */
 	/* need something that scales linear with zoom functions */
 	color: rgb(198, 213, 219);
@@ -314,16 +313,4 @@ div.pages {
 .homeblock .unimportant {
 	font-family: monospace;
 	text-transform: uppercase;
-}
-/* Flex recent posts */
-#recent_posts {
-	overflow-x: visible;
-}
-.recent_posts_parent {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-}
-.recent_post {
-	flex: 1 0 auto;
 }

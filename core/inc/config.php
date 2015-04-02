@@ -700,7 +700,7 @@
 	$config['stylesheets']['Luna (S1)'] = array('Luna (S1)', 'season-one-luna.css');
 	$config['stylesheets']['Luna'] = array('Luna (S2)', 'luna.css');
 	$config['stylesheets']['Wonderbolts'] = array('Wonderbolts', 'wonderbolts.css');
-	//$config['stylesheets']['Shadowbolts'] = array('Shadowbolts', 'shadowbolts.css');
+	$config['stylesheets']['Shadowbolts'] = array('Shadowbolts', 'shadowbolts.css');
 	$config['stylesheets']['Nightmare'] = array('Halloween', 'nightmare.css');
 	$config['stylesheets']['Australian'] = array('Australian', 'Australian.css');
 	$config['stylesheets']['Chrysalis'] = array('Chrysalis', 'Queen.css');
