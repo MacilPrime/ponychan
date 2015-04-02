@@ -697,7 +697,7 @@
 	$config['stylesheets']['Yotsuba'] = array('Yotsuba', 'yotsuba.css');
 	// $config['stylesheets']['Futaba'] = array('Futaba', 'futaba.css');
 
-	//$config['stylesheets']['Luna (S1)'] = array('Luna (S1)', 'season-one-luna.css');
+	$config['stylesheets']['Luna (S1)'] = array('Luna (S1)', 'season-one-luna.css');
 	$config['stylesheets']['Luna'] = array('Luna (S2)', 'luna.css');
 	$config['stylesheets']['Wonderbolts'] = array('Wonderbolts', 'wonderbolts.css');
 	//$config['stylesheets']['Shadowbolts'] = array('Shadowbolts', 'shadowbolts.css');

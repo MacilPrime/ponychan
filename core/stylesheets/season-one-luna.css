@@ -3,12 +3,10 @@
 
 /* Indiscriminate tags */
 body {
-    background:
-        url(http://fc08.deviantart.net/fs70/i/2012/145/e/4/request___flying_luna_by_ra…sma-d512rzq.png) no-repeat right bottom,
-        url(img/season-one-luna/bg.png);
+    background: url(img/season-one-luna/bg.png);
     background-size: 20%;
     font: 95%/130% "Calibri", "Arial", sans-serif;
-    color: rgb(232, 232, 232);
+    color: rgb(202, 200, 200);
 }
 a, a:visited, a.bodylink {
     color: rgb(219, 255, 255);
@@ -85,13 +83,13 @@ form table tr th {
 div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
     background-color: rgb(28,42,98);
 }
-div.post.reply, .reply.highlighted {
-    border-style: solid !important;
+div.post.reply, div.post.reply.highlighted {
+    border: none !important;
 }
 p.intro span.subject, .wsubject {
     color: rgb(2,146,188);
 }
-p.intro span.name, a .name, .wname {
+p.intro span.name, p.intro a.email span.name, .wname {
     color: white;
 }
 a.email {
@@ -156,7 +154,4 @@ span.quote {
 }
 .wname:before {
     color: rgb(96,123,163);
-}
-.wremove {
-
 }
