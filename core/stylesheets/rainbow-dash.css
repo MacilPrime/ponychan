@@ -1,27 +1,17 @@
 
-/* TODO strip off the common kusaba css and replace it with an import tag. */
-
+@import "common/pony-kusaba.css";
 @import "common/razor-buttons.css";
 
 body {
     background:
-    url("http://www.ponychan.net/chan/css/images/rainbow_dash/clouds_fg.png") no-repeat right top,
-    url("http://www.ponychan.net/chan/css/images/rainbow_dash/bg.png") repeat-x right top,
+    url("img/rainbow-dash/rd-in-clouds.png") no-repeat right top,
+    url("img/rainbow-dash/bg.png") repeat-x right top,
     linear-gradient(to bottom, rgb(210, 238, 251) 0px, rgb(232, 247, 254) 400px);
     background-color: rgb(210, 238, 251);
 }
 /* Indiscriminate tags */
-a {
-    text-decoration: none; /* remove the underline */
-}
 a, a:visited, a.bodylink {
     color: rgb(197, 28, 113);
-}
-form a, form a:visited, form a:active {
-    color :rgb(0,0,208);
-}
-form a:hover {
-    color : rgb(0, 0, 230);
 }
 a:hover {
     color: rgb(211, 84, 148);
@@ -80,76 +70,70 @@ header h1 {
                  50px 1px 5px rgba(0, 0, 255, 0.2),
                  90px 1px 5px rgba(165, 0, 255, 0.2) !important;
 }
-.top, #qrmove, #updateSettings {
+.boardlist.top, #qrmove, #updateSettings {
     color: white;
     background-color: rgb(18, 53, 85) !important;
 }
-.top a, #qrmove a {
+.boardlist.top a, #qrmove a {
     color: #DADCF0;
     border-color: #45a;
 }
-.top a:hover, #qrmove a:hover {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover {
     color: #e8f0ff;
 }
 
 
 
 /* Navigation bar */
-.top {
+.boardlist.top {
     background: rgb(18, 53, 85)
                 linear-gradient(to bottom, rgba(0,0,0,0) ,rgba(0,0,0,0.15));
 }
-.top a {
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
     padding-left: 0.3em;
     padding-right: 0.3em;
     color: #D1D4F2;
     border-top: 3px solid rgb(42, 73, 102);
 }
-.top a:hover {
+.boardlist.top .boardlistpart a:hover {
     background-color: rgba(0,0,0,0.3);
 }
-.top a:nth-of-type(6n+1):hover, .top .boardlistactive:nth-of-type(6n+1) {
+.boardlist.top .boardlistpart a:nth-of-type(6n+1):hover, .boardlist.top .boardlistpart a.boardlistactive:nth-of-type(6n+1) {
     border-top-color: rgb(252, 151, 157);
 }
 
-.top a:nth-of-type(6n+2):hover, .top .boardlistactive:nth-of-type(6n+2) {
+.boardlist.top .boardlistpart a:nth-of-type(6n+2):hover, .boardlist.top .boardlistpart a.boardlistactive:nth-of-type(6n+2) {
     border-top-color: rgb(252, 183, 151);
 }
 
-.top a:nth-of-type(6n+3):hover, .top .boardlistactive:nth-of-type(6n+3) {
+.boardlist.top .boardlistpart a:nth-of-type(6n+3):hover, .boardlist.top .boardlistpart a.boardlistactive:nth-of-type(6n+3) {
     border-top-color: rgb(252, 249, 150);
 }
 
-.top a:nth-of-type(6n+4):hover, .top .boardlistactive:nth-of-type(6n+4) {
+.boardlist.top .boardlistpart a:nth-of-type(6n+4):hover, .boardlist.top .boardlistpart a.boardlistactive:nth-of-type(6n+4) {
     border-top-color: rgb(189, 252, 151);
 }
 
-.top a:nth-of-type(6n+5):hover, .top .boardlistactive:nth-of-type(6n+5) {
+.boardlist.top .boardlistpart a:nth-of-type(6n+5):hover, .boardlist.top .boardlistpart a.boardlistactive:nth-of-type(6n+5) {
     border-top-color: rgb(151, 222, 252);
 }
 
-.top a:nth-of-type(6n):hover, .top .boardlistactive:nth-of-type(6n) {
+.boardlist.top .boardlistpart a:nth-of-type(6n):hover, .boardlist.top .boardlistpart a.boardlistactive:nth-of-type(6n) {
     border-top-color: rgb(239, 151, 252);
 }
-.top .boardlistactive {
+.boardlist.top .boardlistpart a.boardlistactive {
     padding-top: 6px;
 }
-.top .boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
     background: inherit;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
     text-shadow: 0 0 2px rgba(0,0,0,0.6);
 }
-.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
     color: #D1D4F2;
 }
 
 
-
-
-/* Board Page header */
-.frontpage header h1 {
-    color: white;
-}
 div.banner {
     background: rgba(63, 121, 139, 0.1);
     color: #fff;
@@ -160,9 +144,6 @@ div.banner {
 /* override the white font in style.css */
 div.banner a {
     color: inherit;
-}
-img.banner {
-    display: none !important;
 }
 div.banner .unimportant {
     float: left;
@@ -230,7 +211,7 @@ tr:nth-of-type(6n) th {
 }
 
 /* Announcements */
-.blotter {
+div.blotter {
     color: rgb(56, 56, 155);
 }
 
@@ -275,11 +256,9 @@ span.trip, .wtrip {
     font-family: monospace;
 }
 p.intro a.post_no {
-    text-decoration: underline;
     color: #09147E;
 }
 p.intro a.post_no:hover {
-    text-decoration: underline;
     color: #2F3CC2;
 }
 .fileinfo {
@@ -288,9 +267,6 @@ p.intro a.post_no:hover {
 .reply .fileinfo {
     line-height: 120%;
 }
-/*.helphover div, .reply, .highlight, .reflinkpreview {*/
-/*background: #d4dcf0;*/
-/*}*/
 div.post.reply.highlighted {
     background: rgba(255, 255, 255, 0.9)
                 url("img/rainbow-dash/highlight.png") no-repeat bottom left;
@@ -319,9 +295,6 @@ span.omitted, .toolong {
     text-transform: lowercase;
     border-radius: 0.5rem 0;
 }
-.bodylink {
-    color: #CA1C57;
-}
 span.quote {
     color: rgb(74, 134, 30);
 }
@@ -349,6 +322,7 @@ div.pages {
 }
 .homepage header h1 {
     font-size: 6em;
+    color: white;
 }
 .homepage header + hr {
     display: none;
@@ -394,7 +368,6 @@ div.pages {
     text-shadow: 0 -2px 2px rgba(0,0,0,0.2);
     padding: 0.1em;
     background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2));
-    margin: -2px -1px;
     color: rgb(194, 194, 194);
     font-weight: normal;
     text-transform: lowercase;
@@ -475,19 +448,8 @@ div.pages {
 .post-hover {
     line-height: 110%;
 }
-.post-hover input, .post-hover .postfooter {
-    /* "Look at me! You can't press me! I'm just here to torture you." */
-    display: none;
-    /* That's enough of that. */
-}
 .wthread, .post-hover {
-    background-color: rgb(232, 246, 252);
-}
-.mentioned:before {
-    content: " Replies:";
-    padding-left: 3px;
-    font-size: 80%;
-    opacity: 0.7;
+    background-color: rgb(232, 246, 252) !important;
 }
 
 /* Thread watcher */
@@ -509,19 +471,16 @@ div.pages {
 .wpost {
     color: #000;
 }
-.wname:before {
+.wname::before {
     /* The element is always there. If no nickname is given, it'll leave
         you an empty element. */
     content: " by ";
     color: #607ba3;
 }
-.wremove {
-
-}
 .post-inline {
     /* This should make the inline posts brighter depending on how deep it's nested. */
-    background-color: rgba(255,255,255,0.05);
-    box-shadow: none;
+    background-color: rgba(255,255,255,0.05) !important;
+    box-shadow: none !important;
 }
 
 
@@ -539,7 +498,7 @@ div.pages {
     padding: 0.5em;
     /* This should give the transitions a reference frame. */
 }
-.hidetext:before {
+.hidetext::before {
     /*display: none;*/
     content: "click to view text";
     clear: both;
@@ -552,11 +511,6 @@ div.pages {
 
 }
 
-/*.hidetext.off:before {*/
-/*position: absolute;*/
-/*height: 1.0em;*/
-/*margin-top: 50%;*/
-/*}*/
 .hidetext.off {
     transition: transform 0.6s ease-in-out,
                 max-height 0.6s ease-in-out;
