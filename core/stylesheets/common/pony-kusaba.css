@@ -242,6 +242,7 @@ a.email {
 #settingsScreen {
     right: 0;
     top: 30px;
+    max-height: calc(95% - 30px);
     /* We're going to orient the settings so it's similar to Ponychan's */
 }
 
