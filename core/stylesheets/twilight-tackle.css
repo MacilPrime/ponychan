@@ -231,7 +231,7 @@ form:not(#qrform) input[type=submit]:active {
 
 /* Posts */
 
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
     color: rgb(221, 163, 202);
     font-weight: normal;
     font-style: italic;
@@ -240,15 +240,15 @@ form:not(#qrform) input[type=submit]:active {
     color: rgb(155, 155, 155);
     content: " — ";
 }
-.name, .email .name, .wname, .email:hover .name {
+p.intro span.name, .email .name, .wname, .email:hover .name {
     color: rgb(234, 126, 185);
     font-weight: normal;
 }
-.email {
+a.email {
     border-bottom: 1px dashed rgb(213, 73, 155)
 }
 
-.trip, .wtrip {
+span.trip, .wtrip {
     color: rgb(195, 93, 148);
     font-family: monospace;
 }
@@ -256,10 +256,10 @@ form:not(#qrform) input[type=submit]:active {
     color: rgb(218,180,210);
     text-transform: lowercase;
 }
-.post_no {
+p.intro a.post_no {
     color: rgb(224, 198, 224);
 }
-.post_no:hover {
+p.intro a.post_no:hover {
     color: rgb(252, 241, 250);
 }
 .fileinfo {
@@ -272,7 +272,7 @@ form:not(#qrform) input[type=submit]:active {
     border: 1px solid rgb(155, 107, 151);
 }
 
-.reply.highlighted {
+div.post.reply.highlighted {
     background: rgb(76, 18, 65);
     border: 1px solid rgb(222, 202, 215);
     border-left-color: #ffffff;
@@ -281,19 +281,19 @@ form:not(#qrform) input[type=submit]:active {
     /* Realigns the checkboxes */
     margin-top: 4px;
 }
-.omitted, .toolong {
+span.omitted, .toolong {
     color: rgb(218, 155, 206);
     padding: 0.3em 2em;
 }
 .bodylink {
     color: rgb(236, 152, 226);
 }
-.quote {
+span.quote {
     color: rgb(173, 135, 213);
 }
 
 /* Footer */
-.pages {
+div.pages {
     background-color: inherit;
     border: 0;
     color: rgb(184,159,186);
@@ -389,7 +389,7 @@ form:not(#qrform) input[type=submit]:active {
 .wlink, .wlink:visited {
     color: rgb(204, 177, 208)
 }
-.wlinkpart + .wname:before {
+.wname:before {
     /* The element is always there. If no nickname is given, it'll leave
         you an empty element. */
     color: rgb(163, 102, 158);

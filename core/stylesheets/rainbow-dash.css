@@ -254,7 +254,7 @@ tr:nth-of-type(6n) th {
 .intro {
     margin: 0;
 }
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
     color: rgb(16, 16, 224);
     font-weight: normal;
     font-style: italic;
@@ -263,22 +263,22 @@ tr:nth-of-type(6n) th {
     content: " — ";
     color: gray;
 }
-.name, .email .name, .email:hover .name, .wname {
+p.intro span.name, .email .name, .email:hover .name, .wname {
     color: rgb(32, 48, 144) !important;
     font-weight: bold;
 }
-.email {
+a.email {
     border-bottom: 1px dashed #6080e0;
 }
-.trip, .wtrip {
+span.trip, .wtrip {
     color: rgb(64, 96, 176);
     font-family: monospace;
 }
-.post_no {
+p.intro a.post_no {
     text-decoration: underline;
     color: #09147E;
 }
-.post_no:hover {
+p.intro a.post_no:hover {
     text-decoration: underline;
     color: #2F3CC2;
 }
@@ -291,17 +291,17 @@ tr:nth-of-type(6n) th {
 /*.helphover div, .reply, .highlight, .reflinkpreview {*/
 /*background: #d4dcf0;*/
 /*}*/
-.reply.highlighted {
+div.post.reply.highlighted {
     background: rgba(255, 255, 255, 0.9)
                 url("img/rainbow-dash/highlight.png") no-repeat bottom left;
     transition: background-color 0.4s ease-out;
 
 }
-.reply.highlighted .body {
+div.post.reply.highlighted .body {
     padding-left: 1em;
     transition: padding 0.4s cubic-bezier(.3,-0.23,.29,1);
 }
-.reply.highlighted .postimg {
+div.post.reply.highlighted .postimg {
     margin-left: 1em;
     transition: margin 0.4s cubic-bezier(.3,-0.23,.29,1);
 }
@@ -309,7 +309,7 @@ tr:nth-of-type(6n) th {
     /* Realigns the checkboxes */
     margin-top: 4px;
 }
-.omitted, .toolong {
+span.omitted, .toolong {
     color: rgb(64, 64, 64);
     padding: 0.3em 2em;
 }
@@ -322,13 +322,13 @@ tr:nth-of-type(6n) th {
 .bodylink {
     color: #CA1C57;
 }
-.quote {
+span.quote {
     color: rgb(74, 134, 30);
 }
 
 
 /* Footer */
-.pages {
+div.pages {
     background: transparent;
     border: none;
 }
@@ -509,7 +509,7 @@ tr:nth-of-type(6n) th {
 .wpost {
     color: #000;
 }
-.wlinkpart + .wname:before {
+.wname:before {
     /* The element is always there. If no nickname is given, it'll leave
         you an empty element. */
     content: " by ";

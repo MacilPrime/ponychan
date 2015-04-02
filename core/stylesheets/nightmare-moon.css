@@ -110,7 +110,7 @@ p.intro span.subject, .wsubject {
 p.intro span.name, p.intro a.email span.name, .wname {
     color: rgb(37, 89, 255);
 }
-.email {
+a.email {
     border-bottom: 1px dashed rgb(39, 90, 255);
 }
 span.trip, .wtrip {

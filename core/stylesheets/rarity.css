@@ -122,7 +122,7 @@ body > header .subtitle {
 .intro {
     margin: 0;
 }
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
     color: rgb(52, 122, 191);
 }
 .intro .subject {
@@ -132,28 +132,28 @@ body > header .subtitle {
     color: rgb(155, 155, 155);
     content: " — ";
 }
-.name, .email .name, .wname, .email:hover .name {
+p.intro span.name, .email .name, .wname, .email:hover .name {
     color: rgb(96, 0, 160);
     font-weight: bold;
     font-family: 'Goudy Bookletter 1911', serif;
     font-size: 110%;
 }
-.email {
+a.email {
     border-bottom: 1px dashed rgb(77, 24, 111);
 }
 
-.trip, .wtrip {
+span.trip, .wtrip {
     color: rgb(102, 79, 161);
     font-family: monospace;
     font-size: 110%;
     letter-spacing: -1px;
 }
-.post_no {
+p.intro a.post_no {
     font-size: 110%;
     text-decoration: underline;
     color: rgb(88, 41, 103);
 }
-.post_no:hover {
+p.intro a.post_no:hover {
     color: rgb(150, 73, 174);
 }
 .fileinfo {
@@ -164,7 +164,7 @@ body > header .subtitle {
     line-height: 120%;
 }
 
-.reply.highlighted {
+div.post.reply.highlighted {
     border-left-color: #4c166e;
     background: rgb(246, 236, 247);
     border: 1px solid rgb(222, 202, 215);
@@ -173,20 +173,20 @@ body > header .subtitle {
     /* Realigns the checkboxes */
     margin-top: 4px;
 }
-.omitted, .toolong {
+span.omitted, .toolong {
     color: gray;
     padding: 0.3em 2em;
 }
 .bodylink {
     color: rgb(108, 0, 170);
 }
-.quote {
+span.quote {
     color: rgb(160, 48, 192);
 }
 
 
 /* Footer */
-.pages {
+div.pages {
     background-color: inherit;
     border: 0;
 }
@@ -219,7 +219,7 @@ body > header .subtitle {
 .wlink {
     color: rgb(48, 48, 173)
 }
-.wlinkpart + .wname:before {
+.wname:before {
     /* The element is always there. If no nickname is given, it'll leave
         you an empty element. */
     content: " by ";

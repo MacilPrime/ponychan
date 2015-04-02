@@ -140,7 +140,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* the color of 'by' in watcher */
-.wlinkpart + .wname:before {
+.wname:before {
 	/* The element is always there. If no nickname is given, it'll leave
 		you an empty element. */
 	color: #d9a9ff;
@@ -227,37 +227,37 @@ form:not(#qrform) textarea:focus,
 	padding: 0.2em 0.9em;
 }
 
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
 	font-family: "Philosopher", sans-serif;
 	color: rgb(37, 53, 106);
 }
 
-.name, .email .name, .email:hover .name, .wname {
+p.intro span.name, .email .name, .email:hover .name, .wname {
 	color: rgb(2, 19, 69);
 }
 
-.email {
+a.email {
 	border-bottom: 1px dotted rgb(2, 19, 69);
 	/* change the underline color. */
 }
 
-.trip, .wtrip {
+span.trip, .wtrip {
 	font-family: "Ubuntu", monospace;
 	color: rgb(3, 28, 102);
 }
 
-.post_no {
+p.intro a.post_no {
 	/* Make this a deeper color than most links */
 	color: rgb(102, 40, 116);
 }
 
-.post_no:hover {
+p.intro a.post_no:hover {
 	color: rgb(123, 50, 139);
 }
-.reply.highlighted, .post-inline {
+div.post.reply.highlighted, .post-inline {
 	border: 1px solid #304f64 !important;
 }
-.reply.highlighted {
+div.post.reply.highlighted {
 	/* Makes all borders solid. */
 	background-color: rgb(50, 80, 101);
 }
@@ -267,7 +267,7 @@ form:not(#qrform) textarea:focus,
 	background-color: rgba(255,255,255,0.1);
 }
 
-.quote {
+span.quote {
 	color: rgb(181, 220, 244);
 	font: bold 110% "Philosopher", "Calibri", sans-serif;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.40);
@@ -276,7 +276,7 @@ form:not(#qrform) textarea:focus,
 	background-color: rgb(127, 83, 217);
 	color: rgb(127, 83, 217);
 }
-.omitted, .toolong {
+span.omitted, .toolong {
 	font-style: italic;
 	color: rgb(228, 228, 228);
 }
@@ -287,7 +287,7 @@ form:not(#qrform) textarea:focus,
 }
 
 
-.wlinkpart + .wname:before {
+.wname:before {
 	color: rgb(174, 192, 222);
 }
 
@@ -297,7 +297,7 @@ form:not(#qrform) textarea:focus,
 }
 
 /* Page numbers */
-.pages {
+div.pages {
 	color: rgb(72, 72, 72);
 }
 /* homepage */

@@ -16,7 +16,7 @@ body,body h1,header div.subtitle,div.blotter,h2 {
 body h1 {
     font-family:"Capacitor",Courier,monospace
 }
-.pages {
+div.pages {
     background:transparent !important
 }
 div.pages {
@@ -67,7 +67,7 @@ div.banner {
     background: #8F0304;
 }
 /* text decorations */
-.subject,.name,.trip {
+p.intro span.subject,.name,.trip {
     color:white !important
 }
 a.email {

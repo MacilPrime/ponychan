@@ -88,22 +88,22 @@ th {
 .reply, .reply.highlighted {
     border-style: solid !important;
 }
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
     color: rgb(2,146,188);
 }
-.name, a .name, .wname {
+p.intro span.name, a .name, .wname {
     color: white;
 }
-.email {
+a.email {
     border-bottom: 1px dashed #1e88d7;
 }
-.trip, .wtrip {
+span.trip, .wtrip {
     color: rgb(227,227,227);
 }
-.post_no {
+p.intro a.post_no {
     color: rgb(210,216,241);
 }
-.post_no:hover {
+p.intro a.post_no:hover {
     color: rgb(224,230,255);
 }
 .reply .fileinfo {
@@ -113,11 +113,11 @@ th {
 .bodylink {
     color: rgb(138,138,189);
 }
-.reply.highlighted {
+div.post.reply.highlighted {
     background: rgb(74,104,168);
     border-color: rgb(207,218,232);
 }
-.quote {
+span.quote {
     color: rgb(255,240,200);
 }
 
@@ -154,7 +154,7 @@ th {
 .wpost {
     color: white;
 }
-.wlinkpart + .wname:before {
+.wname:before {
     color: rgb(96,123,163);
 }
 .wremove {

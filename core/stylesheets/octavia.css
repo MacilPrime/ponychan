@@ -117,7 +117,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* the color of 'by' in watcher */
-.wlinkpart + .wname:before {
+.wname:before {
 	/* The element is always there. If no nickname is given, it'll leave
 		you an empty element. */
 	color: white;
@@ -202,37 +202,37 @@ form:not(#qrform) textarea:focus,
 	padding: 0.2em 0.9em;
 }
 
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
 	font-family: "Philosopher", sans-serif;
 	color: rgb(41, 61, 127);
 }
 
-.name, .email .name, .email:hover .name, .wname {
+p.intro span.name, .email .name, .email:hover .name, .wname {
 	color: rgb(37, 10, 2);
 }
 
-.email {
+a.email {
 	border-color: rgb(37, 10, 2);
 	/* change the underline color. */
 }
 
-.trip, .wtrip {
+span.trip, .wtrip {
 	font-family: "Ubuntu", monospace;
 	color: rgb(72, 22, 8);
 }
 
-.post_no {
+p.intro a.post_no {
 	/* Make this a deeper color than most links */
 	color: rgb(51, 27, 27);
 }
 
-.post_no:hover {
+p.intro a.post_no:hover {
 	color: rgb(159, 85, 84);
 }
-.reply.highlighted, .post-inline {
+div.post.reply.highlighted, .post-inline {
 	border: 1px solid black !important;
 }
-.reply.highlighted {
+div.post.reply.highlighted {
 	/* Makes all borders solid. */
 	background-color: rgb(239, 237, 179);
 }
@@ -242,12 +242,12 @@ form:not(#qrform) textarea:focus,
 	background-color: rgba(255,255,255,0.1);
 }
 
-.quote {
+span.quote {
 	color: rgb(226, 216, 231);
 	font: bold 110% "Philosopher", "Calibri", sans-serif;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
 }
-.omitted, .toolong {
+span.omitted, .toolong {
 	font-style: italic;
 	color: rgb(228, 228, 228);
 }
@@ -258,7 +258,7 @@ form:not(#qrform) textarea:focus,
 }
 
 
-.wlinkpart + .wname:before {
+.wname:before {
 	color: rgb(235, 235, 235);
 }
 
@@ -268,7 +268,7 @@ form:not(#qrform) textarea:focus,
 }
 
 /* Page numbers */
-.pages {
+div.pages {
 	color: rgb(72, 72, 72);
 }
 /* homepage */
