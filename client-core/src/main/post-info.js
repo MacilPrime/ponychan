@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export function get_post_board($post) {
 	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
 }
@@ -19,3 +21,13 @@ export function get_post_class(postid) {
 export function get_post_num_from_id(postid) {
 	return parseInt(/^\w+:(\d+)$/.exec(postid)[1], 10);
 }
+
+export const get_post_name = _.memoize($post =>
+  $post.find('.intro .name').first().text()
+);
+get_post_name.cache = new WeakMap();
+
+export const get_post_trip = _.memoize($post =>
+  $post.find('.intro .trip').first().text()
+);
+get_post_trip.cache = new WeakMap();

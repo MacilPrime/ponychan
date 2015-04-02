@@ -4,19 +4,32 @@
  * Released under the MIT license
  * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
  *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/post-hiding.js';
- *
  */
 
 import $ from 'jquery';
+import _ from 'lodash';
 import Bacon from 'baconjs';
 import settings from './settings';
 import setCss from './set-css';
-import {get_post_board} from './post-info';
+import {get_post_board, get_post_name, get_post_trip} from './post-info';
 
-settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {moredetails:"Only available on certain boards", orderhint:1});
+settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {
+	moredetails:"Only available on certain boards",
+	orderhint:1,
+	validator(value) {
+		if (value) {
+			if (!window.localStorage || localStorage.getItem("ofAge") != "true") {
+				if (confirm("You must be at least 18 years of age to continue.\nPush Cancel if you are not.")) {
+					try {
+						localStorage.setItem("ofAge", "true");
+					} catch(e) {}
+				} else {
+					throw new Error("This setting is restricted.");
+				}
+			}
+		}
+	}
+});
 settings.newSetting(
 	"mature_as_spoiler", "bool", false, "Treat mature content images as spoilered images", 'filters',
 	{
@@ -25,25 +38,72 @@ settings.newSetting(
 	}
 );
 settings.newSetting("show_hide_buttons", "bool", true, "Show post hiding buttons", 'filters', {orderhint:3});
+settings.newSetting("show_hider_stubs", "bool", true, "Show stubs for hidden posts", 'filters', {orderhint:4});
+settings.newSetting("filtered_names", "textarea", "", "Filtered names", 'filters', {orderhint:5});
+settings.newSetting("filtered_trips", "textarea", "", "Filtered tripcodes", 'filters', {orderhint:6});
+
+function makeMatcherFromText(text) {
+	const filterFns = _.chain(text.split('\n'))
+		.map(line => line.trim())
+		.filter(Boolean)
+		.map(line => {
+			// converts a line into a function that checks whether a value matches it.
+			const rm = line.match(/^\/(.*)\/([gi]*)$/);
+			if (rm) {
+				try {
+					const regex = new RegExp(rm[1], rm[2]);
+					return input => regex.test(input);
+				} catch(e) {
+					console.error("Failed to parse regex:", line, e);
+				}
+			}
+			return input => input.indexOf(line) !== -1;
+		}).value();
+	return _.extend(input => _.any(filterFns, fn => fn(input)), {count: filterFns.length});
+}
+
+const nameMatcherStream = settings.getSettingStream('filtered_names').map(makeMatcherFromText);
+const tripMatcherStream = settings.getSettingStream('filtered_trips').map(makeMatcherFromText);
+
+const postFilterMatcherStream = Bacon.combineAsArray(nameMatcherStream, tripMatcherStream)
+	.map(([nameMatcher, tripMatcher]) => {
+		return $postC => {
+			if (nameMatcher.count > 0) {
+				if (nameMatcher(get_post_name($postC))) return true;
+			}
+			if (tripMatcher.count > 0) {
+				if (tripMatcher(get_post_trip($postC))) return true;
+			}
+			return false;
+		};
+	});
 
 $(document).ready(function(){
-	function init_hide_style() {
-		if (settings.getSetting("show_hide_buttons"))
-			setCss("hide_button", "");
-		else
-			setCss("hide_button", ".postHider { display: none; }");
-	}
-	init_hide_style();
+	settings.getSettingStream('show_hide_buttons').onValue(hideButton => {
+		setCss("hide_button", hideButton ? "" : ".postHider { display: none; }");
+	});
+	settings.getSettingStream('show_hider_stubs').onValue(show_hider_stubs => {
+		setCss("hide_button", show_hider_stubs ? "" : ".postStub { display: none; }");
+	});
 
-	function init_mature() {
-		var expires = new Date();
-		if (settings.getSetting("show_mature")) {
+	Bacon.combineAsArray(
+			settings.getSettingStream('show_mature'),
+			settings.getSettingStream('mature_as_spoiler')
+		)
+		.onValue(([show_mature, mature_as_spoiler]) => {
+			if (show_mature) {
+				prep_mature_images(document.body);
+			}
+		});
+
+	settings.getSettingStream('show_mature').onValue(show_mature => {
+		const expires = new Date();
+		if (show_mature) {
 			expires.setTime((new Date()).getTime()+60480000000);
 			document.cookie = "show_mature=true; expires="+expires.toGMTString()+"; path="+SITE_DATA.siteroot;
 
 			$(".mature_warning").hide();
 			$(".mature_thread, .mature_post_button").show();
-			switch_mature_as_spoiler();
 		} else {
 			expires.setTime((new Date()).getTime()-50000);
 			document.cookie = "show_mature=false; expires="+expires.toGMTString()+"; path="+SITE_DATA.siteroot;
@@ -51,8 +111,7 @@ $(document).ready(function(){
 			$(".mature_warning").show();
 			$(".mature_thread, .mature_post_button").hide();
 		}
-	}
-	init_mature();
+	});
 
 	function prep_mature_images(context) {
 		$("img[data-mature-src]", context).each(function() {
@@ -76,41 +135,6 @@ $(document).ready(function(){
 			}
 		});
 	}
-
-	var ofAge = false;
-	function switch_mature() {
-		if (settings.getSetting("show_mature")) {
-			if (window.localStorage && localStorage.getItem("ofAge") == "true") {
-				ofAge = true;
-			}
-			if (!ofAge) {
-				if (confirm("You must be at least 18 years of age to continue.\nPush Cancel if you are not.")) {
-					ofAge = true;
-					try {
-						localStorage.setItem("ofAge", "true");
-					} catch(e) {}
-				} else {
-					settings.setSetting("show_mature", false);
-				}
-			}
-		}
-		init_mature();
-	}
-
-	function switch_mature_as_spoiler() {
-		if (settings.getSetting("show_mature")) {
-			prep_mature_images(document.body);
-		}
-	}
-
-	$(document).on("setting_change", function(e, setting) {
-		if (setting == "show_hide_buttons")
-			init_hide_style();
-		else if (setting == "show_mature")
-			switch_mature();
-		else if (setting == "mature_as_spoiler")
-			switch_mature_as_spoiler();
-	});
 
 	var hidden_posts = [];
 	function load_hidden_posts() {
@@ -151,6 +175,7 @@ $(document).ready(function(){
 			.prependTo($stub)
 			.text("[ + ] "+prefix+name)
 			.click(show_this_post);
+		$postC.addClass('hidden-post');
 	}
 
 	function hide_post(board, postnum) {
@@ -166,6 +191,7 @@ $(document).ready(function(){
 	}
 
 	function do_show_post($postC) {
+		if (!$postC.hasClass('hidden-post')) return;
 		if ($postC.hasClass("opContainer")) {
 			var $thread = $postC.parent(".thread");
 			$thread.find(".replyContainer, .omitted").show();
@@ -173,6 +199,7 @@ $(document).ready(function(){
 
 		$postC.find(".postStub").remove();
 		$postC.children(".post, .postSide").show();
+		$postC.removeClass('hidden-post');
 	}
 
 	function show_post(board, postnum) {
@@ -205,7 +232,7 @@ $(document).ready(function(){
 		show_post(get_post_board($pc.children(".post")), postnum);
 	}
 
-	function process_posts(context) {
+	function process_posts(context, postFilter) {
 		var threads_needed = 0;
 		var $posts = $(context).filter(".post").add( $(".post", context) );
 		$posts.each(function() {
@@ -237,11 +264,14 @@ $(document).ready(function(){
 
 			place_button($post);
 			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
-			if (is_post_hidden(get_post_board($pc.children(".post")), postnum)) {
+			const shouldHidePost = is_post_hidden(get_post_board($post), postnum) || postFilter($post);
+
+			if (shouldHidePost) {
 				if ($pc.hasClass("opContainer"))
 					threads_needed++;
 				do_hide_post($pc);
 			} else {
+				do_show_post($pc);
 				if ($pc.hasClass("opContainer") && $thread.hasClass("mature_thread") && !settings.getSetting("show_mature"))
 					threads_needed++;
 				else if ($pc.hasClass("opContainer") && $thread.attr("data-loaded-late"))
@@ -316,8 +346,15 @@ $(document).ready(function(){
 			.click(hide_this_post);
 	}
 
-	process_posts(document);
-	$(document).on('new_post', function(e, post) {
-		process_posts(post);
-	});
+	const new_posts = Bacon.fromEvent($(document), 'new_post', (event, post) => post);
+
+	postFilterMatcherStream
+		.onValue(postFilter => {
+			process_posts(document, postFilter);
+		});
+	postFilterMatcherStream
+		.sampledBy(new_posts, (a,b)=>[a,b])
+		.onValue(([postFilter, post]) => {
+			process_posts(post, postFilter);
+		});
 });
