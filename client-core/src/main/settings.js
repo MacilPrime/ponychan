@@ -30,17 +30,22 @@ function checkSettingValue(setting, value) {
 	switch(type) {
 		case "bool":
 			if (typeof value !== "boolean") {
-				throw new Error(`setting ${setting} was expected to be boolean but was: ${value}`);
+				throw new Error(`Setting ${setting} was expected to be boolean but was: ${value}`);
+			}
+			break;
+		case "textarea":
+			if (typeof value !== "string") {
+				throw new Error(`Setting ${setting} was expected to be string but was: ${value}`);
 			}
 			break;
 		case "number":
 			if (typeof value !== "number" || isNaN(value)) {
-				throw new Error(`setting ${setting} was expected to be a number but was ${value}`);
+				throw new Error(`Setting ${setting} was expected to be a number but was ${value}`);
 			}
 			break;
 		case "select":
 			if (!settingData.get('selectOptions').find(item => item.get('value') === value)) {
-				throw new Error(`setting ${setting} was not a valid option: ${value}`);
+				throw new Error(`Setting ${setting} was not a valid option: ${value}`);
 			}
 			break;
 	}

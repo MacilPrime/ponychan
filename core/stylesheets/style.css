@@ -628,9 +628,13 @@ div.post.reply.post-inline .body {
 }
 .settingsScreen input[type=number] {
 	width: 4em;
-	margin-left: 2em;
 	text-align: right;
 }
+.settingsScreen input[type=number],
+.settingsScreen textarea {
+	margin-left: 2em;
+}
+
 #settingsScreen h1 a {
 	float: right;
 	margin: 0 11px 2px 2px;

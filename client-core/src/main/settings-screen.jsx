@@ -91,6 +91,50 @@ const SettingSaveButton = React.createClass({
 	}
 });
 
+const TextAreaItem = React.createClass({
+	mixins: [PureRenderMixin],
+	getInitialState() {
+		return {value: this.props.value};
+	},
+	componentWillReceiveProps(nextProps) {
+		this.setState({value: nextProps.value});
+	},
+	reset() {
+		this.componentWillReceiveProps(this.props);
+	},
+	render() {
+		const {setting, disabled} = this.props;
+		const name = setting.get('name');
+		const desc = setting.get('description');
+		let valid = false;
+		try {
+			settings.checkSettingValue(name, this.state.value);
+			valid = true;
+		} catch(e) {}
+
+		const onChange = event => {
+			const value = React.findDOMNode(this.refs.input).value;
+			this.setState({value});
+		};
+		const onSave = event => {
+			settings.setSetting(name, this.state.value, true);
+		};
+		return (
+			<div>
+				<div className="setting_description">{desc}</div>
+				<textarea ref="input"
+					disabled={disabled}
+					value={this.state.value} onChange={onChange} />
+				<div style={{visibility:this.props.value===this.state.value?'hidden':'visible'}}>
+					<SettingSaveButton
+						disabled={disabled} valid={valid}
+						onSave={onSave} onUndo={this.reset} />
+				</div>
+			</div>
+		);
+	}
+});
+
 const NumberItem = React.createClass({
 	mixins: [PureRenderMixin],
 	getInitialState() {
@@ -128,7 +172,7 @@ const NumberItem = React.createClass({
 				<span style={{visibility:this.props.value===this.state.value?'hidden':'visible'}}>
 					<SettingSaveButton
 						disabled={disabled} valid={valid}
-						onSave={onSave} showUndo={this.props.value!==this.state.value} onUndo={this.reset} />
+						onSave={onSave} onUndo={this.reset} />
 				</span>
 			</div>
 		);
@@ -175,7 +219,8 @@ const SettingItem = React.createClass({
 		const ITEM_TYPES = {
 			bool: CheckboxItem,
 			select: SelectItem,
-			number: NumberItem
+			number: NumberItem,
+			textarea: TextAreaItem
 		};
 		const Tag = ITEM_TYPES[setting.get('type')] || InvalidItem;
 
