@@ -33,15 +33,15 @@ body > header h1 {
     font-family: "Josefin Sans",
         "Century Gothic Medium", "Calibri", sans-serif;
 }
-.top, #qrmove, #updateSettings {
+.boardlist.top, #qrmove, #updateSettings {
     background-color: rgb(10, 18, 38);
     color: rgb(255,255,241);
 }
-.top a, #qrmove a {
+.boardlist.top a, #qrmove a {
     color: rgb(255, 255, 220);
     border-color: rgb(90, 107, 171);
 }
-.top a:hover, #qrmove a:hover {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover {
     background-color: rgb(89,106,170);
     color: rgb(159,163,208);
 }
@@ -50,7 +50,7 @@ body > header h1 {
 
 
 /* Navigation bar */
-.top a {
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
     padding-left: 0.3em;
     padding-right: 0.3em;
     border-top-color: rgb(91,108,172);
@@ -58,7 +58,7 @@ body > header h1 {
 .boardlist.top .boardlistpart a[href="/"] {
     color: rgb(203,206,233);
 }
-.top .boardlistactive {
+.boardlist.top .boardlistpart a.boardlistactive {
     border-top-color: rgb(91,108,172);
 }
 

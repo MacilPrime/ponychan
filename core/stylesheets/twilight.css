@@ -47,7 +47,7 @@ div.post.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathrea
 .boardlist.top .boardlistpart a:hover {
     background: rgb(64, 16, 64);
 }
-.boardlist.top .boardlistpart a.boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
     border-color: rgb(136,85,136);
 }
 .boardlist.top .boardlistpart a[href="/"] {

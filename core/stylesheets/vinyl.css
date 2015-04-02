@@ -32,15 +32,15 @@ a:hover {
 .boardlist.top {
     background:black
 }
-.top .boardlistpart a {
+.boardlist.top .boardlistpart a {
     border-top:solid #30364D;
     margin:0 !important;
 }
-.top .boardlistpart a:hover {
+.boardlist.top .boardlistpart a:hover {
     background:#30364D !important;
     border-top:solid #7479BD;
 }
-.top a.boardlistactive,a.watcherButton.open {
+.boardlist.top a.boardlistactive,a.watcherButton.open {
     background:black !important;
     border-top:solid #7479BD !important;
     padding-top: 6px !important;

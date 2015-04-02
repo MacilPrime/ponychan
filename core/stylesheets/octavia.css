@@ -58,18 +58,18 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* Head bar backgrounds */
-.top, #qrmove, .ban h2 {
+.boardlist.top, #qrmove, .ban h2 {
 	background-color: rgb(167, 109, 158);
 	color: white;
 }
 
 /* Head bar links */
-.top a, .top a:visited, #qrmove a, #qrmove a:visited {
+.boardlist.top a, .top a:visited, #qrmove a, #qrmove a:visited {
 	color: rgb(255, 158, 231);
 }
 
 /* Head bar links on hover */
-.top a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
 	color: rgb(255, 194, 249);
 }
 
@@ -79,22 +79,22 @@ div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSetting
 }
 
 /* -- Navigation bar -- */
-.top a:hover {
+.boardlist.top .boardlistpart a:hover {
 	background-color: rgb(167, 97, 201);
 }
 
 /* set the border-color property to show that the button is 'lit' */
-.top .boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
 	border-color: rgb(221, 120, 221);
 }
 
 /* Color of the 'home' link */
-.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
 	color: rgb(255, 218, 252);
 }
 
 /* Toggle links on the right */
-.top .watcherButton, .top .settingsButton {
+.boardlist.top .watcherButton, .top .settingsButton {
 	color: rgb(221, 226, 219);
 }
 /* Settings page */
@@ -181,7 +181,7 @@ form:not(#qrform) textarea:focus,
 	inset 0 0 7px rgba(0,0,0,0.0);
 }
 /* Staff notice */
-.blotter {
+div.blotter {
 	border: 1px solid rgb(151, 90, 129);
 	color: white;
 }

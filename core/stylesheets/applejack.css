@@ -50,13 +50,13 @@ div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSet
     background: rgb(247,237,196);
     border-color: rgb(229, 214, 139);
 }
-.top, #qrmove, #updateSettings {
+.boardlist.top, #qrmove, #updateSettings {
     background-color: #91ca40;
 }
-.top a, .top a:visited, #qrmove a, #qrmove a:visited {
+.boardlist.top a, .top a:visited, #qrmove a, #qrmove a:visited {
     color: #203f0c;
 }
-.top a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
     color: rgb(32, 63, 12);
     box-shadow: inset 0 0 1em rgba(0,0,0,0.3);
 }
@@ -64,13 +64,13 @@ div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSet
 
 
 /* Navigation bar */
-.top a:hover {
+.boardlist.top .boardlistpart a:hover {
     background: rgb(0,64,64);
 }
-.top .boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
     border-color: #f3d634;
 }
-.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
     color: rgb(53, 86, 6);
 }
 
@@ -102,11 +102,6 @@ div.banner {
     color: white;
 }
 
-
-/* Post form */
-.blotter {
-    color: inherit;
-}
 form th:after {
     color: #fff;
     font-size: 120%;

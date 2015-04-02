@@ -44,16 +44,16 @@ div.post.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathrea
     background-color: rgb(205, 235, 242);
 }
 /* Tone 3 - Bars */
-.top, #qrmove {
+.boardlist.top, #qrmove {
     background-color: rgb(106, 53, 139);
 }
-.top a {
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
     color: rgb(191, 163, 245);
 }
 #qrmove a {
     color: rgb(208, 193, 208);
 }
-.top a:hover, #qrmove a:hover {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover {
     color: #f2e2f2;
 }
 /* Semantics */
@@ -61,16 +61,16 @@ div.post.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathrea
 
 
 /* Navigation bar */
-.top {
+.boardlist.top {
     background-image: linear-gradient(to bottom, rgb(134, 80, 164), rgb(113, 54, 142))
 }
-.top a:hover {
+.boardlist.top .boardlistpart a:hover {
     background-color: rgb(114, 204, 242);
 }
-.top .boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
     border-color: rgb(114, 204, 242);
 }
-.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
     color: rgb(250, 241, 255);
 }
 
@@ -98,10 +98,6 @@ header div.subtitle {
 
 #qrDisplayButton {
     color: rgb(46, 97, 152);
-}
-
-.blotter {
-    color: inherit;
 }
 
 

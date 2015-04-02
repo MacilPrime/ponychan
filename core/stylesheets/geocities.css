@@ -18,12 +18,12 @@ header h1::before {
 form table {
     margin: 5px;
 }
-.blotter::before {
+div.blotter::before {
     content: url('img/gc/construction%20icon.gif');
     position: relative;
     right: 5px;
 }
-.blotter::after {
+div.blotter::after {
     display: block;
     content: "/-- WEBSITE UNDER CONSTRUCTION --/";
 }

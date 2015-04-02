@@ -154,7 +154,7 @@ button:not(#qrfilebutton):active {
 
 
 /* Navigation bar */
-.boardlist.top .boardlistpart a.boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
     border-color: rgb(151,164,225);
     background: rgba(0,0,0,0.3);
     box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
