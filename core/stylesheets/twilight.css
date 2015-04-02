@@ -6,10 +6,10 @@
 body {
     background: #f0e0f0;
 }
-a, a:visited, a:active {
+a, a:visited, a.bodylink {
     color: rgb(34,0,170);
 }
-a:hover {
+a:hover, div.banner a:hover {
     color: rgb(221,0,221);
 }
 input[type=button], input[type=submit], input[type=file], button {
@@ -22,40 +22,35 @@ input[type=text], input[type=password], input[type=search], textarea {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
     outline: 2px solid rgb(176,96,176);
 }
-hr {
-    border-color: #C3A8A8 !important;
+hr, .thread hr {
+    border-color: #C3A8A8;
 }
 /* Setting the color scheme */
 h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: rgb(96, 16, 96);
 }
-.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathread {
+div.post.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathread {
     background-color: rgb(232, 192, 232);
 }
 .boardlist.top, #qrmove {
     background-color: rgb(80, 32, 80);
 }
-.boardlist.top a {
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
     color: rgb(224,144,224);
 }
 #qrmove a {
     color: rgb(208, 193, 208);
 }
-.boardlist.top a:hover, #qrmove a:hover {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover {
     color: #ffe0ff;
 }
-/* Semantics */
-
-
-
-/* Navigation bar */
-.boardlist.top a:hover {
-    background-color: rgb(64, 16, 64);
+.boardlist.top .boardlistpart a:hover {
+    background: rgb(64, 16, 64);
 }
-.boardlist.top .boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .watcherButton.open {
     border-color: rgb(136,85,136);
 }
-.boardlist.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
     color: rgb(226,166,226);
 }
 
@@ -68,7 +63,7 @@ div.banner {
     color: rgb(255, 255, 255);
 }
 
-body > header .subtitle {
+header div.subtitle {
     color: rgb(178, 143, 165);
 }
 
@@ -78,7 +73,7 @@ body > header .subtitle {
     border-color: rgb(107, 66, 104)
 }
 
-form table th {
+form table tr th {
     background: rgb(204, 136, 204);
 }
 
@@ -86,49 +81,38 @@ form table th {
     color: rgb(34,0,170);
 }
 
-.blotter {
-    color: inherit;
-}
-
 
 /* Posts */
-.reply, .wthread, .hashtag, #updateSettings, .catathread {
+div.post.reply, .wthread, .hashtag, #updateSettings, .catathread {
     border-color: rgb(189,141,189);
     line-height: 140%;
     padding: 3px;
 }
-.postHider {
-    margin-top: -2px;
-}
-.intro {
-    margin: 0;
-}
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
     color: rgb(214, 16, 144);
     font-weight: normal;
     font-style: italic;
 }
-.intro .subject:after {
+p.intro span.subject::after {
     color: rgb(155, 155, 155);
     content: " — ";
 }
-.name, .email .name, .wname, .email:hover .name {
+p.intro span.name, .email .name, .wname, .email:hover .name {
     color: rgb(96, 0, 160);
     font-weight: bold;
 }
-.email {
+a.email {
     border-bottom: 1px dashed rgb(126, 0, 204);
 }
 
-.trip, .wtrip {
+span.trip, .wtrip {
     color: rgb(160, 64, 160);
     font-family: monospace;
 }
-.post_no {
-    text-decoration: underline;
+p.intro a.post_no {
     color: rgb(88, 41, 103);
 }
-.post_no:hover {
+p.intro a.post_no:hover {
     color: rgb(150, 73, 174);
 }
 .fileinfo {
@@ -139,7 +123,7 @@ form table th {
     line-height: 120%;
 }
 
-.reply.highlighted {
+div.post.reply.highlighted {
     background: rgb(246, 236, 247);
     border: 1px solid rgb(222, 202, 215);
 }
@@ -147,27 +131,20 @@ form table th {
     /* Realigns the checkboxes */
     margin-top: 4px;
 }
-.omitted, .toolong {
+span.omitted, .toolong {
     color: gray;
     padding: 0.3em 2em;
 }
-.bodylink {
-    color: rgb(108, 0, 170);
-}
-.quote {
+span.quote {
     color: rgb(160, 48, 192);
 }
 
 
 /* Footer */
-.pages {
+div.pages {
     background-color: inherit;
     border: 0;
 }
-.boardlist.bottom {
-    font-size: 120%;
-}
-
 
 
 /* -- Manipulated DOM -- */
@@ -190,7 +167,7 @@ form table th {
 .wlink {
     color: rgb(48, 48, 173)
 }
-.wlinkpart + .wname:before {
+.wname:before {
     /* The element is always there. If no nickname is given, it'll leave
         you an empty element. */
     content: " by ";

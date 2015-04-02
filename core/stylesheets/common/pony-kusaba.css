@@ -115,7 +115,7 @@ p.intro span.subject, .wsubject {
     font-weight: normal;
     font-style: italic;
 }
-p.intro span.subject:after {
+p.intro span.subject::after {
     content: " — ";
 }
 .wname {

@@ -708,7 +708,7 @@
 	$config['stylesheets']['Derpy'] = array('Derpy', 'derpy.css');
 	$config['stylesheets']['Pinkie'] = array('Pinkie', 'pinkie.css');
 
-	// $config['stylesheets']['Twilight'] = array('Twilight', 'twilight.css');
+	$config['stylesheets']['Twilight'] = array('Twilight', 'twilight.css');
 	// $config['stylesheets']['Twilight Tackle'] = array('Twilight Tackle', 'twilight-tackle.css');
 	// $config['stylesheets']['Rainbow Dash'] = array('Rainbow Dash', 'rainbow-dash.css');
 	// $config['stylesheets']['Fluttershy'] = array('Fluttershy', 'fluttershy.css');
