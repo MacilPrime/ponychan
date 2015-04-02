@@ -21,7 +21,7 @@ settings.newSetting(
 function buttonEvent() {
   Notification.requestPermission(function() {
     if (Notification.permission == "granted") {
-      var note = new Notification("Board settings - MLPchan", {
+      var note = new Notification("Board settings - Ponychan", {
         body: "This is a test",
         tag: "desktop_test",
         icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
