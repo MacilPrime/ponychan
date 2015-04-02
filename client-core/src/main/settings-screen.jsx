@@ -44,7 +44,7 @@ const SelectItem = React.createClass({
 			);
 		}).toArray();
 		const onChange = event => {
-			settings.setSetting(name, event.target.value);
+			settings.setSetting(name, event.target.value, true);
 		};
 		return (
 			<div>
@@ -65,7 +65,7 @@ const CheckboxItem = React.createClass({
 		const name = setting.get('name');
 		const desc = setting.get('description');
 		const toggle = event => {
-			settings.setSetting(name, event.target.checked);
+			settings.setSetting(name, event.target.checked, true);
 		};
 		return (
 			<label>
@@ -74,6 +74,63 @@ const CheckboxItem = React.createClass({
 					checked={value} onChange={toggle} />
 				<span className="setting_description">{desc}</span>
 			</label>
+		);
+	}
+});
+
+const SettingSaveButton = React.createClass({
+	mixins: [PureRenderMixin],
+	render() {
+		const {valid, onSave, onUndo, disabled} = this.props;
+		return (
+			<span>
+				<button disabled={!valid || disabled} onClick={onSave}>Save</button>
+				<button disabled={disabled} onClick={onUndo}>Undo</button>
+			</span>
+		);
+	}
+});
+
+const NumberItem = React.createClass({
+	mixins: [PureRenderMixin],
+	getInitialState() {
+		return {value: this.props.value};
+	},
+	componentWillReceiveProps(nextProps) {
+		this.setState({value: nextProps.value});
+	},
+	reset() {
+		this.componentWillReceiveProps(this.props);
+	},
+	render() {
+		const {setting, disabled} = this.props;
+		const name = setting.get('name');
+		const desc = setting.get('description');
+		let valid = false;
+		try {
+			settings.checkSettingValue(name, this.state.value);
+			valid = true;
+		} catch(e) {}
+
+		const onChange = event => {
+			const value = parseInt(React.findDOMNode(this.refs.input).value);
+			this.setState({value});
+		};
+		const onSave = event => {
+			settings.setSetting(name, this.state.value, true);
+		};
+		return (
+			<div>
+				<div className="setting_description">{desc}</div>
+				<input type="number" ref="input"
+					disabled={disabled}
+					value={this.state.value} onChange={onChange} />
+				<span style={{visibility:this.props.value===this.state.value?'hidden':'visible'}}>
+					<SettingSaveButton
+						disabled={disabled} valid={valid}
+						onSave={onSave} showUndo={this.props.value!==this.state.value} onUndo={this.reset} />
+				</span>
+			</div>
 		);
 	}
 });
@@ -115,7 +172,11 @@ const SettingItem = React.createClass({
 				{disabledMessageComponent}
 			</div>;
 
-		const ITEM_TYPES = {bool: CheckboxItem, select: SelectItem};
+		const ITEM_TYPES = {
+			bool: CheckboxItem,
+			select: SelectItem,
+			number: NumberItem
+		};
 		const Tag = ITEM_TYPES[setting.get('type')] || InvalidItem;
 
 		const classes = cx('setting_item', {disabled});

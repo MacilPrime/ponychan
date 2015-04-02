@@ -13,6 +13,14 @@ import {get_post_num} from '../post-info';
 
 settings.newSetting("reloader", "bool", true, "Enable thread auto-updating", 'reloader', {orderhint:1, moredetails:"New posts in threads will appear as they're made."});
 settings.newSetting("reloader_autoscroll", "bool", false, "Scroll page down when new posts are loaded", 'reloader', {orderhint:2, moredetails:"Only happens if page is scrolled to the bottom already."});
+settings.newSetting("reloader_time", "number", 30, "Update interval in seconds", 'reloader', {
+	orderhint:3,
+	validator(value) {
+		if(value < 1) {
+			throw new Error("Update interval must be a positive number!");
+		}
+	}
+});
 
 const updateNoCache = new Bacon.Bus();
 
@@ -37,9 +45,7 @@ $(document).ready(function(){
 
 	var tickTimer = null;
 
-	var updateInterval = 30;
-	if(window.localStorage && localStorage.updateInterval != null)
-		updateInterval = parseInt(localStorage.updateInterval);
+	var updateInterval = settings.getSetting("reloader_time");
 
 	var timeUntilUpdate;
 	var timeSinceActivity = 0;
@@ -59,11 +65,6 @@ $(document).ready(function(){
  			timeSinceActivity += updateInterval;
 			tick();
 		}
-	}
-
-	function saveSettings() {
-		if (!window.localStorage) return;
-		localStorage.updateInterval = updateInterval;
 	}
 
 	var $statusSettings = $("<div/>")
@@ -97,14 +98,9 @@ $(document).ready(function(){
 		.attr("type", "text")
 		.val(updateInterval)
 		.blur(function() {
-			var newVal = parseInt($(this).val());
-			if(isNaN(newVal) || newVal < 1) {
-				alert("Update interval must be a positive number!");
-				return;
-			}
-			updateInterval = newVal;
-			timeSinceActivity = 0;
-			saveSettings();
+			const newVal = parseInt($(this).val());
+			settings.setSetting('reloader_time', newVal, true);
+			$(this).val(updateInterval);
 		}).appendTo($statusSettings);
 	$statusSettings.append("<br/>");
 	$("<input/>")
@@ -264,19 +260,26 @@ $(document).ready(function(){
 		}
 	});
 
-	$(document).on("setting_change", function(e, setting) {
-		if (setting == "reloader") {
-			updateEnabled = settings.getSetting("reloader");
-			timeSinceActivity = 0;
-			if(updateEnabled) {
-				prepareDelayedUpdate();
-			} else {
-				if(tickTimer)
-					clearTimeout(tickTimer);
-			}
-		} else if (setting == "reloader_autoscroll") {
-			autoScroll = settings.getSetting("reloader_autoscroll");
+	function reinit() {
+		timeSinceActivity = 0;
+		if(updateEnabled) {
+			prepareDelayedUpdate();
+		} else {
+			if(tickTimer)
+				clearTimeout(tickTimer);
 		}
+	}
+
+	settings.getSettingStream("reloader").changes().onValue(value => {
+		updateEnabled = value;
+		reinit();
+	});
+	settings.getSettingStream("reloader_time").changes().onValue(value => {
+		updateInterval = value;
+		reinit();
+	});
+	settings.getSettingStream("reloader_autoscroll").onValue(value => {
+		autoScroll = value;
 	});
 
 	prepareDelayedUpdate();

@@ -23,6 +23,33 @@ const getSettingStream = _.memoize(name =>
 		.map(() => getSetting(name))
 );
 
+// Throws an error if the given value isn't valid for the named setting.
+function checkSettingValue(setting, value) {
+	const settingData = settingsMetadata.get(setting);
+	const type = settingData.get('type');
+	switch(type) {
+		case "bool":
+			if (typeof value !== "boolean") {
+				throw new Error(`setting ${setting} was expected to be boolean but was: ${value}`);
+			}
+			break;
+		case "number":
+			if (typeof value !== "number" || isNaN(value)) {
+				throw new Error(`setting ${setting} was expected to be a number but was ${value}`);
+			}
+			break;
+		case "select":
+			if (!settingData.get('selectOptions').find(item => item.get('value') === value)) {
+				throw new Error(`setting ${setting} was not a valid option: ${value}`);
+			}
+			break;
+	}
+	const validator = settingData.get('validator');
+	if (validator) {
+		validator(value);
+	}
+}
+
 function _readSetting(name) {
 	const settingData = settingsMetadata.get(name);
 
@@ -50,21 +77,14 @@ function _readSetting(name) {
 					localVal = null;
 				}
 				// setting type checking
-				switch(type) {
-				case "bool":
-					if (typeof localVal[0] !== "boolean") {
-						console.error("setting was expected to be boolean:", localVal);
-						localVal = null;
-					}
-					break;
-				case "select":
-					if (!settingData.get('selectOptions').find(item => item.get('value') === localVal[0])) {
-						localVal = null;
-					}
-					break;
+				try {
+					checkSettingValue(name, localVal[0]);
+				} catch(e) {
+					console.warn(e);
+					localVal = null;
 				}
 			} catch(e) {
-				console.error("Could not parse rawVal:", rawVal);
+				console.error("Could not parse rawVal:", rawVal, e);
 				localVal = null;
 			}
 		}
@@ -110,6 +130,15 @@ function setSetting(name, value, notquiet=false) {
 			localStorage.removeItem(id);
 		}
 	} else {
+		try {
+			checkSettingValue(name, value);
+		} catch(e) {
+			console.warn('Error while trying to set setting', name, value, e);
+			if (notquiet && e && e.message) {
+				alert(e.message);
+			}
+			return;
+		}
 		const toWrite = [value, settingData.get('defpriority')];
 
 		if (window.localStorage) {
@@ -183,12 +212,16 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 //					as it emits true.
 //   notSupported: If true, then the setting will be disabled and a message will be shown
 //                 to the user explaining that their browser does not support the setting.
+//   validator: Function to validate the value of the setting when it's loaded or
+//              changed. Should throw an exception with an error message if the value is
+//              not deemed valid.
 function newSetting(name, type, defval, description, section, extra={}) {
 	const moredetails = extra.moredetails;
 	const selectOptions = extra.selectOptions && Immutable.fromJS(extra.selectOptions);
 	const testButton = extra.testButton && Immutable.fromJS(extra.testButton);
 	const orderhint = extra.orderhint || 0;
 	const defpriority = extra.defpriority || 0;
+	const validator = extra.validator;
 
 	if (settingsMetadata.has(name))
 		throw new Error(`Setting ${name} has already been defined!`);
@@ -207,7 +240,7 @@ function newSetting(name, type, defval, description, section, extra={}) {
 	const bus = new Bacon.Bus();
 
 	const settingMetadata = Immutable.Map({
-		name, section, orderhint, type,
+		name, section, orderhint, type, validator,
 		description, moredetails, selectOptions,
 		hidden: !!extra.hider, testButton, disableMessage,
 		defval, defpriority,
@@ -258,7 +291,7 @@ newSection('filters', 'Filters', 5);
 
 const settings = {
 	getSetting, getSettingStream, setSetting,
-	bindCheckbox,
+	bindCheckbox, checkSettingValue,
 	newSection, newSetting,
 	getAllSettingValues,
 	getAllSettingsMetadata
