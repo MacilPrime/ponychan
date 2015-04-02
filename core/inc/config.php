@@ -690,8 +690,23 @@
 	// Values are array(displayName, file)
 	// Yeah, the name and displayName match for most right now. This lets us change
 	// the displayNames in the future without overriding people's settings.
-	$config['stylesheets']['Cloudsdale'] = array('Cloudsdale', 'Cloudsdale.css');
 	$config['stylesheets']['Colgate'] = array('Colgate', 'colgate.css');
+
+	$config['stylesheets']['Twilight'] = array('Twilight', 'twilight.css');
+	$config['stylesheets']['Twilight Tackle'] = array('Twilight Tackle', 'twilight-tackle.css');
+	$config['stylesheets']['Rainbow Dash'] = array('Rainbow Dash', 'rainbow-dash.css');
+	$config['stylesheets']['Fluttershy'] = array('Fluttershy', 'fluttershy.css');
+	// $config['stylesheets']['Applejack'] = array('Applejack', 'applejack.css');
+	// $config['stylesheets']['Rarity'] = array('Rarity', 'rarity.css');
+	$config['stylesheets']['Nightmare Moon'] = array('Nightmare Moon', 'nightmare-moon.css');
+	// $config['stylesheets']['Vinyl Trance'] = array('Vinyl Trance', 'vinyl.css');
+	// $config['stylesheets']['Timelord'] = array('Timelord', 'timelord.css');
+	$config['stylesheets']['Octavia'] = array('Octavia', 'octavia.css');
+	// $config['stylesheets']['Great and Powerful'] = array('Great and Powerful', 'trixie.css');
+	// $config['stylesheets']['Aloe and Lotus'] = array('Aloe and Lotus', 'aloe-and-lotus.css');
+	// $config['stylesheets']['Scootaloo'] = array('Scootaloo', 'scootaloo.css');
+
+	$config['stylesheets']['Cloudsdale'] = array('Cloudsdale', 'Cloudsdale.css');
 	$config['stylesheets']['Pone'] = array('Pone', 'pone.css');
 	$config['stylesheets']['Yotsuba B'] = array('Yotsuba B', ''); // default
 	$config['stylesheets']['Yotsuba'] = array('Yotsuba', 'yotsuba.css');
@@ -708,27 +723,13 @@
 	$config['stylesheets']['Derpy'] = array('Derpy', 'derpy.css');
 	$config['stylesheets']['Pinkie'] = array('Pinkie', 'pinkie.css');
 
-	$config['stylesheets']['Twilight'] = array('Twilight', 'twilight.css');
-	$config['stylesheets']['Twilight Tackle'] = array('Twilight Tackle', 'twilight-tackle.css');
-	$config['stylesheets']['Rainbow Dash'] = array('Rainbow Dash', 'rainbow-dash.css');
-	$config['stylesheets']['Fluttershy'] = array('Fluttershy', 'fluttershy.css');
-	// $config['stylesheets']['Applejack'] = array('Applejack', 'applejack.css');
-	// $config['stylesheets']['Rarity'] = array('Rarity', 'rarity.css');
-	$config['stylesheets']['Nightmare Moon'] = array('Nightmare Moon', 'nightmare-moon.css');
-	// $config['stylesheets']['Vinyl Trance'] = array('Vinyl Trance', 'vinyl.css');
-	// $config['stylesheets']['Timelord'] = array('Timelord', 'timelord.css');
-	$config['stylesheets']['Octavia'] = array('Octavia', 'octavia.css');
-	// $config['stylesheets']['Great and Powerful'] = array('Great and Powerful', 'trixie.css');
-	// $config['stylesheets']['Aloe and Lotus'] = array('Aloe and Lotus', 'aloe-and-lotus.css');
-	// $config['stylesheets']['Scootaloo'] = array('Scootaloo', 'scootaloo.css');
-
 	$config['stylesheets']['Geocities'] = array('Geocities', 'geocities.css');
 
 	// The prefix for each stylesheet URI. Defaults to $config['root']/stylesheets/
 	// $config['uri_stylesheets'] = 'http://static.example.org/stylesheets/';
 
 	// The default stylesheet to use
-	$config['default_stylesheet'] = 'Cloudsdale';
+	$config['default_stylesheet'] = 'Colgate';
 
 	// Boardlinks
 	// You can group, order and place the boardlist at the top of every page, using the following template.
