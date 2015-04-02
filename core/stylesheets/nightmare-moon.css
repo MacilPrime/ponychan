@@ -1,6 +1,6 @@
-@import "common/pony-kusaba.css";
-@import "common/ghost-buttons.css";
-@import "common/enigma-settings.css";
+@import "common/pony-kusaba.css?v=196242052";
+@import "common/ghost-buttons.css?v=196242052";
+@import "common/enigma-settings.css?v=196242052";
 
 /* Indiscriminate tags */
 body {
