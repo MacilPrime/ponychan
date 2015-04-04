@@ -2067,14 +2067,21 @@ function simple_hash($input) {
 function secure_hash($input) {
 	global $config;
 
-	$count = 1 << $config['secure_count_log2'];
+	if ($config['kusabax_secure_tripcode']) {
+		$secure_tripcode = md5($input . $config['KU_RANDOMSEED']);
+		$secure_tripcode = base64_encode($secure_tripcode);
+		$secure_tripcode = str_rot13($secure_tripcode);
+		return substr($secure_tripcode, 2, 10);
+	} else {
+		$count = 1 << $config['secure_count_log2'];
 
-	$hash = md5($config['secure_trip_salt'] . $input, TRUE);
-	do {
-		$hash = md5($hash . $input, TRUE);
-	} while (--$count);
+		$hash = md5($config['secure_trip_salt'] . $input, TRUE);
+		do {
+			$hash = md5($hash . $input, TRUE);
+		} while (--$count);
 
-	return substr(base64_encode($hash), 0, 10);
+		return substr(base64_encode($hash), 0, 10);
+	}
 }
 
 function generate_tripcode($name) {

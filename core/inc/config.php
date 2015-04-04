@@ -149,6 +149,9 @@
 	$config['secure_trip_salt'] = ')(*&^%$#@!98765432190zyxwvutsrqponmlkjihgfedcba';
 	// Controls how much processing power is used in generating secure tripcodes
 	$config['secure_count_log2'] = 7;
+	// Use KusabaX secure tripcode algorithm
+	$config['kusabax_secure_tripcode'] = false;
+	$config['KU_RANDOMSEED'] = 'x';
 
 	// Used for simple access-control
 	$config['cookies']['mod_secret'] = 'lmnopqrstuvwxyz09123456789!@#$%^&*()';
