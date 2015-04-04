@@ -1,30 +1,13 @@
 /**
  * gilda
- * 
+ *
  * Created on 4/1/2015
  * Ported from old Ponychan, originally written by Little Hawk.
- * 
- * 
+ *
+ *
  */
 @import "common/bubble-buttons.css";
 @import "common/pony-kusaba.css";
-
-@font-face {
-	font-family: "One Way";
-	src: url(font/one-way.woff);
-}
-@font-face {
-	font-family: "Open Sans";
-	src: url(font/open-sans.woff)
-}
-@font-face {
-	font-family: "Ubuntu";
-	src: url(font/ubuntu.woff)
-}
-@font-face {
-	font-family: "Philosopher";
-	src: url(font/ubuntu.woff)
-}
 
 /* Keyframes for animations */
 @keyframes notification {
@@ -50,7 +33,7 @@ body {
 }
 
 /* All links, including the ref-links inside the post body. */
-a, a:visited, a:active, .bodylink, .banner a, .banner a:visited, .banner a:hover {
+a, a:visited, a.bodylink, div.banner a, div.banner a:visited, div.banner a:hover {
 	color: rgb(230, 190, 3);
 }
 
@@ -81,7 +64,7 @@ hr {
 }
 /* Table headers, including the post form */
 /* as well as many staff dashboard headers */
-th {
+form table tr th {
 	background-color: rgb(59, 50, 31);
 	text-shadow: 1px 1px 2px rgba(255, 225, 142, 0.30);
 }
@@ -98,50 +81,50 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Head bar backgrounds */
-.top, #qrmove, .ban h2 {
+.boardlist.top, #qrmove, .ban h2 {
 	background: rgb(183, 153, 81)
 	linear-gradient(to right, rgb(174, 145, 82), rgb(189, 160, 82));
 	color: white;
 }
 
 /* Head bar links */
-.top a, .top a:visited, #qrmove a, #qrmove a:visited {
+.boardlist.top a, .top a:visited, #qrmove a, #qrmove a:visited {
 	color: rgb(54, 46, 25);
 	transition: background-color 0.2s ease-in-out,
 				color 0.1s ease-in-out;
 }
 
 /* Head bar links on hover */
-.top a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
 	color: rgb(255, 212, 120);
 }
 
 /* Block items */
-.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
+div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
 	background-color: rgb(31, 28, 18)
 }
 
 /* -- Navigation bar -- */
-.top a:hover {
+.boardlist.top .boardlistpart a:hover {
 	background-color: rgba(0,0,0,0.4);
 }
 
 /* set the border-color property to show that the button is 'lit' */
-.top .boardlistactive, .watcherButton.open {
+.boardlist.top .boardlistpart a.boardlistactive, .boardlist.top .watcherButton.open {
 	border-color: rgb(54, 46, 25);
 	box-shadow: inset 0 0 1em rgba(0,0,0,0.2);
 }
 
 /* Color of the 'home' link */
-.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
 	color: rgb(116, 95, 45);
 }
-.top a[href="/"] {
+.boardlist.top .boardlistpart a[href="/"] {
 	color: rgb(231, 220, 179);
 }
 
 /* Toggle links on the right */
-.top .watcherButton, .top .settingsButton {
+.boardlist.top .watcherButton, .top .settingsButton {
 	color: rgb(117, 96, 47);
 }
 /* Settings page */
@@ -165,7 +148,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* the color of 'by' in watcher */
-.wlinkpart + .wname:before {
+.wname:before {
 	/* The element is always there. If no nickname is given, it'll leave
 		you an empty element. */
 	color: rgb(119, 112, 74);
@@ -182,7 +165,7 @@ body > header h1:before, body > header h1:after {
 	padding: 0 0.5em;
 }
 /* Board description */
-body > header .subtitle {
+header div.subtitle {
 	color: rgb(198, 182, 169);
 	text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 	font: 130% "Georgia", serif;
@@ -218,7 +201,7 @@ form[name="post"] th, .pages {
 	border-radius: 0.3rem;
 }
 /* Staff notice */
-.blotter {
+div.blotter {
 	background:
 		url(img/gilda/blotter-frame-left.png) no-repeat scroll left,
 		url(img/gilda/blotter-frame-right.png) no-repeat scroll right;
@@ -229,7 +212,7 @@ form[name="post"] th, .pages {
 .wpost {
 	color: white;
 }
-.reply {
+div.post.reply {
 	border-style: solid;
 	border-color: rgb(151, 136, 86);
 	border-radius: 0 1rem;
@@ -245,43 +228,43 @@ form[name="post"] th, .pages {
 	padding: 0.2em 0.9em;
 }
 
-.subject, .wsubject {
+p.intro span.subject, .wsubject {
 	font-family: "Philosopher", sans-serif;
 	color: rgb(213, 199, 219);
 }
 
-.name, .email .name, .email:hover .name, .wname {
+p.intro span.name, .email .name, p.intro a.email:hover span.name, .wname {
 	color: rgb(224, 158, 3);
 }
 
-.email {
+a.email {
 	border-bottom: 1px dotted rgb(234, 167, 3);
 	/* change the underline color. */
 }
 
-.trip, .wtrip {
+span.trip, .wtrip {
 	font-family: "Ubuntu", monospace;
 	color: rgb(237, 186, 55);
 }
 .capcode {
 	color: gray;
 }
-.post_no {
+p.intro a.post_no {
 	/* Make this a deeper color than most links */
 	color: rgb(236, 192, 74);
 }
 
-.post_no:hover {
+p.intro a.post_no:hover {
 	color: rgb(242, 210, 118);
 }
 .fileinfo {
 	color: rgb(120, 90, 27);
 }
 
-.reply.highlighted, .post-inline {
+div.post.reply.highlighted, .post-inline {
 	background-color: rgb(31, 28, 18);
 }
-.reply.highlighted {
+div.post.reply.highlighted {
 	/* Makes all borders solid. */
 	border: 1px solid rgb(209, 131, 68) !important;
 }
@@ -291,13 +274,14 @@ form[name="post"] th, .pages {
 	background-color: rgba(0,0,0,0.1);
 }
 
-.quote {
+span.quote {
 	color: rgb(200, 172, 212);
-	font: bold 110% "Calibri", sans-serif;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.40);
 }
 .spoiler {
 	background-color: rgb(228, 214, 232);
+}
+.spoiler, div.post .body .spoiler a {
 	color: rgb(228, 214, 232);
 }
 .spoiler:hover {
@@ -311,7 +295,7 @@ form[name="post"] th, .pages {
 .public_ban {
 	color: rgb(187, 143, 149);
 }
-.omitted, .toolong {
+span.omitted, .toolong {
 	color: rgb(129, 129, 129);
 }
 
@@ -326,7 +310,7 @@ form[name="post"] th, .pages {
 }
 
 /* Page numbers */
-.pages {
+div.pages {
 	color: rgb(174, 174, 174);
 }
 /* homepage */

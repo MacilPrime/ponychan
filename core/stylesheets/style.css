@@ -1216,3 +1216,7 @@ img.catalogthumb {
   src: local('Indie Flower'), local('IndieFlower'),
 		url(font/indie-flower.woff) format('woff');
 }
+@font-face {
+	font-family: "One Way";
+	src: url(font/one-way.woff);
+}
