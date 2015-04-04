@@ -344,9 +344,9 @@
 	$config['old_thread_bump_interval_max'] = 14*60*60;
 
 	// Image hard limit (stops allowing new image replies when this is reached if not zero)
-	$config['image_hard_limit'] = 0;
+	$config['image_hard_limit'] = 1000;
 	// Reply hard limit (stops allowing new replies when this is reached if not zero)
-	$config['reply_hard_limit'] = 0;
+	$config['reply_hard_limit'] = 1500;
 
 	// Automatically convert things like "..." to Unicode characters ("…")
 	$config['auto_unicode'] = true;
