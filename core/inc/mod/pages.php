@@ -623,15 +623,15 @@ function mod_page_ip($mask_url) {
 			if (!$post['thread']) {
 				// TODO: There is no reason why this should be such a fucking mess.
 				$po = new Thread(
-					$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
-					$post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
-					$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['sticky'], $post['locked'],
-					$post['sage'], $post['embed'], '?/', $mod, false, $post['mature']
+					$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+					$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+					$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 				);
 			} else {
 				$po = new Post(
 					$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
-					$post['body'], $post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
+					$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
+					$post['file'], $post['file_uri'], $post['filewidth'],
 					$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
 				);
 			}
@@ -658,7 +658,7 @@ function mod_page_ip($mask_url) {
 		$query->execute() or error(db_error($query));
 		$args['bans'] = $query->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	if (hasPermission($config['mod']['view_banhistory'])) {
 		$query = prepare('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`, `username`
 			FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id`
@@ -888,11 +888,11 @@ function mod_notes($mask_url, $page = null) {
 			}
 			$mask = render_mask($range);
 			$mask_url = mask_url($mask);
-			
+
 			$query = prepare('DELETE FROM `ip_notes` WHERE `id` = :id');
 			$query->bindValue(':id', $note);
 			$query->execute() or error(db_error($query));
-		
+
 			modLog("Removed a note for <a href=\"?/IP/$mask_url\">$mask</a>");
 		}
 
@@ -971,15 +971,15 @@ function mod_posts($mask_url, $boardName, $page = null) {
 		if (!$post['thread']) {
 			// TODO: There is no reason why this should be such a fucking mess.
 			$po = new Thread(
-				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
-				$post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
-				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['sticky'], $post['locked'],
-				$post['sage'], $post['embed'], '?/', $mod, false, $post['mature']
+				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 			);
 		} else {
 			$po = new Post(
 				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
-				$post['body'], $post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
+				$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
+				$post['file'], $post['file_uri'], $post['filewidth'],
 				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
 			);
 		}
@@ -1953,17 +1953,16 @@ function mod_reports() {
 		if (!$post['thread']) {
 			// Still need to fix this:
 			$po = new Thread(
-				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'],
-				$post['capcode'], $post['body'], $post['time'], $post['thumb'],
-				$post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
-				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['sticky'],
-				$post['locked'], $post['sage'], $post['embed'], '?/', $mod, false, $post['mature']
+				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 			);
 		} else {
 			$po = new Post(
 				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
-				$post['body'], $post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'],
-				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'], $post['embed'], '?/', $mod, $post['mature']
+				$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
+				$post['file'], $post['file_uri'], $post['filewidth'],
+				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
 			);
 		}
 

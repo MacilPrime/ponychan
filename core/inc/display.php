@@ -317,7 +317,7 @@ function embed_html($link) {
 }
 
 class Post {
-	public function __construct($id, $thread, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumbx, $thumby, $file, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
+	public function __construct($id, $thread, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -332,11 +332,11 @@ class Post {
 		$this->body = $body;
 		$this->time = $time;
 		$this->thumb = $thumb;
-		$this->thumb_uri = $thumb ? $config['uri_thumb'] . $thumb : null;
+		$this->thumb_uri = $thumb_uri ? $thumb_uri : ($thumb ? $config['uri_thumb'] . $thumb : null);
 		$this->thumbx = $thumbx;
 		$this->thumby = $thumby;
 		$this->file = $file;
-		$this->file_uri = $file ? $config['uri_img'] . $file : null;
+		$this->file_uri = $file_uri ? $file_uri : ($file ? $config['uri_img'] . $file : null);
 		$this->filex = $filex;
 		$this->filey = $filey;
 		$this->filesize = $filesize;
@@ -423,7 +423,7 @@ class Post {
 };
 
 class Thread {
-	public function __construct($id, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumbx, $thumby, $file, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false) {
+	public function __construct($id, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -437,11 +437,11 @@ class Thread {
 		$this->body = $body;
 		$this->time = $time;
 		$this->thumb = $thumb;
-		$this->thumb_uri = $thumb ? $config['uri_thumb'] . $thumb : null;
+		$this->thumb_uri = $thumb_uri ? $thumb_uri : ($thumb ? $config['uri_thumb'] . $thumb : null);
 		$this->thumbx = $thumbx;
 		$this->thumby = $thumby;
 		$this->file = $file;
-		$this->file_uri = $file ? $config['uri_img'] . $file : null;
+		$this->file_uri = $file_uri ? $file_uri : ($file ? $config['uri_img'] . $file : null);
 		$this->filex = $filex;
 		$this->filey = $filey;
 		$this->filesize = $filesize;

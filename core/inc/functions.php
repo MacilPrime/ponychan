@@ -724,16 +724,16 @@ function parse_mask($mask) {
 	 * In all cases, we return a pair of strings containing the start and end addresses
 	 * of the range.
 	 */
-	
+
 	if (strpos($mask, '*') !== false) {
 		// For a glob expression, we need to manually parse the ip address. Ugh.
-		
+
 		if (strpos($mask, ':') !== false) {
 			// ipv6
 			$parts = explode(':', $mask);
 			if (count($parts) < 2 || count($parts) > 8)
 				return null;
-			
+
 			$packed = "";
 			$starSeen = false;
 			$emptySeen = false;
@@ -750,7 +750,7 @@ function parse_mask($mask) {
 					$emptySeen = true;
 					continue;
 				}
-				
+
 				if (!ctype_xdigit($chunk) || strlen($chunk) > 4)
 					return null;
 				$bioctet = intval($chunk, 16);
@@ -759,7 +759,7 @@ function parse_mask($mask) {
 				$packed .= chr($bioctet >> 8);
 				$packed .= chr($bioctet & 0xff);
 			}
-			
+
 			$start = $packed;
 			$end = $packed;
 			while (strlen($start) < 16) {
@@ -772,7 +772,7 @@ function parse_mask($mask) {
 			$parts = explode('.', $mask);
 			if (count($parts) < 2 || count($parts) > 4)
 				return null;
-			
+
 			$packed = "";
 			$seen = false;
 			foreach ($parts as $chunk) {
@@ -782,7 +782,7 @@ function parse_mask($mask) {
 					$seen = true;
 					continue;
 				}
-				
+
 				if (!ctype_digit($chunk) || strlen($chunk) > 3)
 					return null;
 				$byte = intval($chunk);
@@ -790,7 +790,7 @@ function parse_mask($mask) {
 					return null;
 				$packed .= chr($byte);
 			}
-			
+
 			$start = $packed;
 			$end = $packed;
 			while (strlen($start) < 4) {
@@ -810,11 +810,11 @@ function parse_mask($mask) {
 		} else {
 			return null;
 		}
-		
+
 		$packed = @inet_pton($ip);
 		if ($packed === false)
 			return null;
-		
+
 		$maxRange = strlen($packed) * 8;
 		if ($rangeString === null) {
 			$range = $maxRange;
@@ -825,7 +825,7 @@ function parse_mask($mask) {
 			if ($range > $maxRange)
 				return null;
 		}
-		
+
 		$start = "";
 		$end = "";
 		for ($i = 0; $i < strlen($packed); $i++) {
@@ -836,11 +836,11 @@ function parse_mask($mask) {
 				$mask = 0;
 			else
 				$mask = (1 << ((($i + 1) * 8) - $range)) - 1;
-			
+
 			$start .= chr($byte & ~$mask);
 			$end .= chr($byte | $mask);
 		}
-		
+
 		return array('range_type'=>(strlen($packed) == 4 ? IP_TYPE_IPV4 : IP_TYPE_IPV6), 'range_start'=>inet_ntop($start), 'range_end'=>inet_ntop($end));
 	}
 }
@@ -985,18 +985,18 @@ function checkBan($board = 0, $types = null) {
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':board', $board);
 	$query->execute() or error(db_error($query));
-	
+
 	foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $ban) {
 		if ($ban['expires'] && $ban['expires'] < time()) {
 			// Ban expired
 			$query = prepare("UPDATE `bans` SET `status` = 1 WHERE `id` = :id");
 			$query->bindValue(':id', $ban['id'], PDO::PARAM_INT);
 			$query->execute() or error(db_error($query));
-			
+
 			if ($ban['seen'] && !$config['require_ban_view'])
 				continue;
 		}
-		
+
 		displayBan($ban);
 	}
 }
@@ -1378,7 +1378,7 @@ function index($page, $mod=false, $oldbump=false) {
 		}
 		$thread = new Thread(
 			$th['id'], $th['subject'], $th['email'], $th['name'], $th['trip'], $th['capcode'], $th['body'], $th['time'], $th['thumb'],
-			$th['thumbwidth'], $th['thumbheight'], $th['file'], $th['filewidth'], $th['fileheight'], $th['filesize'], $th['filename'], $th['ip'],
+			$th['thumb_uri'], $th['thumbwidth'], $th['thumbheight'], $th['file'], $th['file_uri'], $th['filewidth'], $th['fileheight'], $th['filesize'], $th['filename'], $th['ip'],
 			$th['sticky'], $th['locked'], $th['sage'], $th['embed'], $mod ? '?/' : $config['root'], $mod, true, $th['mature']
 		);
 
@@ -1414,7 +1414,8 @@ function index($page, $mod=false, $oldbump=false) {
 
 			$thread->add(new Post(
 				$po['id'], $th['id'], $po['subject'], $po['email'], $po['name'], $po['trip'], $po['capcode'], $po['body'], $po['time'],
-				$po['thumb'], $po['thumbwidth'], $po['thumbheight'], $po['file'], $po['filewidth'], $po['fileheight'], $po['filesize'],
+				$po['thumb'], $po['thumb_uri'], $po['thumbwidth'], $po['thumbheight'], $po['file'], $po['file_uri'],
+				$po['filewidth'], $po['fileheight'], $po['filesize'],
 				$po['filename'], $po['ip'], $po['embed'], $mod ? '?/' : $config['root'], $mod, $po['mature'])
 			);
 		}
@@ -1866,13 +1867,14 @@ function buildThread($id, $return=false, $mod=false) {
 		if (!isset($thread)) {
 			$thread = new Thread(
 				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
-				$post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 			);
 		} else {
 			$thread->add(new Post(
 				$post['id'], $thread->id, $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
-				$post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'], $post['fileheight'],
+				$post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
+				$post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
 				$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'])
 			);
 		}
@@ -1929,9 +1931,9 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 		while ($post = $query->fetch()) {
 			if (!isset($thread)) {
 				$thread = new Thread(
-					$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
-					$post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'], $post['fileheight'], $post['filesize'],
-					$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
+				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 				);
 			} else {
 				if ($post['file'])
@@ -1939,7 +1941,8 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 
 				$thread->add(new Post(
 					$post['id'], $thread->id, $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
-					$post['time'], $post['thumb'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filewidth'], $post['fileheight'],
+					$post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
+					$post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
 					$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'])
 				);
 			}
