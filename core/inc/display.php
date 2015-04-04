@@ -332,9 +332,11 @@ class Post {
 		$this->body = $body;
 		$this->time = $time;
 		$this->thumb = $thumb;
+		$this->thumb_uri = $thumb ? $config['uri_thumb'] . $thumb : null;
 		$this->thumbx = $thumbx;
 		$this->thumby = $thumby;
 		$this->file = $file;
+		$this->file_uri = $file ? $config['uri_img'] . $file : null;
 		$this->filex = $filex;
 		$this->filey = $filey;
 		$this->filesize = $filesize;
@@ -435,9 +437,11 @@ class Thread {
 		$this->body = $body;
 		$this->time = $time;
 		$this->thumb = $thumb;
+		$this->thumb_uri = $thumb ? $config['uri_thumb'] . $thumb : null;
 		$this->thumbx = $thumbx;
 		$this->thumby = $thumby;
 		$this->file = $file;
+		$this->file_uri = $file ? $config['uri_img'] . $file : null;
 		$this->filex = $filex;
 		$this->filey = $filey;
 		$this->filesize = $filesize;

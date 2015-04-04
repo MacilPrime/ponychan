@@ -30,11 +30,11 @@
 		{% elseif post.mature %}
 			{{ config.root }}{{ config.mature_image }}
 		{% else %}
-			{{ config.uri_thumb }}{{ post.thumb }}
+			{{ post.thumb_uri }}
 		{% endif %}
 		{% endfilter %}"
 		{% if post.mature and post.thumb != 'file' and post.thumb != 'spoiler' and post.file != 'deleted' %}
-		 data-mature-src="{{ config.uri_thumb }}{{ post.thumb }}"
+		 data-mature-src="{{ post.thumb_uri }}"
 		 data-mature-style="width:{{ post.thumbx }}px;height:{{ post.thumby }}px"
 		 style=""
 		{% else %}
