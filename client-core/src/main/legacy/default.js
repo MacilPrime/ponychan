@@ -96,6 +96,7 @@ window.citeReply = function citeReply(id) {
 		// ???
 		body.value += '>>' + id + '\n';
 	}
+    document.forms['post'].scrollIntoView(true);
 };
 
 function rememberStuff() {
