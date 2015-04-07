@@ -38,7 +38,7 @@ settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Soun
 
 var $au;
 function prepareNotifySound() {
-	$au = $("audio#notify_sound");
+	$au = $("#notify_sound");
 	if (!$au.length) {
 		$au = $("<audio/>")
 			.attr("id", "notify_sound")
@@ -46,38 +46,29 @@ function prepareNotifySound() {
 	} else {
 		$au.empty();
 	}
-	switch (settings.getSetting("reply_notify_sound")) {
-        case "aim":
-            $au.append(
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/imrcv.ogg", type:"audio/ogg"}),
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/imrcv.mp3", type:"audio/mpeg"})
-            );
-		break;
-        case "synth-bass":
-            $au.append(
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/synth-bass.ogg", type:"audio/ogg"}),
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/synth-bass.mp3", type:"audio/mpeg"})
-            );
-            break;
-        case "sine":
-            $au.append(
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/sine.ogg", type:"audio/ogg"}),
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/sine.mp3", type:"audio/mpeg"})
-            );
-            break;
-        case "yeah":
-            $au.append(
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/yeah.ogg", type:"audio/ogg"}),
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/yeah.mp3", type:"audio/mpeg"})
-            );
-            break;
-        //case "main":
-        default:
-            $au.append(
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/notify.ogg", type:"audio/ogg"}),
-                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/notify.mp3", type:"audio/mpeg"})
-            );
-    }
+    const soundName = (function () {
+        // read settings to get the sound name.
+        var chime = settings.getSetting("reply_notify_sound");
+        for (var i = 0; i < soundChoices.length; i++) {
+            if (soundChoices[i].value == chime) {
+                return chime;
+            }
+        }
+        // Default sound goes here.
+        return "main";
+    })();
+    $au.append(
+        $("<source/>")
+            .attr({
+                src: SITE_DATA.siteroot + "static/chimes/" + soundName + ".ogg",
+                type: "audio/ogg"
+            }),
+        $("<source/>")
+            .attr({
+                src:SITE_DATA.siteroot + "static/chimes/" + soundName + ".mp3",
+                type:"audio/mpeg"
+            })
+    );
 	try {
 		if ($au[0].load)
 			$au[0].load();
