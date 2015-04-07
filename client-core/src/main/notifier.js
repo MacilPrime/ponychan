@@ -22,7 +22,9 @@ settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound",
 
 const soundChoices = [
 	{value: "main", displayName: "Default"},
+    {value: "synth-bass", displayName: "Synth bass"},
 	{value: "aim", displayName: "AIM"},
+    {value: "sine", displayName: "Sine"},
 	{value: "yeah", displayName: "Yeah!"}
 ];
 
@@ -45,25 +47,37 @@ function prepareNotifySound() {
 		$au.empty();
 	}
 	switch (settings.getSetting("reply_notify_sound")) {
-	case "aim":
-		$au.append(
-			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify_imrcv.ogg", type:"audio/ogg"}),
-			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify_imrcv.mp3", type:"audio/mpeg"})
-		);
+        case "aim":
+            $au.append(
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/imrcv.ogg", type:"audio/ogg"}),
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/imrcv.mp3", type:"audio/mpeg"})
+            );
 		break;
-	case "yeah":
-		$au.append(
-			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify_yeah.ogg", type:"audio/ogg"}),
-			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify_yeah.mp3", type:"audio/mpeg"})
-		);
-		break;
-	//case "main":
-	default:
-		$au.append(
-			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify.ogg", type:"audio/ogg"}),
-			$("<source/>").attr({src:SITE_DATA.siteroot+"static/notify.mp3", type:"audio/mpeg"})
-		);
-	}
+        case "synth-bass":
+            $au.append(
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/synth-bass.ogg", type:"audio/ogg"}),
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/synth-bass.mp3", type:"audio/mpeg"})
+            );
+            break;
+        case "sine":
+            $au.append(
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/sine.ogg", type:"audio/ogg"}),
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/sine.mp3", type:"audio/mpeg"})
+            );
+            break;
+        case "yeah":
+            $au.append(
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/yeah.ogg", type:"audio/ogg"}),
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/yeah.mp3", type:"audio/mpeg"})
+            );
+            break;
+        //case "main":
+        default:
+            $au.append(
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/notify.ogg", type:"audio/ogg"}),
+                $("<source/>").attr({src:SITE_DATA.siteroot+"static/chimes/notify.mp3", type:"audio/mpeg"})
+            );
+    }
 	try {
 		if ($au[0].load)
 			$au[0].load();
