@@ -1,7 +1,7 @@
 {% filter remove_whitespace %}
 {# tabs and new lines will be ignored #}
-<div class="postContainer replyContainer postC_{{ post.id }} postC_{{ board.uri }}-{{ post.id }}" id="replyC_{{ post.id }}">
-<div class="post reply{% if post.mature %} mature_post{% endif %} post_{{ post.id }} post_{{ board.uri }}-{{ post.id }}" id="reply_{{ post.id }}">
+<div class="postContainer replyContainer postC_{{ post.id }} postC_{{ board.uri }}-{{ post.id }}" id="replyC_{{ post.id }}" data-thread="{{ post.thread }}">
+<div class="post reply{% if post.mature %} mature_post{% endif %} post_{{ post.id }} post_{{ board.uri }}-{{ post.id }}" id="reply_{{ post.id }}" data-thread="{{ post.thread }}">
 
 {% if not index %}<span class="jumpHandle" id="{{ post.id }}"></span>{% endif %}
 <p class="intro">
