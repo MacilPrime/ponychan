@@ -14,13 +14,15 @@ import $ from 'jquery';
  *
  * @param {jQuery} $post - The loose post to receive the footer item.
  * @method addItem - Inserts footer links. Use 2nd param for event callback
- *                   Currently, it won't replace the link with the same name.
+ *                   Currently, it WILL replace the link with the same name.
  * @method removeItem - Deletes footer links.
  */
 
 export function footer($post) {
-    return {
+    const FooterHandler = {
         addItem: function (name, callback) {
+            // before we do anything, we need to remove the clones
+            FooterHandler.removeItem(name);
 
             // get the footer, or make a new one.
             let $footer = (function () {
@@ -43,7 +45,7 @@ export function footer($post) {
                 .attr("href", "javascript:;")
                 .appendTo($li);
 
-    },
+        },
         removeItem: function (name) {
             let $footer = $post.children(".postfooter");
             $footer
@@ -55,5 +57,6 @@ export function footer($post) {
                 $footer.remove();
             }
         }
-    }
+    };
+    return FooterHandler;
 }
