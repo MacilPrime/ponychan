@@ -107,11 +107,8 @@ $(document).ready(function () {
 
             function buildForm(postContent) {
 
-                var $editForm = $('<form />')
+                var $editForm = $('<div />')
                     .addClass("edit-form")
-                    .attr("method", "post")
-                    .attr("action", "/post.php")
-                    .attr("enctype", "multipart/form-data")
                     .fadeIn("fast")
                     .insertBefore($post.find(".body").first());
 
