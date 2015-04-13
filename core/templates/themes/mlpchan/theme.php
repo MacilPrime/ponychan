@@ -76,7 +76,8 @@
 					$post['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], ($post['thread'] ? $post['thread'] : $post['id'])) . '#' . $post['id'];
 					$post['boardlink'] = sprintf($config['board_path'], $post['board']);
 					$post['snippet'] = pm_snippet($post['body'], 80);
-					$post['src'] = $config['uri_thumb'] . $post['thumb'];
+					if (!$post['thumb_uri'])
+						$post['thumb_uri'] = $config['uri_thumb'] . $post['thumb'];
 
 					$recent_posts[] = $post;
 				}
