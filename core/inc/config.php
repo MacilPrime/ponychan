@@ -417,6 +417,26 @@
 	$config['markup'][] = array("/^\s*==(.+?)==\s*$/m", "<span class=\"heading\">\$1</span>");
 	$config['markup'][] = array("/\[cs\](.+?)\[\/cs\]/s", "<span class=\"comicsans\">\$1</span>");
 	$config['markup'][] = array("/\[tt\](.+?)\[\/tt\]/s", "<span style=\"font-family: monospace\">\$1</span>");
+	$config['markup'][] = array("/\[rcv\](.+?)\[\/rcv\]/s", function($matches) {
+		$rpl = $matches[1];
+		// avoid replacing stuff inside html tags
+		$rpl = preg_replace_callback('/(?<=^|>)([^<]+)/', function($matches) {
+			return preg_replace_callback('/(?<=^|;)([^&]+)/', function($matches) {
+				$part = strtoupper($matches[1]);
+				$part = preg_replace("/\bI\b/", "WE", $part);
+				$part = preg_replace("/\bME\b/", "US", $part);
+				$part = preg_replace("/\bYOU\b/", "THOU", $part);
+				$part = preg_replace("/\bMY\b/", "OUR", $part);
+				$part = preg_replace("/\bMINE\b/", "OURS", $part);
+				$part = preg_replace("/\bYOUR\b/", "THINE", $part);
+				$part = preg_replace("/\bWILL\b/", "SHALL", $part);
+				$part = preg_replace("/\bSHOULD\b/", "SHOULDST", $part);
+				$part = preg_replace("/\bAM\b/", "ART", $part);
+				return $part;
+			}, $matches[1]);
+		}, $rpl);
+		return "<span class=\"royalluna\">$rpl</span>";
+	});
 
 	$config['user_url_markup'] = true;
 

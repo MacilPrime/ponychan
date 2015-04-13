@@ -246,6 +246,10 @@ span.quote {
 span.orangetext {
 	color: #E07000;
 }
+.royalluna {
+	text-shadow: 2px 2px 0px rgba(64, 64, 64, 0.4), -2px -2px 0px rgba(64, 64, 64, 0.2);
+	font-size: 1.1em;
+}
 span.omitted {
 	display: block;
 	margin-top: 1em;
