@@ -437,6 +437,29 @@
 		}, $rpl);
 		return "<span class=\"royalluna\">$rpl</span>";
 	});
+	$config['markup'][] = array(
+		'/\[(?<count>\d+)?d(?<sides>\d+)(?<modifier>[+-]\d+)?\]/',
+		function($match) {
+			if ($match['count'] === "")
+				$match['count'] = 1;
+			$count = min(intval($match['count']), 1000);
+			$sides = intval($match['sides']);
+
+			$result = 0;
+			for ($i = 0; $i < $count; $i++) {
+				$result += rand(1, $sides);
+			}
+
+			$modnote = '';
+			if (isset($match['modifier'])) {
+				$modifier = intval($match['modifier']);
+				$modnote = ' '.($modifier<0 ? '-' : '+').' '.abs($modifier);
+				$result += $modifier;
+			}
+
+			return '<span class="diceroll">Roll '.$count.'d'.$sides.$modnote.' = '.$result.'</span>';
+		}
+	);
 
 	$config['user_url_markup'] = true;
 

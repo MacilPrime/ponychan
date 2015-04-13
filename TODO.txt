@@ -1,11 +1,5 @@
 -themes
 
--[rcv], <orangetext
-
-icon for new posts
-
-dice
-
 post drop-down buttons
 
 mod interface love
