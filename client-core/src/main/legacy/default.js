@@ -13,11 +13,31 @@ import {log_error} from '../logger';
 import myPosts from '../my-posts';
 
 function get_cookie(cookie_name) {
-	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
+	const results = document.cookie.match('(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
 	if (results)
 		return (unescape(results[2]));
 	else
 		return null;
+}
+
+// Temporary for Ponychan transition
+if (window.localStorage && localStorage.getItem('name') === null) {
+	const postname = get_cookie('name');
+	if (postname) {
+		localStorage.setItem('name', postname);
+	}
+}
+if (window.localStorage && localStorage.getItem('email') === null) {
+	const email = get_cookie('email');
+	if (email) {
+		localStorage.setItem('email', email);
+	}
+}
+if (window.localStorage && localStorage.getItem('password') === null) {
+	const postpassword = get_cookie('postpassword');
+	if (postpassword) {
+		localStorage.setItem('password', postpassword);
+	}
 }
 
 window.highlightReply = function highlightReply(id) {
