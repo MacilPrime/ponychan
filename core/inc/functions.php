@@ -1835,6 +1835,7 @@ function markup(&$body, $track_cites = false) {
 	}, $body);
 
 	$body = preg_replace("/^\s*&gt;.*$/m", '<span class="quote">$0</span>', $body);
+	$body = preg_replace("/^\s*&lt;.*$/m", '<span class="orangetext">$0</span>', $body);
 
 	if ($config['strip_superfluous_returns'])
 		$body = preg_replace('/\s+$/', '', $body);

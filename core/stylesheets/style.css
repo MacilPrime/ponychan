@@ -243,6 +243,9 @@ span.trip {
 span.quote {
 	color: #789922;
 }
+span.orangetext {
+	color: #E07000;
+}
 span.omitted {
 	display: block;
 	margin-top: 1em;
