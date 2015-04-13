@@ -138,7 +138,7 @@ $(document).ready(function(){
 
 	var hidden_posts = [];
 	function load_hidden_posts() {
-		if (typeof localStorage != "undefined" && localStorage) {
+		if (typeof localStorage != "undefined" && localStorage && !localStorage.POLYFILLED) {
 			var try_hidden_posts = JSON.parse(localStorage.getItem("hidden_posts"));
 			if (try_hidden_posts)
 				hidden_posts = try_hidden_posts;
@@ -147,7 +147,7 @@ $(document).ready(function(){
 	load_hidden_posts();
 
 	function save_hidden_posts() {
-		if (typeof localStorage != "undefined" && localStorage) {
+		if (typeof localStorage != "undefined" && localStorage && !localStorage.POLYFILLED) {
 			try {
 				localStorage.setItem("hidden_posts", JSON.stringify(hidden_posts));
 			} catch (e) {}

@@ -59,11 +59,11 @@ function generatePassword() {
 
 window.dopost = function dopost(form) {
 	if (window.localStorage) {
-		if (form.elements['name']) {
-			localStorage.name = form.elements['name'].value.replace(/( |^)## .+$/, '');
+		if (form.elements.name) {
+			localStorage.setItem('name', form.elements.name.value.replace(/( |^)## .+$/, ''));
 		}
-		if (form.elements['email'] && form.elements['email'].value != 'sage') {
-			localStorage.email = form.elements['email'].value;
+		if (form.elements.email && form.elements.email.value != 'sage') {
+			localStorage.setItem('email', form.elements.email.value);
 		}
 
 		var saved;
@@ -72,11 +72,11 @@ window.dopost = function dopost(form) {
 		else
 			saved = {};
 
-		saved[board_id+":"+thread_id] = form.elements['body'].value;
+		saved[board_id+":"+thread_id] = form.elements.body.value;
 		sessionStorage.body = JSON.stringify(saved);
 	}
 
-	return form.elements['body'].value != "" || form.elements['file'].value != "";
+	return form.elements.body.value != "" || form.elements.file.value != "";
 };
 
 window.citeReply = function citeReply(id) {
@@ -101,22 +101,22 @@ window.citeReply = function citeReply(id) {
 function rememberStuff() {
 	if (document.forms.post) {
 		if (document.forms.post.password) {
-			var password = window.localStorage && localStorage.password;
+			var password = window.localStorage && localStorage.getItem('password');
 			if (!password)
 				password = generatePassword();
 			document.forms.post.password.value = password;
 			if (window.localStorage) {
 				try {
-					localStorage.password = password;
+					localStorage.setItem('password', password);
 				} catch(e) {}
 			}
 		}
 
 		if (window.localStorage) {
-			if (localStorage.name && document.forms.post.elements['name'])
-				document.forms.post.elements['name'].value = localStorage.name;
-			if (localStorage.email && document.forms.post.elements['email'])
-				document.forms.post.elements['email'].value = localStorage.email;
+			if (localStorage.getItem('name') && document.forms.post.elements.name)
+				document.forms.post.elements.name.value = localStorage.getItem('name');
+			if (localStorage.getItem('email') && document.forms.post.elements.email)
+				document.forms.post.elements.email.value = localStorage.getItem('email');
 		}
 
 		if (/^#q\d+$/.exec(window.location.hash))
@@ -126,8 +126,9 @@ function rememberStuff() {
 			var saved = JSON.parse(sessionStorage.body);
 			if (get_cookie(SITE_DATA.cookiename)) {
 				// Remove successful posts
+				var successful;
 				try {
-					var successful = JSON.parse(get_cookie(SITE_DATA.cookiename));
+					successful = JSON.parse(get_cookie(SITE_DATA.cookiename));
 				} catch(e) {
 					log_error(e);
 				}
@@ -168,8 +169,8 @@ function rememberStuff() {
 $(document).ready(function() {
 	rememberStuff();
 
-	if (window.localStorage && localStorage.password && document.forms.postcontrols) {
-		document.forms.postcontrols.password.value = localStorage.password;
+	if (window.localStorage && localStorage.getItem('password') && document.forms.postcontrols) {
+		document.forms.postcontrols.password.value = localStorage.getItem('password');
 	}
 
 	if (/^#\d+$/.exec(window.location.hash))

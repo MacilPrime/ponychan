@@ -61,6 +61,7 @@ function browserifyTask(name, entry, destname) {
       entries: [
         'console-polyfill',
         'babel/polyfill',
+        'webstorage-polyfill',
         entry
       ],
       noparse: ['jquery', 'moment', 'baconjs', 'rsvp'],

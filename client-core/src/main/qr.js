@@ -930,10 +930,10 @@ $(document).ready(function(){
 		}
 
 		if (window.localStorage) {
-			if ($QRForm[0].elements['name'])
-				localStorage.name = $QRForm[0].elements['name'].value.replace(/( |^)## .+$/, '');
-			if ($QRForm[0].elements['email'] && $QRForm[0].elements['email'].value != 'sage')
-				localStorage.email = $QRForm[0].elements['email'].value;
+			if ($QRForm[0].elements.name)
+				localStorage.setItem('name', $QRForm[0].elements.name.value.replace(/( |^)## .+$/, ''));
+			if ($QRForm[0].elements.email && $QRForm[0].elements.email.value != 'sage')
+				localStorage.setItem('email', $QRForm[0].elements.email.value);
 		}
 
 		$password.val( $("form[name='postcontrols'] input#password").val() );
