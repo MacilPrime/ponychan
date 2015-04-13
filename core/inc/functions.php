@@ -1575,6 +1575,8 @@ function buildJavascript() {
 		'cookiename' => $config['cookies']['js'],
 		'cookiepath' => $config['cookies']['jail'] ? $config['cookies']['path'] : '/',
 		'genpassword_chars' => $config['genpassword_chars'],
+		'url_favicon' => $config['url_favicon'],
+		'url_favicon_alert' => $config['url_favicon_alert'],
 		'siteroot' => $config['root']
 	);
 
