@@ -2000,7 +2000,11 @@ function hashPostPassword($password) {
 }
 
 function doesPasswordMatchPostHash($password, $hash) {
-	return sha1($password) === $hash;
+	if (strpos($hash, '$MD5$$$$') === 0) {
+		return '$MD5$$$$' . md5($password) === $hash;
+	} else {
+		return sha1($password) === $hash;
+	}
 }
 
 function editPostForm($postid, $password=false, $mod=false) {
