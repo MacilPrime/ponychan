@@ -282,8 +282,8 @@ function utf8_clean_userinput() {
 }
 
 function computeResize($width, $height, $max_width, $max_height) {
-	$x_ratio = $max_width / $width;
-	$y_ratio = $max_height / $height;
+	$x_ratio = $width == 0 ? 1 : $max_width / $width;
+	$y_ratio = $height == 0 ? 1 : $max_height / $height;
 
 	if (($width > $max_width) || ($height > $max_height)) {
 		if (($x_ratio * $height) < $max_height) {
