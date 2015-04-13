@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-5');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-6');
 
 require 'inc/functions.php';
 
@@ -341,6 +341,20 @@ if (file_exists($config['has_installed'])) {
 					ADD COLUMN `thumb_uri` varchar(255) DEFAULT NULL COMMENT 'Temporary override for remote images',
 					ADD COLUMN `file_uri` varchar(255) DEFAULT NULL COMMENT 'Temporary override for remote images'"
 				, $board['uri'])) or error(db_error());
+			}
+		case 'v0.9.6-dev-8-mlpchan-5':
+			foreach ($boards as $board) {
+				query(
+					"ALTER TABLE `posts_${board['uri']}`
+					CHANGE `password` `password` varchar(40) DEFAULT NULL"
+				) or error(db_error());
+				query(
+					"UPDATE `posts_${board['uri']}` SET `password` = SHA1(`password`)"
+				) or error(db_error());
+				query(
+					"ALTER TABLE `posts_${board['uri']}`
+					CHANGE `password` `password` char(40) DEFAULT NULL"
+				) or error(db_error());
 			}
 		case false:
 			// Update version number

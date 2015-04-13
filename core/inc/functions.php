@@ -1995,6 +1995,14 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 	file_write($board['dir'] . $config['dir']['res'] . sprintf($config['file_page50'], $id), $body);
 }
 
+function hashPostPassword($password) {
+	return sha1($password);
+}
+
+function doesPasswordMatchPostHash($password, $hash) {
+	return sha1($password) === $hash;
+}
+
 function editPostForm($postid, $password=false, $mod=false) {
 	global $config, $board;
 

@@ -62,7 +62,7 @@ if (isset($_POST['delete'])) {
 		$query->execute() or error(db_error($query));
 
 		if ($post = $query->fetch()) {
-			if ($password != '' && $post['password'] != $password)
+			if (!doesPasswordMatchPostHash($password, $post['password']))
 				error($config['error']['invalidpassword']);
 
 			if ($post['time'] >= time() - $config['delete_time']) {
@@ -142,7 +142,7 @@ if (isset($_POST['delete'])) {
 	if(!$post)
 		error($config['error']['noedit']);
 
-	if ($password != '' && $post['password'] != $password)
+	if (!doesPasswordMatchPostHash($password, $post['password']))
 		error($config['error']['invalidpassword']);
 
 	if ($post['time'] >= time() - $config['edit_time']) {
@@ -207,7 +207,7 @@ if (isset($_POST['delete'])) {
 	}
 
 	if (isset($password)) {
-		if ($password == '' || $post['password'] != $password)
+		if (!doesPasswordMatchPostHash($password, $post['password']))
 			error($config['error']['invalidpassword']);
 	} else {
 		// Check the referrer
@@ -502,7 +502,7 @@ if (isset($_POST['delete'])) {
 	$post['subject'] = $_POST['subject'];
 	$post['email'] = str_replace(' ', '%20', htmlspecialchars($_POST['email']));
 	$post['body'] = $_POST['body'];
-	$post['password'] = $_POST['password'];
+	$post['password'] = hashPostPassword($_POST['password']);
 	$post['has_file'] = !isset($post['embed']) && (($post['op'] && !isset($post['no_longer_require_an_image_for_op']) && $config['force_image_op']) || (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != ''));
 	$post['thumb_included'] = $post['has_file'] && (isset($_POST['thumbdurl']) || (isset($_FILES['thumbfile']) && $_FILES['thumbfile']['tmp_name'] != ''));
 	$post['thumb_time'] = isset($_POST['thumbtime']) ? $_POST['thumbtime'] : null;
@@ -612,7 +612,7 @@ if (isset($_POST['delete'])) {
 		error(sprintf($config['error']['toolong'], 'subject'));
 	if (!$mod && mb_strlen($post['body']) > $config['max_body'])
 		error($config['error']['toolong_body']);
-	if (mb_strlen($post['password']) > 20)
+	if (mb_strlen($_POST['password']) > 200)
 		error(sprintf($config['error']['toolong'], 'password'));
 
 	wordfilters($post['body']);
