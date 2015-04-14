@@ -416,6 +416,7 @@
 	$config['markup'][] = array("/\[#(.+?)\]/", "<span class=\"hashtag\">#\$1</span>");
 	$config['markup'][] = array("/^\s*==(.+?)==\s*$/m", "<span class=\"heading\">\$1</span>");
 	$config['markup'][] = array("/\[cs\](.+?)\[\/cs\]/s", "<span class=\"comicsans\">\$1</span>");
+	$config['markup'][] = array("/\[shy\](.+?)\[\/shy\]/s", "<span class=\"shy\">\$1</span>");
 	$config['markup'][] = array("/\[tt\](.+?)\[\/tt\]/s", "<span style=\"font-family: monospace\">\$1</span>");
 	$config['markup'][] = array("/\[rcv\](.+?)\[\/rcv\]/s", function($matches) {
 		$rpl = $matches[1];

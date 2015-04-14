@@ -250,6 +250,10 @@ span.orangetext {
 	text-shadow: 2px 2px 0px rgba(64, 64, 64, 0.4), -2px -2px 0px rgba(64, 64, 64, 0.2);
 	font-size: 1.1em;
 }
+.shy {
+	font-size: 0.6rem;
+	text-transform: lowercase;
+}
 span.omitted {
 	display: block;
 	margin-top: 1em;
