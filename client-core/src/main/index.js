@@ -1,10 +1,12 @@
 require('./legacy/visibility.min.js');
 
 import './logger.js';
-require('./legacy/default.js');
+import './legacy/default.js';
 import settings from './settings.js';
+
 require('./state.js');
 require('./styles.js');
+import './cite-reply';
 require('./spoiler-toggle.js');
 require('./local-time.js');
 require('./legacy/reloader.js');

@@ -11,7 +11,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import {log_error} from '../logger';
 import myPosts from '../my-posts';
-import settings from '../settings';
+import citeReply from '../cite-reply';
 
 function get_cookie(cookie_name) {
 	const results = document.cookie.match('(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
@@ -98,71 +98,6 @@ window.dopost = function dopost(form) {
 	}
 
 	return form.elements.body.value != "" || form.elements.file.value != "";
-};
-
-window.citeReply = function citeReply(id) {
-    var $message;
-    if (settings.getSetting("use_QR")) {
-        $message = $("#qrcomment");
-        QR.open();
-    } else {
-        $message = $("#body");
-        document.forms["post"].scrollIntoView();
-    }
-    var cited = ">>" + id + "\n";
-
-    // select the content of the post first.
-    if ("getSelection" in window) {
-        let sel = window.getSelection();
-        // we want to find if the highlighted selection overlaps
-        // multiple posts. If it does, we'll ignore it.
-        function getPostID(node) {
-            return $(node)
-                .parents(".post")
-                .find(".intro:first-of-type > .post_no:last-of-type")
-                .text();
-        }
-        let startID = getPostID(sel.anchorNode);
-        let endID = getPostID(sel.focusNode);
-
-        if (id == startID && id == endID) {
-            let text = sel.toString().trim();
-            if (text.length > 0) {
-                let lines = text.split("\n");
-                let hasStarted = false;
-                for (let i = 0; i < lines.length; i++) {
-                    let newQuote = lines[i].trim();
-                    if (hasStarted || newQuote.length > 0) {
-                        hasStarted = true;
-                        cited += ">" + newQuote + "\n";
-                    }
-                }
-            }
-        }
-
-        if("selectionStart" in $message.get(0)) {
-            // if something is selected in the message box
-            let message = $message.val();
-            let start = $message.get(0).selectionStart;
-            let end = $message.get(0).selectionEnd;
-            $message.val(
-                message.slice(0, start) + cited + message.slice(end)
-            );
-
-            let afterInsert = start + cited.length;
-            $message.get(0).setSelectionRange(afterInsert, afterInsert);
-        } else {
-            // append the text
-            $message.val(message + cited);
-        }
-    } else if ("selection" in document) {
-        // fallback (if we even need it).
-        $message.focus();
-        let sel = document.selection.createRange();
-        sel.text = '>>' + id + '\n';
-    }
-    $message.focus();
-    $message.trigger("input");
 };
 
 function rememberStuff() {
