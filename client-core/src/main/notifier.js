@@ -22,9 +22,9 @@ settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound",
 
 const soundChoices = [
 	{value: "main", displayName: "Default"},
-    {value: "synth-bass", displayName: "Synth bass"},
+	{value: "synth-bass", displayName: "Synth bass"},
 	{value: "aim", displayName: "AIM"},
-    {value: "sine", displayName: "Sine"},
+	{value: "sine", displayName: "Sine"},
 	{value: "yeah", displayName: "Yeah!"}
 ];
 
@@ -36,7 +36,7 @@ settings.newSetting("reply_notify_sound", "select", "main", "Reply Notifier Soun
 	defpriority: 0
 });
 
-var $au;
+let $au;
 function prepareNotifySound() {
 	$au = $("#notify_sound");
 	if (!$au.length) {
@@ -46,29 +46,19 @@ function prepareNotifySound() {
 	} else {
 		$au.empty();
 	}
-    const soundName = (function () {
-        // read settings to get the sound name.
-        var chime = settings.getSetting("reply_notify_sound");
-        for (var i = 0; i < soundChoices.length; i++) {
-            if (soundChoices[i].value == chime) {
-                return chime;
-            }
-        }
-        // Default sound goes here.
-        return "main";
-    })();
-    $au.append(
-        $("<source/>")
-            .attr({
-                src: SITE_DATA.siteroot + "static/chimes/" + soundName + ".ogg",
-                type: "audio/ogg"
-            }),
-        $("<source/>")
-            .attr({
-                src:SITE_DATA.siteroot + "static/chimes/" + soundName + ".mp3",
-                type:"audio/mpeg"
-            })
-    );
+	const soundName = settings.getSetting("reply_notify_sound");
+	$au.append(
+		$("<source/>")
+			.attr({
+			src: SITE_DATA.siteroot + "static/chimes/" + soundName + ".ogg",
+			type: "audio/ogg"
+		}),
+		$("<source/>")
+			.attr({
+			src:SITE_DATA.siteroot + "static/chimes/" + soundName + ".mp3",
+			type:"audio/mpeg"
+		})
+	);
 	try {
 		if ($au[0].load)
 			$au[0].load();
@@ -77,12 +67,11 @@ function prepareNotifySound() {
 	}
 }
 
-function playSound() {
+export function playSound() {
 	$au[0].play();
 }
-exports.playSound = playSound;
 
-var unseenReplies = [];
+let unseenReplies = [];
 
 // Sets the title to show the number of unread replies to the
 // user.
@@ -119,13 +108,13 @@ $(document).ready(function() {
 	}).on('new_unseen_post.notifier', function(e, post) {
 		notifyCheck($(post));
 	}).on('posts_seen.notifier', function(e, data) {
-		var changed = false;
-		var posts = data.posts;
+		let changed = false;
+		const posts = data.posts;
 		for (var i=0; i<posts.length; i++) {
 			if (!unseenReplies.length)
 				break;
 
-			var ri = unseenReplies.indexOf(posts[i]);
+			const ri = unseenReplies.indexOf(posts[i]);
 			if (ri != -1) {
 				unseenReplies.splice(ri, 1);
 				changed = true;
