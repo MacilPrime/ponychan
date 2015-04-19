@@ -6,8 +6,8 @@
  *
  *
  */
-@import "common/bubble-buttons.css";
-@import "common/pony-kusaba.css";
+@import "common/bubble-buttons.css?v=3268520798";
+@import "common/pony-kusaba.css?v=3268520798";
 
 /* Keyframes for animations */
 @keyframes notification {

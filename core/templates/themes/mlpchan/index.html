@@ -60,7 +60,7 @@
 		{% for post in recent_posts %}
 		<div class="recent_post">
 			<a href="{{ post.link }}">
-				<img src="{{ post.src }}" style="width:{{ post.thumbwidth }}px;height:{{ post.thumbheight }}px" alt="">
+				<img src="{{ post.thumb_uri }}" style="width:{{ post.thumbwidth }}px;height:{{ post.thumbheight }}px" alt="">
 			</a>
 			<div class="boardname"><a href="{{ post.boardlink }}">/{{ post.board }}/</a></div>
 			{{ post.snippet }}

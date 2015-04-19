@@ -1,3 +1,9 @@
+-themes
+
+post drop-down buttons
+
+mod interface love
+
 persist deleted threads and posts
 - allow mods to see (with [deleted] in the post header bright red maybe)
 - allow mods to revert
@@ -8,11 +14,6 @@ ban appeals
 /all/
 - json api
 - static page that uses ajax and react
-
-ponychan css themes
-
-user filters
-- needs settings page re-work. Using react for settings page.
 
 thread tags and board thread filter toggle buttons
 

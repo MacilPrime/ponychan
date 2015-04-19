@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `filesize` int(11) DEFAULT NULL,
   `filename` text DEFAULT NULL,
   `filehash` text DEFAULT NULL,
-  `password` varchar(20) DEFAULT NULL,
+  `password` char(40) DEFAULT NULL,
   `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
   `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `sticky` int(1) NOT NULL,
