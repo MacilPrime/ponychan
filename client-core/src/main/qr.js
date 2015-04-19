@@ -715,46 +715,6 @@ $(document).ready(function(){
 		}
 	});
 
-	var oldCiteReply = citeReply;
-	function qrCiteReply(id) {
-		QR.open();
-
-		var cited = ">>"+id+"\n";
-
-		if(typeof window.getSelection != "undefined" && window.getSelection != null) {
-			var sel = window.getSelection();
-			var startPostNo = $(sel.anchorNode).parents(".post").first().find(".intro:first>.post_no").last().text();
-			var endPostNo = $(sel.focusNode).parents(".post").first().find(".intro:first>.post_no").last().text();
-			if(id == startPostNo && id == endPostNo) {
-				var text = sel.toString().trim();
-				if(text.length) {
-					var lines = text.split("\n");
-					var hasStarted = false;
-					for(var i in lines) {
-						var line = lines[i].trim();
-						if(!hasStarted && line == "")
-							continue;
-						hasStarted = true;
-						cited += ">" + line + "\n";
-					}
-				}
-			}
-		}
-
-		var text = $comment.val();
-		if(typeof $comment[0].selectionStart != "undefined" && $comment[0].selectionStart != null) {
-			var start = $comment[0].selectionStart;
-			var end = $comment[0].selectionEnd;
-			$comment.val(text.slice(0, start)+cited+text.slice(end));
-			var afterInsert = start+cited.length;
-			$comment[0].setSelectionRange(afterInsert, afterInsert);
-		} else {
-			$comment.val(text + cited);
-		}
-		$comment.focus();
-		$comment.trigger("input");
-	}
-
 	function stealCaptcha() {
 		$QRCaptchaPuzzleImage
 			.css("visibility", "visible")
@@ -930,10 +890,10 @@ $(document).ready(function(){
 		}
 
 		if (window.localStorage) {
-			if ($QRForm[0].elements['name'])
-				localStorage.name = $QRForm[0].elements['name'].value.replace(/( |^)## .+$/, '');
-			if ($QRForm[0].elements['email'] && $QRForm[0].elements['email'].value != 'sage')
-				localStorage.email = $QRForm[0].elements['email'].value;
+			if ($QRForm[0].elements.name)
+				localStorage.setItem('name', $QRForm[0].elements.name.value.replace(/( |^)## .+$/, ''));
+			if ($QRForm[0].elements.email && $QRForm[0].elements.email.value != 'sage')
+				localStorage.setItem('email', $QRForm[0].elements.email.value);
 		}
 
 		$password.val( $("form[name='postcontrols'] input#password").val() );
@@ -1081,7 +1041,6 @@ $(document).ready(function(){
 		if (use_QR) {
 			$oldForm.hide();
 			$QRButtonDiv.show();
-			citeReply = qrCiteReply;
 			if($captchaPuzzle.length)
 				stealCaptcha();
 			if (settings.getSetting("QR_persistent"))
@@ -1090,7 +1049,6 @@ $(document).ready(function(){
 			QR.close();
 			$oldForm.show();
 			$QRButtonDiv.hide();
-			citeReply = oldCiteReply;
 		}
 	}
 

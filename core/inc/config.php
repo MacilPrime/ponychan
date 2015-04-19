@@ -417,6 +417,49 @@
 	$config['markup'][] = array("/^\s*==(.+?)==\s*$/m", "<span class=\"heading\">\$1</span>");
 	$config['markup'][] = array("/\[cs\](.+?)\[\/cs\]/s", "<span class=\"comicsans\">\$1</span>");
 	$config['markup'][] = array("/\[tt\](.+?)\[\/tt\]/s", "<span style=\"font-family: monospace\">\$1</span>");
+	$config['markup'][] = array("/\[rcv\](.+?)\[\/rcv\]/s", function($matches) {
+		$rpl = $matches[1];
+		// avoid replacing stuff inside html tags
+		$rpl = preg_replace_callback('/(?<=^|>)([^<]+)/', function($matches) {
+			return preg_replace_callback('/(?<=^|;)([^&]+)/', function($matches) {
+				$part = strtoupper($matches[1]);
+				$part = preg_replace("/\bI\b/", "WE", $part);
+				$part = preg_replace("/\bME\b/", "US", $part);
+				$part = preg_replace("/\bYOU\b/", "THOU", $part);
+				$part = preg_replace("/\bMY\b/", "OUR", $part);
+				$part = preg_replace("/\bMINE\b/", "OURS", $part);
+				$part = preg_replace("/\bYOUR\b/", "THINE", $part);
+				$part = preg_replace("/\bWILL\b/", "SHALL", $part);
+				$part = preg_replace("/\bSHOULD\b/", "SHOULDST", $part);
+				$part = preg_replace("/\bAM\b/", "ART", $part);
+				return $part;
+			}, $matches[1]);
+		}, $rpl);
+		return "<span class=\"royalluna\">$rpl</span>";
+	});
+	$config['markup'][] = array(
+		'/\[(?<count>\d+)?d(?<sides>\d+)(?<modifier>[+-]\d+)?\]/',
+		function($match) {
+			if ($match['count'] === "")
+				$match['count'] = 1;
+			$count = min(intval($match['count']), 1000);
+			$sides = intval($match['sides']);
+
+			$result = 0;
+			for ($i = 0; $i < $count; $i++) {
+				$result += rand(1, $sides);
+			}
+
+			$modnote = '';
+			if (isset($match['modifier'])) {
+				$modifier = intval($match['modifier']);
+				$modnote = ' '.($modifier<0 ? '-' : '+').' '.abs($modifier);
+				$result += $modifier;
+			}
+
+			return '<span class="diceroll">Roll '.$count.'d'.$sides.$modnote.' = '.$result.'</span>';
+		}
+	);
 
 	$config['user_url_markup'] = true;
 
@@ -932,7 +975,8 @@
 	// $config['url_stylesheet'] = 'http://static.example.org/style.css'; // main/base stylesheet
 	// $config['url_instance_script'] = 'http://static.example.org/instance.js';
 	// $config['url_main_script'] = 'http://static.example.org/js/main.js';
-	$config['url_favicon'] = '/static/sun-icon.png';
+	$config['url_favicon'] = '/static/flutter-icon.png';
+	$config['url_favicon_alert'] = '/static/flutter-icon-new-replies.png';
 
 /*
  * ====================

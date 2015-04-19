@@ -24,12 +24,13 @@ $(document).ready(function(){
 
 		var tag;
 		switch(event.which) {
-		case 66: tag = 'b'; break;
-		case 72: tag = 'h'; break;
-		case 73: tag = 'i'; break;
-		case 82: tag = 's'; break;
-		case 83: tag = '?'; break;
-		case 85: tag = 'u'; break;
+		case 66: tag = 'b'; break; // b
+		case 72: tag = 'h'; break; // h
+		case 73: tag = 'i'; break; // i
+		case 75: tag = 'rcv'; break; // k
+		case 82: tag = 's'; break; // r
+		case 83: tag = '?'; break; // s
+		case 85: tag = 'u'; break; // u
 		default:
 			return true;
 		}

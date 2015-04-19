@@ -109,15 +109,8 @@ This is a mature content thread. You must have viewing mature content enabled in
 		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
 	 <a class="post_no permalink" href="{{ post.link }}">No.</a>
-	<a class="post_no"
-		{% if not index %}
-			 onclick="citeReply({{ post.id }});"
-		{% endif %}
-		 href="{% if index %}
-			{{ post.link }}
-		{% else %}
-			javascript:void(0);
-		{% endif %}">
+	<a class="post_no citelink"
+		 href="{{ post.link }}">
 		{{ post.id }}
 	</a>
 	{% if post.sticky %}

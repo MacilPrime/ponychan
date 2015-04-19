@@ -230,8 +230,8 @@ function send_usage(retryTime) {
 
 	if (document.location.protocol == 'http:') {
 		usage.http_user = true;
-		if (localStorage.last_https_send)
-			usage.last_https_send = parseInt(localStorage.last_https_send);
+		if (localStorage.getItem('last_https_send'))
+			usage.last_https_send = parseInt(localStorage.getItem('last_https_send'));
 	}
 
 	// usage object construction end

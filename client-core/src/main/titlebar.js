@@ -35,6 +35,8 @@ export function removeTitleFlash(key) {
 }
 
 $(document).ready(function() {
+	const $icon = $('head link[rel="shortcut icon"]');
+
 	if($('div.banner').length == 0)
 		return; // not index
 
@@ -64,9 +66,14 @@ $(document).ready(function() {
 	var pendingScrollHandler = null;
 
 	updateTitle = function() {
-		var newTitle = flashmessage + "("+$unseenPosts.length+") "+mainTitle;
-		if(document.title != newTitle)
+		const newTitle = flashmessage + "("+$unseenPosts.length+") "+mainTitle;
+		if (document.title != newTitle) {
 			document.title = newTitle;
+		}
+		const icon = $unseenPosts.length ? SITE_DATA.url_favicon_alert : SITE_DATA.url_favicon;
+		if ($icon.attr('href') !== icon) {
+			$icon.attr('href', icon);
+		}
 	};
 
 	function scrollHandler() {

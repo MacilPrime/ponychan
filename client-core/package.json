@@ -10,7 +10,8 @@
     "lodash": "3.6.0",
     "moment": "2.9.0",
     "react": "^0.13.1",
-    "rsvp": "3.0.17"
+    "rsvp": "3.0.17",
+    "webstorage-polyfill": "^1.0.0"
   },
   "devDependencies": {
     "babel": "^4.7.16",

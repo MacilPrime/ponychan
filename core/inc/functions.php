@@ -282,8 +282,8 @@ function utf8_clean_userinput() {
 }
 
 function computeResize($width, $height, $max_width, $max_height) {
-	$x_ratio = $max_width / $width;
-	$y_ratio = $max_height / $height;
+	$x_ratio = $width == 0 ? 1 : $max_width / $width;
+	$y_ratio = $height == 0 ? 1 : $max_height / $height;
 
 	if (($width > $max_width) || ($height > $max_height)) {
 		if (($x_ratio * $height) < $max_height) {
@@ -1575,6 +1575,8 @@ function buildJavascript() {
 		'cookiename' => $config['cookies']['js'],
 		'cookiepath' => $config['cookies']['jail'] ? $config['cookies']['path'] : '/',
 		'genpassword_chars' => $config['genpassword_chars'],
+		'url_favicon' => $config['url_favicon'],
+		'url_favicon_alert' => $config['url_favicon_alert'],
 		'siteroot' => $config['root']
 	);
 
@@ -1833,6 +1835,7 @@ function markup(&$body, $track_cites = false) {
 	}, $body);
 
 	$body = preg_replace("/^\s*&gt;.*$/m", '<span class="quote">$0</span>', $body);
+	$body = preg_replace("/^\s*&lt;.*$/m", '<span class="orangetext">$0</span>', $body);
 
 	if ($config['strip_superfluous_returns'])
 		$body = preg_replace('/\s+$/', '', $body);
@@ -1993,6 +1996,18 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 		return $body;
 
 	file_write($board['dir'] . $config['dir']['res'] . sprintf($config['file_page50'], $id), $body);
+}
+
+function hashPostPassword($password) {
+	return sha1($password);
+}
+
+function doesPasswordMatchPostHash($password, $hash) {
+	if (strpos($hash, '$MD5$$$$') === 0) {
+		return '$MD5$$$$' . md5($password) === $hash;
+	} else {
+		return sha1($password) === $hash;
+	}
 }
 
 function editPostForm($postid, $password=false, $mod=false) {

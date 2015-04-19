@@ -131,15 +131,6 @@ a.email {
 .reply .fileinfo {
     line-height: 120%;
 }
-.hashtag {
-    background-color: inherit;
-    color: inherit;
-    padding: 0.2rem 0.3rem;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    text-transform: lowercase;
-    box-shadow: none;
-}
 .omitted, .toolong {
     color: gray;
     padding: 0.3em 2em;
