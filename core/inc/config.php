@@ -759,7 +759,7 @@
 	$config['stylesheets']['Octavia'] = array('Octavia', 'octavia.css');
 	// $config['stylesheets']['Great and Powerful'] = array('Great and Powerful', 'trixie.css');
 	$config['stylesheets']['Aloe and Lotus'] = array('Aloe and Lotus', 'aloe-and-lotus.css');
-	// $config['stylesheets']['Scootaloo'] = array('Scootaloo', 'scootaloo.css');
+	$config['stylesheets']['Scootaloo'] = array('Scootaloo', 'scootaloo.css');
 	$config['stylesheets']['Gilda'] = array('Gilda', 'gilda.css');
 
 	$config['stylesheets']['Cloudsdale'] = array('Cloudsdale', 'Cloudsdale.css');
