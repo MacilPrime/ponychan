@@ -758,7 +758,7 @@
 	// $config['stylesheets']['Timelord'] = array('Timelord', 'timelord.css');
 	$config['stylesheets']['Octavia'] = array('Octavia', 'octavia.css');
 	// $config['stylesheets']['Great and Powerful'] = array('Great and Powerful', 'trixie.css');
-	// $config['stylesheets']['Aloe and Lotus'] = array('Aloe and Lotus', 'aloe-and-lotus.css');
+	$config['stylesheets']['Aloe and Lotus'] = array('Aloe and Lotus', 'aloe-and-lotus.css');
 	// $config['stylesheets']['Scootaloo'] = array('Scootaloo', 'scootaloo.css');
 	$config['stylesheets']['Gilda'] = array('Gilda', 'gilda.css');
 
