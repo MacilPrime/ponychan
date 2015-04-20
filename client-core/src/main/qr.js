@@ -18,6 +18,7 @@ import RSVP from 'rsvp';
 import settings from './settings';
 import {updateThreadNow} from './legacy/reloader';
 import {thumbnailer} from './thumbnailer';
+import {log_error} from './logger';
 
 import * as util from './util';
 import * as state from './state';
