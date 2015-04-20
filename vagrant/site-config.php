@@ -8,6 +8,11 @@
   $config['thumb_ext'] = '';
   $config['thumb_method'] = 'convert';
 
+  $config['spoiler_images'] = true;
+  $config['show_spoiler_thread_button'] = true;
+  $config['allow_self_edit'] = true;
+  $config['mature_allowed'] = true;
+
   /*
    * For lack of a better name, “boardlinks” are those sets of navigational links that appear at the top
    * and bottom of board pages. They can be a list of links to boards and/or other pages such as status

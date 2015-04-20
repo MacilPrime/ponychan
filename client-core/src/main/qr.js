@@ -229,6 +229,15 @@ $(document).ready(function(){
         .attr("class", "qr-options")
 		.css("min-width", "100%")
 		.appendTo($QRForm);
+	var $spoiler_thread = $("<input/>")
+		.attr("id", "qrspoiler_thread")
+		.attr("type", "checkbox")
+		.attr("name", "spoiler_thread");
+	var $spoiler_thread_label = $("<label/>")
+		.text("Spoiler Thread")
+		.attr("for", "qrspoiler_thread")
+		.prepend($spoiler_thread)
+		.appendTo($row);
 	var $spoiler = $("<input/>")
 		.attr("id", "qrspoiler")
 		.attr("type", "checkbox")
@@ -299,6 +308,9 @@ $(document).ready(function(){
 		.attr("name", "password")
 		.val( $("form[name='postcontrols'] input#password").val() )
 		.appendTo($QRForm);
+	if( $oldForm.find("#spoiler_thread").length == 0 ) {
+		$spoiler_thread_label.remove();
+	}
 	if( $oldForm.find("#spoiler").length == 0 ) {
 		$spoilerlabel.remove();
 	}

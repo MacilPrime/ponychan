@@ -318,6 +318,10 @@ div.post .body .spoiler a {
 .spoiler:hover, div.post .body .spoiler:hover a, .spoiler-force-color {
 	color: white !important;
 }
+.spoileredThread .body:not(.spoileredThreadControls),
+.spoileredThread .replyContainer {
+	display: none;
+}
 .hidetogglebutton {
 	min-width: 4em;
 }

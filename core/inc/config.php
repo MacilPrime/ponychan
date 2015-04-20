@@ -240,6 +240,7 @@
 		'recaptcha_challenge_field',
 		'recaptcha_response_field',
 		'spoiler',
+		'spoiler_thread',
 		'mature',
 		'file',
 		'thumbfile',
@@ -365,6 +366,9 @@
 
 	// Allow [#Mature] threads
 	$config['mature_allowed'] = false;
+
+	// Show spoiler thread button
+	$config['show_spoiler_thread_button'] = false;
 
 	// Always act as if they had typed "noko" in the email field no mattter what
 	$config['always_noko'] = false;

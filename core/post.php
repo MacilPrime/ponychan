@@ -603,6 +603,11 @@ if (isset($_POST['delete'])) {
 		}
 	}
 
+	$has_spoiler_tag_in_post = (stripos($post['body'], '[#spoiler]') !== false);
+	if (isset($_POST['spoiler_thread']) && !$has_spoiler_tag_in_post) {
+		$post['body'] = "[#Spoiler]\n" . $post['body'];
+	}
+
 	// Check string lengths
 	if (mb_strlen($post['name']) > 75)
 		error(sprintf($config['error']['toolong'], 'name'));
