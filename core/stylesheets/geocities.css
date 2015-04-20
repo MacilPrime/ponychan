@@ -6,7 +6,7 @@ header, header h1, header div.subtitle, #qrtoggleoptions {
     text-align: left;
 }
 header h1::before {
-    content: "Welcome to the mlpchan bulletin board!";
+    content: "Welcome to the ponychan bulletin board!";
     display: block;
 }
 #settingsScreen h1::after {
