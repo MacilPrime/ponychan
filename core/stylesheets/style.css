@@ -488,7 +488,7 @@ table.mod.config-editor input[type="text"] {
 	background: -webkit-linear-gradient(top,  #43475e 0%,#232b2b 49%,#1c1c1c 100%);
 	background: -o-linear-gradient(top,  #43475e 0%,#232b2b 49%,#1c1c1c 100%);
 	background: -ms-linear-gradient(top,  #43475e 0%,#232b2b 49%,#1c1c1c 100%);
-	background: linear-gradient(top,  #43475e 0%,#232b2b 49%,#1c1c1c 100%);
+	background: linear-gradient(to bottom,  #43475e 0%,#232b2b 49%,#1c1c1c 100%);
 	margin-right: 0.5em;
 	padding: 0.2em 0.5em;
 	border-width: 1px;

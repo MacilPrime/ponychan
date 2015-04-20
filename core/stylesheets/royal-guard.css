@@ -41,7 +41,7 @@ div.post.reply, .wthread {
 .boardlist.top {
   background: #8B0C0F;
   background: -webkit-linear-gradient(top, #8B0C0F, #65080A);
-  background: linear-gradient(top, #8B0C0F, #65080A);
+  background: linear-gradient(to bottom, #8B0C0F, #65080A);
 }
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
   color: #F0C5C5;
