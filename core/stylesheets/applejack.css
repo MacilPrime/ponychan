@@ -43,17 +43,16 @@ hr {
     height: 1px;
     margin: 0px;
 }
-div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings, #settingsScreen  {
+div.post.reply, .wthread, .post-hover, div.pages, .catathread, #updateSettings, #settingsScreen  {
     padding: 0.5em;
-    border-radius: 0.5rem;
     border-style: solid;
-    background: rgb(247,237,196);
+    background: #ffd990;
     border-color: rgb(229, 214, 139);
 }
 .boardlist.top, #qrmove, #updateSettings {
     background-color: #91ca40;
 }
-.boardlist.top a, .top a:visited, #qrmove a, #qrmove a:visited {
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, #qrmove a, #qrmove a:visited {
     color: #203f0c;
 }
 .boardlist.top .boardlistpart a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
@@ -118,13 +117,6 @@ form th:after {
 .post {
     line-height: 140%;
 }
-div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
-    line-height: 150%;
-}
-.hashtag {
-    font-weight: bold;
-    padding: 0.1em 0.5em;
-}
 
 .postHider {
     margin-top: -2px;
@@ -155,10 +147,8 @@ a.email {
 
 span.trip, .wtrip {
     color: rgb(87,147,43);
-    font-family: monospace;
 }
 p.intro a.post_no {
-    text-decoration: underline;
     color: #09147E;
 }
 p.intro a.post_no:hover {
@@ -176,10 +166,6 @@ p.intro a.post_no:hover {
 div.post.reply.highlighted {;
     border: 1px solid rgb(201, 189, 67);
     background: rgb(255,245,205);
-}
-.op .delete {
-    /* Realigns the checkboxes */
-    margin-top: 4px;
 }
 
 span.quote {
@@ -205,28 +191,17 @@ span.omitted, .toolong {
     text-transform: lowercase;
     color: rgb(44, 101, 176);
     letter-spacing: 0px;
-    transition: letter-spacing 0.5s ease-out,
-    color 0.3s ease-in-out;
 }
 #qrDisplayButton:hover {
-    letter-spacing: 2px;
     color: rgb(104, 102, 177);
 }
-#qrDisplayButton:before {
+#qrDisplayButton::before {
     content: "[";
     margin-right: 2px;
-    transition: margin 1s ease-in-out;
 }
-#qrDisplayButton:hover:before {
-    margin-right: 8px;
-}
-#qrDisplayButton:after {
+#qrDisplayButton::after {
     content: "]";
     margin-left: 2px;
-    transition: margin 1s ease-in-out;
-}
-#qrDisplayButton:hover:after {
-    margin-left: 8px;
 }
 
 /* Thread watcher */
@@ -259,12 +234,11 @@ span.omitted, .toolong {
 .homeblock > h2 {
 	font-family: "Philosopher", serif;
 	font-size: 150%;
-	margin: -25px -17px 0;
+  margin: -18px -19px 0;
 	/* We must use pixels here because we */
 	/* need something that scales linear with zoom functions */
 	color: white;
 	padding: 0.2em 0.7em;
-	border-radius: 0 0.5em 0 0;
 	background-color: rgb(215, 98, 95);
 }
 .homeblock > h2 + div {
@@ -273,16 +247,4 @@ span.omitted, .toolong {
 }
 .homeblock .unimportant {
 	font-family: monospace;
-}
-/* Flex recent posts */
-#recent_posts {
-	overflow-x: visible;
-}
-.recent_posts_parent {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-}
-.recent_post {
-	flex: 1 0 auto;
 }

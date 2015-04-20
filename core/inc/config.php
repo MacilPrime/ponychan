@@ -751,7 +751,7 @@
 	$config['stylesheets']['Twilight Tackle'] = array('Twilight Tackle', 'twilight-tackle.css');
 	$config['stylesheets']['Rainbow Dash'] = array('Rainbow Dash', 'rainbow-dash.css');
 	$config['stylesheets']['Fluttershy'] = array('Fluttershy', 'fluttershy.css');
-	// $config['stylesheets']['Applejack'] = array('Applejack', 'applejack.css');
+	$config['stylesheets']['Applejack'] = array('Applejack', 'applejack.css');
 	// $config['stylesheets']['Rarity'] = array('Rarity', 'rarity.css');
 	$config['stylesheets']['Nightmare Moon'] = array('Nightmare Moon', 'nightmare-moon.css');
 	// $config['stylesheets']['Vinyl Trance'] = array('Vinyl Trance', 'vinyl.css');
