@@ -65,10 +65,10 @@ img.banner {
 }
 
 /* Headline */
-body > header {
+header {
     padding-top: 3em;
 }
-body > header h1 {
+header h1 {
     font-size: 4em;
     font-weight: normal;
 }

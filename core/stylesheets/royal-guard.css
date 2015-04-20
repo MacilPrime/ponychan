@@ -1,0 +1,51 @@
+@import "common/pony-kusaba.css?v=3002914135";
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+  background: scroll #EAEAEA url(img/royal-guard/bg.png) left repeat;
+  color: #333;
+  font-size: 13px;
+}
+
+header h1 {
+  color: #A80000;
+  font-family: "Century Gothic Medium", "Calibri Light", Century, Arial, sans-serif;
+}
+
+a, a:visited, a.bodylink {
+  color: #3792B3;
+}
+a:hover {
+  color: #7BBDD7;
+}
+span.trip, .wtrip {
+  color: #67AB55;
+}
+p.intro span.name, .wname {
+  color: #55A525;
+}
+p.intro span.subject, .wsubject {
+  color: #321E96;
+}
+p.intro time {
+  color: #525252;
+}
+div.post.reply, .wthread {
+  background: #E9E9E9;
+  border: 1px solid #488F1F;
+  border-left-width: 6px;
+}
+.post-inline, .post-hover {
+  border-left-width: 1px !important;
+}
+.boardlist.top {
+  background: #8B0C0F;
+  background: -webkit-linear-gradient(top, #8B0C0F, #65080A);
+  background: linear-gradient(top, #8B0C0F, #65080A);
+}
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
+  color: #F0C5C5;
+}
+.boardlist.top .boardlistpart a[href="/"] {
+  color: #F9EDED;
+}

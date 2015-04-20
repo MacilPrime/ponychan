@@ -760,6 +760,7 @@
 	$config['stylesheets']['Trixie'] = array('Trixie', 'trixie.css');
 	$config['stylesheets']['Aloe and Lotus'] = array('Aloe and Lotus', 'aloe-and-lotus.css');
 	$config['stylesheets']['Scootaloo'] = array('Scootaloo', 'scootaloo.css');
+	$config['stylesheets']['Royal Guard'] = array('Royal Guard', 'royal-guard.css');
 	$config['stylesheets']['Gilda'] = array('Gilda', 'gilda.css');
 
 	$config['stylesheets']['Cloudsdale'] = array('Cloudsdale', 'Cloudsdale.css');
