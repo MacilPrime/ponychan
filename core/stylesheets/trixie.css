@@ -15,27 +15,10 @@
 	src: url('font/sabrina.ttf') format('truetype');
 }
 
-/* Keyframes for animations */
-@keyframes notification {
-	0% {
-		color: #db8696;
-	}
-	50% {
-		color: rgb(237, 89, 96);
-	}
-	100% {
-		color: #db8797;
-	}
-}
-
 /* Indiscriminate tags */
 body {
 	background: url(img/trixie/trixie_yay.png) bottom 30px right 30px/50% no-repeat,
-	radial-gradient(
-			circle at bottom 5em right 5em,
-			rgb(123, 196, 236),
-			rgb(75, 182, 239),
-			rgb(131, 200, 237));
+		#0197D7;
 }
 
 /* All links, including the ref-links inside the post body. */
@@ -98,7 +81,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 
 /* Block items */
 div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
-	background-color: rgb(104, 178, 222)
+	background-color: rgba(121,183,223,0.8);
 }
 
 /* -- Navigation bar -- */
@@ -140,10 +123,8 @@ div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSetting
 }
 
 /* the color of 'by' in watcher */
-.wname:before {
-	/* The element is always there. If no nickname is given, it'll leave
-		you an empty element. */
-	color: #d9a9ff;
+.wname::before {
+	color: #B35DF7;
 }
 
 /* -- Board Page header -- */
@@ -264,19 +245,17 @@ div.post.reply.highlighted {
 .post-inline {
 	/* 	as nesting iterations approach infinity,
 	 	what background color does it approach? */
-	background-color: rgba(255,255,255,0.1);
+	background-color: rgba(255,255,255,0.1) !important;
 }
 
 span.quote {
-	color: rgb(181, 220, 244);
-	font: bold 110% "Philosopher", "Calibri", sans-serif;
-	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.40);
+	color: rgb(118, 32, 127);
 }
 .spoiler {
 	background-color: rgb(127, 83, 217);
 	color: rgb(127, 83, 217);
 }
-span.omitted, .toolong {
+.omitted, .toolong {
 	font-style: italic;
 	color: rgb(228, 228, 228);
 }
@@ -286,13 +265,8 @@ span.omitted, .toolong {
 	color: inherit;
 }
 
-
-.wname:before {
-	color: rgb(174, 192, 222);
-}
-
 /* The color of the ban page table */
-.ban {
+div.ban {
 	border-color: rgb(134, 124, 174);
 }
 
@@ -306,28 +280,25 @@ div.pages {
 	text-shadow: 	1px 1px 1px rgb(59, 85, 179),
 	0 0 16px rgb(177, 188, 230);
 }
-.homepage hr {
-	border-top: 2px solid rgb(0, 147, 218);
-}
 .homepage .subtitle {
 	color: rgb(210, 235, 249);
 	font-size: 180%;
 }
 .homeblock {
-	border: 2px solid rgb(0, 147, 218);
+	border: 2px solid rgb(0, 102, 218);
+	background: rgba(255, 255, 255, 0.76);
 	line-height: 140%;
 	margin-top: 2em;
 }
 .homeblock > h2 {
 	font-family: "Ubuntu", monospace;
-	font-size: 150%;
-	margin: -25px -17px 0;
+	font-size: 1.5em;
+	margin: -18px -19px 0;
 	/* We must use pixels here because we */
 	/* need something that scales linear with zoom functions */
 	color: rgb(208, 223, 243);
 	padding: 0.2em 0.7em;
-	border-radius: 0.5em 0.5em 0 0;
-	background-color: rgb(0, 147, 218);
+	background-color: rgb(0, 102, 218);
 }
 .homeblock > h2 + div {
 	/* The body container */
@@ -336,19 +307,4 @@ div.pages {
 .homeblock .unimportant {
 	font-family: monospace;
 	text-transform: uppercase;
-}
-/* Flex recent posts */
-#recent_posts {
-	overflow-x: visible;
-}
-.recent_posts_parent {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-}
-.recent_post {
-	flex: 1 0 auto;
-}
-#watcherAlerts {
-	animation: notification 3.5s;
 }
