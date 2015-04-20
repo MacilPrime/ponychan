@@ -8,6 +8,7 @@ body {
     url("img/rainbow-dash/bg.png") repeat-x right top,
     linear-gradient(to bottom, rgb(210, 238, 251) 0px, rgb(232, 247, 254) 400px);
     background-color: rgb(210, 238, 251);
+    font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
 }
 /* Indiscriminate tags */
 a, a:visited, a.bodylink {
