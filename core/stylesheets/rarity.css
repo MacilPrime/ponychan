@@ -132,7 +132,7 @@ p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.
     color: rgb(96, 0, 160);
     font-weight: bold;
     font-family: 'Goudy Bookletter 1911', serif;
-    font-size: 110%;
+    font-size: 1.1em;
 }
 a.email {
     border-bottom: 1px dashed rgb(77, 24, 111);
@@ -140,13 +140,11 @@ a.email {
 
 span.trip, .wtrip {
     color: rgb(102, 79, 161);
-    font-family: monospace;
-    font-size: 110%;
+    font-size: 1.1em;
     letter-spacing: -1px;
 }
 p.intro a.post_no {
-    font-size: 110%;
-    text-decoration: underline;
+    font-size: 1.1em;
     color: rgb(88, 41, 103);
 }
 p.intro a.post_no:hover {
@@ -200,7 +198,7 @@ div.pages {
 }
 /* Mod links */
 .controls {
-    font-size: 90%;
+    font-size: 0.9em;
 }
 /* Thread watcher */
 #watcherScreen {
@@ -215,7 +213,7 @@ div.pages {
 .wlink {
     color: rgb(48, 48, 173)
 }
-.wname:before {
+.wname::before {
     /* The element is always there. If no nickname is given, it'll leave
         you an empty element. */
     content: " by ";
