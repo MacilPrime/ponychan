@@ -239,11 +239,9 @@ div.post.reply.highlighted {
 
 span.quote {
 	color: rgb(81, 91, 118);
-	font: bold 110% "Philosopher", "Calibri", sans-serif;
-	text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
 }
-span.omitted {
-	color: rgb(255, 249, 208);
+.omitted {
+	color: rgb(87, 76, 76);
 }
 
 /* Footer */
@@ -251,11 +249,7 @@ span.omitted {
 	color: inherit;
 }
 
-.wpost {
-    /*color: white;*/
-}
-
-.wname:before {
+.wname::before {
 	color: rgb(92, 92, 92);
 }
 
@@ -289,13 +283,12 @@ div.pages {
 }
 .homeblock > h2 {
 	font-family: "Neucha", sans-serif;
-	font-size: 150%;
-	margin: -25px -17px 0;
+	font-size: 1.5em;
+	margin: -18px -19px 0;
 	/* We must use pixels here because we */
 	/* need something that scales linear with zoom functions */
 	color: rgb(233, 227, 117);
 	padding: 0.2em 0.7em;
-	border-radius: 0 0.5em 0 0;
 	background-color: rgb(146, 129, 83);
 }
 .homeblock > h2 + div {
@@ -304,16 +297,4 @@ div.pages {
 }
 .homeblock .unimportant {
 	font-family: "Ubuntu", monospace;
-}
-/* Flex recent posts */
-#recent_posts {
-	overflow-x: visible;
-}
-.recent_posts_parent {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-}
-.recent_post {
-	flex: 1 0 auto;
 }
