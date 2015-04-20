@@ -754,7 +754,7 @@
 	$config['stylesheets']['Applejack'] = array('Applejack', 'applejack.css');
 	$config['stylesheets']['Rarity'] = array('Rarity', 'rarity.css');
 	$config['stylesheets']['Nightmare Moon'] = array('Nightmare Moon', 'nightmare-moon.css');
-	// $config['stylesheets']['Vinyl Trance'] = array('Vinyl Trance', 'vinyl.css');
+	$config['stylesheets']['Vinyl Trance'] = array('Vinyl Trance', 'vinyl.css');
 	$config['stylesheets']['Timelord'] = array('Timelord', 'timelord.css');
 	$config['stylesheets']['Octavia'] = array('Octavia', 'octavia.css');
 	// $config['stylesheets']['Great and Powerful'] = array('Great and Powerful', 'trixie.css');

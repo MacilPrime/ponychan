@@ -8,29 +8,31 @@
 @import "common/razor-buttons.css?v=3268520798";
 
 body {
-    background:black url("http://www.ponychan.net/chan/css/images/vinyl-bg1a.png") no-repeat fixed right top
+    background:black url(img/vinyl/vinyl-bg1a.png) no-repeat fixed right top;
+    font-family: serif;
+    font-size: 12pt;
 }
 body,body h1,header div.subtitle,div.blotter,h2 {
-    color:#98B1D7
+    color:#98B1D7;
 }
 body h1 {
-    font-family:"Capacitor",Courier,monospace
+    font-family:"Capacitor",Courier,monospace;
 }
 div.pages {
-    background:transparent !important
+    background:transparent !important;
 }
 div.pages {
-    border:none
+    border:none;
 }
 a,a:visited {
-    color:#98B1D7 !important
+    color:#98B1D7 !important;
 }
 a:hover {
-    color: #E3ECF2 !important
+    color: #E3ECF2 !important;
 }
 /* top navbar */
 .boardlist.top {
-    background:black
+    background:black;
 }
 .boardlist.top .boardlistpart a {
     border-top:solid #30364D;
@@ -48,20 +50,20 @@ a:hover {
 /* postarea */
 form[name="post"] table tr th,textarea,input[type="text"],input[type="password"] {
     border:2px solid #56658E;
-    background:url("http://www.ponychan.net/chan/css/images/vinyl-bg1b.png") no-repeat fixed right top;
+    background:url(img/vinyl/vinyl-bg1b.png) no-repeat fixed right top;
     border-radius:10px;
     color: #98B1D7;
 }
 /* boxes n stuff */
 .thread div.reply,.homeblock,#qr,#settingsScreen,#watcherScreen,div.reply.post-hover,div.post.reply.highlighted {
-    background:black url("http://www.ponychan.net/chan/css/images/vinyl-bg1b.png") no-repeat fixed right top;
+    background:black url(img/vinyl/vinyl-bg1b.png) no-repeat fixed right top;
     color:#98B1D7;
     border:2px solid #C7D9E5;
     border-bottom-right-radius:12px;
     border-top-left-radius:12px;
 }
 div.post.reply.highlighted {
-    border-color:#8F0304
+    border-color:#8F0304;
 }
 div.banner {
     background: #8F0304;
@@ -86,4 +88,7 @@ span.quote,.wname {
 .hidetext {
     background:inherit;
     border-color: #8F0304;
+}
+.omitted {
+  color: white;
 }
