@@ -370,6 +370,9 @@
 	// Show spoiler thread button
 	$config['show_spoiler_thread_button'] = false;
 
+	// Show image spoiler button if thread spoiler button is shown?
+	$config['show_image_spoiler_when_thread_spoiler_available'] = false;
+
 	// Always act as if they had typed "noko" in the email field no mattter what
 	$config['always_noko'] = false;
 

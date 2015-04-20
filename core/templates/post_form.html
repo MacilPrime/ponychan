@@ -94,7 +94,12 @@
 			</td>
 		</tr>
 		{% endif %}
-		{% if mod or (config.show_spoiler_thread_button and not id) or config.spoiler_images or (config.mature_allowed and not id) %}
+		{% if mod or
+			(config.show_spoiler_thread_button and not id) or
+			(config.spoiler_images and
+					(config.show_image_spoiler_when_thread_spoiler_available or
+						not (config.show_spoiler_thread_button and not id))) or
+			(config.mature_allowed and not id) %}
 		<tr>
 			<th>
 				{% trans %}Flags{% endtrans %}
@@ -105,7 +110,10 @@
 					<input id="spoiler_thread" name="spoiler_thread" type="checkbox">
 					 {% trans %}Spoiler Thread{% endtrans %}</label>
 				</div>{% endif %}
-				{% if config.spoiler_images %}<div>
+				{% if config.spoiler_images and
+						(config.show_image_spoiler_when_thread_spoiler_available or
+							not (config.show_spoiler_thread_button and not id))
+				%}<div>
 					<label>
 					<input id="spoiler" name="spoiler" type="checkbox">
 					 {% trans %}Spoiler Image{% endtrans %}</label>
