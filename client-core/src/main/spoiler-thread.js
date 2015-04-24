@@ -57,6 +57,7 @@ $(document).ready(function() {
               '<br/>',
               $('<button/>')
                 .addClass('revealer')
+                .attr('type', 'button')
                 .text('Reveal')
                 .click(function(e) {
                   process(true, $thread);

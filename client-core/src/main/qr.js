@@ -214,6 +214,7 @@ $(document).ready(function(){
 		.appendTo($buttonrow);
 	var $filebutton = $("<button/>")
 		.attr("id", "qrfilebutton")
+		.attr('type', 'button')
 		.text("Browse...")
 		.click(function(e) {
 			e.preventDefault();

@@ -84,8 +84,8 @@ const SettingSaveButton = React.createClass({
 		const {valid, onSave, onUndo, disabled} = this.props;
 		return (
 			<span>
-				<button disabled={!valid || disabled} onClick={onSave}>Save</button>
-				<button disabled={disabled} onClick={onUndo}>Undo</button>
+				<button type="button" disabled={!valid || disabled} onClick={onSave}>Save</button>
+				<button type="button" disabled={disabled} onClick={onUndo}>Undo</button>
 			</span>
 		);
 	}
@@ -200,7 +200,7 @@ const SettingItem = React.createClass({
 			testButton.get('fn')();
 		};
 		const testButtonComponent = !testButton ? null :
-			<div><button disabled={disabled} onClick={testButtonFn}>
+			<div><button type="button" disabled={disabled} onClick={testButtonFn}>
 				{testButton.get('label')}
 			</button></div>;
 
@@ -264,6 +264,7 @@ const SettingsCloseButton = React.createClass({
 	render() {
 		return (
 			<button
+				type="button"
 				aria-label="Close"
 				onClick={this.props.onClick}
 				className="settings-close-button">
