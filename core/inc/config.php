@@ -1178,7 +1178,7 @@
 	// Edit posts without leaving "Post was edited" message
 	$config['mod']['noeditmsg'] = ADMIN;
 	// "Move" a thread to another board (EXPERIMENTAL; has some known bugs)
-	$config['mod']['move'] = DISABLED;
+	$config['mod']['move'] = MOD;
 	// Bypass "field_disable_*" (forced anonymity, etc.)
 	$config['mod']['bypass_field_disable'] = MOD;
 	// Bypass flood check

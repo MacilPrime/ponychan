@@ -1055,12 +1055,12 @@ function post(array $post) {
 	global $pdo, $board;
 	$query = prepare(sprintf(
 		'INSERT INTO `posts_%s` (`id`, `thread`, `subject`, `email`, `name`, ' .
-		'`trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, ' .
-		'`thumbwidth`, `thumbheight`, `file`, `filewidth`, `fileheight`, ' .
+		'`trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, `thumb_uri`, ' .
+		'`thumbwidth`, `thumbheight`, `file`, `file_uri`, `filewidth`, `fileheight`, ' .
 		'`filesize`, `filename`, `filehash`, `password`, `ip_type`, `ip_data`, `sticky`, ' .
 		'`locked`, `sage`, `embed`, `mature`) VALUES ( NULL, :thread, :subject, ' .
 		':email, :name, :trip, :capcode, :body, :body_nomarkup, :time, :time, ' .
-		':thumb, :thumbwidth, :thumbheight, :file, :width, :height, :filesize, ' .
+		':thumb, :thumb_uri, :thumbwidth, :thumbheight, :file, :file_uri, :width, :height, :filesize, ' .
 		':filename, :filehash, :password, :ip_type, INET6_ATON(:ip), :sticky, :locked, 0, :embed, ' .
 		':mature)', $board['uri']));
 
@@ -1124,6 +1124,9 @@ function post(array $post) {
 	} else {
 		$query->bindValue(':thread', $post['thread'], PDO::PARAM_INT);
 	}
+
+	$query->bindValue(':thumb_uri', (isset($post['thumb_uri']) && $post['thumb_uri']) ? $post['thumb_uri'] : null);
+	$query->bindValue(':file_uri', (isset($post['file_uri']) && $post['file_uri']) ? $post['file_uri'] : null);
 
 	if ($post['has_file']) {
 		$query->bindValue(':thumb', $post['thumb']);
