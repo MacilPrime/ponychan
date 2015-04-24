@@ -83,7 +83,7 @@ $(document).ready(function(){
 		setCss("hide_button", hideButton ? "" : ".postHider { display: none; }");
 	});
 	settings.getSettingStream('show_hider_stubs').onValue(show_hider_stubs => {
-		setCss("hide_button", show_hider_stubs ? "" : ".postStub { display: none; }");
+		setCss("hider_stubs", show_hider_stubs ? "" : ".postStub { display: none; }");
 	});
 
 	Bacon.combineAsArray(
