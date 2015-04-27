@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `capcode` varchar(50) DEFAULT NULL,
   `body` text NOT NULL,
   `body_nomarkup` text DEFAULT NULL,
+  `post_modifiers` text DEFAULT NULL COMMENT
+    'optional json object describing changes to how the post is rendered or marked up',
   `time` int(11) NOT NULL,
   `bump` int(11) DEFAULT NULL,
   `thumb` varchar(50) DEFAULT NULL,

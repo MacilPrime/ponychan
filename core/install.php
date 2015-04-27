@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-6');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-7');
 
 require 'inc/functions.php';
 
@@ -355,6 +355,11 @@ if (file_exists($config['has_installed'])) {
 					"ALTER TABLE `posts_${board['uri']}`
 					CHANGE `password` `password` char(40) DEFAULT NULL"
 				) or error(db_error());
+			}
+		case 'v0.9.6-dev-8-mlpchan-6':
+			foreach ($boards as $board) {
+				query("ALTER TABLE `posts_${board['uri']}` ADD `post_modifiers` text DEFAULT NULL COMMENT
+			    'optional json object describing changes to how the post is rendered or marked up' AFTER `body_nomarkup`") or error(db_error());
 			}
 		case false:
 			// Update version number
