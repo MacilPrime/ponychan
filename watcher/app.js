@@ -5,7 +5,6 @@ const swig = require('swig');
 const nconf = require('nconf');
 const redis = require('redis');
 const mysql = require('mysql');
-const toobusy = require('toobusy');
 const RSVP = require('rsvp');
 
 RSVP.on('error', function(err) {
@@ -166,11 +165,6 @@ app.set('views', __dirname + '/views');
 app
   .use(express.logger())
   .use(express.cookieParser());
-
-app.use(function(req, res, next) {
-  if (toobusy()) res.send(503, "I'm busy right now, sorry.");
-  else next();
-});
 
 app.get('/threads', checkUserid, function(req, res, next) {
   var threads = req.query.ids;
