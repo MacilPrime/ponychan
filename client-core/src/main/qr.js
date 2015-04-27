@@ -299,6 +299,14 @@ $(document).ready(function(){
 		.attr("for", "qrraw")
 		.prepend($rawhtml)
 		.appendTo($modrow);
+	var $use_capcode = $("<input/>")
+		.attr("id", "qr_use_capcode")
+		.attr("type", "checkbox")
+		.attr("name", "use_capcode");
+	var $use_capcode_label = $("<label/>")
+		.attr("for", "qr_use_capcode")
+		.prepend($use_capcode)
+		.appendTo($modrow);
 	var $QRwarning = $("<div/>")
 		.attr("id", "qrwarning")
 		.click(function() {
@@ -310,6 +318,14 @@ $(document).ready(function(){
 		.attr("name", "password")
 		.val( $("form[name='postcontrols'] input#password").val() )
 		.appendTo($QRForm);
+	{
+		const $old_use_capcode = $oldForm.find("#use_capcode");
+		if ($old_use_capcode.length) {
+			$use_capcode_label.append($old_use_capcode.parent().find('.textPart').clone());
+		} else {
+			$use_capcode_label.remove();
+		}
+	}
 	if( $oldForm.find("#spoiler_thread").length == 0 ) {
 		$spoiler_thread_label.remove();
 	}

@@ -236,6 +236,7 @@
 		'sticky',
 		'lock',
 		'raw',
+		'use_capcode',
 		'embed',
 		'recaptcha_challenge_field',
 		'recaptcha_response_field',
@@ -1134,7 +1135,7 @@
 		DEVELOPER => array('Developer'),
 	//	JANITOR		=> array('Janitor'),
 		MOD		=> array('Mod'),
-		ADMIN		=> true
+		ADMIN		=> array('Admin', true)
 	);
 
 	// Example: Allow mods to post with "## Moderator" as well

@@ -139,6 +139,14 @@
 					<input title="{% trans %}Raw HTML{% endtrans %}" type="checkbox" name="raw" id="raw">
 					 {% trans %}Raw HTML{% endtrans %}</label>
 				</div>{% endif %}
+				{% set available_capcode = config.mod.capcode[mod.type][0] %}
+				{% if available_capcode %}<div>
+					<label>
+					<input title="{% trans %}Capcode{% endtrans %}" type="checkbox" name="use_capcode" id="use_capcode">
+					 <span class="textPart">
+						{% trans %}Capcode{% endtrans %} <span class="availableCapcode">({{ available_capcode|e }})</span>
+					</span></label>
+				</div>{% endif %}
 			{% endif %}
 			</td>
 		</tr>

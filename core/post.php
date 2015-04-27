@@ -544,6 +544,15 @@ if (isset($_POST['delete'])) {
 
 	$post['capcode'] = false;
 
+	if ($mod && isset($_POST['use_capcode'])) {
+		$available_capcode = isset($config['mod']['capcode'][$mod['type']]) &&
+			isset($config['mod']['capcode'][$mod['type']][0]) ?
+			$config['mod']['capcode'][$mod['type']][0] : false;
+		if ($available_capcode === false)
+			error($config['error']['noaccess']);
+		$post['capcode'] = $available_capcode;
+	}
+
 	if ($mod && preg_match('/^((.+) )?## (.+)$/', $post['name'], $matches)) {
 		$name = $matches[2] != '' ? $matches[2] : $config['anonymous'];
 		$cap = $matches[3];
