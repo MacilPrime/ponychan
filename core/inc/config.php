@@ -1028,6 +1028,8 @@
 	// "## Custom" becomes lightgreen, italic and bold
 	//$config['custom_capcode']['Custom'] ='<span class="capcode" style="color:lightgreen;font-style:italic;font-weight:bold"> ## %s</span>';
 
+	$config['custom_capcode']['Founder'] = ' <span class="capcode founderCapcode">## %s</span>';
+
 	// "## Mod" makes everything purple, including the name and tripcode
 	//$config['custom_capcode']['Mod'] = array(
 	//	'<span class="capcode" style="color:purple"> ## %s</span>',

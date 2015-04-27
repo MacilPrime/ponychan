@@ -185,7 +185,7 @@ p.intro span.name {
 	color: #117743;
 	font-weight: bold;
 }
-p.intro span.capcode, p.intro a.capcode, p.intro a.nametag {
+.capcode, p.intro a.nametag {
 	color: #F00000;
 	margin-left: 0;
 }
@@ -243,7 +243,7 @@ span.trip {
 span.quote {
 	color: #789922;
 }
-span.orangetext {
+span.orangetext, .founderCapcode {
 	color: #E07000;
 }
 .royalluna {
