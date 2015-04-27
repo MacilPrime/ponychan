@@ -1114,6 +1114,8 @@
 
 	// Probably best not to change these:
 	if (!defined('JANITOR')) {
+		define('FOUNDER', -2, true);
+		define('DEVELOPER', -1, true);
 		define('JANITOR',	0,	true);
 		define('MOD',		1,	true);
 		define('ADMIN',		2,	true);
@@ -1128,6 +1130,8 @@
 
 	// Capcode permissions
 	$config['mod']['capcode'] = array(
+		FOUNDER => array('Founder'),
+		DEVELOPER => array('Developer'),
 	//	JANITOR		=> array('Janitor'),
 		MOD		=> array('Mod'),
 		ADMIN		=> true
@@ -1146,117 +1150,123 @@
 
 	/* Post Controls */
 	// View IP addresses
-	$config['mod']['show_ip'] = MOD;
+	$config['permissions']['show_ip'] = MOD;
 	// Delete a post
-	$config['mod']['delete'] = JANITOR;
+	$config['permissions']['delete'] = JANITOR;
 	// Ban a user for a post
-	$config['mod']['ban'] = MOD;
+	$config['permissions']['ban'] = MOD;
 	// Ban and delete (one click; instant)
-	$config['mod']['bandelete'] = MOD;
+	$config['permissions']['bandelete'] = MOD;
 	// Remove bans
-	$config['mod']['unban'] = MOD;
+	$config['permissions']['unban'] = MOD;
 	// Delete file (and keep post)
-	$config['mod']['deletefile'] = JANITOR;
+	$config['permissions']['deletefile'] = JANITOR;
 	// Delete all posts by IP
-	$config['mod']['deletebyip'] = MOD;
+	$config['permissions']['deletebyip'] = MOD;
 	// Delete all posts by IP across all boards
-	$config['mod']['deletebyip_global'] = MOD;
+	$config['permissions']['deletebyip_global'] = MOD;
 	// Force-bump a thread
-	$config['mod']['bump'] = MOD;
+	$config['permissions']['bump'] = MOD;
 	// Sticky a thread
-	$config['mod']['sticky'] = MOD;
+	$config['permissions']['sticky'] = MOD;
 	// Lock a thread
-	$config['mod']['lock'] = MOD;
+	$config['permissions']['lock'] = MOD;
 	// Post in a locked thread
-	$config['mod']['postinlocked'] = MOD;
+	$config['permissions']['postinlocked'] = MOD;
 	// Prevent a thread from being bumped
-	$config['mod']['bumplock'] = MOD;
+	$config['permissions']['bumplock'] = MOD;
 	// View whether a thread has been bumplocked ("-1" to allow non-mods to see too)
-	$config['mod']['view_bumplock'] = MOD;
+	$config['permissions']['view_bumplock'] = MOD;
 	// Edit posts
-	$config['mod']['editpost'] = MOD;
+	$config['permissions']['editpost'] = MOD;
 	// Edit posts without leaving "Post was edited" message
-	$config['mod']['noeditmsg'] = ADMIN;
+	$config['permissions']['noeditmsg'] = ADMIN;
 	// "Move" a thread to another board (EXPERIMENTAL; has some known bugs)
-	$config['mod']['move'] = MOD;
+	$config['permissions']['move'] = MOD;
 	// Bypass "field_disable_*" (forced anonymity, etc.)
-	$config['mod']['bypass_field_disable'] = MOD;
+	$config['permissions']['bypass_field_disable'] = MOD;
 	// Bypass flood check
-	$config['mod']['flood'] = ADMIN;
+	$config['permissions']['flood'] = ADMIN;
 	// Raw HTML posting
-	$config['mod']['rawhtml'] = MOD;
+	$config['permissions']['rawhtml'] = MOD;
 
 	/* Administration */
 	// View the report queue
-	$config['mod']['reports'] = JANITOR;
+	$config['permissions']['reports'] = JANITOR;
 	// Dismiss an abuse report
-	$config['mod']['report_dismiss'] = JANITOR;
+	$config['permissions']['report_dismiss'] = JANITOR;
 	// Dismiss all abuse reports by an IP
-	$config['mod']['report_dismiss_ip'] = JANITOR;
+	$config['permissions']['report_dismiss_ip'] = JANITOR;
 	// View bans
-	$config['mod']['view_ban'] = MOD;
+	$config['permissions']['view_ban'] = MOD;
 	// View ban history
-	$config['mod']['view_banhistory'] = MOD;
+	$config['permissions']['view_banhistory'] = MOD;
 	// View the username of the mod who made a ban
-	$config['mod']['view_banstaff'] = MOD;
-	// If the moderator doesn't fit the $config['mod']['view_banstaff''] (previous) permission,
+	$config['permissions']['view_banstaff'] = MOD;
+	// If the moderator doesn't fit the $config['permissions']['view_banstaff''] (previous) permission,
 	// show him just a "?" instead. Otherwise, it will be "Mod" or "Admin"
-	$config['mod']['view_banquestionmark'] = false;
+	$config['permissions']['view_banquestionmark'] = false;
 	// View IP address notes
-	$config['mod']['view_notes'] = JANITOR;
+	$config['permissions']['view_notes'] = JANITOR;
 	// Create notes
-	$config['mod']['create_notes'] = $config['mod']['view_notes'];
+	$config['permissions']['create_notes'] = $config['permissions']['view_notes'];
 	// Remote notes
-	$config['mod']['remove_notes'] = ADMIN;
+	$config['permissions']['remove_notes'] = ADMIN;
 	// Create a new board
-	$config['mod']['newboard'] = ADMIN;
+	$config['permissions']['newboard'] = ADMIN;
 	// Manage existing boards (change title, etc)
-	$config['mod']['manageboards'] = ADMIN;
+	$config['permissions']['manageboards'] = ADMIN;
 	// Delete a board
-	$config['mod']['deleteboard'] = ADMIN;
+	$config['permissions']['deleteboard'] = ADMIN;
 	// List/manage users
-	$config['mod']['manageusers'] = MOD;
+	$config['permissions']['manageusers'] = MOD;
 	// Promote/demote users
-	$config['mod']['promoteusers'] = ADMIN;
+	$config['permissions']['promoteusers'] = ADMIN;
 	// Edit any users' login information
-	$config['mod']['editusers'] = ADMIN;
+	$config['permissions']['editusers'] = ADMIN;
 	// Change user's own password
-	$config['mod']['change_password'] = JANITOR;
+	$config['permissions']['change_password'] = -INF;
 	// Delete a user
-	$config['mod']['deleteusers'] = ADMIN;
+	$config['permissions']['deleteusers'] = ADMIN;
 	// Create a user
-	$config['mod']['createusers'] = ADMIN;
+	$config['permissions']['createusers'] = ADMIN;
 	// View the moderation log
-	$config['mod']['modlog'] = ADMIN;
+	$config['permissions']['modlog'] = ADMIN;
 	// Create a PM (viewing mod usernames)
-	$config['mod']['create_pm'] = JANITOR;
+	$config['permissions']['create_pm'] = JANITOR;
 	// Read any PM, sent to or from anybody
-	$config['mod']['master_pm'] = ADMIN;
+	$config['permissions']['master_pm'] = ADMIN;
 	// Rebuild everything
-	$config['mod']['rebuild'] = ADMIN;
+	$config['permissions']['rebuild'] = ADMIN;
 	// Search through posts
-	$config['mod']['search'] = JANITOR;
+	$config['permissions']['search'] = JANITOR;
 	// Read the moderator noticeboard
-	$config['mod']['noticeboard'] = JANITOR;
+	$config['permissions']['noticeboard'] = JANITOR;
 	// Post to the moderator noticeboard
-	$config['mod']['noticeboard_post'] = MOD;
+	$config['permissions']['noticeboard_post'] = MOD;
 	// Delete entries from the noticeboard
-	$config['mod']['noticeboard_delete'] = ADMIN;
+	$config['permissions']['noticeboard_delete'] = ADMIN;
 	// Public ban messages; attached to posts
-	$config['mod']['public_ban'] = MOD;
+	$config['permissions']['public_ban'] = MOD;
 	// Manage and install themes for homepage
-	$config['mod']['themes'] = ADMIN;
+	$config['permissions']['themes'] = ADMIN;
 	// Post news entries
-	$config['mod']['news'] = ADMIN;
+	$config['permissions']['news'] = ADMIN;
 	// Custom name when posting news
-	$config['mod']['news_custom'] = ADMIN;
+	$config['permissions']['news_custom'] = ADMIN;
 	// Delete news entries
-	$config['mod']['news_delete'] = ADMIN;
+	$config['permissions']['news_delete'] = ADMIN;
 
 	// View the current configuration
-	$config['mod']['show_config'] = ADMIN;
+	$config['permissions']['show_config'] = ADMIN;
 	// Edit the current configuration (via web interface)
-	$config['mod']['edit_config'] = ADMIN;
+	$config['permissions']['edit_config'] = ADMIN;
+
+	/* Backwards compatibility. TODO change places that depend on this to use
+	   $config['permissions'] instead. */
+	$config['mod'] = array_merge($config['mod'], $config['permissions']);
+
+	$config['extra_permissions'][FOUNDER] = array('rawhtml');
 
 /*
  * ====================

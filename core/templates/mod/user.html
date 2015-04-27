@@ -32,6 +32,14 @@
 				<td>
 					<ul style="padding:5px 8px;list-style:none">
 						<li>
+							<input type="radio" name="type" id="founder" value="{{ constant('FOUNDER') }}">
+							 <label for="founder">{% trans 'Founder' %}</label>
+						</li>
+						<li>
+							<input type="radio" name="type" id="developer" value="{{ constant('DEVELOPER') }}">
+							 <label for="developer">{% trans 'Developer' %}</label>
+						</li>
+						<li>
 							<input type="radio" name="type" id="janitor" value="{{ constant('JANITOR') }}">
 							 <label for="janitor">{% trans 'Janitor' %}</label>
 						</li>

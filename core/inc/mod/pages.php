@@ -1636,7 +1636,7 @@ function mod_user_new() {
 		}
 
 		$_POST['type'] = (int) $_POST['type'];
-		if ($_POST['type'] !== JANITOR && $_POST['type'] !== MOD && $_POST['type'] !== ADMIN)
+		if (!in_array($_POST['type'], array(FOUNDER, DEVELOPER, JANITOR, MOD, ADMIN), true))
 			error(sprintf($config['error']['invalidfield'], 'type'));
 
 		$query = prepare('INSERT INTO `mods` (`id`, `username`, `password`, `type`, `boards`) VALUES (NULL, :username, SHA1(:password), :type, :boards)');
@@ -1654,7 +1654,7 @@ function mod_user_new() {
 		return;
 	}
 
-	mod_page(_('Edit user'), 'mod/user.html', array('new' => true, 'boards' => listBoards()));
+	mod_page(_('New user'), 'mod/user.html', array('new' => true, 'boards' => listBoards()));
 }
 
 

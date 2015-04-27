@@ -134,7 +134,7 @@
 					<input title="{% trans %}Lock{% endtrans %}" type="checkbox" name="lock" id="lock">
 					 {% trans %}Lock{% endtrans %}</label>
 				</div>{% endif %}
-				{% if post.mod|hasPermission(config.mod.rawhtml, board.uri) %}<div>
+				{% if post.mod|hasPermission('rawhtml', board.uri) %}<div>
 					<label>
 					<input title="{% trans %}Raw HTML{% endtrans %}" type="checkbox" name="raw" id="raw">
 					 {% trans %}Raw HTML{% endtrans %}</label>

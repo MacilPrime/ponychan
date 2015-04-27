@@ -53,7 +53,7 @@
 				{% trans %}Flags{% endtrans %}
 			</th>
 			<td>
-				{% if post.mod|hasPermission(config.mod.rawhtml, board.uri) %}<div>
+				{% if post.mod|hasPermission('rawhtml', board.uri) %}<div>
 					<label for="raw">{% trans %}Raw HTML{% endtrans %}</label><br>
 					<input title="{% trans %}Raw HTML{% endtrans %}" type="checkbox" name="raw" id="raw">
 				</div>{% endif %}
