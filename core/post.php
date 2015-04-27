@@ -197,7 +197,7 @@ if (isset($_POST['delete'])) {
 
 		if (!isset($password) && !hasPermission($config['mod']['editpost'], $board['uri']))
 			error($config['error']['noaccess']);
-		if ($post['raw'] && !hasPermission($config['mod']['rawhtml'], $board['uri']))
+		if ($post['raw'] && !hasPermission('rawhtml', $board['uri']))
 			error($config['error']['noaccess']);
 		if ($post['noeditmsg'] && !hasPermission($config['mod']['noeditmsg'], $board['uri']))
 			error($config['error']['noaccess']);
@@ -437,7 +437,7 @@ if (isset($_POST['delete'])) {
 			error($config['error']['noaccess']);
 		if ($post['locked'] && !hasPermission($config['mod']['lock'], $board['uri']))
 			error($config['error']['noaccess']);
-		if ($post['raw'] && !hasPermission($config['mod']['rawhtml'], $board['uri']))
+		if ($post['raw'] && !hasPermission('rawhtml', $board['uri']))
 			error($config['error']['noaccess']);
 	}
 
