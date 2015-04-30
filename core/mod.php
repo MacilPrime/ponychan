@@ -66,7 +66,7 @@ $pages = array(
 	'/notes/([\w.:*^]+)/(\d+)'		=> 'notes',		// ip notes list
 	'/posts/([\w.:*^]+)/(\w+)'		=> 'posts',		// ip post list
 	'/posts/([\w.:*^]+)/(\w+)/(\d+)'	=> 'posts',		// ip post list
-	
+
 
 	'/(\w+)/edit/(\d+)'			=> 'edit',		// edit post
 
@@ -112,7 +112,7 @@ if (isset($config['mod']['custom_pages'])) {
 
 $new_pages = array();
 foreach ($pages as $key => $callback) {
-	if (preg_match('/^secure /', $callback))
+	if ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match('/^secure /', $callback))
 		$key .= '(/(?P<token>[a-f0-9]{8}))?';
 	$new_pages[@$key[0] == '!' ? $key : '!^' . $key . '(?:&[^&=]+=[^&]*)*$!'] = $callback;
 }
@@ -124,8 +124,14 @@ foreach ($pages as $uri => $handler) {
 
 		if (preg_match('/^secure(_POST)? /', $handler, $m)) {
 			$secure_post_only = isset($m[1]);
-			if (!$secure_post_only || $_SERVER['REQUEST_METHOD'] == 'POST') {
-				$token = isset($matches['token']) ? $matches['token'] : (isset($_POST['token']) ? $_POST['token'] : false);
+			if (!$secure_post_only || $_SERVER['REQUEST_METHOD'] === 'POST') {
+				if (isset($matches['token'])) {
+					$token = $matches['token'];
+					$actual_query = preg_replace('!/([a-f0-9]{8})$!', '', $query);
+				} else {
+					$token = isset($_POST['token']) ? $_POST['token'] : false;
+					$actual_query = $query;
+				}
 
 				if ($token === false) {
 					if ($secure_post_only)
@@ -137,8 +143,7 @@ foreach ($pages as $uri => $handler) {
 				}
 
 				// CSRF-protected page; validate security token
-				$actual_query = preg_replace('!/([a-f0-9]{8})$!', '', $query);
-				if ($token != make_secure_link_token(substr($actual_query, 1))) {
+				if ($token !== make_secure_link_token(substr($actual_query, 1))) {
 					error($config['error']['csrf']);
 				}
 			}
