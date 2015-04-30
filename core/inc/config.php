@@ -995,7 +995,7 @@
  */
 
 	// Whether or not to lock moderator sessions to the IP address that was logged in with.
-	$config['mod']['lock_ip'] = true;
+	$config['mod']['lock_ip'] = false;
 
 	// The page that is first shown when a moderator logs in. Defaults to the dashboard.
 	$config['mod']['default'] = '/';
