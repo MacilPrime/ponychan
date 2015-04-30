@@ -1,3 +1,4 @@
+make [B] ban button default to IPv6 range
 fix bans.status_range index
 bad thumbnail
 staff: replace "promote"/"demote" buttons with a simple radio button menu on user edit page.
