@@ -287,10 +287,10 @@ function computeResize($width, $height, $max_width, $max_height) {
 
 	if (($width > $max_width) || ($height > $max_height)) {
 		if (($x_ratio * $height) < $max_height) {
-			$height = min(ceil($x_ratio * $height), $max_height);
+			$height = min(round($x_ratio * $height), $max_height);
 			$width = $max_width;
 		} else {
-			$width = min(ceil($y_ratio * $width), $max_width);
+			$width = min(round($y_ratio * $width), $max_width);
 			$height = $max_height;
 		}
 	}

@@ -279,12 +279,12 @@ class ImageConvert extends ImageBase {
 					escapeshellarg($this->temp)) || !file_exists($this->temp))
 					error('Failed to resize image!');
 			} else {
-				if (shell_exec("convert -background transparent -filter Point -sample {$this->width}x{$this->height} +antialias -quality {$quality} " .
+				if (shell_exec("convert -background transparent -filter Point -sample {$this->width}x{$this->height}\! +antialias -quality {$quality} " .
 					escapeshellarg($this->src . '') . " " . escapeshellarg($this->temp)) || !file_exists($this->temp))
 					error('Failed to resize image!');
 			}
 		} else {
-			if (shell_exec("convert -background transparent -filter Point -scale {$this->width}x{$this->height} +antialias -quality {$quality} " .
+			if (shell_exec("convert -background transparent -filter Point -scale {$this->width}x{$this->height}\! +antialias -quality {$quality} " .
 				escapeshellarg($this->src . '[0]') . " " . escapeshellarg($this->temp)) || !file_exists($this->temp))
 				error('Failed to resize image!');
 		}
