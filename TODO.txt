@@ -1,4 +1,3 @@
-fix [B]
 bad thumbnail
 staff: replace "promote"/"demote" buttons with a simple radio button menu on user edit page.
 
