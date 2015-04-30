@@ -15,7 +15,7 @@ header h1 {
 a, a:visited, a.bodylink {
   color: #3792B3;
 }
-a:hover {
+a:hover, div.banner a:hover {
   color: #7BBDD7;
 }
 span.trip, .wtrip {
