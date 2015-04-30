@@ -13,32 +13,37 @@ import {log_error} from '../logger';
 import myPosts from '../my-posts';
 import citeReply from '../cite-reply';
 
+function old_get_cookie(cookie_name) {
+	const results = document.cookie.match('(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
+	return results ? decodeURIComponent(results[2]) : null;
+}
+
 function get_cookie(cookie_name) {
 	const results = document.cookie.match('(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
-	if (results)
-		return (unescape(results[2]));
-	else
-		return null;
+	return results ? decodeURIComponent(results[2].replace(/\+/g, ' ')) : null;
 }
 
 // Temporary for Ponychan transition
-if (window.localStorage && localStorage.getItem('name') === null) {
-	const postname = get_cookie('name');
-	if (postname) {
-		localStorage.setItem('name', postname);
+if (window.localStorage && !localStorage.getItem('ponychan_name_transition')) {
+	if (localStorage.getItem('name') === null || localStorage.getItem('name') === old_get_cookie('name')) {
+		const postname = get_cookie('name');
+		if (postname) {
+			localStorage.setItem('name', postname);
+		}
 	}
-}
-if (window.localStorage && localStorage.getItem('email') === null) {
-	const email = get_cookie('email');
-	if (email) {
-		localStorage.setItem('email', email);
+	if (localStorage.getItem('email') === null || localStorage.getItem('email') === old_get_cookie('email')) {
+		const email = get_cookie('email');
+		if (email) {
+			localStorage.setItem('email', email);
+		}
 	}
-}
-if (window.localStorage && localStorage.getItem('password') === null) {
-	const postpassword = get_cookie('postpassword');
-	if (postpassword) {
-		localStorage.setItem('password', postpassword);
+	if (localStorage.getItem('password') === null || localStorage.getItem('password') === old_get_cookie('password')) {
+		const postpassword = get_cookie('postpassword');
+		if (postpassword) {
+			localStorage.setItem('password', postpassword);
+		}
 	}
+	localStorage.setItem('ponychan_name_transition', true);
 }
 
 window.highlightReply = function highlightReply(id) {

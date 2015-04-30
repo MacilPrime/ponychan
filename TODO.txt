@@ -2,8 +2,6 @@ fix [B]
 bad thumbnail
 staff: replace "promote"/"demote" buttons with a simple radio button menu on user edit page.
 
-Fix " " -> "+" cookie issue
-
 watcher should support reports
 
 -themes
