@@ -564,7 +564,7 @@
 	$config['max_width'] = 10000;
 	$config['max_height'] = $config['max_width']; // 1:1
 	// Reject duplicate image uploads
-	$config['image_reject_repost'] = true;
+	$config['image_reject_repost'] = false;
 	// Reject duplicate image uploads within the same thread. Doesn't change anything if image_reject_repost is true.
 	$config['image_reject_repost_in_thread'] = false;
 
