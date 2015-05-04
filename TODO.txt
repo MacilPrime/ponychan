@@ -1,3 +1,5 @@
+make reply queuing a toggleable setting that defaults to off
+noko setting
 make [B] ban button default to IPv6 range
 fix bans.status_range index
 bad thumbnail
