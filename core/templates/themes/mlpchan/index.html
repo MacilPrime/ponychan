@@ -19,8 +19,8 @@
 	<hr />
 
 	<div class="homeblock mainhomeblock">
-	  <p>Welcome to Ponychan.net! This is an imageboard for older fans of
-	  the show <em>“My Little Pony: Friendship is Magic”</em>. <sup><a href="http://www.hotdiggedydemon.com/post/16367923346/why-adult-men-like-my-little-pony-friendship-is-magic">[What?]</a></sup>
+		<p>Welcome to Ponychan.net! This is an imageboard for older fans of
+		the show <em>“My Little Pony: Friendship is Magic”</em>. <sup><a href="http://www.hotdiggedydemon.com/post/16367923346/why-adult-men-like-my-little-pony-friendship-is-magic">[What?]</a></sup>
 	</div>
 
 	{% if news|count > 0 %}
@@ -42,15 +42,15 @@
 	{% endif %}
 
 	<div class="homeblock" id="boards">
-	  <h2>Boards</h2>
-	  {% for category, boards in categories %}
-	    <h3>{{ category }}</h3>
-	    <ul>
-	    {% for board in boards %}
-              <li><a href="{{ board.uri }}">/{{ board.shortname|e }}/ - {{ board.title|e }}</a> — {{ board.subtitle|e }}</li>
-	    {% endfor %}
-	    </ul>
-	  {% endfor %}
+		<h2>Boards</h2>
+		{% for category, boards in categories %}
+			<h3>{{ category }}</h3>
+			<ul>
+			{% for board in boards %}
+				<li><a href="{{ board.uri }}">/{{ board.shortname|e }}/ - {{ board.title|e }}</a> — {{ board.subtitle|e }}</li>
+			{% endfor %}
+			</ul>
+		{% endfor %}
 	</div>
 
 	{% if recent_posts|count > 0 %}
@@ -71,39 +71,39 @@
 	{% endif %}
 
 	<div class="homeblock" id="rules">
-	  <h2>Rules</h2>
-	  <h3>Sitewide</h3>
-	  <p>Threats and flaming are not allowed.
-	  <ul>
-	    <li>Disruptive behaviors that prevent others from engaging in a
-	    thread are prohibited.
-	    <li>Stalking, harassment, or posting of others' personal information
-	    are prohibited.
-	  </ul>
-	  <p>In general, R34 and gore are not allowed:
-	  <ul>
-	    <li>Depictions of sex acts, genitals, female nipples, sex fluids, and underage sexualization are prohibited.
-	    <li>Depictions of explicit dismemberment, torture, or butchery are
-	    prohibited.
-	  </ul>
-	  <p>The above set of rules against R34 and gore do not apply to
-	  properly tagged mature content threads on supporting boards. See the
-	  FAQ for info on this feature.
-	  <p>Accessing this site means you are responsible for the content of
-	  your posts, images, and the consequences of them.
-	  <p>Spamming, raiding, ban evasion, and participating in or advocating
-	  for any illegal activities is prohibited.
-	  <p>The staff reserves the right to enforce these and all other rules
-	  and guidelines in the manner they see best for the site.
-	  <p>The opinions and statements of staff members not posted under
-	  their moderator tags are not official representations of the site,
-	  its policies, guidelines or principles.
-	  <p>Do not look for loopholes or try to argue technicalities in these
-	  guidelines. Follow their spirit as well as their letter.
+		<h2>Rules</h2>
+		<h3>Sitewide</h3>
+		<p>Threats and flaming are not allowed.
+		<ul>
+			<li>Disruptive behaviors that prevent others from engaging in a
+			thread are prohibited.
+			<li>Stalking, harassment, or posting of others' personal information
+			are prohibited.
+		</ul>
+		<p>In general, R34 and gore are not allowed:
+		<ul>
+			<li>Depictions of sex acts, genitals, female nipples, sex fluids, and underage sexualization are prohibited.
+			<li>Depictions of explicit dismemberment, torture, or butchery are
+			prohibited.
+		</ul>
+		<p>The above set of rules against R34 and gore do not apply to
+		properly tagged mature content threads on supporting boards. See the
+		FAQ for info on this feature.
+		<p>Accessing this site means you are responsible for the content of
+		your posts, images, and the consequences of them.
+		<p>Spamming, raiding, ban evasion, and participating in or advocating
+		for any illegal activities is prohibited.
+		<p>The staff reserves the right to enforce these and all other rules
+		and guidelines in the manner they see best for the site.
+		<p>The opinions and statements of staff members not posted under
+		their moderator tags are not official representations of the site,
+		its policies, guidelines or principles.
+		<p>Do not look for loopholes or try to argue technicalities in these
+		guidelines. Follow their spirit as well as their letter.
 	</div>
 
 	<div class="homeblock" id="faq">
-	  <h2>FAQ</h2>
+		<h2>FAQ</h2>
  <p>
 There is no signup; you can enter any name you like (or no name, bearing in mind it can sometimes be confusing to chat with Anonymous, Anonymous and Anonymous rather than Alice, Carol and Bob).
  <p>
@@ -115,8 +115,35 @@ The site employs a tagging system for adult content threads on the following boa
 	</div>
 
 	<div class="homeblock" id="staff">
-	  <h2>Staff</h2>
-		<div>TODO</div>
+		<h2>Staff</h2>
+		<div>
+			<h3>Administrators</h3>
+			<div>
+				<span class="trip">!!Shining Armor</span> ## Admin - Fenolio!X.Layton0s - Community Administrator</div>
+			<div>
+				<span class="trip">!!Luna</span> ## Admin - Macil!/5s/Techmk - Technical Administrator</div>
+		</div>
+		<div>
+			<h3>Moderators</h3>
+			<div>
+				<span class="trip">!!Twilight Sparkle</span> ## Mod - Astra Bolt</div>
+			<div>
+				<span class="trip">!!Lyra</span> ## Mod - Admiral Yang</div>
+			<div>
+				<span class="trip">!!Rarity</span> ## Mod - Crimson Risk</div>
+			<div>
+				<span class="trip">!!Gilda</span> ## Mod - Ghosties</div>
+			<div>
+				<span class="trip">!!Zecora</span> ## Mod - Mellowbloom!bloom.WArE</div>
+			<div>
+				<span class="trip">!!Pinkie Pie</span> ## Mod - Nimble Wing!SonicFbkn.</div>
+			<div>
+				<span class="trip">!!Rainbow Dash</span> ## Mod - Rainbro</div>
+			<div>
+				<span class="trip">!!Fluttershy</span> ## Mod - TPWPF</div>
+			<div>
+				<span class="trip">!!Sweetie Bot</span> ## Developer - Zeke</div>
+		</div>
 	</div>
 
 {% endblock %}
