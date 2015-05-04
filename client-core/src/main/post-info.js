@@ -1,15 +1,15 @@
 import _ from 'lodash';
 
 export function get_post_board($post) {
-	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
+	return /\bpostC?_(\w+)-\d+\b/.exec($post.attr("class"))[1];
 }
 
 export function get_post_num($post) {
-	return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
+	return parseInt(/\bpostC?_(\d+)\b/.exec($post.attr("class"))[1]);
 }
 
 export function get_post_id($post) {
-	const match = /\bpost_(\w+)-(\d+)\b/.exec($post.attr("class"));
+	const match = /\bpostC?_(\w+)-(\d+)\b/.exec($post.attr("class"));
 	return match[1]+':'+match[2];
 }
 
