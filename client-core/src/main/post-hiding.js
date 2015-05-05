@@ -11,7 +11,7 @@ import _ from 'lodash';
 import Bacon from 'baconjs';
 import settings from './settings';
 import setCss from './set-css';
-import {get_post_board, get_post_name, get_post_trip} from './post-info';
+import {get_post_board, get_post_name, get_post_trip, get_post_num} from './post-info';
 
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {
 	moredetails:"Only available on certain boards",
@@ -300,7 +300,7 @@ $(document).ready(function(){
 
 						// It would be silly if we just loaded hidden threads onto this
 						// page to make up for hidden threads.
-						var postnum = /replyC_(\d+)/.exec($thread.find(".opContainer").first().attr("id"))[1];
+						var postnum = get_post_num($thread.find(".opContainer"));
 						if (is_post_hidden(board_id, postnum))
 							return;
 
@@ -356,5 +356,8 @@ $(document).ready(function(){
 		.sampledBy(new_posts, (a,b)=>[a,b])
 		.onValue(([postFilter, post]) => {
 			process_posts(post, postFilter);
+			if (!postFilter($(post))) {
+				$(document).trigger("new_viewable_post", post);
+			}
 		});
 });
