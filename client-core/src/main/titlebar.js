@@ -113,7 +113,7 @@ $(document).ready(function() {
 
 	scrollHandler();
 
-	$(document).on('new_post', function(e, post) {
+	$(document).on('new_viewable_post', function(e, post) {
 		var $post = $(post);
 		// Don't increase the counter for post previews
 		if ($post.is(".preview-hidden, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
