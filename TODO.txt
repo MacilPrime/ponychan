@@ -1,3 +1,4 @@
+make hide blocks not animate on page load
 make reply queuing a toggleable setting that defaults to off
 noko setting
 make [B] ban button default to IPv6 range
