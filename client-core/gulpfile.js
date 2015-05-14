@@ -59,12 +59,12 @@ function browserifyTask(name, entry, destname) {
     var bundler = browserify({
       debug: true,
       entries: [
-        'console-polyfill',
-        'babel/polyfill',
-        'webstorage-polyfill',
+        'node_modules/console-polyfill',
+        'node_modules/babel/polyfill',
+        'node_modules/webstorage-polyfill',
         entry
       ],
-      noparse: ['jquery', 'moment', 'baconjs', 'rsvp'],
+      noparse: ['jquery', 'moment', 'rsvp'],
       cache: {}, packageCache: {}, fullPaths: args.watch
     });
     bundler.transform(babelify);
