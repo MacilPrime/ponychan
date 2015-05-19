@@ -216,6 +216,10 @@ a.postlink {
 	word-wrap: normal;
 	white-space: nowrap;
 }
+.backlink {
+	margin: 0 0.2em;
+	display: inline-block;
+}
 a.bodylink {
 	color: #D00;
 }
@@ -582,7 +586,7 @@ table.mod.config-editor input[type="text"] {
 }
 .post-hover {
 	margin-left: 16px !important;
-	position: absolute !important;
+	position: fixed !important;
 	display: block !important;
 	z-index: 10;
 	pointer-events: none;

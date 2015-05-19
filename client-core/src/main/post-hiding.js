@@ -263,14 +263,26 @@ $(document).ready(function(){
 			var $thread = $pc.parents(".thread").first();
 
 			place_button($post);
-			var postnum = /replyC_(\d+)/.exec($pc.attr("id"))[1];
+			var postnum = get_post_num($post);
 			const shouldHidePost = is_post_hidden(get_post_board($post), postnum) || postFilter($post);
 
+
 			if (shouldHidePost) {
+				if (!$post.attr("data-filtered")) {
+					$(".mentioned-"+postnum).css("display", "none");
+					$post.attr("data-filtered", "true")
+				}
 				if ($pc.hasClass("opContainer"))
 					threads_needed++;
 				do_hide_post($pc);
+				// flag telling other post previewing tools to skip this.
 			} else {
+				if ($post.attr("data-filtered")) {
+					// if it was previously filtered,
+					// then we need to show its backlinks
+					$(".mentioned-"+postnum).removeAttr("style");
+					$post.removeAttr("data-filtered");
+				}
 				do_show_post($pc);
 				if ($pc.hasClass("opContainer") && $thread.hasClass("mature_thread") && !settings.getSetting("show_mature"))
 					threads_needed++;
@@ -300,7 +312,8 @@ $(document).ready(function(){
 
 						// It would be silly if we just loaded hidden threads onto this
 						// page to make up for hidden threads.
-						var postnum = get_post_num($thread.find(".opContainer"));
+						var postnum = get_post_num($thread.find(".op"));
+						console.log(postnum);
 						if (is_post_hidden(board_id, postnum))
 							return;
 

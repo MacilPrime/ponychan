@@ -46,16 +46,8 @@ if (window.localStorage && !localStorage.getItem('ponychan_name_transition')) {
 	localStorage.setItem('ponychan_name_transition', true);
 }
 
-window.highlightReply = function highlightReply(id) {
-	if (typeof event != "undefined" && event && typeof event.which != "undefined" && event.which == 2) {
-		// don't highlight on middle click
-		return true;
-	}
-
-	$('.highlighted').removeClass('highlighted');
-	if (id)
-		$('#reply_'+id).addClass('highlighted');
-};
+window.highlightReply = function highlightReply(id) {};
+// just keeping this here to prevent errors from being thrown for now.
 
 window.confirmDelete = function confirmDelete() {
 	var count = $('form[name="postcontrols"] input.delete:checked').length;

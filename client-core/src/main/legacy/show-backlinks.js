@@ -13,14 +13,14 @@
  */
 
 import $ from 'jquery';
-import {get_post_num} from '../post-info';
+import {get_post_num, get_post_board} from '../post-info';
 
 $(document).ready(function(){
 	function showBackLinks() {
-		var reply_id = get_post_num( $(this) );
-
-		if ($(this).hasClass('post-inline') || $(this).hasClass('post-hover'))
+		if (/post-(inline|preview|hover)/.test(this.className))
 			return;
+		var reply_id = get_post_num( $(this) );
+		const post_board = get_post_board($(this));
 
 		$(this).find('a.bodylink.postlink').each(function() {
 			var m = $(this).text().match(/^>>(\d+)/);
@@ -35,12 +35,19 @@ $(document).ready(function(){
 			if($mentioned.length == 0)
 				$mentioned = $('<span class="mentioned"></span>').appendTo($post.find('.intro').first());
 
-			if ($mentioned.find('a.mentioned-' + reply_id).length != 0)
+			if ($mentioned.find('.mentioned-' + reply_id).length != 0)
 				return;
 
-			var $link = $('<a class="postlink backlink mentioned-' + reply_id + '" onclick="highlightReply(\'' + reply_id + '\');" href="#' + reply_id + '">&gt;&gt;' +
-				reply_id + '</a>');
-			$mentioned.append(" ", $link);
+			const $link = $('<a />')
+				.addClass('postlink backlink mentioned-'+reply_id)
+				.attr('href', "#"+reply_id)
+				.text('>>'+reply_id)
+				.appendTo($mentioned);
+
+			if ($post.attr("data-filtered")) {
+				// filtered posts
+				$link.css("display", "none");
+			}
 
 			if (window.init_postlink_hover)
 				$link.each(init_postlink_hover);

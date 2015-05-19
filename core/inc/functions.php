@@ -1789,7 +1789,7 @@ function markup(&$body, $track_cites = false) {
 				$query->execute() or error(db_error($query));
 
 				if ($post = $query->fetch()) {
-					$replacement = '<a class="bodylink postlink" onclick="highlightReply(\''.$cite.'\');" href="' .
+					$replacement = '<a class="bodylink postlink" href="' .
 						$config['root'] . $board['dir'] . $config['dir']['res'] . ($post['thread']?$post['thread']:$post['id']) . '.html#' . $cite . '">' .
 							'&gt;&gt;' . $cite .
 							'</a>';

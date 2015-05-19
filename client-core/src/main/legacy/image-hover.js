@@ -84,8 +84,8 @@ $(document).ready(function(){
 		});
 	}
 
-	$('a:not([class="file"]) > img.postimg').each(init_image_hover);
+	$('a:not(.file) > img.postimg').each(init_image_hover);
 	$(document).on('new_post', function(e, post) {
-		$(post).find('> a:not([class="file"]) > img.postimg').each(init_image_hover);
+		$(post).find('a:not(.file) > img.postimg').each(init_image_hover);
 	});
 });

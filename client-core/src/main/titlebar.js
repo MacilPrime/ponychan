@@ -116,7 +116,7 @@ $(document).ready(function() {
 	$(document).on('new_viewable_post', function(e, post) {
 		var $post = $(post);
 		// Don't increase the counter for post previews
-		if ($post.is(".preview-hidden, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
+		if ($post.is(".post-preview, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
 			return;
 		// Or for posts the user made themselves.
 		if (myPosts.contains(get_post_id($post)))
