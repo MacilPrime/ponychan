@@ -1,3 +1,6 @@
+fix cache consistency
+fix android bug
+separate name cookie on anon
 fix thread move bug:
     PHP message: PHP Warning:  link(): No such file or directory in /var/www/inc/mod/pages.php on line 1151" while reading response header from upstream, client: 2601:8:b001:c023:e4b3:5846:afc2:370a, server: www.ponychan.net, request: "POST /mod.php?/gala/move/1879419 HTTP/1.1", upstream: "fastcgi://unix:///var/run/php5-fpm.sock:", host: "www.ponychan.net", referrer: "http://www.ponychan.net/mod.php?/gala/move/1879419"
 

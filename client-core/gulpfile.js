@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
-var mold = require('mold-source-map');
 var _ = require('lodash');
 var streamify = require('gulp-streamify');
 var sourcemaps = require('gulp-sourcemaps');
@@ -59,9 +58,6 @@ function browserifyTask(name, entry, destname) {
     var bundler = browserify({
       debug: true,
       entries: [
-        'node_modules/console-polyfill',
-        'node_modules/babel/polyfill',
-        'node_modules/webstorage-polyfill',
         entry
       ],
       noparse: ['jquery', 'moment', 'rsvp'],
@@ -80,7 +76,6 @@ function browserifyTask(name, entry, destname) {
     function buildBundle(isRebuild) {
       var bundle = bundler.bundle();
       var result = bundle
-        .pipe(mold.transformSourcesRelativeTo('.'))
         .pipe(source(destname))
         .pipe(streamify(sourcemaps.init({loadMaps:true})))
         .pipe(gulpif(args.minify, streamify(uglify())))
