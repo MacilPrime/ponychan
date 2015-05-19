@@ -1,3 +1,7 @@
+import 'console-polyfill';
+import 'babel/polyfill';
+import 'webstorage-polyfill';
+
 import './legacy/visibility.min.js';
 
 import './logger.js';
