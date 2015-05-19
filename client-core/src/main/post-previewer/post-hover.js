@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import {Metadata} from './url-metadata';
 import {findPost} from './post-finder';
 import {onPostLinkEvent, markParentLinks} from './link-utils';
 import settings from '../settings';
