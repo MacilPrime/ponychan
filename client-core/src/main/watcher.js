@@ -8,7 +8,8 @@
 
 import $ from 'jquery';
 import {log_error} from './logger';
-import {get_post_num, get_post_id, get_post_class} from './post-info';
+import {jumpToPost} from './post-utils';
+import {get_post_board, get_post_num, get_post_id, get_post_class} from './post-info';
 import './settings-screen.jsx'; // has to come after this
 
 var max_watched_threads = 70;
@@ -421,9 +422,7 @@ function jump_to_first_unread_post() {
 		var post_time = (new Date($post.find('.intro:first').find('time:first').attr('datetime'))).getTime()/1000;
 		if (post_time > last_seen_time) {
 			jumped = true;
-			var postnum = get_post_num($post);
-			window.location.hash = postnum;
-			highlightReply(postnum);
+			jumpToPost(get_post_id($post));
 			return false;
 		}
 	});
