@@ -43,7 +43,7 @@ function processMessage(data) {
 		}
 	}
 
-	if (data.hasOwnProperty("watched_threads")) {
+	if (data.hasOwnProperty("watched_threads") && data.watched_threads) {
 		if (typeof data.watched_threads !== "object" || Object.keys(data.watched_threads).length > 70)
 			return {error: "Bad watched_threads"};
 
@@ -76,7 +76,7 @@ function receiveMessage(event) {
 	try {
 		response = processMessage(event.data);
 	} catch(e) {
-		response = {error: e};
+		response = {error: e ? e.message : e, stack: e && e.stack};
 	}
 	response.https_transit_response = true;
 	event.source.postMessage(response, event.origin);

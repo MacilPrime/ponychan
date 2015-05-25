@@ -36,7 +36,7 @@ function sendData() {
 	let iframeLoaded = false;
 	const data = getData();
 	const $if = $('<iframe/>')
-		.attr({id:'httpsif', src:'https://www.ponychan.net'+SITE_DATA.siteroot+'https_receive.html?v=1'})
+		.attr({id:'httpsif', src:'https://www.ponychan.net'+SITE_DATA.siteroot+'https_receive.html?v=2'})
 		.css({visibility:'hidden', width:'2px', height:'2px'})
 		.load(function() {
 			iframeLoaded = true;
@@ -72,7 +72,7 @@ window.addEventListener("message", receiveMessage, false);
 $(document).ready(function() {
 	if (
 		window.postMessage && window.localStorage &&
-    document.location.protocol !== "https:"
+    document.location.origin !== 'https://www.ponychan.net'
 	) {
 		const last_https_send = localStorage.getItem('last_https_send');
 		if (last_https_send == null || parseInt(last_https_send) + 25*60*1000 < Date.now()) {
