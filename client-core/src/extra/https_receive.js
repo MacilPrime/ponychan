@@ -24,6 +24,10 @@ function processMessage(data) {
 			localStorage.setItem('password', data.password);
 	}
 
+	if (data.ofAge) {
+		localStorage.setItem("ofAge", "true");
+	}
+
 	if (typeof data.settings !== "object" || Object.keys(data.settings).length > 60)
 		return {error: "Bad settings"};
 

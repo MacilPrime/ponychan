@@ -16,6 +16,7 @@ function getData() {
 	const data = {
 		userid: localStorage.getItem('userid'),
 		settings: getSettings(),
+		ofAge: localStorage.getItem("ofAge") == "true",
 		watched_threads: JSON.parse(localStorage.getItem("watched_threads"))
 	};
 	if (localStorage.name != null) {
@@ -36,7 +37,7 @@ function sendData() {
 	let iframeLoaded = false;
 	const data = getData();
 	const $if = $('<iframe/>')
-		.attr({id:'httpsif', src:'https://www.ponychan.net'+SITE_DATA.siteroot+'https_receive.html?v=2'})
+		.attr({id:'httpsif', src:'https://www.ponychan.net'+SITE_DATA.siteroot+'https_receive.html?v=3'})
 		.css({visibility:'hidden', width:'2px', height:'2px'})
 		.load(function() {
 			iframeLoaded = true;
