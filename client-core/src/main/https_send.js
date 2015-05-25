@@ -55,7 +55,7 @@ function sendData() {
 }
 
 function receiveMessage(event) {
-	if (event.origin !== 'https://mlpchan.net') return;
+	if (event.origin !== 'https://www.ponychan.net') return;
 	if (!event.data.https_transit_response) return;
 
 	receivedResponse = true;
