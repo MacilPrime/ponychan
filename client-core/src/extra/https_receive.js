@@ -1,30 +1,30 @@
 function processMessage(data) {
 	if (typeof data.userid !== "string" || !/^[0-9a-f]{32}$/.exec(data.userid))
 		return {error: "Bad userid"};
-	localStorage.olduserid = data.userid;
+	localStorage.setItem('olduserid', data.userid);
 
 	if (data.hasOwnProperty("name")) {
 		if (typeof data.name !== "string" || data.name.length > 75)
 			return {error: "Bad name"};
-		if (localStorage.name == null)
-			localStorage.name = data.name;
+		if (localStorage.getItem('name') == null)
+			localStorage.setItem('name', data.name);
 	}
 
 	if (data.hasOwnProperty("email")) {
 		if (typeof data.email !== "string" || data.email.length > 254)
 			return {error: "Bad email"};
-		if (localStorage.email == null)
-			localStorage.email = data.email;
+		if (localStorage.getItem('email') == null)
+			localStorage.setItem('email', data.email);
 	}
 
 	if (data.hasOwnProperty("password")) {
 		if (typeof data.password !== "string" || data.password.length > 75)
 			return {error: "Bad password"};
-		if (localStorage.password == null)
-			localStorage.password = data.password;
+		if (localStorage.getItem('password') == null)
+			localStorage.setItem('password', data.password);
 	}
 
-	if (typeof data.settings !== "object" || Object.keys(data.settings).length > 20)
+	if (typeof data.settings !== "object" || Object.keys(data.settings).length > 60)
 		return {error: "Bad settings"};
 
 	for (var setting in data.settings) {
@@ -37,14 +37,14 @@ function processMessage(data) {
 		if (localStorage.getItem(sid) == null) {
 			var sval = data.settings[setting];
 			if (sval == null) continue;
-			if (typeof sval === "string" && sval.length > 20)
+			if (typeof sval === "string" && sval.length > 1000)
 				return {error: "Bad setting: "+sid};
 			localStorage.setItem(sid, data.settings[setting]);
 		}
 	}
 
 	if (data.hasOwnProperty("watched_threads")) {
-		if (typeof data.watched_threads !== "object" || Object.keys(data.watched_threads).length > 30)
+		if (typeof data.watched_threads !== "object" || Object.keys(data.watched_threads).length > 70)
 			return {error: "Bad watched_threads"};
 
 		var watched_threads;
@@ -56,20 +56,20 @@ function processMessage(data) {
 		for (var tid in data.watched_threads) {
 			if (!data.watched_threads.hasOwnProperty(tid)) continue;
 			if (watched_threads.hasOwnProperty(tid)) continue;
-			if (Object.keys(watched_threads).length >= 30) break;
+			if (Object.keys(watched_threads).length > 70) break;
 			watched_threads[tid] = data.watched_threads[tid];
 		}
-		localStorage.watched_threads = JSON.stringify(watched_threads);
+		localStorage.setItem('watched_threads', JSON.stringify(watched_threads));
 	}
 
 	return {success: true};
 }
 
 function receiveMessage(event) {
-	if (document.location.protocol !== 'https:') return;
+	if (document.location.origin !== 'https://www.ponychan.net') return;
 
-	var intended = "http://mlpchan.net";
-	if (event.origin !== intended) return;
+	var allowed_senders = ["http://mlpchan.net", "https://mlpchan.net", "http://www.ponychan.net"];
+	if (allowed_senders.indexOf(event.origin) < 0) return;
 	if (!event.data.https_transit_content) return;
 
 	var response;
@@ -79,7 +79,7 @@ function receiveMessage(event) {
 		response = {error: e};
 	}
 	response.https_transit_response = true;
-	event.source.postMessage(response, intended);
+	event.source.postMessage(response, event.origin);
 }
 
 window.addEventListener("message", receiveMessage, false);

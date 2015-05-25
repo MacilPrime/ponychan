@@ -1,39 +1,57 @@
+import _ from 'lodash';
+import $ from 'jquery';
+import {log_error} from './logger';
+import settings from './settings';
+
+function getSettings() {
+	return _.chain(settings.getAllSettingValues(true))
+		.pairs()
+		.map(([name, value]) => [name, localStorage.getItem('setting_'+name)])
+		.filter(([name, value]) => value != null)
+		.zipObject()
+		.value();
+}
+
 function getData() {
-	var data = {};
-	data.userid = userid;
-	if (localStorage.name != null)
+	const data = {
+		userid: localStorage.getItem('userid'),
+		settings: getSettings(),
+		watched_threads: JSON.parse(localStorage.getItem("watched_threads"))
+	};
+	if (localStorage.name != null) {
 		data.name = localStorage.name;
-	if (localStorage.email != null)
+	}
+	if (localStorage.email != null) {
 		data.email = localStorage.email;
-	if (localStorage.password != null)
+	}
+	if (localStorage.password != null) {
 		data.password = localStorage.password;
-	data.settings = settings.getAllSettings(true);
-	data.watched_threads = watched_threads;
+	}
 	return data;
 }
 
-var receivedResponse = false;
+let receivedResponse = false;
 
 function sendData() {
-	var iframeLoaded = false;
-	var data = getData();
-	var $if = $('<iframe/>')
-		.attr({id:'httpsif', src:'https://mlpchan.net'+siteroot+'https_receive.html?v=2'})
+	let iframeLoaded = false;
+	const data = getData();
+	const $if = $('<iframe/>')
+		.attr({id:'httpsif', src:'https://www.ponychan.net'+SITE_DATA.siteroot+'https_receive.html?v=1'})
 		.css({visibility:'hidden', width:'2px', height:'2px'})
 		.load(function() {
 			iframeLoaded = true;
 			data.https_transit_content = true;
-			this.contentWindow.postMessage(data, 'https://mlpchan.net');
+			this.contentWindow.postMessage(data, 'https://www.ponychan.net');
 			setTimeout(function() {
 				if (!receivedResponse)
 					log_error("https iframe response timeout");
-			}, 5*1000);
+			}, 15*1000);
 		})
 		.appendTo(document.body);
 	setTimeout(function() {
 		if (!iframeLoaded)
 			log_error("https iframe load timeout");
-	}, 5*1000);
+	}, 15*1000);
 }
 
 function receiveMessage(event) {
@@ -44,18 +62,20 @@ function receiveMessage(event) {
 
 	console.log("https iframe response:", event.data);
 	if (event.data.success) {
-		localStorage.last_https_send = Date.now();
+		localStorage.setItem('last_https_send', Date.now());
 	} else {
-		send_error({message:"bad https iframe response",response:event.data});
+		log_error({message:"bad https iframe response",response:event.data});
 	}
 }
 window.addEventListener("message", receiveMessage, false);
 
 $(document).ready(function() {
-	if (window.postMessage && window.localStorage &&
-	    document.location.protocol != "https:") {
-		if (localStorage.last_https_send == null ||
-		    parseInt(localStorage.last_https_send) + 25*60*1000 < Date.now()) {
+	if (
+		window.postMessage && window.localStorage &&
+    document.location.protocol !== "https:"
+	) {
+		const last_https_send = localStorage.getItem('last_https_send');
+		if (last_https_send == null || parseInt(last_https_send) + 25*60*1000 < Date.now()) {
 			sendData();
 		}
 	}
