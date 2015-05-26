@@ -532,7 +532,7 @@ table.mod.config-editor input[type="text"] {
 
 	z-index: 5;
 }
-.boardlist.top + * { margin-top: 48px; }
+body { padding-top: 48px; }
 .boardlist.top .boardlistpart {
 	font-size: 0;
 	visibility: hidden;
