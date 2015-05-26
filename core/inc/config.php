@@ -669,7 +669,6 @@
 	$config['banners'][] = array('mikie-eckg.jpg', 600, 150);
 	$config['banners'][] = array('mudpony.png', 600, 150);
 	$config['banners'][] = array('pwnies-obey.png', 600, 150);
-	$config['banners'][] = array('queenie-toys.jpg', 600, 150);
 	$config['banners'][] = array('salute.png', 600, 150);
 	$config['banners'][] = array('sersys-changeling.gif', 600, 150);
 	$config['banners'][] = array('sersys-lines.png', 600, 150);
