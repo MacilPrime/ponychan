@@ -58,9 +58,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 /* - Title - */
 
 /* Headline */
-header {
-    padding-top: 3em;
-}
 header h1 {
     font-size: 4em;
     font-weight: normal;
