@@ -649,7 +649,6 @@
 	// $config['banners'][] = array('some%20image.png', 600, 150);
 	$config['banners'][] = array('agiri-panic.png', 600, 150);
 	$config['banners'][] = array('batman.gif', 600, 150);
-	$config['banners'][] = array('colshy-3d.jpg', 600, 150);
 	$config['banners'][] = array('colshy-cmc.jpg', 600, 150);
 	$config['banners'][] = array('colshy-copypasta.jpg', 500, 150);
 	$config['banners'][] = array('colshy-fs.jpg', 600, 150);
@@ -657,7 +656,6 @@
 	$config['banners'][] = array('colshy-humanchan.jpg', 600, 150);
 	$config['banners'][] = array('colshy-khan.jpg', 600, 150);
 	$config['banners'][] = array('colshy-no.jpg', 600, 150);
-	$config['banners'][] = array('colshy-pinkie.jpg', 600, 150);
 	$config['banners'][] = array('colshy-the%20ride.jpg', 600, 150);
 	$config['banners'][] = array('cpu-wrestler.jpg', 600, 150);
 	$config['banners'][] = array('eleanoré-scootachan.png', 600, 150);
@@ -680,9 +678,7 @@
 	$config['banners'][] = array('sersys-no%20control.gif', 600, 150);
 	$config['banners'][] = array('sersys-ponies.jpg', 600, 150);
 	$config['banners'][] = array('sersys-sombra.jpg', 600, 150);
-	$config['banners'][] = array('sersys-trixie.jpg', 600, 150);
 	$config['banners'][] = array('starmane-derails.png', 600, 150);
-	$config['banners'][] = array('tarra-cloud%20computing.jpg', 600, 150);
 	$config['banners'][] = array('tiananmen.jpg', 600, 150);
 	$config['banners'][] = array('wizard-crazy.jpg', 600, 150);
 	$config['banners'][] = array('z-banner.gif', 600, 150);
