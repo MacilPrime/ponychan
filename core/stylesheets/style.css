@@ -128,7 +128,7 @@ div.banner a:hover {
 img.banner {
 	display: block;
 	border: 1px solid #a9a9a9;
-	margin: 12px auto 0 auto;
+	margin: 0 auto;
 	max-width: 95%;
 }
 .postimg {
