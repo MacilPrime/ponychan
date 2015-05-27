@@ -14,20 +14,20 @@ export class Metadata {
 		if ((/^#(\d+)$/).test(url)) {
 			this.post = parseInt(url.replace('#', ''));
 		} else {
-			var parts = (/^(\?)?\/(\w+)\/(res|thread)\/((\d+)(\+50)?.html(#(\d+))?)?/).exec(url);
-			var hash = parts[7] || parts[6] || parts[5];
-			this.board = parts[2];
-			this.thread = parseInt(parts[5]);
-			this.post = parseInt(hash.replace('#', ''));
+			let parts = (/^\??\/(\w+)\/(?:[^\/?&#]+)\/(?:(\d+)(?:\+50)?.html(?:#(\d+))?)?/).exec(url);
+			this.board = parts[1];
+			this.thread = parseInt(parts[2]);
+			if (parts[3])
+				this.post = parseInt(parts[3]);
 		}
 	}
 	toQuerySelector(isForContainer) {
 		var start = isForContainer ? '.postC' : '.post';
 		// What if two posts from two different boards share the same number?
-		if ('board' in this && 'thread' in this && !('post' in this)) {
+		if (this.board && this.thread && !(this.post)) {
 			// For thread selectors
 			throw new Error('This method does not support thread selectors.');
-		} else if ('board' in this) {
+		} else if (this.board) {
 			// Board and post specific. URL contained a board name here.
 			return start+'_'+this.board+'-'+this.post;
 		} else {
