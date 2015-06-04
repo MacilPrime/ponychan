@@ -70,16 +70,16 @@ function receiveMessage(event) {
 }
 window.addEventListener("message", receiveMessage, false);
 
-$(document).ready(function() {
-	if (
-		window.postMessage && window.localStorage &&
-    document.location.origin !== 'https://www.ponychan.net'
-	) {
-		const last_https_send = localStorage.getItem('last_https_send');
-		if (last_https_send && _.includes(["http://mlpchan.net", "https://mlpchan.net", "http://www.ponychan.net"], document.location.origin)) {
-			window.location.href = 'https://www.ponychan.net'+document.location.pathname+document.location.search+document.location.hash;
-		} else if (last_https_send == null || parseInt(last_https_send) + 25*60*1000 < Date.now()) {
+if (
+	window.postMessage && window.localStorage &&
+	document.location.origin !== 'https://www.ponychan.net'
+) {
+	const last_https_send = localStorage.getItem('last_https_send');
+	if (last_https_send && _.includes(["http://mlpchan.net", "https://mlpchan.net", "http://www.ponychan.net"], document.location.origin)) {
+		window.location.href = 'https://www.ponychan.net'+document.location.pathname+document.location.search+document.location.hash;
+	} else if (last_https_send == null || parseInt(last_https_send) + 25*60*1000 < Date.now()) {
+		$(document).ready(function() {
 			sendData();
-		}
+		});
 	}
-});
+}
