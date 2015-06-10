@@ -1235,3 +1235,57 @@ img.catalogthumb {
 	font-family: "One Way";
 	src: url(font/one-way.woff);
 }
+
+
+
+/* Edit button */
+footer {
+	/* push the site's footer out of the way of the original edit button */
+	margin-top: 3em;
+}
+.postfooter {
+	/* TODO remove important declaration upon 'themes' merge */
+	margin: 0 0.3em 0 0 !important;
+}
+.footer-item {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+.footer-item + .footer-item::before {
+	content: "•";
+	padding: 0 1ex;
+}
+.reply {
+	padding: 0.2em 0.3em 0.8em 0.6em !important;
+	position: relative;
+	/* The relative positioning is part of a hack to get*/
+	/* the footer's placement right.*/
+}
+/* - Editing posts - */
+.reply .postfooter {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	font-size: 85%;
+	margin-right: 0.3em;
+}
+.edit-form {
+	margin: 0.5em 0.5em 0.8em 2em;
+}
+.reply .edit-form {
+	float: left;
+}
+.edit-controls a {
+	margin-left: 0.5em;
+}
+.post[id] .edit-form ~ .body {
+	/* Hide the post body easier with css. */
+	/* But only hide the original! */
+	display: none;
+}
+.edit-body {
+	padding: 0.2em;
+	min-width: 250px;
+	min-height: 5em;
+}
