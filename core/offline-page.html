@@ -61,12 +61,16 @@ $(document).ready(function() {
     'https://i.imgur.com/3gUcHkO.png',
     'https://i.imgur.com/raNjTDN.png',
     'https://i.imgur.com/LrTUJH4.png',
-    'https://i.imgur.com/8eFsXYE.png',
-    ]
+    'https://i.imgur.com/8eFsXYE.png'
+  ];
   var r = Math.floor(Math.random() * images.length);
   var imgsrc = images[r];
   $('#bottomimgstyle').remove();
-  $('<style/>').attr('id','bottomimgstyle').attr('type','text/css').text('body { background: url("'+imgsrc+'") no-repeat center bottom fixed, url("https://i.imgur.com/GDb76bw.png") repeat scroll 0 0 transparent !important; }').appendTo(document.head);
+  $('<style/>')
+    .attr('id','bottomimgstyle')
+    .attr('type','text/css')
+    .text('body { background: url("'+imgsrc+'") no-repeat center bottom fixed, url("https://i.imgur.com/GDb76bw.png") repeat scroll 0 0 transparent !important; }')
+    .appendTo(document.head);
 });
 </script>
 </head>
