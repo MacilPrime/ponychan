@@ -1,3 +1,4 @@
+remember your posts in localStorage instead of sessionStorage
 investigate antibot
 fix cache consistency
 fix android bug
