@@ -17,9 +17,6 @@ import {
 
 
 $(document).ready(function () {
-    var password;
-    // password will be defined if the board supports editing.
-
     function init() {
         function onEachPost($post) {
             if (myPosts.contains(get_post_id($post))) {
@@ -29,20 +26,6 @@ $(document).ready(function () {
 
         // check if the board is editable and that formdata is supported.
         if ($(".edit_post").length > 0 && "FormData" in window) {
-
-            (function () {
-                const $password = $("#password");
-                $(document).on("click.footer-item", function () {
-                    // This saved password only refreshes when you click
-                    // the edit button. That way, in the event that the
-                    // user changes the password while having the edit
-                    // form open, the post will still go through.
-                    password = $password.val();
-                });
-                // assume it's not loaded yet here.
-                password = localStorage.password;
-            })();
-
             $(".post").each(function () {
                 onEachPost($(this));
             });
@@ -59,14 +42,11 @@ $(document).ready(function () {
         }
 
         footer($post).addItem("Edit", function (evt) {
-
+            const password = $("#password").val();
             if (getEditForm().length > 0) {
-
                 // the post body is hidden with css.
                 closeForm();
-
             } else {
-
                 // ajax the edit post form first
                 $(evt.target).text("Editing...");
                 var editRequest = new FormData();
