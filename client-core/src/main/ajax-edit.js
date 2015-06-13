@@ -90,7 +90,7 @@ $(document).ready(function () {
                 var $editForm = $('<div />')
                     .addClass("edit-form")
                     .fadeIn("fast")
-                    .insertBefore($post.find(".body").first());
+                    .insertBefore($post.find("> .body").first());
 
                 var $message = $('<textarea />')
                     .text(postContent)
@@ -191,17 +191,16 @@ $(document).ready(function () {
                             var $newPost = $(data)
                                 .find(".post_" + get_post_num($post));
                             if ($newPost) {
-                                $newPost.find(".body").fadeIn();
-                                // replace the node and its events binded.
-                                $post.replaceWith($newPost);
-                                $(document).trigger("new_post", $newPost);
+                                $post.find("> .body").replaceWith($newPost.find("> .body"));
+                                $post.find("> .body").fadeIn();
+                                $(document).trigger("new_post", $post);
                             } else {
-                                alert("Error: Failed to find post.");
-                                closeForm();
+                                alert("Error: Failed to refresh post.");
                             }
+                            closeForm();
                         },
                         error: function(xhr, textStatus, exception) {
-                            alert("Error: Failed to retrieve post.");
+                            alert("Error: Failed to refresh post.");
                             console.log("AJAX error", {
                                 xhrstatus: xhr.status,
                                 textStatus: textStatus,
@@ -216,7 +215,7 @@ $(document).ready(function () {
             function closeForm() {
                 let $editForm = getEditForm();
                 if ($editForm.length > 0) {
-                    $editForm.fadeOut().remove();
+                    $editForm.remove();
                 }
                 $(evt.target).text("Edit");
             }
