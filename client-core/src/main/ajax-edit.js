@@ -21,6 +21,12 @@ $(document).ready(function () {
     // password will be defined if the board supports editing.
 
     function init() {
+        function onEachPost($post) {
+            if (myPosts.contains(get_post_id($post))) {
+                giveEditControls($post);
+            }
+        }
+
         // check if the board is editable and that formdata is supported.
         if ($(".edit_post").length > 0 && "FormData" in window) {
 
@@ -44,12 +50,6 @@ $(document).ready(function () {
             $(document).on("new_post", function (e, post) {
                 onEachPost($(post));
             });
-
-            function onEachPost($post) {
-                if (myPosts.contains(get_post_id($post))) {
-                    giveEditControls($post);
-                }
-            }
         }
     }
     function giveEditControls($post) {
@@ -171,7 +171,7 @@ $(document).ready(function () {
                         success: function (data) {
                             var $data = $(data);
                             if ((/<title>Error<\/title>/).test(data)) {
-                                alert("Error: " + $data.find("h2").first().text())
+                                alert("Error: " + $data.find("h2").first().text());
                             } else {
                                 retrieveRevision();
                             }
@@ -204,8 +204,8 @@ $(document).ready(function () {
                         }
 
                         // 2. Get thread page
-                        return root + get_post_board($post) + "/res/"
-                            + get_thread_num($post) + ".html";
+                        return root + get_post_board($post) + "/res/" +
+                          get_thread_num($post) + ".html";
                     }
 
                     $.ajax({
@@ -244,7 +244,7 @@ $(document).ready(function () {
                 }
                 $(evt.target).text("Edit");
             }
-        })
+        });
     }
     init();
 });
