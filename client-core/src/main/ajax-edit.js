@@ -104,7 +104,7 @@ $(document).ready(function () {
 
                 $('<input />')
                     .attr("value", "Submit")
-                    .attr("type", "submit")
+                    .attr("type", "button")
                     .on("click", sendRevision)
                     .appendTo($editControls);
 
@@ -117,10 +117,6 @@ $(document).ready(function () {
                 // DOM setup over
 
                 function sendRevision(evt) {
-
-                    // stop the submit button
-                    evt.preventDefault();
-
                     // change the submit button's message.
                     $(this).val("Posting...");
 
