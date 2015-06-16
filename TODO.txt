@@ -1,5 +1,6 @@
 remember your posts in localStorage instead of sessionStorage
 Require spoilered threads to have a subject
+timed deletion board. (Threads that haven't been bumped in a set amount of time are pushed off?)
 investigate antibot
 fix cache consistency
 fix android bug
