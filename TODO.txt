@@ -1,4 +1,5 @@
 remember your posts in localStorage instead of sessionStorage
+Require spoilered threads to have a subject
 investigate antibot
 fix cache consistency
 fix android bug
