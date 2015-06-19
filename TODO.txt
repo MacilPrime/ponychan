@@ -5,13 +5,9 @@ let (mod?) editing (un)spoiler a post. (need to generate/remove thumbnail)
 make moving a thread to a board it already exists on cause an error
 
 # mod tools
-Search by name
-Search by trip
-Search by filename
-Name ban
+Search by name/trip/filename pagination
+Name/trip/file bans
 Mods having access to the blotter
-Trip bans
-file-bans
 mod actions without leaving page
 view deleted posts
 - image filename is renamed so old URL stops working
