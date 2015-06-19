@@ -67,6 +67,7 @@ $pages = array(
 	'/posts/([\w.:*^]+)/(\w+)'		=> 'posts',		// ip post list
 	'/posts/([\w.:*^]+)/(\w+)/(\d+)'	=> 'posts',		// ip post list
 
+	'/search'					=> 'secure_POST search',		// search page
 
 	'/(\w+)/edit/(\d+)'			=> 'edit',		// edit post
 

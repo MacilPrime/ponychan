@@ -1,0 +1,18 @@
+{% for board_posts in posts %}
+	<fieldset>
+		<legend>
+			<a href="?/{{ config.board_path|sprintf(board_posts.board.uri)|e }}">
+				{{ config.board_abbreviation|sprintf(board_posts.board.uri)|e }}
+				 -
+				 {{ board_posts.board.title|e }}
+			</a>
+      {% if show_all_url_prefix %}
+			 -
+			 <a href="{{ show_all_url_prefix|e }}/{{ board_posts.board.uri|e }}">{% trans 'Show all' %}</a>
+      {% endif %}
+		</legend>
+		{{ board_posts.posts|join('<hr>') }}
+	</fieldset>
+{% else %}
+  {% trans 'No posts were found.' %}
+{% endfor %}
