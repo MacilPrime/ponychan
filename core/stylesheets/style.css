@@ -406,6 +406,8 @@ hr {
 div.report {
 	color: #333;
 }
+
+/* mod stuff */
 table.modlog {
 	margin: auto;
 	width: 100%;
@@ -421,6 +423,15 @@ table.modlog tr th {
 	white-space: nowrap;
 	background: #98E;
 }
+
+.searchPage li {
+	margin: 10px 5px;
+}
+.searchPage input[type=text] {
+	min-width: 30em;
+	margin-right: 1em;
+}
+
 td.minimal, th.minimal {
 	width: 1%;
 	white-space: nowrap;

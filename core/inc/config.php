@@ -1142,6 +1142,8 @@
 	$config['permissions']['report_dismiss'] = JANITOR;
 	// Dismiss all abuse reports by an IP
 	$config['permissions']['report_dismiss_ip'] = JANITOR;
+	// Search posts
+	$config['permissions']['search'] = DEVELOPER;
 	// View bans
 	$config['permissions']['view_ban'] = MOD;
 	// View ban history

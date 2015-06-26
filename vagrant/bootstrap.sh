@@ -68,6 +68,7 @@ ln -sf \
   /vagrant/core/static/ \
   /vagrant/core/stylesheets/ \
   /vagrant/core/*.md \
+  /vagrant/core/offline-page.html \
   /vagrant/core/LICENSE-Macil.txt \
   /vagrant/core/install.sql \
   /var/www/

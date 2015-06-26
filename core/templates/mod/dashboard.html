@@ -80,6 +80,9 @@
 		{% if mod|hasPermission(config.mod.view_ban) %}
 			<li><a href="?/bans">{% trans 'Ban list' %}</a></li>
 		{% endif %}
+		{% if mod|hasPermission(config.mod.search) %}
+			<li><a href="?/search">{% trans 'Search' %}</a></li>
+		{% endif %}
 		{% if mod|hasPermission(config.mod.manageusers) %}
 			<li><a href="?/users">{% trans 'Manage users' %}</a></li>
 		{% elseif mod|hasPermission(config.mod.change_password) %}

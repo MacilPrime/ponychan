@@ -850,6 +850,73 @@ function mod_ban_history($mask_url, $page = null) {
 	mod_page(sprintf(_('Ban history for %s'), $mask), 'mod/ban_history.html', array('ban_history' => $ban_history, 'count' => $count, 'mask' => $mask));
 }
 
+function mod_search() {
+	global $config, $mod;
+
+	if (isset($_POST['token'])) {
+		if (!isset($_POST['name'], $_POST['trip'], $_POST['filename'])) {
+			error($config['error']['missedafield']);
+		}
+
+		if (isset($_POST['nameSubmit'])) {
+			$field = 'name';
+			$search = globToSqlLike($_POST['name']);
+		} elseif (isset($_POST['tripSubmit'])) {
+			$field = 'trip';
+			$search = globToSqlLike($_POST['trip']);
+		} elseif (isset($_POST['filenameSubmit'])) {
+			$field = 'filename';
+			$search = globToSqlLike($_POST['filename']);
+		} else {
+			error($config['error']['missedafield']);
+		}
+
+		$boards = listBoards();
+		$posts = array();
+		foreach ($boards as $board) {
+			openBoard($board['uri']);
+
+			$query = prepare(sprintf('SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s`
+				WHERE `%s` LIKE :query
+				ORDER BY `id` DESC LIMIT :limit', $board['uri'], $field));
+			$query->bindValue(':query', $search);
+			$query->bindValue(':limit', $config['mod']['ip_recentposts'], PDO::PARAM_INT);
+			$query->execute() or error(db_error($query));
+
+			while ($post = $query->fetch(PDO::FETCH_ASSOC)) {
+				if (!$post['thread']) {
+					// TODO: There is no reason why this should be such a fucking mess.
+					$po = new Thread(
+						$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+						$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+						$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
+					);
+				} else {
+					$po = new Post(
+						$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
+						$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
+						$post['file'], $post['file_uri'], $post['filewidth'],
+						$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
+					);
+				}
+
+				if (!isset($posts[$board['uri']]))
+					$posts[$board['uri']] = array('board' => $board, 'posts' => array());
+				$posts[$board['uri']]['posts'][] = $po->build(true);
+			}
+		}
+
+		mod_page(_('Search Results'), 'mod/view_posts.html', array(
+			'posts' => $posts,
+		));
+	} else {
+		$security_token = make_secure_link_token('search');
+		mod_page(_('Search'), 'mod/search.html', array(
+			'token' => $security_token
+		));
+	}
+}
+
 function mod_notes($mask_url, $page = null) {
 	global $config;
 
@@ -998,12 +1065,15 @@ function mod_posts($mask_url, $boardName, $page = null) {
 	$query->execute() or error(db_error($query));
 	$count = $query->fetchColumn(0);
 
-	mod_page(sprintf(_('Posts in /%s/ for %s'), $board['uri'], $mask), 'mod/post_list.html', array(
+	mod_page(sprintf(_('Posts in /%s/ for %s'), $board['uri'], $mask), 'mod/ip_board_post_list.html', array(
 		'posts' => $posts,
 		'count' => $count,
-		'mask' => $mask,
+		'query' => $mask,
 		'board' => $board['uri'],
-		'token'=>make_secure_link_token('ban')));
+		'return_url' => "?/IP/" . mask_url($mask),
+		'return_title' => 'IP page',
+		'page_url_prefix' => "?/posts/" . mask_url($mask) . "/" . $board['uri'] ."/",
+	));
 }
 
 function mod_bump($board, $post) {
