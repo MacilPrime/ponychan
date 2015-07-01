@@ -236,6 +236,7 @@ div.post.reply {
 	border-style: none solid solid none;
 	border-color: #B7C5D9;
 	display: inline-block;
+	position: relative; /* needed for reply footers */
 }
 span.trip {
 	color: #228854;
@@ -1249,14 +1250,9 @@ img.catalogthumb {
 
 
 
-/* Edit button */
-footer {
-	/* push the site's footer out of the way of the original edit button */
-	margin-top: 3em;
-}
+/* Footers, Edit button */
 .postfooter {
-	/* TODO remove important declaration upon 'themes' merge */
-	margin: 0 0.3em 0 0 !important;
+	margin: 0 0.3em 0 0;
 }
 .footer-item {
 	display: inline;
@@ -1267,27 +1263,18 @@ footer {
 	content: "•";
 	padding: 0 1ex;
 }
-.reply {
-	padding: 0.2em 0.3em 0.8em 0.6em !important;
-	position: relative;
-	/* The relative positioning is part of a hack to get*/
-	/* the footer's placement right.*/
-}
 /* - Editing posts - */
 .reply .postfooter {
 	position: absolute;
 	right: 0;
 	bottom: 0;
-	font-size: 85%;
+	font-size: 0.85em;
 	margin-right: 0.3em;
 }
 .edit-form {
 	margin: 0.5em 0.5em 0.8em 2em;
 }
-.reply .edit-form {
-	float: left;
-}
-.edit-controls a {
+.edit-controls > * + * {
 	margin-left: 0.5em;
 }
 .post[id] .edit-form ~ .body {
