@@ -145,8 +145,8 @@ if (isset($_POST['delete'])) {
 	if (!doesPasswordMatchPostHash($password, $post['password']))
 		error($config['error']['invalidpassword']);
 
-	if ($post['time'] >= time() - $config['edit_time']) {
-		error(sprintf($config['error']['edit_too_soon'], until($post['time'] + $config['edit_time'])));
+	if ($config['edit_time_end'] !== 0 && time() > $post['time'] + $config['edit_time_end']) {
+		error(sprintf($config['error']['edit_too_late'], time_length($config['edit_time_end'])));
 	}
 
 	editPostForm($id, $password, $mod);
@@ -175,8 +175,8 @@ if (isset($_POST['delete'])) {
 	if(!$post)
 		error($config['error']['noedit']);
 
-	if ($post['time'] >= time() - $config['edit_time']) {
-		error(sprintf($config['error']['edit_too_soon'], until($post['time'] + $config['edit_time'])));
+	if ($config['edit_time_end'] !== 0 && time() > $post['time'] + $config['edit_time_end']) {
+		error(sprintf($config['error']['edit_too_late'], time_length($config['edit_time_end'])));
 	}
 
 	if (isset($_POST['password']))
