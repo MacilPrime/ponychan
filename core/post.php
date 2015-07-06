@@ -215,10 +215,6 @@ if (isset($_POST['delete'])) {
 			error($config['error']['referer']);
 	}
 
-	if ($post['time'] >= time() - $config['edit_time']) {
-		error(sprintf($config['error']['edit_too_soon'], until($post['time'] + $config['edit_time'])));
-	}
-
 	$post['op'] = !$post['thread'];
 	$post['body'] = $_POST['body'];
 
