@@ -324,8 +324,9 @@
 
 	// How long before you can delete a post after posting, in seconds.
 	$config['delete_time'] = 10;
-	// How long before you can edit a post after posting, in seconds.
-	$config['edit_time'] = 10;
+	// How long you are allowed to edit a post after posting, in seconds.
+	// 0 means no limit.
+	$config['edit_time_end'] = 2*60*60;
 
 	// Disable replies bumping stickied threads
 	$config['no_sticky_reply_bump'] = true;
@@ -844,7 +845,7 @@
 	$config['error']['fileexists']		= _('That file <a href="%s">already exists</a>!');
 	$config['error']['fileexistsinthread']	= _('That file <a href="%s">already exists</a> in this thread!');
 	$config['error']['delete_too_soon']	= _('You\'ll have to wait another %s before deleting that.');
-	$config['error']['edit_too_soon']	= _('You\'ll have to wait another %s before editing that.');
+	$config['error']['edit_too_late']	= _('Posts on this board may only be edited for %s after being made.');
 	$config['error']['invalid_embed']	= _('Couldn\'t make sense of the URL of the video you tried to embed.');
 	$config['error']['captcha']		= _('You seem to have mistyped the verification.');
 

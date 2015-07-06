@@ -908,38 +908,28 @@ function checkFlood($post) {
 	return $flood;
 }
 
-function until($timestamp) {
-	$difference = $timestamp - time();
-	if ($difference < 60) {
-		return $difference . ' second' . ($difference != 1 ? 's' : '');
-	} elseif ($difference < 60*60) {
-		return ($num = round($difference/(60))) . ' minute' . ($num != 1 ? 's' : '');
-	} elseif ($difference < 60*60*24) {
-		return ($num = round($difference/(60*60))) . ' hour' . ($num != 1 ? 's' : '');
-	} elseif ($difference < 60*60*24*7) {
-		return ($num = round($difference/(60*60*24))) . ' day' . ($num != 1 ? 's' : '');
-	} elseif ($difference < 60*60*24*365) {
-		return ($num = round($difference/(60*60*24*7))) . ' week' . ($num != 1 ? 's' : '');
+function time_length($time) {
+	if ($time < 60) {
+		return $time . ' second' . ($time != 1 ? 's' : '');
+	} elseif ($time < 60*60) {
+		return ($num = round($time/(60))) . ' minute' . ($num != 1 ? 's' : '');
+	} elseif ($time < 60*60*24) {
+		return ($num = round($time/(60*60))) . ' hour' . ($num != 1 ? 's' : '');
+	} elseif ($time < 60*60*24*7) {
+		return ($num = round($time/(60*60*24))) . ' day' . ($num != 1 ? 's' : '');
+	} elseif ($time < 60*60*24*365) {
+		return ($num = round($time/(60*60*24*7))) . ' week' . ($num != 1 ? 's' : '');
 	}
 
-	return ($num = round($difference/(60*60*24*365))) . ' year' . ($num != 1 ? 's' : '');
+	return ($num = round($time/(60*60*24*365))) . ' year' . ($num != 1 ? 's' : '');
+}
+
+function until($timestamp) {
+	return time_length($timestamp - time());
 }
 
 function ago($timestamp) {
-	$difference = time() - $timestamp;
-	if ($difference < 60) {
-		return $difference . ' second' . ($difference != 1 ? 's' : '');
-	} elseif ($difference < 60*60) {
-		return ($num = round($difference/(60))) . ' minute' . ($num != 1 ? 's' : '');
-	} elseif ($difference < 60*60*24) {
-		return ($num = round($difference/(60*60))) . ' hour' . ($num != 1 ? 's' : '');
-	} elseif ($difference < 60*60*24*7) {
-		return ($num = round($difference/(60*60*24))) . ' day' . ($num != 1 ? 's' : '');
-	} elseif ($difference < 60*60*24*365) {
-		return ($num = round($difference/(60*60*24*7))) . ' week' . ($num != 1 ? 's' : '');
-	}
-
-	return ($num = round($difference/(60*60*24*365))) . ' year' . ($num != 1 ? 's' : '');
+	return time_length(time() - $timestamp);
 }
 
 define('FULL_BAN', 0);

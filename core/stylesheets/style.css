@@ -58,6 +58,9 @@ header div.subtitle, header h1 {
 header div.subtitle {
 	font-size: 8pt;
 }
+footer {
+	clear: both;
+}
 form[name='post'] {
 	margin-bottom: 2em;
 }
@@ -197,6 +200,10 @@ p.intro .mentioned a {
 }
 div.delete {
 	float: right;
+	clear: right;
+}
+div.edit_post_description {
+	font-size: 0.8em;
 }
 .body {
 	margin-left: 1.5em;
