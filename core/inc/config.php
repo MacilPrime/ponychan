@@ -324,6 +324,9 @@
 
 	// How long before you can delete a post after posting, in seconds.
 	$config['delete_time'] = 10;
+
+	// Allow users to edit their own posts
+	$config['allow_self_edit'] = true;
 	// How long you are allowed to edit a post after posting, in seconds.
 	// 0 means no limit.
 	$config['edit_time_end'] = 2*60*60;
@@ -362,9 +365,6 @@
 
 	// Advanced raplcement (regular expressions):
 	// $config['wordfilters'][] = array('/cat/', 'dog', true); // 'true' means it's a regular expression
-
-	// Allow users to edit their own posts
-	$config['allow_self_edit'] = false;
 
 	// Allow [#Mature] threads
 	$config['mature_allowed'] = false;

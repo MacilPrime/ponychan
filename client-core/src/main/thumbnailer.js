@@ -9,7 +9,7 @@
  *
  */
 
-var RSVP = require('rsvp');
+import RSVP from 'rsvp';
 
 function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
 	var scalex = max_x / orig_width;
@@ -21,7 +21,7 @@ function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
 	return {width: dest_width, height: dest_height};
 }
 
-function thumbnailer(image, max_x, max_y) {
+export function thumbnailer(image, max_x, max_y) {
 	return new RSVP.Promise(function(resolve, reject) {
 		var dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
 
@@ -40,9 +40,8 @@ function thumbnailer(image, max_x, max_y) {
 		}
 	});
 }
-exports.thumbnailer = thumbnailer;
 
-function thumbnailer_simple(image, max_x, max_y) {
+export function thumbnailer_simple(image, max_x, max_y) {
 	return new RSVP.Promise(function(resolve, reject) {
 		var dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
 
@@ -81,6 +80,7 @@ function thumbnailer_fancy(image, max_x, max_y, lobes) {
 			var worker = new Worker(SITE_DATA.siteroot+'js/thumbnailer-worker.js?v=10');
 			worker.onmessage = function worker_onmessage(event) {
 				if (event.data.result) {
+					worker.terminate();
 					canvas.width = dest.width;
 					canvas.height = dest.height;
 					imageCPA = ctx.getImageData(0, 0, canvas.width, canvas.height);

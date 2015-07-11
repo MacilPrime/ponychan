@@ -1,3 +1,7 @@
+ban signing
+fake username field right before password field in post form for stupid browsers to auto-fill into
+when a post is edited (or deleted) and reloader.js notices, it should put a button on the post to update it (StackOverflow style)
+
 remember your posts in localStorage instead of sessionStorage
 Require spoilered threads to have a subject
 timed deletion board. (Threads that haven't been bumped in a set amount of time are pushed off?)

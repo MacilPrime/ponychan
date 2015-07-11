@@ -17,7 +17,7 @@ import RSVP from 'rsvp';
 
 import settings from './settings';
 import {updateThreadNow} from './legacy/reloader';
-import {thumbnailer} from './thumbnailer';
+import {thumbnailer, thumbnailer_simple} from './thumbnailer';
 import {log_error} from './logger';
 
 import * as util from './util';
@@ -518,7 +518,8 @@ $(document).ready(function(){
 					this.el.css("background-image", "url(" + this.fileurl + ")");
 					if (useCanvas && useWorker) {
 						var render_job = RSVP.defer();
-						this.filethumb = render_job.promise;
+						// TODO fully remove client thumbnailing code
+						//this.filethumb = render_job.promise;
 
 						var fileimg = new Image();
 						fileimg.onload = function() {
@@ -530,7 +531,7 @@ $(document).ready(function(){
 							}
 
 							var start = new Date().getTime();
-							var thumber = thumbnailer(fileimg, maxX, maxY);
+							var thumber = thumbnailer_simple(fileimg, maxX, maxY);
 							var thumber_timing = thumber.then(function() {
 								var end = new Date().getTime();
 								var time = end-start;
