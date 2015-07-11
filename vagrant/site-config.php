@@ -10,7 +10,6 @@
 
   $config['spoiler_images'] = true;
   $config['show_spoiler_thread_button'] = true;
-  $config['allow_self_edit'] = true;
   $config['mature_allowed'] = true;
 
   /*
