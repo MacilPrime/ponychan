@@ -184,6 +184,9 @@ $(document).ready(function() {
               var $newPost = $(data)
                 .find(".post_" + get_post_num($post));
               if ($newPost) {
+	              var postHTML = $post.get(0).innerHTML;
+	              $post.html(postHTML); // erase all events.
+
                 $post.find("> .body").replaceWith($newPost.find("> .body"));
                 $post.find("> .body").fadeIn();
                 $(document).trigger("new_post", $post);
