@@ -9,7 +9,9 @@ let (mod?) editing (un)spoiler a post. (need to generate/remove thumbnail)
 make moving a thread to a board it already exists on cause an error
 
 # mod tools
+remove the board sorting of posts on IP page
 Search by name/trip/filename pagination
+page showing posts by new users
 Name/trip/file bans
 Mods having access to the blotter
 mod actions without leaving page
