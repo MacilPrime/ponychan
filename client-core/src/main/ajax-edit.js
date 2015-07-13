@@ -188,7 +188,11 @@ $(document).ready(function() {
 	              $post.html(postHTML); // erase all events.
 
                 $post.find("> .body").replaceWith($newPost.find("> .body"));
-                $post.find("> .body").fadeIn();
+                $post.find("> .body").fadeIn('fast', function() {
+	                $(this).removeAttr('style');
+	                // jQuery likes to leave display: block
+	                // rules in their targeted elements.
+                });
                 $(document).trigger("new_post", $post);
               } else {
                 alert("Error: Failed to refresh post.");
