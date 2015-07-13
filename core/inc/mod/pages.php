@@ -1378,17 +1378,15 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 		error($config['error']['404']);
 
 	$thread = $_post['thread'];
-	$mask = $_post['ip'];
 
-	if (isset($_POST['new_ban'], $_POST['reason'], $_POST['length'], $_POST['board'], $_POST['ban_type'])) {
+	if (isset($_POST['new_ban'], $_POST['mask'], $_POST['reason'], $_POST['length'], $_POST['board'], $_POST['ban_type'])) {
 		require_once 'inc/mod/ban.php';
 
 		// Check the referrer
 		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
 			error($config['error']['referer']);
 
-		if (isset($_POST['mask']))
-			$mask = $_POST['mask'];
+		$mask = $_POST['mask'];
 
 		ban($mask, $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board'], $_POST['ban_type']);
 
@@ -1412,6 +1410,8 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 
 		header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 	}
+
+	$mask = ipToUserRange($_post['ip']);
 
 	$args = array(
 		'mask' => $mask,

@@ -368,6 +368,13 @@ function globToSqlLike($glob) {
 	return str_replace(['\\', '%', '_', '*'], ['\\\\', '\\%', '\\_', '%'], $glob);
 }
 
+// Take an IP string and transform it to a range that should match the user.
+// IPv4 addresses are unchanged. IPv6 addresses are effectively transformed to
+// a /64 range.
+function ipToUserRange($ip) {
+	return preg_replace('/^((?:[0-9a-f]+:){4}).*$/i', '\1*', $ip);
+}
+
 function cyclicThreadCleanup($thread) {
 	global $board, $config;
 
