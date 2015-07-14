@@ -982,7 +982,7 @@ function checkBan($board = 0, $types = null) {
 	}
 
 	if (event('check-ban', $board))
-		return true;
+		return;
 
 	if ($types === null)
 		$types = array(FULL_BAN);
@@ -1000,6 +1000,9 @@ function checkBan($board = 0, $types = null) {
 	$query->execute() or error(db_error($query));
 
 	foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $ban) {
+		if (event('process-ban', $ban, $board))
+			continue;
+
 		if ($ban['expires'] && $ban['expires'] < time()) {
 			// Ban expired
 			$query = prepare("UPDATE `bans` SET `status` = 1 WHERE `id` = :id");
