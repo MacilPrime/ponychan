@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import Bacon from 'baconjs';
+import myPosts from "./my-posts";
+import {get_post_id} from './post-info';
 import settings from './settings';
 
 settings.newSetting("reveal_spoiler_threads", "bool", false, "Always reveal spoiler threads", 'pagestyle',
@@ -36,7 +38,8 @@ $(document).ready(function() {
         const isSpoilered = $op.find('.hashtag').filter(function() {
           return $(this).text().toLowerCase() === '#spoiler';
         }).length > 0;
-        if (isSpoilered) {
+	      const isNotYours = !myPosts.contains(get_post_id($op));
+        if (isSpoilered && isNotYours) {
           $thread.addClass('spoileredThread');
           const $img = $op.find('img.postimg');
           if ($img.length) {
