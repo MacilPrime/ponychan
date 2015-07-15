@@ -84,7 +84,7 @@ $(document).ready(function() {
         var $editForm = $('<div />')
           .addClass("edit-form")
           .fadeIn("fast")
-          .insertBefore($post.find("> .body").first());
+          .insertBefore($post.find("> .body, > .opMain > .body").first());
 
         var $message = $('<textarea />')
           .text(postContent)
@@ -184,11 +184,10 @@ $(document).ready(function() {
               var $newPost = $(data)
                 .find(".post_" + get_post_num($post));
               if ($newPost) {
-	              var postHTML = $post.get(0).innerHTML;
-	              $post.html(postHTML); // erase all events.
-
-                $post.find("> .body").replaceWith($newPost.find("> .body"));
-                $post.find("> .body").fadeIn('fast', function() {
+	              $post.html($post.html()); // erase all events.
+	              var $newBody = $newPost.find("> .body, > .opMain > .body");
+                $post.find("> .body, > .opMain > .body").replaceWith($newBody);
+                $newBody.fadeIn('fast', function() {
 	                $(this).removeAttr('style');
 	                // jQuery likes to leave display: block
 	                // rules in their targeted elements.
