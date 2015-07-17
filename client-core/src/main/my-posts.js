@@ -1,39 +1,76 @@
 /*
- * postlink-info.js
- *
  * Adds " (OP)" to >>X links when the OP is quoted.
  * Adds " (You)" to >>X links when the user is quoted.
  *
  * Released under the MIT license
- * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
- *
+ * Copyright (c) 2015 Macil Tech <maciltech@gmail.com>
  */
 
-var myposts = [];
-
-const myPosts = {
-	contains(id) {
-		return myposts.indexOf(id) !== -1;
-	}
-};
-
-export default myPosts;
-
+import _ from 'lodash';
 import $ from 'jquery';
 import settings from './settings';
 import setCss from './set-css';
+import {log_error} from './logger';
 import {get_post_num, get_post_board} from './post-info';
+
+const REMEMBER_LIMIT = 1000;
+let myposts = [];
+
+const myPosts = {
+	contains(id) {
+		// TODO use a map
+		return !!_.find(myposts, post => post.id === id);
+	}
+};
+export default myPosts;
 
 settings.newSetting("link_show_you", "bool", true, 'Show "(You)" on links to your posts', 'links', {orderhint:6});
 
+function normalizePosts(posts) {
+	return _.chain(posts)
+		.uniq(post => post.id)
+		.sortBy(post => post.timestamp)
+		.takeRight(REMEMBER_LIMIT)
+		.value();
+}
+
 function loadMyPosts() {
-	if (window.sessionStorage && sessionStorage.myposts) {
-		myposts = JSON.parse(sessionStorage.myposts);
+	try {
+		const parts = [myposts];
+
+		const smyposts = window.sessionStorage && sessionStorage.getItem('myposts');
+		if (smyposts) {
+			parts.push(JSON.parse(smyposts).map(post => {
+				// little bit of backwards-compatibility
+				if (typeof post === 'string') {
+					return {id: post, timestamp: Date.now()-1};
+				} else {
+					return post;
+				}
+			}));
+		}
+
+		const lmyposts = window.localStorage && localStorage.getItem('myposts');
+		if (lmyposts) {
+			parts.push(JSON.parse(lmyposts));
+		}
+
+		myposts = normalizePosts(_.flatten(parts));
+	} catch(e) {
+		console.error('myposts load failure', e);
 	}
 }
 function saveMyPosts() {
-	if (window.sessionStorage)
-		sessionStorage.myposts = JSON.stringify(myposts);
+	try {
+		if (window.localStorage && !localStorage.POLYFILLED) {
+			localStorage.setItem('myposts', JSON.stringify(myposts));
+			sessionStorage.removeItem('myposts');
+		} else if (window.sessionStorage) {
+			sessionStorage.setItem('myposts', JSON.stringify(myposts));
+		}
+	} catch(e) {
+		console.error('myposts save failure', e);
+	}
 }
 loadMyPosts();
 
@@ -81,7 +118,7 @@ function updateLinkInfo() {
 
 $(document).on('post_submitted', function(e, info) {
 	loadMyPosts();
-	myposts.push(info.board+':'+info.postid);
+	myposts.push({id: `${info.board}:${info.postid}`, timestamp: Date.now()});
 	saveMyPosts();
 }).ready(function() {
 	updateLinkInfo();
