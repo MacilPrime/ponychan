@@ -942,6 +942,8 @@ define('BAN_STATUS_LIFTED', 2);
 function displayBan($ban) {
 	global $config, $wantjson;
 
+	http_response_code(403);
+
 	if (!$ban['seen']) {
 		$query = prepare("UPDATE `bans` SET `seen` = 1 WHERE `id` = :id");
 		$query->bindValue(':id', $ban['id'], PDO::PARAM_INT);

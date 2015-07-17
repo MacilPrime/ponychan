@@ -30,12 +30,12 @@ if (isset($_POST['delete'])) {
 	// Delete
 
 	if (!isset($_POST['board'], $_POST['password']))
-		error($config['error']['bot']);
+		error($config['error']['bot'], false, 400);
 
 	$password = $_POST['password'];
 
 	if ($password == '')
-		error($config['error']['invalidpassword']);
+		error($config['error']['invalidpassword'], false, 403);
 
 	$delete = array();
 	foreach ($_POST as $post => $value) {
@@ -48,13 +48,13 @@ if (isset($_POST['delete'])) {
 
 	// Check if board exists
 	if (!openBoard($_POST['board']))
-		error($config['error']['noboard']);
+		error($config['error']['noboard'], false, 404);
 
 	// Check if banned
 	checkBan($board['uri']);
 
 	if (empty($delete))
-		error($config['error']['nodelete']);
+		error($config['error']['nodelete'], false, 400);
 
 	foreach ($delete as $id) {
 		$query = prepare(sprintf("SELECT `thread`, `time`,`password` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
@@ -63,10 +63,10 @@ if (isset($_POST['delete'])) {
 
 		if ($post = $query->fetch()) {
 			if (!doesPasswordMatchPostHash($password, $post['password']))
-				error($config['error']['invalidpassword']);
+				error($config['error']['invalidpassword'], false, 403);
 
 			if ($post['time'] >= time() - $config['delete_time']) {
-				error(sprintf($config['error']['delete_too_soon'], until($post['time'] + $config['delete_time'])));
+				error(sprintf($config['error']['delete_too_soon'], until($post['time'] + $config['delete_time'])), false, 409);
 			}
 
 			if (isset($_POST['file'])) {
@@ -94,12 +94,12 @@ if (isset($_POST['delete'])) {
 	// User picked a post to edit
 
 	if (!isset($_POST['board'], $_POST['password']))
-		error($config['error']['bot']);
+		error($config['error']['bot'], false, 400);
 
 	$password = $_POST['password'];
 
 	if ($password == '')
-		error($config['error']['invalidpassword']);
+		error($config['error']['invalidpassword'], false, 403);
 
 	$editposts = array();
 	foreach ($_POST as $post => $value) {
@@ -112,24 +112,24 @@ if (isset($_POST['delete'])) {
 
 	// Check if board exists
 	if (!openBoard($_POST['board']))
-		error($config['error']['noboard']);
+		error($config['error']['noboard'], false, 404);
 
 	if (!$config['allow_self_edit'])
-		error($config['error']['bot']);
+		error($config['error']['bot'], false, 400);
 
 	// Check if banned
 	checkBan($board['uri']);
 
 	if (empty($editposts))
-		error($config['error']['noedit']);
+		error($config['error']['noedit'], false, 400);
 	if (count($editposts)!=1)
-		error($config['error']['toomanyedits']);
+		error($config['error']['toomanyedits'], false, 400);
 
 	if (isset($_POST['mod']) && $_POST['mod']) {
 		require 'inc/mod.php';
 		if (!$mod) {
 			// Liar. You're not a mod.
-			error($config['error']['notamod']);
+			error($config['error']['notamod'], false, 403);
 		}
 	}
 
@@ -143,10 +143,10 @@ if (isset($_POST['delete'])) {
 		error($config['error']['noedit']);
 
 	if (!doesPasswordMatchPostHash($password, $post['password']))
-		error($config['error']['invalidpassword']);
+		error($config['error']['invalidpassword'], false, 403);
 
 	if ($config['edit_time_end'] !== 0 && time() > $post['time'] + $config['edit_time_end']) {
-		error(sprintf($config['error']['edit_too_late'], time_length($config['edit_time_end'])));
+		error(sprintf($config['error']['edit_too_late'], time_length($config['edit_time_end'])), false, 409);
 	}
 
 	editPostForm($id, $password, $mod);
@@ -154,7 +154,7 @@ if (isset($_POST['delete'])) {
 	// User is submitting an edited post
 
 	if (!isset($_POST['board'], $_POST['id']))
-		error($config['error']['bot']);
+		error($config['error']['bot'], false, 400);
 
 	$id = $_POST['id'];
 
@@ -176,7 +176,7 @@ if (isset($_POST['delete'])) {
 		error($config['error']['noedit']);
 
 	if ($config['edit_time_end'] !== 0 && time() > $post['time'] + $config['edit_time_end']) {
-		error(sprintf($config['error']['edit_too_late'], time_length($config['edit_time_end'])));
+		error(sprintf($config['error']['edit_too_late'], time_length($config['edit_time_end'])), false, 409);
 	}
 
 	if (isset($_POST['password']))
@@ -189,7 +189,7 @@ if (isset($_POST['delete'])) {
 		require 'inc/mod.php';
 		if (!$mod) {
 			// Liar. You're not a mod.
-			error($config['error']['notamod']);
+			error($config['error']['notamod'], false, 403);
 		}
 
 		$post['raw'] = isset($_POST['raw']);
@@ -208,12 +208,12 @@ if (isset($_POST['delete'])) {
 
 	if (isset($password)) {
 		if (!doesPasswordMatchPostHash($password, $post['password']))
-			error($config['error']['invalidpassword']);
-	} else {
-		// Check the referrer
-		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
-			error($config['error']['referer']);
+			error($config['error']['invalidpassword'], false, 403);
 	}
+
+	// Check the referrer
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+		error($config['error']['referer']);
 
 	$post['op'] = !$post['thread'];
 	$post['body'] = $_POST['body'];
@@ -221,12 +221,12 @@ if (isset($_POST['delete'])) {
 	if (!($post['file'] || isset($post['embed'])) || (($post['op'] && $config['force_body_op']) || (!$post['op'] && $config['force_body']))) {
 		$stripped_whitespace = preg_replace('/[\s]/u', '', $post['body']);
 		if ($stripped_whitespace == '') {
-			error($config['error']['tooshort_body']);
+			error($config['error']['tooshort_body'], false, 400);
 		}
 	}
 
 	if (!$mod && mb_strlen($post['body']) > $config['max_body'])
-		error($config['error']['toolong_body']);
+		error($config['error']['toolong_body'], false, 400);
 
 	wordfilters($post['body']);
 
@@ -957,17 +957,17 @@ if (isset($_POST['delete'])) {
 		$redirect = $root . $board['dir'] . $config['dir']['res'] .
 			sprintf($config['file_page'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
 
-	   	if (!$post['op'] && isset($_SERVER['HTTP_REFERER'])) {
-			$regex = array(
-				'board' => str_replace('%s', '(\w{1,8})', preg_quote($config['board_path'], '/')),
-				'page' => str_replace('%d', '(\d+)', preg_quote($config['file_page'], '/')),
-				'page50' => str_replace('%d', '(\d+)', preg_quote($config['file_page50'], '/')),
-				'res' => preg_quote($config['dir']['res'], '/'),
-			);
+			if (!$post['op'] && isset($_SERVER['HTTP_REFERER'])) {
+				$regex = array(
+					'board' => str_replace('%s', '(\w{1,8})', preg_quote($config['board_path'], '/')),
+					'page' => str_replace('%d', '(\d+)', preg_quote($config['file_page'], '/')),
+					'page50' => str_replace('%d', '(\d+)', preg_quote($config['file_page50'], '/')),
+					'res' => preg_quote($config['dir']['res'], '/'),
+				);
 
-			if (preg_match('/\/' . $regex['board'] . $regex['res'] . $regex['page50'] . '([?&#].*)?$/', $_SERVER['HTTP_REFERER'])) {
-				$redirect = $root . $board['dir'] . $config['dir']['res'] .
-					sprintf($config['file_page50'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
+				if (preg_match('/\/' . $regex['board'] . $regex['res'] . $regex['page50'] . '([?&#].*)?$/', $_SERVER['HTTP_REFERER'])) {
+					$redirect = $root . $board['dir'] . $config['dir']['res'] .
+						sprintf($config['file_page50'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
 			}
 		}
 	} else {

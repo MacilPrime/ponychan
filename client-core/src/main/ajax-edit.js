@@ -9,6 +9,7 @@ import $ from "jquery";
 import {footer} from "./footer-utils";
 import myPosts from "./my-posts";
 import {get_post_num, get_thread_num, get_post_board, get_post_id} from './post-info';
+import * as state from './state';
 
 $(document).ready(function() {
   function init() {
@@ -50,6 +51,7 @@ $(document).ready(function() {
         editRequest.append("password", password);
         editRequest.append("edit", "Edit");
 
+        // TODO make some nice JSON api for this to use.
         $.ajax({
           url: SITE_DATA.siteroot + "post.php",
           data: editRequest,
@@ -58,23 +60,11 @@ $(document).ready(function() {
           processData: false,
           type: 'POST',
           success: function(data) {
-            var $data = $(data);
-            if ((/<title>Error<\/title>/).test(data)) {
-              // pull the potential error message
-              // out of the received page
-              alert("Error: " + $data.find("h2").first().text());
-              closeForm();
-            } else {
-              buildForm($data.find("#body").text());
-            }
+            var $data = $($.parseHTML(data));
+            buildForm($data.find("#body").text());
           },
           error: function(xhr, textStatus, exception) {
-            alert("Error: Failed to connect to server");
-            console.log("AJAX error", {
-              xhrstatus: xhr.status,
-              textStatus: textStatus,
-              errorThrown: exception
-            });
+            handleConnectionError(xhr);
             closeForm();
           }
         });
@@ -96,7 +86,7 @@ $(document).ready(function() {
           .addClass("edit-controls")
           .appendTo($editForm);
 
-        $('<input />')
+        var $submit = $('<input />')
           .attr("value", "Submit")
           .attr("type", "button")
           .on("click", sendRevision)
@@ -111,10 +101,7 @@ $(document).ready(function() {
         // DOM setup over
 
         function sendRevision(evt) {
-          // change the submit button's message.
-          $(this).val("Posting...");
-
-          // disable everything.
+          $submit.val("Posting...");
           $editForm
             .find("input, textarea")
             .prop("disabled", true);
@@ -139,21 +126,14 @@ $(document).ready(function() {
             processData: false,
             type: 'POST',
             success: function(data) {
-              var $data = $(data);
-              if ((/<title>Error<\/title>/).test(data)) {
-                alert("Error: " + $data.find("h2").first().text());
-              } else {
-                retrieveRevision();
-              }
+              retrieveRevision();
             },
             error: function(xhr, textStatus, exception) {
-              alert("Error: Failed to submit post to server");
-              console.log("AJAX error", {
-                xhrstatus: xhr.status,
-                textStatus: textStatus,
-                errorThrown: exception
-              });
-              closeForm();
+              handleConnectionError(xhr);
+              $submit.val("Submit");
+              $editForm
+                .find("input, textarea")
+                .prop("disabled", false);
             }
           });
         }
@@ -199,15 +179,24 @@ $(document).ready(function() {
               closeForm();
             },
             error: function(xhr, textStatus, exception) {
-              alert("Error: Failed to refresh post.");
-              console.log("AJAX error", {
-                xhrstatus: xhr.status,
-                textStatus: textStatus,
-                errorThrown: exception
-              });
+              handleConnectionError(xhr);
               closeForm();
             }
           });
+        }
+      }
+
+      function handleConnectionError(xhr) {
+        var $data = $($.parseHTML(xhr.responseText));
+        var title = $data.filter('title').first().text();
+        if (title && /Error/.test(title)) {
+          alert("Error: " + $data.find("h2").first().text());
+        } else if (title && /Banned/.test(title)) {
+          var pageState = {title: 'Ban', banpage: xhr.responseText};
+          state.newState(pageState);
+        } else {
+          console.log("Ajax Error", xhr);
+          alert("Error: Connection failed");
         }
       }
 
