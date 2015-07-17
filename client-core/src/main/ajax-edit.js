@@ -32,19 +32,26 @@ $(document).ready(function() {
   }
 
   function giveEditControls($post) {
+    $post.find('.edit-form').remove();
 
     function getEditForm() {
       return $post.find(".edit-form");
     }
 
+    function getBody($root = $post) {
+      return $root.find("> .body, > .opMain > .body").first();
+    }
+
     footer($post).addItem("Edit", function(evt) {
+      const $footerEditButton = $(evt.target);
+
       const password = $("#password").val();
       if (getEditForm().length > 0) {
         // the post body is hidden with css.
         closeForm();
       } else {
         // ajax the edit post form first
-        $(evt.target).text("Editing...");
+        $footerEditButton.text("Editing...");
         var editRequest = new FormData();
         editRequest.append("board", get_post_board($post));
         editRequest.append("delete_" + get_post_num($post), "true");
@@ -74,7 +81,7 @@ $(document).ready(function() {
         var $editForm = $('<div />')
           .addClass("edit-form")
           .fadeIn("fast")
-          .insertBefore($post.find("> .body, > .opMain > .body").first());
+          .insertBefore(getBody());
 
         var $message = $('<textarea />')
           .text(postContent)
@@ -165,18 +172,16 @@ $(document).ready(function() {
                 .find(".post_" + get_post_num($post));
               if ($newPost) {
                 $post.html($post.html()); // erase all events.
-                var $newBody = $newPost.find("> .body, > .opMain > .body");
-                $post.find("> .body, > .opMain > .body").replaceWith($newBody);
-                $newBody.fadeIn('fast', function() {
-                  $(this).removeAttr('style');
-                  // jQuery likes to leave display: block
-                  // rules in their targeted elements.
-                });
+                var $newBody = getBody($newPost);
+                getBody().replaceWith($newBody);
+                closeForm();
                 $(document).trigger("new_post", $post);
+                $newBody.hide();
+                $newBody.fadeIn('fast');
               } else {
                 alert("Error: Failed to refresh post.");
+                closeForm();
               }
-              closeForm();
             },
             error: function(xhr, textStatus, exception) {
               handleConnectionError(xhr);
@@ -205,7 +210,7 @@ $(document).ready(function() {
         if ($editForm.length > 0) {
           $editForm.remove();
         }
-        $(evt.target).text("Edit");
+        $footerEditButton.text("Edit");
       }
     });
   }

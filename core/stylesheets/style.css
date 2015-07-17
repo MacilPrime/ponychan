@@ -1284,10 +1284,8 @@ img.catalogthumb {
 .edit-controls > * + * {
 	margin-left: 0.5em;
 }
-.post[id] .edit-form ~ .body {
-	/* Hide the post body easier with css. */
-	/* But only hide the original! */
-	display: none;
+.post .edit-form ~ .body {
+	display: none !important;
 }
 .edit-body {
 	padding: 0.2em;
