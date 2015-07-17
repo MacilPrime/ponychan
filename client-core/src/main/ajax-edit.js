@@ -92,9 +92,9 @@ $(document).ready(function() {
           .on("click", sendRevision)
           .appendTo($editControls);
 
-        $('<a />')
-          .text("Cancel")
-          .attr("href", "javascript:;")
+        $('<input />')
+          .attr("value", "Cancel")
+          .attr("type", "button")
           .on("click", closeForm)
           .appendTo($editControls);
 
