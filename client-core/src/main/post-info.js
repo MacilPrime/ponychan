@@ -4,6 +4,14 @@ export function get_post_board($post) {
 	return /\bpost_(\w+)-\d+\b/.exec($post.attr("class"))[1];
 }
 
+export function get_thread_num($post) {
+    if ($post.hasClass("op")) {
+        return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
+    } else {
+        return parseInt($post.data("thread"));
+    }
+}
+
 export function get_post_num($post) {
 	return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
 }

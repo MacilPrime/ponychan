@@ -11,7 +11,7 @@
 		config.uri_stylesheets }}{{ config.stylesheets[config.default_stylesheet].1 }}?v={{
 		('stylesheets/' ~ config.stylesheets[config.default_stylesheet].1)|filemtime }}">{% endif %}
 	{% if not nojavascript %}
-		<script type="text/javascript" src="{{ config.url_instance_script }}?v={{ config.file_instance_script|filemtime }}"></script>
+		<script type="text/javascript" id="config" data-board-config="{{ getBoardConfig(config)|e }}" src="{{ config.url_instance_script }}?v={{ config.file_instance_script|filemtime }}"></script>
 		<script type="text/javascript" src="{{ config.url_main_script }}?v={{ config.file_main_script|filemtime }}"></script>
 	{% endif %}
 </head>

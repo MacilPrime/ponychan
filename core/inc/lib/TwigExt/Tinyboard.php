@@ -41,6 +41,7 @@ class TwigExt_Tinyboard extends Twig_Extension
 	public function getFunctions()
 	{
 		return Array(
+			'getBoardConfig' => new Twig_Filter_Function('getBoardConfig'),
 			'time' => new Twig_Filter_Function('time'),
 			'floor' => new Twig_Filter_Function('floor'),
 			'timezone' => new Twig_Filter_Function('twig_timezone_function'),

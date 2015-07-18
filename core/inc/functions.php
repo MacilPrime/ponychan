@@ -949,6 +949,8 @@ define('BAN_STATUS_LIFTED', 2);
 function displayBan($ban) {
 	global $config, $wantjson;
 
+	http_response_code(403);
+
 	if (!$ban['seen']) {
 		$query = prepare("UPDATE `bans` SET `seen` = 1 WHERE `id` = :id");
 		$query->bindValue(':id', $ban['id'], PDO::PARAM_INT);
@@ -1605,6 +1607,15 @@ function buildJavascript() {
 	));
 
 	file_write($config['file_instance_script'], $script);
+}
+
+function getBoardConfig($config) {
+	return json_encode([
+		'image_hard_limit' => $config['image_hard_limit'],
+		'reply_hard_limit' => $config['reply_hard_limit'],
+		'allow_self_edit' => $config['allow_self_edit'],
+		'edit_time_end' => $config['edit_time_end']
+	]);
 }
 
 function checkDNSBL() {

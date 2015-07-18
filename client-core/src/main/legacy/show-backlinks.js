@@ -23,6 +23,8 @@ $(document).ready(function(){
 			return;
 
 		$(this).find('a.bodylink.postlink').each(function() {
+			if ($(this).closest('.post-inline, .post-hover').length) return;
+
 			var m = $(this).text().match(/^>>(\d+)/);
 			if (!m) return;
 			var id = m[1];

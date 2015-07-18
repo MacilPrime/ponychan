@@ -1039,6 +1039,17 @@ $(document).ready(function(){
 							setTimeout(updateThreadNow, 10, true);
 						}
 					} else {
+						$QRwarning.text('Unknown error: '+String(data && data.error));
+						console.log("Unknown QR response", data);
+						prepSubmitButton();
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					query = null;
+					prepSubmitButton();
+					setQRFormDisabled(false);
+					if (jqXHR.responseJSON) {
+						var data = jqXHR.responseJSON;
 						if (data.error == 'message') {
 							if (data.message_html)
 								$QRwarning.html(data.message_html);
@@ -1050,16 +1061,11 @@ $(document).ready(function(){
 						} else {
 							$QRwarning.text('Unknown error: '+data.error);
 						}
-						prepSubmitButton();
+					} else {
+						$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
 					}
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-					query = null;
-					prepSubmitButton();
-					$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
-					setQRFormDisabled(false);
-					var info = {xhrstatus: jqXHR.status, textStatus: textStatus, errorThrown: errorThrown};
-					console.log("Ajax Error", info);
+					var info = {xhrstatus: jqXHR.status, textStatus, errorThrown};
+					console.log("Ajax Error", info, jqXHR);
 				}
 			});
 

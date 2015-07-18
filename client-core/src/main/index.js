@@ -17,6 +17,7 @@ import './local-time.js';
 import './legacy/reloader.js';
 import './legacy/post-hover.js';
 import './my-posts.js';
+import './ajax-edit.js';
 import './watcher.js';
 import './notifier.js';
 import './show-filenames.js';

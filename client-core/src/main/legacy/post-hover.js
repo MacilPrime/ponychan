@@ -95,7 +95,14 @@ $(document).ready(function(){
 		}
 	}
 
+	const initializedPostlinks = new WeakSet();
+
 	function init_postlink_hover() {
+		if (initializedPostlinks.has(this)) {
+			return;
+		}
+		initializedPostlinks.add(this);
+
 		var $link = $(this);
 
 		var id;
