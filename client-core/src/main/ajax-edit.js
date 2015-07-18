@@ -10,36 +10,42 @@ import {footer} from "./footer-utils";
 import myPosts from "./my-posts";
 import {get_post_num, get_thread_num, get_post_board, get_post_id} from './post-info';
 import * as state from './state';
+import config  from './config';
 
 $(document).ready(function() {
+  init();
+
   function init() {
-    function onEachPost($post) {
-      if (myPosts.contains(get_post_id($post))) {
-        giveEditControls($post);
-      }
-    }
+    $('.edit-form').remove();
 
-    // check if the board is editable and that formdata is supported.
-    if ($(".edit_post").length > 0 && "FormData" in window) {
-      $(".post").each(function() {
-        onEachPost($(this));
-      });
+    $(".post").each(function() {
+      giveEditControls($(this));
+    });
 
-      $(document).on("new_post", function(e, post) {
-        onEachPost($(post));
-      });
-    }
+    $(document).on("new_post", function(e, post) {
+      giveEditControls($(post));
+    });
   }
 
   function giveEditControls($post) {
-    $post.find('.edit-form').remove();
-
     function getEditForm() {
       return $post.find(".edit-form");
     }
 
     function getBody($root = $post) {
       return $root.find("> .body, > .opMain > .body").first();
+    }
+
+    function getPostTime() {
+      return new Date($post.find('time').attr('datetime')).getTime();
+    }
+
+    const isEditable = window.FormData && config.board.allow_self_edit &&
+      myPosts.contains(get_post_id($post)) &&
+      (config.board.edit_time_end === 0 || Date.now() < getPostTime() + config.board.edit_time_end*1000);
+
+    if (!isEditable) {
+      return;
     }
 
     footer($post).addItem("Edit", function(evt) {
@@ -175,6 +181,7 @@ $(document).ready(function() {
                 var $newBody = getBody($newPost);
                 getBody().replaceWith($newBody);
                 closeForm();
+                $footerEditButton.remove();
                 $(document).trigger("new_post", $post);
                 $newBody.hide();
                 $newBody.fadeIn('fast');
@@ -214,5 +221,4 @@ $(document).ready(function() {
       }
     });
   }
-  init();
 });

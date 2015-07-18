@@ -9,6 +9,10 @@
 
 import $ from 'jquery';
 
+$(document).ready(function() {
+    $(".postfooter").remove();
+});
+
 /**
  * footer
  *
