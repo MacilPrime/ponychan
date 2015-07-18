@@ -1599,6 +1599,15 @@ function buildJavascript() {
 	file_write($config['file_instance_script'], $script);
 }
 
+function getBoardConfig($config) {
+	return json_encode([
+		'image_hard_limit' => $config['image_hard_limit'],
+		'reply_hard_limit' => $config['reply_hard_limit'],
+		'allow_self_edit' => $config['allow_self_edit'],
+		'edit_time_end' => $config['edit_time_end']
+	]);
+}
+
 function checkDNSBL() {
 	global $config;
 
