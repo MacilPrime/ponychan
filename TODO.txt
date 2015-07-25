@@ -7,6 +7,7 @@
   html and image files) so deploys can finally be as easy as rsyncing the core/
   directory over.
 - ban signing
+- post dropdown menu with [#cyclic] option
 
 remember your posts in localStorage instead of sessionStorage
 Require spoilered threads to have a subject
