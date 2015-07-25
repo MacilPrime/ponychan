@@ -175,10 +175,6 @@ if (isset($_POST['delete'])) {
 	if(!$post)
 		error($config['error']['noedit']);
 
-	if ($config['edit_time_end'] !== 0 && time() > $post['time'] + $config['edit_time_end']) {
-		error(sprintf($config['error']['edit_too_late'], time_length($config['edit_time_end'])), false, 409);
-	}
-
 	if (isset($_POST['password']))
 		$password = $_POST['password'];
 
@@ -204,6 +200,10 @@ if (isset($_POST['delete'])) {
 	} else {
 		if (!isset($password))
 			error($config['error']['bot']);
+
+		if ($config['edit_time_end'] !== 0 && time() > $post['time'] + $config['edit_time_end']) {
+			error(sprintf($config['error']['edit_too_late'], time_length($config['edit_time_end'])), false, 409);
+		}
 	}
 
 	if (isset($password)) {
