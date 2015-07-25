@@ -182,8 +182,8 @@ a.email {
     transform: scaleY(1) scaleZ(1);
     transform-origin: top;
     max-height: 2000px;
-    border: 1px solid rgba(0,0,0,0.3) !important;
-    background: rgba(0,0,0,0.1) !important;
+    border: 1px solid rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.1);
     /* This should give the transitions a reference frame. */
 }
 .hidetext.off {
