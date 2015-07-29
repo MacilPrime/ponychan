@@ -177,6 +177,7 @@ a.email {
 }
 .hidetext {
     transition: transform 0.25s ease-in-out,
+      padding 0.25s ease-in-out,
       height 0.25s ease-in-out;
     overflow: hidden;
     transform: scaleY(1) scaleZ(1);
