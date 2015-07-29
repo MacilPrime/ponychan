@@ -39,9 +39,15 @@ $(document).ready(function() {
 
 			$button.on('click.hider', function() {
 				if(!$text.hasClass('off')) {
+					// Allow height to animate from current height to 0 when closing if
+					// the stylesheet wants to. Otherwise the height would jump to 0
+					// immediately.
+					$text.css('height', $text.height());
+					var __unused = $text[0].offsetHeight;
 					$text.addClass('off');
 					$button.text('Show');
 				} else {
+					$text.css('height', '');
 					$text.removeClass('off');
 					$button.text('Hide');
 				}
