@@ -282,10 +282,9 @@ function bidi_cleanup($str){
 	return $str;
 }
 
-function secure_link_confirm($text, $title, $confirm_message, $href) {
-	global $config;
+function secure_link_confirm($text, $title, $href) {
 
-	return '<a onclick="if (event.which==2) return true;if (confirm(\'' . htmlentities(addslashes($confirm_message)) . '\')) document.location=\'?/' . htmlentities(addslashes($href . '/' . make_secure_link_token($href))) . '\';return false;" title="' . htmlentities($title) . '" href="?/' . $href . '">' . $text . '</a>';
+	return '<a  title="' . htmlentities($title) . '" href="?/' . htmlentities(addslashes($href . '/' . make_secure_link_token($href))) . '">' . $text . '</a>';
 }
 function secure_link($href) {
 	return $href . '/' . make_secure_link_token($href);
@@ -381,15 +380,15 @@ class Post {
 
 			// Delete
 			if (hasPermission($config['mod']['delete'], $board['uri'], $this->mod))
-				$built .= ' ' . secure_link_confirm($config['mod']['link_delete'], 'Delete', 'Are you sure you want to delete this?', $board['uri'] . '/delete/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_delete'], 'Delete', $board['uri'] . '/delete/' . $this->id);
 
 			// Delete all posts by IP
 			if (hasPermission($config['mod']['deletebyip'], $board['uri'], $this->mod))
-				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip'], 'Delete all posts by IP', 'Are you sure you want to delete all posts by this IP address?', $board['uri'] . '/deletebyip/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip'], 'Delete all posts by IP', $board['uri'] . '/deletebyip/' . $this->id);
 
 			// Delete all posts by IP (global)
 			if (hasPermission($config['mod']['deletebyip_global'], $board['uri'], $this->mod))
-				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip_global'], 'Delete all posts by IP across all boards', 'Are you sure you want to delete all posts by this IP address, across all boards?', $board['uri'] . '/deletebyip/' . $this->id . '/global');
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip_global'], 'Delete all posts by IP across all boards', $board['uri'] . '/deletebyip/' . $this->id . '/global');
 
 			// Ban
 			if (hasPermission($config['mod']['ban'], $board['uri'], $this->mod))
@@ -401,7 +400,7 @@ class Post {
 
 			// Delete file (keep post)
 			if (!empty($this->file) && hasPermission($config['mod']['deletefile'], $board['uri'], $this->mod))
-				$built .= ' ' . secure_link_confirm($config['mod']['link_deletefile'], 'Delete file', 'Are you sure you want to delete this file?', $board['uri'] . '/deletefile/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletefile'], 'Delete file', $board['uri'] . '/deletefile/' . $this->id);
 
 			// Edit post
 			if (hasPermission($config['mod']['editpost'], $board['uri'], $this->mod))
@@ -502,18 +501,19 @@ class Thread {
 
 		$built = '';
 		if ($this->mod) {
+            $id = $this->id;
 			// Mod controls (on thread posts)
 			// Delete
 			if (hasPermission($config['mod']['delete'], $board['uri'], $this->mod))
-				$built .= ' ' . secure_link_confirm($config['mod']['link_delete'], 'Delete', 'Are you sure you want to delete this?', $board['uri'] . '/delete/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_delete'], 'Delete', $board['uri'] . '/delete/' . $this->id);
 
 			// Delete all posts by IP
 			if (hasPermission($config['mod']['deletebyip'], $board['uri'], $this->mod))
-				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip'], 'Delete all posts by IP', 'Are you sure you want to delete all posts by this IP address?', $board['uri'] . '/deletebyip/' . $this->id);
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip'], 'Delete all posts by IP', $board['uri'] . '/deletebyip/' . $this->id);
 
 			// Delete all posts by IP (global)
 			if (hasPermission($config['mod']['deletebyip_global'], $board['uri'], $this->mod))
-				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip_global'], 'Delete all posts by IP across all boards', 'Are you sure you want to delete all posts by this IP address, across all boards?', $board['uri'] . '/deletebyip/' . $this->id . '/global');
+				$built .= ' ' . secure_link_confirm($config['mod']['link_deletebyip_global'], 'Delete all posts by IP across all boards', $board['uri'] . '/deletebyip/' . $this->id . '/global');
 
 			// Ban
 			if (hasPermission($config['mod']['ban'], $board['uri'], $this->mod))
