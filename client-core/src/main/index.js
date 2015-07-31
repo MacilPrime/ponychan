@@ -14,6 +14,7 @@ import './cite-reply';
 import './spoiler-toggle.js';
 import './spoiler-thread.js';
 import './local-time.js';
+import './live-post-changes.js';
 import './legacy/reloader.js';
 import './legacy/post-hover.js';
 import './my-posts.js';

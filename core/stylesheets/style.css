@@ -1296,3 +1296,18 @@ img.catalogthumb {
 	min-width: 250px;
 	min-height: 5em;
 }
+
+/* For live post changes */
+.dead-buttons {
+	opacity: 0;
+	visibility: hidden;
+	/* Don't throw off the scroll position */
+	transition: opacity 0.5s ease-in-out 3s,
+				visibility 1ms ease 3.5s;
+}
+.hidden-new-edit, .old-editmsg {
+	display: none;
+}
+.edit-revealer {
+	margin: 0 1ch;
+}
