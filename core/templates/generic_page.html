@@ -13,6 +13,9 @@
 	{% if not nojavascript %}
 		<script type="text/javascript" id="config" data-board-config="{{ getBoardConfig(config)|e }}" src="{{ config.url_instance_script }}?v={{ config.file_instance_script|filemtime }}"></script>
 		<script type="text/javascript" src="{{ config.url_main_script }}?v={{ config.file_main_script|filemtime }}"></script>
+        {% if mod %}
+            <script type="text/javascript" src="{{ config.file_mod_script }}?v={{ config.file_mod_script|filemtime }}"></script>
+        {% endif %}
 	{% endif %}
 </head>
 <body class="boardpage {% block extra_body_classes %}{% endblock %}">

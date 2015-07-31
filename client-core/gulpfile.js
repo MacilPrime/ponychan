@@ -106,7 +106,8 @@ function browserifyTask(name, entry, destname) {
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['client-js-extra', 'main-js']);
+gulp.task('build', ['client-js-extra', 'main-js', 'mod-js']);
 
 copyTask('client-js-extra', './src/extra/**.js');
 browserifyTask('main-js', './src/main/', 'main.js');
+browserifyTask('mod-js', './src/mod/', 'mod.js');
