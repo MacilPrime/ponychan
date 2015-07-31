@@ -202,11 +202,6 @@ function checkSpam(array $extra_salt = array()) {
 	if (!isset($_POST['hash']))
 		return true;
 
-	// Temporary work-around for "username" being removed from
-	// config.spam.hidden_input_names. TODO remove this check July 31 2015.
-	if (isset($_POST['username']) && $_POST['username'])
-		return false;
-
 	$hash_given = $_POST['hash'];
 
 	if (!empty($extra_salt)) {
