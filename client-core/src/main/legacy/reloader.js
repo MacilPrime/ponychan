@@ -198,6 +198,7 @@ $(document).ready(function(){
 				var $banner = $data.filter('div.banner').add( $data.find('div.banner') ).first();
 				if($banner.length) {
 					loadPosts($data);
+					$(document).trigger('thread_reloaded', data);
 					prepareDelayedUpdate();
 				} else {
 					if($data.find("h2").first().text().trim() === "Thread specified does not exist.") {
