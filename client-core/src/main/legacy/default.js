@@ -246,7 +246,6 @@ window.mogrifyHTML = function mogrifyHTML(html) {
 		return '<span class="mogrifier" data-data="' + _.escape(text) + '"></span>';
 	}
 
-	html = html.replace(/<img\b[^>]*>/g, mogrifier);
 	html = html.replace(/<audio\b[^>]*>.*?<\/audio>/g, mogrifier);
 	html = html.replace(/<video\b[^>]*>.*?<\/video>/g, mogrifier);
 	html = html.replace(/<script\b[^>]*>.*?<\/script>/g, mogrifier);
