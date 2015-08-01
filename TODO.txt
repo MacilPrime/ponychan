@@ -1,5 +1,4 @@
-- fake username field right before password field in post form for stupid
-  browsers to auto-fill into
+- fix IPv6 address links in mod logs, reports, manage user pages
 - when a post is edited (or deleted) and reloader.js notices, it should put a
   button on the post to update it (StackOverflow style). If the post hasn't been
   scrolled onto the screen before, then it can live-update immediately.
