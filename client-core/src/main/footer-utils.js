@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 $(document).ready(function() {
-	$(".postfooter").remove();
+	$('.postfooter').remove();
 });
 
 /**
@@ -21,31 +21,31 @@ export function footer($post) {
 
 			// get the footer, or make a new one.
 			function getFooter() {
-				let $f = $post.children(".postfooter");
-				return $f.length > 0 ? $f : $("<ul />")
-					.addClass("postfooter")
+				let $f = $post.children('.postfooter');
+				return $f.length > 0 ? $f : $('<ul />')
+					.addClass('postfooter')
 					.appendTo($post);
 			}
 
 			getFooter()
 				.append(
-				$("<li />")
-					.addClass("footer-item")
-					.attr("data-footer", name.toLowerCase())
+				$('<li />')
+					.addClass('footer-item')
+					.attr('data-footer', name.toLowerCase())
 					.append(
 					// Text can be changed without damaging its functionality.
-					$("<a />")
+					$('<a />')
 						.text(name)
 						.click(callback)
-						.attr("href", "javascript:;")
+						.attr('href', 'javascript:;')
 				)
 			);
 
 		},
 		removeItem(name) {
-			let $footer = $post.children(".postfooter");
+			let $footer = $post.children('.postfooter');
 			$footer
-				.children("[data-footer='" + name.toLowerCase() + "']")
+				.children(`[data-footer="${name.toLowerCase()}"]`)
 				.remove();
 
 			// erase the footer if there are no more items
