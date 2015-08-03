@@ -211,7 +211,6 @@
 	// These are fields used to confuse the bots. Make sure they aren't actually used by Tinyboard, or it won't work.
 	$config['spam']['hidden_input_names'] = array(
 		'user',
-		'username',
 		'login',
 		'search',
 		'q',
@@ -247,6 +246,7 @@
 		'thumbfile',
 		'thumbdurl',
 		'thumbtime',
+		'username',
 		'wantjson',
 		'making_a_post',
 		'activate_egg',

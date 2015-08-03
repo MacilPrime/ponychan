@@ -38,10 +38,6 @@ h2 {
 h3 {
 	font-size: 17px;
 }
-.homeblock h2 {
-	margin: 0;
-	padding: 0;
-}
 header {
 	margin: 1em 0;
 }
@@ -343,8 +339,9 @@ div.post .body .spoiler a {
 	margin: 5px;
 }
 .hidetext.off {
-	height: 0;
-	padding: 0;
+	height: 0 !important;
+	padding-top: 0;
+	padding-bottom: 0;
 	overflow: hidden;
 }
 .embed {
@@ -491,6 +488,13 @@ table.mod.config-editor input[type="text"] {
 	padding: 1em;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
+}
+.homeblock h2 {
+	margin: 0;
+	padding: 0;
+}
+.homeblock p, .homeblock h4 {
+	margin: 0.5em 0;
 }
 .mainhomeblock {
 	font-size: 130%;

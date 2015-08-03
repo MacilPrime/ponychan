@@ -1,5 +1,5 @@
 
-@import "common/pony-kusaba.css?v=10701602";
+@import "common/pony-kusaba.css?v=572120271";
 @import "common/razor-buttons.css?v=10701602";
 
 body {
@@ -485,43 +485,6 @@ div.pages {
     /* This should make the inline posts brighter depending on how deep it's nested. */
     background-color: rgba(255,255,255,0.05) !important;
     box-shadow: none !important;
-}
-
-
-/* Animated Collapsible spoilers */
-.hidetext {
-    transition: transform 0.4s cubic-bezier(.29,.11,.04,1.18),
-                max-height 0.4s cubic-bezier(.29,.11,.04,1.18);
-    overflow: hidden;
-    transform: scaleY(1) scaleZ(1);
-    transform-origin: top;
-    max-height: 2000px;
-    border: 2px dashed rgba(0, 0, 0, 0.14);
-    border-radius: 0.5rem;
-    background: rgb(242, 250, 253);
-    padding: 0.5em;
-    /* This should give the transitions a reference frame. */
-}
-.hidetext::before {
-    /*display: none;*/
-    content: "click to view text";
-    clear: both;
-    display: block;
-    overflow: hidden;
-    height: 0;
-    /* This will make the placeholder appear to hide "underneath the content" */
-    /*transition: height 0.5s ease-in-out;*/
-    opacity: 0.7;
-
-}
-
-.hidetext.off {
-    transition: transform 0.6s ease-in-out,
-                max-height 0.6s ease-in-out;
-    height: inherit;
-    padding: 0 5px;
-    max-height: 1.0em;
-    transform: scaleY(0) scaleZ(0);
 }
 
 /* Countdown */

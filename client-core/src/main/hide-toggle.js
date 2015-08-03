@@ -4,8 +4,6 @@
  * Released under the WTFPLv2 license
  *
  * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/hide-toggle.js';
  *   $config['markup'][] = array("/\[h\](.+?)\[\/h\]/s", "<div class=\"hidetext\">\$1</div>");
  *   $config['markup'][] = array("/\[hide\](.+?)\[\/hide\]/s", "<div class=\"hidetext\">\$1</div>");
  *
@@ -32,14 +30,24 @@ $(document).ready(function() {
 					.appendTo($buttonP);
 			}
 
+			$text.css('transition', 'none');
 			$text.addClass('off');
+			// see http://stackoverflow.com/a/16575811/1289657
+			var __unused = $text[0].offsetHeight;
+			$text.css('transition', '');
 			$button.text('Show');
 
 			$button.on('click.hider', function() {
 				if(!$text.hasClass('off')) {
+					// Allow height to animate from current height to 0 when closing if
+					// the stylesheet wants to. Otherwise the height would jump to 0
+					// immediately.
+					$text.css('height', $text.height());
+					var __unused = $text[0].offsetHeight;
 					$text.addClass('off');
 					$button.text('Show');
 				} else {
+					$text.css('height', '');
 					$text.removeClass('off');
 					$button.text('Hide');
 				}

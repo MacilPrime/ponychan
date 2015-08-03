@@ -86,7 +86,7 @@ span.quote,.wname {
     border-top-left-radius:10px;
 }
 .hidetext {
-    background:inherit;
+    background: none;
     border-color: #8F0304;
 }
 .omitted {

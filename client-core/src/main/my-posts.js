@@ -102,7 +102,7 @@ function descLinks() {
 			}
 
 			var postid = board+':'+postnum;
-			if (myposts.indexOf(postid) != -1 && !$(this).children(".younote").length) {
+			if (myPosts.contains(postid) && !$(this).children(".younote").length) {
 				$(this).append( $('<span/>').addClass('younote').text(' (You)') );
 			}
 		}

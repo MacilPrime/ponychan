@@ -169,9 +169,6 @@ span.quote {
   margin: 0;
   width: 100%; }
 
-.hidetext.off {
-  padding: 0.1em 0.6em; }
-
 form[name="post"] table,
 form[name="editpost"] table {
   padding: 0.5em 0; }

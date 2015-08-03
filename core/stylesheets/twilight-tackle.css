@@ -1,4 +1,4 @@
-@import "common/pony-kusaba.css?v=10701602";
+@import "common/pony-kusaba.css?v=572120271";
 
 /* Indiscriminate tags */
 body {
@@ -385,10 +385,7 @@ div.pages {
     background: rgba(0,0,0,0.05) none !important;
 }
 
-
-/* Animated Collapsible spoilers */
 .hidetext {
     border: 2px dashed rgb(116, 25, 99);
     background: rgba(0,0,0,0.1);
-    /* This should give the transitions a reference frame. */
 }

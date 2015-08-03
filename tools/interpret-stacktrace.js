@@ -21,7 +21,7 @@ function parseMessage(msg) {
   var sourcemap = getSourceMapForVersion(version);
   var stack = msg.data.stack;
   var interpretedStack = stack.replace(
-    /(https:\/\/mlpchan\.net\/js\/main\.js(?:\?[^:]*)):(\d+):(\d+)/g,
+    /(https:\/\/www.ponychan\.net\/js\/main\.js(?:\?[^:]*)):(\d+):(\d+)/g,
     function(full, url, line, column) {
       line = +line;
       column = +column;

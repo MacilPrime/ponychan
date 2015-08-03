@@ -368,6 +368,13 @@ function globToSqlLike($glob) {
 	return str_replace(['\\', '%', '_', '*'], ['\\\\', '\\%', '\\_', '%'], $glob);
 }
 
+// Take an IP string and transform it to a range that should match the user.
+// IPv4 addresses are unchanged. IPv6 addresses are effectively transformed to
+// a /64 range.
+function ipToUserRange($ip) {
+	return preg_replace('/^((?:[0-9a-f]+:){4}).*$/i', '\1*', $ip);
+}
+
 function cyclicThreadCleanup($thread) {
 	global $board, $config;
 
@@ -977,7 +984,7 @@ function checkBan($board = 0, $types = null) {
 	}
 
 	if (event('check-ban', $board))
-		return true;
+		return;
 
 	if ($types === null)
 		$types = array(FULL_BAN);
@@ -995,6 +1002,9 @@ function checkBan($board = 0, $types = null) {
 	$query->execute() or error(db_error($query));
 
 	foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $ban) {
+		if (event('process-ban', $ban, $board))
+			continue;
+
 		if ($ban['expires'] && $ban['expires'] < time()) {
 			// Ban expired
 			$query = prepare("UPDATE `bans` SET `status` = 1 WHERE `id` = :id");

@@ -177,19 +177,15 @@ a.email {
 }
 .hidetext {
     transition: transform 0.25s ease-in-out,
-                max-height 0.25s ease-in-out;
+      padding 0.25s ease-in-out,
+      height 0.25s ease-in-out;
     overflow: hidden;
     transform: scaleY(1) scaleZ(1);
     transform-origin: top;
-    max-height: 2000px;
-    border: 1px solid rgba(0,0,0,0.3) !important;
-    background: rgba(0,0,0,0.1) !important;
-    /* This should give the transitions a reference frame. */
+    border: 1px solid rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.1);
 }
 .hidetext.off {
-    height: inherit;
-    padding: 0 5px;
-    max-height: 1.0em;
     transform: scaleY(0) scaleZ(0);
 }
 
