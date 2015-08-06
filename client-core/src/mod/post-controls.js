@@ -45,6 +45,9 @@ $(document).on('click', '.controls a', evt => {
 					submitAction(evt.target.href).then(() => {
 						pop('File for post no. '+get_post_num($post)+' has been removed.', 5);
 						$(evt.target).remove(); // this button is no longer needed.
+						// lower the opacity of the image to gesture that its source
+						// is removed.
+						$post.find('> a > .postimg').addClass('dead-file')
 					});
 				break;
 			default:
@@ -58,16 +61,15 @@ $(document).on('click', '.controls a', evt => {
 
 function submitAction(url) {
 	return new RSVP.Promise((resolve, reject) => {
-		$.get(url).done(data => {
-				if ((/<title>Error<\/title>/).test(data)) {
-					alert("Error: "+$(data).find("h2").first().text());
-					reject();
-				} else {
-					resolve(data);
-				}
-			}).fail((xhr, status, err) => {
-				alert("Error: "+xhr.status+' '+err);
+		$.ajax(url, {
+			cache: true,
+			// FIXME Setting this to 'false' triggers an invalid security token error
+			// because it thinks the unix timestamp trailing the url is the token.
+			success: resolve,
+			error(xhr, status, err) {
+				pop('Fatal: '+xhr.status+' '+err, 5);
 				reject();
-			})
+			}
+		});
 	})
 }

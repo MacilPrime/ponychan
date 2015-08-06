@@ -1305,6 +1305,9 @@ img.catalogthumb {
 	transition: opacity 0.5s ease-in-out 3s,
 				visibility 1ms ease 3.5s;
 }
+.dead-file {
+	opacity: 0.4;
+}
 .hidden-new-edit, .old-editmsg {
 	display: none;
 }
