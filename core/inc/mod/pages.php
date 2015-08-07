@@ -1173,7 +1173,7 @@ function mod_mature($board, $unmature, $post) {
 	if (!openBoard($board))
 		error($config['error']['noboard']);
 
-	if (!hasPermission('setmature', $board))
+	if (!$config['mature_allowed'] || !hasPermission('setmature', $board))
 		error($config['error']['noaccess']);
 
 	db_beginTransaction();

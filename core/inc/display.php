@@ -551,7 +551,7 @@ class Thread {
 				else
 					$built .= ' <a title="Lock thread" href="?/' . secure_link($board['uri'] . '/lock/' . $this->id) . '">' . $config['mod']['link_lock'] . '</a>';
 
-			if (hasPermission('setmature', $board['uri'], $this->mod))
+			if ($config['mature_allowed'] && hasPermission('setmature', $board['uri'], $this->mod))
 				if ($this->mature)
 					$built .= ' <a title="Remove mature tag" href="?/' . secure_link($board['uri'] . '/unmature/' . $this->id) . '">' . $config['mod']['link_unmature'] . '</a>';
 				else
