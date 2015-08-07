@@ -11,32 +11,32 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == str_replace('\\', '/', __FILE__)) {
 
 class PreparedQueryDebug {
 	protected $query;
-	
+
 	public function __construct($query) {
 		global $pdo;
 		$query = preg_replace("/[\n\t]+/", ' ', $query);
-		
+
 		$this->query = $pdo->prepare($query);
 	}
 	public function __call($function, $args) {
 		global $config, $debug;
-		
+
 		if ($config['debug'] && $function == 'execute') {
 			$start = microtime(true);
 		}
-		
+
 		$return = call_user_func_array(array($this->query, $function), $args);
-		
+
 		if ($config['debug'] && $function == 'execute') {
 			$time = round((microtime(true) - $start) * 1000, 2) . 'ms';
-			
+
 			$debug['sql'][] = array(
 				'query' => $this->query->queryString,
 				'rows' => $this->query->rowCount(),
 				'time' => '~' . $time
 			);
 		}
-		
+
 		return $return;
 	}
 }
@@ -44,7 +44,7 @@ class PreparedQueryDebug {
 function sql_open() {
 	global $pdo, $config;
 	if ($pdo) return true;
-	
+
 	$dsn = $config['db']['type'] . ':host=' . $config['db']['server'] . ';dbname=' . $config['db']['database'];
 	if (!empty($config['db']['dsn']))
 		$dsn .= ';' . $config['db']['dsn'];
@@ -59,11 +59,11 @@ function sql_open() {
 		return $pdo = new PDO($dsn, $config['db']['user'], $config['db']['password'], $options);
 	} catch(PDOException $e) {
 		$message = $e->getMessage();
-		
+
 		// Remove any sensitive information
 		$message = str_replace($config['db']['user'], '<em>hidden</em>', $message);
 		$message = str_replace($config['db']['password'], '<em>hidden</em>', $message);
-		
+
 		// Print error
 		error('Database error: ' . $message);
 	}
@@ -71,9 +71,9 @@ function sql_open() {
 
 function prepare($query) {
 	global $pdo, $debug, $config;
-	
+
 	sql_open();
-	
+
 	if ($config['debug'])
 		return new PreparedQueryDebug($query);
 
@@ -82,9 +82,9 @@ function prepare($query) {
 
 function query($query) {
 	global $pdo, $debug, $config;
-	
+
 	sql_open();
-	
+
 	if ($config['debug']) {
 		$start = microtime(true);
 		$query = $pdo->query($query);
@@ -100,6 +100,22 @@ function query($query) {
 	}
 
 	return $pdo->query($query);
+}
+
+function db_beginTransaction() {
+	global $pdo, $debug, $config;
+	sql_open();
+	$pdo->beginTransaction() or error(db_error());
+}
+
+function db_commit() {
+	global $pdo, $debug, $config;
+	$pdo->commit() or error(db_error());
+}
+
+function db_rollBack() {
+	global $pdo, $debug, $config;
+	$pdo->rollBack() or error(db_error());
 }
 
 function db_error($PDOStatement=null) {

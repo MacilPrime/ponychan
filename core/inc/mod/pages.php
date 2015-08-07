@@ -1167,6 +1167,51 @@ function mod_bumplock($board, $unbumplock, $post) {
 	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
 }
 
+function mod_mature($board, $unmature, $post) {
+	global $config;
+
+	if (!openBoard($board))
+		error($config['error']['noboard']);
+
+	if (!hasPermission('setmature', $board))
+		error($config['error']['noaccess']);
+
+	db_beginTransaction();
+	// Argh, hack. TODO make tag not actually be part of the post body.
+	if ($unmature) {
+		$query = prepare(sprintf('UPDATE `posts_%s` SET
+			`body` = REGEXP_REPLACE(`body`, "<span class=\"hashtag\">#Mature</span>(<br/>)?", ""),
+			`body_nomarkup` = IF(`body`=`body_nomarkup`,
+				REGEXP_REPLACE(`body`, "<span class=\"hashtag\">#Mature</span>(<br/>)?", ""),
+				REGEXP_REPLACE(`body_nomarkup`, "\\\[#Mature\\\]\n?", ""))
+			WHERE `id` = :id AND `thread` IS NULL', $board));
+	} else {
+		$query = prepare(sprintf('UPDATE `posts_%s` SET
+			`body` = CONCAT("<span class=\"hashtag\">#Mature</span><br/>", `body`),
+			`body_nomarkup` = IF(`body`=`body_nomarkup`,
+				CONCAT("<span class=\"hashtag\">#Mature</span><br/>", `body_nomarkup`),
+				CONCAT("[#Mature]\n", `body_nomarkup`))
+			WHERE `id` = :id AND `thread` IS NULL', $board));
+	}
+	$query->bindValue(':id', $post);
+	$query->execute() or error(db_error($query));
+
+	$query = prepare(sprintf('UPDATE `posts_%s` SET `mature` = :mature WHERE (`id` = :id AND `thread` IS NULL) OR `thread` = :id', $board));
+	$query->bindValue(':id', $post);
+	$query->bindValue(':mature', $unmature ? 0 : 1);
+	$query->execute() or error(db_error($query));
+	if ($query->rowCount()) {
+		modLog("Set thread #{$post} to " . ($unmature?"not ":"") . "mature mode");
+		db_commit();
+		buildThread($post);
+		buildIndex();
+	} else {
+		db_rollBack();
+	}
+
+	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
+}
+
 function mod_move($originBoard, $postID) {
 	global $board, $config, $mod;
 

@@ -961,6 +961,8 @@
 	$config['mod']['link_unlock'] = '[-Lock]';
 	$config['mod']['link_bumplock'] = '[Sage]';
 	$config['mod']['link_bumpunlock'] = '[-Sage]';
+	$config['mod']['link_mature'] = '[Mature]';
+	$config['mod']['link_unmature'] = '[-Mature]';
 	$config['mod']['link_editpost'] = '[Edit]';
 	$config['mod']['link_move'] = '[Move]';
 
@@ -1117,6 +1119,8 @@
 	$config['permissions']['sticky'] = MOD;
 	// Lock a thread
 	$config['permissions']['lock'] = MOD;
+	// Change a thread's mature setting
+	$config['permissions']['setmature'] = MOD;
 	// Post in a locked thread
 	$config['permissions']['postinlocked'] = MOD;
 	// Prevent a thread from being bumped
