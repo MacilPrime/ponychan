@@ -1,7 +1,7 @@
 {% set show_all_url_prefix = "?/posts/" ~ (mask|mask_url) %}
 {% include 'mod/view_posts.html' %}
 
-{% if mod|hasPermission(config.mod.view_notes) %}
+{% if mod|hasPermission('view_notes') %}
 	<fieldset id="notes">
 		<legend>
 			{% set notes_on_record = 'note' ~ (notes|count != 1 ? 's' : '') ~ ' on record' %}
@@ -21,7 +21,7 @@
 					<th>{% trans 'IP' %}</th>
 					<th>{% trans 'Note' %}</th>
 					<th>{% trans 'Date' %}</th>
-					{% if mod|hasPermission(config.mod.remove_notes) %}
+					{% if mod|hasPermission('remove_notes') %}
 						<th>{% trans 'Actions' %}</th>
 					{% endif %}
 				</tr>
@@ -43,7 +43,7 @@
 						<td class="minimal">
 							{{ note.time|date(config.post_date)|e }}
 						</td>
-						{% if mod|hasPermission(config.mod.remove_notes) %}
+						{% if mod|hasPermission('remove_notes') %}
 							<td class="minimal">
 								<a href="?/IP/{{ note|mask|mask_url|e }}/remove_note/{{ note.id|e }}">
 									<small>[{% trans 'remove' %}]</small>
@@ -55,7 +55,7 @@
 			</table>
 		{% endif %}
 
-		{% if mod|hasPermission(config.mod.create_notes) %}
+		{% if mod|hasPermission('create_notes') %}
 			<form action="" method="post" class="noteform">
 				<table>
 					<tr>
@@ -80,7 +80,7 @@
 	</fieldset>
 {% endif %}
 
-{% if bans|count > 0 and mod|hasPermission(config.mod.view_ban) %}
+{% if bans|count > 0 and mod|hasPermission('view_ban') %}
 	<fieldset id="bans">
 		<legend>
 			{% set bans_on_record = 'ban' ~ (bans|count != 1 ? 's' : '') ~ ' on record' %}
@@ -180,7 +180,7 @@
 	</fieldset>
 {% endif %}
 
-{% if mod|hasPermission(config.mod.ban) %}
+{% if mod|hasPermission('ban') %}
 	<fieldset>
 		<legend>{% trans 'New ban' %}</legend>
 		{% set redirect = '?/IP/' ~ mask|mask_url ~ '#bans' %}
@@ -188,7 +188,7 @@
 	</fieldset>
 {% endif %}
 
-{% if ban_history|count > 0 and mod|hasPermission(config.mod.view_banhistory) %}
+{% if ban_history|count > 0 and mod|hasPermission('view_banhistory') %}
 	<fieldset id="banhistory">
 		<legend>
 			{% set bans_on_record = 'historic ban' ~ (ban_history|count != 1 ? 's' : '') ~ ' on record' %}
@@ -276,10 +276,10 @@
 						</td>
 						<td>
 							{% if ban.username %}
-								{% if mod|hasPermission(config.mod.view_banstaff) %}
+								{% if mod|hasPermission('view_banstaff') %}
 									<a href="?/new_PM/{{ ban.username|e }}">{{ ban.username|e }}</a>
 								{% else %}
-									{% if mod|hasPermission(config.mod.view_banquestionmark) %}
+									{% if mod|hasPermission('view_banquestionmark') %}
 										<em>?</em>
 									{% else %}
 

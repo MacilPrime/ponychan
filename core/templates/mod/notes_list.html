@@ -16,7 +16,7 @@
 			{% for note in notes %}
 				<tr>
 					<td style="white-space: nowrap">
-						{% if mod|hasPermission(config.mod.remove_notes) %}<input type="checkbox" name="note_{{ note.id }}"> {% endif %}
+						{% if mod|hasPermission('remove_notes') %}<input type="checkbox" name="note_{{ note.id }}"> {% endif %}
 						<a href="?/IP/{{ note|mask|mask_url }}">{{ note|mask }}</a>
 					</td>
 					<td style="white-space: nowrap">
@@ -36,7 +36,7 @@
 			{% endfor %}
 		</table>
 		
-		{% if mod|hasPermission(config.mod.remove_notes) %}
+		{% if mod|hasPermission('remove_notes') %}
 			<p style="text-align:center">
 				<input type="submit" name="remove_notes" value="{% trans 'Remove notes' %}">
 			</p>

@@ -7,7 +7,7 @@
 {{ antibot.html() }}
 {% if mod %}<input type="hidden" name="mod" value="1">{% endif %}
 	<table>
-		{% if not config.field_disable_name or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri)) %}<tr>
+		{% if not config.field_disable_name or (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}<tr>
 			<th>
 				{% trans %}Name{% endtrans %}
 				{{ antibot.html() }}
@@ -17,7 +17,7 @@
 				{{ antibot.html() }}
 			</td>
 		</tr>{% endif %}
-		{% if not config.field_disable_email or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri)) %}<tr>
+		{% if not config.field_disable_email or (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}<tr>
 			<th>
 				{% trans %}Email{% endtrans %}
 				{{ antibot.html() }}
@@ -28,7 +28,7 @@
 			</td>
 		</tr>{% endif %}
 		<tr>
-			{% if not (config.field_disable_subject or (id and config.field_disable_reply_subject)) or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri)) %}<th>
+			{% if not (config.field_disable_subject or (id and config.field_disable_reply_subject)) or (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}<th>
 				{% trans %}Subject{% endtrans %}
 				{{ antibot.html() }}
 			</th>
@@ -124,12 +124,12 @@
 					 {% trans %}Mature Content{% endtrans %}</label>
 				</div>{% endif %}
 			{% if mod %}
-				{% if not id and post.mod|hasPermission(config.mod.sticky, board.uri) %}<div>
+				{% if not id and post.mod|hasPermission('sticky', board.uri) %}<div>
 					<label>
 					<input title="{% trans %}Sticky{% endtrans %}" type="checkbox" name="sticky" id="sticky">
 					 {% trans %}Sticky{% endtrans %}</label>
 				</div>{% endif %}
-				{% if not id and post.mod|hasPermission(config.mod.lock, board.uri) %}<div>
+				{% if not id and post.mod|hasPermission('lock', board.uri) %}<div>
 					<label>
 					<input title="{% trans %}Lock{% endtrans %}" type="checkbox" name="lock" id="lock">
 					 {% trans %}Lock{% endtrans %}</label>
@@ -151,7 +151,7 @@
 			</td>
 		</tr>
 		{% endif %}
-		{% if not config.field_disable_password or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri)) %}<tr>
+		{% if not config.field_disable_password or (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}<tr>
 			<th>
 				{% trans %}Password{% endtrans %}
 				{{ antibot.html() }}

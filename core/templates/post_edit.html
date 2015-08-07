@@ -57,7 +57,7 @@
 					<label for="raw">{% trans %}Raw HTML{% endtrans %}</label><br>
 					<input title="{% trans %}Raw HTML{% endtrans %}" type="checkbox" name="raw" id="raw">
 				</div>{% endif %}
-				{% if post.mod|hasPermission(config.mod.noeditmsg, board.uri) %}<div>
+				{% if post.mod|hasPermission('noeditmsg', board.uri) %}<div>
 					<label for="noeditmsg">{% trans %}No "Post was edited" message{% endtrans %}</label><br>
 					<input title="{% trans %}No edit message{% endtrans %}" type="checkbox" name="noeditmsg" id="noeditmsg">
 				</div>{% endif %}
