@@ -7,51 +7,31 @@
  */
 
 import $ from 'jquery';
+import RSVP from 'rsvp';
+import Bacon from 'baconjs';
 
-export function settingsAd(text, time, cb) {
-	return pop(text+' \u2191', time, cb);
+export function settingsAd(text, time) {
+	return pop(text+' \u2191', time);
 }
 
-export function pop(text, time, cb) {
-	if (time === undefined) time = 30;
-
-	var $navbar = $(".boardlist.top").first();
-	var $notice = $("<div/>")
-		.appendTo(document.body)
+export function pop(text, time = 30) {
+	const $navbar = $(".boardlist.top").first();
+	const $pop = $("<div/>")
 		.hide()
-		.addClass("popnotice")
 		.text(text)
-		.css("top", $navbar.height()+"px");
+		.fadeIn('fast')
+		.addClass("popnotice")
+		.css("top", $navbar.height()+"px")
+		.appendTo(document.body);
 
-	var hasFaded = false;
-	var hasCalled = false;
+	return new RSVP.Promise(resolve => {
+		const seconds = s => s * 1000;
+		// Above function is to convert seconds to milliseconds.
 
-	function fadeNow() {
-		if (hasFaded)
-			return;
-		hasFaded = true;
-		$notice.fadeOut(function() {
-			$notice.remove();
-		});
-		if (cb)
-			doCall();
-	}
-	function doCall() {
-		if (hasCalled)
-			return;
-		hasCalled = true;
-		cb();
-	}
-
-	$notice.click(fadeNow);
-
-	setTimeout(function() {
-		$notice.fadeIn(function() {
-			if (cb)
-				setTimeout(doCall, 5*1000);
-
-			if (time)
-				setTimeout(fadeNow, time*1000);
-		});
-	}, 1500);
+		Bacon.mergeAll(
+			Bacon.fromEvent($pop, 'click'),
+			Bacon.later(seconds(time))
+		).take(1)
+			.onValue(() => $pop.fadeOut(seconds(1), resolve));
+	}).then(() => $pop.remove());
 }
