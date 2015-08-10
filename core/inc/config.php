@@ -889,7 +889,6 @@
 	$config['file_post'] = 'post.php';
 	$config['file_instance_script'] = 'instance.js';
 	$config['file_main_script'] = 'js/main.js';
-    $config['file_mod_script'] = 'js/mod.js';
 
 	// Board directory, followed by a forward-slash (/). (%s is board abbreviation)
 	$config['board_path'] = '%s/';
