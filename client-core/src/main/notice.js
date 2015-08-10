@@ -15,13 +15,20 @@ export function settingsAd(text, time) {
 }
 
 export function pop(text, time = 30) {
-	const $navbar = $(".boardlist.top").first();
-	const $pop = $("<div/>")
+	const bubbleSpacing = 5;
+	const $pop = $('<div />')
 		.hide()
 		.text(text)
 		.fadeIn('fast')
-		.addClass("popnotice")
-		.css("top", $navbar.height()+"px")
+		.addClass('popnotice')
+		.css('top', () =>
+		// calculate navbar height + all existing bubble heights.
+		$('.boardlist.top')
+			.first()
+			.height()
+		+ $('.popnotice')
+			.map((i, el) => $(el).outerHeight()).get()
+			.reduce((a, b) => a + b + bubbleSpacing, 0))
 		.appendTo(document.body);
 
 	return new RSVP.Promise(resolve => {
@@ -33,5 +40,17 @@ export function pop(text, time = 30) {
 			Bacon.later(seconds(time))
 		).take(1)
 			.onValue(() => $pop.fadeOut(seconds(1), resolve));
-	}).then(() => $pop.remove());
+	}).then(() => {
+			$pop.nextAll('.popnotice')
+				.each((i, el) =>
+				// All bubbles stacked under the removed bubble
+				// have to take its place.
+				$(el).css({
+					top: parseInt($(el)
+						.css('top')
+						.match(/^\d+/)
+						.pop()) - $pop.outerHeight() - bubbleSpacing
+				}));
+			$pop.remove();
+		});
 }
