@@ -6,8 +6,8 @@
  */
 import $ from 'jquery';
 import RSVP from 'rsvp';
-import {pop} from '../main/notice';
-import {get_post_num} from '../main/post-info';
+import {pop} from './notice';
+import {get_post_num} from './post-info';
 
 $(document).on('click', '.controls a', evt => {
 

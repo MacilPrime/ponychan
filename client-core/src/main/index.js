@@ -28,6 +28,7 @@ import './legacy/smartphone-spoiler.js';
 import './legacy/show-backlinks.js';
 import './navbar.js';
 import './permalink.js';
+import './post-controls.js';
 import './qr.js';
 import './tags.js';
 import './misc.js';
