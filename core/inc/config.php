@@ -1183,7 +1183,7 @@
 	// Create a user
 	$config['permissions']['createusers'] = ADMIN;
 	// View the moderation log
-	$config['permissions']['modlog'] = ADMIN;
+	$config['permissions']['modlog'] = MOD;
 	// Create a PM (viewing mod usernames)
 	$config['permissions']['create_pm'] = JANITOR;
 	// Read any PM, sent to or from anybody

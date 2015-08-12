@@ -44,7 +44,7 @@ function mod_login() {
 
 			$args['error'] = $config['error']['invalid'];
 		} else {
-			modLog('Logged in');
+			modLog('Logged in', 2);
 
 			// Login successful
 			// Set cookies
@@ -138,7 +138,7 @@ function mod_edit_board($boardName) {
 				cache::delete('all_boards');
 			}
 
-			modLog('Deleted board: ' . sprintf($config['board_abbreviation'], $board['uri']), false);
+			modLog('Deleted board: ' . sprintf($config['board_abbreviation'], $board['uri']), 1, false);
 
 			// Delete entire board directory
 			rrmdir($board['uri'] . '/');
@@ -395,7 +395,7 @@ function mod_news_delete($id) {
 }
 
 function mod_log($page_no = 1) {
-	global $config;
+	global $config, $mod;
 
 	if ($page_no < 1)
 		error($config['error']['404']);
@@ -403,7 +403,7 @@ function mod_log($page_no = 1) {
 	if (!hasPermission('modlog'))
 		error($config['error']['noaccess']);
 
-	$query = prepare("SELECT `username`, `mod`, INET6_NTOA(`ip_data`) AS `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` ORDER BY `time` DESC LIMIT :offset, :limit");
+	$query = prepare("SELECT `username`, `mod`, INET6_NTOA(`ip_data`) AS `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `permission_level` <= {$mod['type']} ORDER BY `time` DESC LIMIT :offset, :limit");
 	$query->bindValue(':limit', $config['mod']['modlog_page'], PDO::PARAM_INT);
 	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['modlog_page'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
@@ -412,7 +412,7 @@ function mod_log($page_no = 1) {
 	if (empty($logs) && $page_no > 1)
 		error($config['error']['404']);
 
-	$query = prepare("SELECT COUNT(*) FROM `modlogs`");
+	$query = prepare("SELECT COUNT(*) FROM `modlogs` WHERE `permission_level` <= {$mod['type']}");
 	$query->execute() or error(db_error($query));
 	$count = $query->fetchColumn(0);
 
@@ -420,7 +420,7 @@ function mod_log($page_no = 1) {
 }
 
 function mod_user_log($username, $page_no = 1) {
-	global $config;
+	global $config, $mod;
 
 	if ($page_no < 1)
 		error($config['error']['404']);
@@ -428,7 +428,7 @@ function mod_user_log($username, $page_no = 1) {
 	if (!hasPermission('modlog'))
 		error($config['error']['noaccess']);
 
-	$query = prepare("SELECT `username`, `mod`, INET6_NTOA(`ip_data`) AS `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username ORDER BY `time` DESC LIMIT :offset, :limit");
+	$query = prepare("SELECT `username`, `mod`, INET6_NTOA(`ip_data`) AS `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username AND `permission_level` <= {$mod['type']} ORDER BY `time` DESC LIMIT :offset, :limit");
 	$query->bindValue(':username', $username);
 	$query->bindValue(':limit', $config['mod']['modlog_page'], PDO::PARAM_INT);
 	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['modlog_page'], PDO::PARAM_INT);
@@ -438,7 +438,7 @@ function mod_user_log($username, $page_no = 1) {
 	if (empty($logs) && $page_no > 1)
 		error($config['error']['404']);
 
-	$query = prepare("SELECT COUNT(*) FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username");
+	$query = prepare("SELECT COUNT(*) FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username AND `permission_level` <= {$mod['type']}");
 	$query->bindValue(':username', $username);
 	$query->execute() or error(db_error($query));
 	$count = $query->fetchColumn(0);
@@ -1637,7 +1637,7 @@ function mod_user($uid) {
 			$query->bindValue(':id', $uid);
 			$query->execute() or error(db_error($query));
 
-			modLog('Deleted user ' . utf8tohtml($user['username']) . ' <small>(#' . $user['id'] . ')</small>');
+			modLog('Deleted user ' . utf8tohtml($user['username']) . ' <small>(#' . $user['id'] . ')</small>', 2);
 
 			header('Location: ?/users', true, $config['redirect_http']);
 
@@ -1664,7 +1664,7 @@ function mod_user($uid) {
 			$query->bindValue(':password', $_POST['password']);
 			$query->execute() or error(db_error($query));
 
-			modLog('Changed password for ' . utf8tohtml($_POST['username']) . ' <small>(#' . $user['id'] . ')</small>');
+			modLog('Changed password for ' . utf8tohtml($_POST['username']) . ' <small>(#' . $user['id'] . ')</small>', 2);
 
 			if ($uid == $mod['id']) {
 				login($_POST['username'], $_POST['password']);
@@ -1691,7 +1691,7 @@ function mod_user($uid) {
 			$query->bindValue(':password', $_POST['password']);
 			$query->execute() or error(db_error($query));
 
-			modLog('Changed own password');
+			modLog('Changed own password', 2);
 
 			login($user['username'], $_POST['password']);
 			setCookies();
@@ -1763,7 +1763,7 @@ function mod_user_new() {
 
 		$userID = $pdo->lastInsertId();
 
-		modLog('Created a new user: ' . utf8tohtml($_POST['username']) . ' <small>(#' . $userID . ')</small>');
+		modLog('Created a new user: ' . utf8tohtml($_POST['username']) . ' <small>(#' . $userID . ')</small>', 2);
 
 		header('Location: ?/users', true, $config['redirect_http']);
 		return;
@@ -1799,7 +1799,7 @@ function mod_user_promote($uid, $action) {
 	$query->bindValue(':id', $uid);
 	$query->execute() or error(db_error($query));
 
-	modLog(($action == 'promote' ? 'Promoted' : 'Demoted') . " user #{$uid}");
+	modLog(($action == 'promote' ? 'Promoted' : 'Demoted') . " user #{$uid}", 2);
 
 	header('Location: ?/users', true, $config['redirect_http']);
 }
@@ -1845,7 +1845,7 @@ function mod_pm($id, $reply = false) {
 			cache::delete('pm_unreadcount_' . $mod['id']);
 		}
 
-		modLog('Read a PM');
+		modLog('Read a PM', 2);
 	}
 
 	if ($reply) {
@@ -1923,7 +1923,7 @@ function mod_new_pm($username) {
 			cache::delete('pm_unreadcount_' . $id);
 		}
 
-		modLog('Sent a PM to ' . utf8tohtml($username));
+		modLog('Sent a PM to ' . utf8tohtml($username), 2);
 
 		header('Location: ?/', true, $config['redirect_http']);
 	}
@@ -2142,7 +2142,7 @@ function mod_report_dismiss($id, $all = false) {
 	if ($all)
 		modLog("Dismissed all reports by <a href=\"?/IP/$ip\">$ip</a>");
 	else
-		modLog("Dismissed a report for post #{$id}", $board);
+		modLog("Dismissed a report for post #{$id}", 1, $board);
 
 	header('Location: ?/reports', true, $config['redirect_http']);
 }
