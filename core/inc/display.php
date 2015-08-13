@@ -340,7 +340,6 @@ class Post {
 		$this->filesize = $filesize;
 		$this->filename = $filename;
 		$this->ip = $ip;
-		$this->ip_url = ipToUserRange($ip);
 		$this->embed = $embed;
 		$this->root = $root;
 		$this->mod = $mod;
@@ -448,7 +447,6 @@ class Thread {
 		$this->omitted_images = 0;
 		$this->posts = array();
 		$this->ip = $ip;
-		$this->ip_url = ipToUserRange($ip);
 		$this->sticky = $sticky;
 		$this->locked = $locked;
 		$this->bumplocked = $bumplocked;

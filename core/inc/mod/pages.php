@@ -1710,7 +1710,7 @@ function mod_user($uid) {
 	}
 
 	if (hasPermission('modlog')) {
-		$query = prepare('SELECT * FROM `modlogs` WHERE `mod` = :id ORDER BY `time` DESC LIMIT 5');
+		$query = prepare('SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `modlogs` WHERE `mod` = :id ORDER BY `time` DESC LIMIT 5');
 		$query->bindValue(':id', $uid);
 		$query->execute() or error(db_error($query));
 		$log = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -2134,8 +2134,11 @@ function mod_report_dismiss($id, $all = false) {
 		error($config['error']['noaccess']);
 
 	if ($all) {
-		$query = prepare("DELETE FROM `reports` WHERE `ip_data` = INET6_ATON(:ip)");
-		$query->bindValue(':ip', $ip);
+		$range = parse_mask(ipToUserRange($ip));
+		$query = prepare("DELETE FROM `reports` WHERE `ip_type` = :range_type AND INET6_ATON(:range_start) <= `ip_data` AND `ip_data` <= INET6_ATON(:range_end)");
+		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+		$query->bindValue(':range_start', $range['range_start']);
+		$query->bindValue(':range_end', $range['range_end']);
 	} else {
 		$query = prepare("DELETE FROM `reports` WHERE `id` = :id");
 		$query->bindValue(':id', $id);
