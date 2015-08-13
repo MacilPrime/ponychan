@@ -284,7 +284,7 @@ function bidi_cleanup($str){
 
 function secure_link_confirm($text, $title, $href) {
 
-	return '<a  title="' . htmlentities($title) . '" href="?/' . htmlentities(addslashes($href . '/' . make_secure_link_token($href))) . '">' . $text . '</a>';
+	return '<a  title="' . htmlentities($title) . '" href="?/' . htmlentities(addslashes($href )) . '">' . $text . '</a>';
 }
 function secure_link($href) {
 	return $href . '/' . make_secure_link_token($href);
