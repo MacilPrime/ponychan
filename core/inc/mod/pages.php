@@ -403,7 +403,8 @@ function mod_log($page_no = 1) {
 	if (!hasPermission('modlog'))
 		error($config['error']['noaccess']);
 
-	$query = prepare("SELECT `username`, `mod`, INET6_NTOA(`ip_data`) AS `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `permission_level` <= {$mod['type']} ORDER BY `time` DESC LIMIT :offset, :limit");
+	$query = prepare("SELECT `username`, `mod`, INET6_NTOA(`ip_data`) AS `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `permission_level` <= :permission_level ORDER BY `time` DESC LIMIT :offset, :limit");
+	$query->bindValue(':permission_level', $mod['type'], PDO::PARAM_INT);
 	$query->bindValue(':limit', $config['mod']['modlog_page'], PDO::PARAM_INT);
 	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['modlog_page'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
@@ -412,7 +413,8 @@ function mod_log($page_no = 1) {
 	if (empty($logs) && $page_no > 1)
 		error($config['error']['404']);
 
-	$query = prepare("SELECT COUNT(*) FROM `modlogs` WHERE `permission_level` <= {$mod['type']}");
+	$query = prepare("SELECT COUNT(*) FROM `modlogs` WHERE `permission_level` <= :permission_level");
+	$query->bindValue(':permission_level', $mod['type'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 	$count = $query->fetchColumn(0);
 
@@ -428,8 +430,9 @@ function mod_user_log($username, $page_no = 1) {
 	if (!hasPermission('modlog'))
 		error($config['error']['noaccess']);
 
-	$query = prepare("SELECT `username`, `mod`, INET6_NTOA(`ip_data`) AS `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username AND `permission_level` <= {$mod['type']} ORDER BY `time` DESC LIMIT :offset, :limit");
+	$query = prepare("SELECT `username`, `mod`, INET6_NTOA(`ip_data`) AS `ip`, `board`, `time`, `text` FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username AND `permission_level` <= :permission_level ORDER BY `time` DESC LIMIT :offset, :limit");
 	$query->bindValue(':username', $username);
+	$query->bindValue(':permission_level', $mod['type'], PDO::PARAM_INT);
 	$query->bindValue(':limit', $config['mod']['modlog_page'], PDO::PARAM_INT);
 	$query->bindValue(':offset', ($page_no - 1) * $config['mod']['modlog_page'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
@@ -438,8 +441,9 @@ function mod_user_log($username, $page_no = 1) {
 	if (empty($logs) && $page_no > 1)
 		error($config['error']['404']);
 
-	$query = prepare("SELECT COUNT(*) FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username AND `permission_level` <= {$mod['type']}");
+	$query = prepare("SELECT COUNT(*) FROM `modlogs` LEFT JOIN `mods` ON `mod` = `mods`.`id` WHERE `username` = :username AND `permission_level` <= :permission_level");
 	$query->bindValue(':username', $username);
+	$query->bindValue(':permission_level', $mod['type'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 	$count = $query->fetchColumn(0);
 
