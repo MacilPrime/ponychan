@@ -101,28 +101,6 @@ const action = {
 		});
 		return list;
 	},
-	findFilesDeleted() {
-		_.forOwn(list.dataPosts, (newPost, id) => {
-			$(newPost)
-				.find('.postimg[src="/static/deleted.png"]')
-				.each(function () {
-					const $oldPost = $(list.currentPosts[id]);
-					// does the original have the file marked as deleted?
-					const isNotMarked = $oldPost
-							.children('.postimg[src="/static/deleted.png"]')
-							.length == 0;
-					if (isNotMarked) {
-						$oldPost.children('.fileinfo + a').remove(); // remove image
-						$oldPost.children('.fileinfo')
-							.replaceWith(
-							$('<img />')
-								.addClass('postimg')
-								.attr('src', '/static/deleted.png')
-						)
-					}
-				});
-		})
-	},
 	markPostsAsEdited() {
 		_.forOwn(list.dataPosts, (newPost, id) => {
 			// Look for edited posts in the new page first.
