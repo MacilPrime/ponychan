@@ -61,6 +61,8 @@ const list = {
 			// to compare with our current post stack until we find our
 			// first matching post. This is a subtractive process.
 			_.forOwn(this.currentPosts, (post, id) => {
+				if ($(post).is('.op'))
+					return true; // The OP doesn't count.
 				if (this.matchesBoth(id))
 					return false; // break the loop.
 				else
