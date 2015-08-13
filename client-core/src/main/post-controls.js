@@ -8,6 +8,7 @@ import $ from 'jquery';
 import RSVP from 'rsvp';
 import {pop} from './notice';
 import {get_post_num} from './post-info';
+import {updateThreadNow} from './legacy/reloader';
 
 $(document).on('click', '.controls a', evt => {
 
@@ -24,10 +25,9 @@ $(document).on('click', '.controls a', evt => {
 						pop('Post no. '+get_post_num($post)+' has been removed.', 5);
 						$post.children('.controls')
 							.addClass('dead-buttons')
-							.each(function() {
-								$(this).text($(this).text());
-							});
-						// Disable all mod buttons.
+							.each((i, el) => $(el).text($(el).text()));
+							// Unwrap the text from the links to disable the buttons.
+							updateThreadNow(true);
 					});
 				break;
 			case '[D+]':
@@ -48,6 +48,7 @@ $(document).on('click', '.controls a', evt => {
 						// lower the opacity of the image to gesture that its source
 						// is removed.
 						$post.find('> a > .postimg').addClass('dead-file')
+						updateThreadNow(true)
 					});
 				break;
 			default:
