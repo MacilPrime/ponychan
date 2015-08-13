@@ -363,7 +363,7 @@ if (file_exists($config['has_installed'])) {
 			}
 		case 'v0.9.6-dev-8-mlpchan-7':
 			query("ALTER TABLE `modlogs` ADD `permission_level` SMALLINT(1) DEFAULT 1 NOT NULL") or error(db_error());
-			query("UPDATE `modlogs` SET `permission_level` = 2 WHERE `text` LIKE '% a PM%' OR `text` LIKE '%password%' OR `text` LIKE 'Promoted%' OR `text` LIKE 'Demoted%' OR `text` LIKE 'Created a new user: %' OR `text` LIKE 'Deleted user %'") or error(db_error());
+			query("UPDATE `modlogs` SET `permission_level` = 2 WHERE `text` LIKE '% a PM%' OR `text` LIKE '%password%' OR `text` LIKE 'Promoted%' OR `text` LIKE 'Demoted%' OR `text` LIKE 'Created a new user: %' OR `text` LIKE 'Deleted user %' OR `text` = 'Logged in'") or error(db_error());
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);
