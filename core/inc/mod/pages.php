@@ -2134,7 +2134,8 @@ function mod_report_dismiss($id, $all = false) {
 		error($config['error']['noaccess']);
 
 	if ($all) {
-		$range = parse_mask(ipToUserRange($ip));
+		$ipRange = ipToUserRange($ip);
+		$range = parse_mask($ipRange);
 		$query = prepare("DELETE FROM `reports` WHERE `ip_type` = :range_type AND INET6_ATON(:range_start) <= `ip_data` AND `ip_data` <= INET6_ATON(:range_end)");
 		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 		$query->bindValue(':range_start', $range['range_start']);
@@ -2147,7 +2148,7 @@ function mod_report_dismiss($id, $all = false) {
 
 
 	if ($all)
-		modLog("Dismissed all reports by <a href=\"?/IP/$ip\">$ip</a>");
+		modLog("Dismissed all reports by <a href=\"?/IP/$ipRange\">$ipRange</a>");
 	else
 		modLog("Dismissed a report for post #{$id}", 1, $board);
 
