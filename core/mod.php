@@ -130,7 +130,7 @@ foreach ($pages as $uri => $handler) {
 				if (empty($_SERVER['HTTP_X_REQUESTED_WITH']))
 					return true;
 				else
-					return strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+					return (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest');
 			}
 			if (!$secure_post_only || $_SERVER['REQUEST_METHOD'] === 'POST') {
 				if (isset($matches['token'])) {
