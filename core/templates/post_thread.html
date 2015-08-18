@@ -101,8 +101,8 @@ This is a mature content thread. You must have viewing mature content enabled in
 				 <span class="posterid id_{{ post.ip|poster_id(post.thread) }}">{{ post.ip|poster_id(post.id) }}</span>)
 			</span>
 		{% endif %}
-		{% if post.mod and post.mod|hasPermission(config.mod.show_ip, board.uri) %}
-			 <span class="posterip">[<a href="?/IP/{{ post.ip_url }}">{{ post.ip }}</a>]</span>
+		{% if post.mod and post.mod|hasPermission('show_ip', board.uri) %}
+			 <span class="posterip">[<a href="?/IP/{{ post.ip|ipToUserRange }}">{{ post.ip }}</a>]</span>
 		{% endif %}
 		{% if post.mature %}
 			 <span class="mature_note">Mature Content</span>
@@ -119,7 +119,7 @@ This is a mature content thread. You must have viewing mature content enabled in
 	{% if post.locked %}
 		<img class="icon" title="Locked" src="{{ config.image_locked }}" alt="Locked" />
 	{% endif %}
-	{% if post.bumplocked and (config.mod.view_bumplock < 0 or (post.mod and post.mod|hasPermission(config.mod.view_bumplock, board.uri))) %}
+	{% if post.bumplocked and (config.mod.view_bumplock < 0 or (post.mod and post.mod|hasPermission('view_bumplock', board.uri))) %}
 		<img class="icon" title="Bumplocked" src="{{ config.image_bumplocked }}" alt="Bumplocked" />
 	{% endif %}
 	{% if index %}

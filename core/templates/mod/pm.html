@@ -33,7 +33,7 @@
 		<li style="padding:5px 0">
 			<input type="submit" name="delete" value="{% trans 'Delete forever' %}">
 		</li>
-		{% if mod|hasPermission(config.mod.create_pm) %}
+		{% if mod|hasPermission('create_pm') %}
 			<li style="padding:5px 0">
 				<a href="?/PM/{{ id }}/reply">
 					{% trans 'Reply with quote' %}

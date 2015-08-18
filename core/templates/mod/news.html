@@ -1,18 +1,18 @@
-{% if mod|hasPermission(config.mod.news) %}
+{% if mod|hasPermission('news') %}
 	<fieldset>
 		<legend>{% trans 'New post' %}</legend>
 		<form style="margin:0" action="" method="post">
 			<table>
 				<tr>
 					<th>
-						{% if mod|hasPermission(config.mod.news_custom) %}
+						{% if mod|hasPermission('news_custom') %}
 							<label for="name">{% trans 'Name' %}</label>
 						{% else %}
 							{% trans 'Name' %}
 						{% endif %}
 					</th>
 					<td>
-						{% if mod|hasPermission(config.mod.news_custom) %}
+						{% if mod|hasPermission('news_custom') %}
 							<input type="text" size="55" name="name" id="name" value="{{ mod.username|e }}">
 						{% else %}
 							{{ mod.username|e }}
@@ -37,7 +37,7 @@
 
 {% for post in news %}
 	<div class="ban">
-		{% if mod|hasPermission(config.mod.news_delete) %}
+		{% if mod|hasPermission('news_delete') %}
 			<span style="float:right;padding:2px">
 				<a class="unimportant" href="?/news/delete/{{ post.id }}">[{% trans 'delete' %}]</a>
 			</span>

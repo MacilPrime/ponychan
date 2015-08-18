@@ -4,7 +4,7 @@
 		<th>{% trans 'Username' %}</th>
 		<th>{% trans 'Type' %}</th>
 		<th>{% trans 'Boards' %}</th>
-		{% if mod|hasPermission(config.mod.modlog) %}
+		{% if mod|hasPermission('modlog') %}
 			<th>{% trans 'Last action' %}</th>
 		{% endif %}
 		<th>&hellip;</th>
@@ -38,7 +38,7 @@
 					{{ _boards|join(', ') }}
 				{% endif %}
 			</td>
-			{% if mod|hasPermission(config.mod.modlog) %}
+			{% if mod|hasPermission('modlog') %}
 				<td>
 					{% if user.last %}
 						<span title="{{ user.action|e }}">{{ user.last|ago }}</span>
@@ -48,19 +48,19 @@
 				</td>
 			{% endif %}
 			<td>
-				{% if mod|hasPermission(config.mod.promoteusers) and user.type < constant('ADMIN') %}
+				{% if mod|hasPermission('promoteusers') and user.type < constant('ADMIN') %}
 					<a style="float:left;text-decoration:none" href="?/users/{{ user.id }}/promote" title="{% trans 'Promote' %}">&#9650;</a>
 				{% endif %}
-				{% if mod|hasPermission(config.mod.promoteusers) and user.type > constant('JANITOR') %}
+				{% if mod|hasPermission('promoteusers') and user.type > constant('JANITOR') %}
 					 <a style="float:left;text-decoration:none" href="?/users/{{ user.id }}/demote" title="{% trans 'Demote' %}">&#9660;</a>
 				{% endif %}
-				{% if mod|hasPermission(config.mod.modlog) %}
+				{% if mod|hasPermission('modlog') %}
 					 <a class="unimportant" style="margin-left:5px;float:right" href="?/log:{{ user.username|e }}">[{% trans 'log' %}]</a>
 				{% endif %}
-				{% if mod|hasPermission(config.mod.editusers) or (mod|hasPermission(config.mod.change_password) and mod.id == user.id) %}
+				{% if mod|hasPermission('editusers') or (mod|hasPermission('change_password') and mod.id == user.id) %}
 					 <a class="unimportant" style="margin-left:5px;float:right" href="?/users/{{ user.id }}">[{% trans 'edit' %}]</a>
 				{% endif %}
-				{% if mod|hasPermission(config.mod.create_pm) %}
+				{% if mod|hasPermission('create_pm') %}
 					 <a class="unimportant" style="margin-left:5px;float:right" href="?/new_PM/{{ user.username|e }}">[{% trans 'PM' %}]</a>
 				{% endif %}
 			</td>
@@ -68,7 +68,7 @@
 	{% endfor %}
 </table>
 
-{% if mod|hasPermission(config.mod.createusers) %}
+{% if mod|hasPermission('createusers') %}
 	<p style="text-align:center">
 		<a href="?/users/new">Create a new user</a>
 	</p>

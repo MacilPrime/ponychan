@@ -35,8 +35,8 @@
 				 <span class="posterid id_{{ post.ip|poster_id(post.thread) }}">{{ post.ip|poster_id(post.thread) }}</span>)
 			</span>
 		{% endif %}
-		{% if post.mod and post.mod|hasPermission(config.mod.show_ip, board.uri) %}
-			 <span class="posterip">[<a href="?/IP/{{ post.ip_url }}">{{ post.ip }}</a>]</span>
+		{% if post.mod and post.mod|hasPermission('show_ip', board.uri) %}
+			 <span class="posterip">[<a href="?/IP/{{ post.ip|ipToUserRange }}">{{ post.ip }}</a>]</span>
 		{% endif %}
 		{% if post.mature %}
 			 <span class="mature_note">Mature Content</span>

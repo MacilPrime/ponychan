@@ -90,14 +90,16 @@ function destroyCookies() {
 	setcookie($config['cookies']['mod'], 'deleted', time() - $config['cookies']['expire'], $config['cookies']['jail']?$config['cookies']['path'] : '/', null, false, true);
 }
 
-function modLog($action, $_board=null) {
+function modLog($action, $permissionLevel=1, $_board=null) {
 	global $mod, $board, $config;
-	$query = prepare("INSERT INTO `modlogs` (`mod`, `ip_type`, `ip_data`, `board`, `time`, `text`) VALUES (:id, :ip_type, INET6_ATON(:ip), :board, :time, :text)");
+	$query = prepare("INSERT INTO `modlogs` (`mod`, `ip_type`, `ip_data`, `board`, `time`, `text`, `permission_level`)
+									VALUES (:id, :ip_type, INET6_ATON(:ip), :board, :time, :text, :permission_level)");
 	$query->bindValue(':id', $mod['id'], PDO::PARAM_INT);
 	$query->bindValue(':ip_type', ipType($_SERVER['REMOTE_ADDR']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':time', time(), PDO::PARAM_INT);
 	$query->bindValue(':text', $action);
+	$query->bindValue(':permission_level', $permissionLevel);
 	if (isset($_board))
 		$query->bindValue(':board', $_board);
 	elseif (isset($board))

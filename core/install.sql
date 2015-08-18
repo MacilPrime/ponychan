@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `modlogs` (
   `board` varchar(120) DEFAULT NULL,
   `time` int(11) NOT NULL,
   `text` text NOT NULL,
+  `permission_level` smallint(1) NOT NULL DEFAULT 1 COMMENT 'Uses same permission hierarchy as defined in config',
   KEY `time` (`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
