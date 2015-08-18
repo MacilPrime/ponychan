@@ -39,11 +39,11 @@ $(document).on('click', '.controls a', evt => {
 			case '[F]':
 				if (confirm('Are you sure you want to delete this file?'))
 					submitAction(evt.target.href).then(() => {
-						pop('File for post no. '+get_post_num($post)+' has been removed.', 5);
+						pop('File for post no. '+get_post_num($post)+' has been removed.', 10);
 						$(evt.target).remove(); // this button is no longer needed.
 						// lower the opacity of the image to gesture that its source
 						// is removed.
-						$post.find('> a > .postimg').addClass('dead-file')
+						$post.find('> a > .postimg').addClass('dead-file');
 						updateThreadNow(true)
 					});
 				break;
