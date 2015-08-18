@@ -35,6 +35,7 @@ import './misc.js';
 import './titlebar.js';
 import './hide-toggle.js';
 import './post-hiding.js';
+import './dashboard.js';
 import './ips.js';
 import './fancy.js';
 import './mc.js';
