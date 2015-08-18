@@ -97,6 +97,10 @@ const action = {
 						.addClass('removedpost')
 						.text('[Removed]')
 				);
+				$post.children('.controls')
+					.addClass('dead-buttons')
+					.each((i, el) => $(el).text($(el).text()));
+				// Unwrap the text from the links to disable the buttons.
 			}
 		});
 		return list;

@@ -23,10 +23,6 @@ $(document).on('click', '.controls a', evt => {
 				if (confirm('Are you sure you want to delete this?'))
 					submitAction(evt.target.href).then(() => {
 						pop('Post no. '+get_post_num($post)+' has been removed.', 5);
-						$post.children('.controls')
-							.addClass('dead-buttons')
-							.each((i, el) => $(el).text($(el).text()));
-							// Unwrap the text from the links to disable the buttons.
 							updateThreadNow(true);
 					});
 				break;
