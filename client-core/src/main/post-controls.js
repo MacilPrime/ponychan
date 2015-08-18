@@ -184,12 +184,15 @@ function ban(url, $post) {
 								.then(() => retract($banForm.closest('.ban-fields')), reject)
 								.then(() => {
 									if (($banMessage.length + $showMessage.length) > 1)
-										$('<span />')
-											.hide()
-											.fadeIn()
-											.html('('+$banMessage.val()+')')
-											.addClass('public_ban')
-											.appendTo(get_post_body($post));
+										get_post_body($post)
+											.append(
+											'\n',
+											$('<span />')
+												.hide()
+												.fadeIn()
+												.html('('+$banMessage.val()+')')
+												.addClass('public_ban')
+										);
 									resolve();
 							});
 					})).appendTo($post)
