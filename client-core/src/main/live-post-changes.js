@@ -6,6 +6,7 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import RSVP from 'rsvp';
+import {footer} from './footer-utils';
 import {get_post_body} from './post-info';
 
 function init() {
@@ -101,6 +102,7 @@ const action = {
 					.addClass('dead-buttons')
 					.each((i, el) => $(el).text($(el).text()));
 				// Unwrap the text from the links to disable the buttons.
+				footer($post).kill();
 			}
 		});
 		return list;

@@ -28,6 +28,7 @@ export function footer($post) {
 			}
 
 			getFooter()
+				.filter(':not(.dead-buttons)')
 				.append(
 				$('<li />')
 					.addClass('footer-item')
@@ -44,6 +45,8 @@ export function footer($post) {
 		},
 		removeItem(name) {
 			let $footer = $post.children('.postfooter');
+			if ($footer.hasClass('dead-buttons'))
+				return;
 			$footer
 				.children(`[data-footer="${name.toLowerCase()}"]`)
 				.remove();
@@ -52,6 +55,12 @@ export function footer($post) {
 			if ($footer.children().length == 0) {
 				$footer.remove();
 			}
+		},
+		kill() {
+			let $footer = $post.children('.postfooter')
+			$footer
+				.addClass('dead-buttons')
+				.text($footer.text());
 		}
 	}
 }
