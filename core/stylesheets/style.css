@@ -1315,3 +1315,11 @@ img.catalogthumb {
 .edit-revealer {
 	margin: 0 1ch;
 }
+
+/* Ajax ban form */
+.ban-fields {
+	border-radius: 1em;
+	margin: 0 1em 1em;
+	border: 2px dotted rgba(0, 0, 0, 0.2);
+	clear: both;
+}
