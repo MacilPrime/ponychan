@@ -95,7 +95,7 @@ function submitAction(url, $form) {
 				resolve($($.parseHTML(data)));
 			},
 			error(xhr, status, err) {
-				toggleFormControls(true);
+				if (hasForm) toggleFormControls(true);
 				pop('Fatal: '+xhr.status+' '+err, 5);
 				reject();
 			}
