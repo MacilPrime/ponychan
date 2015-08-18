@@ -54,7 +54,7 @@ $(document).on('click', '.controls a', evt => {
 						pop(get_post_name($post) + get_post_trip($post)
 						+ ' (No. ' + get_post_num($post) + ') has been banned.');
 						updateThreadNow(true)
-					}).catch(error => pop(error));
+					});
 				break;
 			default:
 				redirect();
