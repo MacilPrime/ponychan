@@ -69,6 +69,7 @@ function submitAction(url, $form) {
 	const hasForm = $form instanceof $;
 	// If the 2nd (optional) parameter is specified, it sends a POST request.
 	return new RSVP.Promise((resolve, reject) => {
+		if (hasForm) toggleFormControls(false);
 		$.ajax(url, {
 			method: hasForm ? 'POST' : 'GET',
 			data: (() => {
@@ -88,9 +89,6 @@ function submitAction(url, $form) {
 			// FIXME Setting this to 'false' triggers an invalid security token error
 			// because it thinks the unix timestamp trailing the url is the token.
 			processData: false,
-			beforeSend() {
-				if (hasForm) toggleFormControls(false);
-			},
 			success(data) {
 				resolve($($.parseHTML(data)));
 			},
@@ -116,7 +114,7 @@ function submitAction(url, $form) {
 						.prop('disabled', 'true');
 					// Cache the original value and always disable.
 				}
-			})
+			});
 		}
 	});
 }
