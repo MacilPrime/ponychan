@@ -126,12 +126,10 @@ foreach ($pages as $uri => $handler) {
 
 		if (preg_match('/^secure(_POST)? /', $handler, $m)) {
 			$secure_post_only = isset($m[1]);
-			function noAjaxHeader() {
+			function hasCsrfHeader() {
 				// You can't csrf with extra headers against your target.
-				if (empty($_SERVER['HTTP_X_REQUESTED_WITH']))
-					return true;
-				else
-					return (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest');
+				return (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) &&
+					strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 			}
 			if (!$secure_post_only || $_SERVER['REQUEST_METHOD'] === 'POST') {
 				if (isset($matches['token'])) {
@@ -143,7 +141,7 @@ foreach ($pages as $uri => $handler) {
 					$actual_query = $query;
 				}
 
-				if ($token === false && noAjaxHeader()) {
+				if ($token === false && !hasCsrfHeader()) {
 					if ($secure_post_only)
 						error($config['error']['csrf']);
 					else {
@@ -153,7 +151,7 @@ foreach ($pages as $uri => $handler) {
 				}
 
 				// CSRF-protected page; validate security token
-				if ($token !== make_secure_link_token(substr($actual_query, 1)) && noAjaxHeader()) {
+				if ($token !== make_secure_link_token(substr($actual_query, 1)) && !hasCsrfHeader()) {
 					error($config['error']['csrf']);
 				}
 			}
