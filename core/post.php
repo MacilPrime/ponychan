@@ -209,11 +209,11 @@ if (isset($_POST['delete'])) {
 	if (isset($password)) {
 		if (!doesPasswordMatchPostHash($password, $post['password']))
 			error($config['error']['invalidpassword'], false, 403);
+	} else {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
 	}
-
-	// Check the referrer
-	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
-		error($config['error']['referer']);
 
 	$post['op'] = !$post['thread'];
 	$post['body'] = $_POST['body'];
