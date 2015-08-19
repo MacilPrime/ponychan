@@ -10,7 +10,15 @@ import {pop} from './notice';
 import {get_post_num, get_post_name, get_post_trip, get_post_body} from './post-info';
 import {updateThreadNow} from './legacy/reloader';
 
+function showError(e) {
+	console.error(e);
+	alert("Error: "+(e&&e.message?e.message:e));
+}
+
 $(document).on('click', '.controls a', evt => {
+	function redirect() {
+		window.location = evt.target.href;
+	}
 
 	if (evt.which !== 2 && !evt.ctrlKey && !evt.shiftKey) {
 		// ignore new-window clicks.
@@ -27,14 +35,14 @@ $(document).on('click', '.controls a', evt => {
 					});
 				break;
 			case '[D+]':
-				if (confirm('Are you sure you want to delete all '
-					+ 'posts by this IP address on this board?'))
-					submitAction(evt.target.href).then(redirect);
+				if (confirm('Are you sure you want to delete all ' +
+					'posts by this IP address on this board?'))
+					submitAction(evt.target.href).then(redirect).catch(showError);
 				break;
 			case '[D++]':
-				if (confirm('Are you sure you want to delete all '
-					+ 'posts by this IP address on all boards?'))
-					submitAction(evt.target.href).then(redirect);
+				if (confirm('Are you sure you want to delete all ' +
+					'posts by this IP address on all boards?'))
+					submitAction(evt.target.href).then(redirect).catch(showError);
 				break;
 			case '[F]':
 				if (confirm('Are you sure you want to delete this file?'))
@@ -44,23 +52,15 @@ $(document).on('click', '.controls a', evt => {
 						// lower the opacity of the image to gesture that its source
 						// is removed.
 						$post.find('> a > .postimg').addClass('dead-file');
-						updateThreadNow(true)
-					});
+						updateThreadNow(true);
+					}).catch(showError);
 				break;
 			case '[B]':
 			case '[B&D]':
-				ban(evt.target.href, $post)
-					.then(() => {
-						pop(get_post_name($post) + get_post_trip($post)
-						+ ' (No. ' + get_post_num($post) + ') has been banned.');
-						updateThreadNow(true)
-					});
+				openInlineBanForm(evt.target.href, $post);
 				break;
 			default:
 				redirect();
-		}
-		function redirect() {
-			window.location = evt.target.href;
 		}
 	}
 });
@@ -119,99 +119,107 @@ function submitAction(url, $form) {
 	});
 }
 
-function ban(url, $post) {
-		return new RSVP.Promise((resolve, reject) => {
-			submitAction(url).then($data => {
-				// Load the ban form. Both the form and the path of the submitted ban
-				// have the same path. They're interpreted differently depending on what's in
-				// their request headers.
-				const $banForm = $data.filter('.banform').first();
-				const $existingFields = $post.find('.ban-fields');
-				if ($banForm.length == 0) {
-					pop('Fatal: The form requested in the page was not found.');
-					return;
-				}
-				const andDelete = $banForm.find('[name="delete"]').val();
-				// 'andDelete' is a string of value 0 or 1.
-				if ($post
-						.find(".banform [name='delete']")
-						.filter((i, input) => input.value == andDelete)
-						// "is this the same form?"
-						.length > 0) {
-					retract($existingFields);
-					return;
-				} else {
-					retract($existingFields);
-				}
-				// - Manipulate the contents of the ban form -
-				// 1. Don't break W3C spec by having multiple
-				// elements of the same ID in the same page.
-				$banForm.find('[id]').removeAttr('id');
+function openInlineBanForm(url, $post) {
+	submitAction(url).then($data => {
+		// Load the ban form. Both the form and the path of the submitted ban
+		// have the same path. They're interpreted differently depending on what's in
+		// their request headers.
+		const $banForm = $data.filter('.banform').first();
+		const $existingFields = $post.find('.ban-fields');
+		if ($banForm.length == 0) {
+			pop('Fatal: The form requested in the page was not found.');
+			return;
+		}
+		const andDelete = $banForm.find('[name="delete"]').val();
+		// 'andDelete' is a string of value 0 or 1.
+		if ($post
+				.find(".banform [name='delete']")
+				.filter((i, input) => input.value == andDelete)
+				// "is this the same form?"
+				.length > 0
+		) {
+			retract($existingFields);
+			return;
+		} else {
+			retract($existingFields);
+		}
+		// - Manipulate the contents of the ban form -
+		// 1. Don't break W3C spec by having multiple
+		// elements of the same ID in the same page.
+		$banForm.find('[id]').removeAttr('id');
 
-				// 2. Don't show the IP field since we have both that
-				// and the context of the ban in front of our nose.
-				$banForm.find('[name="mask"]')
-					.attr('type', 'hidden')
-					.closest('tr')
-					.css('display', 'none');
+		// 2. Don't show the IP field since we have both that
+		// and the context of the ban in front of our nose.
+		$banForm.find('[name="mask"]')
+			.attr('type', 'hidden')
+			.closest('tr')
+			.css('display', 'none');
 
-				// 3. Cancel button.
-				$('<input />')
-					.val('Cancel')
-					.attr('type', 'button')
-					.click(evt => retract($(evt.target).closest('.ban-fields')))
-					.insertBefore($banForm.find('[name="new_ban"]'));
+		// 3. Cancel button.
+		$('<input />')
+			.val('Cancel')
+			.attr('type', 'button')
+			.click(evt => retract($(evt.target).closest('.ban-fields')))
+			.insertBefore($banForm.find('[name="new_ban"]'));
 
-				$('<fieldset />')
-					.addClass('ban-fields')
-					.append(
-					$('<legend />')
-						.addClass('ban-header')
-						.text(andDelete == "1" ? 'Ban & delete' : 'New ban'),
-					$banForm
-						.on('submit', event => {
-							event.preventDefault();
-							// Prepare to append the ban message.
-							const $showMessage = $banForm
-								.find('[name="public_message"]:checked')
-								.first();
-							const $banMessage = $banForm
-								.find('[name="message"]')
-								.first();
-							submitAction(url, $banForm)
-								.then(() => retract($banForm.closest('.ban-fields')), reject)
-								.then(() => {
-									if (($banMessage.length + $showMessage.length) > 1)
-										get_post_body($post)
-											.append(
-											'\n',
-											$('<span />')
-												.hide()
-												.fadeIn()
-												.html('('+$banMessage.val()+')')
-												.addClass('public_ban')
-										);
-									resolve();
+		$('<fieldset />')
+			.addClass('ban-fields')
+			.append(
+				$('<legend />')
+					.addClass('ban-header')
+					.text(andDelete == "1" ? 'Ban & delete' : 'New ban'),
+				$banForm
+					.on('submit', event => {
+						event.preventDefault();
+						// Prepare to append the ban message.
+						const $showMessage = $banForm
+							.find('[name="public_message"]:checked')
+							.first();
+						const $banMessage = $banForm
+							.find('[name="message"]')
+							.first();
+						submitAction(url, $banForm)
+							.then(() => retract($banForm.closest('.ban-fields')))
+							.then(() => {
+								if (($banMessage.length + $showMessage.length) > 1) {
+									get_post_body($post)
+										.append(
+										'\n',
+										$('<span />')
+											.hide()
+											.fadeIn()
+											.html('('+$banMessage.val()+')')
+											.addClass('public_ban')
+									);
+								}
+								pop(get_post_name($post) + get_post_trip($post) +
+									' (No. ' + get_post_num($post) + ') has been banned.');
+								updateThreadNow(true);
+							}).catch(err => {
+								console.error(err);
+								alert('Error: '+err);
 							});
-					})).appendTo($post)
-					.hide()
-					.animate({
-						margin: 'show',
-						padding: 'show',
-						height: 'show',
-						opacity: 'show'
-					});
+			})).appendTo($post)
+			.hide()
+			.animate({
+				margin: 'show',
+				padding: 'show',
+				height: 'show',
+				opacity: 'show'
 			});
+	}).catch(err => {
+		console.error(err);
+		alert('Error: '+err);
+	});
 
-			function retract($target) {
-				return new RSVP.Promise(resolve => {
-					$target.animate({
-						margin: 'hide',
-						padding: 'hide',
-						height: 'hide',
-						opacity: 'hide'
-					}, 'slow', 'swing', resolve);
-				}).then(() => $target.remove());
-			}
-		});
+	function retract($target) {
+		return new RSVP.Promise(resolve => {
+			$target.animate({
+				margin: 'hide',
+				padding: 'hide',
+				height: 'hide',
+				opacity: 'hide'
+			}, 'slow', 'swing', resolve);
+		}).then(() => $target.remove());
+	}
 }
