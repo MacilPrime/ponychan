@@ -522,7 +522,7 @@ class Thread {
 
 			// Delete file (keep post)
 			if (!empty($this->file) && $this->file != 'deleted' && hasPermission('deletefile', $board['uri'], $this->mod))
-				$built .= ' ' . secure_link_confirm($config['mod']['link_deletefile'], 'Delete file', 'Are you sure you want to delete this file?', $board['uri'] . '/deletefile/' . $this->id);
+				$built .= ' <a title="Delete file" href="?/' . $board['uri'] . '/deletefile/' . $this->id . '">' . $config['mod']['link_deletefile'] . '</a>';
 
 			// Bump
 			if (hasPermission('bump', $board['uri'], $this->mod))
