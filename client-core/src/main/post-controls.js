@@ -7,7 +7,7 @@
 import $ from 'jquery';
 import RSVP from 'rsvp';
 import {pop} from './notice';
-import {get_post_num, get_post_name, get_post_trip, get_post_body} from './post-info';
+import {get_post_num, get_post_name, get_post_trip, get_post_body, get_post_ip, get_post_board} from './post-info';
 import {updateThreadNow} from './legacy/reloader';
 
 function showError(e) {
@@ -16,9 +16,6 @@ function showError(e) {
 }
 
 $(document).on('click', '.controls a', evt => {
-	function redirect() {
-		window.location = evt.target.href;
-	}
 
 	if (evt.which !== 2 && !evt.ctrlKey && !evt.shiftKey) {
 		// ignore new-window clicks.
@@ -36,13 +33,19 @@ $(document).on('click', '.controls a', evt => {
 				break;
 			case '[D+]':
 				if (confirm('Are you sure you want to delete all ' +
-					'posts by this IP address on this board?'))
-					submitAction(evt.target.href).then(redirect).catch(showError);
+					'posts by this IP address on /'+get_post_board($post)+'/?'))
+					submitAction(evt.target.href).then(() => {
+						pop('All posts by IP '+get_post_ip($post)+' on ' +
+							'/'+get_post_board($post)+'/ have been removed.');
+					}).catch(showError);
 				break;
 			case '[D++]':
 				if (confirm('Are you sure you want to delete all ' +
 					'posts by this IP address on all boards?'))
-					submitAction(evt.target.href).then(redirect).catch(showError);
+					submitAction(evt.target.href).then(() => {
+						pop('All posts by IP '+get_post_ip($post)+' on ' +
+							'all boards have been removed.')
+					}).catch(showError);
 				break;
 			case '[F]':
 				if (confirm('Are you sure you want to delete this file?'))
@@ -60,7 +63,7 @@ $(document).on('click', '.controls a', evt => {
 				openInlineBanForm(evt.target.href, $post);
 				break;
 			default:
-				redirect();
+				window.location = evt.target.href;
 		}
 	}
 });
@@ -68,23 +71,25 @@ $(document).on('click', '.controls a', evt => {
 function submitAction(url, $form) {
 	const hasForm = $form instanceof $;
 	// If the 2nd (optional) parameter is specified, it sends a POST request.
+	const serialized = (() => {
+		if (hasForm) {
+			return $form.serialize() + $form
+					.find('input[type="submit"], input[type="button"]')
+					// jQuery's serialize() doesn't include buttons:
+					// https://stackoverflow.com/questions/9866459/
+					// ...or disabled fields apparently!
+					.filter((i, btn) => btn.name.length > 0)
+					.map((i, btn) => encodeURI(btn.name)+'='+encodeURI(btn.value))
+					.get()
+					.reduce((a, b) => a + '&' + b, '');
+		}
+		return null;
+	})();
 	return new RSVP.Promise((resolve, reject) => {
 		if (hasForm) toggleFormControls(false);
 		$.ajax(url, {
 			method: hasForm ? 'POST' : 'GET',
-			data: (() => {
-				if (hasForm) {
-					return $form.serialize() + $form
-							.find('input[type="submit"], input[type="button"]')
-							// jQuery's serialize() doesn't include buttons:
-							// https://stackoverflow.com/questions/9866459/
-							.filter((i, btn) => btn.name != null && btn.value != null)
-							.map((i, btn) => '&'+encodeURI(btn.name)+'='+encodeURI(btn.value))
-							.get()
-							.reduce((a, b) => a + b);
-				}
-				return null;
-			})(),
+			data: serialized,
 			cache: true,
 			// FIXME Setting this to 'false' triggers an invalid security token error
 			// because it thinks the unix timestamp trailing the url is the token.
@@ -94,8 +99,7 @@ function submitAction(url, $form) {
 			},
 			error(xhr, status, err) {
 				if (hasForm) toggleFormControls(true);
-				pop('Fatal: '+xhr.status+' '+err, 5);
-				reject();
+				reject('Fatal: '+xhr.status+' '+err);
 			}
 		});
 		function toggleFormControls(enable) {
