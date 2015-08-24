@@ -46,6 +46,7 @@ export const get_post_ip = _.memoize($post => {
 		return $ip.attr('data-old-text') || $ip.text();
 	return null;
 });
+get_post_ip.cache = new WeakMap();
 
 export function get_post_body($post) {
 	return $post.find("> .body, > .opMain > .body").first();
