@@ -191,7 +191,9 @@ $(document).ready(function(){
 				else if (jqXHR.getResponseHeader('X-CF-Dodge-Etag'))
 					page_etag = jqXHR.getResponseHeader('X-CF-Dodge-Etag');
 				if (status == 'notmodified') {
-					data = '<!doctype html><html><body><div class="banner">dummy</div></body></html>';
+					loadPosts($([]));
+					prepareDelayedUpdate();
+					return;
 				}
 				data = mogrifyHTML(data);
 				var $data = $($.parseHTML(data));

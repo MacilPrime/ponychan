@@ -17,11 +17,8 @@ function init() {
 	});
 	$(document).on('thread_reloaded', (evt, data) => {
 		let $data = $('<div />').append(data);
-		if ($data.children().length > 1) {
-			// check to make sure that this isn't that dummy banner.
-			list.populate($data);
-			_.forEach(action, func => {func();});
-		}
+		list.populate($data);
+		_.forEach(action, func => {func();});
 	});
 }
 
