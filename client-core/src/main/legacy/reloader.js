@@ -7,7 +7,7 @@
  */
 
 import $ from 'jquery';
-import Bacon from 'baconjs';
+import kefirBus from 'kefir-bus';
 import settings from '../settings';
 import {get_post_num} from '../post-info';
 
@@ -22,10 +22,10 @@ settings.newSetting("reloader_time", "number", 30, "Update interval in seconds",
 	}
 });
 
-const updateNoCache = new Bacon.Bus();
+const updateNoCache = kefirBus();
 
 export function updateThreadNow(nocache=false) {
-	updateNoCache.push(nocache);
+	updateNoCache.emit(nocache);
 }
 
 $(document).ready(function(){

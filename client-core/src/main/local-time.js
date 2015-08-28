@@ -7,6 +7,8 @@
  */
 
 import moment from "moment";
+import Kefir from 'kefir';
+import udKefir from 'ud-kefir';
 import $ from 'jquery';
 import settings from './settings';
 

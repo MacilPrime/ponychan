@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Bacon from 'baconjs';
+import Kefir from 'kefir';
 import settings from './settings';
 import {jumpToPost} from './post-utils';
 import {get_post_id} from './post-info';
@@ -63,11 +63,12 @@ function makeNote($post) {
     icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
   });
 
-  const noteClicks = Bacon.fromEvent(note, 'click');
+  const noteClicks = Kefir.fromEvents(note, 'click');
 
-  Bacon.mergeAll(
-    Bacon.fromEvent(window, 'focus'), noteClicks
-  ).take(1).onValue(() => {
+  Kefir.merge([
+    Kefir.fromEvents(window, 'focus'),
+    noteClicks
+  ]).take(1).onValue(() => {
     note.close();
   });
 

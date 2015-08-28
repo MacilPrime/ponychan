@@ -8,18 +8,19 @@
 
 import $ from 'jquery';
 import _ from 'lodash';
-import Bacon from 'baconjs';
+import Kefir from 'kefir';
+import kefirBus from 'kefir-bus';
 import Immutable from 'immutable';
 
 let settingsMetadata = Immutable.Map();
 let settingsValues = Immutable.Map();
 let settingsSectionsList = Immutable.List();
 
-const refresher = new Bacon.Bus();
+const refresher = kefirBus();
 
 const getSettingStream = _.memoize(name =>
 	settingsMetadata.get(name).get('bus')
-		.toProperty(null)
+		.toProperty(()=>null)
 		.map(() => getSetting(name))
 );
 
@@ -158,7 +159,7 @@ function setSetting(name, value, notquiet=false) {
 	}
 
 	settingsValues = settingsValues.set(name, value);
-	settingsMetadata.get(name).get('bus').push();
+	settingsMetadata.get(name).get('bus').emit();
 	$(document).trigger("setting_change", name);
 }
 
@@ -194,7 +195,7 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 		settings: Immutable.List()
 	})).sortBy(section => section.get('orderhint'));
 
-	refresher.push();
+	refresher.emit(null);
 }
 
 // Adds a setting to the settings menu.
@@ -213,7 +214,7 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 //                time the user last changed the setting, then the defval will take priority
 //                over the user's value. This allows the default setting to be changed at a
 //                future time, optionally overriding an older setting set by the user.
-//   hider: If set to a Bacon stream, then the setting will be hidden as long
+//   hider: If set to a Kefir stream, then the setting will be hidden as long
 //					as it emits true.
 //   notSupported: If true, then the setting will be disabled and a message will be shown
 //                 to the user explaining that their browser does not support the setting.
@@ -245,7 +246,7 @@ function newSetting(name, type, defval, description, section, extra={}) {
 	const disableMessage = !extra.notSupported ? null :
 		'Your browser does not support this setting. Firefox or Chrome are recommended.';
 
-	const bus = new Bacon.Bus();
+	const bus = kefirBus();
 
 	const settingMetadata = Immutable.Map({
 		name, section, orderhint, type, validator,
@@ -266,12 +267,12 @@ function newSetting(name, type, defval, description, section, extra={}) {
 	);
 
 	refresher.plug(bus);
-	refresher.push();
+	refresher.emit(null);
 
 	if (extra.hider) {
 		extra.hider.onValue(hidden => {
 			settingsMetadata = settingsMetadata.setIn([name, 'hidden'], hidden);
-			refresher.push();
+			refresher.emit(null);
 		});
 	}
 }
@@ -287,7 +288,7 @@ function getAllSettingValues(noDefault=false) {
 }
 
 const getAllSettingsMetadata = _.once(() =>
-	refresher.toProperty(null).map(() => ({settingsMetadata, settingsValues, settingsSectionsList}))
+	refresher.toProperty(()=>null).map(() => ({settingsMetadata, settingsValues, settingsSectionsList}))
 );
 
 newSection('pagestyle', 'Page Formatting', 1);
