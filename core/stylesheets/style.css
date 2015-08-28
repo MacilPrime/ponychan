@@ -1309,9 +1309,6 @@ img.catalogthumb {
 .dead-file {
 	opacity: 0.4;
 }
-.hidden-new-edit, .old-editmsg {
-	display: none;
-}
 .edit-revealer {
 	margin: 0 1ch;
 }
