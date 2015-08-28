@@ -41,12 +41,13 @@ function getPostsByIdInContext(context) {
 }
 
 function processChanges(currentPosts, newPosts) {
-	let hasSeenNewPost = false;
+	let hasSeenNewReply = false;
 	currentPosts.forEach((post, id) => {
 		const newPost = newPosts.get(id);
 
 		if (!newPost) {
-			if (isLast50Page && !hasSeenNewPost) return;
+			if (isLast50Page && !hasSeenNewReply) return;
+			console.log('marking as deleted', id);
 
 			const $post = $(post);
 			$post.attr('data-deleted', 'true');
@@ -62,9 +63,10 @@ function processChanges(currentPosts, newPosts) {
 				.each((i, el) => $(el).text($(el).text()));
 			footer($post).kill();
 		} else {
-			hasSeenNewPost = true;
-
 			const $post = $(post);
+			if ($post.hasClass('reply')) {
+				hasSeenNewReply = true;
+			}
 			const $newPost = $(newPost);
 
 			const $newPostEditTime = $newPost.find('.editmsg time');
