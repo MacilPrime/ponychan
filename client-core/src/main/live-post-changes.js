@@ -47,7 +47,6 @@ function processChanges(currentPosts, newPosts) {
 
 		if (!newPost) {
 			if (isLast50Page && !hasSeenNewReply) return;
-			console.log('marking as deleted', id);
 
 			const $post = $(post);
 			$post.attr('data-deleted', 'true');
