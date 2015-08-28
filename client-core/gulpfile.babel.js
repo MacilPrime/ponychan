@@ -102,7 +102,12 @@ function browserifyTask(name, entry, destname) {
         });
       }
 
-      return result;
+      return new RSVP.Promise((resolve, reject) => {
+        bundle.on('error', reject);
+        result.on('error', reject);
+        result.on('end', resolve);
+        result.on('finish', resolve);
+      });
     }
 
     return buildBundle(false);

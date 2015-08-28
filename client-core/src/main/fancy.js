@@ -13,27 +13,30 @@
  */
 
 import $ from 'jquery';
-import Bacon from 'baconjs';
+import Kefir from 'kefir';
 import settings from './settings';
 
 {
-	const revealer = new Bacon.Bus();
-	const hider = revealer.map(false).take(1).toProperty(true);
+	const revealer = Kefir.pool();
+	const hider = revealer.map(()=>false).take(1).toProperty(()=>true);
 	settings.newSetting("fancy_mode", "bool", false, "Fancy mode", 'pagestyle', {
 		orderhint: 20, hider});
 
 	// Unhide if the setting is ever true, or the user does a certain thing.
 	revealer.plug(
-		Bacon.mergeAll([
-			settings.getSettingStream("fancy_mode").toEventStream().filter(Boolean),
-			Bacon.fromEvent(document, 'keydown')
+		Kefir.merge([
+			settings.getSettingStream("fancy_mode").filter(Boolean),
+			Kefir.fromEvents(document, 'keydown')
 				.filter(event =>
 					event.which == 70 && !event.ctrlKey && !event.altKey &&
 					!event.shiftKey && !event.metaKey
 				)
 				.filter(event => !/TEXTAREA|INPUT/.test(event.target.nodeName))
 				.filter(() => $('.settingsScreen').is(':visible'))
-				.doAction(event => event.preventDefault())
+				.map(event => {
+					event.preventDefault();
+					return event;
+				})
 		])
 	);
 }

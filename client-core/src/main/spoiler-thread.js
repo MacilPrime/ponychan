@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Bacon from 'baconjs';
+import Kefir from 'kefir';
 import settings from './settings';
 
 settings.newSetting("reveal_spoiler_threads", "bool", false, "Always reveal spoiler threads", 'pagestyle',
@@ -74,7 +74,7 @@ $(document).ready(function() {
       process(reveal_spoiler_threads, $('.thread'));
     });
 
-  const new_posts = Bacon.fromEvent($(document), 'new_post', (event, post) => post);
+  const new_posts = Kefir.fromEvents($(document), 'new_post', (event, post) => post);
 
   settings.getSettingStream('reveal_spoiler_threads')
     .sampledBy(new_posts, (a,b)=>[a,b])

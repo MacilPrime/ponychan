@@ -47,10 +47,10 @@ import './hide-trip.js';
 import './settings-screen.jsx';
 
 // for debugging and inline scripts
-window.mlpchan = {
+window.ponychan = {
   _dbg_require: require,
   libs: {
-    Bacon: require('baconjs'),
+    Kefir: require('kefir'),
     React: require('react/addons'),
     Immutable: require('immutable'),
     RSVP: require('rsvp'),
@@ -61,5 +61,5 @@ window.mlpchan = {
   settings: settings
 };
 
-window.$ = window.mlpchan.$;
-window.settings = window.mlpchan.settings;
+window.$ = window.ponychan.$;
+window.settings = window.ponychan.settings;
