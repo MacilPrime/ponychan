@@ -16,6 +16,7 @@ var exec = require('./src/build/exec');
 
 var args = stdio.getopt({
   'watch': {key: 'w', description: 'Automatic rebuild'},
+  'hot': {key: 'h', description: 'Hot module replacement'},
   'minify': {key: 'm', description: 'Minify build'}
 });
 
@@ -67,6 +68,10 @@ function browserifyTask(name, entry, destname) {
     bundler.transform(envify({
       VERSION: getVersion()
     }));
+    if (args.hot) {
+      bundler.transform(require('react-hot-transform'));
+      bundler.plugin(require('browserify-hmr'));
+    }
 
     if (args.watch) {
       bundler = watchify(bundler);

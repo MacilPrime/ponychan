@@ -53,7 +53,8 @@ client javascript:
 
 Now run `gulp` to build the client javascript. You may pass the `--watch` (`-w`)
 option to make gulp continue running and automatically rebuild the javascript
-when any of the source files change.
+when any of the source files change, and the `--hot` (`-h`) option to make
+changes to supported files be applied immediately in running browsers.
 
 The javascript codebase was only recently transitioned to Browserify, and many
 modules still rely on global variables exposed by other modules. The

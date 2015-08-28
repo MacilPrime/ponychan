@@ -44,3 +44,7 @@ $(document).ready(function(){
 		formatTimeElements(post);
 	});
 });
+
+if (module.hot) {
+	module.hot.accept();
+}

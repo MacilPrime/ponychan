@@ -228,8 +228,11 @@ function newSetting(name, type, defval, description, section, extra={}) {
 	const defpriority = extra.defpriority || 0;
 	const validator = extra.validator;
 
-	if (settingsMetadata.has(name))
-		throw new Error(`Setting ${name} has already been defined!`);
+	if (settingsMetadata.has(name)) {
+		// TODO make new setting definition apply immediately. This would make it
+		// work well with hot module replacement.
+		return;
+	}
 
 	const sectionEntryIndex = settingsSectionsList
 		.findIndex(sectionEntry => sectionEntry.get('name') === section);
