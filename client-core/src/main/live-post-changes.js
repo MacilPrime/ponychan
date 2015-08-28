@@ -18,7 +18,8 @@ function init() {
 	$(document).on('thread_reloaded', (evt, data) => {
 		let $data = $('<div />').append(data);
 		list.populate($data);
-		_.forEach(action, func => {func();});
+		action.findDeletedPosts();
+		action.markPostsAsEdited();
 	});
 }
 
@@ -98,7 +99,6 @@ const action = {
 				footer($post).kill();
 			}
 		});
-		return list;
 	},
 	markPostsAsEdited() {
 		_.forOwn(list.dataPosts, (newPost, id) => {
