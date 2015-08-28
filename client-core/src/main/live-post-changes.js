@@ -20,9 +20,9 @@ function init() {
 		if ($data.children().length > 1) {
 			// check to make sure that this isn't that dummy banner.
 			list.populate($data);
-			_.forEach(action, func => {func()})
+			_.forEach(action, func => {func();});
 		}
-	})
+	});
 }
 
 const list = {
@@ -77,7 +77,7 @@ const list = {
 			// to compare with yet.
 			if (!this.matchesBoth(id))
 				this.prune(id);
-		})
+		});
 	}
 };
 
@@ -91,17 +91,13 @@ const action = {
 				const $intro = $post
 					.find('.intro')
 					.first();
-				$intro.find('.permalink').remove();
 				$intro.find('input').prop('disabled', true);
-				$intro.find('.citelink').replaceWith(
-					$('<span />')
+				$intro.find('.citelink').after(
+					' ', $('<span />')
 						.addClass('removedpost')
 						.text('[Removed]')
 				);
-				$post.children('.controls')
-					.addClass('dead-buttons')
-					.each((i, el) => $(el).text($(el).text()));
-				// Unwrap the text from the links to disable the buttons.
+				$post.children('.controls').remove();
 				footer($post).kill();
 			}
 		});
@@ -128,7 +124,7 @@ const action = {
 					} else {
 						// If it started out with no edit, then any
 						// presented edit is new to us.
-						presentNewEdit($oldPost, $(newPost))
+						presentNewEdit($oldPost, $(newPost));
 					}
 				}
 			});
