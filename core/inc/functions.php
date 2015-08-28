@@ -113,24 +113,7 @@ function loadConfig() {
 		if (isset($_SERVER['HTTP_HOST'])) {
 			$config['referer_match'] = '/^' .
 				(preg_match($config['url_regex'], $config['root']) ? '' :
-					'https?:\/\/' . $_SERVER['HTTP_HOST']) .
-				str_replace('/', '/+',
-					preg_quote($config['root'], '/') .
-				'(' .
-						str_replace('%s', '\w+', preg_quote($config['board_path'], '/')) .
-						'(' .
-							str_replace('%d', '\d+', preg_quote($config['file_page'])) .
-						')?' .
-					'|' .
-						str_replace('%s', '\w+', preg_quote($config['board_path'], '/')) .
-						preg_quote($config['dir']['res'], '/') .
-						'(' .
-							str_replace('%d', '\d+', preg_quote($config['file_page'], '/')) . '|' .
-							str_replace('%d', '\d+', preg_quote($config['file_page50'], '/')) .
-						')' .
-					'|' .
-						preg_quote($config['file_mod'], '/') . '\?\/.*' .
-				')([#?](.+)?)?$') . '/i';
+					'https?:\/\/' . preg_quote($_SERVER['HTTP_HOST'], '/')) . '\/.*/';
 		} else {
 			// CLI mode
 			$config['referer_match'] = '//';
