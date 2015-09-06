@@ -7,8 +7,8 @@ import $ from 'jquery';
 import Kefir from 'kefir';
 import udKefir from 'ud-kefir';
 import docReady from './doc-ready';
-import {footer} from './footer-utils';
 import {hasSeen} from './titlebar';
+import {footer} from './footer-utils';
 import {get_post_body} from './post-info';
 
 const update = udKefir(module, null).changes().take(1).toProperty();
