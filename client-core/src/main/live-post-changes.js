@@ -1,16 +1,15 @@
 /**
- * find-deleted-posts
+ * live-post-changes
  *
  *
  */
 import $ from 'jquery';
-import _ from 'lodash';
-import RSVP from 'rsvp';
 import Kefir from 'kefir';
 import udKefir from 'ud-kefir';
 import docReady from './doc-ready';
 import {footer} from './footer-utils';
-import {get_post_body} from './post-info';
+import {unseenPosts} from './titlebar';
+import {get_post_body, get_post_id} from './post-info';
 
 const update = udKefir(module, null).changes().take(1).toProperty();
 
@@ -98,22 +97,28 @@ function presentNewEdit($oldPost, $newPost) {
 	let $newBody = get_post_body($newPost);
 
 	$oldBody.find('.new-editmsg').remove();
-
-	$('<div />')
-		.addClass('editmsg new-editmsg')
-		.append(
+	if (unseenPosts.has(get_post_id($oldPost))) {
+		reveal()
+	} else {
+		$('<div />')
+			.addClass('editmsg new-editmsg')
+			.append(
 			'This post has a new edit.',
 			$('<button />')
 				.text('Load')
 				.addClass('edit-revealer')
 				.click(evt => {
 					evt.preventDefault();
-					$oldBody.replaceWith($newBody);
-					// Reset all events
-					$oldPost.html($oldPost.html());
-					$(document).trigger('new_post', $oldPost[0]);
+					reveal();
 				})
-	).appendTo($oldBody);
+		).appendTo($oldBody);
+	}
+	function reveal() {
+		$oldBody.replaceWith($newBody);
+		// Reset all events
+		$oldPost.html($oldPost.html());
+		$(document).trigger('new_post', $oldPost[0]);
+	}
 }
 
 init();
