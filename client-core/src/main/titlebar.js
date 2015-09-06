@@ -61,7 +61,10 @@ $(document).ready(function() {
 
 	var mainTitle = titlePrefix+titleEnd;
 
-	var $unseenPosts = $(".thread .post.reply").not(".preview-hidden, .post-hover, .post-inline");
+	var $unseenPosts = $(".thread .post.reply" +
+		":not(.preview-hidden)" +
+		":not(.preview-hover)" +
+		":not(.post-inline)");
 
 	var pendingScrollHandler = null;
 
