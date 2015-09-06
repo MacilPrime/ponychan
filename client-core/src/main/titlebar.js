@@ -12,7 +12,11 @@ import {get_post_id} from './post-info';
 
 var flash = {};
 var flashmessage = '';
-export const unseenPosts = new Map();
+const unseenPosts = new Map();
+export function hasSeen($post) {
+	let id = get_post_id($post);
+	return !unseenPosts.has(id);
+}
 
 // Temporary dummy function. Gets replaced later.
 var updateTitle = function() {};

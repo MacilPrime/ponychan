@@ -8,8 +8,8 @@ import Kefir from 'kefir';
 import udKefir from 'ud-kefir';
 import docReady from './doc-ready';
 import {footer} from './footer-utils';
-import {unseenPosts} from './titlebar';
-import {get_post_body, get_post_id} from './post-info';
+import {hasSeen} from './titlebar';
+import {get_post_body} from './post-info';
 
 const update = udKefir(module, null).changes().take(1).toProperty();
 
@@ -97,9 +97,7 @@ function presentNewEdit($oldPost, $newPost) {
 	let $newBody = get_post_body($newPost);
 
 	$oldBody.find('.new-editmsg').remove();
-	if (unseenPosts.has(get_post_id($oldPost))) {
-		reveal()
-	} else {
+	if (hasSeen($oldPost)) {
 		$('<div />')
 			.addClass('editmsg new-editmsg')
 			.append(
@@ -112,6 +110,8 @@ function presentNewEdit($oldPost, $newPost) {
 					reveal();
 				})
 		).appendTo($oldBody);
+	} else {
+		reveal()
 	}
 	function reveal() {
 		$oldBody.replaceWith($newBody);
