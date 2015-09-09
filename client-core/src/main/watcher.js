@@ -180,7 +180,7 @@ function refresh_watched_threads(callback) {
 					}
 				}
 
-				mod = data.mod;
+				mod = isModPage ? data.mod : null;
 
 				if (changed)
 					save_watched_threads();
