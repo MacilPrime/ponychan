@@ -14,7 +14,7 @@ export const WatcherMenu = React.createClass({
 	},
 	render() {
 		var {mod, threads, onRemove} = this.props;
-		var threadComponents = threads.map(thread => <Thread thread={thread} onRemove={onRemove} />);
+		var threadComponents = threads.map(thread => <Thread key={thread.id} thread={thread} onRemove={onRemove} />);
 
 		var modSection = mod ? <section className="wmod">
 			<h2>Moderator</h2>
@@ -43,7 +43,7 @@ export const Thread = React.createClass({
 	},
 	_remove() {
 		var {thread, onRemove} = this.props;
-		onRemove(thread.board+':'+thread.postnum);
+		onRemove(thread.id);
 	},
 	render() {
 		var {thread} = this.props;
