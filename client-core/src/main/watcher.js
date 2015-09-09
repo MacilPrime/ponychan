@@ -22,6 +22,7 @@ const isModPage = (document.location.pathname == SITE_DATA.siteroot+'mod.php');
 var max_watched_threads = 70;
 var watcher_poll_time = 30 * 1000;
 
+var mod;
 var watched_threads;
 load_watched_threads();
 
@@ -179,6 +180,8 @@ function refresh_watched_threads(callback) {
 					}
 				}
 
+				mod = data.mod;
+
 				if (changed)
 					save_watched_threads();
 				populate_watcher_screen();
@@ -240,12 +243,16 @@ function populate_watcher_screen() {
 		}, watched_threads[id]);
 	});
 
+	if (mod) {
+		alerts += mod.report_count;
+	}
+
 	var pr;
 	if ($watcherScreen[0]) {
 		pr = new RSVP.Promise((resolve, reject) => {
 			React.render(
 				React.createElement(WatcherMenu, {
-					threads,
+					threads, mod,
 					onRemove: remove_watch
 				}),
 				$watcherScreen[0],

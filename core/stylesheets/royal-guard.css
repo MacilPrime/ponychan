@@ -1,4 +1,4 @@
-@import "common/pony-kusaba.css?v=572120271";
+@import "common/pony-kusaba.css?v=2409617336";
 
 body {
 	font-family: Arial, Helvetica, sans-serif;
@@ -30,8 +30,13 @@ p.intro span.subject, .wsubject {
 p.intro time {
   color: #525252;
 }
-div.post.reply, .wthread {
+.watcherMenu {
+	background: #E9E9E9;
+}
+div.post.reply, .watcherMenu {
   background: #E9E9E9;
+}
+div.post.reply, .wthread {
   border: 1px solid #488F1F;
   border-left-width: 6px;
 }

@@ -1,5 +1,5 @@
 
-@import "common/pony-kusaba.css?v=572120271";
+@import "common/pony-kusaba.css?v=2409617336";
 
 /* Indiscriminate tags */
 body {
@@ -60,7 +60,7 @@ form table tr th {
 
 
 /* Posts */
-div.post.reply, .wthread {
+div.post.reply, .watcherMenu {
     background-color: #d4dcf0;
 }
 p.intro span.subject, .wsubject {
@@ -107,9 +107,6 @@ span.quote {
     border-color: rgb(107, 119, 169);
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
     font-size: inherit;
-}
-.wthread {
-    border-bottom: 1px dashed gray;
 }
 .wpost {
     color: #000;

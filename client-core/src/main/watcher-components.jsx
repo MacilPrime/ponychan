@@ -8,15 +8,28 @@ const PureRenderMixin = React.addons.PureRenderMixin;
 export const WatcherMenu = React.createClass({
 	mixins: [PureRenderMixin],
 	propTypes: {
+		mod: React.PropTypes.object,
 		threads: React.PropTypes.array.isRequired,
 		onRemove: React.PropTypes.func.isRequired
 	},
 	render() {
-		var {threads, onRemove} = this.props;
+		var {mod, threads, onRemove} = this.props;
 		var threadComponents = threads.map(thread => <Thread thread={thread} onRemove={onRemove} />);
+
+		var modSection = mod ? <section className="wmod">
+			<h2>Moderator</h2>
+			<div className="wcontent">
+				<a className="wlink" href="?/reports"><span className="wreportcount">{mod.report_count}</span> reports</a>
+			</div>
+		</section> : null;
+
 		return (
 			<div className="watcherMenu">
-				{threadComponents}
+				{modSection}
+				<section className="wthreads">
+					<h2>Threads</h2>
+					{threadComponents}
+				</section>
 			</div>
 		);
 	}

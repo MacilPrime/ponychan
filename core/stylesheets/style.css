@@ -970,18 +970,28 @@ table.recaptchatable {
 	max-width: 95%;
 	overflow: auto;
 }
+.watcherMenu h2 {
+	margin: 0;
+	padding: 3px 0;
+	font-size: 12pt;
+}
+.watcherMenu section:not(:last-child) {
+	border: 0 solid rgba(0, 0, 0, 0.1);
+	border-bottom-width: 1px;
+}
+.wmod .wcontent {
+	padding: 4px;
+}
 .wthread {
 	padding: 5px;
-	border-bottom: 1px solid black;
+	border: 0 solid black;
+	border-top-width: 1px;
 }
-.wthread:last-of-type {
-	border-bottom: none;
-}
-.wlinkpart a, .wlinkpart a:visited {
+a.wlink, a.wlink:visited {
 	color: rgb(100, 100, 230);
 	text-decoration: none;
 }
-.wlinkpart a:hover {
+a.wlink:hover {
 	color: rgb(80, 80, 200);
 }
 .wtrip {

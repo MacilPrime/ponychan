@@ -253,7 +253,7 @@ fieldset {
 	margin-top:3px;
 }
 /*Thread watcher*/
-.wthread{
+.watcherMenu {
 	background-color:#192B19;
 }
 .boardlist.top .watcherButton.open {

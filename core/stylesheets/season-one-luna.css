@@ -1,5 +1,5 @@
-@import "common/pony-kusaba.css?v=572120271";
-@import "common/bubble-buttons.css?v=10701602";
+@import "common/pony-kusaba.css?v=2409617336";
+@import "common/bubble-buttons.css?v=2409617336";
 
 /* Indiscriminate tags */
 body {
@@ -80,7 +80,7 @@ form table tr th {
 
 
 /* Posts */
-div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+div.post.reply, .watcherMenu, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
     background-color: rgb(28,42,98);
 }
 div.post.reply, div.post.reply.highlighted {
@@ -145,9 +145,6 @@ span.quote {
     border-color: rgb(107, 119, 169);
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
     font-size: inherit;
-}
-.wthread {
-    border-bottom: 1px dashed gray;
 }
 .wpost {
     color: white;
