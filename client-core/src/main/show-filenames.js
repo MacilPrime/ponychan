@@ -6,16 +6,21 @@
  *
  */
 
-import $ from 'jquery';
+var $ = require('jquery');
+var _ = require('lodash');
+
+var supportsDownloadAttr = _.once(function() {
+	var link = document.createElement('a');
+	return 'download' in link;
+});
 
 $(document).ready(function() {
 	function filename_expander(context) {
-		$(".postfilename[title], .postfilename[data-fn-fullname]", context).each(function() {
+		$(".post-filename[data-fn-fullname]", context).each(function() {
 			var $fn = $(this);
 			var shortname = $fn.attr("data-fn-shortname") || $fn.text();
-			var fullname = $fn.attr("title") || $fn.attr("data-fn-fullname");
+			var fullname = $fn.attr("data-fn-fullname");
 			$fn
-				.removeAttr("title")
 				.attr("data-fn-shortname", shortname)
 				.attr("data-fn-fullname", fullname)
 				.text(shortname)
@@ -25,6 +30,10 @@ $(document).ready(function() {
 					$fn.text(shortname);
 				});
 		});
+
+		if (!supportsDownloadAttr()) {
+			$("a.post-filename[title][download]", context).removeAttr('title');
+		}
 	}
 
 	filename_expander(document);
