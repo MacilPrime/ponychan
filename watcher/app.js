@@ -45,6 +45,7 @@ nconf
       }
     },
     mysql: {
+      connection_limit: 10,
       host: '172.27.0.2',
       user: 'tinyboard',
       pass: '',
@@ -62,13 +63,13 @@ if (nconf.get('redis:main:pass'))
   pdb.auth(nconf.get('redis:main:pass'));
 pdb.select(nconf.get('redis:main:db'));
 
-var conn = mysql.createConnection({
+var conn = mysql.createPool({
+  connectionLimit: nconf.get('mysql:connection_limit'),
   host: nconf.get('mysql:host'),
   user: nconf.get('mysql:user'),
   password: nconf.get('mysql:pass'),
   database: nconf.get('mysql:db')
 });
-conn.connect();
 
 var app = express();
 
