@@ -99,20 +99,21 @@ function submitAction(url, $form) {
 			},
 			error(xhr, status, err) {
 				if (hasForm) toggleFormControls(true);
-				reject('Fatal: '+xhr.status+' '+err);
+				reject(new Error('Fatal: '+xhr.status+' '+err));
 			}
 		});
 		function toggleFormControls(enable) {
 			$form.find(':input').each((i, input) => {
 				const $input = $(input);
 				if (enable) {
-					if ('disabled' in $input.data())
+					if ('disabled' in $input.data()) {
 						$input.prop('disabled', $input.data('disabled'))
 							.removeData('disabled');
-					// Restore the original value and erase the cached data.
-					else
+						// Restore the original value and erase the cached data.
+					} else {
 						$input.prop('disabled', 'false');
-					// No data given. Always enable.
+						// No data given. Always enable.
+					}
 				} else {
 					$input.data('disabled', $input.prop('disabled'))
 						.prop('disabled', 'true');
