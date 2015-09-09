@@ -4,13 +4,13 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "babel": "^4.7.16",
-    "express": "^3.20.2",
-    "lodash": "^3.5.0",
-    "mysql": "^2.5.4",
-    "nconf": "^0.7.1",
-    "redis": "^0.12.1",
-    "rsvp": "^3.0.16",
+    "babel-core": "^5.8.23",
+    "express": "^3.21.2",
+    "lodash": "^3.10.1",
+    "mysql": "^2.9.0",
+    "nconf": "^0.7.2",
+    "redis": "^1.0.0",
+    "rsvp": "^3.1.0",
     "swig": "^1.4.2"
   },
   "scripts": {

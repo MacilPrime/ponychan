@@ -1,5 +1,2 @@
-require("babel/register")({
-  sourceMap: "inline"
-});
-
+require("babel-core/register")();
 require('./app');
