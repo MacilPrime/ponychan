@@ -45,6 +45,7 @@ function processChanges(currentPosts, newPosts) {
 		const newPost = newPosts.get(id);
 
 		if (!newPost) {
+			if (true) return; // Temporarily disable until bug with your own posts is fixed.
 			if (isLast50Page && !hasSeenNewReply) return;
 
 			const $post = $(post);
@@ -103,6 +104,7 @@ function presentNewEdit($oldPost, $newPost) {
 			.append(
 			'This post has a new edit.',
 			$('<button />')
+				.attr('type', 'button')
 				.text('Load')
 				.addClass('edit-revealer')
 				.click(evt => {

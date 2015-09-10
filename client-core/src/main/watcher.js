@@ -181,7 +181,7 @@ function refresh_watched_threads(callback) {
 					}
 				}
 
-				mod = data.mod;
+				mod = isModPage ? data.mod : null;
 
 				if (changed)
 					save_watched_threads();
@@ -237,7 +237,7 @@ function populate_watcher_screen() {
 			unread_hash = '#unread';
 		}
 		return _.assign({
-			board, postnum,
+			id, board, postnum,
 			url: make_thread_url(board, postnum)+unread_hash,
 			url50: watched_threads[id].known_reply_count > 100 ?
 				make_thread50_url(board, postnum)+unread_hash : null

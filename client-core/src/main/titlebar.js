@@ -71,7 +71,7 @@ $(document).ready(function() {
 		":not(.post-inline)")
 		.each((i, post) => {
 			const $post = $(post);
-		 unseenPosts.set(get_post_id($post), $post)
+			unseenPosts.set(get_post_id($post), $post);
 	});
 
 	var pendingScrollHandler = null;
