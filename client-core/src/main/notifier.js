@@ -8,6 +8,7 @@
  *
  */
 
+var _ = require('lodash');
 import $ from 'jquery';
 import settings from './settings';
 import {log_error} from './logger';
@@ -89,9 +90,11 @@ function updateTitle() {
 	}
 }
 
+const postsNotifiedFor = new WeakSet();
 function notifyCheck($post) {
-	if ($post.find('.younote').length == 0)
+	if ($post.find('.younote').length == 0 || postsNotifiedFor.has($post[0]))
 		return;
+	postsNotifiedFor.add($post[0]);
 	// Okay, this post is a brand new reply to you
 	if (settings.getSetting("reply_notify"))
 		playSound();
@@ -114,9 +117,9 @@ $(document).ready(function() {
 			if (!unseenReplies.length)
 				break;
 
-			const ri = unseenReplies.indexOf(posts[i]);
-			if (ri != -1) {
-				unseenReplies.splice(ri, 1);
+			const oldLen = unseenReplies.length;
+			_.remove(unseenReplies, x => x === posts[i]);
+			if (unseenReplies.length !== oldLen) {
 				changed = true;
 			}
 		}
