@@ -104,6 +104,7 @@ function presentNewEdit($oldPost, $newPost) {
 			.append(
 			'This post has a new edit.',
 			$('<button />')
+				.attr('type', 'button')
 				.text('Load')
 				.addClass('edit-revealer')
 				.click(evt => {
