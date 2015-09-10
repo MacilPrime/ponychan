@@ -7,11 +7,16 @@
  */
 
 import $ from 'jquery';
-import {get_post_id} from './post-info';
 import myPosts from './my-posts';
+import {get_post_id} from './post-info';
 
 var flash = {};
 var flashmessage = '';
+const unseenPosts = new Map();
+export function hasSeen($post) {
+	let id = get_post_id($post);
+	return !unseenPosts.has(id);
+}
 
 // Temporary dummy function. Gets replaced later.
 var updateTitle = function() {};
@@ -60,17 +65,23 @@ $(document).ready(function() {
 	}
 
 	var mainTitle = titlePrefix+titleEnd;
-
-	var $unseenPosts = $(".thread .post.reply").not(".preview-hidden, .post-hover, .post-inline");
+	$(".thread .post.reply" +
+		":not(.preview-hidden)" +
+		":not(.preview-hover)" +
+		":not(.post-inline)")
+		.each((i, post) => {
+			const $post = $(post);
+		 unseenPosts.set(get_post_id($post), $post)
+	});
 
 	var pendingScrollHandler = null;
 
 	updateTitle = function() {
-		const newTitle = flashmessage + "("+$unseenPosts.length+") "+mainTitle;
+		const newTitle = flashmessage + "("+unseenPosts.size+") "+mainTitle;
 		if (document.title != newTitle) {
 			document.title = newTitle;
 		}
-		const icon = $unseenPosts.length ? SITE_DATA.url_favicon_alert : SITE_DATA.url_favicon;
+		const icon = unseenPosts.size ? SITE_DATA.url_favicon_alert : SITE_DATA.url_favicon;
 		if ($icon.attr('href') !== icon) {
 			$icon.attr('href', icon);
 		}
@@ -85,16 +96,16 @@ $(document).ready(function() {
 			return;
 
 		var seenPosts = [];
-		while($unseenPosts.length > 0) {
-			var $post = $($unseenPosts[0]);
-			if($post.is(":visible")) {
-				var postBottom = $post.offset().top+$post.height();
-				var screenBottom = $(window).scrollTop()+$(window).height();
-				if(postBottom > screenBottom)
+		for (let id of Array.from(unseenPosts.keys()).sort()) {
+			let $post = unseenPosts.get(id);
+			if ($post.is(":visible")) {
+				let postBottom = $post.offset().top + $post.height();
+				let screenBottom = $(window).scrollTop() + $(window).height();
+				if (postBottom > screenBottom)
 					break;
 			}
-			seenPosts.push(get_post_id($post));
-			$unseenPosts = $unseenPosts.slice(1);
+			seenPosts.push(id);
+			unseenPosts.delete(id);
 		}
 		updateTitle();
 		if (seenPosts.length)
@@ -102,7 +113,6 @@ $(document).ready(function() {
 				posts: seenPosts
 			});
 	}
-
 	$(window).scroll(function(event) {
 		if(pendingScrollHandler)
 			return;
@@ -122,7 +132,7 @@ $(document).ready(function() {
 		if (myPosts.contains(get_post_id($post)))
 			return;
 		$(document).trigger('new_unseen_post', post);
-		$unseenPosts = $unseenPosts.add(post);
+		unseenPosts.set(get_post_id($post), $post);
 		updateTitle();
 	});
 });

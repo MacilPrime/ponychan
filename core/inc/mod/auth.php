@@ -12,17 +12,17 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == str_replace('\\', '/', __FILE__)) {
 // create a hash/salt pair for validate logins
 function mkhash($username, $password, $salt = false) {
 	global $config;
-	
+
 	if (!$salt) {
 		// create some sort of salt for the hash
 		$salt = substr(base64_encode(sha1(rand() . time(), true) . $config['cookies']['salt']), 0, 15);
-		
+
 		$generated_salt = true;
 	}
-	
+
 	// generate hash (method is not important as long as it's strong)
 	$hash = substr(base64_encode(md5($username . $config['cookies']['salt'] . sha1($username . $password . $salt . ($config['mod']['lock_ip'] ? $_SERVER['REMOTE_ADDR'] : ''), true), true)), 0, 20);
-	
+
 	if (isset($generated_salt))
 		return array($hash, $salt);
 	else
@@ -31,19 +31,19 @@ function mkhash($username, $password, $salt = false) {
 
 function login($username, $password, $makehash=true) {
 	global $mod;
-	
+
 	// SHA1 password
 	if ($makehash) {
 		$password = sha1($password);
 	}
-	
+
 	$query = prepare("SELECT `id`,`type`,`boards` FROM `mods` WHERE `username` = :username AND `password` = :password LIMIT 1");
 	$query->bindValue(':username', $username);
 	$query->bindValue(':password', $password);
 	$query->execute() or error(db_error($query));
-	
+
 	$hash = mkhash($username, $password);
-	
+
 	if ($user = $query->fetch()) {
 		return $mod = array(
 			'id' => $user['id'],
@@ -62,15 +62,15 @@ function setCookies() {
 		error('setCookies() was called for a non-moderator!');
 	if (!isset($mod['passhash']))
 		error('setCookies() can only be called when logging in!');
-	
+
 	setcookie($config['cookies']['mod'],
 			$mod['username'] . // username
-			':' . 
+			':' .
 			$mod['passhash'] . // password
 			':' .
 			$mod['sessionsalt'], // salt
 		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
-	
+
 	setModSecretCookie();
 }
 
@@ -78,7 +78,7 @@ function setModSecretCookie() {
 	global $mod, $config;
 	if (!$mod)
 		error('setModSecretCookie() was called for a non-moderator!');
-	
+
 	setcookie($config['cookies']['mod'] . '_secret',
 		$config['cookies']['mod_secret'],
 		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
@@ -90,14 +90,16 @@ function destroyCookies() {
 	setcookie($config['cookies']['mod'], 'deleted', time() - $config['cookies']['expire'], $config['cookies']['jail']?$config['cookies']['path'] : '/', null, false, true);
 }
 
-function modLog($action, $_board=null) {
+function modLog($action, $permissionLevel=1, $_board=null) {
 	global $mod, $board, $config;
-	$query = prepare("INSERT INTO `modlogs` (`mod`, `ip_type`, `ip_data`, `board`, `time`, `text`) VALUES (:id, :ip_type, INET6_ATON(:ip), :board, :time, :text)");
+	$query = prepare("INSERT INTO `modlogs` (`mod`, `ip_type`, `ip_data`, `board`, `time`, `text`, `permission_level`)
+									VALUES (:id, :ip_type, INET6_ATON(:ip), :board, :time, :text, :permission_level)");
 	$query->bindValue(':id', $mod['id'], PDO::PARAM_INT);
 	$query->bindValue(':ip_type', ipType($_SERVER['REMOTE_ADDR']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':time', time(), PDO::PARAM_INT);
 	$query->bindValue(':text', $action);
+	$query->bindValue(':permission_level', $permissionLevel);
 	if (isset($_board))
 		$query->bindValue(':board', $_board);
 	elseif (isset($board))
@@ -105,7 +107,7 @@ function modLog($action, $_board=null) {
 	else
 		$query->bindValue(':board', null, PDO::PARAM_NULL);
 	$query->execute() or error(db_error($query));
-	
+
 	if ($config['syslog'])
 		_syslog(LOG_INFO, '[mod/' . $mod['username'] . ']: ' . $action);
 }
@@ -119,19 +121,19 @@ if (isset($_COOKIE[$config['cookies']['mod']])) {
 		destroyCookies();
 		error($config['error']['malformed']);
 	}
-	
+
 	$query = prepare("SELECT `id`, `type`, `boards`, `password` FROM `mods` WHERE `username` = :username LIMIT 1");
 	$query->bindValue(':username', $cookie[0]);
 	$query->execute() or error(db_error($query));
 	$user = $query->fetch();
-	
+
 	// validate password hash
 	if ($cookie[1] != mkhash($cookie[0], $user['password'], $cookie[2])) {
 		// Malformed cookies
 		destroyCookies();
 		error($config['error']['malformed']);
 	}
-	
+
 	$mod = array(
 		'id' => $user['id'],
 		'type' => $user['type'],
@@ -139,35 +141,35 @@ if (isset($_COOKIE[$config['cookies']['mod']])) {
 		'sessionsalt' => $cookie[2],
 		'boards' => explode(',', $user['boards'])
 	);
-	
+
 	setModSecretCookie();
 }
 
 function create_pm_header() {
 	global $mod, $config;
-	
+
 	if ($config['cache']['enabled'] && ($header = cache::get('pm_unread_' . $mod['id'])) != false) {
 		if ($header === true)
 			return false;
-	
+
 		return $header;
 	}
-	
+
 	$query = prepare("SELECT `id` FROM `pms` WHERE `to` = :id AND `unread` = 1");
 	$query->bindValue(':id', $mod['id'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
-	
+
 	if ($pm = $query->fetch())
 		$header = array('id' => $pm['id'], 'waiting' => $query->rowCount() - 1);
 	else
 		$header = true;
-	
+
 	if ($config['cache']['enabled'])
 		cache::set('pm_unread_' . $mod['id'], $header);
-	
+
 	if ($header === true)
 		return false;
-	
+
 	return $header;
 }
 
@@ -175,5 +177,3 @@ function make_secure_link_token($uri) {
 	global $mod, $config;
 	return substr(sha1($config['cookies']['salt'] . '-' . $uri . '-' . $mod['id']), 0, 8);
 }
-
-

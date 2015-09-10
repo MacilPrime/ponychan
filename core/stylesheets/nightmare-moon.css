@@ -1,6 +1,6 @@
-@import "common/pony-kusaba.css?v=572120271";
-@import "common/ghost-buttons.css?v=10701602";
-@import "common/enigma-settings.css?v=10701602";
+@import "common/pony-kusaba.css?v=2409617336";
+@import "common/ghost-buttons.css?v=2409617336";
+@import "common/enigma-settings.css?v=2409617336";
 
 /* Indiscriminate tags */
 body {
@@ -159,9 +159,6 @@ span.quote {
     border-color: rgb(107, 119, 169);
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
     font-size: inherit;
-}
-.wthread {
-    border-bottom: 1px dashed gray;
 }
 .wpost {
     color: white;

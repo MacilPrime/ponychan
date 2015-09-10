@@ -80,10 +80,10 @@
 					</td>
 					<td>
 						{% if ban.username %}
-							{% if mod|hasPermission(config.mod.view_banstaff) %}
+							{% if mod|hasPermission('view_banstaff') %}
 								<a href="?/new_PM/{{ ban.username|e }}">{{ ban.username|e }}</a>
 							{% else %}
-								{% if mod|hasPermission(config.mod.view_banquestionmark) %}
+								{% if mod|hasPermission('view_banquestionmark') %}
 									<em>?</em>
 								{% else %}
 							

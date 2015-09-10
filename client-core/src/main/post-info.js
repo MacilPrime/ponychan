@@ -42,3 +42,15 @@ export const get_post_trip = _.memoize($post =>
   $post.find('.intro .trip').first().text()
 );
 get_post_trip.cache = new WeakMap();
+
+export const get_post_ip = _.memoize($post => {
+	const $ip = $post.find('.intro .posterip a').first();
+	if ($ip.length > 0)
+		return $ip.attr('data-old-text') || $ip.text();
+	return null;
+});
+get_post_ip.cache = new WeakMap();
+
+export function get_post_body($post) {
+	return $post.find("> .body, > .opMain > .body").first();
+}

@@ -1,6 +1,6 @@
 
-@import "common/pony-kusaba.css?v=572120271";
-@import "common/razor-buttons.css?v=10701602";
+@import "common/pony-kusaba.css?v=2409617336";
+@import "common/razor-buttons.css?v=2409617336";
 
 body {
     background:
@@ -49,7 +49,7 @@ hr {
 
 
 /* Setting the color scheme */
-.wthread, .hashtag {
+.watcherMenu, .hashtag {
     background-color: rgb(243, 250, 254);
 }
 h1, h2, h3, h4, h5, h6 {
@@ -225,6 +225,8 @@ div.post.reply, .hashtag, .catathread {
 }
 div.post.reply, .wthread, .catathread {
     padding: 3px;
+}
+div.post.reply, .watcherMenu, .catathread {
     background-color: rgba(255, 255, 255, 0.5);
 }
 div.post.reply .intro {
@@ -452,7 +454,7 @@ div.pages {
 .post-hover {
     line-height: 110%;
 }
-.wthread, .post-hover {
+.watcherMenu, .post-hover {
     background-color: rgb(232, 246, 252) !important;
 }
 
@@ -468,9 +470,6 @@ div.pages {
 }
 .wlink {
     color: rgb(197, 28, 113);
-}
-.wthread {
-    border-bottom: 1px dashed gray;
 }
 .wpost {
     color: #000;

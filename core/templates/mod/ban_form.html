@@ -41,15 +41,8 @@
 					<label for="reason">{% trans 'Message' %}</label>
 				</th>
 				<td>
-					<input type="checkbox" id="public_message" name="public_message"{% if config.mod.check_ban_message %} checked{% endif %}> 
-					<input type="text" name="message" id="message" size="35" maxlength="200" value="{{ config.mod.default_ban_message|e }}"> 
-					<span class="unimportant">({% trans 'public; attached to post' %})</span>
-					<script type="text/javascript">
-						document.getElementById('message').disabled = !document.getElementById('public_message').checked;
-						document.getElementById('public_message').onchange = function() {
-							document.getElementById('message').disabled = !this.checked;
-						}
-					</script>
+					<input type="checkbox" id="public_message" name="public_message"{% if config.mod.check_ban_message %} checked{% endif %}>
+					<input type="text" placeholder="public; attached to post" name="message" id="message" size="35" maxlength="200" value="{{ config.mod.default_ban_message|e }}" disabled>
 				</td>
 			</tr>
 		{% endif %}
@@ -58,8 +51,7 @@
 				<label for="length">{% trans 'Length' %}</label>
 			</th>
 			<td>
-				<input type="text" name="length" id="length" size="20" maxlength="40"> 
-					<span class="unimportant">(eg. "2d1h30m" or "2 days")</span></td>
+				<input type="text" placeholder="(eg. '2d1h30m' or '2 days')" name="length" id="length" size="20" maxlength="40">
 			</tr>
 		<tr>
 			<th>{% trans 'Board' %}</th>

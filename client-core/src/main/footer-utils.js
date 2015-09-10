@@ -1,16 +1,7 @@
-/**
- * footer-utils.js
- *
- * Builds and removes footer buttons.
- * Created on 4/10/2015
- */
-
-
-
 import $ from 'jquery';
 
 $(document).ready(function() {
-    $(".postfooter").remove();
+	$('.postfooter').remove();
 });
 
 /**
@@ -23,44 +14,53 @@ $(document).ready(function() {
  */
 
 export function footer($post) {
-    const FooterHandler = {
-        addItem: function (name, callback) {
-            // before we do anything, we need to remove the clones
-            FooterHandler.removeItem(name);
+	return {
+		addItem(name, callback) {
+			// before we do anything, we need to remove the clones
+			this.removeItem(name);
 
-            // get the footer, or make a new one.
-            let $footer = (function () {
-                let $f = $post.children(".postfooter");
-                return $f.length > 0 ? $f : $("<ul />")
-                    .addClass("postfooter")
-                    .appendTo($post);
-            })();
+			// get the footer, or make a new one.
+			function getFooter() {
+				let $f = $post.children('.postfooter');
+				return $f.length > 0 ? $f : $('<ul />')
+					.addClass('postfooter')
+					.appendTo($post);
+			}
 
-            // outer container
-            let $li = $("<li />")
-                .addClass("footer-item")
-                .attr("data-footer", name.toLowerCase())
-                .appendTo($footer);
+			getFooter()
+				.filter(':not(.dead-buttons)')
+				.append(
+				$('<li />')
+					.addClass('footer-item')
+					.attr('data-footer', name.toLowerCase())
+					.append(
+					// Text can be changed without damaging its functionality.
+					$('<a />')
+						.text(name)
+						.click(callback)
+						.attr('href', 'javascript:;')
+				)
+			);
 
-            // Text can be changed without damaging its functionality.
-            $("<a />")
-                .text(name)
-                .on("click", callback)
-                .attr("href", "javascript:;")
-                .appendTo($li);
+		},
+		removeItem(name) {
+			let $footer = $post.children('.postfooter');
+			if ($footer.hasClass('dead-buttons'))
+				return;
+			$footer
+				.children(`[data-footer="${name.toLowerCase()}"]`)
+				.remove();
 
-        },
-        removeItem: function (name) {
-            let $footer = $post.children(".postfooter");
-            $footer
-                .children("[data-footer='" + name.toLowerCase() + "']")
-                .remove();
-
-            // erase the footer if there are no more items
-            if ($footer.children().length == 0) {
-                $footer.remove();
-            }
-        }
-    };
-    return FooterHandler;
+			// erase the footer if there are no more items
+			if ($footer.children().length == 0) {
+				$footer.remove();
+			}
+		},
+		kill() {
+			let $footer = $post.children('.postfooter')
+			$footer
+				.addClass('dead-buttons')
+				.text($footer.text());
+		}
+	}
 }

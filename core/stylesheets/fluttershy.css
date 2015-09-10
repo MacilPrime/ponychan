@@ -1,4 +1,4 @@
-@import "common/pony-kusaba.css?v=572120271";
+@import "common/pony-kusaba.css?v=2409617336";
 
 /* Indiscriminate tags */
 body {
@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: #e0e8e8;
 }
 /* Block items */
-div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+div.post.reply, .wthread, .watcherMenu, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
     border-color: rgb(229, 214, 139);
     background-color: rgb(255,238,153);
 }

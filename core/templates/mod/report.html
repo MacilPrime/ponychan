@@ -6,17 +6,17 @@
 	<br>
 	{% trans 'Report date' %}: <time datetime="{{ report.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ report.time|date(config.post_date) }}</time>
 	<br>
-	{% if mod|hasPermission(config.mod.show_ip, report.board) %}
-		{% trans 'Reported by' %}: <a href="?/IP/{{ report.ip }}">{{ report.ip }}</a>
+	{% if mod|hasPermission('show_ip', report.board) %}
+		{% trans 'Reported by' %}: <a href="?/IP/{{ report.ip|ipToUserRange }}">{{ report.ip }}</a>
 		<br>
 	{% endif %}
-	{% if mod|hasPermission(config.mod.report_dismiss, report.board) or mod|hasPermission(config.mod.report_dismiss_ip, report.board) %}
+	{% if mod|hasPermission('report_dismiss', report.board) or mod|hasPermission('report_dismiss_ip', report.board) %}
 		<hr>
-		{% if mod|hasPermission(config.mod.report_dismiss, report.board) %}
+		{% if mod|hasPermission('report_dismiss', report.board) %}
 			<a title="{% trans 'Discard abuse report' %}" href="?/reports/{{ report.id }}/dismiss">Dismiss</a>
 		{% endif %}
-		{% if mod|hasPermission(config.mod.report_dismiss_ip, report.board) %}
-			{% if mod|hasPermission(config.mod.report_dismiss, report.board) %}
+		{% if mod|hasPermission('report_dismiss_ip', report.board) %}
+			{% if mod|hasPermission('report_dismiss', report.board) %}
 			 |
 			{% endif %}
 			 <a title="{% trans 'Discard all abuse reports by this IP address' %}" href="?/reports/{{ report.id }}/dismissall">Dismiss+</a>

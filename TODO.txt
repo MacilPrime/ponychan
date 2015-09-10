@@ -1,8 +1,3 @@
-- fake username field right before password field in post form for stupid
-  browsers to auto-fill into
-- when a post is edited (or deleted) and reloader.js notices, it should put a
-  button on the post to update it (StackOverflow style). If the post hasn't been
-  scrolled onto the screen before, then it can live-update immediately.
 - separate out tinyboard code and all instance files (config files, cache, board
   html and image files) so deploys can finally be as easy as rsyncing the core/
   directory over.

@@ -80,6 +80,7 @@ $pages = array(
 	'/(\w+)/deletebyip/(\d+)(/global)?'	=> 'secure deletebyip',	// delete all posts by IP address
 	'/(\w+)/bump/(\d+)'			=> 'secure bump',	// force bump thread
 	'/(\w+)/(un)?lock/(\d+)'		=> 'secure lock',	// lock thread
+	'/(\w+)/(un)?mature/(\d+)'		=> 'secure mature',	// toggle mature tag on thread
 	'/(\w+)/(un)?sticky/(\d+)'		=> 'secure sticky',	// sticky thread
 	'/(\w+)/bump(un)?lock/(\d+)'		=> 'secure bumplock',	// "bumplock" thread
 
@@ -125,16 +126,22 @@ foreach ($pages as $uri => $handler) {
 
 		if (preg_match('/^secure(_POST)? /', $handler, $m)) {
 			$secure_post_only = isset($m[1]);
+			function hasCsrfHeader() {
+				// You can't csrf with extra headers against your target.
+				return (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) &&
+					strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+			}
 			if (!$secure_post_only || $_SERVER['REQUEST_METHOD'] === 'POST') {
 				if (isset($matches['token'])) {
 					$token = $matches['token'];
 					$actual_query = preg_replace('!/([a-f0-9]{8})$!', '', $query);
+
 				} else {
 					$token = isset($_POST['token']) ? $_POST['token'] : false;
 					$actual_query = $query;
 				}
 
-				if ($token === false) {
+				if ($token === false && !hasCsrfHeader()) {
 					if ($secure_post_only)
 						error($config['error']['csrf']);
 					else {
@@ -144,7 +151,7 @@ foreach ($pages as $uri => $handler) {
 				}
 
 				// CSRF-protected page; validate security token
-				if ($token !== make_secure_link_token(substr($actual_query, 1))) {
+				if ($token !== make_secure_link_token(substr($actual_query, 1)) && !hasCsrfHeader()) {
 					error($config['error']['csrf']);
 				}
 			}

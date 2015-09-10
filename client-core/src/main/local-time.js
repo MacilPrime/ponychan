@@ -7,12 +7,17 @@
  */
 
 import moment from "moment";
+import Kefir from 'kefir';
+import udKefir from 'ud-kefir';
 import $ from 'jquery';
+import docReady from './doc-ready';
 import settings from './settings';
 
 settings.newSetting("time_casual", "bool", false, "12 hour time display", 'pagestyle', {orderhint: 4});
 
-$(document).ready(function(){
+const update = udKefir(module, null).changes().take(1).toProperty();
+
+docReady.takeUntilBy(update).onValue(() => {
 	var time_casual, time_format_string;
 
 	function init() {
@@ -27,10 +32,10 @@ $(document).ready(function(){
 	}
 	init();
 
-	$(document).on("setting_change", function(e, setting) {
-		if (setting == "time_casual")
-			init();
-	});
+	settings.getSettingStream('time_casual')
+		.changes()
+		.takeUntilBy(update)
+		.onValue(init);
 
 	function formatTimeElements(context) {
 		$("time", context).each(function() {
@@ -40,7 +45,7 @@ $(document).ready(function(){
 	}
 
 	// allow to work with auto-reload.js, etc.
-	$(document).on('new_post', function(e, post) {
-		formatTimeElements(post);
-	});
+	Kefir.fromEvents($(document), 'new_post', (e, post) => post)
+		.takeUntilBy(update)
+		.onValue(formatTimeElements);
 });

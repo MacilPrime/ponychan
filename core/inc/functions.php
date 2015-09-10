@@ -86,6 +86,11 @@ function loadConfig() {
 
 	require 'inc/instance-config.php';
 
+	if (isset($config['overrides'])) {
+		$config = array_merge_deep([$config, $config['overrides']]);
+		unset($config['overrides']);
+	}
+
 	if (isset($board['dir']) && file_exists($board['dir'] . '/config.php')) {
 		require $board['dir'] . '/config.php';
 	}
@@ -113,24 +118,7 @@ function loadConfig() {
 		if (isset($_SERVER['HTTP_HOST'])) {
 			$config['referer_match'] = '/^' .
 				(preg_match($config['url_regex'], $config['root']) ? '' :
-					'https?:\/\/' . $_SERVER['HTTP_HOST']) .
-				str_replace('/', '/+',
-					preg_quote($config['root'], '/') .
-				'(' .
-						str_replace('%s', '\w+', preg_quote($config['board_path'], '/')) .
-						'(' .
-							str_replace('%d', '\d+', preg_quote($config['file_page'])) .
-						')?' .
-					'|' .
-						str_replace('%s', '\w+', preg_quote($config['board_path'], '/')) .
-						preg_quote($config['dir']['res'], '/') .
-						'(' .
-							str_replace('%d', '\d+', preg_quote($config['file_page'], '/')) . '|' .
-							str_replace('%d', '\d+', preg_quote($config['file_page50'], '/')) .
-						')' .
-					'|' .
-						preg_quote($config['file_mod'], '/') . '\?\/.*' .
-				')([#?](.+)?)?$') . '/i';
+					'https?:\/\/' . preg_quote($_SERVER['HTTP_HOST'], '/')) . '\/.*/';
 		} else {
 			// CLI mode
 			$config['referer_match'] = '//';
@@ -279,6 +267,20 @@ function utf8_clean_userinput() {
 	foreach ($_FILES as &$item) {
 		$item['name'] = utf8_clean($item['name']);
 	}
+}
+
+function array_merge_deep($arrays) {
+	$result = array();
+	foreach ($arrays as $array) {
+		foreach ($array as $key => $value) {
+			if (isset($result[$key]) && is_array($result[$key]) && is_array($value) && $result[$key] !== $value) {
+				$result[$key] = array_merge_deep(array($result[$key], $value));
+			} else {
+				$result[$key] = $value;
+			}
+		}
+	}
+	return $result;
 }
 
 function computeResize($width, $height, $max_width, $max_height) {

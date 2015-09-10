@@ -14,6 +14,7 @@ import './cite-reply';
 import './spoiler-toggle.js';
 import './spoiler-thread.js';
 import './local-time.js';
+import './live-post-changes.js';
 import './legacy/reloader.js';
 import './post-previewer/post-hover.js';
 import './post-previewer/post-inline.js';
@@ -28,12 +29,14 @@ import './legacy/smartphone-spoiler.js';
 import './legacy/show-backlinks.js';
 import './navbar.js';
 import './permalink.js';
+import './post-controls.js';
 import './qr.js';
 import './tags.js';
 import './misc.js';
 import './titlebar.js';
 import './hide-toggle.js';
 import './post-hiding.js';
+import './dashboard.js';
 import './ips.js';
 import './fancy.js';
 import './mc.js';
@@ -45,10 +48,10 @@ import './hide-trip.js';
 import './settings-screen.jsx';
 
 // for debugging and inline scripts
-window.mlpchan = {
+window.ponychan = {
   _dbg_require: require,
   libs: {
-    Bacon: require('baconjs'),
+    Kefir: require('kefir'),
     React: require('react/addons'),
     Immutable: require('immutable'),
     RSVP: require('rsvp'),
@@ -59,5 +62,5 @@ window.mlpchan = {
   settings: settings
 };
 
-window.$ = window.mlpchan.$;
-window.settings = window.mlpchan.settings;
+window.$ = window.ponychan.$;
+window.settings = window.ponychan.settings;

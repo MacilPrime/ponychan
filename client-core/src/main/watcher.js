@@ -2,20 +2,28 @@
  * watcher.js
  *
  * Released under the MIT license
- * Copyright (c) 2013 Macil Tech <maciltech@gmail.com>
+ * Copyright (c) 2015 Macil Tech <maciltech@gmail.com>
  *
  */
 
-import $ from 'jquery';
+var _ = require('lodash');
+var $ = require('jquery');
+var RSVP = require('rsvp');
+import Immutable from 'immutable';
+import React from 'react/addons';
 import { footer } from './footer-utils';
 import {log_error} from './logger';
 import {jumpToPost} from './post-utils';
 import {get_post_board, get_post_num, get_post_id, get_post_class} from './post-info';
 import './settings-screen.jsx'; // has to come after this
+import {WatcherMenu} from './watcher-components.jsx';
+
+const isModPage = (document.location.pathname == SITE_DATA.siteroot+'mod.php');
 
 var max_watched_threads = 70;
 var watcher_poll_time = 30 * 1000;
 
+var mod;
 var watched_threads;
 load_watched_threads();
 
@@ -32,6 +40,7 @@ function save_watched_threads() {
 
 function add_watch($post) {
 	var postid = get_post_id($post);
+	var updated = RSVP.Promise.resolve();
 
 	load_watched_threads();
 	if (!watched_threads.hasOwnProperty(postid)) {
@@ -61,12 +70,14 @@ function add_watch($post) {
 		if ($(".watcherButton").length == 0) {
 			init_watcher_menu();
 		} else {
-			populate_watcher_screen();
+			updated = populate_watcher_screen();
 			run_watcher_refresher();
 		}
 	}
 
-	alert("Thread watched");
+	updated.then(() => {
+		alert("Thread watched");
+	});
 }
 
 function remove_watch(postid) {
@@ -74,15 +85,19 @@ function remove_watch(postid) {
 	delete watched_threads[postid];
 	save_watched_threads();
 
+	var updated = RSVP.Promise.resolve();
+
 	add_watch_buttons($("."+get_post_class(postid)));
 	if (Object.keys(watched_threads).length == 0) {
 		init_watcher_menu();
 	} else {
-		populate_watcher_screen();
+		updated = populate_watcher_screen();
 		run_watcher_refresher();
 	}
 
-	alert("Thread unwatched");
+	updated.then(() => {
+		alert("Thread unwatched");
+	});
 }
 
 function add_watch_buttons($posts) {
@@ -166,6 +181,8 @@ function refresh_watched_threads(callback) {
 					}
 				}
 
+				mod = data.mod;
+
 				if (changed)
 					save_watched_threads();
 				populate_watcher_screen();
@@ -204,95 +221,50 @@ function open_watcher() {
 
 function populate_watcher_screen() {
 	var $watcherScreen = $('#watcherScreen');
-	$watcherScreen.html('');
 	var alerts = 0;
 
-	for (let id in watched_threads) {
-		var thread = watched_threads[id];
-
+	var threads = Object.keys(watched_threads).map(id => {
 		var match = /^(\w+):(\d+)$/.exec(id);
 		var board = match[1];
-		var postnum = match[2];
-
-		var $name = $('<span/>')
-			.addClass('wname')
-			.text(thread.opname);
-		var $trip = $('<span/>')
-			.addClass('wtrip')
-			.text(thread.optrip);
-		var $subject = $('<span/>')
-			.addClass('wsubject')
-			.text(thread.subject);
-		var $post = $('<span/>')
-			.addClass('wpost')
-			.text(thread.post);
-
-		var $postcounter = $('<span/>').addClass('wpostcounter');
+		var postnum = +match[2];
 		var unread_hash = '';
-		if (thread.known_reply_count == null) {
-			var $error = $('<span/>')
-				.addClass('wcounterror')
-				.text('Thread not found');
-			$postcounter.append('(', $error, ')');
-		} else {
-			var $allposts = $('<span/>')
-				.addClass('wallposts')
-				.text(thread.known_reply_count+' posts');
-
-			// If the reported last time is greater than
-			// the last seen time, and we're not directly
-			// viewing this thread now, then show the
-			// number of new posts.
-			if (thread.last_known_time > thread.last_seen_time && page_thread_id != id) {
-				alerts++;
-				unread_hash = '#unread';
-				var $newposts = $('<span/>')
-					.addClass('wnewposts');
-				if (thread.known_reply_count > thread.seen_reply_count) {
-					$newposts.text((thread.known_reply_count-thread.seen_reply_count)+' new');
-				} else {
-					$newposts.text('unknown new');
-				}
-				$postcounter.append('(', $allposts, '/', $newposts, ')');
-			} else {
-				$postcounter.append('(', $allposts, ')');
-			}
+		if (
+			watched_threads[id].known_reply_count != null &&
+			watched_threads[id].last_known_time > watched_threads[id].last_seen_time &&
+			page_thread_id != id
+		) {
+			alerts++;
+			unread_hash = '#unread';
 		}
+		return _.assign({
+			board, postnum,
+			url: make_thread_url(board, postnum)+unread_hash,
+			url50: watched_threads[id].known_reply_count > 100 ?
+				make_thread50_url(board, postnum)+unread_hash : null
+		}, watched_threads[id]);
+	});
 
-		var $postlink = $('<a/>')
-			.addClass('wlink')
-			.attr('href', make_thread_url(board, postnum)+unread_hash)
-			.text('/'+board+'/'+postnum);
-		var $postlinkpart = $('<span/>')
-			.addClass('wlinkpart')
-			.append($postlink);
-		if (thread.known_reply_count > 100) {
-			var $postlink50 = $('<a/>')
-				.addClass('wlink50')
-				.attr('href', make_thread50_url(board, postnum)+unread_hash)
-				.text('+50');
-			$postlinkpart.append(' ', $postlink50);
-		}
+	if (mod) {
+		alerts += mod.report_count;
+	}
 
-		var $removebutton = $('<a/>')
-			.addClass('wremove')
-			.attr("href", "javascript:;")
-			.text('X');
-
-		$removebutton.click(() => {remove_watch(id);});
-
-		var $top = $('<div/>')
-			.addClass('wtop')
-			.append($postlinkpart, ' ', $name, $trip, ' ', $postcounter, ' ', $removebutton);
-		var $details = $('<div/>')
-			.addClass('wdetails')
-			.append($subject, ' — ', $post);
-		var $thread = $('<div/>')
-			.addClass('wthread')
-			.appendTo($watcherScreen)
-			.append($top, $details);
+	var pr;
+	if ($watcherScreen[0]) {
+		pr = new RSVP.Promise((resolve, reject) => {
+			React.render(
+				React.createElement(WatcherMenu, {
+					threads, mod,
+					onRemove: remove_watch
+				}),
+				$watcherScreen[0],
+				resolve
+			);
+		});
+	} else {
+		pr = Promise.resolve();
 	}
 	watcher_alerts(alerts);
+	return pr;
 }
 
 function watcher_alerts(count) {
@@ -358,7 +330,6 @@ function init_watcher_menu() {
 
 	var $watcherScreen = $("<div/>")
 		.attr("id", "watcherScreen")
-		.text('watcher screen is this')
 		.appendTo(document.body)
 		.hide();
 

@@ -191,11 +191,11 @@ if (isset($_POST['delete'])) {
 		$post['raw'] = isset($_POST['raw']);
 		$post['noeditmsg'] = isset($_POST['noeditmsg']);
 
-		if (!isset($password) && !hasPermission($config['mod']['editpost'], $board['uri']))
+		if (!isset($password) && !hasPermission('editpost', $board['uri']))
 			error($config['error']['noaccess']);
 		if ($post['raw'] && !hasPermission('rawhtml', $board['uri']))
 			error($config['error']['noaccess']);
-		if ($post['noeditmsg'] && !hasPermission($config['mod']['noeditmsg'], $board['uri']))
+		if ($post['noeditmsg'] && !hasPermission('noeditmsg', $board['uri']))
 			error($config['error']['noaccess']);
 	} else {
 		if (!isset($password))
@@ -429,9 +429,9 @@ if (isset($_POST['delete'])) {
 		$post['locked'] = $post['op'] && isset($_POST['lock']);
 		$post['raw'] = isset($_POST['raw']);
 
-		if ($post['sticky'] && !hasPermission($config['mod']['sticky'], $board['uri']))
+		if ($post['sticky'] && !hasPermission('sticky', $board['uri']))
 			error($config['error']['noaccess']);
-		if ($post['locked'] && !hasPermission($config['mod']['lock'], $board['uri']))
+		if ($post['locked'] && !hasPermission('lock', $board['uri']))
 			error($config['error']['noaccess']);
 		if ($post['raw'] && !hasPermission('rawhtml', $board['uri']))
 			error($config['error']['noaccess']);
@@ -475,7 +475,7 @@ if (isset($_POST['delete'])) {
 		}
 	}
 
-	if (!hasPermission($config['mod']['bypass_field_disable'], $board['uri'])) {
+	if (!hasPermission('bypass_field_disable', $board['uri'])) {
 		if ($config['field_disable_name'])
 			$_POST['name'] = $config['anonymous']; // "forced anonymous"
 
@@ -519,7 +519,7 @@ if (isset($_POST['delete'])) {
 	if (!$post['op']) {
 		// Check if thread is locked
 		// but allow mods to post
-		if ($thread['locked'] && !hasPermission($config['mod']['postinlocked'], $board['uri']))
+		if ($thread['locked'] && !hasPermission('postinlocked', $board['uri']))
 			error($config['error']['locked']);
 
 		$thread['cyclic'] = (stripos($thread['body'], '<span class="hashtag">#cyclic</span>') !== FALSE);
@@ -636,7 +636,7 @@ if (isset($_POST['delete'])) {
 		$post['tracked_cites'] = markup($post['body'], true);
 
 	// Check for a flood
-	if (!hasPermission($config['mod']['flood'], $board['uri']) && checkFlood($post)) {
+	if (!hasPermission('flood', $board['uri']) && checkFlood($post)) {
 		error($config['error']['flood']);
 	}
 

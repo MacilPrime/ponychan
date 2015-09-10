@@ -1,4 +1,4 @@
-{% if mod|hasPermission(config.mod.noticeboard_post) %}
+{% if mod|hasPermission('noticeboard_post') %}
 	<fieldset>
 		<legend>{% trans 'New post' %}</legend>
 		<form style="margin:0" action="" method="post">
@@ -25,7 +25,7 @@
 
 {% for post in noticeboard %}
 	<div class="ban">
-		{% if mod|hasPermission(config.mod.noticeboard_delete) %}
+		{% if mod|hasPermission('noticeboard_delete') %}
 			<span style="float:right;padding:2px">
 				<a class="unimportant" href="?/noticeboard/delete/{{ post.id }}">[{% trans 'delete' %}]</a>
 			</span>

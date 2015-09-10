@@ -7,7 +7,7 @@
  *
  */
 
-@import "common/pony-kusaba.css?v=572120271";
+@import "common/pony-kusaba.css?v=2409617336";
 
 /* Indiscriminate tags */
 body {
@@ -57,7 +57,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 	color: #da8951;
 }
 /* Block items */
-div.post.reply, .wthread, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+div.post.reply, .watcherMenu, .wthread, .watcherMenu, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
 	background-color: rgb(245, 185, 144);
 	border-color: rgb(230, 120, 47);
 }

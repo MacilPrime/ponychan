@@ -234,7 +234,8 @@ a.email {
     font-size: inherit;
 }
 .wthread {
-    border-bottom: 1px dashed gray;
+    border-style: dashed;
+    border-color: gray;
 }
 .wpost {
     color: black;

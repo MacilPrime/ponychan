@@ -5,6 +5,8 @@
   $config['cache']['enabled'] = 'redis';
   $config['cache']['redis'] = array('localhost', 6379, '', 1);
 
+  $config['overrides']['cookies']['salt'] = 'test value';
+
   $config['thumb_ext'] = '';
   $config['thumb_method'] = 'convert';
 

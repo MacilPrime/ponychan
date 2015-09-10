@@ -7,51 +7,50 @@
  */
 
 import $ from 'jquery';
+import RSVP from 'rsvp';
+import Kefir from 'kefir';
 
-export function settingsAd(text, time, cb) {
-	return pop(text+' \u2191', time, cb);
+export function settingsAd(text, time) {
+	return pop(text+' \u2191', time);
 }
 
-export function pop(text, time, cb) {
-	if (time === undefined) time = 30;
-
-	var $navbar = $(".boardlist.top").first();
-	var $notice = $("<div/>")
-		.appendTo(document.body)
+export function pop(text, time = 30) {
+	const bubbleSpacing = 5;
+	const $pop = $('<div />')
 		.hide()
-		.addClass("popnotice")
 		.text(text)
-		.css("top", $navbar.height()+"px");
+		.fadeIn('fast')
+		.addClass('popnotice')
+		.css('top', () =>
+		// calculate navbar height + all existing bubble heights.
+		$('.boardlist.top')
+			.first()
+			.height()
+		+ $('.popnotice')
+			.map((i, el) => $(el).outerHeight()).get()
+			.reduce((a, b) => a + b + bubbleSpacing, 0))
+		.appendTo(document.body);
 
-	var hasFaded = false;
-	var hasCalled = false;
+	return new RSVP.Promise(resolve => {
+		// convert seconds to milliseconds.
+		const seconds = s => s * 1000;
 
-	function fadeNow() {
-		if (hasFaded)
-			return;
-		hasFaded = true;
-		$notice.fadeOut(function() {
-			$notice.remove();
+		Kefir.merge([
+			Kefir.fromEvents($pop, 'click'),
+			Kefir.later(seconds(time))
+		]).take(1)
+			.onValue(() => $pop.fadeOut(seconds(1), resolve));
+	}).then(() => {
+			$pop.nextAll('.popnotice')
+				.each((i, el) =>
+				// All bubbles stacked under the removed bubble
+				// have to take its place.
+				$(el).css({
+					top: parseInt($(el)
+						.css('top')
+						.match(/^\d+/)
+						.pop()) - $pop.outerHeight() - bubbleSpacing
+				}));
+			$pop.remove();
 		});
-		if (cb)
-			doCall();
-	}
-	function doCall() {
-		if (hasCalled)
-			return;
-		hasCalled = true;
-		cb();
-	}
-
-	$notice.click(fadeNow);
-
-	setTimeout(function() {
-		$notice.fadeIn(function() {
-			if (cb)
-				setTimeout(doCall, 5*1000);
-
-			if (time)
-				setTimeout(fadeNow, time*1000);
-		});
-	}, 1500);
 }

@@ -1,6 +1,6 @@
 
-@import "common/pony-kusaba.css?v=572120271";
-@import "common/bubble-buttons.css?v=10701602";
+@import "common/pony-kusaba.css?v=2409617336";
+@import "common/bubble-buttons.css?v=2409617336";
 
 
 /* Indiscriminate tags */
@@ -37,7 +37,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: rgb(77, 24, 111);
 }
 /* Tone 2 - Cells */
-div.post.reply, #settingsScreen, .wthread, .hashtag, #updateSettings, .catathread {
+div.post.reply, #settingsScreen, .watcherMenu, .hashtag, #updateSettings, .catathread {
     background-color: rgb(222, 239, 244);
 }
 .replyContainer:nth-of-type(2n) .reply {
@@ -203,9 +203,6 @@ div.pages {
 /* Thread watcher */
 #watcherScreen {
     border-color: rgb(169, 114, 166);
-}
-.wthread {
-    border-bottom: 1px dashed gray;
 }
 .wpost {
     color: black;

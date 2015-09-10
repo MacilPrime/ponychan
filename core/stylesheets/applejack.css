@@ -1,5 +1,5 @@
-@import "common/pony-kusaba.css?v=572120271";
-@import "common/razor-buttons.css?v=10701602";
+@import "common/pony-kusaba.css?v=2409617336";
+@import "common/razor-buttons.css?v=2409617336";
 
 body {
     background-color: rgb(255,239,173);
@@ -46,8 +46,10 @@ hr {
 div.post.reply, .wthread, .post-hover, div.pages, .catathread, #updateSettings, #settingsScreen  {
     padding: 0.5em;
     border-style: solid;
-    background: #ffd990;
     border-color: rgb(229, 214, 139);
+}
+div.post.reply, .watcherMenu, .post-hover, div.pages, .catathread, #updateSettings, #settingsScreen  {
+    background: #ffd990;
 }
 .boardlist.top, #qrmove, #updateSettings {
     background-color: #91ca40;

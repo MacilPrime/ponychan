@@ -20,6 +20,9 @@
       "db": 0
     }
   },
+  "board": {
+    "cookies_salt": "test value",
+  },
   "mysql": {
     "host": "localhost",
     "user": "bob",

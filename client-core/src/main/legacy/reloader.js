@@ -7,7 +7,7 @@
  */
 
 import $ from 'jquery';
-import Bacon from 'baconjs';
+import kefirBus from 'kefir-bus';
 import settings from '../settings';
 import {get_post_num} from '../post-info';
 
@@ -22,10 +22,10 @@ settings.newSetting("reloader_time", "number", 30, "Update interval in seconds",
 	}
 });
 
-const updateNoCache = new Bacon.Bus();
+const updateNoCache = kefirBus();
 
 export function updateThreadNow(nocache=false) {
-	updateNoCache.push(nocache);
+	updateNoCache.emit(nocache);
 }
 
 $(document).ready(function(){
@@ -191,13 +191,16 @@ $(document).ready(function(){
 				else if (jqXHR.getResponseHeader('X-CF-Dodge-Etag'))
 					page_etag = jqXHR.getResponseHeader('X-CF-Dodge-Etag');
 				if (status == 'notmodified') {
-					data = '<!doctype html><html><body><div class="banner">dummy</div></body></html>';
+					loadPosts($([]));
+					prepareDelayedUpdate();
+					return;
 				}
 				data = mogrifyHTML(data);
 				var $data = $($.parseHTML(data));
 				var $banner = $data.filter('div.banner').add( $data.find('div.banner') ).first();
 				if($banner.length) {
 					loadPosts($data);
+					$(document).trigger('thread_reloaded', data);
 					prepareDelayedUpdate();
 				} else {
 					if($data.find("h2").first().text().trim() === "Thread specified does not exist.") {

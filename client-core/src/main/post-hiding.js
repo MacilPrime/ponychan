@@ -8,7 +8,7 @@
 
 import $ from 'jquery';
 import _ from 'lodash';
-import Bacon from 'baconjs';
+import Kefir from 'kefir';
 import settings from './settings';
 import setCss from './set-css';
 import {get_post_board, get_post_name, get_post_trip, get_post_num} from './post-info';
@@ -65,7 +65,7 @@ function makeMatcherFromText(text) {
 const nameMatcherStream = settings.getSettingStream('filtered_names').map(makeMatcherFromText);
 const tripMatcherStream = settings.getSettingStream('filtered_trips').map(makeMatcherFromText);
 
-const postFilterMatcherStream = Bacon.combineAsArray(nameMatcherStream, tripMatcherStream)
+const postFilterMatcherStream = Kefir.combine([nameMatcherStream, tripMatcherStream])
 	.map(([nameMatcher, tripMatcher]) => {
 		return $postC => {
 			if (nameMatcher.count > 0) {
@@ -86,10 +86,10 @@ $(document).ready(function(){
 		setCss("hider_stubs", show_hider_stubs ? "" : ".postStub { display: none; }");
 	});
 
-	Bacon.combineAsArray(
+	Kefir.combine([
 			settings.getSettingStream('show_mature'),
 			settings.getSettingStream('mature_as_spoiler')
-		)
+		])
 		.onValue(([show_mature, mature_as_spoiler]) => {
 			if (show_mature) {
 				prep_mature_images(document.body);
@@ -359,7 +359,7 @@ $(document).ready(function(){
 			.click(hide_this_post);
 	}
 
-	const new_posts = Bacon.fromEvent($(document), 'new_post', (event, post) => post);
+	const new_posts = Kefir.fromEvents($(document), 'new_post', (event, post) => post);
 
 	postFilterMatcherStream
 		.onValue(postFilter => {

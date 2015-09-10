@@ -1,4 +1,4 @@
-@import "common/pony-kusaba.css?v=572120271";
+@import "common/pony-kusaba.css?v=2409617336";
 
 /* Indiscriminate tags */
 body {
@@ -58,6 +58,8 @@ li {
 /* Setting the color scheme */
 div.post.reply, .wthread, #settingsScreen, .hashtag, #updateSettings, .catathread {
     border: 2px solid rgb(121,24,103);
+}
+div.post.reply, .wthread, .watcherMenu section, #settingsScreen, .hashtag, #updateSettings, .catathread {
     background: linear-gradient(to bottom, rgb(121, 24, 103) 0px, rgb(90, 18, 77) 300px);
 }
 input[type=text], input[type=password], input[type=search], textarea {

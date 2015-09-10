@@ -28,6 +28,7 @@ class TwigExt_Tinyboard extends Twig_Extension
 			'filemtime' => new Twig_Filter_Function('filemtime'),
 			'bidi_cleanup' => new Twig_Filter_Function('bidi_cleanup'),
 			'addslashes' => new Twig_Filter_Function('addslashes'),
+			'ipToUserRange' => new Twig_Filter_Function('ipToUserRange'),
 			'mask' => new Twig_Filter_Function('render_mask'),
 			'mask_url' => new Twig_Filter_Function('mask_url')
 		);

@@ -8,7 +8,7 @@
 import $ from "jquery";
 import {footer} from "./footer-utils";
 import myPosts from "./my-posts";
-import {get_post_num, get_thread_num, get_post_board, get_post_id} from './post-info';
+import {get_post_num, get_thread_num, get_post_board, get_post_id, get_post_body} from './post-info';
 import * as state from './state';
 import config  from './config';
 
@@ -30,10 +30,6 @@ $(document).ready(function() {
   function giveEditControls($post) {
     function getEditForm() {
       return $post.find(".edit-form");
-    }
-
-    function getBody($root = $post) {
-      return $root.find("> .body, > .opMain > .body").first();
     }
 
     function getPostTime() {
@@ -87,7 +83,7 @@ $(document).ready(function() {
         var $editForm = $('<div />')
           .addClass("edit-form")
           .fadeIn("fast")
-          .insertBefore(getBody());
+          .insertBefore(get_post_body($post));
 
         var $message = $('<textarea />')
           .text(postContent)
@@ -178,8 +174,8 @@ $(document).ready(function() {
                 .find(".post_" + get_post_num($post));
               if ($newPost) {
                 $post.html($post.html()); // erase all events.
-                var $newBody = getBody($newPost);
-                getBody().replaceWith($newBody);
+                var $newBody = get_post_body($newPost);
+                get_post_body($post).replaceWith($newBody);
                 closeForm();
                 $footerEditButton.remove();
                 $(document).trigger("new_post", $post);
