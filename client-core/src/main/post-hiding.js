@@ -76,7 +76,7 @@ const postFilterMatcherStream = Kefir.combine([nameMatcherStream, tripMatcherStr
 			}
 			return false;
 		};
-	});
+	}).toProperty();
 
 $(document).ready(function(){
 	settings.getSettingStream('show_hide_buttons').onValue(hideButton => {
