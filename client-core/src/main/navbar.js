@@ -34,7 +34,7 @@ $(document).ready(function(){
 			$navbar.css("position", "absolute");
 			setCss("navbar", "");
 		}
-		$(".boardlist.top + *").css("margin-top", (16+$navbar.outerHeight())+"px");
+		$("body").css("padding-top", (16+$navbar.outerHeight())+"px");
 	};
 
 	navbarApplySettings();

@@ -363,6 +363,11 @@ function timing_end() {
 	}
 }
 
+// Converts a glob expression with * symbols to an SQL LIKE expression.
+function globToSqlLike($glob) {
+	return str_replace(['\\', '%', '_', '*'], ['\\\\', '\\%', '\\_', '%'], $glob);
+}
+
 function cyclicThreadCleanup($thread) {
 	global $board, $config;
 

@@ -1,3 +1,18 @@
+remember your posts in localStorage instead of sessionStorage
+Require spoilered threads to have a subject
+timed deletion board. (Threads that haven't been bumped in a set amount of time are pushed off?)
+let (mod?) editing (un)spoiler a post. (need to generate/remove thumbnail)
+make moving a thread to a board it already exists on cause an error
+
+# mod tools
+Search by name/trip/filename pagination
+Name/trip/file bans
+Mods having access to the blotter
+mod actions without leaving page
+view deleted posts
+- image filename is renamed so old URL stops working
+
+investigate antibot
 fix cache consistency
 fix android bug
 separate name cookie on anon

@@ -40,6 +40,7 @@ import './embed.js';
 import './search.js';
 import './desktop-notifier.js';
 import './hide-trip.js';
+import './https_send.js';
 
 import './settings-screen.jsx';
 

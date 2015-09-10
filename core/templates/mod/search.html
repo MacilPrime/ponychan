@@ -1,0 +1,23 @@
+<div class="searchPage">
+
+<form action="?/search" method="post">
+	<input type="hidden" name="token" value="{{ token }}">
+	<div class="description">
+		Searches must be full matches. Searches are case insensitive. Use * to
+		 match zero or more arbitrary characters. For example, to search for all
+		 posts made by someone with "Foo" somewhere in their name, enter "*Foo*".
+	</div>
+	<ul>
+		<li>
+			<input type="text" name="name">
+			<input type="submit" name="nameSubmit" value="Search by Name">
+		<li>
+			<input type="text" name="trip">
+			<input type="submit" name="tripSubmit" value="Search by Tripcode">
+		<li>
+			<input type="text" name="filename">
+			<input type="submit" name="filenameSubmit" value="Search by Filename">
+	</ul>
+</form>
+
+</div>

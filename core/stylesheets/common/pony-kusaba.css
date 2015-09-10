@@ -57,17 +57,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 /* - Title - */
 
-/* Banner */
-img.banner {
-    display: none !important;
-    /* Yes, we are hiding the banner by default in pony-kusaba.
-       Old ponychan substituted banners with typography. */
-}
-
 /* Headline */
-header {
-    padding-top: 3em;
-}
 header h1 {
     font-size: 4em;
     font-weight: normal;

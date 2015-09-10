@@ -442,8 +442,11 @@ if (isset($_POST['delete'])) {
 	}
 
 	if (!$post['mod']) {
-		if (checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : '')))
-			error($config['error']['spam']);
+		if (checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : ''))) {
+			if (!$userid) {
+				error($config['error']['spam']);
+			}
+		}
 	}
 
 	//Check if thread exists
