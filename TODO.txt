@@ -1,3 +1,8 @@
+make watcher appear for all mods.
+when you make a post, it can appear as [Removed] on the next refresh
+#unread is broken on mature threads
+keep mods logged in
+
 - separate out tinyboard code and all instance files (config files, cache, board
   html and image files) so deploys can finally be as easy as rsyncing the core/
   directory over.
