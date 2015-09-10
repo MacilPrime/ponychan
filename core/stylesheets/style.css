@@ -38,10 +38,6 @@ h2 {
 h3 {
 	font-size: 17px;
 }
-.homeblock h2 {
-	margin: 0;
-	padding: 0;
-}
 header {
 	margin: 1em 0;
 }
@@ -57,6 +53,9 @@ header div.subtitle, header h1 {
 }
 header div.subtitle {
 	font-size: 8pt;
+}
+footer {
+	clear: both;
 }
 form[name='post'] {
 	margin-bottom: 2em;
@@ -197,6 +196,10 @@ p.intro .mentioned a {
 }
 div.delete {
 	float: right;
+	clear: right;
+}
+div.edit_post_description {
+	font-size: 0.8em;
 }
 .body {
 	margin-left: 1.5em;
@@ -240,6 +243,7 @@ div.post.reply {
 	border-style: none solid solid none;
 	border-color: #B7C5D9;
 	display: inline-block;
+	position: relative; /* needed for reply footers */
 }
 span.trip {
 	color: #228854;
@@ -339,8 +343,9 @@ div.post .body .spoiler a {
 	margin: 5px;
 }
 .hidetext.off {
-	height: 0;
-	padding: 0;
+	height: 0 !important;
+	padding-top: 0;
+	padding-bottom: 0;
 	overflow: hidden;
 }
 .embed {
@@ -487,6 +492,13 @@ table.mod.config-editor input[type="text"] {
 	padding: 1em;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
+}
+.homeblock h2 {
+	margin: 0;
+	padding: 0;
+}
+.homeblock p, .homeblock h4 {
+	margin: 0.5em 0;
 }
 .mainhomeblock {
 	font-size: 130%;
@@ -1249,4 +1261,42 @@ img.catalogthumb {
 @font-face {
 	font-family: "One Way";
 	src: url(font/one-way.woff);
+}
+
+
+
+/* Footers, Edit button */
+.postfooter {
+	margin: 0 0.3em 0 0;
+}
+.footer-item {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+.footer-item + .footer-item::before {
+	content: "•";
+	padding: 0 1ex;
+}
+/* - Editing posts - */
+.reply .postfooter {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	font-size: 0.85em;
+	margin-right: 0.3em;
+}
+.edit-form {
+	margin: 0.5em 0.5em 0.8em 2em;
+}
+.edit-controls > * + * {
+	margin-left: 0.5em;
+}
+.post .edit-form ~ .body {
+	display: none !important;
+}
+.edit-body {
+	padding: 0.2em;
+	min-width: 250px;
+	min-height: 5em;
 }

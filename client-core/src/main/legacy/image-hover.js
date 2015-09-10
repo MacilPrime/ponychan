@@ -53,7 +53,7 @@ $(document).ready(function(){
 			$newImage
 				.addClass('image-hover')
 				.attr('src', imageurl)
-				.insertAfter($image.parent())
+				.appendTo(document.body)
 				.load(function() {
 					$(this).trigger('mousemove');
 				});

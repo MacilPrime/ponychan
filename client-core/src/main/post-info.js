@@ -4,6 +4,14 @@ export function get_post_board($post) {
 	return /\bpostC?_(\w+)-\d+\b/.exec($post.attr("class"))[1];
 }
 
+export function get_thread_num($post) {
+    if ($post.hasClass("op")) {
+        return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
+    } else {
+        return parseInt($post.data("thread"));
+    }
+}
+
 export function get_post_num($post) {
 	// try class first, then ID.
 	const match = /\bpostC?_(\d+)\b/.exec($post.attr("class"));

@@ -211,7 +211,6 @@
 	// These are fields used to confuse the bots. Make sure they aren't actually used by Tinyboard, or it won't work.
 	$config['spam']['hidden_input_names'] = array(
 		'user',
-		'username',
 		'login',
 		'search',
 		'q',
@@ -247,6 +246,7 @@
 		'thumbfile',
 		'thumbdurl',
 		'thumbtime',
+		'username',
 		'wantjson',
 		'making_a_post',
 		'activate_egg',
@@ -324,8 +324,12 @@
 
 	// How long before you can delete a post after posting, in seconds.
 	$config['delete_time'] = 10;
-	// How long before you can edit a post after posting, in seconds.
-	$config['edit_time'] = 10;
+
+	// Allow users to edit their own posts
+	$config['allow_self_edit'] = true;
+	// How long you are allowed to edit a post after posting, in seconds.
+	// 0 means no limit.
+	$config['edit_time_end'] = 2*60*60;
 
 	// Disable replies bumping stickied threads
 	$config['no_sticky_reply_bump'] = true;
@@ -361,9 +365,6 @@
 
 	// Advanced raplcement (regular expressions):
 	// $config['wordfilters'][] = array('/cat/', 'dog', true); // 'true' means it's a regular expression
-
-	// Allow users to edit their own posts
-	$config['allow_self_edit'] = false;
 
 	// Allow [#Mature] threads
 	$config['mature_allowed'] = false;
@@ -844,7 +845,7 @@
 	$config['error']['fileexists']		= _('That file <a href="%s">already exists</a>!');
 	$config['error']['fileexistsinthread']	= _('That file <a href="%s">already exists</a> in this thread!');
 	$config['error']['delete_too_soon']	= _('You\'ll have to wait another %s before deleting that.');
-	$config['error']['edit_too_soon']	= _('You\'ll have to wait another %s before editing that.');
+	$config['error']['edit_too_late']	= _('Posts on this board may only be edited for %s after being made.');
 	$config['error']['invalid_embed']	= _('Couldn\'t make sense of the URL of the video you tried to embed.');
 	$config['error']['captcha']		= _('You seem to have mistyped the verification.');
 

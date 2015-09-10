@@ -1,17 +1,22 @@
 <div class="delete delete_post">
 	{% trans %}Delete Post{% endtrans %} [<input title="Delete file only" type="checkbox" name="file" id="delete_file" />
-	 <label for="delete_file">{% trans %}File{% endtrans %}</label>] <label for="password">{% trans %}Password{% endtrans %}</label> 
-		<input id="password" type="password" name="password" size="12" maxlength="18" />
+	 <label for="delete_file">{% trans %}File{% endtrans %}</label>] <label for="password">{% trans %}Password{% endtrans %}</label>
+		 <input id="password" type="password" name="password" size="12" maxlength="18" />
 		<input type="submit" name="delete" onclick="return confirmDelete()" value="{% trans %}Delete{% endtrans %}" />
 </div>
-<div class="delete report_post" style="clear:both">
-	<label for="reason">{% trans %}Reason{% endtrans %}</label> 
-		<input id="reason" type="text" name="reason" size="20" maxlength="50" />
+<div class="delete report_post">
+	<label for="reason">{% trans %}Reason{% endtrans %}</label>
+		 <input id="reason" type="text" name="reason" size="20" maxlength="50" />
 		<input type="submit" name="report" value="{% trans %}Report{% endtrans %}" />
 </div>
 {% if config.allow_self_edit %}
-<div class="delete edit_post" style="clear:both">
-	{% trans %}Edit Post{% endtrans %} 
-		<input type="submit" name="edit" value="{% trans %}Edit{% endtrans %}" />
+<div class="delete edit_post">
+	{% trans %}Edit Post{% endtrans %}
+		 <input type="submit" name="edit" value="{% trans %}Edit{% endtrans %}" />
 </div>
+	{% if config.edit_time_end != 0 %}
+<div class="delete edit_post_description">
+	Posts on this board may be edited for {{ config.edit_time_end|time_length|e }} after being made.
+</div>
+	{% endif %}
 {% endif %}

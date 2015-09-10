@@ -19,10 +19,6 @@ function format_bytes($size) {
 	return round($size, 2).$units[$i];
 }
 
-function getIPSearchURL($ip) {
-	return preg_replace('/^((?:[0-9a-f]+:){4}).*$/i', '\1*', $ip);
-}
-
 function doBoardListPart($list, $root, $noactive=false) {
 	global $config, $board;
 
@@ -69,13 +65,15 @@ function createBoardlist($mod=false, $noactive=false) {
 	);
 }
 
-function error($message, $priority = true) {
+function error($message, $priority = false, $status = 500) {
 	global $board, $mod, $config, $userid, $wantjson;
 
 	if ($config['syslog'] && $priority !== false) {
 		// Use LOG_NOTICE instead of LOG_ERR or LOG_WARNING because most error message are not significant.
 		_syslog($priority !== true ? $priority : LOG_NOTICE, $message);
 	}
+
+	http_response_code($status);
 
 	if (isset($config['error_log'])) {
 		$logdata = array();
@@ -342,7 +340,7 @@ class Post {
 		$this->filesize = $filesize;
 		$this->filename = $filename;
 		$this->ip = $ip;
-		$this->ip_url = getIPSearchURL($ip);
+		$this->ip_url = ipToUserRange($ip);
 		$this->embed = $embed;
 		$this->root = $root;
 		$this->mod = $mod;
@@ -450,7 +448,7 @@ class Thread {
 		$this->omitted_images = 0;
 		$this->posts = array();
 		$this->ip = $ip;
-		$this->ip_url = getIPSearchURL($ip);
+		$this->ip_url = ipToUserRange($ip);
 		$this->sticky = $sticky;
 		$this->locked = $locked;
 		$this->bumplocked = $bumplocked;

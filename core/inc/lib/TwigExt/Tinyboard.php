@@ -23,6 +23,7 @@ class TwigExt_Tinyboard extends Twig_Extension
 			'count' => new Twig_Filter_Function('count'),
 			'ago' => new Twig_Filter_Function('ago'),
 			'until' => new Twig_Filter_Function('until'),
+			'time_length' => new Twig_Filter_Function('time_length'),
 			'push' => new Twig_Filter_Function('twig_push_filter'),
 			'filemtime' => new Twig_Filter_Function('filemtime'),
 			'bidi_cleanup' => new Twig_Filter_Function('bidi_cleanup'),
@@ -31,7 +32,7 @@ class TwigExt_Tinyboard extends Twig_Extension
 			'mask_url' => new Twig_Filter_Function('mask_url')
 		);
 	}
-	
+
 	/**
 	* Returns a list of functions to add to the existing list.
 	*
@@ -40,12 +41,13 @@ class TwigExt_Tinyboard extends Twig_Extension
 	public function getFunctions()
 	{
 		return Array(
+			'getBoardConfig' => new Twig_Filter_Function('getBoardConfig'),
 			'time' => new Twig_Filter_Function('time'),
 			'floor' => new Twig_Filter_Function('floor'),
 			'timezone' => new Twig_Filter_Function('twig_timezone_function'),
 		);
 	}
-	
+
 	/**
 	* Returns the name of the extension.
 	*
@@ -81,7 +83,7 @@ function twig_hasPermission_filter($mod, $permission, $board = null) {
 function twig_extension_filter($value, $case_insensitive = true) {
 	$ext = substr($value, strrpos($value, '.') + 1);
 	if($case_insensitive)
-		$ext = strtolower($ext);		
+		$ext = strtolower($ext);
 	return $ext;
 }
 
@@ -100,4 +102,3 @@ function twig_truncate_filter($value, $length = 30, $preserve = false, $separato
 	}
 	return $value;
 }
-

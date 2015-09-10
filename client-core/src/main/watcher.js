@@ -7,6 +7,7 @@
  */
 
 import $ from 'jquery';
+import { footer } from './footer-utils';
 import {log_error} from './logger';
 import {jumpToPost} from './post-utils';
 import {get_post_board, get_post_num, get_post_id, get_post_class} from './post-info';
@@ -88,27 +89,18 @@ function add_watch_buttons($posts) {
 	$posts.each(function() {
 		var $post = $(this);
 
-		$post.find('.postfooter').remove();
-		var $footer = $("<div/>")
-			.addClass('postfooter')
-			.appendTo($post);
-		var $watchlink = $("<a/>")
-			.appendTo($footer)
-			.attr('href', 'javascript:void(0);');
-
 		var postid = get_post_id($post);
 		if (watched_threads.hasOwnProperty(postid)) {
-			$watchlink
-				.text('Unwatch')
-				.click(function() {
-					remove_watch(postid);
-				});
+            footer($post).removeItem("Watch");
+            footer($post).addItem('Unwatch', function () {
+                remove_watch(postid);
+            });
 		} else {
-			$watchlink
-				.text('Watch')
-				.click(function() {
-					add_watch($post);
-				});
+            footer($post).removeItem("Unwatch");
+            footer($post).addItem('Watch', function () {
+                add_watch($post);
+            });
+
 		}
 	});
 }

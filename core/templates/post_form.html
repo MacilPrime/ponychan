@@ -158,7 +158,9 @@
 				<input type="hidden" name="activate_egg" value="0">
 			</th>
 			<td>
-				<input type="password" name="password" size="12" maxlength="18" autocomplete="off">
+				<input type="text" name="username" style="display:none"
+				 data-comment="this is a dummy field just for browsers that insist on auto-filling a username in somewhere">
+				<input type="password" name="password" size="12" maxlength="18">
 				 <span class="unimportant">{% trans %}(For file deletion.){% endtrans %}</span>
 				{{ antibot.html() }}
 			</td>
