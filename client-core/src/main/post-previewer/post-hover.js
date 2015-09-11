@@ -25,7 +25,7 @@ function init() {
 				.on('click', event => $post.remove())
 				// Get the hovering block out of the way
 				.on('mouseout', event => {
-					$(event.target).off('mousemove').off('mouseout').off('click')
+					$(event.target).off('mousemove, mouseout, click')
 				});
 		}
 	});
@@ -52,15 +52,15 @@ function midHover(evt, $post) {
 
 	// default coordinates on right
 	const xy = Object.seal({
-		left: evt.clientX + 50,
+		left: evt.clientX + 25,
 		right: 'auto',
-		top: evt.clientY - 80,
+		top: evt.clientY - 40,
 		bottom: 'auto'
 	});
 	// flip to left
 	const leftSideOfPage = windowWidth / 2;
 	if (evt.clientX > leftSideOfPage) {
-		xy.right = windowWidth - evt.clientX + 50;
+		xy.right = windowWidth - evt.clientX + 25;
 		xy.left = 'auto';
 	}
 	// floor

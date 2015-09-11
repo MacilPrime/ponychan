@@ -18,22 +18,7 @@ export function findPost(url) {
 			'post_'+meta.post
 		].join(' '));
 
-	new RSVP.Promise((resolve, reject) => {
-
-		// attempt to query the document for this post.
-		const $foundPost = $(meta.toQuerySelector()).first();
-		if ($foundPost.length > 0) {
-			// this is synchronous
-			resolve($foundPost.clone());
-		} else {
-			// this is asynchronous
-			loadPost(url, $loadPost => {
-				if ($loadPost instanceof $) resolve($loadPost);
-				else reject($loadPost)
-			})
-		}
-
-	}).then($retrievedPost => {
+	loadPost(url).then($retrievedPost => {
 
 			const $clone = $retrievedPost.clone();
 			// fill the container with the post's contents. or,
@@ -72,59 +57,74 @@ export function findPost(url) {
 		}).catch(error => $container.html(message(error)));
 
 	return $container;
+		// the post may or may not still be loading but we still need
+		// the container either way!
 }
 
 
 
-const threadCache = {};
-// Later, this populates with jQuery promise objects.
+const threadCache = new Map();
+// Later, this populates with jquery promise objects.
 
-function loadPost(targetURL, callback) {
-	// Performs ajax requests to get posts from external pages.
-	// 1st param - URL, including hash.
-	// 2nd param - Callback, with the inserted post in its parameter.
-	const meta = new Metadata(targetURL);
-	const threadURL = targetURL.replace(/#.*$/, '');
-
-	// https://learn.jquery.com/code-organization/deferreds/examples/
-	if (_.isUndefined(threadCache[threadURL])) {
-		// When it's undefined, it's a page we haven't loaded yet.
-
-		threadCache[threadURL] = $.Deferred(
-			// Point all callbacks of the same url to the corresponding promise.
-				dfr => $.ajax(threadURL, {cache: false}).then(dfr.resolve, dfr.reject)
-		).promise();
-	}
-
-	threadCache[threadURL].done((data, textStatus, jqXHR) => {
-		const $postC = $(data).find('#replyC_'+meta.post);
-		const isOK = (/^0|200|304$/).test(jqXHR.status);
-
-		if (isOK && $postC.length == 0) {
-			delete threadCache[targetURL];
-			callback('This post was either pruned or deleted.');
-
-		} else if (isOK) {
-
-			// Drop a clone of the post in the document body.
-			const $cloneC = $postC.clone()
-				.addClass('preview-hidden')
-				.removeAttr('id')
-				.appendTo(document.body);
-			const $cloneP = $cloneC.children('.post')
-				.addClass('post-preview');
-
-			// check if the parent thread is a spoiler.
-			_.filter($postC.closest('.thread').find('.op .hashtag'),
-					self => /^#Spoiler$/.test($(self).text())).forEach(
-				() => $cloneP.addClass('spoiler_post'));
-
-			$(document).trigger('new_post', $cloneP[0]);
-			$cloneC.find('[id]').removeAttr('id');
-			callback($cloneP);
-
-		} else {
-			callback('Error: '+$(data).find('h2').first().text());
+function loadPost(targetURL) {
+	// 1. Will attempt to query the document to get your post first.
+	// 2. Also performs ajax requests to get posts from external pages.
+	//    - These posts are 'preprocessed' - they contain special flags
+	//      to be properly marked as mature or spoilered, etc.
+	// 1st param - ThreadURL, including hash.
+	return new RSVP.Promise((resolve, reject) => {
+		const meta = new Metadata(targetURL);
+		const $foundPost = $(meta.toQuerySelector()).first();
+		if ($foundPost.length > 0) {
+			resolve($foundPost.clone());
+			return;
 		}
-	}).fail((xhr, status, err) => callback(xhr.status+' '+err))
+
+		const threadURL = targetURL.replace(/#.*$/, '');
+
+		// https://learn.jquery.com/code-organization/deferreds/examples/
+		if (!threadCache.has(threadURL)) {
+			// When it's undefined, it's a page we haven't loaded yet.
+
+			threadCache.set(threadURL, $.Deferred(
+				// Point all callbacks of the same url to the corresponding promise.
+					dfr => $.ajax(threadURL, {cache: false}).then(dfr.resolve, dfr.reject)
+			).promise());
+		}
+
+		threadCache.get(threadURL).done((data) => {
+			const $postC = $(data).find('#replyC_'+meta.post);
+
+			if ($postC.length == 0) {
+				threadCache.delete(targetURL); // erase negative caches.
+				reject('This post was either pruned or deleted.');
+
+			} else {
+
+				// Drop a clone of the post in the document body.
+				const $cloneC = $postC.clone()
+					.addClass('preview-hidden')
+					.removeAttr('id')
+					.appendTo(document.body);
+				const $cloneP = $cloneC.children('.post')
+					.addClass('post-preview');
+
+				// check if the parent thread is a spoiler.
+				const isSpoiler = $postC.closest('.thread').find('.op .hashtag')
+						.filter((i, hash) => /^#spoiler$/.test($(hash).text().toLowerCase()))
+						.length > 0;
+
+				if (isSpoiler)
+					$cloneP.addClass('spoiler_post');
+
+				$(document).trigger('new_post', $cloneP[0]);
+				$cloneC.find('[id]').removeAttr('id');
+				resolve($cloneP);
+
+			}
+		}).fail((xhr, status, err) => {
+			threadCache.delete(targetURL);
+			reject('Error: '+xhr.status+' '+err)
+		})
+	})
 }

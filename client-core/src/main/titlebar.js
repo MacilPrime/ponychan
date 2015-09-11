@@ -67,7 +67,7 @@ $(document).ready(function() {
 	var mainTitle = titlePrefix+titleEnd;
 	$(".thread .post.reply" +
 		":not(.preview-hidden)" +
-		":not(.preview-hover)" +
+		":not(.post-hover)" +
 		":not(.post-inline)")
 		.each((i, post) => {
 			const $post = $(post);

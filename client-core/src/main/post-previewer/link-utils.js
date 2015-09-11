@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import _ from 'lodash';
 import {Metadata} from './url-metadata';
 import {get_post_num, get_post_board} from '../post-info';
 
@@ -33,8 +32,10 @@ export function markParentLinks($post, $link) {
 			linkText = '^>>>/'+board+'/'+get_post_num($parent)+'\\b';
 
 		// check if the parent thread is a spoiler.
-		_.filter($post.find('a'),
-				self => new RegExp(linkText).test($(self).text())).forEach(
-				link => $(link).addClass('parent-link'));
+		$post.find('a').filter((i, anchor) =>
+				new RegExp(linkText).test($(anchor).text())
+		).each((i, postlink) =>
+				$(postlink).addClass('parent-link')
+		)
 	}
 }
