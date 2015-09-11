@@ -31,7 +31,7 @@ export function markParentLinks($post, $link) {
 		else
 			linkText = '^>>>/'+board+'/'+get_post_num($parent)+'\\b';
 
-		// check if the parent thread is a spoiler.
+		// give the proper links the dashed underline
 		$post.find('a').filter((i, anchor) =>
 				new RegExp(linkText).test($(anchor).text())
 		).each((i, postlink) =>
