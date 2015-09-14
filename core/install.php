@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-8');
+define('VERSION', 'v0.9.6-dev-8-mlpchan-9');
 
 require 'inc/functions.php';
 
@@ -246,7 +246,7 @@ if (file_exists($config['has_installed'])) {
 				query(sprintf("DROP INDEX `thread` ON `posts_%s`", $board['uri'])) or error(db_error());
 				query(sprintf("CREATE INDEX `ip` ON `posts_%s` (`ip`)", $board['uri'])) or error(db_error());
 				// Add bodylink and postlink classes to links in posts
-				query(sprintf("UPDATE `posts_%s` SET `body`=replace( replace(body, '<a target=\"_blank\" rel=\"nofollow\" href=\"', '<a target=\"_blank\" class=\"bodylink\" rel=\"nofollow\" href=\"'), '<a ', '<a class=\"bodylink postlink\" ')", $board['uri'])) or error(db_error());
+				query(sprintf("UPDATE `posts_%s` SET `body`=replace( replace(body, '<a target=\"_blank\" rel=\"nofollow\" href=\"', '<a target=\"_blank\" class=\"bodylink\" rel=\"nofollow\" href=\"'), '<a onclick=\"highlightReply(', '<a class=\"bodylink postlink\" onclick=\"highlightReply(')", $board['uri'])) or error(db_error());
 			}
 		case 'v0.9.6-dev-8-mlpchan-1':
 			query("DROP TABLE `mutes`") or error(db_error());
@@ -364,6 +364,11 @@ if (file_exists($config['has_installed'])) {
 		case 'v0.9.6-dev-8-mlpchan-7':
 			query("ALTER TABLE `modlogs` ADD `permission_level` SMALLINT(1) DEFAULT 1 NOT NULL") or error(db_error());
 			query("UPDATE `modlogs` SET `permission_level` = 2 WHERE `text` LIKE '% a PM%' OR `text` LIKE '%password%' OR `text` LIKE 'Promoted%' OR `text` LIKE 'Demoted%' OR `text` LIKE 'Created a new user: %' OR `text` LIKE 'Deleted user %' OR `text` = 'Logged in'") or error(db_error());
+		case 'v0.9.6-dev-8-mlpchan-8':
+			// Remove onclick property from post links
+			foreach ($boards as $board) {
+				query(sprintf("UPDATE `posts_%s` SET `body`=REGEXP_REPLACE(body, '<a class=\"bodylink postlink\" onclick=\"[^\"]*\" ', '<a class=\"bodylink postlink\" ')", $board['uri'])) or error(db_error());
+			}
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);
