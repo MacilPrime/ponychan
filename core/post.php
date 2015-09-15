@@ -288,6 +288,7 @@ if (isset($_POST['delete'])) {
 		$logdata['action'] = 'editpost';
 		$logdata['board'] = $board['uri'];
 		$logdata['number'] = intval($id);
+		$logdata['body_nomarkup'] = $post['body_nomarkup'];
 		$logdata['byauthor'] = isset($password);
 		$logdata['time'] = date(DATE_ATOM);
 		$logdata['thread'] = $post['op'] ? null : intval($post['thread']);
@@ -985,6 +986,7 @@ if (isset($_POST['delete'])) {
 		$logdata['action'] = 'post';
 		$logdata['board'] = $board['uri'];
 		$logdata['number'] = intval($id);
+		$logdata['body_nomarkup'] = $post['body_nomarkup'];
 		$logdata['time'] = date(DATE_ATOM);
 		$logdata['thread'] = $post['op'] ? null : intval($post['thread']);
 		$logdata['ip'] = $post['ip'];
