@@ -12,11 +12,7 @@ export function findPost(url) {
 	const $container = $('<div/>')
 		.data('dummy', 'loading')
 		.append(message('Loading...'))
-		.addClass([
-			'dummy', 'post', 'reply',
-			meta.toQuerySelector().replace('.', ''),
-			'post_'+meta.post
-		].join(' '));
+		.addClass(['dummy', 'post', 'reply'].join(' '));
 
 	loadPost(url).then($retrievedPost => {
 
@@ -24,13 +20,11 @@ export function findPost(url) {
 			// fill the container with the post's contents. or,
 			// fill it with a warning message.
 			$container.html(() => {
-				const noped = _.negate(settings.getSetting);
-
-				if (noped('show_mature') && $clone.hasClass('mature_post'))
+				if (!settings.getSetting('show_mature') && $clone.hasClass('mature_post'))
 					return message('This linked post is in a mature content thread, '+
 					'and viewing mature content threads is currently disabled.');
 
-				if (noped('reveal_spoiler_threads') && $clone.hasClass('spoiler_post'))
+				if (!settings.getSetting('reveal_spoiler_threads') && $clone.hasClass('spoiler_post'))
 					return message([
 						$('<p />').text('This post is from a spoilered thread.'),
 						$('<a />').text('[View thread]')
@@ -52,7 +46,7 @@ export function findPost(url) {
 			// Clear out inline containers from the clone.
 			clearAllInline($container);
 			if ($container.find('.bodynote').length == 0)
-				$container.trigger('new_post', $container.get(0))
+				$container.trigger('new_post', $container.get(0));
 
 		}).catch(error => $container.html(message(error)));
 

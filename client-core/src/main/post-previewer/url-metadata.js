@@ -21,8 +21,8 @@ export class Metadata {
 				this.post = parseInt(parts[3]);
 		}
 	}
-	toQuerySelector(isForContainer) {
-		var start = isForContainer ? '.postC' : '.post';
+	toQuerySelector() {
+		var start = '.thread > .postContainer > .post';
 		// What if two posts from two different boards share the same number?
 		if (this.board && this.thread && !(this.post)) {
 			// For thread selectors
