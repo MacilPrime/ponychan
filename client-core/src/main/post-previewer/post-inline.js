@@ -4,7 +4,7 @@ import udKefir from 'ud-kefir';
 import {Metadata} from './url-metadata';
 import {findPost} from './post-finder';
 import {onPostLinkEvent, markParentLinks} from './link-utils';
-import {jumpToPost} from '../post-utils';
+import {highlightPost} from '../post-utils';
 import settings from '../settings';
 
 settings.newSetting('preview_inline',
@@ -22,12 +22,12 @@ function init() {
 		.onValue(({event, $link}) => {
 			if (settings.getSetting('preview_inline')) {
 				toggleInline($link);
+				event.preventDefault();
 			} else {
 				const url = $link.attr('href');
 				const meta = new Metadata(url);
-				jumpToPost(meta.board+':'+meta.post);
+				highlightPost(meta.board+':'+meta.post);
 			}
-			event.preventDefault();
 		});
 	settings.getSettingStream('preview_inline')
 		.takeUntilBy(update)

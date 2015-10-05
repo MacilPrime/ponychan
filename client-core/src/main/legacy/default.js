@@ -12,6 +12,7 @@ import _ from 'lodash';
 import {log_error} from '../logger';
 import myPosts from '../my-posts';
 import citeReply from '../cite-reply';
+import {highlightPost} from '../post-utils';
 
 function old_get_cookie(cookie_name) {
 	const results = document.cookie.match('(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
@@ -165,19 +166,8 @@ function rememberStuff() {
 	}
 }
 
-$(document).ready(function() {
-	rememberStuff();
-
-	if (window.localStorage && localStorage.getItem('password') && document.forms.postcontrols) {
-		document.forms.postcontrols.password.value = localStorage.getItem('password');
-	}
-
-	if (/^#\d+$/.exec(window.location.hash))
-		highlightReply(window.location.hash.substring(1));
-});
-
-window.board_id = null;
-window.thread_id = null;
+global.board_id = null;
+global.thread_id = null;
 (function() {
 	var path_board_regex = new RegExp("^"+SITE_DATA.siteroot+"(?:mod\\.php\\?/)?([^/]+)/(?:res/([0-9]+))?");
 	var reg_result = path_board_regex.exec(document.location.pathname+document.location.search);
@@ -189,6 +179,17 @@ window.thread_id = null;
 			thread_id = parseInt(reg_result[2]);
 	}
 })();
+
+$(document).ready(function() {
+	rememberStuff();
+
+	if (window.localStorage && localStorage.getItem('password') && document.forms.postcontrols) {
+		document.forms.postcontrols.password.value = localStorage.getItem('password');
+	}
+
+	if (global.board_id && /^#\d+$/.exec(window.location.hash))
+		highlightPost(global.board_id + ':' + window.location.hash.substring(1));
+});
 
 window.make_thread_url = function make_thread_url(board, postnum) {
 	if (document.location.pathname == SITE_DATA.siteroot+'mod.php')
