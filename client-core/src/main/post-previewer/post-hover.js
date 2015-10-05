@@ -25,7 +25,7 @@ function init() {
 				.on('click', event => $post.remove())
 				// Get the hovering block out of the way
 				.on('mouseout', event => {
-					$(event.target).off('mousemove, mouseout, click')
+					$(event.target).off('mousemove, mouseout, click');
 				});
 		}
 	});

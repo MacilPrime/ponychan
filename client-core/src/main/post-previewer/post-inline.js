@@ -46,6 +46,15 @@ function toggleInline(evt, $post) {
 		// depending on whether the links are in the header or not.
 		const $before = $link.hasClass('backlink') ? $link.closest('.intro') : $link;
 
+		const getOrCreateWrap = function() {
+			if ($before.next().hasClass('inline-wrap'))
+				return $before.next();
+			else
+				return $('<div />')
+					.addClass('inline-wrap')
+					.insertAfter($before);
+		};
+
 		if ($link.hasClass('inlined')) {
 			// for backlinks, drop posts in after the parent
 			$link.removeClass('inlined');
@@ -75,19 +84,11 @@ function toggleInline(evt, $post) {
 							$intro.append($('<a />')
 								.text('[View]')
 								.attr('href', evt.target.getAttribute('href'))
-								.addClass('threadviewlink'))
+								.addClass('threadviewlink'));
 						}
 					}
 				}).prependTo(getOrCreateWrap());
 
-		}
-		function getOrCreateWrap() {
-			if ($before.next().hasClass('inline-wrap'))
-				return $before.next();
-			else
-				return $('<div />')
-					.addClass('inline-wrap')
-					.insertAfter($before);
 		}
 	}
 }
