@@ -13,10 +13,7 @@ export function get_thread_num($post) {
 }
 
 export function get_post_num($post) {
-	// try class first, then ID.
-	const match = /\bpostC?_(\d+)\b/.exec($post.attr("class"));
-	if (match) return parseInt(match[1]);
-	else return parseInt(/^replyC?_(\d+)$/.exec($post.attr("id"))[1]);
+	return parseInt(/\bpost_(\d+)\b/.exec($post.attr("class"))[1]);
 }
 
 export function get_post_id($post) {
