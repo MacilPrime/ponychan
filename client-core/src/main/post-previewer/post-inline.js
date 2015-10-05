@@ -13,18 +13,18 @@ settings.newSetting('preview_inline',
 	{orderhint: 1});
 
 const update = udKefir(module, null).changes().take(1).toProperty();
+const linksToPreviews = ud.defonce(module, () => new WeakMap());
 
 function init() {
 	onPostLinkEvent('click')
 		.takeUntilBy(update)
 		.filter(({event}) => event.which === 1 && !event.ctrlKey && !event.shiftKey && !event.metaKey)
 		.onValue(({event, $link}) => {
-			const url = $link.attr('href');
-			const $post = findPost(url);
-			const meta = new Metadata(url);
 			if (settings.getSetting('preview_inline')) {
-				toggleInline($link, $post);
+				toggleInline($link);
 			} else {
+				const url = $link.attr('href');
+				const meta = new Metadata(url);
 				jumpToPost(meta.board+':'+meta.post);
 			}
 			event.preventDefault();
@@ -39,8 +39,9 @@ function init() {
 }
 
 
-function toggleInline($link, $post) {
-	const meta = new Metadata($link.attr('href'));
+function toggleInline($link) {
+	const url = $link.attr('href');
+	const meta = new Metadata(url);
 	if ($link.hasClass('parent-link')) return;
 
 	// Determining reference frame for the bin's position differs
@@ -60,12 +61,16 @@ function toggleInline($link, $post) {
 		// for backlinks, drop posts in after the parent
 		$link.removeClass('inlined');
 
-		let $cont = getOrCreateWrap();
-		$cont.children(meta.toQuerySelector()).remove();
-		if ($cont.children().length == 0)
+		const $post = $(linksToPreviews.get($link[0]));
+		$post.remove();
+		const $cont = getOrCreateWrap();
+		if ($cont.children().length == 0) {
 			$cont.remove();
-
+		}
 	} else {
+		const $post = findPost(url);
+		linksToPreviews.set($link[0], $post[0]);
+
 		$link.addClass('inlined');
 		$post.addClass('post-inline')
 			.on('new_post', (e, post) => {
