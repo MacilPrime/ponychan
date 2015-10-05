@@ -68,7 +68,7 @@ function loadPost(targetURL) {
 	// 1st param - ThreadURL, including hash.
 	return new RSVP.Promise((resolve, reject) => {
 		const meta = new Metadata(targetURL);
-		const $foundPost = $(meta.toQuerySelector()).first();
+		const $foundPost = $('.thread > .postContainer > '+meta.toQuerySelector()).first();
 		if ($foundPost.length > 0) {
 			resolve($foundPost.clone());
 			return;
@@ -118,7 +118,7 @@ function loadPost(targetURL) {
 			}
 		}).fail((xhr, status, err) => {
 			threadCache.delete(targetURL);
-			reject('Error: '+xhr.status+' '+err)
-		})
-	})
+			reject('Error: '+xhr.status+' '+err);
+		});
+	});
 }

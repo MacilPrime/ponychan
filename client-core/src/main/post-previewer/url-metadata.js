@@ -22,7 +22,7 @@ export class Metadata {
 		}
 	}
 	toQuerySelector() {
-		var start = '.thread > .postContainer > .post';
+		var start = '.post';
 		// What if two posts from two different boards share the same number?
 		if (this.board && this.thread && !(this.post)) {
 			// For thread selectors

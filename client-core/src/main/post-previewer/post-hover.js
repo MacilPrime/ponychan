@@ -1,4 +1,6 @@
+const Kefir = require('kefir');
 import $ from 'jquery';
+import udKefir from 'ud-kefir';
 import {findPost} from './post-finder';
 import {onPostLinkEvent, markParentLinks} from './link-utils';
 import settings from '../settings';
@@ -8,42 +10,38 @@ settings.newSetting('preview_hover',
 	'Preview post on link hover', 'links',
 	{orderhint: 2});
 
+const update = udKefir(module, null).changes().take(1).toProperty();
 
 function init() {
-	onPostLinkEvent('mouseover', event => {
-
-		if (settings.getSetting('preview_hover')) {
-
-			const $post = findPost(event.target.getAttribute('href'));
-
-			startHover(event, $post);
-			$(event.target)
-				.on('mousemove', event => midHover(event, $post))
-				// follow the mouse.
-				.on('mouseout', event => $post.remove())
-				// cancel the previous events
-				.on('click', event => $post.remove())
-				// Get the hovering block out of the way
-				.on('mouseout', event => {
-					$(event.target).off('mousemove, mouseout, click');
+	onPostLinkEvent('mouseenter')
+		.takeUntilBy(update)
+		.filter(() => settings.getSetting('preview_hover'))
+		.filter(({$link}) => !$link.hasClass('inlined'))
+		.onValue(({$link}) => {
+			const $post = findPost($link.attr('href'));
+			startHover($link, $post);
+			const end = Kefir.merge([
+					Kefir.fromEvents($link[0], 'mouseleave'),
+					Kefir.fromEvents($link[0], 'click')
+				]);
+			Kefir.fromEvents($link, 'mousemove')
+				.takeUntilBy(end)
+				.onValue(event => {
+					midHover(event, $post);
+				})
+				.onEnd(() => {
+					$post.remove();
 				});
-		}
-	});
+		});
 }
 
-
-function startHover(evt, $post) {
-	const $link = $(evt.target);
-	if (!$link.hasClass('inlined')) {
-
-		$post.addClass('post-hover reply')
-			.on('new_post', () => markParentLinks($post, $link))
-			.appendTo(document.body);
-		$link.trigger('mousemove');
-		// trigger mid hover to set a position.
-	}
+function startHover($link, $post) {
+	$post.addClass('post-hover reply')
+		.on('new_post', () => markParentLinks($post, $link))
+		.appendTo(document.body);
+	$link.trigger('mousemove');
+	// trigger mid hover to set a position.
 }
-
 
 function midHover(evt, $post) {
 	// calculate the window dimensions *only once*.
@@ -76,6 +74,5 @@ function midHover(evt, $post) {
 	}
 	$post.css(xy);
 }
-
 
 init();
