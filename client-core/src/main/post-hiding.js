@@ -270,7 +270,7 @@ $(document).ready(function(){
 
 			if (shouldHidePost) {
 				if (!$post.attr("data-filtered")) {
-					$(".mentioned-"+postnum).css("display", "none");
+					$(".mentioned-"+postnum).addClass("filtered-backlink");
 					$post.attr("data-filtered", "true");
 				}
 				if ($pc.hasClass("opContainer"))
@@ -281,7 +281,7 @@ $(document).ready(function(){
 				if ($post.attr("data-filtered")) {
 					// if it was previously filtered,
 					// then we need to show its backlinks
-					$(".mentioned-"+postnum).removeAttr("style");
+					$(".mentioned-"+postnum).removeClass("filtered-backlink");
 					$post.removeAttr("data-filtered");
 				}
 				do_show_post($pc);
@@ -314,7 +314,6 @@ $(document).ready(function(){
 						// It would be silly if we just loaded hidden threads onto this
 						// page to make up for hidden threads.
 						var postnum = get_post_num($thread.find(".op"));
-						console.log(postnum);
 						if (is_post_hidden(board_id, postnum))
 							return;
 

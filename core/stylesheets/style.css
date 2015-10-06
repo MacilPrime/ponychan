@@ -628,6 +628,9 @@ div.post.reply.post-inline .body {
 .preview-hidden {
 	display: none !important;
 }
+.filtered-backlink {
+	display: none;
+}
 .inlined {
 	opacity: 0.5;
 }
