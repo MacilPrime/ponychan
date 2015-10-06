@@ -50,9 +50,6 @@ $(document).ready(function(){
 				// filtered posts
 				$link.css("display", "none");
 			}
-
-			if (window.init_postlink_hover)
-				$link.each(init_postlink_hover);
 		});
 	}
 
