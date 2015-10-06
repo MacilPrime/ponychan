@@ -7,6 +7,7 @@
  */
 
 import $ from 'jquery';
+import {demogrifyEl} from './mogrify';
 
 var original_page_title = document.title;
 if (typeof history != 'undefined' && history && history.state) {

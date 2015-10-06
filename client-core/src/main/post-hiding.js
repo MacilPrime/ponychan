@@ -12,6 +12,7 @@ import Kefir from 'kefir';
 import settings from './settings';
 import setCss from './set-css';
 import {get_post_board, get_post_name, get_post_trip, get_post_num} from './post-info';
+import {mogrifyHTML} from './mogrify';
 
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {
 	moredetails:"Only available on certain boards",
@@ -270,7 +271,7 @@ $(document).ready(function(){
 			if (shouldHidePost) {
 				if (!$post.attr("data-filtered")) {
 					$(".mentioned-"+postnum).css("display", "none");
-					$post.attr("data-filtered", "true")
+					$post.attr("data-filtered", "true");
 				}
 				if ($pc.hasClass("opContainer"))
 					threads_needed++;

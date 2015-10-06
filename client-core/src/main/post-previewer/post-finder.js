@@ -5,6 +5,7 @@ import * as ud from 'ud';
 import {Metadata} from './url-metadata';
 import {clearAllInline} from './post-inline';
 import settings from '../settings';
+import {mogrifyHTML} from '../mogrify';
 
 export const findPost = ud.defn(module, function findPost(url) {
 
@@ -87,7 +88,7 @@ const loadPost = _.memoize(function(targetURL) {
 		}
 
 		threadCache.get(threadURL).done((data) => {
-			const $postC = $(data).find('#replyC_'+meta.post);
+			const $postC = $($.parseHTML(mogrifyHTML(data))).find('#replyC_'+meta.post);
 
 			if ($postC.length == 0) {
 				threadCache.delete(targetURL); // erase negative caches.
