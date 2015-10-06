@@ -1,8 +1,18 @@
+selenium tests
+put "last edited timestamp" column in posts tables
+fix "nothing to edit" message when trying to edit ancient post
+settings table
+posts table
+better ban screen
+rotating captcha
 [rawhtml]
 hash userid on server
 let (mod?) editing (un)spoiler a post. (need to generate/remove thumbnail)
 remove global.highlightReply
-mod controls on IP page?
+mod controls on IP page? need progress indicator
+[D++] is slow
+how do post updates work with previews?
+use natural npm package for a spam filter
 make watcher appear for all mods.
 when you make a post, it can appear as [Removed] on the next refresh
 #unread is broken on mature threads
