@@ -45,10 +45,10 @@ export function findPost(url) {
 
 			// Clear out inline containers from the clone.
 			clearAllInline($container);
-			if ($container.find('.bodynote').length == 0)
-				$container.trigger('new_post', $container.get(0));
-
-		}).catch(error => $container.html(message(error)));
+			$container.trigger('new_post', $container.get(0));
+		}).catch(error => {
+			$container.html(message(error));
+		});
 
 	return $container;
 		// the post may or may not still be loading but we still need
