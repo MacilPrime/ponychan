@@ -1,11 +1,12 @@
 import $ from 'jquery';
 import RSVP from 'rsvp';
 import _ from 'lodash';
+import * as ud from 'ud';
 import {Metadata} from './url-metadata';
 import {clearAllInline} from './post-inline';
 import settings from '../settings';
 
-export function findPost(url) {
+export const findPost = ud.defn(module, function findPost(url) {
 
 	const message = text => $('<div />').addClass('body bodynote').append(text);
 	const meta = new Metadata(url);
@@ -53,14 +54,13 @@ export function findPost(url) {
 	return $container;
 		// the post may or may not still be loading but we still need
 		// the container either way!
-}
-
+}, 'findPost');
 
 
 const threadCache = new Map();
-// Later, this populates with jquery promise objects.
+// Later, this populates with jquery ajax objects.
 
-function loadPost(targetURL) {
+const loadPost = _.memoize(function(targetURL) {
 	// 1. Will attempt to query the document to get your post first.
 	// 2. Also performs ajax requests to get posts from external pages.
 	//    - These posts are 'preprocessed' - they contain special flags
@@ -94,31 +94,25 @@ function loadPost(targetURL) {
 				reject('This post was either pruned or deleted.');
 
 			} else {
-
-				// Drop a clone of the post in the document body.
 				const $cloneC = $postC.clone()
-					.addClass('preview-hidden')
-					.removeAttr('id')
-					.appendTo(document.body);
-				const $cloneP = $cloneC.children('.post')
-					.addClass('post-preview');
+					.removeAttr('id');
+				const $cloneP = $cloneC.children('.post');
 
 				// check if the parent thread is a spoiler.
 				const isSpoiler = $postC.closest('.thread').find('.op .hashtag')
-						.filter((i, hash) => /^#spoiler$/.test($(hash).text().toLowerCase()))
-						.length > 0;
+					.filter((i, hash) => /^#spoiler$/.test($(hash).text().toLowerCase()))
+					.length > 0;
 
-				if (isSpoiler)
+				if (isSpoiler) {
 					$cloneP.addClass('spoiler_post');
+				}
 
-				$(document).trigger('new_post', $cloneP[0]);
 				$cloneC.find('[id]').removeAttr('id');
 				resolve($cloneP);
-
 			}
 		}).fail((xhr, status, err) => {
 			threadCache.delete(targetURL);
 			reject('Error: '+xhr.status+' '+err);
 		});
 	});
-}
+});
