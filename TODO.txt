@@ -1,4 +1,3 @@
-post previews show on left side of cursor too easily
 selenium tests
 put "last edited timestamp" column in posts tables
 fix "nothing to edit" message when trying to edit ancient post
