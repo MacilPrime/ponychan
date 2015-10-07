@@ -58,24 +58,27 @@ function midHover(evt, $post) {
 	const windowWidth = $(window).width();
 	const windowHeight = $(window).height();
 
-	// flip to left
-	if (evt.clientX > windowWidth/2 && evt.clientX+25 > windowWidth-$post.width()) {
-		xy.right = windowWidth - evt.clientX + 25;
-		xy.left = 'auto';
-		$post.css(xy);
-	}
-	// floor
-	const bottom = xy.top + $post.height();
-	if (bottom > windowHeight) {
-		xy.top = 'auto';
-		xy.bottom = 0;
-		$post.css(xy);
-	}
-	// ceiling
-	const topOfPage = 35; // approximate height of nav bar
-	if (xy.top < topOfPage) {
-		xy.top = topOfPage;
-		$post.css(xy);
+	const post = $post.get(0);
+	if (post.getBoundingClientRect) {
+		// flip to left
+		if (evt.clientX > windowWidth/2 && post.getBoundingClientRect().right > windowWidth) {
+			xy.right = windowWidth - evt.clientX + 25;
+			xy.left = 'auto';
+			$post.css(xy);
+		}
+		// floor
+		if (post.getBoundingClientRect().bottom > windowHeight) {
+			xy.top = 'auto';
+			xy.bottom = 0;
+			$post.css(xy);
+		} else {
+			// ceiling
+			const topOfPage = 35; // approximate height of nav bar
+			if (xy.top < topOfPage) {
+				xy.top = topOfPage;
+				$post.css(xy);
+			}
+		}
 	}
 }
 
