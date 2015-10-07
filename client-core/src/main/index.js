@@ -16,6 +16,7 @@ import './spoiler-thread.js';
 import './local-time.js';
 import './live-post-changes.js';
 import './legacy/reloader.js';
+import './highlight-handler.js';
 import './post-previewer/post-hover.js';
 import './post-previewer/post-inline.js';
 import './my-posts.js';

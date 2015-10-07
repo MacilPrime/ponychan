@@ -20,13 +20,16 @@ function init() {
 		.takeUntilBy(update)
 		.filter(({event}) => event.which === 1 && !event.ctrlKey && !event.shiftKey && !event.metaKey)
 		.onValue(({event, $link}) => {
+			const url = $link.attr('href');
+			const meta = new Metadata(url);
+			const board = meta.board || global.board_id;
+			if (board) {
+				highlightPost(board+':'+meta.post);
+			}
+
 			if (settings.getSetting('preview_inline')) {
 				toggleInline($link);
 				event.preventDefault();
-			} else {
-				const url = $link.attr('href');
-				const meta = new Metadata(url);
-				highlightPost(meta.board+':'+meta.post);
 			}
 		});
 	settings.getSettingStream('preview_inline')

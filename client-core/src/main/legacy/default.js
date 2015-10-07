@@ -12,7 +12,6 @@ import _ from 'lodash';
 import {log_error} from '../logger';
 import myPosts from '../my-posts';
 import citeReply from '../cite-reply';
-import {highlightPost} from '../post-utils';
 
 function get_cookie(cookie_name) {
 	const results = document.cookie.match('(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
@@ -155,9 +154,6 @@ $(document).ready(function() {
 	if (window.localStorage && localStorage.getItem('password') && document.forms.postcontrols) {
 		document.forms.postcontrols.password.value = localStorage.getItem('password');
 	}
-
-	if (global.board_id && /^#\d+$/.exec(window.location.hash))
-		highlightPost(global.board_id + ':' + window.location.hash.substring(1));
 });
 
 window.make_thread_url = function make_thread_url(board, postnum) {
