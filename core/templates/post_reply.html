@@ -42,7 +42,7 @@
 			 <span class="mature_note">Mature Content</span>
 		{% endif %}
 		 <time datetime="{{ post.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.time|date(config.post_date) }}</time>
-	 <a class="post_no permalink" {% if not index %}onclick="highlightReply({{ post.id }})" {% endif %}href="{{ post.link }}">No.</a>
+	 <a class="post_no permalink" href="{{ post.link }}">No.</a>
 	<a class="post_no citelink"
 		 href="{{ post.link }}">
 		{{ post.id }}
