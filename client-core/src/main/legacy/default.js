@@ -47,9 +47,6 @@ if (window.localStorage && !localStorage.getItem('ponychan_name_transition')) {
 	localStorage.setItem('ponychan_name_transition', true);
 }
 
-window.highlightReply = function highlightReply(id) {};
-// just keeping this here to prevent errors from being thrown for now.
-
 window.confirmDelete = function confirmDelete() {
 	var count = $('form[name="postcontrols"] input.delete:checked').length;
 	if (count == 0) {
