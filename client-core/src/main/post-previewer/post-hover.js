@@ -44,10 +44,6 @@ function startHover($link, $post) {
 }
 
 function midHover(evt, $post) {
-	// calculate the window dimensions *only once*.
-	const windowWidth = $(window).width();
-	const windowHeight = $(window).height();
-
 	// default coordinates on right
 	const xy = Object.seal({
 		left: evt.clientX + 25,
@@ -55,24 +51,32 @@ function midHover(evt, $post) {
 		top: evt.clientY - 40,
 		bottom: 'auto'
 	});
+
+	// set the coordinates so the size is calculated based on this first guess
+	$post.css(xy);
+
+	const windowWidth = $(window).width();
+	const windowHeight = $(window).height();
+
 	// flip to left
-	const leftSideOfPage = windowWidth / 2;
-	if (evt.clientX > leftSideOfPage) {
+	if (evt.clientX > windowWidth/2 && evt.clientX+25 > windowWidth-$post.width()) {
 		xy.right = windowWidth - evt.clientX + 25;
 		xy.left = 'auto';
+		$post.css(xy);
 	}
 	// floor
 	const bottom = xy.top + $post.height();
 	if (bottom > windowHeight) {
 		xy.top = 'auto';
 		xy.bottom = 0;
+		$post.css(xy);
 	}
 	// ceiling
 	const topOfPage = 35; // approximate height of nav bar
 	if (xy.top < topOfPage) {
 		xy.top = topOfPage;
+		$post.css(xy);
 	}
-	$post.css(xy);
 }
 
 init();
