@@ -3,6 +3,7 @@ import Kefir from 'kefir';
 import settings from './settings';
 import {jumpToPost} from './post-utils';
 import {get_post_id} from './post-info';
+import pageHasFocus from './lib/page-has-focus';
 
 settings.newSetting(
   "desktop_notifications",

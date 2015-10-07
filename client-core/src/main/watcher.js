@@ -13,6 +13,7 @@ import Immutable from 'immutable';
 import React from 'react/addons';
 import { footer } from './footer-utils';
 import {log_error} from './logger';
+import {make_thread_url, make_thread50_url} from './lib/url';
 import {jumpToPost} from './post-utils';
 import {get_post_board, get_post_num, get_post_id, get_post_class} from './post-info';
 import './settings-screen.jsx'; // has to come after this

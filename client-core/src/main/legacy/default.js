@@ -12,6 +12,7 @@ import _ from 'lodash';
 import {log_error} from '../logger';
 import myPosts from '../my-posts';
 import citeReply from '../cite-reply';
+import {make_thread_url} from '../lib/url';
 
 function get_cookie(cookie_name) {
 	const results = document.cookie.match('(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
@@ -156,20 +157,6 @@ $(document).ready(function() {
 	}
 });
 
-window.make_thread_url = function make_thread_url(board, postnum) {
-	if (document.location.pathname == SITE_DATA.siteroot+'mod.php')
-		return '?/'+board+'/res/'+postnum+'.html';
-	else
-		return SITE_DATA.siteroot+board+'/res/'+postnum+'.html';
-};
-
-window.make_thread50_url = function make_thread50_url(board, postnum) {
-	if (document.location.pathname == SITE_DATA.siteroot+'mod.php')
-		return '?/'+board+'/res/'+postnum+'+50.html';
-	else
-		return SITE_DATA.siteroot+board+'/res/'+postnum+'+50.html';
-};
-
 window.get_url_params = function get_url_params(url, includeHash) {
 	function decode (s) {
 		return decodeURIComponent(s.replace(/\+/g, ' '));
@@ -188,14 +175,6 @@ window.get_url_params = function get_url_params(url, includeHash) {
 		}
 	}
 	return params;
-};
-
-window.pageHasFocus = function() {
-	if (document.hasFocus)
-		return document.hasFocus();
-	if (document.visibilityState)
-		return document.visibilityState == 'visible';
-	return true;
 };
 
 window.RecaptchaOptions = {
