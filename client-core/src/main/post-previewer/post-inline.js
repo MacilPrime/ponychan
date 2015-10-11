@@ -4,7 +4,7 @@ import udKefir from 'ud-kefir';
 import {Metadata} from './url-metadata';
 import {findPost} from './post-finder';
 import {onPostLinkEvent, markParentLinks} from './link-utils';
-import {highlightPost} from '../post-utils';
+import {highlightPost, jumpToPost} from '../post-utils';
 import settings from '../settings';
 
 settings.newSetting('preview_inline',
@@ -23,13 +23,21 @@ function init() {
 			const url = $link.attr('href');
 			const meta = new Metadata(url);
 			const board = meta.board || global.board_id;
-			if (board) {
-				highlightPost(board+':'+meta.post);
-			}
 
 			if (settings.getSetting('preview_inline')) {
+				if (board) {
+					highlightPost(board+':'+meta.post);
+				}
 				toggleInline($link);
 				event.preventDefault();
+			} else {
+				let foundPost = false;
+				if (board) {
+					foundPost = jumpToPost(board+':'+meta.post);
+				}
+				if (foundPost) {
+					event.preventDefault();
+				}
 			}
 		});
 	settings.getSettingStream('preview_inline')
