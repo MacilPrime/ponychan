@@ -10,15 +10,19 @@
  */
 
 export class Metadata {
-	constructor (url) {
+	constructor (url, defaultBoard=null) {
 		if ((/^#(\d+)$/).test(url)) {
-			this.post = parseInt(url.replace('#', ''));
+			this.board = defaultBoard;
+			this.post = parseInt(url.replace('#', ''), 10);
 		} else {
 			let parts = (/^\??\/(\w+)\/(?:[^\/?&#]+)\/(?:(\d+)(?:\+50)?.html(?:#(\d+))?)?/).exec(url);
 			this.board = parts[1];
-			this.thread = parseInt(parts[2]);
+			this.thread = parseInt(parts[2], 10);
 			if (parts[3])
-				this.post = parseInt(parts[3]);
+				this.post = parseInt(parts[3], 10);
+		}
+		if (this.board) {
+			this.postid = `${this.board}:${this.post}`;
 		}
 	}
 	toQuerySelector() {

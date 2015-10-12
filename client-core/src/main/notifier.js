@@ -11,6 +11,8 @@
 var _ = require('lodash');
 import $ from 'jquery';
 import settings from './settings';
+import myPosts from './my-posts';
+import {Metadata} from './post-previewer/url-metadata';
 import {log_error} from './logger';
 import * as titlebar from './titlebar';
 import {get_post_id} from './post-info';
@@ -92,7 +94,16 @@ function updateTitle() {
 
 const postsNotifiedFor = new WeakSet();
 function notifyCheck($post) {
-	if ($post.find('.younote').length == 0 || postsNotifiedFor.has($post[0]))
+	const m = /\bpost_(\w+)-(\d+)/.exec($post[0].className);
+	if (!m) return;
+	const postid = `${m[1]}:${m[2]}`;
+
+	const postLinksToMe = _.any($('a.postlink'), postlink => {
+		const m = new Metadata(postlink.getAttribute('href'), global.board_id);
+		return myPosts.contains(m.postid);
+	});
+
+	if (!postLinksToMe || postsNotifiedFor.has($post[0]))
 		return;
 	postsNotifiedFor.add($post[0]);
 	// Okay, this post is a brand new reply to you

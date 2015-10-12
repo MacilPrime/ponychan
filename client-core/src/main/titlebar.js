@@ -9,6 +9,7 @@
 import $ from 'jquery';
 import myPosts from './my-posts';
 import {get_post_id} from './post-info';
+import {newViewablePosts} from './post-hiding';
 
 var flash = {};
 var flashmessage = '';
@@ -123,7 +124,7 @@ $(document).ready(function() {
 
 	scrollHandler();
 
-	$(document).on('new_viewable_post', function(e, post) {
+	newViewablePosts.onValue(post => {
 		var $post = $(post);
 		// Don't increase the counter for post previews
 		if ($post.is(".post-preview, .post-hover, .post-inline") || $post.parent().is(".preview-hidden"))
@@ -131,8 +132,8 @@ $(document).ready(function() {
 		// Or for posts the user made themselves.
 		if (myPosts.contains(get_post_id($post)))
 			return;
-		$(document).trigger('new_unseen_post', post);
 		unseenPosts.set(get_post_id($post), $post);
 		updateTitle();
+		$(document).trigger('new_unseen_post', post);
 	});
 });

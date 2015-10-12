@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import Kefir from 'kefir';
+import {documentReady, newPosts} from './lib/events';
 import settings from './settings';
 
 settings.newSetting("reveal_spoiler_threads", "bool", false, "Always reveal spoiler threads", 'pagestyle',
@@ -7,7 +8,7 @@ settings.newSetting("reveal_spoiler_threads", "bool", false, "Always reveal spoi
 
 const SPOILER_IMAGE = SITE_DATA.siteroot+'static/spoiler.png';
 
-$(document).ready(function() {
+documentReady.onValue(() => {
   if ($('div.banner').length) return;
 
   function process(reveal_spoiler_threads, $threads) {
@@ -74,10 +75,8 @@ $(document).ready(function() {
       process(reveal_spoiler_threads, $('.thread'));
     });
 
-  const new_posts = Kefir.fromEvents($(document), 'new_post', (event, post) => post);
-
   settings.getSettingStream('reveal_spoiler_threads')
-    .sampledBy(new_posts, (a,b)=>[a,b])
+    .sampledBy(newPosts, (a,b)=>[a,b])
     .onValue(([reveal_spoiler_threads, post]) => {
       if ($(post).hasClass('op')) {
         process(reveal_spoiler_threads, $(post).parents('.thread').first());
