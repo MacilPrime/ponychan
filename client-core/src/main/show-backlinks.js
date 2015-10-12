@@ -73,7 +73,7 @@ function placeBacklinksOnPost(post) {
   const backlinks = postsToBacklinks.get(postid);
   if (!backlinks || !backlinks.size) return;
 
-  $post.find('> .intro > .mentioned').remove();
+  $post.find('> .intro > .mentioned, > .opMain > .intro > .mentioned').remove();
   const $mentioned = $('<span/>')
     .addClass('mentioned');
   Array.from(backlinks).sort().forEach(backlinkid => {
@@ -85,7 +85,7 @@ function placeBacklinksOnPost(post) {
       .text(`>>${backlinknum}`)
       .appendTo($mentioned);
   });
-  $mentioned.appendTo($post.find('> .intro'));
+  $mentioned.appendTo($post.find('> .intro, > .opMain > .intro'));
   const parentid = $post.attr('data-parentid');
   if (parentid) {
     markParentLinks($post, parentid);
