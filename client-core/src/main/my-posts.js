@@ -11,6 +11,7 @@ import $ from 'jquery';
 import settings from './settings';
 import setCss from './set-css';
 import {log_error} from './logger';
+import {Metadata} from './post-previewer/url-metadata';
 import {get_post_num, get_post_board} from './lib/post-info';
 
 const REMEMBER_LIMIT = 1000;
@@ -75,36 +76,33 @@ function saveMyPosts() {
 loadMyPosts();
 
 function descLinks() {
-	var $thread;
+	let $thread;
 	if ($(this).hasClass('thread'))
 		$thread = $(this);
 	else
 		$thread = $(this).parents('.thread').first();
 
 	if (!$thread.length) {
-		if ($('.thread').length == 1)
+		if ($('.thread').length == 1) {
 			$thread = $('.thread');
-		else
+		} else {
 			return;
+		}
 	}
 
-	var $OP = $thread.find('div.post.op');
-	var OP = get_post_num($OP);
-	var board = get_post_board($OP);
+	const $OP = $thread.find('div.post.op');
+	const OP = get_post_num($OP);
+	const board = get_post_board($OP);
 
-	$(this).find('a.bodylink.postlink').each(function() {
-		var match = $(this).text().match(/^>>(\d+)/);
-		if (match) {
-			var postnum = parseInt(match[1]);
+	$(this).find('a.postlink').each(function() {
+		const $link = $(this);
+		const metadata = new Metadata(this.getAttribute('href'), board);
+		if (metadata.post === OP && !$link.children(".opnote").length) {
+			$link.append( $('<span/>').addClass('opnote').text(' (OP)') );
+		}
 
-			if (postnum == OP && !$(this).children(".opnote").length) {
-				$(this).append( $('<span/>').addClass('opnote').text(' (OP)') );
-			}
-
-			var postid = board+':'+postnum;
-			if (myPosts.contains(postid) && !$(this).children(".younote").length) {
-				$(this).append( $('<span/>').addClass('younote').text(' (You)') );
-			}
+		if (myPosts.contains(metadata.postid) && !$link.children(".younote").length) {
+			$link.append( $('<span/>').addClass('younote').text(' (You)') );
 		}
 	});
 }

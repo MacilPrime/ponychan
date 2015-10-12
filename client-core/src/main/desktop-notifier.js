@@ -1,8 +1,11 @@
+const _ = require('lodash');
 import $ from 'jquery';
 import Kefir from 'kefir';
 import settings from './settings';
 import {jumpToPost} from './lib/post-utils';
 import {get_post_id} from './lib/post-info';
+import myPosts from './my-posts';
+import {Metadata} from './post-previewer/url-metadata';
 import pageHasFocus from './lib/page-has-focus';
 
 settings.newSetting(
@@ -48,8 +51,14 @@ function init() {
       if (setting == "desktop_notifications")
         Notification.requestPermission();
     }).on('new_unseen_post', function(e, post) {
-      var $post = $(post);
-      if ($post.find('.younote').length && canNotify()) {
+      const $post = $(post);
+      const postid = get_post_id($post);
+      const postLinksToMe = _.any($post.find('> .body a.postlink'), postlink => {
+        const m = new Metadata(postlink.getAttribute('href'), global.board_id);
+        return myPosts.contains(m.postid);
+      });
+
+      if (postLinksToMe && canNotify()) {
         makeNote($post);
       }
     });
