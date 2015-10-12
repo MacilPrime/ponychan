@@ -75,9 +75,11 @@ documentReady.onValue(() => {
       process(reveal_spoiler_threads, $('.thread'));
     });
 
-  settings.getSettingStream('reveal_spoiler_threads')
-    .sampledBy(newPosts, (a,b)=>[a,b])
-    .onValue(([reveal_spoiler_threads, post]) => {
+  Kefir.combine(
+      [newPosts],
+      [settings.getSettingStream('reveal_spoiler_threads')]
+    )
+    .onValue(([post, reveal_spoiler_threads]) => {
       if ($(post).hasClass('op')) {
         process(reveal_spoiler_threads, $(post).parents('.thread').first());
       }

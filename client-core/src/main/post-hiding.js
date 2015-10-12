@@ -363,9 +363,11 @@ documentReady.onValue(() => {
 			filterStartBus.emit(null);
 			filterStartBus.end();
 		});
-	postFilterMatcherStream
-		.sampledBy(newPosts, (a,b)=>[a,b])
-		.onValue(([postFilter, post]) => {
+	Kefir.combine(
+			[newPosts],
+			[postFilterMatcherStream]
+		)
+		.onValue(([post, postFilter]) => {
 			process_posts(post, postFilter);
 			if (!postFilter($(post))) {
 				newViewablePosts.emit(post);
