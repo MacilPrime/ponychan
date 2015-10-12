@@ -94,7 +94,7 @@ function descLinks() {
 	const OP = get_post_num($OP);
 	const board = get_post_board($OP);
 
-	$(this).find('a.postlink').each(function() {
+	$(this).find('.body a.postlink').each(function() {
 		const $link = $(this);
 		const metadata = new Metadata(this.getAttribute('href'), board);
 		if (metadata.post === OP && !$link.children(".opnote").length) {
