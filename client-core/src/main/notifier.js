@@ -95,7 +95,7 @@ function updateTitle() {
 const postsNotifiedFor = new WeakSet();
 function notifyCheck($post) {
 	const postid = get_post_id($post);
-	const postLinksToMe = _.any($('a.postlink'), postlink => {
+	const postLinksToMe = _.any($post.find('> .body a.postlink'), postlink => {
 		const m = new Metadata(postlink.getAttribute('href'), global.board_id);
 		return myPosts.contains(m.postid);
 	});
