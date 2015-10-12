@@ -10,14 +10,14 @@ import moment from "moment";
 import Kefir from 'kefir';
 import udKefir from 'ud-kefir';
 import $ from 'jquery';
-import docReady from './doc-ready';
+import {documentReady, newPosts} from './lib/events';
 import settings from './settings';
 
 settings.newSetting("time_casual", "bool", false, "12 hour time display", 'pagestyle', {orderhint: 4});
 
 const update = udKefir(module, null).changes().take(1).toProperty();
 
-docReady.takeUntilBy(update).onValue(() => {
+documentReady.takeUntilBy(update).onValue(() => {
 	var time_casual, time_format_string;
 
 	function init() {
@@ -45,7 +45,7 @@ docReady.takeUntilBy(update).onValue(() => {
 	}
 
 	// allow to work with auto-reload.js, etc.
-	Kefir.fromEvents($(document), 'new_post', (e, post) => post)
+	newPosts
 		.takeUntilBy(update)
 		.onValue(formatTimeElements);
 });

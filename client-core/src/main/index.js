@@ -27,7 +27,6 @@ import './show-filenames.js';
 import './legacy/inline-expanding.js';
 import './legacy/image-hover.js';
 import './legacy/smartphone-spoiler.js';
-import './legacy/show-backlinks.js';
 import './navbar.js';
 import './permalink.js';
 import './post-controls.js';
@@ -45,6 +44,7 @@ import './embed.js';
 import './search.js';
 import './desktop-notifier.js';
 import './hide-trip.js';
+import './show-backlinks.js';
 
 import './settings-screen.jsx';
 

@@ -64,12 +64,28 @@ function browserifyTask(name, entry, destname) {
       noparse: ['jquery', 'moment', 'rsvp'],
       cache: {}, packageCache: {}, fullPaths: args.watch
     });
-    bundler.transform(babelify);
+    bundler.transform(babelify, args.hot ? {
+      "plugins": ["react-transform"],
+      "extra": {
+        "react-transform": {
+          "transforms": [
+            {
+              "transform": "react-transform-hmr",
+              "imports": ["react"],
+              "locals": ["module"]
+            }, {
+              "transform": "react-transform-catch-errors",
+              "imports": ["react", "redbox-react"]
+            }
+          ]
+        }
+      }
+    } : null);
     bundler.transform(envify({
-      VERSION: getVersion()
+      VERSION: getVersion(),
+      NODE_ENV: process.env.NODE_ENV
     }));
     if (args.hot) {
-      bundler.transform(require('react-hot-transform'));
       bundler.plugin(require('browserify-hmr'));
     }
 

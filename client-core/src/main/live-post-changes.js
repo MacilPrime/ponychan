@@ -6,17 +6,17 @@
 import $ from 'jquery';
 import Kefir from 'kefir';
 import udKefir from 'ud-kefir';
-import docReady from './doc-ready';
+import {documentReady} from './lib/events';
 import {hasSeen} from './titlebar';
 import {footer} from './footer-utils';
-import {get_post_body} from './post-info';
+import {get_post_body} from './lib/post-info';
 
 const update = udKefir(module, null).changes().take(1).toProperty();
 
 const isLast50Page = /\+50\.html/.test(document.location.href);
 
 function init() {
-	docReady.takeUntilBy(update).onValue(() => {
+	documentReady.takeUntilBy(update).onValue(() => {
 			// Clean up existing controls that are stray on the page
 		$('.new-editmsg').remove();
 

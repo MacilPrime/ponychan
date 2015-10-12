@@ -11,9 +11,11 @@
 var _ = require('lodash');
 import $ from 'jquery';
 import settings from './settings';
+import myPosts from './my-posts';
+import {Metadata} from './post-previewer/url-metadata';
 import {log_error} from './logger';
 import * as titlebar from './titlebar';
-import {get_post_id} from './post-info';
+import {get_post_id} from './lib/post-info';
 
 settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {
 	orderhint: 7,
@@ -92,7 +94,13 @@ function updateTitle() {
 
 const postsNotifiedFor = new WeakSet();
 function notifyCheck($post) {
-	if ($post.find('.younote').length == 0 || postsNotifiedFor.has($post[0]))
+	const postid = get_post_id($post);
+	const postLinksToMe = _.any($('a.postlink'), postlink => {
+		const m = new Metadata(postlink.getAttribute('href'), global.board_id);
+		return myPosts.contains(m.postid);
+	});
+
+	if (!postLinksToMe || postsNotifiedFor.has($post[0]))
 		return;
 	postsNotifiedFor.add($post[0]);
 	// Okay, this post is a brand new reply to you

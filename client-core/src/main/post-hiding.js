@@ -9,9 +9,11 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import Kefir from 'kefir';
+import kefirBus from 'kefir-bus';
 import settings from './settings';
 import setCss from './set-css';
-import {get_post_board, get_post_name, get_post_trip, get_post_num} from './post-info';
+import {documentReady, newPosts} from './lib/events';
+import {get_post_board, get_post_name, get_post_trip, get_post_num} from './lib/post-info';
 import {mogrifyHTML} from './mogrify';
 
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {
@@ -42,6 +44,11 @@ settings.newSetting("show_hide_buttons", "bool", true, "Show post hiding buttons
 settings.newSetting("show_hider_stubs", "bool", true, "Show stubs for hidden posts", 'filters', {orderhint:4});
 settings.newSetting("filtered_names", "textarea", "", "Filtered names", 'filters', {orderhint:5});
 settings.newSetting("filtered_trips", "textarea", "", "Filtered tripcodes", 'filters', {orderhint:6});
+
+const filterStartBus = kefirBus();
+
+export const filterStart = filterStartBus.toProperty();
+export const newViewablePosts = kefirBus();
 
 function makeMatcherFromText(text) {
 	const filterFns = _.chain(text.split('\n'))
@@ -79,7 +86,7 @@ const postFilterMatcherStream = Kefir.combine([nameMatcherStream, tripMatcherStr
 		};
 	}).toProperty();
 
-$(document).ready(function(){
+documentReady.onValue(() => {
 	settings.getSettingStream('show_hide_buttons').onValue(hideButton => {
 		setCss("hide_button", hideButton ? "" : ".postHider { display: none; }");
 	});
@@ -269,21 +276,12 @@ $(document).ready(function(){
 
 
 			if (shouldHidePost) {
-				if (!$post.attr("data-filtered")) {
-					$(".mentioned-"+postnum).addClass("filtered-backlink");
-					$post.attr("data-filtered", "true");
-				}
+				$post.attr("data-filtered", "true");
 				if ($pc.hasClass("opContainer"))
 					threads_needed++;
 				do_hide_post($pc);
-				// flag telling other post previewing tools to skip this.
 			} else {
-				if ($post.attr("data-filtered")) {
-					// if it was previously filtered,
-					// then we need to show its backlinks
-					$(".mentioned-"+postnum).removeClass("filtered-backlink");
-					$post.removeAttr("data-filtered");
-				}
+				$post.removeAttr("data-filtered");
 				do_show_post($pc);
 				if ($pc.hasClass("opContainer") && $thread.hasClass("mature_thread") && !settings.getSetting("show_mature"))
 					threads_needed++;
@@ -359,18 +357,20 @@ $(document).ready(function(){
 			.click(hide_this_post);
 	}
 
-	const new_posts = Kefir.fromEvents($(document), 'new_post', (event, post) => post);
-
 	postFilterMatcherStream
 		.onValue(postFilter => {
 			process_posts(document, postFilter);
+			filterStartBus.emit(null);
+			filterStartBus.end();
 		});
-	postFilterMatcherStream
-		.sampledBy(new_posts, (a,b)=>[a,b])
-		.onValue(([postFilter, post]) => {
+	Kefir.combine(
+			[newPosts],
+			[postFilterMatcherStream]
+		)
+		.onValue(([post, postFilter]) => {
 			process_posts(post, postFilter);
 			if (!postFilter($(post))) {
-				$(document).trigger("new_viewable_post", post);
+				newViewablePosts.emit(post);
 			}
 		});
 });
