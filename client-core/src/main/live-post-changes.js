@@ -9,7 +9,7 @@ import udKefir from 'ud-kefir';
 import {documentReady} from './lib/events';
 import {hasSeen} from './titlebar';
 import {footer} from './footer-utils';
-import {get_post_body} from './post-info';
+import {get_post_body} from './lib/post-info';
 
 const update = udKefir(module, null).changes().take(1).toProperty();
 

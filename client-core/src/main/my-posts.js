@@ -11,7 +11,7 @@ import $ from 'jquery';
 import settings from './settings';
 import setCss from './set-css';
 import {log_error} from './logger';
-import {get_post_num, get_post_board} from './post-info';
+import {get_post_num, get_post_board} from './lib/post-info';
 
 const REMEMBER_LIMIT = 1000;
 let myposts = [];

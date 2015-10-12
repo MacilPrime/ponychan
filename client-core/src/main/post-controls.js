@@ -7,7 +7,7 @@
 import $ from 'jquery';
 import RSVP from 'rsvp';
 import {pop} from './notice';
-import {get_post_num, get_post_name, get_post_trip, get_post_body, get_post_ip, get_post_board} from './post-info';
+import {get_post_num, get_post_name, get_post_trip, get_post_body, get_post_ip, get_post_board} from './lib/post-info';
 import {updateThreadNow} from './legacy/reloader';
 
 function showError(e) {

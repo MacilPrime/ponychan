@@ -15,7 +15,7 @@ import myPosts from './my-posts';
 import {Metadata} from './post-previewer/url-metadata';
 import {log_error} from './logger';
 import * as titlebar from './titlebar';
-import {get_post_id} from './post-info';
+import {get_post_id} from './lib/post-info';
 
 settings.newSetting("reply_notify", "bool", true, "Enable Reply Notifier Sound", 'links', {
 	orderhint: 7,
@@ -94,10 +94,7 @@ function updateTitle() {
 
 const postsNotifiedFor = new WeakSet();
 function notifyCheck($post) {
-	const m = /\bpost_(\w+)-(\d+)/.exec($post[0].className);
-	if (!m) return;
-	const postid = `${m[1]}:${m[2]}`;
-
+	const postid = get_post_id($post);
 	const postLinksToMe = _.any($('a.postlink'), postlink => {
 		const m = new Metadata(postlink.getAttribute('href'), global.board_id);
 		return myPosts.contains(m.postid);

@@ -1,5 +1,5 @@
 const $ = require('jquery');
-import {highlightPost} from './post-utils';
+import {highlightPost} from './lib/post-utils';
 
 function highlightActivePost() {
   if (global.board_id && /^#\d+$/.exec(window.location.hash)) {

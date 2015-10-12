@@ -3,8 +3,9 @@ import * as ud from 'ud';
 import udKefir from 'ud-kefir';
 import {Metadata} from './url-metadata';
 import {findPost} from './post-finder';
+import {get_post_id} from '../lib/post-info';
 import {onPostLinkEvent, markParentLinks} from './link-utils';
-import {highlightPost, jumpToPost} from '../post-utils';
+import {highlightPost, jumpToPost} from '../lib/post-utils';
 import settings from '../settings';
 
 settings.newSetting('preview_inline',
@@ -69,7 +70,6 @@ function toggleInline($link) {
 	};
 
 	if ($link.hasClass('inlined')) {
-		// for backlinks, drop posts in after the parent
 		$link.removeClass('inlined');
 
 		const $post = $(linksToPreviews.get($link[0]));
@@ -81,11 +81,15 @@ function toggleInline($link) {
 	} else {
 		const $post = findPost(url);
 		linksToPreviews.set($link[0], $post[0]);
+		const $parent = $link.closest('.post');
+		const parentid = $parent.length ? get_post_id($parent) : null;
 
 		$link.addClass('inlined');
 		$post.addClass('post-inline')
 			.on('new_post', (e, post) => {
-				markParentLinks($post, $link);
+				if (parentid) {
+					markParentLinks($post, parentid);
+				}
 
 				// Give inline posts a link to make it easy
 				// to navigate on a mobile device.

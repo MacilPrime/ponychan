@@ -5,7 +5,9 @@ const Kefir = require('kefir');
 import {Metadata} from './post-previewer/url-metadata';
 import {filterStart, newViewablePosts} from './post-hiding';
 import udKefir from 'ud-kefir';
+import {get_post_id} from './lib/post-info';
 import {documentReady, newPosts} from './lib/events';
+import {markParentLinks} from './post-previewer/link-utils';
 
 const update = udKefir(module, null).changes().take(1).toProperty();
 
@@ -47,9 +49,7 @@ function parsePage() {
 function parsePost(post) {
   const $post = $(post);
   if ($post.attr("data-filtered")) return;
-  const m = /\bpost_(\w+)-(\d+)/.exec(post.className);
-  if (!m) return;
-  const postid = `${m[1]}:${m[2]}`;
+  const postid = get_post_id($post);
   $post.find('> .body a.postlink').each(function() {
     const metadata = new Metadata($(this).attr('href'), global.board_id);
     addBacklinkToPost(postid, metadata.postid);
@@ -68,15 +68,11 @@ function renderUpdatedBacklinks() {
 }
 
 function placeBacklinksOnPost(post) {
-  const m = /\bpost_(\w+)-(\d+)/.exec(post.className);
-  if (!m) return;
-  const board = m[1];
-  const postnum = +m[2];
-  const postid = `${m[1]}:${m[2]}`;
+  const $post = $(post);
+  const postid = get_post_id($post);
   const backlinks = postsToBacklinks.get(postid);
   if (!backlinks || !backlinks.size) return;
 
-  const $post = $(post);
   $post.find('> .intro > .mentioned').remove();
   const $mentioned = $('<span/>')
     .addClass('mentioned');
@@ -90,6 +86,10 @@ function placeBacklinksOnPost(post) {
       .appendTo($mentioned);
   });
   $mentioned.appendTo($post.find('> .intro'));
+  const parentid = $post.attr('data-parentid');
+  if (parentid) {
+    markParentLinks($post, parentid);
+  }
 }
 
 filterStart

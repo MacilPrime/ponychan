@@ -2,6 +2,7 @@ const Kefir = require('kefir');
 import $ from 'jquery';
 import udKefir from 'ud-kefir';
 import {findPost} from './post-finder';
+import {get_post_id} from '../lib/post-info';
 import {onPostLinkEvent, markParentLinks} from './link-utils';
 import settings from '../settings';
 
@@ -36,8 +37,10 @@ function init() {
 }
 
 function startHover($link, $post) {
+	const $parent = $link.closest('.post');
+	const parentid = $parent.length ? get_post_id($parent) : null;
 	$post.addClass('post-hover reply')
-		.on('new_post', () => markParentLinks($post, $link))
+		.on('new_post', () => parentid && markParentLinks($post, parentid))
 		.appendTo(document.body);
 	$link.trigger('mousemove');
 	// trigger mid hover to set a position.

@@ -8,7 +8,7 @@
 import $ from "jquery";
 import {footer} from "./footer-utils";
 import myPosts from "./my-posts";
-import {get_post_num, get_thread_num, get_post_board, get_post_id, get_post_body} from './post-info';
+import {get_post_num, get_thread_num, get_post_board, get_post_id, get_post_body} from './lib/post-info';
 import * as state from './state';
 import config  from './config';
 

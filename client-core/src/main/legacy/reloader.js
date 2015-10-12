@@ -9,7 +9,7 @@
 import $ from 'jquery';
 import kefirBus from 'kefir-bus';
 import settings from '../settings';
-import {get_post_num} from '../post-info';
+import {get_post_num} from '../lib/post-info';
 import {mogrifyHTML} from '../mogrify';
 
 settings.newSetting("reloader", "bool", true, "Enable thread auto-updating", 'reloader', {orderhint:1, moredetails:"New posts in threads will appear as they're made."});

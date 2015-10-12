@@ -8,7 +8,7 @@
 
 import $ from 'jquery';
 import myPosts from './my-posts';
-import {get_post_id} from './post-info';
+import {get_post_id} from './lib/post-info';
 import {newViewablePosts} from './post-hiding';
 
 var flash = {};

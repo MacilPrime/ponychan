@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {get_post_num} from './post-info';
+import {get_post_num} from './lib/post-info';
 import settings from './settings';
 
 $(document).ready(function() {

@@ -13,7 +13,7 @@ import kefirBus from 'kefir-bus';
 import settings from './settings';
 import setCss from './set-css';
 import {documentReady, newPosts} from './lib/events';
-import {get_post_board, get_post_name, get_post_trip, get_post_num} from './post-info';
+import {get_post_board, get_post_name, get_post_trip, get_post_num} from './lib/post-info';
 import {mogrifyHTML} from './mogrify';
 
 settings.newSetting("show_mature", "bool", false, "Show mature content threads", 'filters', {
