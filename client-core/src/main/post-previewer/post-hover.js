@@ -22,8 +22,8 @@ function init() {
 			const $post = findPost($link.attr('href'));
 			startHover($link, $post);
 			const end = Kefir.merge([
-					Kefir.fromEvents($link[0], 'mouseleave'),
-					Kefir.fromEvents($link[0], 'click')
+					Kefir.fromEvents($link, 'mouseleave'),
+					Kefir.fromEvents($link, 'click')
 				]);
 			Kefir.fromEvents($link, 'mousemove')
 				.takeUntilBy(end)

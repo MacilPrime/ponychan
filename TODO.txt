@@ -1,5 +1,3 @@
-on mobile, the post which appears when you tap on a link doesn't disappear when you tap somewhere else on the page or scroll
-
 change filters to allow multiple conditions of same type
 selenium tests
 put "last edited timestamp" column in posts tables
