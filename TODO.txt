@@ -1,3 +1,4 @@
+handle thread being moved multiple times to a board
 change filters to allow multiple conditions of same type
 selenium tests
 put "last edited timestamp" column in posts tables
