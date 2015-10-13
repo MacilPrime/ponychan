@@ -81,7 +81,8 @@ function setModSecretCookie() {
 
 	setcookie($config['cookies']['mod'] . '_secret',
 		$config['cookies']['mod_secret'],
-		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/', null, false, true);
+		time() + $config['cookies']['expire'], $config['cookies']['jail'] ? $config['cookies']['path'] : '/',
+		$config['cookies']['mod_secret_domain'], false, true);
 }
 
 function destroyCookies() {

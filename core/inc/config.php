@@ -155,6 +155,7 @@
 
 	// Used for simple access-control
 	$config['cookies']['mod_secret'] = 'lmnopqrstuvwxyz09123456789!@#$%^&*()';
+	$config['cookies']['mod_secret_domain'] = null;
 
 /*
  * ====================
