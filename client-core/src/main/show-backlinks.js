@@ -73,19 +73,28 @@ function placeBacklinksOnPost(post) {
   const backlinks = postsToBacklinks.get(postid);
   if (!backlinks || !backlinks.size) return;
 
-  $post.find('> .intro > .mentioned, > .opMain > .intro > .mentioned').remove();
-  const $mentioned = $('<span/>')
-    .addClass('mentioned');
+  const $intro = $post.find('> .intro, > .opMain > .intro');
+  let $mentioned = $intro.find('.mentioned').first();
+  if (!$mentioned.length) {
+    $mentioned = $('<span/>')
+      .addClass('mentioned')
+      .appendTo($intro);
+  }
   Array.from(backlinks).sort().forEach(backlinkid => {
     const [backlinkboard, backlinknum] = backlinkid.split(':');
-    if (global.board_id !== backlinkboard) return;
+    const href = `#${backlinknum}`;
+    if (
+      global.board_id !== backlinkboard ||
+      $mentioned.find(`a.backlink[href=${href}]`).length
+    ) {
+      return;
+    }
     $('<a/>')
       .addClass(`postlink backlink`)
-      .attr('href', `#${backlinknum}`)
+      .attr('href', href)
       .text(`>>${backlinknum}`)
       .appendTo($mentioned);
   });
-  $mentioned.appendTo($post.find('> .intro, > .opMain > .intro'));
   const parentid = $post.attr('data-parentid');
   if (parentid) {
     markParentLinks($post, parentid);
