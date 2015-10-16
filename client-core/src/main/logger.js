@@ -55,24 +55,18 @@ function createID() {
 	return id;
 }
 
-var userid, olduserid;
+var userid;
 if (typeof localStorage != "undefined" && !!localStorage) {
 	userid = localStorage.getItem("userid");
-	if (userid && userid.length == 16) {
-		olduserid = userid;
-		try {
-			localStorage.setItem("olduserid", olduserid);
-		} catch(e) {}
-	} else {
-		olduserid = localStorage.getItem("olduserid");
-	}
 }
 var user_is_noob = !userid;
 if (!userid || userid.length != 32) {
 	userid = createID();
 	try {
 		localStorage.setItem("userid", userid);
-	} catch (e) {}
+	} catch (e) {
+		console.error(e);
+	}
 }
 var expires = new Date();
 expires.setTime((new Date()).getTime()+60480000000);
@@ -224,9 +218,6 @@ function send_usage(retryTime) {
 	usage.supportwURL = typeof wURL != "undefined" && !!wURL;
 
 	usage.supportGetSelection = typeof window.getSelection != "undefined" && !!window.getSelection;
-
-	if (olduserid)
-		usage.olduserid = olduserid;
 
 	if (document.location.protocol == 'http:') {
 		usage.http_user = true;
