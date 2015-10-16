@@ -219,12 +219,6 @@ function send_usage(retryTime) {
 
 	usage.supportGetSelection = typeof window.getSelection != "undefined" && !!window.getSelection;
 
-	if (document.location.protocol == 'http:') {
-		usage.http_user = true;
-		if (localStorage.getItem('last_https_send'))
-			usage.last_https_send = parseInt(localStorage.getItem('last_https_send'));
-	}
-
 	// usage object construction end
 
 	var last_usage_hash_key = "last_usage_data:"+SITE_DATA.siteroot;
