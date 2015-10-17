@@ -23,7 +23,6 @@ $wantjson = false;
 
 utf8_clean_userinput();
 
-$userid = false;
 $userhash = false;
 check_userid();
 
@@ -302,14 +301,13 @@ function computeResize($width, $height, $max_width, $max_height) {
 }
 
 function check_userid() {
-	global $userid, $userhash;
+	global $userhash;
 	if (!isset($_COOKIE['userid']))
 		return;
 	if (!preg_match('/^[0-9a-f]{32}$/', $_COOKIE['userid'])) {
 		// invalid userid cookie, ignore it
 		return;
 	}
-	$userid = $_COOKIE['userid'];
 	$userhash = substr(hash('sha256', $_COOKIE['userid']), 0, 40);
 }
 
