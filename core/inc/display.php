@@ -66,7 +66,7 @@ function createBoardlist($mod=false, $noactive=false) {
 }
 
 function error($message, $priority = false, $status = 500) {
-	global $board, $mod, $config, $userid, $wantjson;
+	global $board, $mod, $config, $userhash, $wantjson;
 
 	if ($config['syslog'] && $priority !== false) {
 		// Use LOG_NOTICE instead of LOG_ERR or LOG_WARNING because most error message are not significant.
@@ -77,7 +77,7 @@ function error($message, $priority = false, $status = 500) {
 
 	if (isset($config['error_log'])) {
 		$logdata = array();
-		$logdata['userid'] = $userid;
+		$logdata['userhash'] = $userhash;
 		$logdata['message'] = $message;
 		$logdata['time'] = date(DATE_ATOM);
 		if (isset($_SERVER['REMOTE_ADDR']))

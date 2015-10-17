@@ -284,7 +284,7 @@ if (isset($_POST['delete'])) {
 
 	if (isset($config['action_log'])) {
 		$logdata = array();
-		$logdata['userid'] = $userid;
+		$logdata['userhash'] = $userhash;
 		$logdata['action'] = 'editpost';
 		$logdata['board'] = $board['uri'];
 		$logdata['number'] = intval($id);
@@ -440,7 +440,7 @@ if (isset($_POST['delete'])) {
 
 	if (!$post['mod']) {
 		if (checkSpam(array($board['uri'], isset($post['thread']) ? $post['thread'] : ''))) {
-			if (!$userid) {
+			if (!$userhash) {
 				error($config['error']['spam']);
 			}
 		}
@@ -497,7 +497,7 @@ if (isset($_POST['delete'])) {
 	}
 
 	$post['ip'] = $_SERVER['REMOTE_ADDR'];
-	$post['userid'] = $userid;
+	$post['userhash'] = $userhash;
 	$post['name'] = $_POST['name'] != '' ? $_POST['name'] : $config['anonymous'];
 	$post['subject'] = $_POST['subject'];
 	$post['email'] = str_replace(' ', '%20', htmlspecialchars($_POST['email']));
@@ -982,7 +982,7 @@ if (isset($_POST['delete'])) {
 
 	if (isset($config['action_log'])) {
 		$logdata = array();
-		$logdata['userid'] = $post['userid'];
+		$logdata['userhash'] = $post['userhash'];
 		$logdata['action'] = 'post';
 		$logdata['board'] = $board['uri'];
 		$logdata['number'] = intval($id);

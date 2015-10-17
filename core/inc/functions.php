@@ -24,6 +24,7 @@ $wantjson = false;
 utf8_clean_userinput();
 
 $userid = false;
+$userhash = false;
 check_userid();
 
 fix_cloudflare_headers();
@@ -301,7 +302,7 @@ function computeResize($width, $height, $max_width, $max_height) {
 }
 
 function check_userid() {
-	global $userid;
+	global $userid, $userhash;
 	if (!isset($_COOKIE['userid']))
 		return;
 	if (!preg_match('/^[0-9a-f]{32}$/', $_COOKIE['userid'])) {
@@ -309,6 +310,7 @@ function check_userid() {
 		return;
 	}
 	$userid = $_COOKIE['userid'];
+	$userhash = substr(hash('sha256', $_COOKIE['userid']), 0, 40);
 }
 
 function fix_cloudflare_headers() {
@@ -342,14 +344,14 @@ function timing_detail($name, $val) {
 }
 
 function timing_end() {
-	global $config, $userid, $timings, $timing_details;
+	global $config, $userhash, $timings, $timing_details;
 
 	if (isset($config) && isset($config['timing_log']) && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
 		timing_mark('end');
 
 		$logdata = array();
 		$logdata['time'] = date(DATE_ATOM);
-		$logdata['userid'] = $userid;
+		$logdata['userhash'] = $userhash;
 		$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
 		if (isset($_SERVER['REQUEST_METHOD']))
 			$logdata['method'] = $_SERVER['REQUEST_METHOD'];

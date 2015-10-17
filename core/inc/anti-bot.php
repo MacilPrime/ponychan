@@ -239,9 +239,9 @@ function checkSpam(array $extra_salt = array()) {
 
 	if ($hash_given !== $hash_expected) {
 		if (isset($config['antibot_log'])) {
-			global $userid;
+			global $userhash;
 			$logdata = array();
-			$logdata['userid'] = $userid;
+			$logdata['userhash'] = $userhash;
 			$logdata['referrer'] = $_SERVER['HTTP_REFERER'];
 			$logdata['time'] = date(DATE_ATOM);
 			$logdata['ip'] = $_SERVER['REMOTE_ADDR'];
