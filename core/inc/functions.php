@@ -1077,11 +1077,11 @@ function post(array $post) {
 		'INSERT INTO `posts_%s` (`id`, `thread`, `subject`, `email`, `name`, ' .
 		'`trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, `thumb_uri`, ' .
 		'`thumbwidth`, `thumbheight`, `file`, `file_uri`, `filewidth`, `fileheight`, ' .
-		'`filesize`, `filename`, `filehash`, `password`, `ip_type`, `ip_data`, `sticky`, ' .
+		'`filesize`, `filename`, `filehash`, `password`, `userhash`, `ip_type`, `ip_data`, `sticky`, ' .
 		'`locked`, `sage`, `embed`, `mature`) VALUES ( NULL, :thread, :subject, ' .
 		':email, :name, :trip, :capcode, :body, :body_nomarkup, :time, :time, ' .
 		':thumb, :thumb_uri, :thumbwidth, :thumbheight, :file, :file_uri, :width, :height, :filesize, ' .
-		':filename, :filehash, :password, :ip_type, INET6_ATON(:ip), :sticky, :locked, 0, :embed, ' .
+		':filename, :filehash, :password, :userhash, :ip_type, INET6_ATON(:ip), :sticky, :locked, 0, :embed, ' .
 		':mature)', $board['uri']));
 
 	// Basic stuff
@@ -1108,6 +1108,7 @@ function post(array $post) {
 	$query->bindValue(':body_nomarkup', $post['body_nomarkup']);
 	$query->bindValue(':time', isset($post['time']) ? $post['time'] : time(), PDO::PARAM_INT);
 	$query->bindValue(':password', $post['password']);
+	$query->bindValue(':userhash', $post['userhash']);
 	$ip = isset($post['ip']) ? $post['ip'] : $_SERVER['REMOTE_ADDR'];
 	$query->bindValue(':ip', $ip);
 	$query->bindValue(':ip_type', ipType($ip));
