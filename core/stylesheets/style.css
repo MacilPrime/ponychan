@@ -353,7 +353,7 @@ div.post .body .spoiler a {
 	margin: 5px;
 }
 .comicsans {
-	font-family: comic sans, comic sans ms;
+	font-family: "comic";
 }
 table.test {
 	width: 100%;
@@ -1276,8 +1276,13 @@ img.catalogthumb {
 	font-family: "One Way";
 	src: url(font/one-way.woff);
 }
-
-
+@font-face {
+	font-family: "comic";
+	src: local('Comic Sans'), local('Comic Sans MS'),
+		url(font/tscu-comic.woff) format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
 
 /* Footers, Edit button */
 .postfooter {
