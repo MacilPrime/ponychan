@@ -63,7 +63,11 @@
 					// Apparently MySQL is too dumb to optimize through all of the unions, so
 					// each of the substatements has the order by limit stuff in it too.
 					// Well, ideally there should just be one posts table.
-					$sql .= sprintf("SELECT * FROM (SELECT *, '%s' AS `board` FROM `posts_%s` WHERE `thread` IS NOT NULL AND `file` IS NOT NULL AND `file` != 'deleted' AND `thumb` != 'spoiler' AND `mature` = 0 ORDER BY `time` DESC LIMIT ${l}) AS `temp_%s` UNION ALL ", $_board['uri'], $_board['uri'], $_board['uri']);
+					$sql .= "SELECT * FROM (SELECT id, time, thread, body, thumb_uri,
+						thumb, thumbwidth, thumbheight, '${_board['uri']}' AS `board`
+						FROM `posts_${_board['uri']}` WHERE `thread` IS NOT NULL AND
+						`file` IS NOT NULL AND `file` != 'deleted' AND `thumb` != 'spoiler' AND `mature` = 0
+						ORDER BY `time` DESC LIMIT ${l}) AS `temp_${_board['uri']}` UNION ALL ";
 				}
 				$sql = preg_replace('/UNION ALL $/', "ORDER BY `time` DESC LIMIT ${l}", $sql);
 				$query = prepare($sql);
