@@ -23,7 +23,7 @@ $wantjson = false;
 
 utf8_clean_userinput();
 
-$userhash = false;
+$userhash = null;
 check_userid();
 
 fix_cloudflare_headers();
