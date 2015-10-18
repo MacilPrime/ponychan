@@ -518,8 +518,6 @@ $(document).ready(function(){
 					this.el.css("background-image", "url(" + this.fileurl + ")");
 					if (useCanvas && useWorker) {
 						var render_job = RSVP.defer();
-						// TODO fully remove client thumbnailing code
-						//this.filethumb = render_job.promise;
 
 						var fileimg = new Image();
 						fileimg.onload = function() {
@@ -578,7 +576,6 @@ $(document).ready(function(){
 		};
 		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
-				delete this.filethumb;
 				if (usewURL && typeof wURL.revokeObjectURL != "undefined" && wURL.revokeObjectURL && this.fileurl) {
 					wURL.revokeObjectURL(this.fileurl);
 					delete this.fileurl;
@@ -962,115 +959,85 @@ $(document).ready(function(){
 			}
 		};
 
-		new RSVP.Promise(function(resolve, reject) {
-			if (selectedreply.filethumb && !$spoiler.is(':checked')) {
-				resolve(util.timeout(5000, selectedreply.filethumb).then(function(result) {
-					if (hasCancelled)
-						return;
+		if (hasCancelled)
+			return;
 
-					var filethumb = result[0];
-					var thumb_timing = result[1];
-					data.append('thumbtime', thumb_timing);
-
-					if (filethumb.mozGetAsFile) {
-						data.append('thumbfile', filethumb.mozGetAsFile('thumb.png', 'image/png'));
-						console.log('thumbfile appended');
-					} else {
-						data.append('thumbdurl', filethumb.toDataURL('image/png'));
-						console.log('thumbdurl appended');
-					}
-				}, function(err) {
-					if (err && err.message == "promise timed out") {
-						console.log('took too long to generate thumbnail; skipping');
-						data.append('thumbtime', -1);
-					} else {
-						log_error(err);
-					}
-				}));
-			} else {
-				resolve();
-			}
-		}).then(function() {
-			if (hasCancelled)
-				return;
-
-			var url = $QRForm.attr("action");
-			query = $.ajax({
-				url: url,
-				data: data,
-				cache: false,
-				contentType: false,
-				processData: false,
-				type: 'POST',
-				dataType: 'json',
-				xhr: function() {
-					var xhr = new window.XMLHttpRequest();
-					if (xhr.upload) {
-						xhr.upload.addEventListener("progress", function(e) {
-							if (e.lengthComputable)
-								$submit.val(Math.round(e.loaded * 100 / e.total).toString() + "%");
-						}, false);
-					}
-					return xhr;
-				},
-				success: function(data) {
-					query = null;
-					setQRFormDisabled(false);
-					if (data.status == 'success') {
-						if (settings.getSetting("QR_persistent") || (replies.length > 1))
-							QR.clear();
-						else
-							QR.close();
-
-						selectedreply.rm();
-
-						$(document).trigger('post_submitted', {
-							postid: data.postid,
-							threadid: data.threadid,
-							board: data.board,
-							url: data.url
-						});
-
-						QRcooldown(10);
-
-						if (data.threadid == null) {
-							window.location.href = data.url;
-						} else {
-							setTimeout(updateThreadNow, 10, true);
-						}
-					} else {
-						$QRwarning.text('Unknown error: '+String(data && data.error));
-						console.log("Unknown QR response", data);
-						prepSubmitButton();
-					}
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-					query = null;
-					prepSubmitButton();
-					setQRFormDisabled(false);
-					if (jqXHR.responseJSON) {
-						var data = jqXHR.responseJSON;
-						if (data.error == 'message') {
-							if (data.message_html)
-								$QRwarning.html(data.message_html);
-							else
-								$QRwarning.text(data.message);
-						} else if (data.error == 'ban') {
-							var pageState = {title: 'Ban', banpage: data.banhtml};
-							state.newState(pageState);
-						} else {
-							$QRwarning.text('Unknown error: '+data.error);
-						}
-					} else {
-						$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
-					}
-					var info = {xhrstatus: jqXHR.status, textStatus, errorThrown};
-					console.log("Ajax Error", info, jqXHR);
+		var url = $QRForm.attr("action");
+		query = $.ajax({
+			url: url,
+			data: data,
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'POST',
+			dataType: 'json',
+			xhr: function() {
+				var xhr = new window.XMLHttpRequest();
+				if (xhr.upload) {
+					xhr.upload.addEventListener("progress", function(e) {
+						if (e.lengthComputable)
+							$submit.val(Math.round(e.loaded * 100 / e.total).toString() + "%");
+					}, false);
 				}
-			});
+				return xhr;
+			},
+			success: function(data) {
+				query = null;
+				setQRFormDisabled(false);
+				if (data.status == 'success') {
+					if (settings.getSetting("QR_persistent") || (replies.length > 1))
+						QR.clear();
+					else
+						QR.close();
 
-			QRrepair();
+					selectedreply.rm();
+
+					$(document).trigger('post_submitted', {
+						postid: data.postid,
+						threadid: data.threadid,
+						board: data.board,
+						url: data.url
+					});
+
+					QRcooldown(10);
+
+					if (data.threadid == null) {
+						window.location.href = data.url;
+					} else {
+						setTimeout(updateThreadNow, 10, true);
+					}
+				} else {
+					$QRwarning.text('Unknown error: '+String(data && data.error));
+					console.log("Unknown QR response", data);
+					prepSubmitButton();
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				query = null;
+				prepSubmitButton();
+				setQRFormDisabled(false);
+				if (jqXHR.responseJSON) {
+					var data = jqXHR.responseJSON;
+					if (data.error == 'message') {
+						if (data.message_html)
+							$QRwarning.html(data.message_html);
+						else
+							$QRwarning.text(data.message);
+					} else if (data.error == 'ban') {
+						var pageState = {title: 'Ban', banpage: data.banhtml};
+						state.newState(pageState);
+					} else {
+						$QRwarning.text('Unknown error: '+data.error);
+					}
+				} else {
+					$QRwarning.text(jqXHR.status == 0 && textStatus == "abort" ? "Post discarded" : "Connection error");
+				}
+				var info = {xhrstatus: jqXHR.status, textStatus, errorThrown};
+				console.log("Ajax Error", info, jqXHR);
+			}
 		});
+
+		QRrepair();
 	}
 
 	function QRInit() {

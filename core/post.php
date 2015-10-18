@@ -504,8 +504,6 @@ if (isset($_POST['delete'])) {
 	$post['body'] = $_POST['body'];
 	$post['password'] = hashPostPassword($_POST['password']);
 	$post['has_file'] = !isset($post['embed']) && (($post['op'] && !isset($post['no_longer_require_an_image_for_op']) && $config['force_image_op']) || (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != ''));
-	$post['thumb_included'] = $post['has_file'] && (isset($_POST['thumbdurl']) || (isset($_FILES['thumbfile']) && $_FILES['thumbfile']['tmp_name'] != ''));
-	$post['thumb_time'] = isset($_POST['thumbtime']) ? $_POST['thumbtime'] : null;
 
 	if ($post['has_file']) {
 		$post['filename'] = urldecode($_FILES['file']['name']);
@@ -760,72 +758,31 @@ if (isset($_POST['delete'])) {
 				$post['thumbwidth'] = $post['width'];
 				$post['thumbheight'] = $post['height'];
 			} else {
-				if ($post['thumb_included']) {
-
-					$post['thumb_included'] = false;
-					timing_mark('thumb_inc_start');
-					if (isset($_POST['thumbdurl'])) {
-						if (strlen($_POST['thumbdurl']) < $config['max_thumb_filesize'] &&
-						    preg_match('/^data:image\/png;base64,(.*)$/', $_POST['thumbdurl'], $data)) {
-							$data = base64_decode($data[1], true);
-							if ($data) {
-								$fd = fopen($post['thumb'], 'wb');
-								if ($fd) {
-									fwrite($fd, $data);
-									fclose($fd);
-								}
-							}
-						}
-					} else {
-						$thumb_filesize = $_FILES['thumbfile']['size'];
-						if ($thumb_filesize < $config['max_thumb_filesize'])
-							copy($_FILES['thumbfile']['tmp_name'], $post['thumb']);
-					}
-					if (is_readable($post['thumb'])) {
-						// find dimensions of an image using GD
-						if ($thumb_size = @getimagesize($post['thumb'])) {
-							$thumb_max_width = $post['op'] ? $config['thumb_op_width'] : $config['thumb_width'];
-							$thumb_max_height = $post['op'] ? $config['thumb_op_height'] : $config['thumb_height'];
-							if ($thumb_size[0] <= $thumb_max_width && $thumb_size[1] <= $thumb_max_height) {
-								$post['thumb_included'] = true;
-								$thumb = new Image($post['thumb'], 'png');
-								$thumb = $thumb->image;
-							}
-						}
-					}
-					if (!$post['thumb_included']) {
-						unlink($post['thumb']);
-					}
-					timing_mark('thumb_inc_end');
-				}
-
-				if (!$post['thumb_included']) {
-					if ($file_type === 'image') {
-						timing_mark('thumb_resize_start');
-						$thumb = $image->resize(
-							$config['thumb_ext'] ? $config['thumb_ext'] : $post['extension'],
-							$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
-							$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
-						);
-						timing_mark('thumb_resize_end');
-					} elseif ($file_type === 'video') {
-						timing_mark('video_resize_start');
-						$newRes = computeResize(
-							$size[0], $size[1],
-							$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
-							$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
-						);
-						exec('avconv -ss 00:00:00 -i ' . escapeshellarg($upload) .
-							' -filter:v scale=' . $newRes['width'] . ':' . $newRes['height'] .
-							' -vframes 1 ' . escapeshellarg($post['thumb']), $__ignore, $ret);
-						if ($ret !== 0)
-							die('video thumbnailing error');
-						$thumb = new Image($post['thumb'], $config['video_thumb_ext']);
-						$thumb = $thumb->image;
-						timing_mark('video_resize_end');
-					} else {
-						die("should not happen, invalid file_type $file_type");
-					}
+				if ($file_type === 'image') {
+					timing_mark('thumb_resize_start');
+					$thumb = $image->resize(
+						$config['thumb_ext'] ? $config['thumb_ext'] : $post['extension'],
+						$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
+						$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
+					);
+					timing_mark('thumb_resize_end');
+				} elseif ($file_type === 'video') {
+					timing_mark('video_resize_start');
+					$newRes = computeResize(
+						$size[0], $size[1],
+						$post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
+						$post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
+					);
+					exec('avconv -ss 00:00:00 -i ' . escapeshellarg($upload) .
+						' -filter:v scale=' . $newRes['width'] . ':' . $newRes['height'] .
+						' -vframes 1 ' . escapeshellarg($post['thumb']), $__ignore, $ret);
+					if ($ret !== 0)
+						die('video thumbnailing error');
+					$thumb = new Image($post['thumb'], $config['video_thumb_ext']);
+					$thumb = $thumb->image;
+					timing_mark('video_resize_end');
+				} else {
+					die("should not happen, invalid file_type $file_type");
 				}
 
 				$thumb->to($post['thumb']);
@@ -1001,9 +958,6 @@ if (isset($_POST['delete'])) {
 			$logdata['filehash'] = $post['filehash'];
 			$logdata['filesize'] = $post['filesize'];
 			$logdata['filename'] = $post['filename'];
-			$logdata['thumb_included'] = $post['thumb_included'];
-			if (isset($post['thumb_time']))
-				$logdata['thumb_time'] = intval($post['thumb_time']);
 		}
 		$logdata['commentsimplehash'] = simplifiedHash($post['body_nomarkup']);
 		$logline = json_encode($logdata);
