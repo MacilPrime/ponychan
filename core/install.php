@@ -1,7 +1,7 @@
 <?php
 
 // Installation/upgrade file
-define('VERSION', 'v0.9.6-dev-8-mlpchan-9');
+define('VERSION', 'v0.9.6-dev-8-ponychan-10');
 
 require 'inc/functions.php';
 
@@ -27,6 +27,7 @@ if (file_exists($config['has_installed'])) {
 
 	$boards = listBoards();
 
+	// Old migration code
 	switch ($version) {
 		case 'v0.9':
 		case 'v0.9.1':
@@ -369,12 +370,21 @@ if (file_exists($config['has_installed'])) {
 			foreach ($boards as $board) {
 				query(sprintf("UPDATE `posts_%s` SET `body`=REGEXP_REPLACE(body, '<a class=\"bodylink postlink\" onclick=\"[^\"]*\" ', '<a class=\"bodylink postlink\" ')", $board['uri'])) or error(db_error());
 			}
+		case 'v0.9.6-dev-8-mlpchan-9':
+			// Add table for tracking future schema changes
+			query("CREATE TABLE IF NOT EXISTS `migrations` (
+				  `name` varchar(120) NOT NULL,
+				  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				  PRIMARY KEY (`name`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+			) or error(db_error());
+		// Don't add new migrations here. Look below to the New Migrations area instead.
 		case false:
 			// Update version number
 			file_write($config['has_installed'], VERSION);
 
 			$page['title'] = 'Upgraded';
-			$page['body'] = '<p style="text-align:center">Successfully upgraded from ' . $version . ' to <strong>' . VERSION . '</strong>.</p>';
+			$page['body'] = '<p style="text-align:center">Successfully upgraded from ' . htmlentities($version) . ' to <strong>' . htmlentities(VERSION) . '</strong>.</p>';
 			break;
 		default:
 			$page['title'] = 'Unknown version';
@@ -382,8 +392,52 @@ if (file_exists($config['has_installed'])) {
 			break;
 		case VERSION:
 			$page['title'] = 'Already installed';
-			$page['body'] = '<p style="text-align:center">It appears that Tinyboard is already installed (' . $version . ') and there is nothing to upgrade! Delete <strong>' . $config['has_installed'] . '</strong> to reinstall.</p>';
+			$page['body'] = '<p style="text-align:center">It appears that Tinyboard is already installed (' . htmlentities($version) . ') and there is nothing to upgrade! Delete <strong>' . htmlentities($config['has_installed']) . '</strong> to reinstall.</p>';
 			break;
+	}
+
+	$query = query("SELECT `name` FROM `migrations`") or error(db_error());
+	$completed_migrations = []; // set where keys are completed migrations
+	foreach($query->fetchAll(PDO::FETCH_ASSOC) as $value) {
+		$completed_migrations[$value['name']] = true;
+	}
+
+	// New migration procedures. The benefit is that these migrations don't have
+	// to be applied in a specific order. It's easier to merge branches together
+	// that each introduce their own necessary migrations. Add new migrations
+	// here!
+	$migration_procedures = [
+		'1-example' => function() {
+			// Example migration procedure.
+			//query("ALTER TABLE `ip_notes` DROP COLUMN `ip`") or error(db_error());
+		},
+		'2-example' => function() {
+			// Another example migration procedure.
+		}
+	];
+
+	$applied_migrations = [];
+	foreach($migration_procedures as $name => $proc) {
+		if (!isset($completed_migrations[$name])) {
+			$proc();
+
+			$query = prepare("INSERT INTO `migrations` (`name`) VALUES (:name)");
+			$query->bindValue(':name', $name);
+			$query->execute() or error(db_error($query));
+
+			// Migration procedures may start a transaction.
+			if ($pdo->inTransaction()) {
+				db_commit();
+			}
+
+			$applied_migrations[] = $name;
+		}
+	}
+
+	if (count($applied_migrations) > 0) {
+		$page['title'] = 'Upgraded';
+		$page['body'] = '<p style="text-align:center">Successfully applied the following migrations: ' .
+			htmlentities(implode(', ', $applied_migrations)) . '</p>';
 	}
 
 	die(Element('page.html', $page));
