@@ -682,10 +682,7 @@ if (isset($_POST['delete'])) {
 			error($config['error']['unsupported_type']);
 		}
 
-		if (isset($config['filename_func']))
-			$post['file_id'] = $config['filename_func']($post);
-		else
-			$post['file_id'] = time() . substr(microtime(), 2, 3);
+		$post['file_id'] = time() . substr(microtime(), 2, 3);
 
 		if ($post['mature'])
 			$post['file_id'] = 'mtr_' . $post['file_id'];
