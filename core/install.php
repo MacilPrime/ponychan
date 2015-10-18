@@ -416,6 +416,14 @@ if (file_exists($config['has_installed'])) {
 			foreach ($boards as $board) {
 				query("UPDATE `posts_${board['uri']}` SET `filename`=REPLACE(REPLACE(REPLACE(REPLACE(`filename`, '&gt;', '>'), '&lt;', '<'), '&amp;', '&'), '%22', '\"') WHERE filename like '%&%' OR filename like '%\%%'") or error(db_error());
 			}
+		},
+		'3-userhash' => function() {
+			global $boards;
+			foreach ($boards as $board) {
+				query("ALTER TABLE `posts_${board['uri']}`
+					ADD `userhash` char(40) DEFAULT NULL,
+					ADD KEY `userhash` (`userhash`)") or error(db_error());
+			}
 		}
 	];
 

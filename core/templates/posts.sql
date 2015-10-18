@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `filename` text DEFAULT NULL,
   `filehash` text DEFAULT NULL,
   `password` char(40) DEFAULT NULL,
+  `userhash` char(40) DEFAULT NULL,
   `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
   `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `sticky` int(1) NOT NULL,
@@ -33,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `mature` int(1) NOT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `thread_id` (`thread`, `id`),
+  KEY `userhash` (`userhash`),
   KEY `ip_type_data` (`ip_type`, `ip_data`),
   KEY `time` (`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
