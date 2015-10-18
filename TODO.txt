@@ -1,3 +1,8 @@
+if a user is suspected of being a bot (first time user, making a thread)
+- put their post in the queue if they have no posts in the queue
+- flag them such that they must solve a captcha before being able to post again
+rotating captcha
+
 handle thread being moved multiple times to a board
 change filters to allow multiple conditions of same type
 selenium tests
@@ -6,9 +11,7 @@ fix "nothing to edit" message when trying to edit ancient post
 settings table
 posts table
 better ban screen
-rotating captcha
 [rawhtml]
-hash userid on server
 let (mod?) editing (un)spoiler a post. (need to generate/remove thumbnail)
 mod controls on IP page? need progress indicator
 [D++] is slow
