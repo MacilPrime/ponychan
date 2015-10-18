@@ -507,8 +507,9 @@ if (isset($_POST['delete'])) {
 	$post['thumb_included'] = $post['has_file'] && (isset($_POST['thumbdurl']) || (isset($_FILES['thumbfile']) && $_FILES['thumbfile']['tmp_name'] != ''));
 	$post['thumb_time'] = isset($_POST['thumbtime']) ? $_POST['thumbtime'] : null;
 
-	if ($post['has_file'])
-		$post['filename'] = utf8tohtml(get_magic_quotes_gpc() ? stripslashes($_FILES['file']['name']) : $_FILES['file']['name']);
+	if ($post['has_file']) {
+		$post['filename'] = urldecode($_FILES['file']['name']);
+	}
 
 	if (!($post['has_file'] || isset($post['embed'])) || (($post['op'] && $config['force_body_op']) || (!$post['op'] && $config['force_body']))) {
 		$stripped_whitespace = preg_replace('/[\s]/u', '', $post['body']);

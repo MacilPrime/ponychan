@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 
 INSERT INTO `migrations` (`name`) VALUES
   ('1-example'),
-  ('2-example');
+  ('2-filename-dehtml');
 
 --
 -- Table structure for table `bans`

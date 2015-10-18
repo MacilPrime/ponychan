@@ -411,8 +411,11 @@ if (file_exists($config['has_installed'])) {
 			// Example migration procedure.
 			//query("ALTER TABLE `ip_notes` DROP COLUMN `ip`") or error(db_error());
 		},
-		'2-example' => function() {
-			// Another example migration procedure.
+		'2-filename-dehtml' => function() {
+			global $boards;
+			foreach ($boards as $board) {
+				query("UPDATE `posts_${board['uri']}` SET `filename`=REPLACE(REPLACE(REPLACE(REPLACE(`filename`, '&gt;', '>'), '&lt;', '<'), '&amp;', '&'), '%22', '\"') WHERE filename like '%&%' OR filename like '%\%%'") or error(db_error());
+			}
 		}
 	];
 
