@@ -912,6 +912,41 @@ function checkFlood($post) {
 	return $flood;
 }
 
+// Triggers an error if the file isn't suitable to be posted.
+function check_post_file($filename, $file_size) {
+	global $config;
+
+	$mime_type = trim(shell_exec('file -b --mime-type ' . escapeshellarg($filename)));
+
+	if (array_key_exists($mime_type, $config['allowed_image_types'])) {
+		if ($file_size > $config['max_filesize'])
+			error(sprintf3($config['error']['filesize'], array(
+				'filesz' => number_format($file_size),
+				'maxsz' => number_format($config['max_filesize'])
+			)));
+
+		$file_type = 'image';
+		$extension = $config['allowed_image_types'][$mime_type];
+	} elseif (array_key_exists($mime_type, $config['allowed_video_types'])) {
+		if ($file_size > $config['max_video_filesize'])
+			error(sprintf3($config['error']['filesize'], array(
+				'filesz' => number_format($file_size),
+				'maxsz' => number_format($config['max_video_filesize'])
+			)));
+
+		$file_type = 'video';
+		$extension = $config['allowed_video_types'][$mime_type];
+	} else {
+		error($config['error']['unsupported_type']);
+	}
+
+	return [
+		'mime_type' => $mime_type,
+		'file_type' => $file_type,
+		'extension' => $extension
+	];
+}
+
 function time_length($time) {
 	if ($time < 60) {
 		return $time . ' second' . ($time != 1 ? 's' : '');

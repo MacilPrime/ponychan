@@ -646,39 +646,11 @@ if (isset($_POST['delete'])) {
 
 	if ($post['has_file']) {
 		$upload = $_FILES['file']['tmp_name'];
-		if (!is_readable($upload))
-			error($config['error']['nomove']);
+		$file_result = check_post_file($upload, $_FILES['file']['size']);
 
-		//$given_extension = strtolower(substr($post['filename'], strrpos($post['filename'], '.') + 1));
-		$mime_type = trim(shell_exec('file -b --mime-type ' . escapeshellarg($upload)));
-
-		$file_type = null;
-		if (array_key_exists($mime_type, $config['allowed_image_types'])) {
-			$file_size = $_FILES['file']['size'];
-			if ($file_size > $config['max_filesize'])
-				error(sprintf3($config['error']['filesize'], array(
-					'filesz' => number_format($file_size),
-					'maxsz' => number_format($config['max_filesize'])
-				)));
-
-			$file_type = 'image';
-			$post['extension'] = $config['allowed_image_types'][$mime_type];
-		} elseif (array_key_exists($mime_type, $config['allowed_video_types'])) {
-			$file_size = $_FILES['file']['size'];
-			if ($file_size > $config['max_video_filesize'])
-				error(sprintf3($config['error']['filesize'], array(
-					'filesz' => number_format($file_size),
-					'maxsz' => number_format($config['max_video_filesize'])
-				)));
-
-			$file_type = 'video';
-			$post['extension'] = $config['allowed_video_types'][$mime_type];
-		//} elseif (in_array($given_extension, $config['allowed_ext_files'])) {
-		//	$file_type = 'file';
-		//	$post['extension'] = $given_extension;
-		} else {
-			error($config['error']['unsupported_type']);
-		}
+		$mime_type = $file_result['mime_type'];
+		$file_type = $file_result['file_type'];
+		$post['extension'] = $file_result['extension'];
 
 		// Keep incrementing the filename until we get an untaken one.
 		$counter = 0;
