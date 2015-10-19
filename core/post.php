@@ -680,12 +680,23 @@ if (isset($_POST['delete'])) {
 			error($config['error']['unsupported_type']);
 		}
 
-		$post['file_id'] = time() . substr(microtime(), 2, 3);
+		// Keep incrementing the filename until we get an untaken one.
+		$counter = 0;
+		do {
+			$m = microtime(true) + ($counter++/1000);
+			$seconds = floor($m);
+			$millis = round(($m - $seconds) * 1000);
+			$post['file_id'] = $seconds . str_pad($millis, 3, '0', STR_PAD_LEFT);
 
-		if ($post['mature'])
-			$post['file_id'] = 'mtr_' . $post['file_id'];
+			if ($post['mature']) {
+				$post['file_id'] = 'mtr_' . $post['file_id'];
+			}
 
-		$post['file'] = $board['dir'] . $config['dir']['img'] . $post['file_id'] . '.' . $post['extension'];
+			$post['file'] = $board['dir'] . $config['dir']['img'] . $post['file_id'] . '.' . $post['extension'];
+			$fd = @fopen($post['file'], 'x');
+		} while ($fd === FALSE);
+		fclose($fd);
+
 		$post['thumb'] = $board['dir'] . $config['dir']['thumb'] . $post['file_id'] . '.' .
 			($file_type === 'video' ?
 				$config['video_thumb_ext'] :
@@ -818,9 +829,7 @@ if (isset($_POST['delete'])) {
 			if (!move_uploaded_file($_FILES['file']['tmp_name'], $post['file']))
 				error($config['error']['nomove']);
 		}
-	}
 
-	if ($post['has_file']) {
 		if ($config['image_reject_repost']) {
 			if ($p = getPostByHash($post['filehash'])) {
 				undoFile($post);
