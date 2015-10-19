@@ -35,7 +35,37 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 INSERT INTO `migrations` (`name`) VALUES
   ('1-example'),
   ('2-filename-dehtml'),
-  ('3-userhash');
+  ('3-userhash'),
+  ('review-queue');
+
+-- Used to store posts that need a CAPTCHA
+CREATE TABLE IF NOT EXISTS `review_queue` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  `board` varchar(120) NOT NULL,
+  `thread` int(11) DEFAULT NULL,
+  `subject` varchar(100) DEFAULT NULL,
+  `email` varchar(254) DEFAULT NULL,
+  `name` varchar(75) DEFAULT NULL,
+  `trip` varchar(25) DEFAULT NULL,
+  `capcode` varchar(50) DEFAULT NULL,
+  `body_nomarkup` text DEFAULT NULL,
+  `file` varchar(50) DEFAULT NULL,
+  `filename` text DEFAULT NULL,
+  `filehash` text DEFAULT NULL,
+  `password` char(40) DEFAULT NULL,
+  `userhash` char(40) DEFAULT NULL,
+  `rawhtml` int(1) NOT NULL,
+  `spoiler` int(1) NOT NULL,
+  `mature` int(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `board_thread_time` (`board`, `thread`, `timestamp`),
+  KEY `userhash` (`userhash`),
+  KEY `ip_type_data` (`ip_type`, `ip_data`),
+  KEY `timestamp` (`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 --
 -- Table structure for table `bans`
