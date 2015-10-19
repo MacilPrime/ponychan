@@ -46,9 +46,11 @@ class Filter {
 			case 'ip':
 				return preg_match($match, $_SERVER['REMOTE_ADDR']);
 			case 'op':
-				return $post['op'] == $match;
+				return $post['op'] === $match;
 			case 'has_file':
-				return $post['has_file'] == $match;
+				return $post['has_file'] === $match;
+			case 'first_time_poster':
+				return $match !== userHasPosts($post['ip'], $post['userhash']);
 			default:
 				error('Unknown filter condition: ' . $condition);
 		}

@@ -1241,6 +1241,37 @@ function bumpThread($id) {
 	$query->execute() or error(db_error($query));
 }
 
+function userHasPosts($ip, $userhash) {
+	global $board;
+
+	$parsed_ip = parse_mask(ipToUserRange($ip));
+
+	$checkForPostsInBoard = function($boarduri) use ($parsed_ip, $userhash) {
+		$query = prepare("SELECT id FROM `posts_${boarduri}` WHERE
+			(`userhash` IS NOT NULL AND `userhash` = :userhash) OR
+			(`ip_type` = :ip_type AND `ip_data` >= INET6_ATON(:range_start) AND `ip_data` <= INET6_ATON(:range_end)) LIMIT 1");
+		$query->bindValue(':userhash', $userhash);
+		$query->bindValue(':ip_type', $parsed_ip['range_type']);
+		$query->bindValue(':range_start', $parsed_ip['range_start']);
+		$query->bindValue(':range_end', $parsed_ip['range_end']);
+		$query->execute() or error(db_error($query));
+
+		return $query->rowCount() > 0;
+	};
+
+	// Check current board first because it's more likely to have posts from the
+	// user if they're posting in it now.
+	$hasPosts = $checkForPostsInBoard($board['uri'], $ip, $userhash);
+	if (!$hasPosts) {
+		foreach(listBoards() as $_board) {
+			if ($_board['uri'] === $board['uri']) continue;
+			$hasPosts = $checkForPostsInBoard($_board['uri'], $ip, $userhash);
+			if ($hasPosts) break;
+		}
+	}
+	return $hasPosts;
+}
+
 // Remove file from post
 function deleteFile($id, $remove_entirely_if_already=true) {
 	global $board, $config;

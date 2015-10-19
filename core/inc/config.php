@@ -256,7 +256,7 @@
 	//$config['flood_filters'][] = array(
 	//	'condition' => array(
 	//		// 100 posts in the past 5 minutes (~20 p/m)
-	//		'posts_in_past_x_minutes' => array(100, 5)
+	//		'posts_in_past_x_minutes' => array(100, 5) // TODO not supported
 	//	),
 	//	// Don't allow the user to post
 	//	'action' => 'reject',
@@ -268,9 +268,9 @@
 	//$config['flood_filters'][] = array(
 	//	'condition' => array(
 	//		// 10 new empty threads in the past 2 minutes
-	//		'threads_with_no_replies_in_past_x_minutes' => array(10, 2),
+	//		'threads_with_no_replies_in_past_x_minutes' => array(10, 2), // TODO not supported
 	//		// Allow replies, but not new threads (ie. reject topics only).
-	//		'OP' => true
+	//		'op' => true
 	//	),
 	//	'action' => 'reject',
 	//	'message' => 'Your post has been rejected on the suspicion of a flood attack on this board (too many new threads); post a reply instead.'

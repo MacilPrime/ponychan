@@ -32,17 +32,27 @@
 
   // Board categories. Only used in the "Categories" theme.
   // $config['categories'] = array(
-  // 	'Group Name' => array('a', 'b', 'c'),
-  // 	'Another Group' => array('d')
+  //   'Group Name' => array('a', 'b', 'c'),
+  //   'Another Group' => array('d')
   // );
   // Optional for the Categories theme. This is an array of name => (title, url) groups for categories
   // with non-board links.
   // $config['custom_categories'] = array(
-  // 	'Links' => array(
-  // 		'Tinyboard' => 'http://tinyboard.org',
-  // 		'Donate' => 'donate.html'
-  // 	)
+  //   'Links' => array(
+  //     'Tinyboard' => 'http://tinyboard.org',
+  //     'Donate' => 'donate.html'
+  //   )
   // );
+
+  $config['flood_filters'][] = array(
+    'condition' => array(
+      'name' => '/foo/',
+      //'op' => true,
+      'first_time_poster' => true
+    ),
+    'action' => 'reject',
+    'message' => 'Spam filter test.'
+  );
 
   $LOGDIR = '/var/www/logs';
   if (!file_exists($LOGDIR)) {
