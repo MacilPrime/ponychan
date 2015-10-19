@@ -678,7 +678,7 @@ function file_unlink($path) {
 	return $ret;
 }
 
-// $action should be a string! Passing a number is deprecated.
+// $action must be a string!
 function hasPermission($action, $board = null, $_mod = null) {
 	global $config;
 
@@ -690,17 +690,12 @@ function hasPermission($action, $board = null, $_mod = null) {
 	if (!is_array($mod))
 		return false;
 
-	if (is_string($action)) {
-		if (
-			$mod['type'] < $config['permissions'][$action] &&
-			(!isset($config['extra_permissions'][$mod['type']]) ||
-				!in_array($action, $config['extra_permissions'][$mod['type']], true))
-		) {
-			return false;
-		}
-	} else {
-		if ($mod['type'] < $action)
-			return false;
+	if (
+		$mod['type'] < $config['permissions'][$action] &&
+		(!isset($config['extra_permissions'][$mod['type']]) ||
+			!in_array($action, $config['extra_permissions'][$mod['type']], true))
+	) {
+		return false;
 	}
 
 	if (!isset($board) || $config['mod']['skip_per_board'])
