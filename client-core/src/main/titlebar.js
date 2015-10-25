@@ -7,6 +7,7 @@
  */
 
 import $ from 'jquery';
+import _ from 'lodash';
 import myPosts from './my-posts';
 import {get_post_id} from './lib/post-info';
 import {newViewablePosts} from './post-hiding';
@@ -134,6 +135,8 @@ $(document).ready(function() {
 			return;
 		unseenPosts.set(get_post_id($post), $post);
 		updateTitle();
-		$(document).trigger('new_unseen_post', post);
+		const unseenPost = $.Event('new_unseen_post');
+		unseenPost.useSkeltal = _.random(0, 20) === 1;
+		$(document).trigger(unseenPost, post);
 	});
 });

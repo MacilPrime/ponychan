@@ -59,18 +59,19 @@ function init() {
       });
 
       if (postLinksToMe && canNotify()) {
-        makeNote($post);
+        makeNote($post, e.useSkeltal);
       }
     });
   }
 }
 
-function makeNote($post) {
+function makeNote($post, useSkeltal) {
+  const iconFn = useSkeltal ? 'mrskeltal.jpg' : 'mlpchanlogo.png';
   const postId = get_post_id($post);
   const note = new Notification(makeHeadLine($post), {
     body: getBody($post),
     tag: "desktop_" + postId,
-    icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
+    icon: SITE_DATA.siteroot + "static/" + iconFn
   });
 
   const noteClicks = Kefir.fromEvents(note, 'click');

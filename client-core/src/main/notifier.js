@@ -69,9 +69,35 @@ function prepareNotifySound() {
 		log_error(e);
 	}
 }
+function getSkeltalElement() {
+	const $oldAu = $('#skeltal_sound');
+	if ($oldAu.length > 0)
+		return $oldAu;
+	// keep old skeleton controls on the page.
+	const $newAu = $('<audio />')
+		.attr('id', 'skeltal_sound')
+		.append(
+		$("<source/>")
+			.attr({
+				src: SITE_DATA.siteroot + "static/chimes/skeltal.ogg",
+				type: "audio/ogg"
+			}),
+		$("<source/>")
+			.attr({
+				src:SITE_DATA.siteroot + "static/chimes/skeltal.mp3",
+				type:"audio/mpeg"
+			})
+	).appendTo(document.body);
+	if ('load' in $newAu.get(0))
+		$newAu.get(0).load();
+	return $newAu;
+}
 
-export function playSound() {
-	$au[0].play();
+export function playSound(useSkeltal = false) {
+	if (useSkeltal)
+		getSkeltalElement().get(0).play();
+	else
+		$au.get(0).play();
 }
 
 let unseenReplies = [];
@@ -93,7 +119,7 @@ function updateTitle() {
 }
 
 const postsNotifiedFor = new WeakSet();
-function notifyCheck($post) {
+function notifyCheck($post, useSkeltal) {
 	const postid = get_post_id($post);
 	const postLinksToMe = _.any($post.find('> .body a.postlink'), postlink => {
 		const m = new Metadata(postlink.getAttribute('href'), global.board_id);
@@ -105,19 +131,20 @@ function notifyCheck($post) {
 	postsNotifiedFor.add($post[0]);
 	// Okay, this post is a brand new reply to you
 	if (settings.getSetting("reply_notify"))
-		playSound();
+		playSound(useSkeltal);
 	unseenReplies.push(get_post_id($post));
 	updateTitle();
 }
 
 $(document).ready(function() {
 	prepareNotifySound();
+	getSkeltalElement();
 
 	$(document).on("setting_change.notifier", function(e, setting) {
 		if (setting == "reply_notify_sound")
 			prepareNotifySound();
 	}).on('new_unseen_post.notifier', function(e, post) {
-		notifyCheck($(post));
+		notifyCheck($(post), e.useSkeltal);
 	}).on('posts_seen.notifier', function(e, data) {
 		let changed = false;
 		const posts = data.posts;
