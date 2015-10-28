@@ -576,16 +576,16 @@ if (isset($_POST['delete'])) {
 	$post['name'] = $trip[0];
 	$post['trip'] = isset($trip[1]) ? $trip[1] : '';
 
-	if (strtolower($post['email']) == 'noko') {
+	if (preg_match("/(?:#|^)noko(?:#|$)/i", $post['email'])) {
 		$post['noko'] = true;
 		if ($config['hide_noko'])
-			$post['email'] = '';
+			$post['email'] = preg_replace("/(?:#|^)noko(?:#|$)/i", "", $post['email']);
 	} else $post['noko'] = false;
 
-	if (strtolower($post['email']) == 'sage') {
+	if (preg_match("/(?:#|^)sage(?:#|$)/i", $post['email'])) {
 		$post['sage'] = true;
 		if ($config['hide_sage'])
-			$post['email'] = '';
+			$post['email'] = preg_replace("/(?:#|^)sage(?:#|$)/i", "", $post['email']);
 	} else $post['sage'] = false;
 
 	$post['mature'] = $post['op'] ? false : $thread['mature'];
