@@ -379,7 +379,7 @@
 	// Don't show email field when set to noko
 	$config['hide_noko'] = true;
 	// Don't show email field when set to sage
-	$config['hide_sage'] = false;
+	$config['hide_sage'] = true;
 
 	// Custom tripcodes. The below example makes a tripcode
 	//  of "#test123" evaluate to "!HelloWorld"
