@@ -576,6 +576,12 @@ if (isset($_POST['delete'])) {
 	$post['name'] = $trip[0];
 	$post['trip'] = isset($trip[1]) ? $trip[1] : '';
 
+	if (preg_match("/(?:#|^)nonoko(?:#|$)/i", $post['email'])) {
+		$post['nonoko'] = true;
+		if ($config['hide_noko'])
+			$post['email'] = preg_replace("/(?:#|^)nonoko(?:#|$)/i", "", $post['email']);
+	} else $post['nonoko'] = false;
+
 	if (preg_match("/(?:#|^)noko(?:#|$)/i", $post['email'])) {
 		$post['noko'] = true;
 		if ($config['hide_noko'])
@@ -918,7 +924,16 @@ if (isset($_POST['delete'])) {
 
 	$root = $post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 
-	if ($wantjson || $config['always_noko'] || $post['noko']) {
+	function shouldStayInThread() {
+		global $wantjson, $config, $post;
+		if ($wantjson)
+			return true; // posting from QR never touches redirects.
+		if ($config['always_noko'] && !$post['nonoko'])
+			return true; // return to thread when noko behavior is default
+		return $post['noko'];
+			// 'noko' in email field determines whether you stay or not.
+	}
+	if (shouldStayInThread()) {
 		$redirect = $root . $board['dir'] . $config['dir']['res'] .
 			sprintf($config['file_page'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
 
@@ -989,7 +1004,7 @@ if (isset($_POST['delete'])) {
 		header('Location: ' . $redirect, true, $config['redirect_http']);
 	}
 
-	if ($wantjson || $config['always_noko'] || $post['noko']) {
+	if (shouldStayInThread()) {
 		close_request();
 	}
 
