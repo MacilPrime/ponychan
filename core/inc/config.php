@@ -1233,6 +1233,30 @@
 	// 	return 'Sorry, you cannot post that!';
 	// });
 
+event_handler('post', function($post) {
+	$now = time();
+	$isHalloween = strtotime('2015-10-31T07:00:00Z') <= $now && $now <= strtotime('2015-11-01T07:00:00Z');
+	if (!$isHalloween) {
+		return;
+	}
+
+	$entries = [
+		'Calcium',
+		'Rattle-rattle',
+		'turn away',
+		'Skeletism',
+		'Skelephobia',
+		'ooOoooOoOooo...!',
+		'o_O'
+	];
+	shuffle($entries);
+	$post->name = preg_replace(
+		"/(.*\(element of )([^)]+)(\))/i",
+		"$1{$entries[0]}$3",
+		$post->name
+	);
+});
+
 /*
  * ====================
  *  Other/uncategorized
