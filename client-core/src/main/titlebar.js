@@ -136,7 +136,9 @@ $(document).ready(function() {
 		unseenPosts.set(get_post_id($post), $post);
 		updateTitle();
 		const unseenPost = $.Event('new_unseen_post');
-		unseenPost.useSkeltal = _.random(0, 20) === 1;
+		const now = new Date();
+		const isHalloween = new Date("2015-10-31T07:00:00Z") <= now && now <= new Date("2015-11-01T07:00:00Z");
+		unseenPost.useSkeltal = isHalloween && _.random(0, 20) === 1;
 		$(document).trigger(unseenPost, post);
 	});
 });
