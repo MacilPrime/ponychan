@@ -13,11 +13,17 @@ import {log_error} from './logger';
 
 const styleChoices = SITE_DATA.styles.map(({name, displayName}) => ({value: name, displayName}));
 
+const now = new Date();
+const isHalloween = new Date("2015-10-31T07:00:00Z") <= now && now <= new Date("2015-11-01T07:00:00Z");
+
+const default_stylesheet = isHalloween ? 'Nightmare' : SITE_DATA.default_stylesheet;
+const defpriority = isHalloween ? 1446285304140 : 0;
+
 settings.newSetting(
 	"style", "select",
-	SITE_DATA.default_stylesheet,
+	default_stylesheet,
 	"Theme", 'pagestyle',
-	{orderhint: 1, selectOptions: styleChoices, defpriority: 0});
+	{orderhint: 1, selectOptions: styleChoices, defpriority});
 
 function getStyleURI(stylename) {
 	if (Array.isArray(SITE_DATA.styles)) {
