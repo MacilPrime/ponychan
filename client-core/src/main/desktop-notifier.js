@@ -37,7 +37,7 @@ function buttonEvent() {
   });
 }
 
-function canNotify() {
+export function canNotify() {
   return window.Notification && Notification.permission == 'granted' &&
     !pageHasFocus() && settings.getSetting("desktop_notifications");
 }

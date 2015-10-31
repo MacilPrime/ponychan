@@ -11,6 +11,7 @@ import _ from 'lodash';
 import myPosts from './my-posts';
 import {get_post_id} from './lib/post-info';
 import {newViewablePosts} from './post-hiding';
+import {canNotify} from './desktop-notifier';
 
 var flash = {};
 var flashmessage = '';
@@ -138,7 +139,7 @@ $(document).ready(function() {
 		const unseenPost = $.Event('new_unseen_post');
 		const now = new Date();
 		const isHalloween = new Date("2015-10-31T07:00:00Z") <= now && now <= new Date("2015-11-01T07:00:00Z");
-		unseenPost.useSkeltal = isHalloween && _.random(0, 20) === 1;
+		unseenPost.useSkeltal = isHalloween && canNotify() && _.random(0, 20) === 1;
 		$(document).trigger(unseenPost, post);
 	});
 });
