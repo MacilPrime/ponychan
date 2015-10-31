@@ -11,17 +11,11 @@ import $ from 'jquery';
 import settings from './settings';
 import {log_error} from './logger';
 
-const styleChoices = Array.isArray(SITE_DATA.styles) ?
-	SITE_DATA.styles.map(({name, displayName}) => ({value: name, displayName}))
-	:
-	_.map( // temp compat code
-		SITE_DATA.styles,
-		(file, name) => ({value: name, displayName: name})
-	);
+const styleChoices = SITE_DATA.styles.map(({name, displayName}) => ({value: name, displayName}));
 
 settings.newSetting(
 	"style", "select",
-	SITE_DATA.default_stylesheet || SITE_DATA.selectedstyle, // temp compat code
+	SITE_DATA.default_stylesheet,
 	"Theme", 'pagestyle',
 	{orderhint: 1, selectOptions: styleChoices, defpriority: 0});
 
