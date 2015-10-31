@@ -13,11 +13,17 @@ import settings from './settings';
 
 const styleChoices = config.site.styles.map(({name, displayName}) => ({value: name, displayName}));
 
+const now = new Date();
+const isHalloween = new Date('2016-10-31T07:00:00Z') <= now && now <= new Date('2016-11-01T07:00:00Z');
+
+const default_stylesheet = isHalloween ? 'Nightmare' : config.site.default_stylesheet;
+const defpriority = isHalloween ? 1477893787191 : 0;
+
 settings.newSetting(
-  'style', 'select',
-  config.site.default_stylesheet,
-  'Theme', 'pagestyle',
-  {orderhint: 1, selectOptions: styleChoices, defpriority: 0});
+	'style', 'select',
+	default_stylesheet,
+	'Theme', 'pagestyle',
+	{orderhint: 1, selectOptions: styleChoices, defpriority});
 
 function getStyleURI(stylename) {
   const entry = _.find(config.site.styles, entry => entry.name === stylename);
