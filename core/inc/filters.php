@@ -51,6 +51,9 @@ class Filter {
 				return $post['has_file'] === $match;
 			case 'first_time_poster':
 				return $match !== userHasPosts($post['ip'], $post['userhash']);
+			case 'has_not_solved_captcha_in_x_minutes':
+				// TODO
+				return true;
 			default:
 				error('Unknown filter condition: ' . $condition);
 		}
@@ -62,6 +65,9 @@ class Filter {
 		switch($this->action) {
 			case 'reject':
 				error(isset($this->message) ? $this->message : 'Posting throttled by flood filter.');
+			case 'captcha':
+				// TODO
+				break;
 			case 'ban':
 				if (!isset($this->reason))
 					error('The ban action requires a reason.');
