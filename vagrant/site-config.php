@@ -44,16 +44,6 @@
   //   )
   // );
 
-  $config['flood_filters'][] = array(
-    'condition' => array(
-      'name' => '/foo/',
-      //'op' => true,
-      'first_time_poster' => true
-    ),
-    'action' => 'reject',
-    'message' => 'Spam filter test.'
-  );
-
   $LOGDIR = '/var/www/logs';
   if (!file_exists($LOGDIR)) {
     mkdir($LOGDIR, 0755, true);
