@@ -523,6 +523,9 @@ if (file_exists($config['has_installed'])) {
 			    REFERENCES boards(uri)
 			    ON DELETE SET NULL
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+		},
+		'db-filters-fix' => function() {
+			query("ALTER TABLE `post_filter_hits` DROP COLUMN `fail_step`, DROP COLUMN `first_time_poster`") or error(db_error());
 		}
 	];
 
