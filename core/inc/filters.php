@@ -16,7 +16,58 @@ function do_filters(array $post) {
 		if (!postMatchesConditions($filter['conditions'], $post)) {
 			continue;
 		}
-		applyFilterAction($filter['action']);
+		switch($filter['mode']) {
+			case 1: // audit
+				log_filter_hit($post, $filter['id'], false);
+				break;
+			case 2: // enforce
+				log_filter_hit($post, $filter['id'], true);
+				applyFilterAction($filter['action']);
+				break;
+			default:
+				error_log('Unknown filter mode: ' . $filter['mode']);
+		}
+	}
+}
+
+function log_filter_hit(array $post, $filter_id, $blocked) {
+	global $board, $config;
+
+	$query = prepare("INSERT INTO `post_filter_hits` (`userhash`, `ip_type`, `ip_data`, `filter_id`, `blocked`, `board`, `successful_post_id`, `thread`, `subject`, `email`, `name`, `trip`, `capcode`, `filename`, `filehash`, `body_nomarkup`) VALUES (:userhash, :ip_type, INET6_ATON(:ip), :filter_id, :blocked, :board, :successful_post_id, :thread, :subject, :email, :name, :trip, :capcode, :filename, :filehash, :body_nomarkup)");
+	$query->bindValue(':subject', empty($post['subject']) ? null : $post['subject']);
+	$query->bindValue(':email', empty($post['email']) ? null : $post['email']);
+	$query->bindValue(':trip', empty($post['trip']) ? null : $post['trip']);
+	$query->bindValue(':capcode', empty($post['capcode']) ? null : $post['capcode']);
+	$query->bindValue(':name', $post['name']);
+	$query->bindValue(':body_nomarkup', $post['body_nomarkup']);
+	$query->bindValue(':filename', isset($post['filename']) ? $post['filename'] : null);
+	$query->bindValue(':filehash', isset($post['filehash']) ? $post['filehash'] : null);
+	$query->bindValue(':userhash', $post['userhash']);
+	$query->bindValue(':successful_post_id', null); // TODO
+	$query->bindValue(':thread', $post['thread']);
+	$query->bindValue(':board', $board['uri']);
+	$query->bindValue(':ip', $post['ip']);
+	$query->bindValue(':ip_type', ipType($post['ip']));
+	$query->bindValue(':blocked', $blocked);
+	$query->bindValue(':filter_id', $filter_id);
+	if (!$query->execute()) {
+		$err = $query->errorInfo();
+
+		// If we get the following error, it's because the filter was removed by
+		// the time we applied it. Probably just because the filter cache was
+		// outdated. Log it, dump the cache, and move on.
+		//  Cannot add or update a child row: a foreign key constraint fails (`tinyboard`.`post_filter_hits`, CONSTRAINT `post_filter_hits_ibfk_1` FOREIGN KEY (`filter_id`) REFERENCES `post_filters` (`id`) ON DELETE SET NULL)
+		if (
+			$err[0] === '23000' &&
+			strpos($err[2], 'FOREIGN KEY (`filter_id`) REFERENCES `post_filters`') !== false
+		) {
+			error_log("Tried to insert post filter hit for non-existent filter $filter_id: {$err[2]}");
+			if ($config['cache']['enabled']) {
+				cache::delete('active_post_filters');
+			}
+		} else {
+			error($err[2]);
+		}
 	}
 }
 
@@ -45,7 +96,7 @@ function get_active_filters() {
 	return $filters;
 }
 
-function postMatchesConditions($conditions, $post) {
+function postMatchesConditions(array $conditions, array $post) {
 	foreach($conditions as $condition) {
 		if (!postMatchesCondition($condition, $post)) {
 			return false;
@@ -54,7 +105,7 @@ function postMatchesConditions($conditions, $post) {
 	return true;
 }
 
-function postMatchesCondition($condition, $post) {
+function postMatchesCondition($condition, array $post) {
 	switch ($condition['type']) {
 		case 'name':
 			return preg_match($condition['value'], $post['name']);
@@ -70,10 +121,6 @@ function postMatchesCondition($condition, $post) {
 			if (!$post['has_file'])
 				return false;
 			return preg_match($condition['value'], $post['filename']);
-		case 'extension':
-			if (!$post['has_file'])
-				return false;
-			return preg_match($condition['value'], $post['body']);
 		case 'ip':
 			return preg_match($condition['value'], $_SERVER['REMOTE_ADDR']);
 		case 'op':

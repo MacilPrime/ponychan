@@ -507,6 +507,8 @@ if (isset($_POST['delete'])) {
 
 	if ($post['has_file']) {
 		$post['filename'] = urldecode($_FILES['file']['name']);
+		$post['filehash'] = $config['file_hash']($_FILES['file']['tmp_name']);
+		$post['filesize'] = filesize($_FILES['file']['tmp_name']);
 	}
 
 	if (!($post['has_file'] || isset($post['embed'])) || (($post['op'] && $config['force_body_op']) || (!$post['op'] && $config['force_body']))) {
@@ -676,9 +678,6 @@ if (isset($_POST['delete'])) {
 
 		// Truncate filename if it is too long
 		$post['filename'] = mb_substr($post['filename'], 0, $config['max_filename_len']);
-
-		$post['filehash'] = $config['file_hash']($upload);
-		$post['filesize'] = filesize($upload);
 
 		if ($file_type === 'image' || $file_type === 'video') {
 			require_once 'inc/image.php';
