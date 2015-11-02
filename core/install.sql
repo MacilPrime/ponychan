@@ -32,12 +32,6 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `migrations` (`name`) VALUES
-  ('1-example'),
-  ('2-filename-dehtml'),
-  ('3-userhash'),
-  ('review-queue');
-
 -- Used to store posts that need a CAPTCHA
 CREATE TABLE IF NOT EXISTS `review_queue` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,

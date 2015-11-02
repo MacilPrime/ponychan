@@ -16,6 +16,133 @@ $page = array(
 // this breaks the dispaly of licenses if enabled
 $config['minify_html'] = false;
 
+// New migration procedures. The benefit is that these migrations don't have
+// to be applied in a specific order. It's easier to merge branches together
+// that each introduce their own necessary migrations. Add new migrations
+// here!
+$migration_procedures = [
+	'1-example' => function() {
+		// Example migration procedure.
+		//query("ALTER TABLE `ip_notes` DROP COLUMN `ip`") or error(db_error());
+	},
+	'2-filename-dehtml' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query("UPDATE `posts_${board['uri']}` SET `filename`=REPLACE(REPLACE(REPLACE(REPLACE(`filename`, '&gt;', '>'), '&lt;', '<'), '&amp;', '&'), '%22', '\"') WHERE filename like '%&%' OR filename like '%\%%'") or error(db_error());
+		}
+	},
+	'3-userhash' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query("ALTER TABLE `posts_${board['uri']}`
+				ADD `userhash` char(40) DEFAULT NULL,
+				ADD KEY `userhash` (`userhash`)") or error(db_error());
+		}
+	},
+	'review-queue' => function() {
+		query("CREATE TABLE IF NOT EXISTS `review_queue` (
+			`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+			`timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			`ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
+			`ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+			`board` varchar(120) NOT NULL,
+			`thread` int(11) DEFAULT NULL,
+			`subject` varchar(100) DEFAULT NULL,
+			`email` varchar(254) DEFAULT NULL,
+			`name` varchar(75) DEFAULT NULL,
+			`trip` varchar(25) DEFAULT NULL,
+			`capcode` varchar(50) DEFAULT NULL,
+			`body_nomarkup` text DEFAULT NULL,
+			`file` varchar(50) DEFAULT NULL,
+			`filename` text DEFAULT NULL,
+			`filehash` text DEFAULT NULL,
+			`password` char(40) DEFAULT NULL,
+			`userhash` char(40) DEFAULT NULL,
+			`rawhtml` int(1) NOT NULL,
+			`spoiler` int(1) NOT NULL,
+			`mature` int(1) NOT NULL,
+			PRIMARY KEY (`id`),
+			KEY `board_thread_time` (`board`, `thread`, `timestamp`),
+			KEY `userhash` (`userhash`),
+			KEY `ip_type_data` (`ip_type`, `ip_data`),
+			KEY `timestamp` (`timestamp`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+	},
+	'db-filters' => function() {
+		query("CREATE TABLE IF NOT EXISTS `captchas` (
+			`id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+			`timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			`question` text NOT NULL,
+			`answers` text NOT NULL COMMENT 'json array',
+			PRIMARY KEY (`id`),
+			KEY `timestamp` (`timestamp`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+		query("INSERT INTO `captchas` (`question`, `answers`) VALUES
+			('Please type the word \"apple\".', '[\"apple\"]'),
+			('What is 3+5?', '[\"8\",\"eight\"]')") or error(db_error());
+		query("CREATE TABLE IF NOT EXISTS `captcha_attempts` (
+			`id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+			`timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			`userhash` char(40) DEFAULT NULL,
+			`ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+			`ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+			`captcha_id` int UNSIGNED DEFAULT NULL,
+			`correct` int(1) NOT NULL,
+			`answer` varchar(75) NOT NULL,
+			PRIMARY KEY (`id`),
+			KEY `userhash_time` (`userhash`, `timestamp`),
+			KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
+			KEY `captcha_time` (`captcha_id`, `timestamp`),
+			KEY `timestamp` (`timestamp`),
+			FOREIGN KEY (captcha_id)
+				REFERENCES captchas(id)
+				ON DELETE SET NULL
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+		query("CREATE TABLE IF NOT EXISTS `post_filters` (
+			`id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+			`filter_json` text NOT NULL,
+			`mode` int(1) NOT NULL COMMENT '0:disable, 1:audit, 2:enforce',
+			PRIMARY KEY (`id`),
+			KEY `mode` (`mode`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+		query("CREATE TABLE IF NOT EXISTS `post_filter_hits` (
+			`id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+			`timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			`userhash` char(40) DEFAULT NULL,
+			`ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+			`ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+			`filter_id` int UNSIGNED DEFAULT NULL,
+			`fail_step` int UNSIGNED DEFAULT NULL,
+			`blocked` int NOT NULL,
+			`board` varchar(120) DEFAULT NULL,
+			`successful_post_id` int UNSIGNED DEFAULT NULL,
+			`thread` int(11) DEFAULT NULL,
+			`first_time_poster` int(1) DEFAULT NULL,
+			`subject` varchar(100) DEFAULT NULL,
+			`email` varchar(254) DEFAULT NULL,
+			`name` varchar(75) DEFAULT NULL,
+			`trip` varchar(25) DEFAULT NULL,
+			`capcode` varchar(50) DEFAULT NULL,
+			`filename` text DEFAULT NULL,
+			`filehash` text DEFAULT NULL,
+			`body_nomarkup` text DEFAULT NULL,
+			PRIMARY KEY (`id`),
+			KEY `userhash_time` (`userhash`, `timestamp`),
+			KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
+			KEY `timestamp` (`timestamp`),
+			FOREIGN KEY (filter_id)
+				REFERENCES post_filters(id)
+				ON DELETE SET NULL,
+			FOREIGN KEY (board)
+				REFERENCES boards(uri)
+				ON DELETE SET NULL
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+	},
+	'db-filters-fix' => function() {
+		query("ALTER TABLE `post_filter_hits` DROP COLUMN `fail_step`, DROP COLUMN `first_time_poster`") or error(db_error());
+	}
+];
+
 if (file_exists($config['has_installed'])) {
 	// Upgrading can take a while.
 	set_time_limit(0);
@@ -27,7 +154,8 @@ if (file_exists($config['has_installed'])) {
 
 	$boards = listBoards();
 
-	// Old migration code
+	// Old migration code. Add new migrations to $migration_procedures above
+	// instead of making new versions here!
 	switch ($version) {
 		case 'v0.9':
 		case 'v0.9.1':
@@ -402,133 +530,6 @@ if (file_exists($config['has_installed'])) {
 		$completed_migrations[$value['name']] = true;
 	}
 
-	// New migration procedures. The benefit is that these migrations don't have
-	// to be applied in a specific order. It's easier to merge branches together
-	// that each introduce their own necessary migrations. Add new migrations
-	// here!
-	$migration_procedures = [
-		'1-example' => function() {
-			// Example migration procedure.
-			//query("ALTER TABLE `ip_notes` DROP COLUMN `ip`") or error(db_error());
-		},
-		'2-filename-dehtml' => function() {
-			global $boards;
-			foreach ($boards as $board) {
-				query("UPDATE `posts_${board['uri']}` SET `filename`=REPLACE(REPLACE(REPLACE(REPLACE(`filename`, '&gt;', '>'), '&lt;', '<'), '&amp;', '&'), '%22', '\"') WHERE filename like '%&%' OR filename like '%\%%'") or error(db_error());
-			}
-		},
-		'3-userhash' => function() {
-			global $boards;
-			foreach ($boards as $board) {
-				query("ALTER TABLE `posts_${board['uri']}`
-					ADD `userhash` char(40) DEFAULT NULL,
-					ADD KEY `userhash` (`userhash`)") or error(db_error());
-			}
-		},
-		'review-queue' => function() {
-			query("CREATE TABLE IF NOT EXISTS `review_queue` (
-			  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			  `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
-			  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-			  `board` varchar(120) NOT NULL,
-			  `thread` int(11) DEFAULT NULL,
-			  `subject` varchar(100) DEFAULT NULL,
-			  `email` varchar(254) DEFAULT NULL,
-			  `name` varchar(75) DEFAULT NULL,
-			  `trip` varchar(25) DEFAULT NULL,
-			  `capcode` varchar(50) DEFAULT NULL,
-			  `body_nomarkup` text DEFAULT NULL,
-			  `file` varchar(50) DEFAULT NULL,
-			  `filename` text DEFAULT NULL,
-			  `filehash` text DEFAULT NULL,
-			  `password` char(40) DEFAULT NULL,
-			  `userhash` char(40) DEFAULT NULL,
-			  `rawhtml` int(1) NOT NULL,
-			  `spoiler` int(1) NOT NULL,
-			  `mature` int(1) NOT NULL,
-			  PRIMARY KEY (`id`),
-			  KEY `board_thread_time` (`board`, `thread`, `timestamp`),
-			  KEY `userhash` (`userhash`),
-			  KEY `ip_type_data` (`ip_type`, `ip_data`),
-			  KEY `timestamp` (`timestamp`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
-		},
-		'db-filters' => function() {
-			query("CREATE TABLE IF NOT EXISTS `captchas` (
-			  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-			  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			  `question` text NOT NULL,
-			  `answers` text NOT NULL COMMENT 'json array',
-			  PRIMARY KEY (`id`),
-			  KEY `timestamp` (`timestamp`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
-			query("INSERT INTO `captchas` (`question`, `answers`) VALUES
-			  ('Please type the word \"apple\".', '[\"apple\"]'),
-			  ('What is 3+5?', '[\"8\",\"eight\"]')") or error(db_error());
-			query("CREATE TABLE IF NOT EXISTS `captcha_attempts` (
-			  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-			  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			  `userhash` char(40) DEFAULT NULL,
-			  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
-			  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-			  `captcha_id` int UNSIGNED DEFAULT NULL,
-			  `correct` int(1) NOT NULL,
-			  `answer` varchar(75) NOT NULL,
-			  PRIMARY KEY (`id`),
-			  KEY `userhash_time` (`userhash`, `timestamp`),
-			  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
-			  KEY `captcha_time` (`captcha_id`, `timestamp`),
-			  KEY `timestamp` (`timestamp`),
-			  FOREIGN KEY (captcha_id)
-			    REFERENCES captchas(id)
-			    ON DELETE SET NULL
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
-			query("CREATE TABLE IF NOT EXISTS `post_filters` (
-			  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-			  `filter_json` text NOT NULL,
-			  `mode` int(1) NOT NULL COMMENT '0:disable, 1:audit, 2:enforce',
-			  PRIMARY KEY (`id`),
-			  KEY `mode` (`mode`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
-			query("CREATE TABLE IF NOT EXISTS `post_filter_hits` (
-			  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-			  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			  `userhash` char(40) DEFAULT NULL,
-			  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
-			  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-			  `filter_id` int UNSIGNED DEFAULT NULL,
-			  `fail_step` int UNSIGNED DEFAULT NULL,
-			  `blocked` int NOT NULL,
-			  `board` varchar(120) DEFAULT NULL,
-			  `successful_post_id` int UNSIGNED DEFAULT NULL,
-			  `thread` int(11) DEFAULT NULL,
-			  `first_time_poster` int(1) DEFAULT NULL,
-			  `subject` varchar(100) DEFAULT NULL,
-			  `email` varchar(254) DEFAULT NULL,
-			  `name` varchar(75) DEFAULT NULL,
-			  `trip` varchar(25) DEFAULT NULL,
-			  `capcode` varchar(50) DEFAULT NULL,
-			  `filename` text DEFAULT NULL,
-			  `filehash` text DEFAULT NULL,
-			  `body_nomarkup` text DEFAULT NULL,
-			  PRIMARY KEY (`id`),
-			  KEY `userhash_time` (`userhash`, `timestamp`),
-			  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
-			  KEY `timestamp` (`timestamp`),
-			  FOREIGN KEY (filter_id)
-			    REFERENCES post_filters(id)
-			    ON DELETE SET NULL,
-			  FOREIGN KEY (board)
-			    REFERENCES boards(uri)
-			    ON DELETE SET NULL
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
-		},
-		'db-filters-fix' => function() {
-			query("ALTER TABLE `post_filter_hits` DROP COLUMN `fail_step`, DROP COLUMN `first_time_poster`") or error(db_error());
-		}
-	];
-
 	$applied_migrations = [];
 	foreach($migration_procedures as $name => $proc) {
 		if (!isset($completed_migrations[$name])) {
@@ -852,6 +853,12 @@ if ($step == 0) {
 	foreach ($queries as &$query) {
 		if (!query($query))
 			$sql_errors .= '<li>' . db_error() . '</li>';
+	}
+
+	foreach ($migration_procedures as $name => $proc) {
+		$query = prepare("INSERT INTO `migrations` (`name`) VALUES (:name)");
+		$query->bindValue(':name', $name);
+		$query->execute() or error(db_error($query));
 	}
 
 	$boards = listBoards();
