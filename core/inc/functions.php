@@ -1158,7 +1158,7 @@ function post(array $post) {
 	$query->bindValue(':mature', isset($post['mature']) && $post['mature'] ? 1 : 0, PDO::PARAM_INT);
 
 	if (isset($post['capcode']) && $post['capcode']) {
-		$query->bindValue(':capcode', $post['capcode'], PDO::PARAM_INT);
+		$query->bindValue(':capcode', $post['capcode']);
 	} else {
 		$query->bindValue(':capcode', NULL, PDO::PARAM_NULL);
 	}
