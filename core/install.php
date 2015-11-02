@@ -16,6 +16,31 @@ $page = array(
 // this breaks the dispaly of licenses if enabled
 $config['minify_html'] = false;
 
+// New migration procedures. The benefit is that these migrations don't have
+// to be applied in a specific order. It's easier to merge branches together
+// that each introduce their own necessary migrations. Add new migrations
+// here!
+$migration_procedures = [
+	'1-example' => function() {
+		// Example migration procedure.
+		//query("ALTER TABLE `ip_notes` DROP COLUMN `ip`") or error(db_error());
+	},
+	'2-filename-dehtml' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query("UPDATE `posts_${board['uri']}` SET `filename`=REPLACE(REPLACE(REPLACE(REPLACE(`filename`, '&gt;', '>'), '&lt;', '<'), '&amp;', '&'), '%22', '\"') WHERE filename like '%&%' OR filename like '%\%%'") or error(db_error());
+		}
+	},
+	'3-userhash' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query("ALTER TABLE `posts_${board['uri']}`
+				ADD `userhash` char(40) DEFAULT NULL,
+				ADD KEY `userhash` (`userhash`)") or error(db_error());
+		}
+	}
+];
+
 if (file_exists($config['has_installed'])) {
 	// Upgrading can take a while.
 	set_time_limit(0);
@@ -27,7 +52,8 @@ if (file_exists($config['has_installed'])) {
 
 	$boards = listBoards();
 
-	// Old migration code
+	// Old migration code. Add new migrations to $migration_procedures above
+	// instead of making new versions here!
 	switch ($version) {
 		case 'v0.9':
 		case 'v0.9.1':
@@ -402,31 +428,6 @@ if (file_exists($config['has_installed'])) {
 		$completed_migrations[$value['name']] = true;
 	}
 
-	// New migration procedures. The benefit is that these migrations don't have
-	// to be applied in a specific order. It's easier to merge branches together
-	// that each introduce their own necessary migrations. Add new migrations
-	// here!
-	$migration_procedures = [
-		'1-example' => function() {
-			// Example migration procedure.
-			//query("ALTER TABLE `ip_notes` DROP COLUMN `ip`") or error(db_error());
-		},
-		'2-filename-dehtml' => function() {
-			global $boards;
-			foreach ($boards as $board) {
-				query("UPDATE `posts_${board['uri']}` SET `filename`=REPLACE(REPLACE(REPLACE(REPLACE(`filename`, '&gt;', '>'), '&lt;', '<'), '&amp;', '&'), '%22', '\"') WHERE filename like '%&%' OR filename like '%\%%'") or error(db_error());
-			}
-		},
-		'3-userhash' => function() {
-			global $boards;
-			foreach ($boards as $board) {
-				query("ALTER TABLE `posts_${board['uri']}`
-					ADD `userhash` char(40) DEFAULT NULL,
-					ADD KEY `userhash` (`userhash`)") or error(db_error());
-			}
-		}
-	];
-
 	$applied_migrations = [];
 	foreach($migration_procedures as $name => $proc) {
 		if (!isset($completed_migrations[$name])) {
@@ -750,6 +751,12 @@ if ($step == 0) {
 	foreach ($queries as &$query) {
 		if (!query($query))
 			$sql_errors .= '<li>' . db_error() . '</li>';
+	}
+
+	foreach ($migration_procedures as $name => $proc) {
+		$query = prepare("INSERT INTO `migrations` (`name`) VALUES (:name)");
+		$query->bindValue(':name', $name);
+		$query->execute() or error(db_error($query));
 	}
 
 	$boards = listBoards();

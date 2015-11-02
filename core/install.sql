@@ -32,11 +32,6 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `migrations` (`name`) VALUES
-  ('1-example'),
-  ('2-filename-dehtml'),
-  ('3-userhash');
-
 --
 -- Table structure for table `bans`
 --
