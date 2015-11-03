@@ -1250,7 +1250,7 @@ function mod_move($originBoard, $postID) {
 			$post['height'] = &$post['fileheight'];
 
 			$file_src = sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'];
-			$file_thumb = sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb'];
+			$file_thumb = $post['thumb'] === 'spoiler' ? null : sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb'];
 		} else {
 			$post['has_file'] = false;
 		}
@@ -1267,7 +1267,9 @@ function mod_move($originBoard, $postID) {
 		if ($post['has_file']) {
 			// copy image
 			$clone($file_src, sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file']);
-			$clone($file_thumb, sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
+			if ($file_thumb !== null) {
+				$clone($file_thumb, sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
+			}
 		}
 
 		// go back to the original board to fetch replies
@@ -1289,7 +1291,7 @@ function mod_move($originBoard, $postID) {
 				$post['height'] = &$post['fileheight'];
 
 				$post['file_src'] = sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'];
-				$post['file_thumb'] = sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb'];
+				$post['file_thumb'] = $post['thumb'] === 'spoiler' ? null : sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb'];
 			} else {
 				$post['has_file'] = false;
 			}
@@ -1330,7 +1332,9 @@ function mod_move($originBoard, $postID) {
 			if ($post['has_file']) {
 				// copy image
 				$clone($post['file_src'], sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file']);
-				$clone($post['file_thumb'], sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
+				if ($post['file_thumb'] !== null) {
+					$clone($post['file_thumb'], sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
+				}
 			}
 
 			foreach ($post['tracked_cites'] as $cite) {
