@@ -1372,6 +1372,7 @@ function mod_move($originBoard, $postID) {
 				'name' => $config['mod']['shadow_name'],
 				'capcode' => $config['mod']['shadow_capcode'],
 				'trip' => '',
+				'userhash' => null,
 				'password' => '',
 				'has_file' => false,
 				// attach to original thread
