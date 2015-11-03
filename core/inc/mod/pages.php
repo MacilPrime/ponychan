@@ -1250,7 +1250,7 @@ function mod_move($originBoard, $postID) {
 			$post['height'] = &$post['fileheight'];
 
 			$file_src = sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'];
-			$file_thumb = $post['thumb'] === 'spoiler' ? null : sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb'];
+			$file_thumb = sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb'];
 		} else {
 			$post['has_file'] = false;
 		}
@@ -1261,15 +1261,20 @@ function mod_move($originBoard, $postID) {
 		if (!openBoard($targetBoard))
 			error($config['error']['noboard']);
 
-		if ($post['has_file']) {
+		if ($post['has_file'] && file_exists($file_src)) {
 			// copy image
+			$limit = 1000;
 			while (!@$clone($file_src, sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'])) {
+				if ($limit-- < 0) {
+					error_log('Failed to ' . ($shadow?'copy':'move') . ' ' . $file_src . ' to ' . $post['file']);
+					error('Failed to write a file');
+				}
 				$post['file'] = incrementFilename($post['file']);
-				if ($file_thumb !== null) {
+				if (file_exists($file_thumb)) {
 					$post['thumb'] = incrementFilename($post['thumb']);
 				}
 			}
-			if ($file_thumb !== null) {
+			if (file_exists($file_thumb)) {
 				$clone($file_thumb, sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
 			}
 		}
@@ -1296,7 +1301,7 @@ function mod_move($originBoard, $postID) {
 				$post['height'] = &$post['fileheight'];
 
 				$post['file_src'] = sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'];
-				$post['file_thumb'] = $post['thumb'] === 'spoiler' ? null : sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb'];
+				$post['file_thumb'] = sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb'];
 			} else {
 				$post['has_file'] = false;
 			}
@@ -1331,15 +1336,20 @@ function mod_move($originBoard, $postID) {
 			$post['op'] = false;
 			$post['tracked_cites'] = markup($post['body'], true);
 
-			if ($post['has_file']) {
+			if ($post['has_file'] && file_exists($post['file_src'])) {
 				// copy image
+				$limit = 1000;
 				while (!@$clone($post['file_src'], sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'])) {
+					if ($limit-- < 0) {
+						error_log('Failed to ' . ($shadow?'copy':'move') . ' ' . $post['file_src'] . ' to ' . $post['file']);
+						error('Failed to write a file');
+					}
 					$post['file'] = incrementFilename($post['file']);
-					if ($post['file_thumb'] !== null) {
+					if (file_exists($post['file_thumb'])) {
 						$post['thumb'] = incrementFilename($post['thumb']);
 					}
 				}
-				if ($post['file_thumb'] !== null) {
+				if (file_exists($post['file_thumb'])) {
 					$clone($post['file_thumb'], sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
 				}
 			}

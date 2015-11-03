@@ -1087,8 +1087,8 @@ function threadExists($id) {
 
 // takes a string like "foo_123456.jpg" and returns "foo_123457.jpg"
 function incrementFilename($f) {
-	$newname = preg_replace_callback('/(.*)(\\d+)/', function($matches) {
-		return $matches[1] . ($matches[2]+1);
+	$newname = preg_replace_callback('/\\d+/', function($matches) {
+		return $matches[0]+1;
 	}, $f, 1);
 	if ($newname === $f) {
 		$newname = preg_replace('/\\./', '-1.', $f, 1);
