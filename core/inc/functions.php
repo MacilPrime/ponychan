@@ -678,6 +678,20 @@ function file_unlink($path) {
 	return $ret;
 }
 
+function file_move_no_overwrite($oldname, $newname) {
+	$fd = @fopen($newname, 'x');
+	if ($fd === false) {
+		return false;
+	}
+	fclose($fd);
+	if (rename($oldname, $newname)) {
+		return true;
+	} else {
+		unlink($newname);
+		throw new Exception("Failed to move file $oldname");
+	}
+}
+
 // $action should be a string! Passing a number is deprecated.
 function hasPermission($action, $board = null, $_mod = null) {
 	global $config;
@@ -1069,6 +1083,20 @@ function threadExists($id) {
 	}
 
 	return false;
+}
+
+// takes a string like "foo_123456.jpg" and returns "foo_123457.jpg"
+function incrementFilename($f) {
+	$newname = preg_replace_callback('/(.*)(\\d+)/', function($matches) {
+		return $matches[1] . ($matches[2]+1);
+	}, $f, 1);
+	if ($newname === $f) {
+		$newname = preg_replace('/\\./', '-1.', $f, 1);
+	}
+	if ($newname === $f) {
+		$newname = $f . '-1';
+	}
+	return $newname;
 }
 
 function post(array $post) {

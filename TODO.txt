@@ -1,3 +1,4 @@
+- add separate column storing whether an image is a spoiler or deleted
 if a user is suspected of being a bot (first time user, making a thread)
 - put their post in the queue if they have no posts in the queue
 - flag them such that they must solve a captcha before being able to post again

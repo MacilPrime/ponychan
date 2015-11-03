@@ -1238,8 +1238,8 @@ function mod_move($originBoard, $postID) {
 		if ($targetBoard === $originBoard)
 			error(_('Target and source board are the same.'));
 
-		// link() if leaving a shadow thread behind; else, rename().
-		$clone = $shadow ? 'link' : 'rename';
+		// hard link if leaving a shadow thread behind, else move it.
+		$clone = $shadow ? 'link' : 'file_move_no_overwrite';
 
 		// indicate that the post is a thread
 		$post['op'] = true;
@@ -1261,16 +1261,21 @@ function mod_move($originBoard, $postID) {
 		if (!openBoard($targetBoard))
 			error($config['error']['noboard']);
 
-		// create the new thread
-		$newID = post($post);
-
 		if ($post['has_file']) {
 			// copy image
-			$clone($file_src, sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file']);
+			while (!@$clone($file_src, sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'])) {
+				$post['file'] = incrementFilename($post['file']);
+				if ($file_thumb !== null) {
+					$post['thumb'] = incrementFilename($post['thumb']);
+				}
+			}
 			if ($file_thumb !== null) {
 				$clone($file_thumb, sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
 			}
 		}
+
+		// create the new thread
+		$newID = post($post);
 
 		// go back to the original board to fetch replies
 		openBoard($originBoard);
@@ -1326,16 +1331,21 @@ function mod_move($originBoard, $postID) {
 			$post['op'] = false;
 			$post['tracked_cites'] = markup($post['body'], true);
 
-			// insert reply
-			$newIDs[$post['id']] = $newPostID = post($post);
-
 			if ($post['has_file']) {
 				// copy image
-				$clone($post['file_src'], sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file']);
+				while (!@$clone($post['file_src'], sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'])) {
+					$post['file'] = incrementFilename($post['file']);
+					if ($post['file_thumb'] !== null) {
+						$post['thumb'] = incrementFilename($post['thumb']);
+					}
+				}
 				if ($post['file_thumb'] !== null) {
 					$clone($post['file_thumb'], sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
 				}
 			}
+
+			// insert reply
+			$newIDs[$post['id']] = $newPostID = post($post);
 
 			foreach ($post['tracked_cites'] as $cite) {
 				$query = prepare('INSERT INTO `cites` (`board`, `post`, `target_board`, `target`) VALUES (:board, :post, :target_board, :target)');
