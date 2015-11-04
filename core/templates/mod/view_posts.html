@@ -11,7 +11,7 @@
 			 <a href="{{ show_all_url_prefix }}/{{ board_posts.board.uri }}">{% trans 'Show all' %}</a>
       {% endif %}
 		</legend>
-		{{ board_posts.posts|join('<hr>') }}
+		{{ board_posts.posts|join('<hr>')|raw }}
 	</fieldset>
 {% else %}
   {% trans 'No posts were found.' %}
