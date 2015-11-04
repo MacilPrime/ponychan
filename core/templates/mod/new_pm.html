@@ -1,11 +1,11 @@
-<form action="?/new_PM/{{ username|e }}" method="post">
+<form action="?/new_PM/{{ username }}" method="post">
 	<table>
 		<tr>
 			<th>To</th>
 			{% if mod|hasPermission('editusers') %}
-				<td><a href="?/users/{{ id }}">{{ username|e }}</a></td>
+				<td><a href="?/users/{{ id }}">{{ username }}</a></td>
 			{% else %}
-				<td>{{ username|e }}</td>
+				<td>{{ username }}</td>
 			{% endif %}
 		</tr>
 		<tr>

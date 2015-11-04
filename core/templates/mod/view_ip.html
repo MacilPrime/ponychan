@@ -6,11 +6,11 @@
 		<legend>
 			{% set notes_on_record = 'note' ~ (notes|count != 1 ? 's' : '') ~ ' on record' %}
 			{% if notes|count == config.mod.ip_range_page_max_notes %}
-				&gt;{{ notes|count|e }} {% trans notes_on_record %}
+				&gt;{{ notes|count }} {% trans notes_on_record %}
 				 -
-				 <a href="?/notes/{{ mask|mask_url|e }}">{% trans 'Show all' %}</a>
+				 <a href="?/notes/{{ mask|mask_url }}">{% trans 'Show all' %}</a>
 			{% else %}
-				{{ notes|count|e }} {% trans notes_on_record %}
+				{{ notes|count }} {% trans notes_on_record %}
 			{% endif %}
 		</legend>
 
@@ -29,23 +29,23 @@
 					<tr>
 						<td class="minimal">
 							{% if note.username %}
-								<a href="?/new_PM/{{ note.username|e }}">{{ note.username|e }}</a>
+								<a href="?/new_PM/{{ note.username }}">{{ note.username }}</a>
 							{% else %}
 								<em>{% trans 'deleted?' %}</em>
 							{% endif %}
 						</td>
 						<td class="minimal">
-							{{ note|mask|e }}
+							{{ note|mask }}
 						</td>
 						<td>
 							{{ note.body }}
 						</td>
 						<td class="minimal">
-							{{ note.time|date(config.post_date)|e }}
+							{{ note.time|date(config.post_date) }}
 						</td>
 						{% if mod|hasPermission('remove_notes') %}
 							<td class="minimal">
-								<a href="?/IP/{{ note|mask|mask_url|e }}/remove_note/{{ note.id|e }}">
+								<a href="?/IP/{{ note|mask|mask_url }}/remove_note/{{ note.id }}">
 									<small>[{% trans 'remove' %}]</small>
 								</a>
 							</td>
@@ -60,7 +60,7 @@
 				<table>
 					<tr>
 						<th>{% trans 'Staff' %}</th>
-						<td>{{ mod.username|e }}</td>
+						<td>{{ mod.username }}</td>
 					</tr>
 					<tr>
 						<th>
@@ -85,11 +85,11 @@
 		<legend>
 			{% set bans_on_record = 'ban' ~ (bans|count != 1 ? 's' : '') ~ ' on record' %}
 			{% if bans|count == config.mod.ip_range_page_max_bans %}
-				&gt;{{ bans|count|e }} {% trans bans_on_record %}
+				&gt;{{ bans|count }} {% trans bans_on_record %}
 				 -
-				 <a href="?/bans/{{ mask|mask_url|e }}">{% trans 'Show all' %}</a>
+				 <a href="?/bans/{{ mask|mask_url }}">{% trans 'Show all' %}</a>
 			{% else %}
-				{{ bans|count|e }} {% trans bans_on_record %}
+				{{ bans|count }} {% trans bans_on_record %}
 			{% endif %}
 		</legend>
 
@@ -140,13 +140,13 @@
 					</tr>
 					<tr>
 						<th>{% trans 'Set' %}</th>
-						<td>{{ ban.set|date(config.post_date)|e }}</td>
+						<td>{{ ban.set|date(config.post_date) }}</td>
 					</tr>
 					<tr>
 						<th>{% trans 'Expires' %}</th>
 						<td>
 							{% if ban.expires %}
-								{{ ban.expires|date(config.post_date)|e }}
+								{{ ban.expires|date(config.post_date) }}
 							{% else %}
 								<em>{% trans 'never' %}</em>
 							{% endif %}
@@ -166,14 +166,14 @@
 						<th>{% trans 'Staff' %}</th>
 						<td>
 							{% if ban.username %}
-								{{ ban.username|e }}
+								{{ ban.username }}
 							{% else %}
 								<em>{% trans 'deleted?' %}</em>
 							{% endif %}
 						</td>
 					</tr>
 				</table>
-				<input type="hidden" name="ban_id" value="{{ ban.id|e }}">
+				<input type="hidden" name="ban_id" value="{{ ban.id }}">
 				<input type="submit" name="unban" value="{% trans 'Remove ban' %}">
 			</form>
 		{% endfor %}
@@ -193,11 +193,11 @@
 		<legend>
 			{% set bans_on_record = 'historic ban' ~ (ban_history|count != 1 ? 's' : '') ~ ' on record' %}
 			{% if ban_history|count == config.mod.ip_range_page_max_banhistory %}
-				&gt;{{ ban_history|count|e }} {% trans bans_on_record %}
+				&gt;{{ ban_history|count }} {% trans bans_on_record %}
 				 -
-				 <a href="?/banhistory/{{ mask|mask_url|e }}">{% trans 'Show all' %}</a>
+				 <a href="?/banhistory/{{ mask|mask_url }}">{% trans 'Show all' %}</a>
 			{% else %}
-				{{ ban_history|count|e }} {% trans bans_on_record %}
+				{{ ban_history|count }} {% trans bans_on_record %}
 			{% endif %}
 		</legend>
 
@@ -218,12 +218,12 @@
 				{% for ban in ban_history %}
 					<tr>
 						<td style="white-space: nowrap">
-							<a href="?/IP/{{ ban|mask|mask_url|e }}">{{ ban|mask }}</a>
+							<a href="?/IP/{{ ban|mask|mask_url }}">{{ ban|mask }}</a>
 						</td>
 						<td>
 							{% if ban.status == constant('BAN_STATUS_ACTIVE') %}{% trans 'Active' %}
 							{% elseif ban.status == constant('BAN_STATUS_EXPIRED') %}{% trans 'Expired' %}
-							{% elseif ban.status == constant('BAN_STATUS_LIFTED') %}{% trans 'Lifted on ' %}{{ ban.lifted|date(config.post_date)|e }}
+							{% elseif ban.status == constant('BAN_STATUS_LIFTED') %}{% trans 'Lifted on ' %}{{ ban.lifted|date(config.post_date) }}
 							{% endif %}
 						</td>
 						<td>
@@ -277,7 +277,7 @@
 						<td>
 							{% if ban.username %}
 								{% if mod|hasPermission('view_banstaff') %}
-									<a href="?/new_PM/{{ ban.username|e }}">{{ ban.username|e }}</a>
+									<a href="?/new_PM/{{ ban.username }}">{{ ban.username }}</a>
 								{% else %}
 									{% if mod|hasPermission('view_banquestionmark') %}
 										<em>?</em>

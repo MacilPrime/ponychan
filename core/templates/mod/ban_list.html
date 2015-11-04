@@ -81,7 +81,7 @@
 					<td>
 						{% if ban.username %}
 							{% if mod|hasPermission('view_banstaff') %}
-								<a href="?/new_PM/{{ ban.username|e }}">{{ ban.username|e }}</a>
+								<a href="?/new_PM/{{ ban.username }}">{{ ban.username }}</a>
 							{% else %}
 								{% if mod|hasPermission('view_banquestionmark') %}
 									<em>?</em>

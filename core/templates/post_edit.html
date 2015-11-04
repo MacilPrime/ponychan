@@ -10,9 +10,9 @@
 				{% trans %}Name{% endtrans %}
 			</th>
 			<td>
-				{% if post.name %}<span class="name">{{ post.name|e }}</span>{% endif %}
-				{% if post.trip %}<span class="trip">{{ post.trip|e }}</span>{% endif %}
-				{% if post.capcode %}<span class="capcode">{{ post.capcode|e }}</span>{% endif %}
+				{% if post.name %}<span class="name">{{ post.name }}</span>{% endif %}
+				{% if post.trip %}<span class="trip">{{ post.trip }}</span>{% endif %}
+				{% if post.capcode %}<span class="capcode">{{ post.capcode }}</span>{% endif %}
 			</td>
 		</tr>{% endif %}
 		{% if post.email or not config.field_disable_email %}<tr>
@@ -20,7 +20,7 @@
 				{% trans %}Email{% endtrans %}
 			</th>
 			<td>
-				{{ post.email|e }}
+				{{ post.email }}
 			</td>
 		</tr>{% endif %}
 		{% if post.subject or not (config.field_disable_subject or (post.thread and config.field_disable_reply_subject)) %}<tr>
@@ -28,7 +28,7 @@
 				{% trans %}Subject{% endtrans %}
 			</th>
 			<td>
-				<span class="subject">{{ post.subject|e }}</span>
+				<span class="subject">{{ post.subject }}</span>
 			</td>
 		</tr>{% endif %}
 		<tr>
@@ -36,7 +36,7 @@
 				{% trans %}Comment{% endtrans %}
 			</th>
 			<td>
-				<textarea name="body" id="body" rows="5" cols="35">{{ post.body_nomarkup|e }}</textarea>
+				<textarea name="body" id="body" rows="5" cols="35">{{ post.body_nomarkup }}</textarea>
 			</td>
 		</tr>
 		<tr>
@@ -44,7 +44,7 @@
 				{% trans %}File{% endtrans %}
 			</th>
 			<td>
-				{{ post.filename|e }}
+				{{ post.filename }}
 			</td>
 		</tr>
 		{% if mod %}

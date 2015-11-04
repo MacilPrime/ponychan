@@ -24,9 +24,9 @@
 				
 				<td>
 					{% if var.type == 'string' %}
-						<input name="{{ name }}" type="text" value="{{ var.value|e }}">
+						<input name="{{ name }}" type="text" value="{{ var.value }}">
 					{% elseif var.type == 'integer' %}
-						<input name="{{ name }}" type="number" value="{{ var.value|e }}">
+						<input name="{{ name }}" type="number" value="{{ var.value }}">
 					{% elseif var.type == 'boolean' %}
 						<input name="{{ name }}" type="checkbox" {% if var.value %}checked{% endif %}>
 					{% else %}
@@ -39,7 +39,7 @@
 				</td>
 				
 				<td class="minimal">
-					{{ var.type|e }}
+					{{ var.type }}
 				</td>
 				
 				<td>

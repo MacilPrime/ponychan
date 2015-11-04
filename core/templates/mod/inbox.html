@@ -17,7 +17,7 @@
 				</td>
 				<td class="minimal">
 					{% if message.username %}
-						<a href="?/new_PM/{{ message.username|e }}">{{ message.username|e }}</a>
+						<a href="?/new_PM/{{ message.username }}">{{ message.username }}</a>
 					{% else %}
 						<em>{% trans 'deleted?' %}</em>
 					{% endif %}

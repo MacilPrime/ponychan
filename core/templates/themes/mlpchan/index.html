@@ -47,7 +47,7 @@
 			<h3>{{ category }}</h3>
 			<ul>
 			{% for board in boards %}
-				<li><a href="{{ board.uri }}">/{{ board.shortname|e }}/ - {{ board.title|e }}</a> — {{ board.subtitle|e }}</li>
+				<li><a href="{{ board.uri }}">/{{ board.shortname }}/ - {{ board.title }}</a> — {{ board.subtitle }}</li>
 			{% endfor %}
 			</ul>
 		{% endfor %}

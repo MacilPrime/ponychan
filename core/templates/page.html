@@ -1,15 +1,15 @@
 {% extends "generic_page.html" %}
 
-{% block title %}{{ title|e }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block banner %}{% endblock %}
 
 {% block header %}
 	<header>
-		<h1>{{ title|e }}</h1>
+		<h1>{{ title }}</h1>
 		<div class="subtitle">
 			{% if subtitle %}
-				{{ subtitle|e }}
+				{{ subtitle }}
 			{% endif %}
 			{% if mod and not hide_dashboard_link %}<p><a href="?/">{% trans %}Return to dashboard{% endtrans %}</a></p>{% endif %}
 		</div>

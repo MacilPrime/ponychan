@@ -6,9 +6,9 @@
 			<li>
 				<a href="?/{{ config.board_path|sprintf(board.uri) }}">{{ config.board_abbreviation|sprintf(board.uri) }}</a>
 					 -
-				 {{ board.title|e }}
+				 {{ board.title }}
 				{% if board.subtitle %}
-					 <small>&mdash; {{ board.subtitle|e }}</small>
+					 <small>&mdash; {{ board.subtitle }}</small>
 				{% endif %}
 				{% if mod|hasPermission('manageboards') %}
 					 <a href="?/edit/{{ board.uri }}"><small>[{% trans 'edit' %}]</small></a>
@@ -34,7 +34,7 @@
 							<li>
 								<a href="?/noticeboard#{{ post.id }}">
 									{% if post.subject %}
-										{{ post.subject|e }}
+										{{ post.subject }}
 									{% else %}
 										<em>{% trans 'no subject' %}</em>
 									{% endif %}
@@ -42,7 +42,7 @@
 								 <small class="unimportant">
 									&mdash; by
 									{% if post.username %}
-										{{ post.username|e }}
+										{{ post.username }}
 									{% else %}
 										<em>deleted?</em>
 									 {% endif %}
@@ -124,7 +124,7 @@
 <fieldset>
 	<legend>{% trans 'User account' %}</legend>
 
-	<div>You are logged in as <strong>{{ mod.username|e }}</strong></div>
+	<div>You are logged in as <strong>{{ mod.username }}</strong></div>
 
 	<ul>
 		<li><a href="?/logout">{% trans 'Logout' %}</a></li>

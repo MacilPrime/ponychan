@@ -13,9 +13,9 @@
 					</th>
 					<td>
 						{% if mod|hasPermission('news_custom') %}
-							<input type="text" size="55" name="name" id="name" value="{{ mod.username|e }}">
+							<input type="text" size="55" name="name" id="name" value="{{ mod.username }}">
 						{% else %}
-							{{ mod.username|e }}
+							{{ mod.username }}
 						{% endif %}
 					</td>
 				</tr>
@@ -47,7 +47,7 @@
 				<a href="#{{ post.id }}">#</a>
 			</small> 
 			{% if post.subject %}
-				{{ post.subject|e }}
+				{{ post.subject }}
 			{% else %}
 				<em>{% trans 'no subject' %}</em>
 			{% endif %} 
