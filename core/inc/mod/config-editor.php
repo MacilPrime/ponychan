@@ -2,10 +2,10 @@
 
 function config_vars() {
 	global $config;
-	
+
 	$config_file = file('inc/config.php', FILE_IGNORE_NEW_LINES);
 	$conf = array();
-	
+
 	$var = array(
 		'name' => false,
 		'comment' => array(),
@@ -18,7 +18,7 @@ function config_vars() {
 			$var['comment'][] = $temp_comment;
 			$temp_comment = false;
 		}
-		
+
 		if (preg_match('!^\s*// (.*)$!', $line, $matches)) {
 			if ($var['default'] !== false) {
 				$line = '';
@@ -36,31 +36,31 @@ function config_vars() {
 				foreach ($var['name'] as &$i)
 					$i = preg_replace('/^\'(.*)\'$/', '$1', $i);
 			}
-			
+
 			if (isset($matches[3]))
 				$var['default'] = $matches[2];
 			else
 				$var['default_temp'] = $matches[2];
 		}
-		
+
 		if (trim($line) === '') {
-			if ($var['name'] !== false) {
+			if ($var['name'] !== false && (!is_array($var['name']) || !in_array($var['name'][0], ['markup', 'extra_permissions'], true))) {
 				if ($var['default_temp'])
 					$var['default'] = $var['default_temp'];
-				
+
 				$temp = eval('return ' . $var['default'] . ';');
 				if (!isset($temp))
 					$var['type'] = 'unknown';
 				else
 					$var['type'] = gettype($temp);
-				
+
 				unset($var['default_temp']);
-				
+
 				if (!is_array($var['name']) || (end($var['name']) != '' && !in_array(reset($var['name']), array('stylesheets')))) {
 					$conf[] = $var;
 				}
 			}
-			
+
 			$var = array(
 				'name' => false,
 				'comment' => array(),
@@ -69,7 +69,6 @@ function config_vars() {
 			);
 		}
 	}
-	
+
 	return $conf;
 }
-
