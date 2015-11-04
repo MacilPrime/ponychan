@@ -4,6 +4,7 @@
 define('VERSION', 'v0.9.6-dev-8-ponychan-10');
 
 require 'inc/functions.php';
+header("Cache-Control: private");
 
 $step = isset($_GET['step']) ? round($_GET['step']) : 0;
 $page = array(

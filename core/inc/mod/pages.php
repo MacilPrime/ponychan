@@ -453,6 +453,8 @@ function mod_user_log($username, $page_no = 1) {
 function mod_view_board($boardName, $page_no = 1) {
 	global $config, $mod;
 
+	header("Cache-Control: private, max-age=5");
+
 	if (!openBoard($boardName))
 		error($config['error']['noboard']);
 
@@ -471,6 +473,8 @@ function mod_view_board($boardName, $page_no = 1) {
 
 function mod_view_thread($boardName, $thread) {
 	global $config, $mod;
+
+	header("Cache-Control: private, max-age=5");
 
 	if (!openBoard($boardName))
 		error($config['error']['noboard']);
@@ -493,6 +497,8 @@ function mod_view_thread($boardName, $thread) {
 
 function mod_view_thread50($boardName, $thread) {
 	global $config, $mod;
+
+	header("Cache-Control: private, max-age=5");
 
 	if (!openBoard($boardName))
 		error($config['error']['noboard']);

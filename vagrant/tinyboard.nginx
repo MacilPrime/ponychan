@@ -52,7 +52,6 @@ server {
 
 	location ~* \.php$ {
 		include fastcgi_params;
-		more_set_headers 'Cache-Control: private, max-age=5';
 		try_files $uri =404;
 		fastcgi_pass unix:/var/run/php5-fpm.sock;
 	}

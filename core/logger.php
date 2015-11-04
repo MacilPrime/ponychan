@@ -13,6 +13,7 @@ if (get_magic_quotes_gpc()) {
 }
 
 header('Content-type: text/plain');
+header("Cache-Control: no-cache, must-revalidate");
 
 if (!isset($_POST['type'], $_POST['data']))
 	die("Error: Missing arguments");

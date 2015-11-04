@@ -19,6 +19,7 @@ if (get_magic_quotes_gpc()) {
 }
 
 header('X-Frame-Options: SAMEORIGIN');
+header("Cache-Control: private");
 
 $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
 
