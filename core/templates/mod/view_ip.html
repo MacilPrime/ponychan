@@ -114,7 +114,7 @@
 						<th>{% trans 'Reason' %}</th>
 						<td>
 							{% if ban.reason %}
-								{{ ban.reason }}
+								{{ ban.reason|raw }}
 							{% else %}
 								<em>{% trans 'no reason' %}</em>
 							{% endif %}

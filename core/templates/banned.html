@@ -33,7 +33,7 @@
 	</p>
 	{% if ban.reason %}
 		<p class="reason">
-			{{ ban.reason }}
+			{{ ban.reason|raw }}
 		</p>
 	{% endif %}
 	{% if ban.ban_type == constant('IMAGE_BAN') %}
@@ -42,8 +42,8 @@
 		</p>
 	{% endif %}
 	<p>
-		{% trans %}Your ban was filed on{% endtrans %} 
-			<strong>{{ ban.set|date(config.ban_date) }}</strong>
+		{% trans %}Your ban was filed on{% endtrans %}
+			 <strong>{{ ban.set|date(config.ban_date) }}</strong>
 		{% if ban.expires %}
 			 for {{ (ban.expires - ban.set + time()) | until }}
 		{% endif %}
@@ -51,10 +51,8 @@
 		{% if ban.expires and time() >= ban.expires %}
 			{% trans %}has since expired.{%  endtrans %}
 		{% elseif ban.expires %}
-			{% trans %}expires{% endtrans %} <span id="countdown">{{ ban.expires|until }}</span> {% trans %}from now, which is on{% endtrans %} 
-			<strong>
-				{{ ban.expires|date(config.ban_date) }}
-			</strong>
+			{% trans %}expires{% endtrans %} <span id="countdown">{{ ban.expires|until }}</span> {% trans %}from now, which is on{% endtrans %}
+			 <strong>{{ ban.expires|date(config.ban_date) }}</strong>
 			<script>
 				var secondsLeft = {{ ban.expires - time() }};
 				var end = new Date().getTime() + secondsLeft*1000;
@@ -83,7 +81,7 @@
 					}
 				}
 				var countdown = document.getElementById("countdown");
-				
+
 				updateExpiresTime();
 				var int = setInterval(updateExpiresTime, 1000);
 			</script>
