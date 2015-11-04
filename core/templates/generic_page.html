@@ -16,7 +16,7 @@
 	{% endif %}
 </head>
 <body class="boardpage {% block extra_body_classes %}{% endblock %}">
-	{{ boardlist.top }}
+	{{ boardlist.top|raw }}
 	{% if pm %}<div class="top_notice">You have <a href="?/PM/{{ pm.id }}">an unread PM</a>{% if pm.waiting > 0 %}, plus {{ pm.waiting }} more waiting{% endif %}.</div><hr />{% endif %}
 	{% block banner %}
 		{% if config.url_banner %}<img class="banner" src="{{ config.url_banner }}" {% if config.banner_width or config.banner_height %}style="{% if config.banner_width %}width:{{ config.banner_width }}px{% endif %};{% if config.banner_width %}height:{{ config.banner_height }}px{% endif %}" {% endif %}alt="" />{% endif %}
@@ -37,11 +37,11 @@
 	{% block main_body %}{% endblock %}
 
 	{% if boardlist %}
-		{{ boardlist.bottom }}
+		{{ boardlist.bottom|raw }}
 	{% endif %}
 	<footer>
 		<p class="unimportant" style="margin-top:20px;text-align:center;">Ponychan is based on Tinyboard | Tinyboard Copyright &copy; 2010-2013 Tinyboard Development Group</p>
-		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer }}</p>{% endfor %}
+		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer|raw }}</p>{% endfor %}
 	</footer>
 </body>
 </html>

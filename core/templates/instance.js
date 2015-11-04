@@ -1,6 +1,6 @@
 {% raw %}
 
-window.SITE_DATA = {% endraw %}{{ SITE_DATA }}{% raw %};
+window.SITE_DATA = {% endraw %}{{ SITE_DATA|raw }}{% raw %};
 
 {% endraw %}{% if config.google_analytics %}{% raw %}
 

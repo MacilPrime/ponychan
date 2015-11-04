@@ -6,16 +6,16 @@
 
 	{% include 'post_form.html' %}
 
-	{% if config.blotter %}<hr /><div class="blotter">{{ config.blotter }}</div>{% endif %}
+	{% if config.blotter %}<hr /><div class="blotter">{{ config.blotter|raw }}</div>{% endif %}
 	<hr />
 	<form name="postcontrols" action="{{ config.post_url }}" method="post">
 	<input type="hidden" name="board" value="{{ board.uri }}" />
 	{% if mod %}<input type="hidden" name="mod" value="1" />{% endif %}
-	{{ body }}
+	{{ body|raw }}
 	{% include 'report_delete.html' %}
 	</form>
-	<div class="pages">{{ btn.prev }} {% for page in pages %}
+	<div class="pages">{{ btn.prev|raw }} {% for page in pages %}
 		 [<a {% if page.selected %}class="selected"{% endif %}{% if not page.selected %}href="{{ page.link }}"{% endif %}>{{ page.num }}</a>]
-	{% endfor %} {{ btn.next }} | <a href="{{ config.root }}{{ board.dir }}catalog.html">Catalog</a></div>
+	{% endfor %} {{ btn.next|raw }} | <a href="{{ config.root }}{{ board.dir }}catalog.html">Catalog</a></div>
 
 {% endblock %}
