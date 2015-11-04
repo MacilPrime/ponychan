@@ -123,7 +123,7 @@ $pages = $new_pages;
 
 foreach ($pages as $uri => $handler) {
 	if (preg_match($uri, $query, $matches)) {
-		$matches = array_slice($matches, 1);
+		$matches = array_map('urldecode', array_slice($matches, 1));
 
 		if (preg_match('/^secure(_POST)? /', $handler, $m)) {
 			$secure_post_only = isset($m[1]);

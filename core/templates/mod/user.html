@@ -4,7 +4,7 @@
 	{% set action = '?/users/' ~ user.id %}
 {% endif %}
 
-<form action="{{ action }}" method="post">
+<form action="{{ action|e }}" method="post">
 	<table>
 		<tr>
 			<th>{% trans 'Username' %}</th>
@@ -77,7 +77,7 @@
 								{% endif %}
 								>
 							 <label for="board_{{ board.uri }}">
-								{{ config.board_abbreviation|sprintf(board.uri) }}
+								{{ config.board_abbreviation|sprintf(board.uri)|e }}
 								 -
 								 {{ board.title|e }}
 							</label>
@@ -111,25 +111,25 @@
 		{% for log in logs %}
 			<tr>
 				<td class="minimal">
-					<a href="?/IP/{{ log.ip|ipToUserRange }}">{{ log.ip }}</a>
+					<a href="?/IP/{{ log.ip|ipToUserRange|url_encode|e }}">{{ log.ip|e }}</a>
 				</td>
 				<td class="minimal">
-					<span title="{{ log.time|date(config.post_date) }}">{{ log.time|ago }}</span>
+					<span title="{{ log.time|date(config.post_date)|e }}">{{ log.time|ago|e }}</span>
 				</td>
 				<td class="minimal">
 					{% if log.board %}
-						<a href="?/{{ config.board_path|sprintf(log.board) }}">{{ config.board_abbreviation|sprintf(log.board) }}</a>
+						<a href="?/{{ config.board_path|sprintf(log.board)|e }}">{{ config.board_abbreviation|sprintf(log.board)|e }}</a>
 					{% else %}
 						-
 					{% endif %}
 				</td>
 				<td>
-					{{ log.text }}
+					{{ log.text|r }}
 				</td>
 			</tr>
 		{% endfor %}
 	</table>
 	<p style="text-align:center" class="unimportant">
-		<a href="?/log:{{ user.username|e }}">{% trans 'View more logs for this user.' %}</a>
+		<a href="?/log:{{ user.username|url_encode|e }}">{% trans 'View more logs for this user.' %}</a>
 	</p>
 {% endif %}
