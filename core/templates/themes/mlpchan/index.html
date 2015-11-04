@@ -35,7 +35,7 @@
 				{% endif %}
 				<span class="unimportant"> &mdash; by {{ entry.name }} at <time datetime="{{ entry.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ entry.time|date(config.post_date) }}</time></span>
 			</h2>
-			<div class="newscontent">{{ entry.body }}</div>
+			<div class="newscontent">{{ entry.body|raw }}</div>
 		</div>
 		{% endfor %}
 	</div>
