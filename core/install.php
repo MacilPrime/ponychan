@@ -39,6 +39,12 @@ $migration_procedures = [
 				ADD `userhash` char(40) DEFAULT NULL,
 				ADD KEY `userhash` (`userhash`)") or error(db_error());
 		}
+	},
+	'email-dehtml' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query("UPDATE `posts_${board['uri']}` SET `email`=REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(`email`, '&gt;', '>'), '&lt;', '<'), '&amp;', '&'), '%22', '\"'), '%20', ' ') WHERE email like '%&%' OR email like '%\%%'") or error(db_error());
+		}
 	}
 ];
 
