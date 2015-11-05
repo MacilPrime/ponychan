@@ -5,7 +5,7 @@
 		(There are no /{{ board }}/ posts for {{ query }}.)
 	</p>
 {% else %}
-	{{ posts|join('<hr>') }}
+	{{ posts|join('<hr>')|raw }}
 {% endif %}
 
 {% if count > posts|count %}
