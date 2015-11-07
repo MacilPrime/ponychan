@@ -48,7 +48,7 @@
 			</a>
 			<div class="catacount">{% trans %}1 reply{% plural post.reply_count %}{{ count }} replies{% endtrans %}</div>
 			<div class="catapreview">
-				{% if post.subject %}<span class="catasubject">{{ post.subject }}</span> {% endif %}{{ post.body }}
+				{% if post.subject %}<span class="catasubject">{{ post.subject }}</span> {% endif %}{{ post.body|raw }}
 			</div>
 		</div>
 	{% endfor %}
