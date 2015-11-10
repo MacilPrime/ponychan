@@ -144,11 +144,12 @@ function getThreadCounts(threads) {
   });
 }
 
-function getScripts(userid) {
+function getScripts(userhash: string): Promise<?Array<string>> {
   return new RSVP.Promise((resolve, reject) => {
     var sets = [redis_prefix+'scripts_all'];
-    if (userid)
-      sets.push(redis_prefix+'scripts_user_'+userid);
+    console.log('userhash', userhash);
+    if (userhash)
+      sets.push(redis_prefix+'scripts_user_'+userhash);
 
     cdb.sunion(sets, (err, scripts) => {
       if (err)
@@ -162,16 +163,16 @@ function getScripts(userid) {
 function checkUserid(req, res, next) {
   var userid = req.cookies.userid;
   if (typeof userid === 'string' && /^[0-9a-f]{32}$/.exec(userid))
-    req.userid = userid;
+    req.userhash = useridhash(userid);
   else
-    req.userid = null;
+    req.userhash = null;
   next();
 }
 
-function sha1(str: string): Buffer {
-  var hasher = crypto.createHash('sha1');
-  hasher.update(str);
-  return hasher.digest('base64');
+function useridhash(userid: string): string {
+  const hasher = crypto.createHash('sha256');
+  hasher.update(userid);
+  return hasher.digest('hex').slice(0,40);
 }
 
 function mkhash(username: string, passhash: string, salt: string): string {
@@ -245,7 +246,7 @@ app.get('/threads', async function(req, res, next) {
     res.setHeader("Cache-Control", "private, max-age="+http_cache_time);
 
     var threads = await getThreadCounts(threadIds);
-    var scripts = await getScripts(req.userid);
+    var scripts = await getScripts(req.userhash);
 
     var response: Object = {threads};
     if (scripts && scripts.length) {
