@@ -4,6 +4,8 @@
 import _ from 'lodash';
 import crypto from 'crypto';
 import express from 'express';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import swig from 'swig';
 import RSVP from 'rsvp';
 
@@ -21,13 +23,16 @@ RSVP.on('error', function(err) {
 
 const app = express();
 
+if (process.env.NODE_ENV === 'development') {
+  app.set('json spaces', 2);
+}
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/../views');
 
 app
-  .use(express.logger())
-  .use(express.cookieParser())
+  .use(morgan('combined'))
+  .use(cookieParser())
   .use(setUserhash)
   .use(checkMod);
 
