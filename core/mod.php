@@ -19,6 +19,7 @@ if (get_magic_quotes_gpc()) {
 }
 
 header('X-Frame-Options: SAMEORIGIN');
+header("Cache-Control: private");
 
 $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
 
@@ -122,7 +123,7 @@ $pages = $new_pages;
 
 foreach ($pages as $uri => $handler) {
 	if (preg_match($uri, $query, $matches)) {
-		$matches = array_slice($matches, 1);
+		$matches = array_map('urldecode', array_slice($matches, 1));
 
 		if (preg_match('/^secure(_POST)? /', $handler, $m)) {
 			$secure_post_only = isset($m[1]);

@@ -21,7 +21,7 @@
 					</td>
 					<td style="white-space: nowrap">
 						{% if note.username %}
-							<a href="?/new_PM/{{ note.username|e }}">{{ note.username|e }}</a>
+							<a href="?/new_PM/{{ note.username }}">{{ note.username }}</a>
 						{% else %}
 							<em>{% trans 'deleted?' %}</em>
 						{% endif %}

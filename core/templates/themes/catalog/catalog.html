@@ -1,10 +1,10 @@
 {% extends "generic_page.html" %}
 
-{% block title %}{{ board.url|e }} - {{ board.title|e }} - Catalog{% endblock %}
+{% block title %}{{ board.url }} - {{ board.title }} - Catalog{% endblock %}
 
 {% block header %}
 <header>
-	<h1>{{ board.url|e }} - {{ board.title|e }}</h1>
+	<h1>{{ board.url }} - {{ board.title }}</h1>
 	<div class="subtitle">
 		Catalog
 		{% if mod %}<p><a href="?/">{% trans %}Return to dashboard{% endtrans %}</a></p>{% endif %}
@@ -48,7 +48,7 @@
 			</a>
 			<div class="catacount">{% trans %}1 reply{% plural post.reply_count %}{{ count }} replies{% endtrans %}</div>
 			<div class="catapreview">
-				{% if post.subject %}<span class="catasubject">{{ post.subject }}</span> {% endif %}{{ post.body }}
+				{% if post.subject %}<span class="catasubject">{{ post.subject }}</span> {% endif %}{{ post.body|raw }}
 			</div>
 		</div>
 	{% endfor %}

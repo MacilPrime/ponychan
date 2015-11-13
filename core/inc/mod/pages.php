@@ -453,6 +453,8 @@ function mod_user_log($username, $page_no = 1) {
 function mod_view_board($boardName, $page_no = 1) {
 	global $config, $mod;
 
+	header("Cache-Control: private, max-age=5");
+
 	if (!openBoard($boardName))
 		error($config['error']['noboard']);
 
@@ -471,6 +473,8 @@ function mod_view_board($boardName, $page_no = 1) {
 
 function mod_view_thread($boardName, $thread) {
 	global $config, $mod;
+
+	header("Cache-Control: private, max-age=5");
 
 	if (!openBoard($boardName))
 		error($config['error']['noboard']);
@@ -493,6 +497,8 @@ function mod_view_thread($boardName, $thread) {
 
 function mod_view_thread50($boardName, $thread) {
 	global $config, $mod;
+
+	header("Cache-Control: private, max-age=5");
 
 	if (!openBoard($boardName))
 		error($config['error']['noboard']);
@@ -1238,8 +1244,8 @@ function mod_move($originBoard, $postID) {
 		if ($targetBoard === $originBoard)
 			error(_('Target and source board are the same.'));
 
-		// link() if leaving a shadow thread behind; else, rename().
-		$clone = $shadow ? 'link' : 'rename';
+		// hard link if leaving a shadow thread behind, else move it.
+		$clone = $shadow ? 'link' : 'file_move_no_overwrite';
 
 		// indicate that the post is a thread
 		$post['op'] = true;
@@ -1261,14 +1267,26 @@ function mod_move($originBoard, $postID) {
 		if (!openBoard($targetBoard))
 			error($config['error']['noboard']);
 
+		if ($post['has_file'] && file_exists($file_src)) {
+			// copy image
+			$limit = 1000;
+			while (!@$clone($file_src, sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'])) {
+				if ($limit-- < 0) {
+					error_log('Failed to ' . ($shadow?'copy':'move') . ' ' . $file_src . ' to ' . $post['file']);
+					error('Failed to write a file');
+				}
+				$post['file'] = incrementFilename($post['file']);
+				if (file_exists($file_thumb)) {
+					$post['thumb'] = incrementFilename($post['thumb']);
+				}
+			}
+			if (file_exists($file_thumb)) {
+				$clone($file_thumb, sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
+			}
+		}
+
 		// create the new thread
 		$newID = post($post);
-
-		if ($post['has_file']) {
-			// copy image
-			$clone($file_src, sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file']);
-			$clone($file_thumb, sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
-		}
 
 		// go back to the original board to fetch replies
 		openBoard($originBoard);
@@ -1324,14 +1342,26 @@ function mod_move($originBoard, $postID) {
 			$post['op'] = false;
 			$post['tracked_cites'] = markup($post['body'], true);
 
+			if ($post['has_file'] && file_exists($post['file_src'])) {
+				// copy image
+				$limit = 1000;
+				while (!@$clone($post['file_src'], sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file'])) {
+					if ($limit-- < 0) {
+						error_log('Failed to ' . ($shadow?'copy':'move') . ' ' . $post['file_src'] . ' to ' . $post['file']);
+						error('Failed to write a file');
+					}
+					$post['file'] = incrementFilename($post['file']);
+					if (file_exists($post['file_thumb'])) {
+						$post['thumb'] = incrementFilename($post['thumb']);
+					}
+				}
+				if (file_exists($post['file_thumb'])) {
+					$clone($post['file_thumb'], sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
+				}
+			}
+
 			// insert reply
 			$newIDs[$post['id']] = $newPostID = post($post);
-
-			if ($post['has_file']) {
-				// copy image
-				$clone($post['file_src'], sprintf($config['board_path'], $board['uri']) . $config['dir']['img'] . $post['file']);
-				$clone($post['file_thumb'], sprintf($config['board_path'], $board['uri']) . $config['dir']['thumb'] . $post['thumb']);
-			}
 
 			foreach ($post['tracked_cites'] as $cite) {
 				$query = prepare('INSERT INTO `cites` (`board`, `post`, `target_board`, `target`) VALUES (:board, :post, :target_board, :target)');
@@ -1372,6 +1402,7 @@ function mod_move($originBoard, $postID) {
 				'name' => $config['mod']['shadow_name'],
 				'capcode' => $config['mod']['shadow_capcode'],
 				'trip' => '',
+				'userhash' => null,
 				'password' => '',
 				'has_file' => false,
 				// attach to original thread

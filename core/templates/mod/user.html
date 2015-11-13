@@ -10,9 +10,9 @@
 			<th>{% trans 'Username' %}</th>
 			<td>
 				{% if new or mod|hasPermission('editusers') %}
-					<input size="20" maxlength="30" type="text" name="username" value="{{ user.username|e }}" autocomplete="off">
+					<input size="20" maxlength="30" type="text" name="username" value="{{ user.username }}" autocomplete="off">
 				{% else %}
-					{{ user.username|e }}
+					{{ user.username }}
 				{% endif %}
 			</td>
 		</tr>
@@ -79,7 +79,7 @@
 							 <label for="board_{{ board.uri }}">
 								{{ config.board_abbreviation|sprintf(board.uri) }}
 								 -
-								 {{ board.title|e }}
+								 {{ board.title }}
 							</label>
 						</li>
 					{% endfor %}
@@ -111,7 +111,7 @@
 		{% for log in logs %}
 			<tr>
 				<td class="minimal">
-					<a href="?/IP/{{ log.ip|ipToUserRange }}">{{ log.ip }}</a>
+					<a href="?/IP/{{ log.ip|ipToUserRange|url_encode }}">{{ log.ip }}</a>
 				</td>
 				<td class="minimal">
 					<span title="{{ log.time|date(config.post_date) }}">{{ log.time|ago }}</span>
@@ -124,12 +124,12 @@
 					{% endif %}
 				</td>
 				<td>
-					{{ log.text }}
+					{{ log.text|raw }}
 				</td>
 			</tr>
 		{% endfor %}
 	</table>
 	<p style="text-align:center" class="unimportant">
-		<a href="?/log:{{ user.username|e }}">{% trans 'View more logs for this user.' %}</a>
+		<a href="?/log:{{ user.username|url_encode }}">{% trans 'View more logs for this user.' %}</a>
 	</p>
 {% endif %}

@@ -1,6 +1,6 @@
 {% extends "generic_page.html" %}
 
-{% block title %}{{ board.url|e }} - {% if config.thread_subject_in_title and thread.subject %}{{ thread.subject }}{% else %}{{ board.title|e }}{% endif %}{% endblock %}
+{% block title %}{{ board.url }} - {% if config.thread_subject_in_title and thread.subject %}{{ thread.subject }}{% else %}{{ board.title }}{% endif %}{% endblock %}
 
 {% block main_body %}
 
@@ -11,12 +11,12 @@
 
 	{% include 'post_form.html' %}
 
-	{% if config.blotter %}<hr /><div class="blotter">{{ config.blotter }}</div>{% endif %}
+	{% if config.blotter %}<hr /><div class="blotter">{{ config.blotter|raw }}</div>{% endif %}
 	<hr />
 	<form name="postcontrols" action="{{ config.post_url }}" method="post">
 	<input type="hidden" name="board" value="{{ board.uri }}" />
 	{% if mod %}<input type="hidden" name="mod" value="1" />{% endif %}
-	{{ body }}
+	{{ body|raw }}
 	{% include 'report_delete.html' %}
 	</form>
 	<div class="endlinks">

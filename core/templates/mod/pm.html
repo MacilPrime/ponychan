@@ -3,7 +3,7 @@
 		<tr>
 			<th>{% trans 'From' %}</th>
 			{% if username %}
-				<td><a href="?/new_PM/{{ username|e }}">{{ username|e }}</a></td>
+				<td><a href="?/new_PM/{{ username }}">{{ username }}</a></td>
 			{% else %}
 				<td><em>{% trans 'deleted?' %}</em></td>
 			{% endif %}
@@ -12,7 +12,7 @@
 			<tr>
 				<th>To</th>
 				{% if to_username %}
-					<td><a href="?/new_PM/{{ to_username|e }}">{{ to_username|e }}</a></td>
+					<td><a href="?/new_PM/{{ to_username }}">{{ to_username }}</a></td>
 				{% else %}
 					<td><em>{% trans 'deleted?' %}</em></td>
 				{% endif %}

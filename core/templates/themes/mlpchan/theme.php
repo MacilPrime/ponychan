@@ -79,7 +79,7 @@
 					// board settings won't be available in the template file, so generate links now
 					$post['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . sprintf($config['file_page'], ($post['thread'] ? $post['thread'] : $post['id'])) . '#' . $post['id'];
 					$post['boardlink'] = sprintf($config['board_path'], $post['board']);
-					$post['snippet'] = pm_snippet($post['body'], 80);
+					$post['snippet_html'] = pm_snippet($post['body'], 80);
 					if (!$post['thumb_uri'])
 						$post['thumb_uri'] = $config['uri_thumb'] . $post['thumb'];
 

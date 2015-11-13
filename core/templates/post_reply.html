@@ -12,7 +12,7 @@
 		{% endif %}
 		{% if post.email|length > 0 %}
 			{# start email #}
-			 <a class="email namepart" href="mailto:{{ post.email }}">
+			 <a class="email namepart" href="mailto:{{ post.email|url_encode }}">
 		{% else %}
 			 <span class="namepart">
 		{% endif %}
@@ -28,7 +28,7 @@
 			</span>
 		{% endif %}
 		{% if capcode %}
-			{{ capcode.cap }}
+			{{ capcode.cap|raw }}
 		{% endif %}
 		{% if config.poster_ids %}
 			 <span class="posterid_part">(ID:
@@ -68,9 +68,9 @@
 			{% if config.show_filename and post.filename %}
 				,
 				{% if post.filename|length > config.max_filename_display %}
-					 <a class="post-filename" title="Save as original filename" href="{{ post.file_uri|e }}" download="{{ post.filename|e }}" data-fn-fullname="{{ post.filename|bidi_cleanup|e }}">{{ post.filename|truncate(config.max_filename_display)|bidi_cleanup|e }}</a>
+					 <a class="post-filename" title="Save as original filename" href="{{ post.file_uri }}" download="{{ post.filename }}" data-fn-fullname="{{ post.filename|bidi_cleanup }}">{{ post.filename|truncate(config.max_filename_display)|bidi_cleanup }}</a>
 				{% else %}
-					 <a class="post-filename" title="Save as original filename" href="{{ post.file_uri|e }}" download="{{ post.filename|e }}">{{ post.filename|bidi_cleanup|e }}</a>
+					 <a class="post-filename" title="Save as original filename" href="{{ post.file_uri }}" download="{{ post.filename }}">{{ post.filename|bidi_cleanup }}</a>
 				{% endif %}
 			{% endif %}
 		)
@@ -102,9 +102,9 @@
 		 alt="" />
 	</a>
 	{% endif %}
-	{{ post.postControls }}
+	{{ post.postControls|raw }}
 	<div class="body">
-		{% endfilter %}{% if index %}{{ post.body|truncate_body(post.link) }}{% else %}{{ post.body }}{% endif %}{% filter remove_whitespace %}
+		{% endfilter %}{% if index %}{{ post.body|truncate_body(post.link)|raw }}{% else %}{{ post.body|raw }}{% endif %}{% filter remove_whitespace %}
 	</div>
 </div>
 </div>

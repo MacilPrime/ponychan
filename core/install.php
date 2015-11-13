@@ -4,6 +4,7 @@
 define('VERSION', 'v0.9.6-dev-8-ponychan-10');
 
 require 'inc/functions.php';
+header("Cache-Control: private");
 
 $step = isset($_GET['step']) ? round($_GET['step']) : 0;
 $page = array(
@@ -140,6 +141,12 @@ $migration_procedures = [
 	},
 	'db-filters-fix' => function() {
 		query("ALTER TABLE `post_filter_hits` DROP COLUMN `fail_step`, DROP COLUMN `first_time_poster`") or error(db_error());
+	},
+	'email-dehtml' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query("UPDATE `posts_${board['uri']}` SET `email`=REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(`email`, '&gt;', '>'), '&lt;', '<'), '&amp;', '&'), '%22', '\"'), '%20', ' ') WHERE email like '%&%' OR email like '%\%%'") or error(db_error());
+		}
 	}
 ];
 

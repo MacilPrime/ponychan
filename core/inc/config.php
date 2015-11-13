@@ -328,7 +328,7 @@
 	$config['reply_hard_limit'] = 1500;
 
 	// Automatically convert things like "..." to Unicode characters ("…")
-	$config['auto_unicode'] = true;
+	$config['auto_unicode'] = false;
 	// Whether to turn URLs into functional links
 	$config['markup_urls'] = true;
 

@@ -1,17 +1,17 @@
-<header><div class="subtitle"><p><a href="{{ return_url|e }}">Return to {{ return_title|e }}</a></p></div></header>
+<header><div class="subtitle"><p><a href="{{ return_url }}">Return to {{ return_title }}</a></p></div></header>
 
 {% if posts|count == 0 %}
 	<p style="text-align:center" class="unimportant">
-		(There are no /{{ board|e }}/ posts for {{ query|e }}.)
+		(There are no /{{ board }}/ posts for {{ query }}.)
 	</p>
 {% else %}
-	{{ posts|join('<hr>') }}
+	{{ posts|join('<hr>')|raw }}
 {% endif %}
 
 {% if count > posts|count %}
 	<p class="unimportant" style="text-align:center;word-wrap:break-word">
 		{% for i in range(0, (count - 1) / config.mod.postlist_page) %}
-			<a href="{{ page_url_prefix|e }}{{ i + 1 }}">[{{ i + 1 }}]</a>
+			<a href="{{ page_url_prefix }}{{ i + 1 }}">[{{ i + 1 }}]</a>
 		{% endfor %}
 	</p>
 {% endif %}

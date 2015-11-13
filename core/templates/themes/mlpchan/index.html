@@ -35,7 +35,7 @@
 				{% endif %}
 				<span class="unimportant"> &mdash; by {{ entry.name }} at <time datetime="{{ entry.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ entry.time|date(config.post_date) }}</time></span>
 			</h2>
-			<div class="newscontent">{{ entry.body }}</div>
+			<div class="newscontent">{{ entry.body|raw }}</div>
 		</div>
 		{% endfor %}
 	</div>
@@ -47,7 +47,7 @@
 			<h3>{{ category }}</h3>
 			<ul>
 			{% for board in boards %}
-				<li><a href="{{ board.uri }}">/{{ board.shortname|e }}/ - {{ board.title|e }}</a> — {{ board.subtitle|e }}</li>
+				<li><a href="{{ board.uri }}">/{{ board.shortname }}/ - {{ board.title }}</a> — {{ board.subtitle }}</li>
 			{% endfor %}
 			</ul>
 		{% endfor %}
@@ -63,7 +63,7 @@
 				<img src="{{ post.thumb_uri }}" style="width:{{ post.thumbwidth }}px;height:{{ post.thumbheight }}px" alt="">
 			</a>
 			<div class="boardname"><a href="{{ post.boardlink }}">/{{ post.board }}/</a></div>
-			{{ post.snippet }}
+			{{ post.snippet_html|raw }}
 		</div>
 		{% endfor %}
 		</div>
@@ -148,8 +148,6 @@ The site employs a tagging system for adult content threads on the /anon/ board.
 			<div>
 				<span class="trip">!!Rarity</span> ## Mod - Crimson Risk !RISkQqf4EM</div>
 			<div>
-				<span class="trip">!!Gilda</span> ## Mod - Ghosties</div>
-			<div>
 				<span class="trip">!!Zecora</span> ## Mod - Mellowbloom!bloom.WArE</div>
 			<div>
 				<span class="trip">!!Pinkie Pie</span> ## Mod - Nimble Wing!SonicFbkn.</div>
@@ -157,6 +155,10 @@ The site employs a tagging system for adult content threads on the /anon/ board.
 				<span class="trip">!!Rainbow Dash</span> ## Mod - Rainbro !Dash/xVjEY</div>
 			<div>
 				<span class="trip">!!Fluttershy</span> ## Mod - TPWPF</div>
+			<div>
+				<span class="trip">!!Ticket</span> ## Mod - F!FFFFFF8t0o</div>
+			<div>
+				<span class="trip">!!Spike</span> ## Mod - Marimo!Mrb.TaRPks</div>
 			<div>
 				<span class="trip">!!Babs Seed</span> ## Developer - Shutterbox</div>
 		</div>

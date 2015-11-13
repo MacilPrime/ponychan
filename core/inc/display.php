@@ -135,7 +135,7 @@ function loginForm($error=false, $username=false, $redirect=false) {
 		'body' => Element('login.html', array(
 			'config'=>$config,
 			'error'=>$error,
-			'username'=>utf8tohtml($username),
+			'username'=>$username,
 			'redirect'=>$redirect
 			)
 		)
@@ -318,9 +318,9 @@ class Post {
 
 		$this->id = $id;
 		$this->thread = $thread;
-		$this->subject = utf8tohtml($subject);
+		$this->subject = $subject;
 		$this->email = $email;
-		$this->name = utf8tohtml($name);
+		$this->name = $name;
 		$this->trip = $trip;
 		$this->capcode = $capcode;
 		$this->body = $body;
@@ -422,9 +422,9 @@ class Thread {
 			$root = &$config['root'];
 
 		$this->id = $id;
-		$this->subject = utf8tohtml($subject);
+		$this->subject = $subject;
 		$this->email = $email;
-		$this->name = utf8tohtml($name);
+		$this->name = $name;
 		$this->trip = $trip;
 		$this->capcode = $capcode;
 		$this->body = $body;

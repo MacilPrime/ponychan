@@ -1,2 +1,3 @@
-require("babel-core/register")();
-require('./app');
+require('babel-polyfill');
+require("babel-register");
+require('./src/app');
