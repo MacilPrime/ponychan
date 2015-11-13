@@ -58,7 +58,6 @@ function getThreadCounts(threads) {
 function getScripts(userhash: string): Promise<?Array<string>> {
   return new RSVP.Promise((resolve, reject) => {
     const sets = [config.redis.prefix+'scripts_all'];
-    console.log('userhash', userhash);
     if (userhash)
       sets.push(config.redis.prefix+'scripts_user_'+userhash);
 
