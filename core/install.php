@@ -142,6 +142,19 @@ $migration_procedures = [
 	'db-filters-fix' => function() {
 		query("ALTER TABLE `post_filter_hits` DROP COLUMN `fail_step`, DROP COLUMN `first_time_poster`") or error(db_error());
 	},
+	'db-filters-fix2' => function() {
+		query("ALTER TABLE `post_filters`
+			ADD COLUMN `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			ADD COLUMN `author` smallint UNSIGNED DEFAULT NULL,
+			ADD COLUMN `parent` int UNSIGNED DEFAULT NULL,
+			ADD FOREIGN KEY (`author`)
+				REFERENCES mods(`id`)
+				ON DELETE SET NULL,
+			ADD FOREIGN KEY (`parent`)
+				REFERENCES post_filters(`id`)
+				ON DELETE SET NULL
+			") or error(db_error());
+	},
 	'email-dehtml' => function() {
 		global $boards;
 		foreach ($boards as $board) {

@@ -95,10 +95,19 @@ CREATE TABLE IF NOT EXISTS `captcha_attempts` (
 
 CREATE TABLE IF NOT EXISTS `post_filters` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `filter_json` text NOT NULL,
   `mode` int(1) NOT NULL COMMENT '0:disable, 1:audit, 2:enforce',
+  `author` smallint UNSIGNED DEFAULT NULL,
+  `parent` int UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `mode` (`mode`)
+  KEY `mode` (`mode`),
+  FOREIGN KEY (`author`)
+    REFERENCES mods(`id`)
+    ON DELETE SET NULL,
+  FOREIGN KEY (`parent`)
+    REFERENCES post_filters(`id`)
+    ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `post_filter_hits` (
