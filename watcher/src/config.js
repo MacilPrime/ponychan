@@ -1,6 +1,7 @@
 /* @flow */
 //jshint ignore:start
 
+import _ from 'lodash';
 import fs from 'fs';
 
 const config = {
@@ -56,7 +57,7 @@ const configExists = (function() {
   }
 })();
 if (configExists) {
-  Object.assign(config, JSON.parse(fs.readFileSync(CONFIG_FILENAME, 'utf8')));
+  _.merge(config, JSON.parse(fs.readFileSync(CONFIG_FILENAME, 'utf8')));
 }
 
 export default config;
