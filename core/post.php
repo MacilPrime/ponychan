@@ -6,7 +6,7 @@
 
 require 'inc/functions.php';
 require 'inc/anti-bot.php';
-
+global $config;
 
 header("Cache-Control: no-cache, must-revalidate");
 
