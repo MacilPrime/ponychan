@@ -19,19 +19,19 @@ if ($config['readonly_maintenance']) {
 
 if (isset($_POST['delete'])) {
 	// Delete
-	include 'post/delete.php';
+	include 'inc/post/delete.php';
 } elseif (isset($_POST['edit'])) {
 	// User picked a post to edit
-	include 'post/edit.php';
+	include 'inc/post/edit.php';
 } elseif (isset($_POST['editpost'])) {
 	// User is submitting an edited post
-	include 'post/editpost.php';
+	include 'inc/post/editpost.php';
 } elseif (isset($_POST['report'])) {
 	// User reported a post
-	include 'post/report.php';
+	include 'inc/post/report.php';
 } elseif (isset($_POST['post']) || isset($_POST['making_a_post'])) {
 	// User is sending a post
-	include 'post/create.php';
+	include 'inc/post/create.php';
 } else {
 	if (!file_exists($config['has_installed'])) {
 		header('Location: install.php', true, $config['redirect_http']);
