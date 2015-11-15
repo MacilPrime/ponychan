@@ -110,6 +110,24 @@ CREATE TABLE IF NOT EXISTS `post_filters` (
     ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
+-- Currently only for tracking mode changes. filter_json values in post_filters
+-- should be treated as immutable.
+CREATE TABLE IF NOT EXISTS `post_filter_changes` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `filter_id` int UNSIGNED NOT NULL,
+  `mod` smallint UNSIGNED DEFAULT NULL,
+  `old_mode` int(1) DEFAULT NULL,
+  `new_mode` int(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (filter_id)
+    REFERENCES post_filters(id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (`mod`)
+    REFERENCES mods(`id`)
+    ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
 CREATE TABLE IF NOT EXISTS `post_filter_hits` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

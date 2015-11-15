@@ -155,6 +155,23 @@ $migration_procedures = [
 				ON DELETE SET NULL
 			") or error(db_error());
 	},
+	'db-filters-changes' => function() {
+		query("CREATE TABLE IF NOT EXISTS `post_filter_changes` (
+		  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+		  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		  `filter_id` int UNSIGNED NOT NULL,
+		  `mod` smallint UNSIGNED DEFAULT NULL,
+		  `old_mode` int(1) DEFAULT NULL,
+		  `new_mode` int(1) DEFAULT NULL,
+		  PRIMARY KEY (`id`),
+		  FOREIGN KEY (filter_id)
+		    REFERENCES post_filters(id)
+		    ON DELETE CASCADE,
+		  FOREIGN KEY (`mod`)
+		    REFERENCES mods(`id`)
+		    ON DELETE SET NULL
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+	},
 	'email-dehtml' => function() {
 		global $boards;
 		foreach ($boards as $board) {
