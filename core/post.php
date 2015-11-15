@@ -576,22 +576,28 @@ if (isset($_POST['delete'])) {
 	$post['name'] = $trip[0];
 	$post['trip'] = isset($trip[1]) ? $trip[1] : '';
 
-	if (preg_match("/(?:#|^)nonoko(?:#|$)/i", $post['email'])) {
+	if (preg_match("/(?:#|^)nokosage(?=#|$)/i", $post['email'])) {
 		$post['nonoko'] = true;
 		if ($config['hide_noko'])
-			$post['email'] = preg_replace("/(?:#|^)nonoko(?:#|$)/i", "", $post['email']);
+			$post['email'] = preg_replace("/(?:#|^)nokosage(?=#|$)/i", "", $post['email']);
 	} else $post['nonoko'] = false;
 
-	if (preg_match("/(?:#|^)noko(?:#|$)/i", $post['email'])) {
+	if (preg_match("/(?:#|^)nonoko(?=#|$)/i", $post['email'])) {
+		$post['nonoko'] = true;
+		if ($config['hide_noko'])
+			$post['email'] = preg_replace("/(?:#|^)nonoko(?=#|$)/i", "", $post['email']);
+	} else $post['nonoko'] = false;
+
+	if (preg_match("/(?:#|^)noko(?=#|$)/i", $post['email'])) {
 		$post['noko'] = true;
 		if ($config['hide_noko'])
-			$post['email'] = preg_replace("/(?:#|^)noko(?:#|$)/i", "", $post['email']);
+			$post['email'] = preg_replace("/(?:#|^)noko(?=#|$)/i", "", $post['email']);
 	} else $post['noko'] = false;
 
-	if (preg_match("/(?:#|^)sage(?:#|$)/i", $post['email'])) {
+	if (preg_match("/(?:#|^)sage(?=#|$)/i", $post['email'])) {
 		$post['sage'] = true;
 		if ($config['hide_sage'])
-			$post['email'] = preg_replace("/(?:#|^)sage(?:#|$)/i", "", $post['email']);
+			$post['email'] = preg_replace("/(?:#|^)sage(?=#|$)/i", "", $post['email']);
 	} else $post['sage'] = false;
 
 	$post['mature'] = $post['op'] ? false : $thread['mature'];
