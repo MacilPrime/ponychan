@@ -251,31 +251,6 @@
 		'quick-reply'
 	);
 
-	// Custom flood filters. Detect flood attacks and reject new posts if there's a positive match.
-	// See http://tinyboard.org/wiki/index.php?title=Flood_filters for more information.
-	//$config['flood_filters'][] = array(
-	//	'condition' => array(
-	//		// 100 posts in the past 5 minutes (~20 p/m)
-	//		'posts_in_past_x_minutes' => array(100, 5)
-	//	),
-	//	// Don't allow the user to post
-	//	'action' => 'reject',
-	//	// Display this message
-	//	'message' => 'Your post has been rejected on the suspicion of a flood attack on this board.'
-	//);
-
-	// Another filter
-	//$config['flood_filters'][] = array(
-	//	'condition' => array(
-	//		// 10 new empty threads in the past 2 minutes
-	//		'threads_with_no_replies_in_past_x_minutes' => array(10, 2),
-	//		// Allow replies, but not new threads (ie. reject topics only).
-	//		'OP' => true
-	//	),
-	//	'action' => 'reject',
-	//	'message' => 'Your post has been rejected on the suspicion of a flood attack on this board (too many new threads); post a reply instead.'
-	//);
-
 	// Enable reCaptcha to make spam even harder
 	$config['recaptcha'] = false;
 	// Public and private key pair from https://www.google.com/recaptcha/admin/create

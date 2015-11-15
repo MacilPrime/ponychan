@@ -692,7 +692,7 @@ function file_move_no_overwrite($oldname, $newname) {
 	}
 }
 
-// $action should be a string! Passing a number is deprecated.
+// $action must be a string!
 function hasPermission($action, $board = null, $_mod = null) {
 	global $config;
 
@@ -704,17 +704,12 @@ function hasPermission($action, $board = null, $_mod = null) {
 	if (!is_array($mod))
 		return false;
 
-	if (is_string($action)) {
-		if (
-			$mod['type'] < $config['permissions'][$action] &&
-			(!isset($config['extra_permissions'][$mod['type']]) ||
-				!in_array($action, $config['extra_permissions'][$mod['type']], true))
-		) {
-			return false;
-		}
-	} else {
-		if ($mod['type'] < $action)
-			return false;
+	if (
+		$mod['type'] < $config['permissions'][$action] &&
+		(!isset($config['extra_permissions'][$mod['type']]) ||
+			!in_array($action, $config['extra_permissions'][$mod['type']], true))
+	) {
+		return false;
 	}
 
 	if (!isset($board) || $config['mod']['skip_per_board'])
@@ -929,6 +924,41 @@ function checkFlood($post) {
 	$flood = (bool)$query->fetch();
 
 	return $flood;
+}
+
+// Triggers an error if the file isn't suitable to be posted.
+function check_post_file($filename, $file_size) {
+	global $config;
+
+	$mime_type = trim(shell_exec('file -b --mime-type ' . escapeshellarg($filename)));
+
+	if (array_key_exists($mime_type, $config['allowed_image_types'])) {
+		if ($file_size > $config['max_filesize'])
+			error(sprintf3($config['error']['filesize'], array(
+				'filesz' => number_format($file_size),
+				'maxsz' => number_format($config['max_filesize'])
+			)));
+
+		$file_type = 'image';
+		$extension = $config['allowed_image_types'][$mime_type];
+	} elseif (array_key_exists($mime_type, $config['allowed_video_types'])) {
+		if ($file_size > $config['max_video_filesize'])
+			error(sprintf3($config['error']['filesize'], array(
+				'filesz' => number_format($file_size),
+				'maxsz' => number_format($config['max_video_filesize'])
+			)));
+
+		$file_type = 'video';
+		$extension = $config['allowed_video_types'][$mime_type];
+	} else {
+		error($config['error']['unsupported_type']);
+	}
+
+	return [
+		'mime_type' => $mime_type,
+		'file_type' => $file_type,
+		'extension' => $extension
+	];
 }
 
 function time_length($time) {
@@ -1156,7 +1186,7 @@ function post(array $post) {
 	$query->bindValue(':mature', isset($post['mature']) && $post['mature'] ? 1 : 0, PDO::PARAM_INT);
 
 	if (isset($post['capcode']) && $post['capcode']) {
-		$query->bindValue(':capcode', $post['capcode'], PDO::PARAM_INT);
+		$query->bindValue(':capcode', $post['capcode']);
 	} else {
 		$query->bindValue(':capcode', NULL, PDO::PARAM_NULL);
 	}
@@ -1237,6 +1267,37 @@ function bumpThread($id) {
 	$query->bindValue(':time', time(), PDO::PARAM_INT);
 	$query->bindValue(':id', $id, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
+}
+
+function userHasPosts($ip, $userhash) {
+	global $board;
+
+	$parsed_ip = parse_mask(ipToUserRange($ip));
+
+	$checkForPostsInBoard = function($boarduri) use ($parsed_ip, $userhash) {
+		$query = prepare("SELECT id FROM `posts_${boarduri}` WHERE
+			(`userhash` IS NOT NULL AND `userhash` = :userhash) OR
+			(`ip_type` = :ip_type AND `ip_data` >= INET6_ATON(:range_start) AND `ip_data` <= INET6_ATON(:range_end)) LIMIT 1");
+		$query->bindValue(':userhash', $userhash);
+		$query->bindValue(':ip_type', $parsed_ip['range_type']);
+		$query->bindValue(':range_start', $parsed_ip['range_start']);
+		$query->bindValue(':range_end', $parsed_ip['range_end']);
+		$query->execute() or error(db_error($query));
+
+		return $query->rowCount() > 0;
+	};
+
+	// Check current board first because it's more likely to have posts from the
+	// user if they're posting in it now.
+	$hasPosts = $checkForPostsInBoard($board['uri'], $ip, $userhash);
+	if (!$hasPosts) {
+		foreach(listBoards() as $_board) {
+			if ($_board['uri'] === $board['uri']) continue;
+			$hasPosts = $checkForPostsInBoard($_board['uri'], $ip, $userhash);
+			if ($hasPosts) break;
+		}
+	}
+	return $hasPosts;
 }
 
 // Remove file from post

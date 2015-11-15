@@ -1,3 +1,12 @@
+make inline editing user server endpoint which checks userhash, not password
+
+filter edit page
+- show stats about number of times the filter has been hit
+- maybe show some post bodies of posts blocked by the filter
+- during edit:
+  - show current posts which would have been affected by the filter
+  - have a post form that people can test filters against
+
 - add separate column storing whether an image is a spoiler or deleted
 if a user is suspected of being a bot (first time user, making a thread)
 - put their post in the queue if they have no posts in the queue
