@@ -77,8 +77,13 @@ This is a mature content thread. You must have viewing mature content enabled in
 			<span class="subject">{{ post.subject|bidi_cleanup }}</span>
 		{% endif %}
 		{% if post.email|length > 0 %}
-			{# start email #}
-			 <a class="email namepart" href="mailto:{{ post.email }}">
+		<a class="email namepart"
+			{% if post.email_is_skype %}
+				href="skype:{{ post.email }}"
+			{% else %}
+				href="mailto:{{ post.email }}"
+			{% endif %}
+				>
 		{% else %}
 			 <span class="namepart">
 		{% endif %}

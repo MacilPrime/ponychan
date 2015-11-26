@@ -229,6 +229,7 @@
 		'mod',
 		'name',
 		'email',
+		'email_is_skype',
 		'subject',
 		'post',
 		'body',
