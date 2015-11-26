@@ -424,6 +424,12 @@ if (file_exists($config['has_installed'])) {
 					ADD `userhash` char(40) DEFAULT NULL,
 					ADD KEY `userhash` (`userhash`)") or error(db_error());
 			}
+		},
+		'skype_email' => function() {
+			global $boards;
+			foreach ($boards as $board) {
+				query("ALTER TABLE `posts_{$board['uri']}` ADD email_is_skype INT(1) NOT NULL;") or error(db_error());
+			}
 		}
 	];
 
