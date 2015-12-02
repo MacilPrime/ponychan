@@ -61,104 +61,6 @@ CREATE TABLE IF NOT EXISTS `review_queue` (
   KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `captchas` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `question` text NOT NULL,
-  `answers` text NOT NULL COMMENT 'json array',
-  PRIMARY KEY (`id`),
-  KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
-
-INSERT INTO `captchas` (`question`, `answer`) VALUES
-  ('Please type the word "apple".', '["apple"]'),
-  ('What is 3+5?', '["8","eight"]');
-
-CREATE TABLE IF NOT EXISTS `captcha_attempts` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `userhash` char(40) DEFAULT NULL,
-  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
-  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-  `captcha_id` int UNSIGNED DEFAULT NULL,
-  `correct` int(1) NOT NULL,
-  `answer` varchar(75) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userhash_time` (`userhash`, `timestamp`),
-  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
-  KEY `captcha_time` (`captcha_id`, `timestamp`),
-  KEY `timestamp` (`timestamp`),
-  FOREIGN KEY (captcha_id)
-    REFERENCES captchas(id)
-    ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
-
-CREATE TABLE IF NOT EXISTS `post_filters` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `filter_json` text NOT NULL,
-  `mode` int(1) NOT NULL COMMENT '0:disable, 1:audit, 2:enforce',
-  `author` smallint UNSIGNED DEFAULT NULL,
-  `parent` int UNSIGNED DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `mode` (`mode`),
-  FOREIGN KEY (`author`)
-    REFERENCES mods(`id`)
-    ON DELETE SET NULL,
-  FOREIGN KEY (`parent`)
-    REFERENCES post_filters(`id`)
-    ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
-
--- Currently only for tracking mode changes. filter_json values in post_filters
--- should be treated as immutable.
-CREATE TABLE IF NOT EXISTS `post_filter_changes` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `filter_id` int UNSIGNED NOT NULL,
-  `mod` smallint UNSIGNED DEFAULT NULL,
-  `old_mode` int(1) DEFAULT NULL,
-  `new_mode` int(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (filter_id)
-    REFERENCES post_filters(id)
-    ON DELETE CASCADE,
-  FOREIGN KEY (`mod`)
-    REFERENCES mods(`id`)
-    ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
-
-CREATE TABLE IF NOT EXISTS `post_filter_hits` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `userhash` char(40) DEFAULT NULL,
-  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
-  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-  `filter_id` int UNSIGNED DEFAULT NULL,
-  `blocked` int NOT NULL,
-  `board` varchar(120) DEFAULT NULL,
-  `successful_post_id` int UNSIGNED DEFAULT NULL,
-  `thread` int(11) DEFAULT NULL,
-  `subject` varchar(100) DEFAULT NULL,
-  `email` varchar(254) DEFAULT NULL,
-  `name` varchar(75) DEFAULT NULL,
-  `trip` varchar(25) DEFAULT NULL,
-  `capcode` varchar(50) DEFAULT NULL,
-  `filename` text DEFAULT NULL,
-  `filehash` text DEFAULT NULL,
-  `body_nomarkup` text DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userhash_time` (`userhash`, `timestamp`),
-  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
-  KEY `timestamp` (`timestamp`),
-  FOREIGN KEY (filter_id)
-    REFERENCES post_filters(id)
-    ON DELETE SET NULL,
-  FOREIGN KEY (board)
-    REFERENCES boards(uri)
-    ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
-
 --
 -- Table structure for table `bans`
 --
@@ -351,6 +253,106 @@ CREATE TABLE IF NOT EXISTS `theme_settings` (
   `value` text,
   KEY `theme` (`theme`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+CREATE TABLE IF NOT EXISTS `captchas` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `question` text NOT NULL,
+  `answers` text NOT NULL COMMENT 'json array',
+  PRIMARY KEY (`id`),
+  KEY `timestamp` (`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+INSERT INTO `captchas` (`question`, `answers`) VALUES
+  ('Please type the word "apple".', '["apple"]'),
+  ('What is 3+5?', '["8","eight"]');
+
+CREATE TABLE IF NOT EXISTS `captcha_attempts` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `userhash` char(40) DEFAULT NULL,
+  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  `captcha_id` int UNSIGNED DEFAULT NULL,
+  `correct` int(1) NOT NULL,
+  `answer` varchar(75) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userhash_time` (`userhash`, `timestamp`),
+  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
+  KEY `captcha_time` (`captcha_id`, `timestamp`),
+  KEY `timestamp` (`timestamp`),
+  FOREIGN KEY (captcha_id)
+    REFERENCES captchas(id)
+    ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `post_filters` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `filter_json` text NOT NULL,
+  `mode` int(1) NOT NULL COMMENT '0:disable, 1:audit, 2:enforce',
+  `author` smallint UNSIGNED DEFAULT NULL,
+  `parent` int UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `mode` (`mode`),
+  FOREIGN KEY (`author`)
+    REFERENCES mods(`id`)
+    ON DELETE SET NULL,
+  FOREIGN KEY (`parent`)
+    REFERENCES post_filters(`id`)
+    ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+-- Currently only for tracking mode changes. filter_json values in post_filters
+-- should be treated as immutable.
+CREATE TABLE IF NOT EXISTS `post_filter_changes` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `filter_id` int UNSIGNED NOT NULL,
+  `mod` smallint UNSIGNED DEFAULT NULL,
+  `old_mode` int(1) DEFAULT NULL,
+  `new_mode` int(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (filter_id)
+    REFERENCES post_filters(id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (`mod`)
+    REFERENCES mods(`id`)
+    ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `post_filter_hits` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `userhash` char(40) DEFAULT NULL,
+  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  `filter_id` int UNSIGNED DEFAULT NULL,
+  `blocked` int NOT NULL,
+  `board` varchar(120) DEFAULT NULL,
+  `successful_post_id` int UNSIGNED DEFAULT NULL,
+  `thread` int(11) DEFAULT NULL,
+  `subject` varchar(100) DEFAULT NULL,
+  `email` varchar(254) DEFAULT NULL,
+  `name` varchar(75) DEFAULT NULL,
+  `trip` varchar(25) DEFAULT NULL,
+  `capcode` varchar(50) DEFAULT NULL,
+  `filename` text DEFAULT NULL,
+  `filehash` text DEFAULT NULL,
+  `body_nomarkup` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userhash_time` (`userhash`, `timestamp`),
+  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
+  KEY `timestamp` (`timestamp`),
+  FOREIGN KEY (filter_id)
+    REFERENCES post_filters(id)
+    ON DELETE SET NULL,
+  FOREIGN KEY (board)
+    REFERENCES boards(uri)
+    ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
