@@ -25,6 +25,7 @@
   },
   "board": {
     "cookies_salt": "test value",
+    "boardlist": [["b"], ["pone", "cool"]]
   },
   "mysql": {
     "host": "localhost",

@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com">
   <title>{% block title %}Untitled Page{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
+  <link rel="shortcut icon" href="/static/flutter-icon.png">
   <link rel="stylesheet" href="{{ "/stylesheets/style.css"|cachebust }}">
   <link rel="stylesheet" type="text/css" id="stylesheet" href="{{ "/stylesheets/colgate.css"|cachebust }}">
   <script type="text/javascript" id="config" src="{{ "/instance.js"|cachebust }}"></script>
@@ -14,6 +16,13 @@
     <div class="boardlistpart">
       <a href="/">home</a>
     </div>
+    {% for boardlistpart in boardlist %}
+    <div class="boardlistpart">
+      {% for item in boardlistpart %}
+      <a href="/{{ item }}/">{{ item }}</a>
+      {% endfor %}
+    </div>
+    {% endfor %}
   </div>
   {% block header %}
     <header>

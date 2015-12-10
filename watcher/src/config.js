@@ -36,7 +36,8 @@ const config = {
     cookies_salt: 'test value',
     permissions: {
       reports: 0
-    }
+    },
+    boardlist: [['b'], ['pone', 'cool']]
   },
   mysql: {
     connection_limit: 10,

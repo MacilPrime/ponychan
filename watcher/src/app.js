@@ -35,6 +35,8 @@ app.set('views', __dirname + '/../views');
 
 swig.setFilter('cachebust', cachebust);
 
+app.locals.boardlist = config.board.boardlist;
+
 app
   .use(morgan('combined'))
   .use(cookieParser())
