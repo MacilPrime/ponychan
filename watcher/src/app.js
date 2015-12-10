@@ -41,6 +41,7 @@ app
   .use(setUserhash)
   .use(checkMod);
 
+app.get('/watcher/', (req, res) => {res.render('watcher.html');});
 app.get('/watcher/threads', watcher);
 app.get('/poll/', poll);
 

@@ -320,24 +320,32 @@ function end_watcher_refresher() {
 function init_watcher_menu() {
 	$(".watcherButton, #watcherScreen").remove();
 
-	if (Object.keys(watched_threads).length == 0)
-		return;
+	const watcherPage = document.getElementById('watcherPage');
 
-	var $watcherButton = $("<a/>")
-		.addClass("watcherButton")
-		.text("watcher")
-		.attr("href", "javascript:;")
-		.prependTo( $(".top .settingsSection") );
+	if (watcherPage) {
+		$(watcherPage).html( $("<div/>").attr("id", "watcherScreen") );
+	} else {
+		if (Object.keys(watched_threads).length == 0)
+			return;
 
-	var $watcherScreen = $("<div/>")
-		.attr("id", "watcherScreen")
-		.appendTo(document.body)
-		.hide();
+		const $watcherButton = $("<a/>")
+			.addClass("watcherButton")
+			.text("watcher")
+			.attr("href", SITE_DATA.siteroot+"watcher/")
+			.prependTo( $(".top .settingsSection") );
+
+		const $watcherScreen = $("<div/>")
+			.attr("id", "watcherScreen")
+			.appendTo(document.body)
+			.hide();
+
+		$watcherButton.click(event => {
+			open_watcher();
+			event.preventDefault();
+		});
+	}
 
 	populate_watcher_screen();
-
-	$watcherButton.click(open_watcher);
-
 	run_watcher_refresher();
 }
 

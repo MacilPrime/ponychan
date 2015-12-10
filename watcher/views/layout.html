@@ -15,6 +15,15 @@
       <a href="/">home</a>
     </div>
   </div>
+  {% block header %}
+    <header>
+      <h1>{% block title %}Untitled Page{% endblock %}</h1>
+      <div class="subtitle">
+        {% block subtitle %}{% endblock %}
+      </div>
+    </header>
+  {% endblock %}
+
   <div class="layout-content">
     {% block content %}{% endblock %}
   </div>
