@@ -43,7 +43,10 @@ app
   .use(setUserhash)
   .use(checkMod);
 
-app.get('/watcher/', (req, res) => {res.render('watcher.html');});
+app.get('/watcher/', (req, res) => {
+  res.setHeader("Cache-Control", "public, max-age=120");
+  res.render('watcher.html');
+});
 app.get('/watcher/threads', watcher);
 app.get('/poll/', poll);
 
