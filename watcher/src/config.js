@@ -61,7 +61,11 @@ const configExists = (function() {
   }
 })();
 if (configExists) {
-  _.merge(config, JSON.parse(fs.readFileSync(CONFIG_FILENAME, 'utf8')));
+  _.merge(
+    config,
+    JSON.parse(fs.readFileSync(CONFIG_FILENAME, 'utf8')),
+    (a, b) => Array.isArray(b) ? b : undefined
+  );
 }
 
 export default config;
