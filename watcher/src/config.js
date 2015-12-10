@@ -11,6 +11,9 @@ const config = {
     host: '',
     port: 4000
   },
+  core: {
+    path: "../core"
+  },
   redis: {
     prefix: 'watcher_',
     main: {

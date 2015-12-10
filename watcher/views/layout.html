@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com">
+  <title>{% block title %}Untitled Page{% endblock %}</title>
+  <link rel="stylesheet" href="{{ "/stylesheets/style.css"|cachebust }}">
+  <link rel="stylesheet" type="text/css" id="stylesheet" href="{{ "/stylesheets/colgate.css"|cachebust }}">
+  <script type="text/javascript" id="config" src="{{ "/instance.js"|cachebust }}"></script>
+  <script type="text/javascript" src="{{ "/js/main.js"|cachebust }}"></script>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <div class="boardlist top">
+    <div class="boardlistpart">
+      <a href="/">home</a>
+    </div>
+  </div>
+  <div class="layout-content">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

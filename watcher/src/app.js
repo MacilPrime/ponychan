@@ -13,8 +13,10 @@ import config from './config';
 
 import setUserhash from './setUserhash';
 import checkMod from './checkMod';
+import cachebust from './util/cachebust';
 
 import watcher from './routes/watcher';
+import poll from './routes/poll';
 
 RSVP.on('error', function(err) {
   console.error('uncaught RSVP promise rejection');
@@ -23,12 +25,15 @@ RSVP.on('error', function(err) {
 
 const app = express();
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   app.set('json spaces', 2);
+  swig.setDefaults({ cache: false });
 }
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/../views');
+
+swig.setFilter('cachebust', cachebust);
 
 app
   .use(morgan('combined'))
@@ -37,6 +42,7 @@ app
   .use(checkMod);
 
 app.get('/watcher/threads', watcher);
+app.get('/poll/', poll);
 
 app.listen(config.listen.port, config.listen.host, function() {
   console.log(`Now listening on ${config.listen.host}:${config.listen.port}`);
