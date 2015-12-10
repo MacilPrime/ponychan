@@ -37,7 +37,7 @@ const config = {
     permissions: {
       reports: 0
     },
-    boardlist: [['b'], ['pone', 'cool']]
+    boardlist: ([['b'], ['pone', 'cool']]: Array<Array<string>>)
   },
   mysql: {
     connection_limit: 10,
