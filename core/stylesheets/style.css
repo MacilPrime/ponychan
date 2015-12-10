@@ -1022,7 +1022,10 @@ a.wlink:hover {
 .wcounterror {
 	color: rgb(200,0,0);
 }
-.wremove, .wremove:visited {
+.wremove {
+	background: none;
+	border: none;
+	cursor: pointer;
 	color: rgb(160,0,0);
 	text-decoration: none;
 	float: right;

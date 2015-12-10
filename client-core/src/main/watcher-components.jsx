@@ -87,7 +87,13 @@ export const Thread = React.createClass({
 				{' '}
 				{postCounter}
 				{' '}
-				<a className="wremove" href="javascript:;" onClick={this._remove}>X</a>
+				<button
+					type="button"
+					aria-label="Remove"
+					onClick={this._remove}
+					className="wremove">
+					X
+				</button>
 			</div>
 			<div className="wdetails">
 				<span className="wsubject">{thread.subject}</span>
