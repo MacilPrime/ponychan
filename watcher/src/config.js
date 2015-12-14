@@ -29,7 +29,7 @@ const config = {
       host: '172.27.0.2',
       port: 6379,
       pass: '',
-      db: 3
+      db: 1
     }
   },
   board: {

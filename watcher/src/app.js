@@ -57,6 +57,7 @@ app.all('/mod/*', (req, res, next) => {
 app.post('/mod/filters/', bodyParser.json(), filters.create);
 app.get('/mod/filters/', filters.getList);
 app.get('/mod/filters/:id', filters.getOne);
+app.post('/mod/filters/:id', bodyParser.json(), filters.update);
 app.get('/watcher/', (req, res) => {
   res.setHeader("Cache-Control", "public, max-age=120");
   res.render('watcher.html');

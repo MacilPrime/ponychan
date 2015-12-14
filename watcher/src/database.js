@@ -39,3 +39,4 @@ export function mysql_query(query: string, vars: Array<string|number>=[]): Promi
 }
 
 export const c_get: (key:string) => Promise<?string> = RSVP.denodeify(credis.get.bind(credis));
+export const c_del: (key:string) => Promise<void> = RSVP.denodeify(credis.del.bind(credis));

@@ -1,6 +1,6 @@
 /* @flow */
 
-import {credis, predis, mysql, mysql_query, c_get} from '../database';
+import {credis, predis, mysql, mysql_query, c_get, c_del} from '../database';
 import config from '../config';
 
 type Condition =
@@ -105,6 +105,33 @@ export async function create(req: Object, res: Object, next: Function): any {
     const id = results.insertId;
     res.type('json');
     res.send({success: true, id});
+  } catch(err) {
+    next(err);
+  }
+}
+
+export async function update(req: Object, res: Object, next: Function): any {
+  try {
+    const id = Number(req.params.id);
+    if (req.get('content-type') !== 'application/json') {
+      res.status(400).send('Invalid Content-Type header');
+      return;
+    }
+    const {mode} = req.body;
+    if (typeof mode !== 'number' || ![0,1,2].includes(mode)) {
+      throw new Error("invalid mode value");
+    }
+    const [results, meta] = await mysql_query(
+      `UPDATE post_filters
+      SET mode = ?
+      WHERE id = ?`,
+      [mode, id]);
+    if (results.affectedRows !== 1) {
+      throw new Error("Failed to find filter with given id");
+    }
+    await c_del('active_post_filters');
+    res.type('json');
+    res.send({success: true});
   } catch(err) {
     next(err);
   }
