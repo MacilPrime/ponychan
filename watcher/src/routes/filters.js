@@ -3,16 +3,23 @@
 import {credis, predis, mysql, mysql_query, c_get} from '../database';
 import config from '../config';
 
+function rowToFilter(row: Object): Object {
+  const {id, timestamp, mode, parent, author, author_name} = row;
+  const {conditions, action} = JSON.parse(row.filter_json);
+  return {id, timestamp, mode, parent, author, author_name, conditions, action};
+}
+
 export async function getList(req: Object, res: Object, next: Function): any {
   try {
     res.setHeader("Cache-Control", "private");
     res.type('json');
-    const [results, meta] = await mysql_query('SELECT * FROM `post_filters`');
-    const filters = results.map(row => {
-      const {id, timestamp, mode} = row;
-      const {conditions, action} = JSON.parse(row.filter_json);
-      return {id, timestamp, mode, conditions, action};
-    });
+    const [results, meta] = await mysql_query(
+      `SELECT post_filters.id, timestamp, mode, parent, author,
+      filter_json,
+      mods.username AS author_name
+      FROM post_filters
+      LEFT JOIN mods ON post_filters.author = mods.id`);
+    const filters = results.map(rowToFilter);
     res.send({
       data: filters,
       paging: { // TODO
@@ -34,17 +41,18 @@ export async function getOne(req: Object, res: Object, next: Function): any {
     }
     const id = Number(req.params.id);
     const [results, meta] = await mysql_query(
-      'SELECT * FROM `post_filters` WHERE `id` = ?',
+      `SELECT post_filters.id, timestamp, mode, parent, author,
+      filter_json,
+      mods.username AS author_name
+      FROM post_filters
+      LEFT JOIN mods ON post_filters.author = mods.id
+      WHERE post_filters.id = ?`,
       [id]);
     if (results.length == 0) {
       res.sendStatus(404);
       return;
     }
-    const filters = results.map(row => {
-      const {id, timestamp, mode, parent, author} = row;
-      const {conditions, action} = JSON.parse(row.filter_json);
-      return {id, timestamp, mode, parent, author, conditions, action};
-    });
+    const filters = results.map(rowToFilter);
     res.send(filters[0]);
   } catch(err) {
     next(err);
