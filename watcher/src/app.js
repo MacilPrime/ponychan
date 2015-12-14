@@ -5,6 +5,7 @@ import _ from 'lodash';
 import crypto from 'crypto';
 import express from 'express';
 import morgan from 'morgan';
+import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import swig from 'swig';
 import RSVP from 'rsvp';
@@ -53,6 +54,7 @@ app.all('/mod/*', (req, res, next) => {
   }
 });
 
+app.post('/mod/filters/', bodyParser.json(), filters.create);
 app.get('/mod/filters/', filters.getList);
 app.get('/mod/filters/:id', filters.getOne);
 app.get('/watcher/', (req, res) => {
