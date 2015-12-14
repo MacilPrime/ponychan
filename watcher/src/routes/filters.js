@@ -57,21 +57,43 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       return;
     }
     const id = Number(req.params.id);
-    const [results, meta] = await mysql_query(
+    const [filterResults] = await mysql_query(
       `SELECT post_filters.id, timestamp, mode, parent, author,
       filter_json,
       mods.username AS author_name
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id
-      WHERE post_filters.id = ?`,
-      [id]);
-    if (results.length == 0) {
+      WHERE post_filters.id = ?`, [id]);
+    if (filterResults.length == 0) {
       res.sendStatus(404);
       return;
     }
-    const filters = results.map(rowToFilter);
+    const [filter] = filterResults.map(rowToFilter);
+
+    const [hitResults] = await mysql_query(
+      `SELECT timestamp,
+      INET6_NTOA(ip_data) AS ip,
+      blocked, board, thread, successful_post_id,
+      name, trip, capcode, email, subject,
+      filename, filehash, body_nomarkup
+      FROM post_filter_hits
+      WHERE filter_id = ?`, [id]);
+
+    filter.hits = hitResults.map(hit => ({
+      timestamp: hit.timestamp,
+      ip: hit.ip,
+      blocked: !!hit.blocked,
+      board: hit.board,
+      thread: hit.thread,
+      successful_post_id: hit.successful_post_id,
+      name: hit.name, trip: hit.trip, capcode: hit.capcode,
+      email: hit.email, subject: hit.subject,
+      filename: hit.filename, filehash: hit.filehash,
+      body_nomarkup: hit.body_nomarkup
+    }));
+
     res.type('json');
-    res.send(filters[0]);
+    res.send(filter);
   } catch(err) {
     next(err);
   }
