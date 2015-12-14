@@ -11,8 +11,6 @@ function rowToFilter(row: Object): Object {
 
 export async function getList(req: Object, res: Object, next: Function): any {
   try {
-    res.setHeader("Cache-Control", "private");
-    res.type('json');
     const [results, meta] = await mysql_query(
       `SELECT post_filters.id, timestamp, mode, parent, author,
       filter_json,
@@ -20,6 +18,7 @@ export async function getList(req: Object, res: Object, next: Function): any {
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id`);
     const filters = results.map(rowToFilter);
+    res.type('json');
     res.send({
       data: filters,
       paging: { // TODO
@@ -34,7 +33,6 @@ export async function getList(req: Object, res: Object, next: Function): any {
 
 export async function getOne(req: Object, res: Object, next: Function): any {
   try {
-    res.type('json');
     if (!/^\d+$/.test(req.params.id)) {
       res.sendStatus(400);
       return;
@@ -53,6 +51,7 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       return;
     }
     const filters = results.map(rowToFilter);
+    res.type('json');
     res.send(filters[0]);
   } catch(err) {
     next(err);
