@@ -138,6 +138,7 @@ export async function create(req: Object, res: Object, next: Function): any {
       VALUES (?, ?, ?, ?)`,
       [mode, parent, filter_json, req.mod.id]);
     const id = results.insertId;
+    await c_del('active_post_filters');
     res.type('json');
     res.send({success: true, id});
   } catch(err) {
