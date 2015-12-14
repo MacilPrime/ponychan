@@ -17,6 +17,7 @@ import cachebust from './util/cachebust';
 
 import watcher from './routes/watcher';
 import poll from './routes/poll';
+import * as filters from './routes/filters';
 
 RSVP.on('error', function(err) {
   console.error('uncaught RSVP promise rejection');
@@ -43,6 +44,17 @@ app
   .use(setUserhash)
   .use(checkMod);
 
+app.all('/mod/*', (req, res, next) => {
+  res.setHeader("Cache-Control", "private");
+  if (!req.mod) {
+    res.sendStatus(403);
+  } else {
+    next();
+  }
+});
+
+app.get('/mod/filters/', filters.getList);
+app.get('/mod/filters/:id', filters.getOne);
 app.get('/watcher/', (req, res) => {
   res.setHeader("Cache-Control", "public, max-age=120");
   res.render('watcher.html');
