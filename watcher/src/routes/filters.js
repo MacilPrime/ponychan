@@ -77,7 +77,8 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       name, trip, capcode, email, subject,
       filename, filehash, body_nomarkup
       FROM post_filter_hits
-      WHERE filter_id = ?`, [id]);
+      WHERE filter_id = ?
+      ORDER BY timestamp DESC LIMIT 100`, [id]);
 
     filter.hits = hitResults.map(hit => ({
       timestamp: hit.timestamp,
@@ -91,6 +92,16 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       filename: hit.filename, filehash: hit.filehash,
       body_nomarkup: hit.body_nomarkup
     }));
+
+    const [changeResults] = await mysql_query(
+      `SELECT timestamp, \`mod\`, mods.username AS mod_name,
+      old_mode, new_mode
+      FROM post_filter_changes
+      LEFT JOIN mods ON post_filter_changes.mod = mods.id
+      WHERE filter_id = ?
+      ORDER BY timestamp DESC LIMIT 100`, [id]);
+
+    filter.history = changeResults;
 
     res.type('json');
     res.send(filter);
