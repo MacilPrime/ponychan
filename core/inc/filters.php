@@ -129,8 +129,9 @@ function postMatchesCondition($condition, array $post) {
 			if (!$post['has_file'])
 				return false;
 			return preg_match($condition['value'], $post['filename']);
-		case 'ip':
-			return preg_match($condition['value'], $_SERVER['REMOTE_ADDR']);
+		// case 'ip':
+		// TODO should be a CIDR/glob range instead
+		// 	return preg_match($condition['value'], $_SERVER['REMOTE_ADDR']);
 		case 'op':
 			return $post['op'] === $condition['value'];
 		case 'has_file':

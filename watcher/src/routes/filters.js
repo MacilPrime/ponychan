@@ -231,7 +231,6 @@ function cleanAndVerifyConditions(conditions: any): Array<Condition> {
       case 'subject':
       case 'body':
       case 'filename':
-      case 'ip':
         if (typeof condition.value !== 'string') {
           throw new Error("value must be string for given type");
         }
