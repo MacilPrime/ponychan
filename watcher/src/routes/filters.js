@@ -130,7 +130,7 @@ export async function create(req: Object, res: Object, next: Function): any {
     if (typeof mode !== 'number' || ![0,1,2].includes(mode)) {
       throw new Error("invalid mode value");
     }
-    if (parent && typeof parent !== 'number') {
+    if (parent != null && typeof parent !== 'number') {
       throw new Error("parent must be null or a number");
     }
     const conditions = cleanAndVerifyConditions(req.body.conditions);
@@ -143,11 +143,37 @@ export async function create(req: Object, res: Object, next: Function): any {
     }
     const filter_json = JSON.stringify({conditions, action});
 
-    const [results, meta] = await mysql_query(
-      `INSERT INTO post_filters (mode, parent, filter_json, author)
-      VALUES (?, ?, ?, ?)`,
-      [mode, parent, filter_json, req.mod.id]);
-    const id = results.insertId;
+    const conn = await new Promise((resolve, reject) => {
+      mysql.getConnection((err, conn) => {
+        if (err) reject(err); else resolve(conn);
+      });
+    });
+    let id;
+    try {
+      await new Promise((resolve, reject) => {
+        conn.beginTransaction(err => { if (err) reject(err); else resolve(); });
+      });
+      if (parent != null) {
+        await setFilterMode(conn, req.mod.id, parent, 0);
+      }
+      const results = await new Promise((resolve, reject) => {
+        conn.query(
+          `INSERT INTO post_filters (mode, parent, filter_json, author)
+          VALUES (?, ?, ?, ?)`,
+          [mode, parent, filter_json, req.mod.id],
+          (err, results) => { if(err) reject(err); else resolve(results); }
+        );
+      });
+      await new Promise((resolve, reject) => {
+        conn.commit(err => { if (err) reject(err); else resolve(); });
+      });
+      id = results.insertId;
+      conn.release();
+    } catch(err) {
+      conn.destroy();
+      throw err;
+    }
+
     await c_del('active_post_filters');
     res.type('json');
     res.send({success: true, id});
@@ -178,31 +204,7 @@ export async function update(req: Object, res: Object, next: Function): any {
       await new Promise((resolve, reject) => {
         conn.beginTransaction(err => { if (err) reject(err); else resolve(); });
       });
-      const results = await new Promise((resolve, reject) => {
-        conn.query(
-          `SELECT mode FROM post_filters WHERE id = ?`, [id],
-          (err, results) => { if(err) reject(err); else resolve(results); }
-        );
-      });
-      if (results.length !== 1) {
-        throw new Error("Could not find filter");
-      }
-      const old_mode = results[0].mode;
-      await new Promise((resolve, reject) => {
-        conn.query(
-          `UPDATE post_filters SET mode = ? WHERE id = ?`,
-          [mode, id],
-          (err, results) => { if(err) reject(err); else resolve(results); }
-        );
-      });
-      await new Promise((resolve, reject) => {
-        conn.query(
-          `INSERT INTO post_filter_changes (filter_id, \`mod\`, old_mode, new_mode)
-          VALUES (?, ?, ?, ?)`,
-          [id, req.mod.id, old_mode, mode],
-          (err, results) => { if(err) reject(err); else resolve(results); }
-        );
-      });
+      await setFilterMode(conn, req.mod.id, id, mode);
       await new Promise((resolve, reject) => {
         conn.commit(err => { if (err) reject(err); else resolve(); });
       });
@@ -217,6 +219,34 @@ export async function update(req: Object, res: Object, next: Function): any {
   } catch(err) {
     next(err);
   }
+}
+
+async function setFilterMode(conn: Object, mod_id: ?number, id: number, mode: number) {
+  const results = await new Promise((resolve, reject) => {
+    conn.query(
+      `SELECT mode FROM post_filters WHERE id = ?`, [id],
+      (err, results) => { if(err) reject(err); else resolve(results); }
+    );
+  });
+  if (results.length !== 1) {
+    throw new Error("Could not find filter");
+  }
+  const old_mode = results[0].mode;
+  await new Promise((resolve, reject) => {
+    conn.query(
+      `UPDATE post_filters SET mode = ? WHERE id = ?`,
+      [mode, id],
+      (err, results) => { if(err) reject(err); else resolve(results); }
+    );
+  });
+  await new Promise((resolve, reject) => {
+    conn.query(
+      `INSERT INTO post_filter_changes (filter_id, \`mod\`, old_mode, new_mode)
+      VALUES (?, ?, ?, ?)`,
+      [id, mod_id, old_mode, mode],
+      (err, results) => { if(err) reject(err); else resolve(results); }
+    );
+  });
 }
 
 function stringToRegExp(value: string): RegExp {
