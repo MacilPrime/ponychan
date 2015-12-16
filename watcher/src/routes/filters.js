@@ -23,9 +23,12 @@ type Action =
   };
 
 function rowToFilter(row: Object): Object {
-  const {id, timestamp, mode, parent, author, author_name} = row;
+  const {id, timestamp, mode, parent, parent_timestamp, author, author_name} = row;
   const {conditions, action} = JSON.parse(row.filter_json);
-  return {id, timestamp, mode, parent, author, author_name, conditions, action};
+  return {
+    id, timestamp, mode, conditions, action,
+    parent, parent_timestamp, author, author_name
+  };
 }
 
 export async function getList(req: Object, res: Object, next: Function): any {
@@ -35,7 +38,8 @@ export async function getList(req: Object, res: Object, next: Function): any {
       filter_json,
       mods.username AS author_name
       FROM post_filters
-      LEFT JOIN mods ON post_filters.author = mods.id`);
+      LEFT JOIN mods ON post_filters.author = mods.id
+      ORDER BY post_filters.id ASC`);
     const filters = results.map(rowToFilter);
     res.type('json');
     res.send({
@@ -58,17 +62,29 @@ export async function getOne(req: Object, res: Object, next: Function): any {
     }
     const id = Number(req.params.id);
     const [filterResults] = await mysql_query(
-      `SELECT post_filters.id, timestamp, mode, parent, author,
-      filter_json,
-      mods.username AS author_name
+      `SELECT post_filters.id, post_filters.timestamp, post_filters.mode,
+      post_filters.author, post_filters.filter_json,
+      mods.username AS author_name,
+      post_filters.parent, parents.timestamp AS parent_timestamp
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id
+      LEFT JOIN post_filters AS parents ON post_filters.parent = parents.id
       WHERE post_filters.id = ?`, [id]);
     if (filterResults.length == 0) {
       res.sendStatus(404);
       return;
     }
     const [filter] = filterResults.map(rowToFilter);
+
+    const [children] = await mysql_query(
+      `SELECT id, timestamp
+      FROM post_filters
+      WHERE parent = ?
+      ORDER BY id DESC LIMIT 100`, [id]);
+
+    filter.children = children.map(child => ({
+      id: child.id, timestamp: child.timestamp
+    }));
 
     const [hitResults] = await mysql_query(
       `SELECT timestamp,
