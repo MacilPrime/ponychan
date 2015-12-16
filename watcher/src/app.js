@@ -55,6 +55,7 @@ app.all('/mod/*', (req, res, next) => {
 });
 
 app.post('/mod/filters/', bodyParser.json(), filters.create);
+app.post('/mod/filters/previews/', bodyParser.json(), filters.preview);
 app.get('/mod/filters/', filters.getList);
 app.get('/mod/filters/:id', filters.getOne);
 app.post('/mod/filters/:id', bodyParser.json(), filters.update);

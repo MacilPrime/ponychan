@@ -110,6 +110,16 @@ export async function getOne(req: Object, res: Object, next: Function): any {
   }
 }
 
+export async function preview(req: Object, res: Object, next: Function): any {
+  // TODO
+  // This should start a background task which generates a list of existing
+  // posts which match the filter conditions in the request body. The response
+  // to this request will contain a URL that the client can poll for the
+  // results. Should follow guidelines in
+  // http://farazdagi.com/blog/2014/rest-long-running-jobs/
+  res.status(501).send('Not implemented yet');
+}
+
 export async function create(req: Object, res: Object, next: Function): any {
   try {
     if (req.get('content-type') !== 'application/json') {
