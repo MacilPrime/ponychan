@@ -33,12 +33,26 @@ function rowToFilter(row: Object): Object {
 
 export async function getList(req: Object, res: Object, next: Function): any {
   try {
+    const q: ?string = req.query.q;
+    let where = '';
+    switch (q) {
+      case 'enabled':
+        where = 'WHERE mode != 0';
+        break;
+      case '':
+      case undefined:
+        break;
+      default:
+        throw new Error("invalid q value");
+    }
+
     const [results, meta] = await mysql_query(
       `SELECT post_filters.id, timestamp, mode, parent, author,
       filter_json,
       mods.username AS author_name
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id
+      ${where}
       ORDER BY post_filters.id ASC`);
     const filters = results.map(rowToFilter);
     res.type('json');
