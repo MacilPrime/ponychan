@@ -172,6 +172,11 @@ $migration_procedures = [
 		    ON DELETE SET NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
 	},
+	'db-filters-keys' => function() {
+		query("ALTER TABLE `post_filters`
+			ADD KEY (`author`),
+			ADD KEY (`parent`)") or error(db_error());
+	},
 	'email-dehtml' => function() {
 		global $boards;
 		foreach ($boards as $board) {

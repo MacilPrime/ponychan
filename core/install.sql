@@ -296,7 +296,9 @@ CREATE TABLE IF NOT EXISTS `post_filters` (
   `author` smallint UNSIGNED DEFAULT NULL,
   `parent` int UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `mode` (`mode`),
+  KEY (`mode`),
+  KEY (`author`),
+  KEY (`parent`),
   FOREIGN KEY (`author`)
     REFERENCES mods(`id`)
     ON DELETE SET NULL,
