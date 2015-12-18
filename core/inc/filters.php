@@ -124,7 +124,7 @@ function postMatchesCondition($condition, array $post) {
 		case 'subject':
 			return preg_match($condition['value'], $post['subject']);
 		case 'body':
-			return preg_match($condition['value'], $post['body']);
+			return preg_match($condition['value'], $post['body_nomarkup']);
 		case 'filename':
 			if (!$post['has_file'])
 				return false;
@@ -132,6 +132,8 @@ function postMatchesCondition($condition, array $post) {
 		// case 'ip':
 		// TODO should be a CIDR/glob range instead
 		// 	return preg_match($condition['value'], $_SERVER['REMOTE_ADDR']);
+		case 'board':
+			return in_array($post['board'], explode(',', $condition['value']), true);
 		case 'op':
 			return $post['op'] === $condition['value'];
 		case 'has_file':

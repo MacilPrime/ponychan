@@ -7,6 +7,8 @@ import fs from 'fs';
 const config = {
   max_watched_threads: 70,
   http_cache_time: 15,
+  task_cache_time: 60*60*24*2,
+  task_timeout_time: 60*5,
   listen: {
     host: '',
     port: 4000
