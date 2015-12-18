@@ -62,6 +62,7 @@ if (isset($password)) {
 if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
     error($config['error']['referer']);
 
+$post['ip'] = $_SERVER['REMOTE_ADDR'];
 $post['op'] = !$post['thread'];
 $post['body'] = $_POST['body'];
 
@@ -139,7 +140,7 @@ if (isset($config['action_log'])) {
     $logdata['byauthor'] = isset($password);
     $logdata['time'] = date(DATE_ATOM);
     $logdata['thread'] = $post['op'] ? null : intval($post['thread']);
-    $logdata['ip'] = $_SERVER['REMOTE_ADDR'];
+    $logdata['ip'] = $post['ip'];
     $logdata['commentsimplehash'] = simplifiedHash($post['body_nomarkup']);
     $logline = json_encode($logdata);
     logToFile($config['action_log'], $logline);

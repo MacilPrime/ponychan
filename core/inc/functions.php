@@ -731,7 +731,7 @@ function listBoards() {
 		return $boards;
 
 	$query = query("SELECT * FROM `boards` ORDER BY `uri`") or error(db_error());
-	$boards = $query->fetchAll();
+	$boards = $query->fetchAll(PDO::FETCH_ASSOC);
 
 	if ($config['cache']['enabled'])
 		cache::set('all_boards', $boards);
