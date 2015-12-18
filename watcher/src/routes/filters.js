@@ -55,13 +55,10 @@ export async function getList(req: Object, res: Object, next: Function): any {
       ${where}
       ORDER BY post_filters.id ASC`);
     const filters = results.map(rowToFilter);
+    // TODO pagination in Link header
     res.type('json');
     res.send({
-      data: filters,
-      paging: { // TODO
-        previous: null,
-        next: null
-      }
+      data: filters
     });
   } catch(err) {
     next(err);
