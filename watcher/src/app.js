@@ -45,7 +45,7 @@ app
   .use(setUserhash)
   .use(checkMod);
 
-app.all('/mod/*', (req, res, next) => {
+app.all('/api/v1/mod/*', (req, res, next) => {
   res.setHeader("Cache-Control", "private");
   if (!req.mod) {
     res.sendStatus(403);
