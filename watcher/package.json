@@ -20,7 +20,8 @@
     "redis": "^2.3.0",
     "rsvp": "^3.1.0",
     "sinon": "^1.17.2",
-    "swig": "^1.4.2"
+    "swig": "^1.4.2",
+    "uuid": "^2.0.1"
   },
   "scripts": {
     "start": "node index.js",
