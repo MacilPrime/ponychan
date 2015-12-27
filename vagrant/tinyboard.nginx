@@ -59,7 +59,7 @@ server {
 		expires 180d;
 	}
 
-	location ~* \.(jpe?g|png|gif|ogg|mp3)$ {
+	location ~* \.(jpe?g|png|gif|ogg|mp3|mp4|mkv|webm)$ {
 		expires 30d;
 	}
 
