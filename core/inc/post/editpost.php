@@ -62,7 +62,7 @@ if (isset($password)) {
 if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
     error($config['error']['referer']);
 
-$post['board'] = $_POST['board']);
+$post['board'] = $_POST['board'];
 $post['ip'] = $_SERVER['REMOTE_ADDR'];
 $post['op'] = !$post['thread'];
 $post['body'] = $_POST['body'];
