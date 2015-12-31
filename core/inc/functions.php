@@ -1301,7 +1301,7 @@ function userHasPosts($ip, $userhash) {
 }
 
 // Remove file from post
-function deleteFile($id, $remove_entirely_if_already=true) {
+function deleteFile($id, $remove_entirely_if_already=true, $rebuild_after=true) {
 	global $board, $config;
 
 	$query = prepare(sprintf("SELECT `thread`,`thumb`,`file` FROM `posts_%s` WHERE `id` = :id LIMIT 1", $board['uri']));
@@ -1312,6 +1312,8 @@ function deleteFile($id, $remove_entirely_if_already=true) {
 
 	if ($post['file'] == 'deleted' && !$post['thread'])
 		return; // Can't delete OP's image completely.
+	if (!$post['file'])
+		return; // Nothing to delete.
 
 	$query = prepare(sprintf("UPDATE `posts_%s` SET `thumb` = NULL, `thumbwidth` = NULL, `thumbheight` = NULL, `filewidth` = NULL, `fileheight` = NULL, `filesize` = NULL, `filename` = NULL, `filehash` = NULL, `file` = :file WHERE `id` = :id", $board['uri']));
 	if ($post['file'] == 'deleted' && $remove_entirely_if_already) {
@@ -1331,10 +1333,12 @@ function deleteFile($id, $remove_entirely_if_already=true) {
 	$query->bindValue(':id', $id, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 
-	if ($post['thread'])
-		buildThread($post['thread']);
-	else
-		buildThread($id);
+	if ($rebuild_after) {
+		if ($post['thread'])
+			buildThread($post['thread']);
+		else
+			buildThread($id);
+	}
 }
 
 // rebuild post (markup)
@@ -1361,6 +1365,36 @@ function rebuildPost($id, $rebuildThread=true) {
 		buildThread($thread);
 
 	return $thread;
+}
+
+function deletePostContent($id, $rebuild_after=true) {
+	global $board, $config;
+
+	$query = prepare(sprintf("SELECT `thread` FROM `posts_%s` WHERE `id` = :id LIMIT 1", $board['uri']));
+	$query->bindValue(':id', $id);
+	$query->execute() or error(db_error($query));
+	if (!$post = $query->fetch())
+		error($config['error']['invalidpost']);
+
+	$query = prepare("DELETE FROM `cites` WHERE `board` = :board AND `post` = :id");
+	$query->bindValue(':board', $board['uri']);
+	$query->bindValue(':id', $id, PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+
+	$query = prepare(sprintf("UPDATE `posts_%s` SET `name` = :name, `trip` = NULL, `subject` = NULL, `email` = NULL, `capcode` = NULL, `body` = :body, `body_nomarkup` = :body, `password` = NULL WHERE `id` = :id", $board['uri']));
+	$query->bindValue(':name', '[deleted]');
+	$query->bindValue(':body', '[deleted]');
+	$query->bindValue(':id', $id);
+	$query->execute() or error(db_error($query));
+
+	deleteFile($id, false, false);
+
+	if ($rebuild_after) {
+		if ($post['thread'])
+			buildThread($post['thread']);
+		else
+			buildThread($id);
+	}
 }
 
 // Delete a post (reply or thread)
