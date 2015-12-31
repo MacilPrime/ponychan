@@ -10,6 +10,7 @@
     "babel-preset-react": "^6.1.4",
     "babel-preset-stage-3": "^6.1.2",
     "babel-register": "^6.1.4",
+    "body-parser": "^1.14.1",
     "cookie-parser": "^1.4.0",
     "express": "^4.13.3",
     "lodash": "^3.10.1",
@@ -19,7 +20,8 @@
     "redis": "^2.3.0",
     "rsvp": "^3.1.0",
     "sinon": "^1.17.2",
-    "swig": "^1.4.2"
+    "swig": "^1.4.2",
+    "uuid": "^2.0.1"
   },
   "scripts": {
     "start": "node index.js",

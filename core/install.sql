@@ -296,7 +296,9 @@ CREATE TABLE IF NOT EXISTS `post_filters` (
   `author` smallint UNSIGNED DEFAULT NULL,
   `parent` int UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `mode` (`mode`),
+  KEY (`mode`),
+  KEY (`author`),
+  KEY (`parent`),
   FOREIGN KEY (`author`)
     REFERENCES mods(`id`)
     ON DELETE SET NULL,
@@ -352,6 +354,87 @@ CREATE TABLE IF NOT EXISTS `post_filter_hits` (
   FOREIGN KEY (board)
     REFERENCES boards(uri)
     ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uuid` char(36) NOT NULL,
+  PRIMARY KEY(`id`),
+  UNIQUE KEY(`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `user_ips` (
+  `user_id` int UNSIGNED NOT NULL,
+  `range_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  PRIMARY KEY(`range_type`, `range_start`, `range_end`),
+  FOREIGN KEY (`user_id`)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `user_userhashes` (
+  `user_id` int UNSIGNED NOT NULL,
+  `userhash` char(40) NOT NULL,
+  PRIMARY KEY(`userhash`),
+  FOREIGN KEY (`user_id`)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `user_tripcodes` (
+  `user_id` int UNSIGNED NOT NULL,
+  `trip` varchar(25) NOT NULL,
+  PRIMARY KEY(`trip`),
+  FOREIGN KEY (`user_id`)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `polls` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `poll_eligible_users` (
+  `poll_id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  PRIMARY KEY (`poll_id`, `user_id`),
+  FOREIGN KEY (`poll_id`)
+    REFERENCES polls(id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (`user_id`)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `poll_questions` (
+  `poll_id` int UNSIGNED NOT NULL,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`poll_id`)
+    REFERENCES polls(id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `poll_results` (
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `poll_id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  `question_id` int UNSIGNED NOT NULL,
+  `answer` int UNSIGNED NOT NULL,
+  PRIMARY KEY (`poll_id`, `user_id`, `question_id`),
+  KEY (`user_id`),
+  FOREIGN KEY (`poll_id`, `user_id`)
+    REFERENCES poll_eligible_users(poll_id, user_id)
+    ON DELETE RESTRICT,
+  FOREIGN KEY (`poll_id`)
+    REFERENCES polls(id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (`poll_id`, `question_id`)
+    REFERENCES poll_questions(poll_id, id)
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

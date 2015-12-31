@@ -298,6 +298,9 @@
 	// How long before you can delete a post after posting, in seconds.
 	$config['delete_time'] = 10;
 
+	// Control whether OP deleting their post deletes the entire thread.
+	$config['op_allow_delete_thread'] = false;
+
 	// Allow users to edit their own posts
 	$config['allow_self_edit'] = true;
 	// How long you are allowed to edit a post after posting, in seconds.

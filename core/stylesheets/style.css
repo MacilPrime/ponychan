@@ -977,6 +977,15 @@ table.recaptchatable {
 	max-width: 95%;
 	overflow: auto;
 }
+#watcherPage #watcherScreen,
+#watcherPage .watcherMenu {
+	background: none;
+	box-shadow: none;
+	border: none;
+	width: auto;
+	max-height: none;
+	max-width: none;
+}
 .watcherMenu h2 {
 	margin: 0;
 	padding: 3px 0;
@@ -1013,7 +1022,10 @@ a.wlink:hover {
 .wcounterror {
 	color: rgb(200,0,0);
 }
-.wremove, .wremove:visited {
+.wremove {
+	background: none;
+	border: none;
+	cursor: pointer;
 	color: rgb(160,0,0);
 	text-decoration: none;
 	float: right;

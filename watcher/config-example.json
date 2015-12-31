@@ -3,6 +3,9 @@
     "host": "localhost",
     "port": 4000
   },
+  "core": {
+    "path": "../core"
+  },
   "redis": {
     "prefix": "watcher_",
     "main": {
@@ -10,18 +13,19 @@
       "host": "localhost",
       "port": 1234,
       "pass": "blah",
-      "db": 0
+      "db": 2
     },
     "cache": {
       "socket": false,
       "host": "localhost",
       "port": 1235,
       "pass": "blah",
-      "db": 0
+      "db": 1
     }
   },
   "board": {
     "cookies_salt": "test value",
+    "boardlist": [["b"], ["pone", "cool"]]
   },
   "mysql": {
     "host": "localhost",

@@ -19,11 +19,11 @@ export default function checkMod(req: Object, res: Object, next: Function) {
     if (result.length == 0) {
       return;
     }
-    const {type, boards, password} = result[0][0];
+    const {id, type, boards, password} = result[0][0];
     if (hash !== modHash(username, password, salt)) {
       return;
     }
-    return {type, boards};
+    return {id, type, boards};
   })().then(mod => {
     req.mod = mod ? mod : null;
     next();

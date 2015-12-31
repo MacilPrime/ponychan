@@ -42,6 +42,9 @@ foreach ($delete as $id) {
         if (isset($_POST['file'])) {
             // Delete just the file
             deleteFile($id);
+        } else if ($post['thread'] === null && !$config['op_allow_delete_thread']) {
+            // Delete post contents only
+            deletePostContent($id);
         } else {
             // Delete entire post
             deletePost($id);

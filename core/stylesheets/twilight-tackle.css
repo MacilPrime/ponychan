@@ -376,7 +376,7 @@ div.pages {
         you an empty element. */
     color: rgb(163, 102, 158);
 }
-.wremove, .wremove:visited {
+.wremove {
      color: rgb(219, 177, 177);
  }
 .wremove:hover, .wlink:hover {

@@ -27,7 +27,7 @@ export const mysql = mysqlModule.createPool({
 
 // Promise Helpers
 
-export function mysql_query(query: string, vars: Array<string|number>=[]): Promise<[Object[], Object[]]> {
+export function mysql_query(query: string, vars: Array<string|number>=[]): Promise<[any, any]> {
   return new RSVP.Promise((resolve, reject) => {
     mysql.query(query, vars, (err, ...results) => {
       if (err)
@@ -39,3 +39,4 @@ export function mysql_query(query: string, vars: Array<string|number>=[]): Promi
 }
 
 export const c_get: (key:string) => Promise<?string> = RSVP.denodeify(credis.get.bind(credis));
+export const c_del: (key:string) => Promise<void> = RSVP.denodeify(credis.del.bind(credis));
