@@ -1765,10 +1765,18 @@ function mod_user_new() {
 		error($config['error']['noaccess']);
 
 	if (isset($_POST['username'], $_POST['password'], $_POST['type'])) {
-		if ($_POST['username'] == '')
-			error(sprintf($config['error']['required'], 'username'));
-		if ($_POST['password'] == '')
-			error(sprintf($config['error']['required'], 'password'));
+		if (mb_strlen($_POST['username']) > 30) {
+			error('The username was too long. The username must be between 3 and 30 characters.');
+		}
+		if (mb_strlen($_POST['username']) < 3) {
+			error('The username was too short. The username must be between 3 and 30 characters.');
+		}
+		if (mb_strlen($_POST['password']) > 100) {
+			error('The password was too long. The password must be less than 100 characters.');
+		}
+		if (mb_strlen($_POST['password']) < 8) {
+			error('The password was too short. The password must be at least 8 characters.');
+		}
 
 		if (isset($_POST['allboards'])) {
 			$boards = array('*');
