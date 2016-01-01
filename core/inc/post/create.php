@@ -143,8 +143,8 @@ $post['password'] = hashPostPassword($_POST['password']);
 $post['has_file'] = !isset($post['embed']) && (($post['op'] && !isset($post['no_longer_require_an_image_for_op']) && $config['force_image_op']) || (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != ''));
 
 preg_match('/^skype:([a-z][a-z0-9\.,\-_]{5,31})$/i', $_POST['email'], $skypeMatch);
-$post['email_is_skype'] = boolval($skypeMatch);
-if ($post['email_is_skype']) {
+$post['email_protocol'] = $skypeMatch ? 'skype' : null;
+if ($skypeMatch) {
     $post['email'] = $skypeMatch[1];
 }
 

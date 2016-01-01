@@ -177,10 +177,10 @@ $migration_procedures = [
 			ADD KEY (`author`),
 			ADD KEY (`parent`)") or error(db_error());
 	},
-	'skype_email' => function() {
+	'email-protocol' => function() {
 		global $boards;
 		foreach ($boards as $board) {
-			query("ALTER TABLE `posts_{$board['uri']}` ADD email_is_skype INT(1) NOT NULL;") or error(db_error());
+			query("ALTER TABLE `posts_{$board['uri']}` ADD `email_protocol` varchar(30) DEFAULT NULL") or error(db_error());
 		}
 	},
 	'email-dehtml' => function() {
