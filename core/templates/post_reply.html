@@ -12,7 +12,9 @@
 		{% endif %}
 		{% if post.email|length > 0 %}
 			{# start email #}
-			 <a class="email namepart" href="mailto:{{ post.email|url_encode }}">
+			 <a class="email namepart"
+				href="{{ post.email_protocol ? post.email_protocol : 'mailto' }}:{{ post.email|url_encode }}"
+				>
 		{% else %}
 			 <span class="namepart">
 		{% endif %}

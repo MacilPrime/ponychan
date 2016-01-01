@@ -77,8 +77,10 @@ This is a mature content thread. You must have viewing mature content enabled in
 			<span class="subject">{{ post.subject|bidi_cleanup }}</span>
 		{% endif %}
 		{% if post.email|length > 0 %}
-			{# start email #}
-			 <a class="email namepart" href="mailto:{{ post.email|url_encode }}">
+      {# start email #}
+			 <a class="email namepart"
+				href="{{ post.email_protocol ? post.email_protocol : 'mailto' }}:{{ post.email|url_encode }}"
+				>
 		{% else %}
 			 <span class="namepart">
 		{% endif %}

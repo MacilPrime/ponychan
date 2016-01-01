@@ -142,6 +142,12 @@ $post['body'] = $_POST['body'];
 $post['password'] = hashPostPassword($_POST['password']);
 $post['has_file'] = !isset($post['embed']) && (($post['op'] && !isset($post['no_longer_require_an_image_for_op']) && $config['force_image_op']) || (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != ''));
 
+preg_match('/^skype:([a-z][a-z0-9\.,\-_]{5,31})$/i', $_POST['email'], $skypeMatch);
+$post['email_protocol'] = $skypeMatch ? 'skype' : null;
+if ($skypeMatch) {
+    $post['email'] = $skypeMatch[1];
+}
+
 if ($post['has_file']) {
     $post['filename'] = urldecode($_FILES['file']['name']);
     $post['filehash'] = $config['file_hash']($_FILES['file']['tmp_name']);
@@ -215,17 +221,33 @@ $trip = generate_tripcode($post['name']);
 $post['name'] = $trip[0];
 $post['trip'] = isset($trip[1]) ? $trip[1] : '';
 
-if (strtolower($post['email']) == 'noko') {
+$post['noko'] = $config['always_noko'];
+$post['sage'] = false;
+
+if (preg_match("/(?:#|^)nokosage(?=#|$)/i", $post['email'])) {
+    $post['noko'] = true;
+    $post['sage'] = true;
+    if ($config['hide_noko'] || $config['hide_sage'])
+        $post['email'] = preg_replace("/(?:#|^)nokosage(?=#|$)/i", "", $post['email']);
+}
+
+if (preg_match("/(?:#|^)nonoko(?=#|$)/i", $post['email'])) {
+    $post['noko'] = false;
+    if ($config['hide_noko'])
+        $post['email'] = preg_replace("/(?:#|^)nonoko(?=#|$)/i", "", $post['email']);
+}
+
+if (preg_match("/(?:#|^)noko(?=#|$)/i", $post['email'])) {
     $post['noko'] = true;
     if ($config['hide_noko'])
-        $post['email'] = '';
-} else $post['noko'] = false;
+        $post['email'] = preg_replace("/(?:#|^)noko(?=#|$)/i", "", $post['email']);
+}
 
-if (strtolower($post['email']) == 'sage') {
+if (preg_match("/(?:#|^)sage(?=#|$)/i", $post['email'])) {
     $post['sage'] = true;
     if ($config['hide_sage'])
-        $post['email'] = '';
-} else $post['sage'] = false;
+        $post['email'] = preg_replace("/(?:#|^)sage(?=#|$)/i", "", $post['email']);
+}
 
 $post['mature'] = $post['op'] ? false : $thread['mature'];
 
@@ -526,7 +548,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 $root = $post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root'];
 
-if ($wantjson || $config['always_noko'] || $post['noko']) {
+function shouldStayInThread() {
+    global $wantjson, $config, $post;
+    if ($wantjson)
+        return true; // posting from QR never touches redirects.
+    return $post['noko'];
+    // 'noko' in email field determines whether you stay or not.
+}
+if (shouldStayInThread()) {
     $redirect = $root . $board['dir'] . $config['dir']['res'] .
         sprintf($config['file_page'], $post['op'] ? $id:$post['thread']) . (!$post['op'] ? '#' . $id : '');
 
@@ -597,7 +626,7 @@ if ($wantjson) {
     header('Location: ' . $redirect, true, $config['redirect_http']);
 }
 
-if ($wantjson || $config['always_noko'] || $post['noko']) {
+if (shouldStayInThread()) {
     close_request();
 }
 

@@ -633,13 +633,13 @@ function mod_page_ip($mask_url) {
 			if (!$post['thread']) {
 				// TODO: There is no reason why this should be such a fucking mess.
 				$po = new Thread(
-					$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+					$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['email_is_skype'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
 					$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 					$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 				);
 			} else {
 				$po = new Post(
-					$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
+					$post['id'], $post['thread'], $post['subject'], $post['email'], $post['email_protocol'], $post['email_is_skype'], $post['name'], $post['trip'], $post['capcode'],
 					$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 					$post['file'], $post['file_uri'], $post['filewidth'],
 					$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
@@ -897,13 +897,13 @@ function mod_search() {
 				if (!$post['thread']) {
 					// TODO: There is no reason why this should be such a fucking mess.
 					$po = new Thread(
-						$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+						$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
 						$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 						$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 					);
 				} else {
 					$po = new Post(
-						$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
+						$post['id'], $post['thread'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'],
 						$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 						$post['file'], $post['file_uri'], $post['filewidth'],
 						$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
@@ -1048,13 +1048,13 @@ function mod_posts($mask_url, $boardName, $page = null) {
 		if (!$post['thread']) {
 			// TODO: There is no reason why this should be such a fucking mess.
 			$po = new Thread(
-				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+				$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
 				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 			);
 		} else {
 			$po = new Post(
-				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
+				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'],
 				$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 				$post['file'], $post['file_uri'], $post['filewidth'],
 				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
@@ -2103,13 +2103,13 @@ function mod_reports() {
 		if (!$post['thread']) {
 			// Still need to fix this:
 			$po = new Thread(
-				$post['id'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
+				$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
 				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
 			);
 		} else {
 			$po = new Post(
-				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['name'], $post['trip'], $post['capcode'],
+				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'],
 				$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 				$post['file'], $post['file_uri'], $post['filewidth'],
 				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']

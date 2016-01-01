@@ -351,13 +351,13 @@
 	// Show image spoiler button if thread spoiler button is shown?
 	$config['show_image_spoiler_when_thread_spoiler_available'] = false;
 
-	// Always act as if they had typed "noko" in the email field no mattter what
+	// Always act as if they had typed "noko" in the email unless the use "nonoko"
 	$config['always_noko'] = false;
 
 	// Don't show email field when set to noko
 	$config['hide_noko'] = true;
 	// Don't show email field when set to sage
-	$config['hide_sage'] = false;
+	$config['hide_sage'] = true;
 
 	// Custom tripcodes. The below example makes a tripcode
 	//  of "#test123" evaluate to "!HelloWorld"
