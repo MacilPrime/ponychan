@@ -1828,25 +1828,6 @@ function mod_users() {
 	mod_page(sprintf('%s (%d)', _('Manage users'), count($users)), 'mod/users.html', array('users' => $users));
 }
 
-function mod_user_promote($uid, $action) {
-	global $config;
-
-	// Check the referrer
-	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
-		error($config['error']['referer']);
-
-	if (!hasPermission('promoteusers'))
-		error($config['error']['noaccess']);
-
-	$query = prepare("UPDATE `mods` SET `type` = `type` " . ($action == 'promote' ? "+1 WHERE `type` < " . (int)ADMIN : "-1 WHERE `type` > " . (int)JANITOR) . " AND `id` = :id");
-	$query->bindValue(':id', $uid);
-	$query->execute() or error(db_error($query));
-
-	modLog(($action == 'promote' ? 'Promoted' : 'Demoted') . " user #{$uid}", 2);
-
-	header('Location: ?/users', true, $config['redirect_http']);
-}
-
 function mod_pm($id, $reply = false) {
 	global $mod, $config;
 

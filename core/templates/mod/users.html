@@ -48,12 +48,6 @@
 				</td>
 			{% endif %}
 			<td>
-				{% if mod|hasPermission('promoteusers') and user.type < constant('ADMIN') %}
-					<a style="float:left;text-decoration:none" href="?/users/{{ user.id }}/promote" title="{% trans 'Promote' %}">&#9650;</a>
-				{% endif %}
-				{% if mod|hasPermission('promoteusers') and user.type > constant('JANITOR') %}
-					 <a style="float:left;text-decoration:none" href="?/users/{{ user.id }}/demote" title="{% trans 'Demote' %}">&#9660;</a>
-				{% endif %}
 				{% if mod|hasPermission('modlog') %}
 					 <a class="unimportant" style="margin-left:5px;float:right" href="?/log:{{ user.username|url_encode }}">[{% trans 'log' %}]</a>
 				{% endif %}

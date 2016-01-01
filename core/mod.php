@@ -31,7 +31,6 @@ $pages = array(
 
 	'/users'				=> 'users',		// manage users
 	'/users/(\d+)'				=> 'user',		// edit user
-	'/users/(\d+)/(promote|demote)'		=> 'user_promote',	// prmote/demote user
 	'/users/new'				=> 'user_new',		// create a new user
 	'/new_PM/([^/]+)'			=> 'new_pm',		// create a new pm
 	'/PM/(\d+)(/reply)?'			=> 'pm',		// read a pm
