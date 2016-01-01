@@ -311,7 +311,7 @@ function embed_html($link) {
 }
 
 class Post {
-	public function __construct($id, $thread, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
+	public function __construct($id, $thread, $subject, $email, $email_is_skype, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -321,6 +321,7 @@ class Post {
 		$this->subject = $subject;
 		$this->email = $email;
 		$this->name = $name;
+		$this->email_is_skype = $email_is_skype;
 		$this->trip = $trip;
 		$this->capcode = $capcode;
 		$this->body = $body;
@@ -416,7 +417,7 @@ class Post {
 };
 
 class Thread {
-	public function __construct($id, $subject, $email, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false) {
+	public function __construct($id, $subject, $email, $email_is_skype, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -425,6 +426,7 @@ class Thread {
 		$this->subject = $subject;
 		$this->email = $email;
 		$this->name = $name;
+		$this->email_is_skype = $email_is_skype;
 		$this->trip = $trip;
 		$this->capcode = $capcode;
 		$this->body = $body;
