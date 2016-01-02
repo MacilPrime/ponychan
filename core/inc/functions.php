@@ -1178,7 +1178,7 @@ function post(array $post) {
 	} else {
 		$query->bindValue(':trip', NULL, PDO::PARAM_NULL);
 	}
-	$query->bindValue(':email_protocol', $post['email_protocol']);
+	$query->bindValue(':email_protocol', !empty($post['email_protocol']) ? $post['email_protocol'] : null);
 	$query->bindValue(':name', $post['name']);
 	$query->bindValue(':body', $post['body']);
 	$query->bindValue(':body_nomarkup', $post['body_nomarkup']);
