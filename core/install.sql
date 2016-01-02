@@ -79,6 +79,8 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `board` varchar(120) DEFAULT NULL,
   `ban_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:full, 1:image only',
   `seen` tinyint(1) NOT NULL,
+  `signed_name` VARCHAR(75) NULL,
+  `signed_trip` VARCHAR(25) NULL,
   PRIMARY KEY (`id`),
   KEY (`expires`),
   KEY `status_range` (`status`, `range_type`, `range_start`, `range_end`)
@@ -167,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `mods` (
   `type` smallint(1) NOT NULL COMMENT '0: janitor, 1: mod, 2: admin',
   `boards` text NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`,`username`)
+  UNIQUE KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=2 ;
 
 --

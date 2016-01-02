@@ -85,8 +85,8 @@
 		{% endif %}
 		{% if mod|hasPermission('manageusers') %}
 			<li><a href="?/users">{% trans 'Manage users' %}</a></li>
-		{% elseif mod|hasPermission('change_password') %}
-			<li><a href="?/users/{{ mod.id }}">{% trans 'Change password' %}</a></li>
+		{% else %}
+			<li><a href="?/users/{{ mod.id }}">{% trans 'Edit Account' %}</a></li>
 		{% endif %}
 		{% if mod|hasPermission('themes') %}
 			<li><a href="?/themes">{% trans 'Manage themes' %}</a></li>
@@ -124,7 +124,15 @@
 <fieldset>
 	<legend>{% trans 'User account' %}</legend>
 
-	<div>You are logged in as <strong>{{ mod.username }}</strong></div>
+	<div>You are logged in as <strong>{{ mod.username }}</strong>
+		 (<span class="staffname">
+			<span class="namepart">
+				<span class="name">{{ mod.signed_name }}</span>
+				<span class="trip">{{ mod.signed_trip }}</span>
+			</span>
+		 <span class="capcode">## {{ config.mod.capcode[mod.type][0] }}</span>
+		</span>)
+	</div>
 
 	<ul>
 		<li><a href="?/logout">{% trans 'Logout' %}</a></li>

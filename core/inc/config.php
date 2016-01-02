@@ -1042,6 +1042,14 @@
 		define('DISABLED',	3,	true);
 	}
 
+	$config['mod']['ranks'] = [
+		FOUNDER => 'Founder',
+		DEVELOPER => 'Developer',
+		JANITOR		=> 'Janitor',
+		MOD		=> 'Mod',
+		ADMIN		=> 'Admin'
+	];
+
 /*
  * ====================
  *  Mod permissions
@@ -1146,10 +1154,12 @@
 	$config['permissions']['manageusers'] = MOD;
 	// Promote/demote users
 	$config['permissions']['promoteusers'] = ADMIN;
-	// Edit any users' login information
+	// Edit any users' information
 	$config['permissions']['editusers'] = ADMIN;
 	// Change user's own password
 	$config['permissions']['change_password'] = -INF;
+	// Change user's own mod signature
+	$config['permissions']['change_signature'] = -INF;
 	// Delete a user
 	$config['permissions']['deleteusers'] = ADMIN;
 	// Create a user

@@ -724,6 +724,24 @@ function hasPermission($action, $board = null, $_mod = null) {
 	return true;
 }
 
+function mod_legal_username_check($username) {
+	if (mb_strlen($username) > 30) {
+		error('The username was too long. The username must be between 3 and 30 characters.');
+	}
+	if (mb_strlen($username) < 3) {
+		error('The username was too short. The username must be between 3 and 30 characters.');
+	}
+}
+
+function mod_legal_password_check($password) {
+	if (mb_strlen($password) > 100) {
+		error('The password was too long. The password must be less than 100 characters.');
+	}
+	if (mb_strlen($password) < 8) {
+		error('The password was too short. The password must be at least 8 characters.');
+	}
+}
+
 function listBoards() {
 	global $config;
 
@@ -1035,7 +1053,7 @@ function checkBan($board = 0, $types = null) {
 	if ($types === null)
 		$types = array(FULL_BAN);
 
-	$query = prepare("SELECT `id`, `set`, `expires`, `reason`, `board`, `seen`, `ban_type` FROM `bans`
+	$query = prepare("SELECT `id`, `set`, `expires`, `reason`, `board`, `seen`, `ban_type`, `signed_name`, `signed_trip` FROM `bans`
 		WHERE `range_type` = :ip_type AND `range_start` <= INET6_ATON(:ip) AND INET6_ATON(:ip) <= `range_end`
 		AND (`board` IS NULL OR `board` = :board)
 		AND `status` = 0
@@ -1160,7 +1178,7 @@ function post(array $post) {
 	} else {
 		$query->bindValue(':trip', NULL, PDO::PARAM_NULL);
 	}
-	$query->bindValue(':email_protocol', $post['email_protocol']);
+	$query->bindValue(':email_protocol', !empty($post['email_protocol']) ? $post['email_protocol'] : null);
 	$query->bindValue(':name', $post['name']);
 	$query->bindValue(':body', $post['body']);
 	$query->bindValue(':body_nomarkup', $post['body_nomarkup']);

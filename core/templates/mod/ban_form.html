@@ -12,9 +12,8 @@
 	{% if post and board %}
 		<input type="hidden" name="delete" value="{% if delete %}1{% else %}0{% endif %}">
 	{% endif %}
-	
+
 	<table>
-		
 		<tr>
 			<th>
 				<label for="mask">{% trans 'IP' %} <span class="unimportant">{% trans '(or subnet)' %}</span></label>
@@ -32,9 +31,24 @@
 				<label for="reason">{% trans 'Reason' %}</label>
 			</th>
 			<td>
-				<textarea name="reason" id="reason" rows="5" cols="30">{{ reason }}</textarea>
+				<textarea name="reason" id="reason" rows="5" cols="30" required>{{ reason }}</textarea>
 			</td>
 		</tr>
+		{% if mod.signed_name or mod.signed_trip %}
+		<tr>
+			<th>{% trans 'Signature' %}</th>
+			<td>
+				<label>
+					<input type="checkbox" name="bansign" checked>&nbsp;
+					<span class="description">Sign my name</span>
+					 (<span class="namepart">
+						<span class="name">{{ mod.signed_name }}</span>
+						<span class="trip">{{ mod.signed_trip }}</span>
+					</span>)
+				</label>
+			</td>
+		</tr>
+		{% endif %}
 		{% if post and board and not delete %}
 			<tr>
 				<th>
@@ -58,15 +72,15 @@
 			<td>
 				<ul style="list-style:none;padding:2px 5px">
 					<li>
-						<input type="radio" name="board" value="*" id="ban-allboards" checked> 
+						<input type="radio" name="board" value="*" id="ban-allboards" checked>&nbsp;
 						<label style="display:inline" for="ban-allboards">
 							<em>{% trans 'all boards' %}</em>
 						</label>
 					</li>
-					
+
 					{% for board in boards %}
 						<li>
-							<input type="radio" name="board" value="{{ board.uri }}" id="ban-board-{{ board.uri }}"> 
+							<input type="radio" name="board" value="{{ board.uri }}" id="ban-board-{{ board.uri }}">&nbsp;
 							<label style="display:inline" for="ban-board-{{ board.uri }}">
 								{{ config.board_abbreviation|sprintf(board.uri) }} - {{ board.title }}
 							</label>
@@ -100,4 +114,3 @@
 		</tr>
 	</table>
 </form>
-

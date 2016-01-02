@@ -31,7 +31,8 @@ $pages = array(
 
 	'/users'				=> 'users',		// manage users
 	'/users/(\d+)'				=> 'user',		// edit user
-	'/users/(\d+)/(promote|demote)'		=> 'user_promote',	// prmote/demote user
+	'/users/(\d+)/change_password'	=> 'user_change_password',	// edit user password
+	'/users/(\d+)/change_signature'	=> 'user_change_signature',	// edit user signature
 	'/users/new'				=> 'user_new',		// create a new user
 	'/new_PM/([^/]+)'			=> 'new_pm',		// create a new pm
 	'/PM/(\d+)(/reply)?'			=> 'pm',		// read a pm

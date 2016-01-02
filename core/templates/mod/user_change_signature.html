@@ -1,0 +1,29 @@
+<form name="moduser_change_signature" action="{{ action }}" method="post">
+	<table>
+		<tr>
+			<th>{% trans 'Username' %}</th>
+			<td>
+				{{ user.username }}
+			</td>
+		</tr>
+		<tr>
+			<th>{% trans 'Current Signature' %}</th>
+			<td>
+				<span class="namepart">
+					<span class="name">{{ user.signed_name }}</span>
+					<span class="trip">{{ user.signed_trip }}</span>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<th>{% trans 'New Signature' %}</th>
+			<td>
+				<input type="text" name="name">
+			</td>
+		</tr>
+	</table>
+
+	<ul style="padding:0;text-align:center;list-style:none">
+		<li><input type="submit" value="{% trans 'Submit' %}"></li>
+	</ul>
+</form>
