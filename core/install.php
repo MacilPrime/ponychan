@@ -274,8 +274,14 @@ $migration_procedures = [
 		query('ALTER TABLE `mods`
 			ADD `signed_name` VARCHAR(75) DEFAULT NULL,
 			ADD `signed_trip` VARCHAR(25) DEFAULT NULL')
+		 or error(db_error());
+	},
+	'mod-unique-names' => function() {
+		query('ALTER TABLE `mods`
+			DROP KEY `id`,
+			ADD UNIQUE KEY (`username`)')
 		or error(db_error());
- 	}
+	}
 ];
 
 if (file_exists($config['has_installed'])) {

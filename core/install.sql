@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `mods` (
   `type` smallint(1) NOT NULL COMMENT '0: janitor, 1: mod, 2: admin',
   `boards` text NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`,`username`)
+  UNIQUE KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=2 ;
 
 --
