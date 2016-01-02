@@ -53,7 +53,7 @@ function parse_time($str) {
 	return time() + $expire;
 }
 
-function ban($mask, $reason, $length, $board, $ban_type) {
+function ban($mask, $reason, $length, $board, $ban_type, $sign) {
 	global $mod, $pdo, $config;
 
 	if(mb_strlen(trim($reason)) == 0) {
@@ -70,13 +70,15 @@ function ban($mask, $reason, $length, $board, $ban_type) {
 		error(sprintf($config['error']['invalidfield'], 'ban_type'));
 	}
 
-	$query = prepare("INSERT INTO `bans` (`status`,`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`ban_type`,`seen`) VALUES (0, :range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, :ban_type, 0)");
+	$query = prepare("INSERT INTO `bans` (`status`,`range_type`,`range_start`,`range_end`,`mod`,`set`,`expires`,`reason`,`board`,`ban_type`,`seen`,`signed_name`,`signed_trip`) VALUES (0, :range_type, INET6_ATON(:range_start), INET6_ATON(:range_end), :mod, :time, :expires, :reason, :board, :ban_type, 0, :signed_name, :signed_trip)");
 	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 	$query->bindValue(':range_start', $range['range_start']);
 	$query->bindValue(':range_end', $range['range_end']);
 	$query->bindValue(':mod', $mod['id'], PDO::PARAM_INT);
 	$query->bindValue(':time', time(), PDO::PARAM_INT);
 	$query->bindValue(':ban_type', $ban_type, PDO::PARAM_INT);
+	$query->bindValue(':signed_name', $sign ? $mod['signed_name'] : null);
+	$query->bindValue(':signed_trip', $sign ? $mod['signed_trip'] : null);
 	if ($reason !== '') {
 		markup($reason);
 		$query->bindValue(':reason', $reason);

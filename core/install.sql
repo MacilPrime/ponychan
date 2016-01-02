@@ -79,6 +79,8 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `board` varchar(120) DEFAULT NULL,
   `ban_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:full, 1:image only',
   `seen` tinyint(1) NOT NULL,
+  `signed_name` VARCHAR(75) NULL,
+  `signed_trip` VARCHAR(25) NULL,
   PRIMARY KEY (`id`),
   KEY (`expires`),
   KEY `status_range` (`status`, `range_type`, `range_start`, `range_end`)

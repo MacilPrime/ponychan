@@ -41,7 +41,9 @@
 							{{ note.body }}
 						</td>
 						<td class="minimal">
-							{{ note.time|date(config.post_date) }}
+							<time datetime="{{ note.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">
+								{{ note.time|date(config.post_date) }}
+							</time>
 						</td>
 						{% if mod|hasPermission('remove_notes') %}
 							<td class="minimal">
@@ -121,6 +123,19 @@
 						</td>
 					</tr>
 					<tr>
+						<th>{% trans 'Signed' %}</th>
+						<td>
+							{% if ban.signed_name or ban.signed_trip %}
+								<span class="namepart">
+									<span class="name">{{ ban.signed_name ? ban.signed_name : "" }}</span>
+									<span class="trip">{{ ban.signed_trip ? ban.signed_trip : "" }}</span>
+								</span>
+							{% else %}
+								-
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
 						<th>{% trans 'Board' %}</th>
 						<td>
 							{% if ban.board %}
@@ -140,13 +155,21 @@
 					</tr>
 					<tr>
 						<th>{% trans 'Set' %}</th>
-						<td>{{ ban.set|date(config.post_date) }}</td>
+						<td>
+							<time datetime="{{ ban.set|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">
+								{{ ban.set|date(config.post_date) }}
+							</time>
+							 <small>({{ ban.set|ago }} ago)</small>
+						</td>
 					</tr>
 					<tr>
 						<th>{% trans 'Expires' %}</th>
 						<td>
 							{% if ban.expires %}
-								{{ ban.expires|date(config.post_date) }}
+								<time datetime="{{ ban.expires|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">
+									{{ ban.expires|date(config.post_date) }}
+								</time>
+								 <small>({{ ban.expires|until }} from now)</small>
 							{% else %}
 								<em>{% trans 'never' %}</em>
 							{% endif %}
@@ -221,9 +244,15 @@
 							<a href="?/IP/{{ ban|mask|mask_url }}">{{ ban|mask }}</a>
 						</td>
 						<td>
-							{% if ban.status == constant('BAN_STATUS_ACTIVE') %}{% trans 'Active' %}
-							{% elseif ban.status == constant('BAN_STATUS_EXPIRED') %}{% trans 'Expired' %}
-							{% elseif ban.status == constant('BAN_STATUS_LIFTED') %}{% trans 'Lifted on ' %}{{ ban.lifted|date(config.post_date) }}
+							{% if ban.status == constant('BAN_STATUS_ACTIVE') %}
+								{% trans 'Active' %}
+							{% elseif ban.status == constant('BAN_STATUS_EXPIRED') %}
+								{% trans 'Expired' %}
+							{% elseif ban.status == constant('BAN_STATUS_LIFTED') %}
+								{% trans 'Lifted on ' %}
+								<time datetime="{{ ban.lifted|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">
+									{{ ban.lifted|date(config.post_date) }}
+								</time>
 							{% endif %}
 						</td>
 						<td>
@@ -261,7 +290,9 @@
 							{% if ban.expires == 0 %}
 								<em>{% trans 'never' %}</em>
 							{% else %}
-								{{ ban.expires|date(config.post_date) }}
+								<time datetime="{{ ban.expires|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">
+									{{ ban.expires|date(config.post_date) }}
+								</time>
 								{% if ban.expires > time() %}
 										<small>(in {{ ban.expires|until }})</small>
 								{% endif %}

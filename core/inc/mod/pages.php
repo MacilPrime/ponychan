@@ -701,19 +701,19 @@ function mod_page_ip($mask_url) {
 }
 
 function mod_ban() {
-	global $config;
+	global $config, $mod;
 
 	if (!hasPermission('ban'))
 		error($config['error']['noaccess']);
 
 	if (!isset($_POST['mask'], $_POST['reason'], $_POST['length'], $_POST['board'], $_POST['ban_type'])) {
-		mod_page(_('New ban'), 'mod/ban_form.html', array('token' => make_secure_link_token('ban'), 'boards' => listBoards()));
+		mod_page(_('New ban'), 'mod/ban_form.html', array('token' => make_secure_link_token('ban'), 'mod' => $mod, 'boards' => listBoards()));
 		return;
 	}
 
 	require_once 'inc/mod/ban.php';
 
-	ban($_POST['mask'], $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board'], $_POST['ban_type']);
+	ban($_POST['mask'], $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board'], $_POST['ban_type'], isset($_POST['bansign']) && $_POST['bansign']);
 
 	if (isset($_POST['redirect']))
 		header('Location: ' . $_POST['redirect'], true, $config['redirect_http']);
@@ -1468,7 +1468,7 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 
 		$mask = $_POST['mask'];
 
-		ban($mask, $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board'], $_POST['ban_type']);
+		ban($mask, $_POST['reason'], parse_time($_POST['length']), $_POST['board'] == '*' ? false : $_POST['board'], $_POST['ban_type'], isset($_POST['bansign']) && $_POST['bansign']);
 
 		if (isset($_POST['public_message'], $_POST['message'])) {
 			// public ban message
@@ -1494,6 +1494,7 @@ function mod_ban_post($board, $delete, $post, $token = false) {
 	$mask = ipToUserRange($_post['ip']);
 
 	$args = array(
+		'mod' => $mod,
 		'mask' => $mask,
 		'hide_ip' => !hasPermission('show_ip', $board),
 		'post' => $post,
@@ -1634,8 +1635,9 @@ function mod_deletebyip($boardName, $post, $global = false) {
 
 function mod_user($uid) {
 	global $config, $mod;
+	$selfEdit = $uid === $mod['id'];
 
-	if (!hasPermission('editusers') && !(hasPermission('change_password') && $uid == $mod['id']))
+	if (!hasPermission('editusers') && !$selfEdit)
 		error($config['error']['noaccess']);
 
 	$query = prepare('SELECT * FROM `mods` WHERE `id` = :id');
@@ -1644,25 +1646,23 @@ function mod_user($uid) {
 	if (!$user = $query->fetch(PDO::FETCH_ASSOC))
 		error($config['error']['404']);
 
-	if (hasPermission('editusers') && isset($_POST['username'], $_POST['password'])) {
+	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+		if (hasPermission('modlog')) {
+			$query = prepare('SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `modlogs` WHERE `mod` = :id ORDER BY `time` DESC LIMIT 5');
+			$query->bindValue(':id', $uid);
+			$query->execute() or error(db_error($query));
+			$log = $query->fetchAll(PDO::FETCH_ASSOC);
+		} else {
+			$log = array();
+		}
+
+		$user['boards'] = explode(',', $user['boards']);
+
+		mod_page(_('Edit user'), 'mod/user.html', array('user' => $user, 'logs' => $log, 'boards' => listBoards()));
+	} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Check the referrer
 		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
 			error($config['error']['referer']);
-
-		if (isset($_POST['allboards'])) {
-			$boards = array('*');
-		} else {
-			$_boards = listBoards();
-			foreach ($_boards as &$board) {
-				$board = $board['uri'];
-			}
-
-			$boards = array();
-			foreach ($_POST as $name => $value) {
-				if (preg_match('/^board_(\w+)$/', $name, $matches) && in_array($matches[1], $_boards))
-					$boards[] = $matches[1];
-			}
-		}
 
 		if (isset($_POST['delete'])) {
 			if (!hasPermission('deleteusers'))
@@ -1673,37 +1673,77 @@ function mod_user($uid) {
 			$query->execute() or error(db_error($query));
 
 			modLog('Deleted user ' . utf8tohtml($user['username']) . ' <small>(#' . $user['id'] . ')</small>', 2);
+		} else {
+			if (isset($_POST['username'])) {
+				if (!hasPermission('editusers'))
+					error($config['error']['noaccess']);
 
-			header('Location: ?/users', true, $config['redirect_http']);
+				if ($_POST['username'] !== $user['username']) {
+					mod_legal_username_check($_POST['username']);
 
-			return;
-		}
+					$query = prepare('UPDATE `mods` SET `username` = :username WHERE `id` = :id');
+					$query->bindValue(':id', $uid);
+					$query->bindValue(':username', $_POST['username']);
+					$query->execute() or error(db_error($query));
 
-		if ($_POST['username'] == '')
-			error(sprintf($config['error']['required'], 'username'));
+					modLog('Renamed user "' . utf8tohtml($user['username']) . '" <small>(#' . $user['id'] . ')</small> to "' . utf8tohtml($_POST['username']) . '"');
+					$user['username'] = $_POST['username'];
 
-		$query = prepare('UPDATE `mods` SET `username` = :username, `boards` = :boards WHERE `id` = :id');
-		$query->bindValue(':id', $uid);
-		$query->bindValue(':username', $_POST['username']);
-		$query->bindValue(':boards', implode(',', $boards));
-		$query->execute() or error(db_error($query));
+					if ($uid === $mod['id']) {
+						login($user['username'], $user['password'], false);
+						setCookies();
+					}
+				}
+			}
 
-		if ($user['username'] !== $_POST['username']) {
-			// account was renamed
-			modLog('Renamed user "' . utf8tohtml($user['username']) . '" <small>(#' . $user['id'] . ')</small> to "' . utf8tohtml($_POST['username']) . '"');
-		}
+			if (isset($_POST['allboards'])) {
+				$boards = array('*');
+			} else {
+				$_boards = listBoards();
+				foreach ($_boards as &$board) {
+					$board = $board['uri'];
+				}
 
-		if ($_POST['password'] != '') {
-			$query = prepare('UPDATE `mods` SET `password` = SHA1(:password) WHERE `id` = :id');
-			$query->bindValue(':id', $uid);
-			$query->bindValue(':password', $_POST['password']);
-			$query->execute() or error(db_error($query));
+				$boards = array();
+				foreach ($_POST as $name => $value) {
+					if (preg_match('/^board_(\w+)$/', $name, $matches) && in_array($matches[1], $_boards))
+						$boards[] = $matches[1];
+				}
+				sort($boards);
+			}
 
-			modLog('Changed password for ' . utf8tohtml($_POST['username']) . ' <small>(#' . $user['id'] . ')</small>', 2);
+			$current_boards = explode(',', $user['boards']);
+			sort($current_boards);
 
-			if ($uid == $mod['id']) {
-				login($_POST['username'], $_POST['password']);
-				setCookies();
+			if ($boards !== $current_boards) {
+				if (!hasPermission('editusers'))
+					error($config['error']['noaccess']);
+
+				$query = prepare('UPDATE `mods` SET `boards` = :boards WHERE `id` = :id');
+				$query->bindValue(':id', $uid);
+				$query->bindValue(':boards', implode(',', $boards));
+				$query->execute() or error(db_error($query));
+
+				modLog('Changed boards of user "' . utf8tohtml($user['username']) . '" <small>(#' . $user['id'] . ')</small> to "' . utf8tohtml(implode(',', $boards)) . '"');
+				$user['boards'] = implode(',', $boards);
+			}
+
+			if (isset($_POST['type'])) {
+				if (!array_key_exists($_POST['type'], $config['mod']['ranks']))
+					error("Invalid rank");
+
+				if ($user['type'] !== $_POST['type']) {
+					if (!hasPermission('promoteusers'))
+						error($config['error']['noaccess']);
+
+					$query = prepare('UPDATE `mods` SET `type` = :type WHERE `id` = :id');
+					$query->bindValue(':id', $uid);
+					$query->bindValue(':type', $_POST['type']);
+					$query->execute() or error(db_error($query));
+
+					modLog('Changed type of user "' . utf8tohtml($user['username']) . '" <small>(#' . $user['id'] . ')</small> to ' . utf8tohtml($config['mod']['ranks'][$_POST['type']]));
+					$user['type'] = $_POST['type'];
+				}
 			}
 		}
 
@@ -1711,47 +1751,9 @@ function mod_user($uid) {
 			header('Location: ?/users', true, $config['redirect_http']);
 		else
 			header('Location: ?/', true, $config['redirect_http']);
-
-		return;
-	}
-
-	if (hasPermission('change_password') && $uid == $mod['id'] && isset($_POST['password'])) {
-		// Check the referrer
-		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
-			error($config['error']['referer']);
-
-		if ($_POST['password'] != '') {
-			$query = prepare('UPDATE `mods` SET `password` = SHA1(:password) WHERE `id` = :id');
-			$query->bindValue(':id', $uid);
-			$query->bindValue(':password', $_POST['password']);
-			$query->execute() or error(db_error($query));
-
-			modLog('Changed own password', 2);
-
-			login($user['username'], $_POST['password']);
-			setCookies();
-		}
-
-		if (hasPermission('manageusers'))
-			header('Location: ?/users', true, $config['redirect_http']);
-		else
-			header('Location: ?/', true, $config['redirect_http']);
-
-		return;
-	}
-
-	if (hasPermission('modlog')) {
-		$query = prepare('SELECT *, INET6_NTOA(`ip_data`) AS `ip` FROM `modlogs` WHERE `mod` = :id ORDER BY `time` DESC LIMIT 5');
-		$query->bindValue(':id', $uid);
-		$query->execute() or error(db_error($query));
-		$log = $query->fetchAll(PDO::FETCH_ASSOC);
 	} else {
-		$log = array();
+		error('Invalid request method');
 	}
-
-	$user['boards'] = explode(',', $user['boards']);
-
-	mod_page(_('Edit user'), 'mod/user.html', array('user' => $user, 'logs' => $log, 'boards' => listBoards()));
 }
 
 function mod_user_new() {
@@ -1765,18 +1767,8 @@ function mod_user_new() {
 		error($config['error']['noaccess']);
 
 	if (isset($_POST['username'], $_POST['password'], $_POST['type'])) {
-		if (mb_strlen($_POST['username']) > 30) {
-			error('The username was too long. The username must be between 3 and 30 characters.');
-		}
-		if (mb_strlen($_POST['username']) < 3) {
-			error('The username was too short. The username must be between 3 and 30 characters.');
-		}
-		if (mb_strlen($_POST['password']) > 100) {
-			error('The password was too long. The password must be less than 100 characters.');
-		}
-		if (mb_strlen($_POST['password']) < 8) {
-			error('The password was too short. The password must be at least 8 characters.');
-		}
+		mod_legal_username_check($_POST['username']);
+		mod_legal_password_check($_POST['password']);
 
 		if (isset($_POST['allboards'])) {
 			$boards = array('*');
@@ -1815,6 +1807,88 @@ function mod_user_new() {
 	mod_page(_('New user'), 'mod/user.html', array('new' => true, 'boards' => listBoards()));
 }
 
+function mod_user_change_password($uid) {
+	global $config, $mod;
+	$selfEdit = $uid === $mod['id'];
+
+	if (!hasPermission('editusers') && !$selfEdit || !hasPermission('change_password'))
+		error($config['error']['noaccess']);
+
+	$query = prepare('SELECT * FROM `mods` WHERE `id` = :id');
+	$query->bindValue(':id', $uid);
+	$query->execute() or error(db_error($query));
+	if (!$user = $query->fetch(PDO::FETCH_ASSOC))
+		error($config['error']['404']);
+
+	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+		mod_page(_('Change Password'), 'mod/user_change_password.html', array('user' => $user, 'boards' => listBoards()));
+	} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
+		if (!isset($_POST['password'], $_POST['password2']))
+			error($config['error']['missedafield']);
+
+		if ($_POST['password'] !== $_POST['password2'])
+			error("Passwords don't match!");
+
+		mod_legal_password_check($_POST['password']);
+
+		$query = prepare('UPDATE `mods` SET `password` = :password WHERE `id` = :id');
+		$query->bindValue(':id', $uid);
+		$query->bindValue(':password', sha1($_POST['password']));
+		$query->execute() or error(db_error($query));
+
+		modLog('Changed password for ' . utf8tohtml($user['username']) . ' <small>(#' . $user['id'] . ')</small>', 2);
+
+		if ($uid === $mod['id']) {
+			login($user['username'], $_POST['password']);
+			setCookies();
+		}
+
+		header('Location: ?/users/' . $uid, true, $config['redirect_http']);
+	}
+}
+
+function mod_user_change_signature($uid) {
+	global $config, $mod;
+	$selfEdit = $uid === $mod['id'];
+
+	if (!hasPermission('editusers') && !$selfEdit || !hasPermission('change_password'))
+		error($config['error']['noaccess']);
+
+	$query = prepare('SELECT * FROM `mods` WHERE `id` = :id');
+	$query->bindValue(':id', $uid);
+	$query->execute() or error(db_error($query));
+	if (!$user = $query->fetch(PDO::FETCH_ASSOC))
+		error($config['error']['404']);
+
+	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+		mod_page(_('Change Password'), 'mod/user_change_signature.html', array('user' => $user, 'boards' => listBoards()));
+	} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		// Check the referrer
+		if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+			error($config['error']['referer']);
+
+		if (!isset($_POST['name']))
+			error($config['error']['missedafield']);
+
+		$pair = generate_tripcode($_POST['name']);
+		$name = $pair[0];
+		$trip = isset($pair[1]) ? $pair[1] : '';
+
+		$query = prepare('UPDATE `mods` SET `signed_name` = :name, `signed_trip` = :trip WHERE `id` = :id');
+		$query->bindValue(':id', $uid);
+		$query->bindValue(':name', $name);
+		$query->bindValue(':trip', $trip);
+		$query->execute() or error(db_error($query));
+
+		modLog('Changed signature for ' . utf8tohtml($user['username']) . ' <small>(#' . $user['id'] . ')</small> to <span class="name">' . utf8tohtml($name) . '</span><span class="trip">' . utf8tohtml($trip) . '</span>');
+
+		header('Location: ?/users/' . $uid, true, $config['redirect_http']);
+	}
+}
 
 function mod_users() {
 	global $config;

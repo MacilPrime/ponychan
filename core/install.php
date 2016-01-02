@@ -263,7 +263,19 @@ $migration_procedures = [
 				REFERENCES poll_questions(poll_id, id)
 				ON DELETE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
-	}
+	},
+	'ban-signing' => function() {
+		query('ALTER TABLE `bans`
+			ADD `signed_name` VARCHAR(75) DEFAULT NULL,
+			ADD `signed_trip` VARCHAR(25) DEFAULT NULL')
+		or error(db_error());
+	},
+	'new-signatures' => function() {
+		query('ALTER TABLE `mods`
+			ADD `signed_name` VARCHAR(75) DEFAULT NULL,
+			ADD `signed_trip` VARCHAR(25) DEFAULT NULL')
+		or error(db_error());
+ 	}
 ];
 
 if (file_exists($config['has_installed'])) {

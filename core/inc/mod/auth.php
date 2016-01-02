@@ -37,7 +37,7 @@ function login($username, $password, $makehash=true) {
 		$password = sha1($password);
 	}
 
-	$query = prepare("SELECT `id`,`type`,`boards` FROM `mods` WHERE `username` = :username AND `password` = :password LIMIT 1");
+	$query = prepare("SELECT `id`,`type`,`boards`,`signed_name`,`signed_trip` FROM `mods` WHERE `username` = :username AND `password` = :password LIMIT 1");
 	$query->bindValue(':username', $username);
 	$query->bindValue(':password', $password);
 	$query->execute() or error(db_error($query));
@@ -51,6 +51,8 @@ function login($username, $password, $makehash=true) {
 			'username' => $username,
 			'passhash' => $hash[0],
 			'sessionsalt' => $hash[1],
+			'signed_name' => $user['signed_name'],
+			'signed_trip' => $user['signed_trip'],
 			'boards' => explode(',', $user['boards'])
 			);
 	} else return false;
@@ -123,7 +125,7 @@ if (isset($_COOKIE[$config['cookies']['mod']])) {
 		error($config['error']['malformed']);
 	}
 
-	$query = prepare("SELECT `id`, `type`, `boards`, `password` FROM `mods` WHERE `username` = :username LIMIT 1");
+	$query = prepare("SELECT `id`, `type`, `boards`, `password`, `signed_name`, `signed_trip` FROM `mods` WHERE `username` = :username LIMIT 1");
 	$query->bindValue(':username', $cookie[0]);
 	$query->execute() or error(db_error($query));
 	$user = $query->fetch();
@@ -140,6 +142,8 @@ if (isset($_COOKIE[$config['cookies']['mod']])) {
 		'type' => $user['type'],
 		'username' => $cookie[0],
 		'sessionsalt' => $cookie[2],
+		'signed_name' => $user['signed_name'],
+		'signed_trip' => $user['signed_trip'],
 		'boards' => explode(',', $user['boards'])
 	);
 

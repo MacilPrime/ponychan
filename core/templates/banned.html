@@ -41,6 +41,15 @@
 			{% trans %}You can still post text-only messages.{% endtrans %}
 		</p>
 	{% endif %}
+	{% if ban.signed_name or ban.signed_trip %}
+	<p>
+		Signed,&nbsp;
+		<span class="namepart">
+			<span class="name">{{ ban.signed_name ? ban.signed_name : "" }}</span>
+			<span class="trip">{{ ban.signed_trip ? ban.signed_trip : "" }}</span>
+		</span>
+	</p>
+	{% endif %}
 	<p>
 		{% trans %}Your ban was filed on{% endtrans %}
 			 <strong>{{ ban.set|date(config.ban_date) }}</strong>

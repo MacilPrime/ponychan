@@ -4,7 +4,7 @@
 	{% set action = '?/users/' ~ user.id %}
 {% endif %}
 
-<form action="{{ action }}" method="post">
+<form name="moduser" action="{{ action }}" method="post">
 	<table>
 		<tr>
 			<th>{% trans 'Username' %}</th>
@@ -16,41 +16,67 @@
 				{% endif %}
 			</td>
 		</tr>
+		{% if new or mod|hasPermission('editusers') or (mod|hasPermission('change_password') and user.id == mod.id) %}
 		<tr>
-			<th>{% trans 'Password' %}{% if not new %} <small style="font-weight:normal">({% trans 'new; optional' %})</small>{% endif %}</th>
+			<th>{% trans 'Password' %}</th>
 			<td>
-				{% if new or (mod|hasPermission('editusers') or (mod|hasPermission('change_password') and user.id == mod.id)) %}
-					<input size="20" maxlength="30" type="password" name="password" value="" autocomplete="off">
+				{% if new %}
+					<input size="20" maxlength="100" type="password" name="password" value="" autocomplete="off">
 				{% else %}
-					-
+					<a href="{{ '?/users/' ~ user.id ~ '/change_password' }}">Change</a>
 				{% endif %}
 			</td>
 		</tr>
-		{% if new %}
+		{% endif %}
+		<tr>
+			<th>{% trans 'Signature' %}</th>
+			<td>
+				{% if new %}
+					<input type="text" name="name" {% if new %}value="{{ config.anonymous }}"{% endif %}>
+				&nbsp;
+				{% else %}
+					<span class="namepart">
+						<span class="name">{{ user.signed_name }}</span>
+						<span class="trip">{{ user.signed_trip }}</span>
+					</span>
+				{% endif %}
+				<br>
+				<small>May be used to sign bans with.</small>
+				{% if not new and (mod|hasPermission('editusers') or (mod|hasPermission('change_signature') and user.id == mod.id)) %}
+					<div><a href="{{ '?/users/' ~ user.id ~ '/change_signature' }}">Change</a></div>
+				{% endif %}
+			</td>
+		</tr>
+		{% if new or mod|hasPermission('promoteusers') %}
 			<tr>
 				<th>{% trans 'Class' %}</th>
 				<td>
 					<ul style="padding:5px 8px;list-style:none">
 						<li>
-							<input type="radio" name="type" id="founder" value="{{ constant('FOUNDER') }}">
-							 <label for="founder">{% trans 'Founder' %}</label>
-						</li>
-						<li>
-							<input type="radio" name="type" id="developer" value="{{ constant('DEVELOPER') }}">
-							 <label for="developer">{% trans 'Developer' %}</label>
-						</li>
-						<li>
-							<input type="radio" name="type" id="janitor" value="{{ constant('JANITOR') }}">
-							 <label for="janitor">{% trans 'Janitor' %}</label>
-						</li>
-						<li>
-							<input type="radio" name="type" id="mod" value="{{ constant('MOD') }}" checked>
-							 <label for="mod">{% trans 'Mod' %}</label>
-						</li>
-						<li>
-							<input type="radio" name="type" id="admin" value="{{ constant('Admin') }}">
-							 <label for="admin">{% trans 'Admin' %}</label>
-						</li>
+							<label><input type="radio" name="type" id="founder" value="{{ constant('FOUNDER') }}"
+									{{ user.type == constant('FOUNDER') ? 'checked' : '' }}>
+ 							 {% trans 'Founder' %}</label>
+ 						</li>
+ 						<li>
+							<label><input type="radio" name="type" id="developer" value="{{ constant('DEVELOPER') }}"
+									{{ user.type == constant('DEVELOPER') ? 'checked' : '' }}>
+ 							 {% trans 'Developer' %}</label>
+ 						</li>
+ 						<li>
+							<label><input type="radio" name="type" id="janitor" value="{{ constant('JANITOR') }}"
+									{{ user.type == constant('JANITOR') ? 'checked' : '' }}>
+ 							 {% trans 'Janitor' %}</label>
+ 						</li>
+ 						<li>
+							<label><input type="radio" name="type" id="mod" value="{{ constant('MOD') }}"
+									{{ (user.type == constant('MOD') or new) ? 'checked' : '' }}>
+ 							 {% trans 'Mod' %}</label>
+ 						</li>
+ 						<li>
+							<label><input type="radio" name="type" id="admin" value="{{ constant('ADMIN') }}"
+									{{ user.type == constant('ADMIN') ? 'checked' : '' }}>
+ 							 {% trans 'Admin' %}</label>
+ 						</li>
 					</ul>
 				</td>
 			</tr>
@@ -60,24 +86,23 @@
 			<td>
 				<ul style="padding:0 5px;list-style:none">
 					<li>
-						<input type="checkbox" id="allboards" name="allboards"
-						{% if '*' in user.boards %} checked{% endif %}
+						<label><input type="checkbox" id="allboards" name="allboards"
+						{% if '*' in user.boards or new %} checked{% endif %}
 						{% if not mod|hasPermission('editusers') %}
 						 disabled
 						{% endif %}
 						>
-						 <label for="allboards">"*" - {% trans 'All boards' %}</label>
+						 "*" - {% trans 'All boards' %}</label>
 					</li>
 					{% for board in boards %}
 						<li>
-							<input type="checkbox" id="board_{{ board.uri }}" name="board_{{ board.uri }}"
+							<label><input type="checkbox" id="board_{{ board.uri }}" name="board_{{ board.uri }}"
 								{% if board.uri in user.boards %} checked{% endif %}
 								{% if not mod|hasPermission('editusers') %}
 								 disabled
 								{% endif %}
 								>
-							 <label for="board_{{ board.uri }}">
-								{{ config.board_abbreviation|sprintf(board.uri) }}
+							 {{ config.board_abbreviation|sprintf(board.uri) }}
 								 -
 								 {{ board.title }}
 							</label>
@@ -92,7 +117,9 @@
 		{% if new %}
 			<li><input type="submit" value="{% trans 'Create user' %}"></li>
 		{% else %}
-			<li><input type="submit" value="{% trans 'Save changes' %}"></li>
+			{% if mod|hasPermission('editusers') %}
+				<li><input type="submit" value="{% trans 'Save changes' %}"></li>
+			{% endif %}
 			{% if mod|hasPermission('deleteusers') %}
 				<li><input name="delete" onclick="return confirm('Are you sure you want to permanently delete this user?');" type="submit" value="{% trans 'Delete user' %}"></li>
 			{% endif %}
@@ -100,7 +127,7 @@
 	</ul>
 </form>
 
-{% if logs|count > 0  %}
+{% if logs|count > 0 %}
 	<table class="modlog" style="width:600px">
 		<tr>
 			<th>{% trans 'IP address' %}</th>
