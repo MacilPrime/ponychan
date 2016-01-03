@@ -591,6 +591,11 @@
       "from": "invariant@>=2.2.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/invariant/-/invariant-2.2.0.tgz"
     },
+    "ip": {
+      "version": "1.1.0",
+      "from": "ip@latest",
+      "resolved": "https://registry.npmjs.org/ip/-/ip-1.1.0.tgz"
+    },
     "ipaddr.js": {
       "version": "1.0.5",
       "from": "ipaddr.js@1.0.5",
