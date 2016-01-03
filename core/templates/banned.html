@@ -101,6 +101,24 @@
 	</p>
 	<p>Click <a href="javascript:history.back()">back</a> to exit this message.</p>
 	<p>{% trans %}Your IP address is{% endtrans %} <strong>{{ ban.ip }}</strong>.</p>
+
+	<div class="appeals">
+		{% if ban.appealable %}
+	  	This ban may be appealed.
+		{% else %}
+			This ban may not be appealed.
+		{% endif %}
+
+		{% include 'appeals.html' %}
+		{% if ban.appealable %}
+		<form name="appeal" action="{{ config.root }}bans/{{ ban.id }}/appeal" method="post">
+	    <textarea name="body"></textarea>
+			<br>
+	    <input type="Submit">
+	  </form>
+		{% endif %}
+	</div>
+
 	{% if ban.board != "moon" and not ( ban.expires and time() >= ban.expires ) %}
 		<p style="clear:both;" class="moonlink">Visit <a href="{{ config.root }}moon/">The Moon</a>.</p>
 	{% endif %}

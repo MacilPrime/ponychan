@@ -47,7 +47,7 @@ header div.subtitle {
 textarea#body, textarea#qrbody {
 	background: url("img/wonderbolts/wblogo.png") center no-repeat white;
 }
-form table tr th {
+form table tr th, table.tableform tr th {
 	border: 1px yellow solid;
 	background: #0179c6;
 }

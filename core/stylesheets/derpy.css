@@ -21,7 +21,7 @@ a#qrDisplayButton, a.bodylink {
 a:hover, p.intro a.post_no:hover {
 	color: #DFFFFF;
 }
-form table tr th {
+form table tr th, table.tableform tr th {
 	background: #AEB2C0;
 }
 textarea#body, #qrcomment {

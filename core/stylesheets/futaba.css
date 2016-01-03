@@ -33,7 +33,7 @@ a.bodylink {
 p.intro span.subject {
 	color: #d00;
 }
-form table tr th {
+form table tr th, table.tableform tr th {
 	background: #EA8;
 }
 div.ban h2 {

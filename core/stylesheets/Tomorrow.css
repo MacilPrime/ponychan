@@ -32,7 +32,7 @@ header h1, header div.subtitle, div.blotter {
     color:#D9D9D9;
 }
 
-div.post.reply, div.banner, form table tr th {
+div.post.reply, div.banner, form table tr th, table.tableform tr th {
     background: rgb(40, 42, 46);
     border: none;
 }

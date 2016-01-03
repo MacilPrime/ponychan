@@ -28,7 +28,7 @@ h1, h2, h3, h4, h5, h6, header h1 {
     font-family: 'Celestia', sans-serif;
     text-shadow: 0 0 5px white;
 }
-form table tr th, .ban h2 {
+form table tr th, table.tableform tr th, .ban h2 {
     background: rgb(19, 20, 51);
     color: rgb(219, 233, 233)
 }

@@ -14,7 +14,7 @@ a, a:visited, a.bodylink {
 a:hover {
     color: rgb(157, 114, 235);
 }
-form table tr th {
+form table tr th, table.tableform tr th {
     background: rgb(111, 206, 244);
 }
 input[type=button], input[type=submit], input[type=file], button {

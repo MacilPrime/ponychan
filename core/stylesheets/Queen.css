@@ -217,7 +217,7 @@ input[type="checkbox"] {
 	color: white;
 }
 
-form table tr th {
+form table tr th, table.tableform tr th {
 	border: 1px solid #673C51 ;
 	background-color: #410B25 ;
 }

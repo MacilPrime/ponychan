@@ -45,7 +45,7 @@ hr, fieldset {
 }
 /* Table headers, including the post form */
 /* as well as many staff dashboard headers */
-form table tr th {
+form table tr th, table.tableform tr th {
 	font-family: "Open Sans", sans-serif;
 	letter-spacing: 1px;
 	background-color: rgb(61, 162, 216);

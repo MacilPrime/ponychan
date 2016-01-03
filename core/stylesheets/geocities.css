@@ -15,7 +15,7 @@ header h1::before {
     left: 6px;
     top: 4px;
 }
-form table {
+form table, table.tableform {
     margin: 5px;
 }
 div.blotter::before {

@@ -13,17 +13,17 @@ export default function checkMod(req: Object, res: Object, next: Function) {
     }
     const [username, hash, salt] = decodeURIComponent(modCookie).split(':');
     const result = await db.mysql_query(
-      'SELECT `id`, `type`, `boards`, `password` FROM `mods` WHERE `username` = ? LIMIT 1',
+      'SELECT `id`, `type`, `boards`, `password`, `signed_name`, `signed_trip` FROM `mods` WHERE `username` = ? LIMIT 1',
       [username]
     );
     if (result.length == 0) {
       return;
     }
-    const {id, type, boards, password} = result[0][0];
+    const {id, type, boards, password, signed_name, signed_trip} = result[0][0];
     if (hash !== modHash(username, password, salt)) {
       return;
     }
-    return {id, type, boards};
+    return {id, type, boards, signed_name, signed_trip};
   })().then(mod => {
     req.mod = mod ? mod : null;
     next();
