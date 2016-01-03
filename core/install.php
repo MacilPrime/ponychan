@@ -305,6 +305,11 @@ $migration_procedures = [
 		    ON DELETE SET NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1')
 		or error(db_error());
+	},
+	'ban-range-key' => function() {
+		query('ALTER TABLE `bans`
+			ADD KEY `range` (`range_type`, `range_start`, `range_end`)')
+		or error(db_error());
 	}
 ];
 

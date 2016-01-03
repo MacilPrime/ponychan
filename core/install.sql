@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `appealable` int(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY (`expires`),
+  KEY `range` (`range_type`, `range_start`, `range_end`),
   KEY `status_range` (`status`, `range_type`, `range_start`, `range_end`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
