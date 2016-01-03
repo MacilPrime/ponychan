@@ -48,6 +48,15 @@ app
   .use(setUserhash)
   .use(checkMod);
 
+app.post('*', (req, res, next) => {
+  const refererRegex = new RegExp(`^https?://${_.escapeRegExp(req.headers.host)}/`);
+  if (!refererRegex.test(req.headers.referer)) {
+    res.status(403).send('Invalid Referer header');
+  } else {
+    next();
+  }
+});
+
 app.all('/api/v1/mod/*', (req, res, next) => {
   res.setHeader("Cache-Control", "private");
   if (!req.mod) {
