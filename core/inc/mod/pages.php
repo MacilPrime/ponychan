@@ -669,7 +669,7 @@ function mod_page_ip($mask_url) {
 		$args['bans'] = $query->fetchAll(PDO::FETCH_ASSOC);
 
 		foreach ($args['bans'] as &$ban) {
-			$query = prepare('SELECT * FROM `ban_appeals`
+			$query = prepare('SELECT *, UNIX_TIMESTAMP(`timestamp`) AS `time` FROM `ban_appeals`
 				WHERE `ban` = :id
 				ORDER BY `timestamp`');
 			$query->bindValue(':id', $ban['id']);

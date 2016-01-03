@@ -1,6 +1,7 @@
 /* @flow */
 //jshint ignore:start
 
+import config from '../config';
 import ipProtocol from '../util/ipProtocol';
 import {credis, predis, mysql, mysql_query, c_get, c_del} from '../database';
 
@@ -77,7 +78,7 @@ export async function modappeal(req: Object, res: Object, next: Function): any {
     await mysql_query(
       `INSERT INTO ban_appeals (\`ban\`, \`is_user\`, \`mod\`, \`name\`, \`trip\`, \`capcode\`, \`body\`)
       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [id, 0, req.mod.id, req.mod.signed_name, req.mod.signed_trip, 'Mod' /*TODO*/, body]
+      [id, 0, req.mod.id, req.mod.signed_name, req.mod.signed_trip, config.staffTypes[req.mod.type], body]
     );
 
     res.render('bans/appealConfirmed.html');
