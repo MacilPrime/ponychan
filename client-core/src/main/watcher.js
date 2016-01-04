@@ -28,6 +28,10 @@ var mod;
 var watched_threads;
 load_watched_threads();
 
+function shouldShowWatcher() {
+	return isModPage || Object.keys(watched_threads).length > 0;
+}
+
 function load_watched_threads() {
 	if (window.localStorage && localStorage.getItem("watched_threads"))
 		watched_threads = JSON.parse(localStorage.getItem("watched_threads"));
@@ -89,7 +93,7 @@ function remove_watch(postid) {
 	var updated = RSVP.Promise.resolve();
 
 	add_watch_buttons($("."+get_post_class(postid)));
-	if (Object.keys(watched_threads).length == 0) {
+	if (!shouldShowWatcher()) {
 		init_watcher_menu();
 	} else {
 		updated = populate_watcher_screen();
@@ -294,7 +298,7 @@ function run_watcher_refresher() {
 	var multiplier = 1;
 
 	function runner(success) {
-		if (Object.keys(watched_threads).length == 0) {
+		if (!shouldShowWatcher()) {
 			watcher_refresher_running = false;
 			return;
 		}
@@ -328,7 +332,7 @@ function init_watcher_menu() {
 	if (watcherPage) {
 		$(watcherPage).html( $("<div/>").attr("id", "watcherScreen") );
 	} else {
-		if (Object.keys(watched_threads).length == 0)
+		if (!shouldShowWatcher())
 			return;
 
 		const $watcherButton = $("<a/>")
