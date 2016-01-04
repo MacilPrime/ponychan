@@ -246,7 +246,10 @@ function populate_watcher_screen() {
 	});
 
 	if (mod) {
-		alerts += mod.report_count;
+		if (mod.report_count)
+			alerts += mod.report_count;
+		if (mod.open_appeals_count)
+			alerts += mod.open_appeals_count;
 	}
 
 	var pr;

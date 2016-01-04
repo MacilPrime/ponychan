@@ -1005,6 +1005,7 @@ table.recaptchatable {
 }
 .wmod .wcontent {
 	padding: 4px;
+	margin: 0;
 }
 .wthread {
 	padding: 5px;
