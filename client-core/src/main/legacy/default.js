@@ -82,9 +82,9 @@ function rememberStuff() {
 		}
 
 		if (window.localStorage) {
-			if (localStorage.getItem('name') && document.forms.post.elements.name)
+			if (localStorage.getItem('name') != null && document.forms.post.elements.name)
 				document.forms.post.elements.name.value = localStorage.getItem('name');
-			if (localStorage.getItem('email') && document.forms.post.elements.email)
+			if (localStorage.getItem('email') != null && document.forms.post.elements.email)
 				document.forms.post.elements.email.value = localStorage.getItem('email');
 		}
 
