@@ -681,6 +681,11 @@ function mod_page_ip($mask_url) {
 			$query->bindValue(':id', $ban['id']);
 			$query->execute() or error(db_error($query));
 			$ban['appeals'] = $query->fetchAll(PDO::FETCH_ASSOC);
+
+			$ban['open_appeal'] = false;
+			$appeal_count = count($ban['appeals']);
+			$ban['open_appeal'] = $ban['appealable'] &&
+				$appeal_count > 0 && $ban['appeals'][$appeal_count-1]['is_user'];
 		}
 	}
 

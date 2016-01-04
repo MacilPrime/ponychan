@@ -199,10 +199,18 @@
 						<th>{% trans 'Appeals' %}</th>
 						<td>
 							<div class="appeals">
-								{% if ban.appealable %}
-									This ban may be appealed.
-								{% else %}
-									This ban may not be appealed.
+								<div>
+									{% if ban.appealable %}
+										This ban may be appealed.
+									{% else %}
+										This ban may not be appealed.
+									{% endif %}
+								</div>
+								{% if ban.open_appeal %}
+									<div>
+										You must respond to the user's appeal or lock appeals in order to
+										 mark this open appeal closed.
+									 </div>
 								{% endif %}
 
 								{% set appeals = ban.appeals %}
