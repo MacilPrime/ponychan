@@ -47,6 +47,13 @@ const config = {
     user: 'tinyboard',
     pass: '',
     db: 'tinyboard'
+  },
+  staffTypes: {
+    '-2': 'Founder',
+    '-1': 'Developer',
+    '0': 'Janitor',
+    '1': 'Mod',
+    '2': 'Admin'
   }
 };
 

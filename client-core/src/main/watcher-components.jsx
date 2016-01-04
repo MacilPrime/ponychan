@@ -18,9 +18,10 @@ export const WatcherMenu = React.createClass({
 
 		var modSection = mod ? <section className="wmod">
 			<h2>Moderator</h2>
-			<div className="wcontent">
-				<a className="wlink" href="?/reports"><span className="wreportcount">{mod.report_count}</span> reports</a>
-			</div>
+			<ul className="wcontent">
+				<li><a className="wlink" href="?/reports"><span className="wreportcount">{mod.report_count}</span> reports</a></li>
+				<li><a className="wlink" href="?/bans"><span className="wappealscount">{mod.open_appeals_count}</span> open appeals</a></li>
+			</ul>
 		</section> : null;
 
 		return (

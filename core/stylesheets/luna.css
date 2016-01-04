@@ -49,7 +49,7 @@ header div.subtitle {
 input[type="text"], input[type="password"], textarea {
 	border: 2px solid #a9a9a9;
 }
-form table tr th {
+form table tr th, table.tableform tr th {
 	border: 1px #737bb8 solid; 
 	background: #210f6e;
 }

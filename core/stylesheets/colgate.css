@@ -53,7 +53,7 @@ header div.subtitle {
 }
 /* Post form */
 
-form table tr th {
+form table tr th, table.tableform tr th {
     background: #a8b8f0;
 }
 

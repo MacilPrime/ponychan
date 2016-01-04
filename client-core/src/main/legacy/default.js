@@ -47,10 +47,10 @@ function generatePassword() {
 
 window.dopost = function dopost(form) {
 	if (window.localStorage) {
-		if (form.elements.name) {
+		if (form.elements.name != null) {
 			localStorage.setItem('name', form.elements.name.value.replace(/( |^)## .+$/, ''));
 		}
-		if (form.elements.email && form.elements.email.value != 'sage') {
+		if (form.elements.email != null && form.elements.email.value != 'sage') {
 			localStorage.setItem('email', form.elements.email.value);
 		}
 

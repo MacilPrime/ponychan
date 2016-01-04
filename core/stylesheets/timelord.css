@@ -51,7 +51,7 @@ hr {
 }
 /* Table headers, including the post form */
 /* as well as many staff dashboard headers */
-form table tr th {
+form table tr th, table.tableform tr th {
     background-color: #e9e375;
 }
 

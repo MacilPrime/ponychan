@@ -81,10 +81,12 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `seen` tinyint(1) NOT NULL,
   `signed_name` VARCHAR(75) NULL,
   `signed_trip` VARCHAR(25) NULL,
+  `appealable` int(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY (`expires`),
+  KEY `range` (`range_type`, `range_start`, `range_end`),
   KEY `status_range` (`status`, `range_type`, `range_start`, `range_end`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -168,6 +170,8 @@ CREATE TABLE IF NOT EXISTS `mods` (
   `password` char(40) NOT NULL COMMENT 'SHA1',
   `type` smallint(1) NOT NULL COMMENT '0: janitor, 1: mod, 2: admin',
   `boards` text NOT NULL,
+  `signed_name` VARCHAR(75) DEFAULT NULL,
+  `signed_trip` VARCHAR(25) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=2 ;
@@ -437,6 +441,25 @@ CREATE TABLE IF NOT EXISTS `poll_results` (
   FOREIGN KEY (`poll_id`, `question_id`)
     REFERENCES poll_questions(poll_id, id)
     ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `ban_appeals` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `ban` int(11) UNSIGNED NOT NULL,
+  `is_user` int(1) NOT NULL,
+  `mod` smallint UNSIGNED DEFAULT NULL,
+  `name` varchar(75) DEFAULT NULL,
+  `trip` varchar(25) DEFAULT NULL,
+  `capcode` varchar(50) DEFAULT NULL,
+  `body` text NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`ban`)
+    REFERENCES bans(`id`)
+    ON DELETE CASCADE,
+  FOREIGN KEY (`mod`)
+    REFERENCES mods(`id`)
+    ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

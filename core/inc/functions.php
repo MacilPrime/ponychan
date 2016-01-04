@@ -1023,12 +1023,18 @@ function displayBan($ban) {
 
 	$ban['ip'] = $_SERVER['REMOTE_ADDR'];
 
+	$query = prepare("SELECT *, UNIX_TIMESTAMP(`timestamp`) AS `time` FROM `ban_appeals` WHERE `ban` = :id");
+	$query->bindValue(':id', $ban['id'], PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+	$appeals = $query->fetchAll(PDO::FETCH_ASSOC);
+
 	$banhtml = Element('page.html', array(
 			'title' => 'Banned!',
 			'config' => $config,
 			'body' => Element('banned.html', array(
 				'config' => $config,
-				'ban' => $ban
+				'ban' => $ban,
+				'appeals' => $appeals
 			))));
 
 	if ($wantjson) {
@@ -1053,7 +1059,7 @@ function checkBan($board = 0, $types = null) {
 	if ($types === null)
 		$types = array(FULL_BAN);
 
-	$query = prepare("SELECT `id`, `set`, `expires`, `reason`, `board`, `seen`, `ban_type`, `signed_name`, `signed_trip` FROM `bans`
+	$query = prepare("SELECT `id`, `set`, `expires`, `reason`, `board`, `seen`, `ban_type`, `signed_name`, `signed_trip`, `appealable` FROM `bans`
 		WHERE `range_type` = :ip_type AND `range_start` <= INET6_ATON(:ip) AND INET6_ATON(:ip) <= `range_end`
 		AND (`board` IS NULL OR `board` = :board)
 		AND `status` = 0

@@ -78,7 +78,11 @@
 			</li>
 		{% endif %}
 		{% if mod|hasPermission('view_ban') %}
-			<li><a href="?/bans">{% trans 'Ban list' %}</a></li>
+			<li>
+				{% if open_appeals > 0 %}<strong>{% endif %}
+					<a href="?/bans">{% trans 'Ban list' %} ({{ open_appeals }} open appeals)</a>
+				{% if open_appeals > 0 %}</strong>{% endif %}
+			</li>
 		{% endif %}
 		{% if mod|hasPermission('search') %}
 			<li><a href="?/search">{% trans 'Search' %}</a></li>

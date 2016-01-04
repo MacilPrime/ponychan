@@ -281,6 +281,35 @@ $migration_procedures = [
 			DROP KEY `id`,
 			ADD UNIQUE KEY (`username`)')
 		or error(db_error());
+	},
+	'appeals' => function() {
+		query('ALTER TABLE `bans`
+			ADD `appealable` int(1) NOT NULL DEFAULT 1')
+		or error(db_error());
+		query('CREATE TABLE IF NOT EXISTS `ban_appeals` (
+		  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+		  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		  `ban` int(11) UNSIGNED NOT NULL,
+		  `is_user` int(1) NOT NULL,
+		  `mod` smallint UNSIGNED DEFAULT NULL,
+		  `name` varchar(75) DEFAULT NULL,
+		  `trip` varchar(25) DEFAULT NULL,
+		  `capcode` varchar(50) DEFAULT NULL,
+		  `body` text NOT NULL,
+		  PRIMARY KEY (`id`),
+		  FOREIGN KEY (`ban`)
+		    REFERENCES bans(`id`)
+		    ON DELETE CASCADE,
+		  FOREIGN KEY (`mod`)
+		    REFERENCES mods(`id`)
+		    ON DELETE SET NULL
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1')
+		or error(db_error());
+	},
+	'ban-range-key' => function() {
+		query('ALTER TABLE `bans`
+			ADD KEY `range` (`range_type`, `range_start`, `range_end`)')
+		or error(db_error());
 	}
 ];
 

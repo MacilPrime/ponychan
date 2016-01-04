@@ -75,6 +75,16 @@ async function getReportCount(): Promise<number> {
   return result[0][0].count;
 }
 
+async function getOpenAppealsCount(): Promise<number> {
+  const result = await mysql_query(`
+    SELECT COUNT(*) AS count FROM \`bans\`
+    WHERE status = 0 AND appealable AND
+      (SELECT COUNT(*) FROM ban_appeals WHERE is_user = 1 AND
+      ban_appeals.id = (SELECT MAX(id) FROM ban_appeals WHERE ban_appeals.ban = bans.id))
+    `);
+  return result[0][0].count;
+}
+
 export default async function watcher(req: Object, res: Object, next: Function): any {
   try {
     const threadIds = req.query.ids || [];
@@ -100,7 +110,8 @@ export default async function watcher(req: Object, res: Object, next: Function):
     }
     if (req.mod && req.mod.type >= config.board.permissions.reports) {
       response.mod = {
-        report_count: await getReportCount()
+        report_count: await getReportCount(),
+        open_appeals_count: await getOpenAppealsCount()
       };
     }
     res.send(response);

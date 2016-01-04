@@ -33,7 +33,7 @@ input[type=text], input[type=password], textarea {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
 	border: 1px solid #0020c0;
 }
-form table tr th {
+form table tr th, table.tableform tr th {
 	background: rgb(230, 119, 45);
 	border-radius: 0.2rem;
 }

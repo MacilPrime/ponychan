@@ -108,6 +108,12 @@ function mod_dashboard() {
 	$query = query('SELECT COUNT(*) FROM `reports`') or error(db_error($query));
 	$args['reports'] = $query->fetchColumn(0);
 
+	$query = query('SELECT COUNT(*) AS count FROM `bans`
+		WHERE status = 0 AND appealable AND
+			(SELECT COUNT(*) FROM ban_appeals WHERE is_user = 1 AND
+			ban_appeals.id = (SELECT MAX(id) FROM ban_appeals WHERE ban_appeals.ban = bans.id))') or error(db_error($query));
+	$args['open_appeals'] = $query->fetchColumn(0);
+
 	mod_page(_('Dashboard'), 'mod/dashboard.html', $args);
 }
 
@@ -667,6 +673,20 @@ function mod_page_ip($mask_url) {
 		$query->bindValue(':limit', $config['mod']['ip_range_page_max_bans'], PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
 		$args['bans'] = $query->fetchAll(PDO::FETCH_ASSOC);
+
+		foreach ($args['bans'] as &$ban) {
+			$query = prepare('SELECT *, UNIX_TIMESTAMP(`timestamp`) AS `time` FROM `ban_appeals`
+				WHERE `ban` = :id
+				ORDER BY `timestamp`');
+			$query->bindValue(':id', $ban['id']);
+			$query->execute() or error(db_error($query));
+			$ban['appeals'] = $query->fetchAll(PDO::FETCH_ASSOC);
+
+			$ban['open_appeal'] = false;
+			$appeal_count = count($ban['appeals']);
+			$ban['open_appeal'] = $ban['appealable'] &&
+				$appeal_count > 0 && $ban['appeals'][$appeal_count-1]['is_user'];
+		}
 	}
 
 	if (hasPermission('view_banhistory')) {
@@ -779,10 +799,13 @@ function mod_bans($mask_url, $page = null) {
 		$range_query = "`range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)";
 	}
 
-	$query = prepare(sprintf('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`,`username`
+	$query = prepare(sprintf('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`,`username`,
+	appealable AND (SELECT COUNT(*) FROM ban_appeals WHERE is_user = 1 AND
+		ban_appeals.id = (SELECT MAX(id) FROM ban_appeals WHERE ban_appeals.ban = bans.id))
+	AS open_appeals
 		FROM `bans` LEFT JOIN `mods` ON `mod` = `mods`.`id`
 		WHERE `status` = 0 AND %s
-		ORDER BY (`expires` IS NOT NULL AND `expires` < :time), `set` DESC LIMIT :offset, :limit', $range_query));
+		ORDER BY open_appeals DESC, (`expires` IS NOT NULL AND `expires` < :time), `set` DESC LIMIT :offset, :limit', $range_query));
 	if ($range !== null) {
 		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
 		$query->bindValue(':range_start', $range['range_start']);

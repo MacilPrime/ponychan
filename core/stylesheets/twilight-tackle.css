@@ -189,7 +189,7 @@ header div.subtitle {
     outline: none;
     border-color: rgb(61, 52, 61)
 }
-form table tr th {
+form table tr th, table.tableform tr th {
     color: rgb(218, 204, 219);
     background: linear-gradient(to bottom, rgb(142, 77, 130) 0px, rgb(131, 82, 122) 300px);
     box-shadow: inset 0 1px 7px rgba(114, 35, 100, 1);

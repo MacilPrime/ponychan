@@ -16,6 +16,7 @@ import setUserhash from './setUserhash';
 import checkMod from './checkMod';
 import cachebust from './util/cachebust';
 
+import * as bans from './routes/bans';
 import watcher from './routes/watcher';
 import poll from './routes/poll';
 import * as tasks from './routes/tasks';
@@ -47,6 +48,15 @@ app
   .use(setUserhash)
   .use(checkMod);
 
+app.post('*', (req, res, next) => {
+  const refererRegex = new RegExp(`^https?://${_.escapeRegExp(req.headers.host)}/`);
+  if (!refererRegex.test(req.headers.referer)) {
+    res.status(403).send('Invalid Referer header');
+  } else {
+    next();
+  }
+});
+
 app.all('/api/v1/mod/*', (req, res, next) => {
   res.setHeader("Cache-Control", "private");
   if (!req.mod) {
@@ -66,6 +76,9 @@ app.post('/api/v1/mod/filters/:id', bodyParser.json(), filters.update);
 
 app.get   ('/api/v1/tasks/:id', tasks.get);
 app.delete('/api/v1/tasks/:id', tasks.del);
+
+app.post('/bans/:id/appeal', bodyParser.urlencoded({extended: false}), bans.appeal);
+app.post('/bans/:id/modappeal', bodyParser.urlencoded({extended: false}), bans.modappeal);
 
 app.get('/watcher/', (req, res) => {
   res.setHeader("Cache-Control", "public, max-age=120");

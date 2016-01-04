@@ -73,7 +73,7 @@ header div.subtitle {
     border-color: rgb(107, 66, 104)
 }
 
-form table tr th {
+form table tr th, table.tableform tr th {
     background: rgb(204, 136, 204);
 }
 

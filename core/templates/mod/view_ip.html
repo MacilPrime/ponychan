@@ -96,8 +96,8 @@
 		</legend>
 
 		{% for ban in bans %}
-			<form action="" method="post" class="userbanlist">
-				<table>
+			<div class="userbanlist">
+				<table class="tableform">
 					<tr>
 						<th>{% trans 'Status' %}</th>
 						<td>
@@ -195,10 +195,46 @@
 							{% endif %}
 						</td>
 					</tr>
+					<tr>
+						<th>{% trans 'Appeals' %}</th>
+						<td>
+							<div class="appeals">
+								<div>
+									{% if ban.appealable %}
+										This ban may be appealed.
+									{% else %}
+										This ban may not be appealed.
+									{% endif %}
+								</div>
+								{% if ban.open_appeal %}
+									<div>
+										You must respond to the user's appeal or lock appeals in order to
+										 mark this open appeal closed.
+									 </div>
+								{% endif %}
+
+								{% set appeals = ban.appeals %}
+								{% include 'appeals.html' %}
+
+								<form name="appeal" action="{{ config.root }}bans/{{ ban.id }}/modappeal" method="post">
+									<textarea name="body"></textarea>
+									<br>
+									<input type="Submit">
+									{% if ban.appealable %}
+										<input type="Submit" name="lock" value="Lock">
+									{% else %}
+										<input type="Submit" name="unlock" value="Unlock">
+									{% endif %}
+								</form>
+							</div>
+						</td>
+					</tr>
 				</table>
-				<input type="hidden" name="ban_id" value="{{ ban.id }}">
-				<input type="submit" name="unban" value="{% trans 'Remove ban' %}">
-			</form>
+				<form action="" method="post">
+					<input type="hidden" name="ban_id" value="{{ ban.id }}">
+					<input type="submit" name="unban" value="{% trans 'Remove ban' %}">
+				</form>
+			</div>
 		{% endfor %}
 	</fieldset>
 {% endif %}

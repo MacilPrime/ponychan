@@ -1,0 +1,17 @@
+{% for appeal in appeals %}
+<div class="appealcomment {% if appeal.is_user %}is_user{% endif %}">
+	<div class="appealintro">
+		<span class="name">{% if appeal.is_user %}User{% else %}{{ appeal.name }}{% endif %}</span>
+		<span class="trip">{{ appeal.trip }}</span>
+		{% if appeal.capcode %}
+			<span class="capcode"> ## {{ appeal.capcode }}</span>
+		{% endif %}
+		<time datetime="{{ appeal.time|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">
+			{{ appeal.time|date(config.post_date) }}
+		</time>
+	</div>
+	<div class="appealbody">
+		{{ appeal.body }}
+	</div>
+</div>
+{% endfor %}

@@ -57,7 +57,7 @@ header div.subtitle, header h1 {
 	color: #000;
 }
 
-form table tr th {
+form table tr th, table.tableform tr th {
 	background: #F0FFFF;
 	border-style: solid;
 	border-width: 1px;

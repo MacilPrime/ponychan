@@ -61,12 +61,14 @@ form[name='post'] {
 	margin-bottom: 2em;
 }
 form table {
+	/* TODO remove these vague "form table..." rules */
 	margin: auto;
 }
-form.userbanlist {
+.userbanlist {
 	text-align:center;
 }
-form.userbanlist table {
+.userbanlist table {
+	margin: auto;
 	width: 400px;
 	margin-bottom: 10px;
 	border-bottom: 1px solid #ddd;
@@ -82,7 +84,7 @@ input[type="text"], input[type="password"], textarea {
 	text-transform: none;
 	word-spacing: normal;
 }
-form table tr td {
+form table tr td, table.tableform tr td {
 	text-align: left;
 	margin: 0;
 	padding: 0;
@@ -93,7 +95,7 @@ form[name="post"] input[name="submit"] {
 table.banlist tr td {
 	padding: 2px;
 }
-form table tr th {
+form table tr th, table.tableform tr th {
 	text-align: left;
 	padding: 4px;
 	background: #98E;
@@ -309,6 +311,12 @@ div.ban p {
 }
 div.ban p.reason {
 	font-weight: bold;
+}
+div.appealcomment {
+	border: 1px solid black;
+}
+div.appealintro time {
+	padding-left: 3em;
 }
 span.heading {
 	color: #AF0A0F;
@@ -997,6 +1005,7 @@ table.recaptchatable {
 }
 .wmod .wcontent {
 	padding: 4px;
+	margin: 0;
 }
 .wthread {
 	padding: 5px;

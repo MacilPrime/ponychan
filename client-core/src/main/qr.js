@@ -918,9 +918,9 @@ $(document).ready(function(){
 		}
 
 		if (window.localStorage) {
-			if ($QRForm[0].elements.name)
+			if ($QRForm[0].elements.name != null)
 				localStorage.setItem('name', $QRForm[0].elements.name.value.replace(/( |^)## .+$/, ''));
-			if ($QRForm[0].elements.email && $QRForm[0].elements.email.value != 'sage')
+			if ($QRForm[0].elements.email != null && $QRForm[0].elements.email.value != 'sage')
 				localStorage.setItem('email', $QRForm[0].elements.email.value);
 		}
 
