@@ -108,6 +108,12 @@ function mod_dashboard() {
 	$query = query('SELECT COUNT(*) FROM `reports`') or error(db_error($query));
 	$args['reports'] = $query->fetchColumn(0);
 
+	$query = query('SELECT COUNT(*) AS count FROM `bans`
+		WHERE status = 0 AND appealable AND
+			(SELECT COUNT(*) FROM ban_appeals WHERE is_user = 1 AND
+			ban_appeals.id = (SELECT MAX(id) FROM ban_appeals WHERE ban_appeals.ban = bans.id))') or error(db_error($query));
+	$args['open_appeals'] = $query->fetchColumn(0);
+
 	mod_page(_('Dashboard'), 'mod/dashboard.html', $args);
 }
 
