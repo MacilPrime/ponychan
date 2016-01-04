@@ -219,11 +219,11 @@
 								<form name="appeal" action="{{ config.root }}bans/{{ ban.id }}/modappeal" method="post">
 									<textarea name="body"></textarea>
 									<br>
-									<input type="Submit">
+									<input type="submit" value="Submit">
 									{% if ban.appealable %}
-										<input type="Submit" name="lock" value="Lock">
+										<input type="submit" name="lock" value="Lock">
 									{% else %}
-										<input type="Submit" name="unlock" value="Unlock">
+										<input type="submit" name="unlock" value="Unlock">
 									{% endif %}
 								</form>
 							</div>
