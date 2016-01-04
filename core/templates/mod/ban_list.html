@@ -21,6 +21,7 @@
 				<th>{% trans 'Set' %}</th>
 				<th>{% trans 'Duration' %}</th>
 				<th>{% trans 'Expires' %}</th>
+				<th>{% trans 'Open Appeals' %}</th>
 				<th>{% trans 'Seen' %}</th>
 				<th>{% trans 'Staff' %}</th>
 			</tr>
@@ -72,6 +73,13 @@
 								 <small>(in {{ ban.expires|until }})</small>
 							{% endif %}
 						{% endif %}
+					</td>
+					<td>
+						{%  if ban.open_appeals %}
+							<span style="color:red">{% trans 'Yes' %}</span>
+						{%  else %}
+							{% trans 'No' %}
+						{%  endif %}
 					</td>
 					<td>
 						{%  if ban.seen %}
