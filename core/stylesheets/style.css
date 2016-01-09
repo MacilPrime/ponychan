@@ -1397,8 +1397,8 @@ img.catalogthumb {
 	/* Spacing is between paragraphs only */
 	padding-top: 0.5em;
 }
-input[name="nameexample"] {
-	display: inline-block;
+.help-demo {
+	padding: 0.5em 0 0.5em 0.5em;
 }
 textarea ~ .help-details {
 	/** the details for the message box is allowed to go
