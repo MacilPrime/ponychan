@@ -85,8 +85,6 @@ form table tr th, table.tableform tr th {
 /* Posts */
 div.post.reply, .help-details, .wthread, .hashtag, #updateSettings, .catathread {
     border-color: rgb(189,141,189);
-    line-height: 140%;
-    padding: 3px;
 }
 p.intro span.subject, .wsubject {
     color: rgb(214, 16, 144);
