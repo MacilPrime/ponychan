@@ -1363,7 +1363,7 @@ function mod_move($originBoard, $postID) {
 			$post['body'] = $post['body_nomarkup'];
 
 			$post['op'] = false;
-			$post['tracked_cites'] = markup($post['body'], true);
+			$post['tracked_cites'] = markup($post['body'], true, false);
 
 			if ($post['has_file'] && file_exists($post['file_src'])) {
 				// copy image

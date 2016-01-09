@@ -293,8 +293,9 @@ wordfilters($post['body']);
 
 $post['body_nomarkup'] = $post['body'];
 
-if (!($mod && isset($post['raw']) && $post['raw']))
-    $post['tracked_cites'] = markup($post['body'], true);
+if (!($mod && isset($post['raw']) && $post['raw'])) {
+    $post['tracked_cites'] = markup($post['body'], true, !$mod);
+}
 
 // Check for a flood
 if (!hasPermission('flood', $board['uri']) && checkFlood($post)) {

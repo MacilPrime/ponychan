@@ -1375,7 +1375,6 @@ function rebuildPost($id, $rebuildThread=true) {
 
 	if ((!$post = $query->fetch()) || !$post['body_nomarkup'])
 		return false;
-
 	markup($body = &$post['body_nomarkup']);
 
 	$query = prepare(sprintf("UPDATE `posts_%s` SET `body` = :body WHERE `id` = :id", $board['uri']));
@@ -1871,7 +1870,7 @@ function unicodify($body) {
 	return $body;
 }
 
-function markup(&$body, $track_cites = false) {
+function markup(&$body, $track_cites = false, $checkFlood = false) {
 	global $board, $config, $markup_urls;
 
 	$body = str_replace("\r", '', $body);
@@ -1899,7 +1898,7 @@ function markup(&$body, $track_cites = false) {
 				return '<a target="_blank" class="bodylink" rel="nofollow" href="' . $url . '">' . $text . '</a>';
 			},
 			$body,
-			$config['max_links'] + 1,
+			($checkFlood ? $config['max_links'] + 1 : -1),
 			$num_links);
 	}
 
@@ -1907,20 +1906,20 @@ function markup(&$body, $track_cites = false) {
 		if (!isset($markup_urls))
 			$markup_urls = array();
 
-		$body = preg_replace_callback('/(?<=^|>)[^<]+/s', function($matches) use (&$num_links) {
+		$body = preg_replace_callback('/(?<=^|>)[^<]+/s', function($matches) use (&$num_links, $checkFlood) {
 			global $config;
 			$res = preg_replace_callback(
 				'/((?:https?|ftp|irc):\/\/[^\s<>()"]+?(?:\([^\s<>()"]*?\)[^\s<>()"]*?)*)((?:\s|<|>|"|\.||\]|!|\?|,|&#44;|&quot;)*(?:[\s<>()"]|$))/',
 				'markup_url',
 				$matches[0],
-				$config['max_links'] + 1,
+				($checkFlood ? $config['max_links'] + 1 : -1),
 				$more_num_links);
 			$num_links += $more_num_links;
 			return $res;
 		}, $body);
 	}
 
-	if ($num_links > $config['max_links'])
+	if ($num_links > $config['max_links'] && $checkFlood)
 		error($config['error']['toomanylinks']);
 
 	if ($config['auto_unicode']) {
@@ -1938,13 +1937,13 @@ function markup(&$body, $track_cites = false) {
 
 	$tracked_cites = array();
 
-	$body = preg_replace_callback('/(?<=^|>)[^<]+/s', function($matches) use ($track_cites, &$tracked_cites) {
+	$body = preg_replace_callback('/(?<=^|>)[^<]+/s', function($matches) use ($track_cites, &$tracked_cites, $checkFlood) {
 		global $config, $board;
 		$body = $matches[0];
 
 		// Cites
 		if (isset($board) && preg_match_all('/([^a-z0-9&;]|^)&gt;&gt;(\d+)([^a-z0-9&;]|$)/im', $body, $cites)) {
-			if (count($cites[0]) > $config['max_cites']) {
+			if (count($cites[0]) > $config['max_cites'] && $checkFlood) {
 				error($config['error']['toomanycites']);
 			}
 
