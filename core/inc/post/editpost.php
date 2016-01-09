@@ -82,7 +82,7 @@ wordfilters($post['body']);
 $post['body_nomarkup'] = $post['body'];
 
 if (!($mod && isset($post['raw']) && $post['raw']))
-    $post['tracked_cites'] = markup($post['body'], true);
+    $post['tracked_cites'] = markup($post['body'], true, !$mod);
 
 require_once 'inc/filters.php';
 

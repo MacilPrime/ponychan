@@ -1375,7 +1375,7 @@ function rebuildPost($id, $rebuildThread=true) {
 
 	if ((!$post = $query->fetch()) || !$post['body_nomarkup'])
 		return false;
-	markup($body = &$post['body_nomarkup'], false, false);
+	markup($body = &$post['body_nomarkup']);
 
 	$query = prepare(sprintf("UPDATE `posts_%s` SET `body` = :body WHERE `id` = :id", $board['uri']));
 	$query->bindValue(':body', $body);
@@ -1870,7 +1870,7 @@ function unicodify($body) {
 	return $body;
 }
 
-function markup(&$body, $track_cites = false, $checkFlood = true) {
+function markup(&$body, $track_cites = false, $checkFlood = false) {
 	global $board, $config, $markup_urls;
 
 	$body = str_replace("\r", '', $body);

@@ -26,7 +26,7 @@ if (count($report) > $config['report_limit'])
     error($config['error']['toomanyreports']);
 
 $reason = $_POST['reason'];
-markup($reason);
+markup($reason, false, true);
 
 foreach ($report as $id) {
     $query = prepare(sprintf("SELECT `thread` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
