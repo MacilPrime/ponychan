@@ -78,7 +78,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* Block items */
-div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings {
+div.post.reply, .help-details, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings {
 	background-color: rgb(223, 211, 123)
 }
 

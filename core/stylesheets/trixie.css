@@ -80,8 +80,11 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* Block items */
-div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
+div.post.reply, .help-details, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
 	background-color: rgba(121,183,223,0.8);
+}
+.help-details {
+	background-color: rgb(121,183,223);
 }
 
 /* -- Navigation bar -- */
@@ -165,7 +168,7 @@ div.banner {
 	background-color: rgb(147, 207, 239);
 	box-shadow: 0 0 0.1rem rgba(0,0,0,0.3);
 }
-form table tr th, table.tableform tr th, .reply, .pages {
+form table tr th, table.tableform tr th, .reply, .help-details, .pages {
 	box-shadow: 0.1rem 0.1rem 0.1rem rgba(0,0,0,0.4);
 }
 form[name="post"] th, .reply, .pages {

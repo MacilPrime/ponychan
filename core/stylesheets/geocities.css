@@ -69,7 +69,7 @@ span.controls.op {
     content: "/-- TEST TEXT PLEASE IGNORE --/";
 }
 
-div.post.reply {
+div.post.reply, .help-details {
     background: url('img/gc/paper.png') #fff9f2 repeat;
     color: black;
     border: none;

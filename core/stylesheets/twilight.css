@@ -29,7 +29,7 @@ hr, .thread hr {
 h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: rgb(96, 16, 96);
 }
-div.post.reply, #settingsScreen, .watcherMenu, .hashtag, #updateSettings, .catathread {
+div.post.reply, .help-details, #settingsScreen, .watcherMenu, .hashtag, #updateSettings, .catathread {
     background-color: rgb(232, 192, 232);
 }
 .boardlist.top, #qrmove {
@@ -83,7 +83,7 @@ form table tr th, table.tableform tr th {
 
 
 /* Posts */
-div.post.reply, .wthread, .hashtag, #updateSettings, .catathread {
+div.post.reply, .help-details, .wthread, .hashtag, #updateSettings, .catathread {
     border-color: rgb(189,141,189);
     line-height: 140%;
     padding: 3px;

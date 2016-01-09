@@ -92,7 +92,7 @@ div.banner a:hover {
 hr, .thread hr {
 	border-color: rgb(128,128,128);
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background: #EC9DC4;
 	border: none !important;
 	box-shadow: 0 0 2px 1px #B8E6E6 !important;

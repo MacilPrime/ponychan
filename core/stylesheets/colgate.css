@@ -60,7 +60,7 @@ form table tr th, table.tableform tr th {
 
 
 /* Posts */
-div.post.reply, .watcherMenu {
+div.post.reply, .watcherMenu, .help-details {
     background-color: #d4dcf0;
 }
 p.intro span.subject, .wsubject {

@@ -71,7 +71,7 @@ div.post.reply p.intro span.name {
 div.post.reply.highlighted {
 	background: url("img/wonderbolts/wbhlgradient.png") bottom repeat-x #2660b0;
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background: #1650A7;
 	border-width: 2px;
 	border-style: solid;

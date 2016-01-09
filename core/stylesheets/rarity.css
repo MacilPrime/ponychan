@@ -37,7 +37,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: rgb(77, 24, 111);
 }
 /* Tone 2 - Cells */
-div.post.reply, #settingsScreen, .watcherMenu, .hashtag, #updateSettings, .catathread {
+div.post.reply, .help-details, #settingsScreen, .watcherMenu, .hashtag, #updateSettings, .catathread {
     background-color: rgb(222, 239, 244);
 }
 .replyContainer:nth-of-type(2n) .reply {

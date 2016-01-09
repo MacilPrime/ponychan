@@ -33,7 +33,7 @@ p.intro time {
 .watcherMenu {
 	background: #E9E9E9;
 }
-div.post.reply, .watcherMenu {
+div.post.reply, .watcherMenu, .help-details {
   background: #E9E9E9;
 }
 div.post.reply, .wthread {

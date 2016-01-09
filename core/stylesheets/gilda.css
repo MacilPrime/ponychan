@@ -100,7 +100,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Block items */
-div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
+div.post.reply, .help-details, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
 	background-color: rgb(31, 28, 18)
 }
 

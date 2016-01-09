@@ -172,7 +172,7 @@ body > header h1 {
 form th {
     text-align: right !important;
 }
-form th, .reply, .catathread {
+form th, .reply, .catathread, .help-details {
     border-radius: 0.5rem 0;
 }
 input[type=text], input[type=email], input[type=search],
@@ -220,7 +220,7 @@ div.blotter {
 .post {
     line-height: 140%;
 }
-div.post.reply, .hashtag, .catathread {
+div.post.reply, .help-details, .hashtag, .catathread {
     border: 1px solid rgb(169, 174, 177);
 }
 div.post.reply, .wthread, .catathread {
@@ -228,6 +228,9 @@ div.post.reply, .wthread, .catathread {
 }
 div.post.reply, .watcherMenu, .catathread {
     background-color: rgba(255, 255, 255, 0.5);
+}
+.help-details {
+    background-color: rgb(243, 250, 254);
 }
 div.post.reply .intro {
     padding-left: 0.3em;

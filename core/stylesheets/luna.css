@@ -70,7 +70,7 @@ p.intro span.name {
 div.post.reply.highlighted {
 	background: #180b90;
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background: #16094b;
 	border-width: 1px;
 	border-style: none solid solid none;

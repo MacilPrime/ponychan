@@ -138,7 +138,7 @@ p.intro span.name {
 div.post .body {
   max-width: 66em; }
 
-div.post.reply,
+div.post.reply, .help-details,
 div.homeblock {
   background: #e8cdaf;
   border: 0.07em solid #d0a574;

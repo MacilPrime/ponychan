@@ -122,7 +122,7 @@ p.intro span.capcode, p.intro a.capcode, p.intro a.nametag, span.public_ban {
 	color: #A30000;
 }
 
-div.post.reply {
+div.post.reply, .help-details {
 	background: #16303C;
 	margin: 4px 12px 4px 18px;
 	padding-bottom: 4px;

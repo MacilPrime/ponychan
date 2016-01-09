@@ -19,7 +19,7 @@ a:link:hover {
 a.post_no {
 	color: #800000;
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background: #f0e0d6;
 	border-color: #d9bfb7;
 }

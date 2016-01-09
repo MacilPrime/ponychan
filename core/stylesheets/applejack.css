@@ -48,7 +48,7 @@ div.post.reply, .wthread, .post-hover, div.pages, .catathread, #updateSettings, 
     border-style: solid;
     border-color: rgb(229, 214, 139);
 }
-div.post.reply, .watcherMenu, .post-hover, div.pages, .catathread, #updateSettings, #settingsScreen  {
+div.post.reply, .help-details, .watcherMenu, .post-hover, div.pages, .catathread, #updateSettings, #settingsScreen  {
     background: #ffd990;
 }
 .boardlist.top, #qrmove, #updateSettings {
