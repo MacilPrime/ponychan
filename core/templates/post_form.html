@@ -15,6 +15,28 @@
 			<td>
 				<input type="text" name="name" size="25" maxlength="75">
 				{{ antibot.html()|raw }}
+				<span class="help-bubble">?</span>
+				<article class="help-details">
+					<p>This field is optional. You can choose&nbsp;
+						any name you want, or you can post anonymously by&nbsp;
+						leaving this field empty.</p>
+					<p>Tripcodes are a way to identify yourself between posts&nbsp;
+						without having to register with the site. To use a&nbsp;
+						tripcode, enter your name as&nbsp;
+						<em>&lsaquo;name&rsaquo;#&lsaquo;key&rsaquo;</em>.
+						You can choose anything you want as the key&mdash;it is private and will&nbsp;
+						never be shown to other posters or stored on the server. For example:</p>
+					<p><input type="text" name="nameexample" value="Rarity#bestpony" size="10" disabled> &rarr;
+						&nbsp;
+						<span class="namepart">
+							<span class="name">Rarity</span>
+							<span class="trip">!.4PK7yxdII</span>
+						</span>
+					</p>
+					<p>If you want a tripcode containing specific words, you can&nbsp;
+						download a program designed to search for tripcodes, such as&nbsp;
+						<em>Tripcode Explorer</em>.</p>
+				</article>
 			</td>
 		</tr>{% endif %}
 		{% if not config.field_disable_email or (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}<tr>
@@ -25,6 +47,25 @@
 			<td>
 				<input type="text" name="email" size="25" maxlength="254">
 				{{ antibot.html()|raw }}
+				<span class="help-bubble">?</span>
+				<article class="help-details">
+					<p>Entering an e-mail is optional.</p>
+					<p>There are also code words you can enter here which perform &nbsp;
+						certain actions when you submit your post.</p>
+					<ul>
+						<li><strong>sage</strong> &mdash; lets you post without bumping a thread.</li>
+						{% if  config.always_noko %}
+							<li><strong>nonoko</strong> &mdash; uses the original post behavior &nbsp;
+								to redirect to the board index.</li>
+						{% else %}
+							<li><strong>noko</strong> &mdash; keeps you in the thread after you post.</li>
+						{% endif %}
+					</ul>
+					<p>These can be used at the same time as an e-mail address by typing &nbsp;
+						<em>&lsaquo;email&rsaquo;#&lsaquo;action&rsaquo;</em>.</p>
+					<p>You can also use Skype names in place of an e-mail. The notation is the same&nbsp;
+						as a link to a username on skype itself, which is <em>skype:&lsaquo;username&rsaquo;</em></p>
+				</article>
 			</td>
 		</tr>{% endif %}
 		<tr>
@@ -50,6 +91,49 @@
 			</th>
 			<td>
 				<textarea name="body" id="body" rows="5" cols="35"></textarea>
+				<span class="help-bubble">?</span>
+				<article class="help-details markup-doc">
+					<dl class="bulleted-dl">
+						<dt>Giving emphasis</dt>
+						<dd><div class="dd-title">[b] Bold [/b] <kbd class="shortcut">Ctrl + B</kbd></div></dd>
+						<dd><div class="dd-title">[i] Italic [/i] <kbd class="shortcut">Ctrl + I</kbd></div></dd>
+						<dd><div class="dd-title">[u] Underlined [/u] <kbd class="shortcut">Ctrl + U</kbd></div></dd>
+						<dd><div class="dd-title">[s] Strikethrough [/s] <kbd class="shortcut">Ctrl + R</kbd></div></dd>
+					</dl>
+					<dl class="bulleted-dl">
+						<dt>Hiding text</dt>
+						<dd>
+							<div class="dd-title">[?] Spoiler text [/?] <kbd class="shortcut">Ctrl + S</kbd></div>
+						</dd>
+						<dd><div class="dd-title">[h] Hide block of text [/h] <kbd class="shortcut">Ctrl + H</kbd></div></dd>
+					</dl>
+					<dl class="bulleted-dl">
+						<dt>Special</dt>
+						<dd><div class="dd-title">[rcv] Royal Canterlot voice [/rcv] <kbd class="shortcut">Ctrl + K</kbd></div></dd>
+						<dd><div class="dd-title">[shy] Fluttershy voice [/shy]</div></dd>
+						<dd><div class="dd-title">[cs] Comic Sans [/cs]</div></dd>
+						<dd><div class="dd-title">[tt] Monospaced [/tt]</div></dd>
+						<dd><div class="dd-title">[d20], [4d6] &mdash; Dice rolls</div></dd>
+					</dl>
+					<dl class="bulleted-dl">
+						<dt>URLs and linking</dt>
+						<dd>
+							<div class="dd-title">Link to a post on the current board</div>
+							<div class="dd-example">&gt;&gt;1234</div>
+						</dd>
+						<dd>
+							<div class="dd-title">Link to another board</div>
+							<div class="dd-example">&gt;&gt;&gt;/pony/</div>
+						<dd>
+							<div class="dd-title">Link to a post on another board</div>
+							<div class="dd-example">&gt;&gt;&gt;/pony/1234</div>
+						</dd>
+						<dd>
+							<div class="dd-title">Hypertext links</div>
+							<div class="dd-example">[url=https://www.ponychan.net/] Ponychan [/url]</div>
+						</dd>
+					</dl>
+				</article>
 				{{ antibot.html()|raw }}
 			</td>
 		</tr>
@@ -161,8 +245,11 @@
 				<input type="text" name="username" style="display:none"
 				 data-comment="this is a dummy field just for browsers that insist on auto-filling a username in somewhere">
 				<input type="password" name="password" size="12" maxlength="18">
-				 <span class="unimportant">{% trans %}(For file deletion.){% endtrans %}</span>
 				{{ antibot.html()|raw }}
+				<span class="help-bubble">?</span>
+				<article class="help-details">
+					<p>This field is for editing and deletions.</p>
+				</article>
 			</td>
 		</tr>{% endif %}
 	</table>

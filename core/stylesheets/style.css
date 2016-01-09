@@ -1363,3 +1363,73 @@ img.catalogthumb {
 	border: 2px dotted rgba(0, 0, 0, 0.2);
 	clear: both;
 }
+/* Help bubbles */
+
+@media screen and (min-width: 480px) {
+	form[name="post"] td {
+		/* Hang help messages over the fields */
+		position: relative;
+	}
+}
+@media screen and (max-width: 480px) {
+	form[name="post"] tr {
+		/* Hang help messages over the fields and their headers*/
+		position: relative;
+	}
+}
+.help-bubble {
+	cursor: default;
+}
+.help-bubble:hover + .help-details, .help-details:hover {
+	display: block;
+}
+.help-details {
+	z-index: 1;
+	background: rgb(214, 218, 240);
+	display: none;
+	position: absolute;
+	left: 0;
+	margin-top: 2px;
+	border: 1px dotted gray;
+	padding: 0.75em;
+}
+.help-details p + p {
+	/* Spacing is between paragraphs only */
+	padding-top: 0.5em;
+}
+input[name="nameexample"] {
+	display: inline-block;
+}
+textarea ~ .help-details {
+	/** the details for the message box is allowed to go
+	on the right side since it's expandable. **/
+	right: 0;
+	left: auto;
+}
+.markup-doc {
+	width: 100%;
+	box-sizing: border-box;
+	column-width: 300px;
+	-webkit-column-width: 300px;
+}
+.markup-doc dl {
+	break-inside: avoid;
+	-webkit-column-break-inside: avoid;
+}
+.markup-doc dt {
+	font-size: 1.1em;
+}
+.bulleted-dl dd {
+	display: list-item;
+	margin-left: 1.5em;
+}
+.shortcut {
+	font-family: inherit;
+	font-size: small;
+	float: right;
+	opacity: 0.6;
+}
+.dd-example {
+	font-size: 0.85em;
+	padding-left: 1ch;
+}
