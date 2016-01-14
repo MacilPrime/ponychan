@@ -1379,19 +1379,61 @@ img.catalogthumb {
 }
 .help-bubble {
 	cursor: default;
-}
-.help-bubble:hover + .help-details, .help-details:hover {
-	display: block;
+	font: bold 0.7em/1.3em sans-serif;
+	display: inline-block;
+	padding: 2px 1px 0;
+	width: 1.52em;
+	height: 1.52em;
+	border-radius: 1em;
+	text-align: center;
+	box-shadow: 0 0.03em 0.04em 0 rgba(29, 29, 29, 0.28);
+	background: rgb(167, 183, 239)
+				radial-gradient(circle at bottom,
+					rgba(0, 0, 0, 0.01),
+					rgba(0, 0, 0, 0.05) 0.8em,
+					rgba(0, 0, 0, 0) 0.9em);
+	color: white;
+	text-shadow: 0 0 0.017em rgba(11, 11, 11, 0.61);
+
+	position: relative;
+	top: -0.11em;
+	left: 0.5ex;
 }
 .help-details {
-	z-index: 1;
-	background: rgb(214, 218, 240);
-	display: none;
+	/* Hide behind stuff but still have dimensions */
+	visibility: hidden;
+	overflow: hidden;
+	z-index: -1;
+
+	/* fade animation with delay */
+	opacity: 0;
+	transition: opacity 150ms ease-in,
+				z-index 0ms 250ms,
+				visibility 0ms 250ms;
+
+	/* Don't displace the input fields */
 	position: absolute;
 	left: 0;
+
 	margin-top: 2px;
 	border: 1px dotted gray;
 	padding: 0.75em;
+	background: rgb(214, 218, 240);
+}
+.help-bubble:hover + .help-details, .help-details:hover {
+	/* Make visible and overlap content */
+	visibility: visible;
+	opacity: 1;
+	z-index: 1;
+
+	/* opening animations */
+	transition: opacity 150ms ease-in 400ms,
+				z-index 0ms 400ms;
+}
+.help-bubble:active + .help-details, .help-details:hover {
+	/* Touchscreen behavior */
+	transition: opacity 50ms ease-in 0ms,
+				z-index 0ms 0ms;
 }
 .help-details p + p {
 	/* Spacing is between paragraphs only */
