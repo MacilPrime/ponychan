@@ -53,6 +53,9 @@ form table tr th, table.tableform tr th {
 	background-color: rgb(50, 78, 127);
 	color: rgb(188, 213, 210);
 }
+.help-bubble {
+	background-color: rgb(62, 102, 163);
+}
 label {
 	color: rgb(188, 213, 210);
 }

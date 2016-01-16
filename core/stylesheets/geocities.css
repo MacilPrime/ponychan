@@ -18,6 +18,9 @@ header h1::before {
 form table, table.tableform {
     margin: 5px;
 }
+.help-bubble {
+    background-color: rgb(125, 114, 170);
+}
 div.blotter::before {
     content: url('img/gc/construction%20icon.gif');
     position: relative;

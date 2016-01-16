@@ -154,3 +154,6 @@ fieldset, div.ban {
 	font-size: 12pt;
 	letter-spacing: 1px;
 }
+.help-bubble {
+	background-color: rgb(173, 177, 191);
+}

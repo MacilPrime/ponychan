@@ -53,6 +53,9 @@ form table tr th, table.tableform tr th {
 	border: 1px #737bb8 solid; 
 	background: #210f6e;
 }
+.help-bubble {
+	background-color: rgb(53, 32, 149);
+}
 div.banner {
 	background-color: #300087;
 	color: #d7e5ff;

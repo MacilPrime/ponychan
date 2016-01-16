@@ -32,6 +32,9 @@ form table tr th, table.tableform tr th, .ban h2 {
     background: rgb(19, 20, 51);
     color: rgb(219, 233, 233)
 }
+.help-bubble {
+    background-color: rgb(61, 64, 110);
+}
 
 .boardlist.top, #qrmove, #updateSettings {
     background: rgb(2, 19, 52);

@@ -90,3 +90,6 @@ div.pages {
 fieldset, div.ban {
 	background-color: rgba(0, 0, 0, 0.5);
 }
+.help-bubble {
+	background-color: rgb(93, 76, 177);
+}

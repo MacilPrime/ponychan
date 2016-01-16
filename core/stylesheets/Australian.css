@@ -195,3 +195,6 @@ form[name="editpost"] textarea {
   min-height: 15em;
   min-width: 40em;
   width: 40em; }
+.help-bubble {
+  background-color: rgb(198, 161, 122);
+}

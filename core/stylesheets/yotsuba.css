@@ -57,3 +57,6 @@ div.boardlist a {
 table.modlog tr th {
 	background: #EA8;
 }
+.help-bubble {
+	background-color: rgb(237, 185, 151);
+}

@@ -26,6 +26,9 @@ a:hover, p.intro a.post_no:hover {
 form table tr th, table.tableform tr th {
 	background: #e693c8;
 }
+.help-bubble {
+	background-color: rgb(229, 146, 199);
+}
 textarea#body, #qrcomment {
 	background: url(img/pinkie/balloons.png) bottom right no-repeat white;
 }

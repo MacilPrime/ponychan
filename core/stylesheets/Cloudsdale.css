@@ -182,3 +182,8 @@ a.post_no {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
+.help-bubble {
+	background-color: rgb(239, 253, 254);
+	color: #a3b4bd;
+	text-shadow: 1px 1px 1px white;
+}

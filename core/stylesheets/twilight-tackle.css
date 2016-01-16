@@ -195,6 +195,9 @@ form table tr th, table.tableform tr th {
     box-shadow: inset 0 1px 7px rgba(114, 35, 100, 1);
     text-shadow: 0 1px 1px rgb(0,0,0);
 }
+.help-bubble {
+    background-color: rgb(174, 113, 164);
+}
 form:not(#qrform) input[type=submit] {
     position: relative;
     bottom: 1px;

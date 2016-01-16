@@ -37,6 +37,9 @@ form table tr th, table.tableform tr th {
 	background: rgb(230, 119, 45);
 	border-radius: 0.2rem;
 }
+.help-bubble {
+	background-color: rgb(236, 146, 98);
+}
 
 /* -- Setting the common color scheme -- */
 /* Heading colors */

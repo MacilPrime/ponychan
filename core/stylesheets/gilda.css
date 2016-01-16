@@ -68,6 +68,9 @@ form table tr th, table.tableform tr th {
 	background-color: rgb(59, 50, 31);
 	text-shadow: 1px 1px 2px rgba(255, 225, 142, 0.30);
 }
+.help-bubble {
+	background-color: rgb(70, 61, 41);
+}
 time {
 	color: rgb(160, 118, 15);
 }

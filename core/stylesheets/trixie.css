@@ -171,6 +171,9 @@ div.banner {
 form table tr th, table.tableform tr th, .reply, .help-details, .pages {
 	box-shadow: 0.1rem 0.1rem 0.1rem rgba(0,0,0,0.4);
 }
+.help-bubble {
+	background-color: rgb(117, 180, 232);
+}
 form[name="post"] th, .reply, .pages {
 	padding: 0.4em;
 	border-radius: 0.3rem 0.3rem 0.5rem 0.3rem;

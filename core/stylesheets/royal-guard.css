@@ -54,3 +54,6 @@ div.post.reply, .wthread {
 .boardlist.top .boardlistpart a[href="/"] {
   color: #F9EDED;
 }
+.help-bubble {
+  font-size: 0.85em;
+}

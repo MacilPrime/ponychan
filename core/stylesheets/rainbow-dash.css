@@ -175,6 +175,9 @@ form th {
 form th, .reply, .catathread, .help-details {
     border-radius: 0.5rem 0;
 }
+.help-bubble {
+    background-color: rgb(158, 211, 236);
+}
 input[type=text], input[type=email], input[type=search],
 input[type=password], textarea, #watcherScreen {
     border-radius: 3px 0;

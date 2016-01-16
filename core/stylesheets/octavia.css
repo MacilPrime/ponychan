@@ -49,6 +49,9 @@ form table tr th, table.tableform tr th {
 	background-color: rgb(184, 136, 177);
 	text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
 }
+.help-bubble {
+	background-color: rgb(176, 128, 169);
+}
 
 /* -- Setting the common color scheme -- */
 /* Heading colors */

@@ -51,6 +51,9 @@ form table tr th, table.tableform tr th {
 	border: 1px yellow solid;
 	background: #0179c6;
 }
+.help-bubble {
+	background-color: rgb(25, 120, 184);
+}
 div.banner {
 	background-color: #FFFFB8;
 	border: 1px solid black;

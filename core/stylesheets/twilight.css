@@ -76,7 +76,9 @@ header div.subtitle {
 form table tr th, table.tableform tr th {
     background: rgb(204, 136, 204);
 }
-
+.help-bubble {
+    background-color: rgb(216, 162, 217);
+}
 #qrDisplayButton {
     color: rgb(34,0,170);
 }

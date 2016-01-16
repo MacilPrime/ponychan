@@ -76,7 +76,9 @@ header div.subtitle {
 form table tr th, table.tableform tr th {
     background: rgb(49,49,80);
 }
-
+.help-bubble {
+    background-color: rgb(98, 99, 140);
+}
 
 
 /* Posts */

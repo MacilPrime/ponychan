@@ -36,6 +36,9 @@ div.post.reply, .help-details, div.banner, form table tr th, table.tableform tr 
     background: rgb(40, 42, 46);
     border: none;
 }
+.help-bubble {
+    background-color: rgb(90, 94, 101);
+}
 div.post.reply.highlighted{
     background:#3E3F43;
 }

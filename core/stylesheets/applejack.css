@@ -250,3 +250,6 @@ span.omitted, .toolong {
 .homeblock .unimportant {
 	font-family: monospace;
 }
+.help-bubble {
+    background-color: rgb(251, 187, 96);
+}

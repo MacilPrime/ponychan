@@ -221,6 +221,9 @@ form table tr th, table.tableform tr th {
 	border: 1px solid #673C51 ;
 	background-color: #410B25 ;
 }
+.help-bubble {
+	background-color: rgb(58, 111, 120);
+}
 #updateSettings{
 	background-color: #000A00 !important;
 	border: 2px solid #333B33;

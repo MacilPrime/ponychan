@@ -19,6 +19,9 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 form table tr th, table.tableform tr th {
     background: rgb(248,184,209);
 }
+.help-bubble {
+    background-color: rgb(137, 203, 201);
+}
 
 /* -- Setting the common color scheme -- */
 /* Heading colors */

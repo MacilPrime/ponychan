@@ -17,6 +17,9 @@ a:hover {
 form table tr th, table.tableform tr th {
     background: rgb(111, 206, 244);
 }
+.help-bubble {
+    background-color: rgb(158, 215, 243);
+}
 input[type=button], input[type=submit], input[type=file], button {
     height: 1.8em;
     margin: 0 2px;
