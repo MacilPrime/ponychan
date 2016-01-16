@@ -205,7 +205,7 @@ p.intro span.subject, .wsubject {
 	color: rgb(41, 61, 127);
 }
 
-p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname, .name {
 	color: rgb(37, 10, 2);
 }
 

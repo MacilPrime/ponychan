@@ -99,7 +99,7 @@ p.intro span.subject, .wsubject {
 p.intro span.subject::after {
     content: " — ";
 }
-p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname, .name {
     color: rgb(34,136,136);
     font-weight: bold;
 }

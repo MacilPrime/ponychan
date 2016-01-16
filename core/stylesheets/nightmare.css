@@ -57,7 +57,7 @@ div.post.reply.highlighted {
 span.quote {
 	color: #ffb642;
 }
-p.intro span.name {
+p.intro span.name, .name {
 	color: white;
 }
 p.intro a.email span.name {

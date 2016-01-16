@@ -25,7 +25,7 @@ a.post_no {
 p.intro a.post_no {
 	color: inherit;
 }
-p.intro a.email span.name {
+p.intro a.email span.name, .name {
 	color: #34345C;
 }
 p.intro a.email:hover span.name {
@@ -182,7 +182,7 @@ p.intro span.subject {
 	font-weight: bold;
 	font-size: 125%;
 }
-p.intro span.name {
+p.intro span.name, .name {
 	color: #117743;
 	font-weight: bold;
 }

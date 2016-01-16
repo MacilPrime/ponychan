@@ -29,7 +29,7 @@ a#qrDisplayButton {
 	color: #FFFFB8 !important;
 	font-size: 14px;
 }
-p.intro a.email span.name {
+p.intro a.email span.name, .name {
 	color: #f8fd77;
 }
 p.intro a.email:hover span.name {

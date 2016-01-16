@@ -91,7 +91,7 @@ div.post.reply, div.post.reply.highlighted {
 p.intro span.subject, .wsubject {
     color: rgb(2,146,188);
 }
-p.intro span.name, p.intro a.email span.name, .wname {
+p.intro span.name, p.intro a.email span.name, .wname, .name {
     color: white;
 }
 a.email {

@@ -107,7 +107,7 @@ div.post.reply.highlighted {
 span.quote {
 	color: rgb(21, 119, 2);
 }
-p.intro span.name {
+p.intro span.name, .name {
 	color: rgb(28, 82, 105);
 }
 p.intro a.email span.name {

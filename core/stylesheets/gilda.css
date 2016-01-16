@@ -83,6 +83,7 @@ h1, h2, h3, h4, h5, h6 {
 	text-shadow: 0.1rem 0.1rem 0.3rem rgba(0,0,0,0.5);
 }
 
+
 /* Head bar backgrounds */
 .boardlist.top, #qrmove, .ban h2 {
 	background: rgb(183, 153, 81)
@@ -236,7 +237,7 @@ p.intro span.subject, .wsubject {
 	color: rgb(213, 199, 219);
 }
 
-p.intro span.name, .email .name, p.intro a.email:hover span.name, .wname {
+p.intro span.name, .email .name, p.intro a.email:hover span.name, .wname, .name {
 	color: rgb(224, 158, 3);
 }
 

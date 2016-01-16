@@ -213,7 +213,7 @@ p.intro span.subject, .wsubject {
 	color: rgb(181, 198, 233);
 }
 
-p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname, .name {
 	color: rgb(203, 218, 239);
 }
 

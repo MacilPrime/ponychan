@@ -67,7 +67,7 @@ div.banner {
 p.intro span.subject {
 	color: #a646ff;
 }
-p.intro span.name {
+p.intro span.name, .name {
 	color: #a7e0fd;
 }
 div.post.reply.highlighted {

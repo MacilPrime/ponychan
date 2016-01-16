@@ -94,7 +94,7 @@ header div.subtitle {
 	font-size: 14px;
 }
 
-p.intro span.name,
+p.intro span.name, .name,
 p.intro a.email span.name,
 p.intro a.email:hover span.name,
 span.wname {

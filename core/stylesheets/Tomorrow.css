@@ -50,7 +50,7 @@ div.post.reply.highlighted{
     background-color: rgba(0, 0, 0, 0.14) !important;
 }
 
-p.intro span.name{
+p.intro span.name, .name{
     color: rgb(197, 200, 198);
 }
 p.intro a.email span.name {

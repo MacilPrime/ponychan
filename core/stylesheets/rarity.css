@@ -131,7 +131,7 @@ p.intro span.subject::after {
     color: rgb(155, 155, 155);
     content: " — ";
 }
-p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.name {
+p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.name, .name {
     color: rgb(96, 0, 160);
     font-weight: bold;
     font-family: 'Goudy Bookletter 1911', serif;

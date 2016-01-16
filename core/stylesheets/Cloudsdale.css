@@ -36,7 +36,7 @@ a:hover, p.intro a.post_no:hover {
 	color: #0000ff;
 }
 
-p.intro a.email span.name {
+p.intro a.email span.name, .name {
 	color: #2222ff;
 }
 

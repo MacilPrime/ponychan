@@ -72,7 +72,7 @@ div.banner {
     background: #8F0304;
 }
 /* text decorations */
-p.intro span.subject,.name,.trip {
+p.intro span.subject,.name,.trip, .name {
     color:white !important
 }
 a.email {

@@ -21,7 +21,7 @@ a:hover, div.banner a:hover {
 span.trip, .wtrip {
   color: #67AB55;
 }
-p.intro span.name, .wname {
+p.intro span.name, .wname, .name {
   color: #55A525;
 }
 p.intro span.subject, .wsubject {

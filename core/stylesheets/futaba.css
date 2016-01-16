@@ -10,7 +10,7 @@ div.title h1 {
 div.title p {
 	font-size: 10px;
 }
-a:link, a:visited, p.intro a.email span.name {
+a:link, a:visited, p.intro a.email span.name, .name {
 	color: #0000ff;
 }
 a:link:hover {

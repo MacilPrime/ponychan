@@ -110,7 +110,7 @@ div.post.op {
 p.intro span.subject, .wsubject {
     color: #33C;
 }
-p.intro span.name, p.intro a.email span.name, .wname {
+p.intro span.name, p.intro a.email span.name, .wname, .name {
     color: rgb(37, 89, 255);
 }
 a.email {

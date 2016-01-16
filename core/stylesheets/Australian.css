@@ -122,7 +122,7 @@ p.intro a.post_no:hover {
   color: #cb6048; }
 p.intro span.subject {
   color: #000; }
-p.intro span.name,
+p.intro span.name, .name,
 p.intro a.email span.name,
 p.intro a.email:hover span.name {
   color: #435963; }
