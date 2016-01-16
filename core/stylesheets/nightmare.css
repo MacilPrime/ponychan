@@ -45,7 +45,7 @@ div.banner {
 hr {
 	border-color: rgb(128,128,128);
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background-color: rgb(25, 4, 29);
 	border-width: 2px;
 	border-style: solid;
@@ -57,7 +57,7 @@ div.post.reply.highlighted {
 span.quote {
 	color: #ffb642;
 }
-p.intro span.name {
+p.intro span.name, .name {
 	color: white;
 }
 p.intro a.email span.name {
@@ -89,4 +89,7 @@ div.pages {
 }
 fieldset, div.ban {
 	background-color: rgba(0, 0, 0, 0.5);
+}
+.help-bubble {
+	background-color: rgb(93, 76, 177);
 }

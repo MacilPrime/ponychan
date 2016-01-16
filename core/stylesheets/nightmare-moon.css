@@ -32,6 +32,9 @@ form table tr th, table.tableform tr th, .ban h2 {
     background: rgb(19, 20, 51);
     color: rgb(219, 233, 233)
 }
+.help-bubble {
+    background-color: rgb(61, 64, 110);
+}
 
 .boardlist.top, #qrmove, #updateSettings {
     background: rgb(2, 19, 52);
@@ -96,7 +99,7 @@ div.post.op {
     padding: 0.8em;
     overflow-y: hidden;
 }
-.postimg {
+.postimg, .help-details {
     background-color: rgb(17, 17, 48);
     border-radius: 5px;
     transition: background-color 0.25s ease-in-out;
@@ -107,7 +110,7 @@ div.post.op {
 p.intro span.subject, .wsubject {
     color: #33C;
 }
-p.intro span.name, p.intro a.email span.name, .wname {
+p.intro span.name, p.intro a.email span.name, .wname, .name {
     color: rgb(37, 89, 255);
 }
 a.email {

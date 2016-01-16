@@ -76,11 +76,13 @@ header div.subtitle {
 form table tr th, table.tableform tr th {
     background: rgb(49,49,80);
 }
-
+.help-bubble {
+    background-color: rgb(98, 99, 140);
+}
 
 
 /* Posts */
-div.post.reply, .watcherMenu, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+div.post.reply, .help-details, .watcherMenu, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
     background-color: rgb(28,42,98);
 }
 div.post.reply, div.post.reply.highlighted {
@@ -89,7 +91,7 @@ div.post.reply, div.post.reply.highlighted {
 p.intro span.subject, .wsubject {
     color: rgb(2,146,188);
 }
-p.intro span.name, p.intro a.email span.name, .wname {
+p.intro span.name, p.intro a.email span.name, .wname, .name {
     color: white;
 }
 a.email {

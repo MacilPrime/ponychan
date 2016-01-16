@@ -76,7 +76,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* Block items */
-div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
+div.post.reply, .help-details, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
 	background-color: rgb(255, 211, 231);
 }
 
@@ -196,7 +196,7 @@ p.intro span.subject, .wsubject {
 	color: rgb(68, 113, 183);
 }
 
-p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname, .name {
 	color: rgb(42, 95, 190);
 }
 
@@ -297,4 +297,7 @@ div.pages {
 .homeblock .unimportant {
 	font-family: monospace;
 	text-transform: uppercase;
+}
+.help-bubble {
+	background-color: rgb(61, 161, 215);
 }

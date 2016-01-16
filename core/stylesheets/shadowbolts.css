@@ -53,6 +53,9 @@ form table tr th, table.tableform tr th {
 	background-color: rgb(50, 78, 127);
 	color: rgb(188, 213, 210);
 }
+.help-bubble {
+	background-color: rgb(62, 102, 163);
+}
 label {
 	color: rgb(188, 213, 210);
 }
@@ -87,7 +90,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* Block items */
-div.post.reply, .blotter, .hashtag, #watcherScreen, .post-hover, .pages, #updateSettings, #settingsScreen {
+div.post.reply, .help-details, .blotter, .hashtag, #watcherScreen, .post-hover, .pages, #updateSettings, #settingsScreen {
 	background-color: rgb(35, 25, 59);
 }
 
@@ -210,7 +213,7 @@ p.intro span.subject, .wsubject {
 	color: rgb(181, 198, 233);
 }
 
-p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname, .name {
 	color: rgb(203, 218, 239);
 }
 

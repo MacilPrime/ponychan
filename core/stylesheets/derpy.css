@@ -86,7 +86,7 @@ div.banner a:hover {
 hr, .thread hr {
 	border-color: rgb(128,128,128);
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background: #AEB2C0;
 	border: none !important;
 	box-shadow: 0 0 1px 1px rgb(137, 137, 137) !important;
@@ -98,7 +98,7 @@ div.post.reply.highlighted {
 span.quote {
 	color: #2E64C0;
 }
-p.intro span.name, p.intro a.email span.name {
+p.intro span.name, p.intro a.email span.name, .name {
 	color: rgb(74, 75, 77);
 }
 p.intro a.email:hover span.name {
@@ -153,4 +153,7 @@ fieldset, div.ban {
 	color: #FAF9AF;
 	font-size: 12pt;
 	letter-spacing: 1px;
+}
+.help-bubble {
+	background-color: rgb(173, 177, 191);
 }

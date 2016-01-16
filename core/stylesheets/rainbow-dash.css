@@ -172,8 +172,11 @@ body > header h1 {
 form th {
     text-align: right !important;
 }
-form th, .reply, .catathread {
+form th, .reply, .catathread, .help-details {
     border-radius: 0.5rem 0;
+}
+.help-bubble {
+    background-color: rgb(158, 211, 236);
 }
 input[type=text], input[type=email], input[type=search],
 input[type=password], textarea, #watcherScreen {
@@ -220,7 +223,7 @@ div.blotter {
 .post {
     line-height: 140%;
 }
-div.post.reply, .hashtag, .catathread {
+div.post.reply, .help-details, .hashtag, .catathread {
     border: 1px solid rgb(169, 174, 177);
 }
 div.post.reply, .wthread, .catathread {
@@ -228,6 +231,9 @@ div.post.reply, .wthread, .catathread {
 }
 div.post.reply, .watcherMenu, .catathread {
     background-color: rgba(255, 255, 255, 0.5);
+}
+.help-details {
+    background-color: rgb(243, 250, 254);
 }
 div.post.reply .intro {
     padding-left: 0.3em;
@@ -247,7 +253,7 @@ p.intro span.subject::after {
     content: " — ";
     color: gray;
 }
-p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname, .name {
     color: rgb(32, 48, 144) !important;
     font-weight: bold;
 }

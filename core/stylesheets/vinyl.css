@@ -54,8 +54,11 @@ form[name="post"] table tr th,textarea,input[type="text"],input[type="password"]
     border-radius:10px;
     color: #98B1D7;
 }
+.help-bubble {
+    background-color: rgb(86, 101, 141);
+}
 /* boxes n stuff */
-.thread div.reply,.homeblock,#qr,#settingsScreen,#watcherScreen,div.reply.post-hover,div.post.reply.highlighted {
+.thread div.reply, .help-details, .homeblock,#qr,#settingsScreen,#watcherScreen,div.reply.post-hover,div.post.reply.highlighted {
     background:black url(img/vinyl/vinyl-bg1b.png) no-repeat fixed right top;
     color:#98B1D7;
     border:2px solid #C7D9E5;
@@ -69,7 +72,7 @@ div.banner {
     background: #8F0304;
 }
 /* text decorations */
-p.intro span.subject,.name,.trip {
+p.intro span.subject,.name,.trip, .name {
     color:white !important
 }
 a.email {

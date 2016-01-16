@@ -26,6 +26,9 @@ a:hover, p.intro a.post_no:hover {
 form table tr th, table.tableform tr th {
 	background: #e693c8;
 }
+.help-bubble {
+	background-color: rgb(229, 146, 199);
+}
 textarea#body, #qrcomment {
 	background: url(img/pinkie/balloons.png) bottom right no-repeat white;
 }
@@ -92,7 +95,7 @@ div.banner a:hover {
 hr, .thread hr {
 	border-color: rgb(128,128,128);
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background: #EC9DC4;
 	border: none !important;
 	box-shadow: 0 0 2px 1px #B8E6E6 !important;
@@ -104,7 +107,7 @@ div.post.reply.highlighted {
 span.quote {
 	color: rgb(21, 119, 2);
 }
-p.intro span.name {
+p.intro span.name, .name {
 	color: rgb(28, 82, 105);
 }
 p.intro a.email span.name {

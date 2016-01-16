@@ -19,6 +19,9 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 form table tr th, table.tableform tr th {
     background: rgb(248,184,209);
 }
+.help-bubble {
+    background-color: rgb(137, 203, 201);
+}
 
 /* -- Setting the common color scheme -- */
 /* Heading colors */
@@ -38,7 +41,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: #e0e8e8;
 }
 /* Block items */
-div.post.reply, .wthread, .watcherMenu, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
+div.post.reply, .help-details, .wthread, .watcherMenu, .post-hover, .hashtag, .pages, .catathread, #updateSettings {
     border-color: rgb(229, 214, 139);
     background-color: rgb(255,238,153);
 }
@@ -96,7 +99,7 @@ p.intro span.subject, .wsubject {
 p.intro span.subject::after {
     content: " — ";
 }
-p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname, .name {
     color: rgb(34,136,136);
     font-weight: bold;
 }

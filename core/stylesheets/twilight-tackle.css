@@ -56,10 +56,10 @@ li {
 
 
 /* Setting the color scheme */
-div.post.reply, .wthread, #settingsScreen, .hashtag, #updateSettings, .catathread {
+div.post.reply, .help-details, .wthread, #settingsScreen, .hashtag, #updateSettings, .catathread {
     border: 2px solid rgb(121,24,103);
 }
-div.post.reply, .wthread, .watcherMenu section, #settingsScreen, .hashtag, #updateSettings, .catathread {
+div.post.reply, .help-details, .wthread, .watcherMenu section, #settingsScreen, .hashtag, #updateSettings, .catathread {
     background: linear-gradient(to bottom, rgb(121, 24, 103) 0px, rgb(90, 18, 77) 300px);
 }
 input[type=text], input[type=password], input[type=search], textarea {
@@ -195,6 +195,9 @@ form table tr th, table.tableform tr th {
     box-shadow: inset 0 1px 7px rgba(114, 35, 100, 1);
     text-shadow: 0 1px 1px rgb(0,0,0);
 }
+.help-bubble {
+    background-color: rgb(174, 113, 164);
+}
 form:not(#qrform) input[type=submit] {
     position: relative;
     bottom: 1px;
@@ -231,7 +234,7 @@ p.intro span.subject::after {
     color: rgb(155, 155, 155);
     content: " — ";
 }
-p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.name {
+p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.name, .name {
     color: rgb(234, 126, 185);
     font-weight: normal;
 }

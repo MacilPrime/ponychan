@@ -15,7 +15,7 @@ div.post.reply {
 	background: #f0e0d6;
 	border-color: #d9bfb7;
 }
-div.post.reply.highlighted {
+div.post.reply.highlighted, .help-details {
 	background: #f0c0b0;
 	border-color: #d9bfb7;
 }
@@ -56,4 +56,7 @@ div.boardlist a {
 }
 table.modlog tr th {
 	background: #EA8;
+}
+.help-bubble {
+	background-color: rgb(237, 185, 151);
 }

@@ -10,7 +10,7 @@ div.title h1 {
 div.title p {
 	font-size: 10px;
 }
-a:link, a:visited, p.intro a.email span.name {
+a:link, a:visited, p.intro a.email span.name, .name {
 	color: #0000ff;
 }
 a:link:hover {
@@ -19,7 +19,7 @@ a:link:hover {
 a.post_no {
 	color: #800000;
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background: #f0e0d6;
 	border-color: #d9bfb7;
 }
@@ -74,4 +74,7 @@ unimportant, .unimportant * {
 }
 table.modlog tr th {
 	background: #EA8;
+}
+.help-bubble {
+	background-color: rgb(237, 185, 151);
 }

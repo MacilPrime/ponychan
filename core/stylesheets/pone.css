@@ -20,3 +20,6 @@ header h1, #settingsScreen h1 {
 div.boardlist {
 	font-size: 11pt;
 }
+help-bubble {
+	background-color: rgb(196, 206, 232);
+}

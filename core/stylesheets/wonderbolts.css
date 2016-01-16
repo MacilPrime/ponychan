@@ -29,7 +29,7 @@ a#qrDisplayButton {
 	color: #FFFFB8 !important;
 	font-size: 14px;
 }
-p.intro a.email span.name {
+p.intro a.email span.name, .name {
 	color: #f8fd77;
 }
 p.intro a.email:hover span.name {
@@ -51,6 +51,9 @@ form table tr th, table.tableform tr th {
 	border: 1px yellow solid;
 	background: #0179c6;
 }
+.help-bubble {
+	background-color: rgb(25, 120, 184);
+}
 div.banner {
 	background-color: #FFFFB8;
 	border: 1px solid black;
@@ -71,7 +74,7 @@ div.post.reply p.intro span.name {
 div.post.reply.highlighted {
 	background: url("img/wonderbolts/wbhlgradient.png") bottom repeat-x #2660b0;
 }
-div.post.reply {
+div.post.reply, .help-details {
 	background: #1650A7;
 	border-width: 2px;
 	border-style: solid;

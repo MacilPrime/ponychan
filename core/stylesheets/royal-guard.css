@@ -21,7 +21,7 @@ a:hover, div.banner a:hover {
 span.trip, .wtrip {
   color: #67AB55;
 }
-p.intro span.name, .wname {
+p.intro span.name, .wname, .name {
   color: #55A525;
 }
 p.intro span.subject, .wsubject {
@@ -33,7 +33,7 @@ p.intro time {
 .watcherMenu {
 	background: #E9E9E9;
 }
-div.post.reply, .watcherMenu {
+div.post.reply, .watcherMenu, .help-details {
   background: #E9E9E9;
 }
 div.post.reply, .wthread {
@@ -53,4 +53,7 @@ div.post.reply, .wthread {
 }
 .boardlist.top .boardlistpart a[href="/"] {
   color: #F9EDED;
+}
+.help-bubble {
+  font-size: 0.85em;
 }

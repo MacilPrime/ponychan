@@ -17,6 +17,9 @@ a:hover {
 form table tr th, table.tableform tr th {
     background: rgb(111, 206, 244);
 }
+.help-bubble {
+    background-color: rgb(158, 215, 243);
+}
 input[type=button], input[type=submit], input[type=file], button {
     height: 1.8em;
     margin: 0 2px;
@@ -37,7 +40,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
     color: rgb(77, 24, 111);
 }
 /* Tone 2 - Cells */
-div.post.reply, #settingsScreen, .watcherMenu, .hashtag, #updateSettings, .catathread {
+div.post.reply, .help-details, #settingsScreen, .watcherMenu, .hashtag, #updateSettings, .catathread {
     background-color: rgb(222, 239, 244);
 }
 .replyContainer:nth-of-type(2n) .reply {
@@ -128,7 +131,7 @@ p.intro span.subject::after {
     color: rgb(155, 155, 155);
     content: " — ";
 }
-p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.name {
+p.intro span.name,p.intro a.email span.name, .wname, p.intro a.email:hover span.name, .name {
     color: rgb(96, 0, 160);
     font-weight: bold;
     font-family: 'Goudy Bookletter 1911', serif;

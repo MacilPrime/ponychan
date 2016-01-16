@@ -49,6 +49,9 @@ form table tr th, table.tableform tr th {
 	background-color: rgb(184, 136, 177);
 	text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
 }
+.help-bubble {
+	background-color: rgb(176, 128, 169);
+}
 
 /* -- Setting the common color scheme -- */
 /* Heading colors */
@@ -74,7 +77,7 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 }
 
 /* Block items */
-div.post.reply, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
+div.post.reply, .help-details, #watcherScreen, .post-hover, .pages, .catathread, #updateSettings, #settingsScreen {
 	background-color: rgb(196, 196, 184)
 }
 
@@ -207,7 +210,7 @@ p.intro span.subject, .wsubject {
 	color: rgb(41, 61, 127);
 }
 
-p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname {
+p.intro span.name,p.intro a.email span.name, p.intro a.email:hover span.name, .wname, .name {
 	color: rgb(37, 10, 2);
 }
 

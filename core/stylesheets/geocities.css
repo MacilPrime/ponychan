@@ -18,6 +18,9 @@ header h1::before {
 form table, table.tableform {
     margin: 5px;
 }
+.help-bubble {
+    background-color: rgb(125, 114, 170);
+}
 div.blotter::before {
     content: url('img/gc/construction%20icon.gif');
     position: relative;
@@ -69,7 +72,7 @@ span.controls.op {
     content: "/-- TEST TEXT PLEASE IGNORE --/";
 }
 
-div.post.reply {
+div.post.reply, .help-details {
     background: url('img/gc/paper.png') #fff9f2 repeat;
     color: black;
     border: none;

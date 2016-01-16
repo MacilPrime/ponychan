@@ -36,7 +36,7 @@ a:hover, p.intro a.post_no:hover {
 	color: #0000ff;
 }
 
-p.intro a.email span.name {
+p.intro a.email span.name, .name {
 	color: #2222ff;
 }
 
@@ -79,7 +79,7 @@ a.bodylink {
 
 /* OP is always a faggot */
 
-div.post.reply
+div.post.reply, .help-details
 {
 	background: #F0FFFF;
 	border-color: #B7C5D9;
@@ -181,4 +181,9 @@ a.post_no {
 	border-top-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+}
+.help-bubble {
+	background-color: rgb(239, 253, 254);
+	color: #a3b4bd;
+	text-shadow: 1px 1px 1px white;
 }
