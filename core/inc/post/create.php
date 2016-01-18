@@ -264,10 +264,8 @@ if (!$post['mature'] && $has_mature_tag_in_post) {
 
 if ($post['mature']) {
     if (!$config['mature_allowed']) {
-        undoFile($post);
         error("This board doesn't allow mature content threads");
     } elseif (!$post['op'] && !$thread['mature']) {
-        undoFile($post);
         error("Only threads can be marked as mature");
     }
 }
