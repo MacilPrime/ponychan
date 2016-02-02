@@ -99,10 +99,7 @@ function remove_watch(postid) {
 		updated = populate_watcher_screen();
 		run_watcher_refresher();
 	}
-
-	updated.then(() => {
-		alert("Thread unwatched");
-	});
+	return updated;
 }
 
 function add_watch_buttons($posts) {
@@ -113,7 +110,7 @@ function add_watch_buttons($posts) {
 		if (watched_threads.hasOwnProperty(postid)) {
             footer($post).removeItem("Watch");
             footer($post).addItem('Unwatch', function () {
-                remove_watch(postid);
+                remove_watch(postid).then(() => alert('Thread unwatched.'));
             });
 		} else {
             footer($post).removeItem("Unwatch");
