@@ -243,6 +243,7 @@ documentReady.onValue(() => {
 	function process_posts(context, postFilter) {
 		var threads_needed = 0;
 		var $posts = $(context).filter(".post").add( $(".post", context) );
+		const isThreadPage = $('div.banner').length > 0;
 		$posts.each(function() {
 			var $post = $(this);
 
@@ -252,7 +253,7 @@ documentReady.onValue(() => {
 
 			// Don't hide a thread if we're trying to view
 			// it specifically.
-			if ($post.hasClass("op") && $('div.banner').length)
+			if ($post.hasClass("op") && isThreadPage)
 				return;
 
 			// Everything after this relies on the post

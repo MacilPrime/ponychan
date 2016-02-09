@@ -1,4 +1,4 @@
-MLPchan's code is split into several different interdependent modules.
+Ponychan's code is split into several different interdependent modules.
 
 * core is based on Tinyboard, contains PHP code, and is placed in the
   webserver's publicly accessible document root. When using Vagrant to run the
@@ -18,7 +18,7 @@ MLPchan's code is split into several different interdependent modules.
 
 1. Install Vagrant and VirtualBox.
 2. Run "vagrant up" to start up a local virtual machine that will run a copy of
- MLPchan on your local computer for development.
+ Ponychan on your local computer for development.
 3. When that completes, (as it instructs you to) visit
  http://172.27.0.2/install.php to complete the Tinyboard installation,
  while leaving the database settings as default, and then browse to
@@ -48,7 +48,7 @@ client javascript:
 1. Install Node.js onto your system.
 2. Install gulp and mocha onto your system with `npm install -g gulp mocha`.
 3. `cd client-core`
-4. Install MLPchan's local javascript dependencies by running `npm install`
+4. Install Ponychan's local javascript dependencies by running `npm install`
  inside the client-core directory.
 
 Now run `gulp` to build the client javascript. You may pass the `--watch` (`-w`)

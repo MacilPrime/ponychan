@@ -13,7 +13,7 @@ import $ from 'jquery';
 import {documentReady, newPosts} from './lib/events';
 import settings from './settings';
 
-settings.newSetting("time_casual", "bool", false, "12 hour time display", 'pagestyle', {orderhint: 4});
+settings.newSetting("time_casual", "bool", true, "12 hour time display", 'pagestyle', {orderhint: 4});
 
 const update = udKefir(module, null).changes().take(1).toProperty();
 
