@@ -252,6 +252,6 @@
 			</td>
 		</tr>{% endif %}
 	</table>
-{{ antibot.html(true) }}
+{{ antibot.html(true)|raw }}
 <input type="hidden" name="hash" value="{{ antibot.hash() }}">
 </form>
