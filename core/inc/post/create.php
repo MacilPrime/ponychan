@@ -85,7 +85,7 @@ if (!$post['mod']) {
 
 //Check if thread exists
 if (!$post['op']) {
-    $query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`bump`,`mature`,`body` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
+    $query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`bump`,`mature`,`anon_thread`,`body` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
     $query->bindValue(':id', $post['thread'], PDO::PARAM_INT);
     $query->execute() or error(db_error());
 
@@ -248,7 +248,24 @@ $post['email_protocol'] = $skypeMatch ? 'skype' : null;
 if ($skypeMatch) {
     $post['email'] = $skypeMatch[1];
 }
-
+$post['anon_thread'] = false;
+if ($post['op']) {
+    error_log(json_encode(['anon_thread_test', stripos($post['body'], '[#anon]') !== false]));
+    if (stripos($post['body'], '[#anon]') !== false) {
+        $post['anon_thread'] = true;
+        if (!hasPermission('bypass_field_disable', $board['uri'])) {
+            $post['name'] = $config['anonymous'];
+            $post['trip'] = '';
+        }
+    }
+} else {
+    $post['anon_thread'] = $thread['anon_thread'];
+    if (!hasPermission('bypass_field_disable', $board['uri'])
+        && $thread['anon_thread']) {
+        $post['name'] = $config['anonymous'];
+        $post['trip'] = '';
+    }
+}
 $post['mature'] = $post['op'] ? false : $thread['mature'];
 
 if (isset($_POST['mature'])) {

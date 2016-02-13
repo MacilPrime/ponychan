@@ -1160,11 +1160,11 @@ function post(array $post) {
 		'`trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, `thumb_uri`, ' .
 		'`thumbwidth`, `thumbheight`, `file`, `file_uri`, `filewidth`, `fileheight`, ' .
 		'`filesize`, `filename`, `filehash`, `password`, `userhash`, `ip_type`, `ip_data`, `sticky`, ' .
-		'`locked`, `sage`, `embed`, `mature`) VALUES ( NULL, :thread, :subject, ' .
+		'`locked`, `sage`, `embed`, `mature`, `anon_thread`) VALUES ( NULL, :thread, :subject, ' .
 		':email, :email_protocol, :name, :trip, :capcode, :body, :body_nomarkup, :time, :time, ' .
 		':thumb, :thumb_uri, :thumbwidth, :thumbheight, :file, :file_uri, :width, :height, :filesize, ' .
 		':filename, :filehash, :password, :userhash, :ip_type, INET6_ATON(:ip), :sticky, :locked, 0, :embed, ' .
-		':mature)', $board['uri']));
+		':mature, :anon_thread)', $board['uri']));
 
 	// Basic stuff
 	if (!empty($post['subject'])) {
@@ -1208,6 +1208,8 @@ function post(array $post) {
 	}
 
 	$query->bindValue(':mature', isset($post['mature']) && $post['mature'] ? 1 : 0, PDO::PARAM_INT);
+
+	$query->bindValue(':anon_thread', isset($post['anon_thread']) && $post['anon_thread'] ? 1 : 0, PDO::PARAM_INT);
 
 	if (isset($post['capcode']) && $post['capcode']) {
 		$query->bindValue(':capcode', $post['capcode']);
@@ -1549,7 +1551,7 @@ function index($page, $mod=false, $oldbump=false) {
 		$thread = new Thread(
 			$th['id'], $th['subject'], $th['email'], $th['email_protocol'], $th['name'], $th['trip'], $th['capcode'], $th['body'], $th['time'], $th['thumb'],
 			$th['thumb_uri'], $th['thumbwidth'], $th['thumbheight'], $th['file'], $th['file_uri'], $th['filewidth'], $th['fileheight'], $th['filesize'], $th['filename'], $th['ip'],
-			$th['sticky'], $th['locked'], $th['sage'], $th['embed'], $mod ? '?/' : $config['root'], $mod, true, $th['mature']
+			$th['sticky'], $th['locked'], $th['sage'], $th['embed'], $mod ? '?/' : $config['root'], $mod, true, $th['mature'], $th['anon_thread']
 		);
 
 		if ($config['cache']['enabled'] && $cached = cache::get("thread_index_{$board['uri']}_{$th['id']}")) {
@@ -1586,7 +1588,7 @@ function index($page, $mod=false, $oldbump=false) {
 				$po['id'], $th['id'], $po['subject'], $po['email'], $po['email_protocol'], $po['name'], $po['trip'], $po['capcode'], $po['body'], $po['time'],
 				$po['thumb'], $po['thumb_uri'], $po['thumbwidth'], $po['thumbheight'], $po['file'], $po['file_uri'],
 				$po['filewidth'], $po['fileheight'], $po['filesize'],
-				$po['filename'], $po['ip'], $po['embed'], $mod ? '?/' : $config['root'], $mod, $po['mature'])
+				$po['filename'], $po['ip'], $po['embed'], $mod ? '?/' : $config['root'], $mod, $po['mature'], $po['anon_thread'])
 			);
 		}
 
@@ -2050,14 +2052,14 @@ function buildThread($id, $return=false, $mod=false) {
 			$thread = new Thread(
 				$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
 				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
-				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
+				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature'], $post['anon_thread']
 			);
 		} else {
 			$thread->add(new Post(
 				$post['id'], $thread->id, $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
 				$post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 				$post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
-				$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'])
+				$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'], $post['anon_thread'])
 			);
 		}
 	}
@@ -2115,7 +2117,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 				$thread = new Thread(
 				$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
 				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
-				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature']
+				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature'], $post['anon_thread']
 				);
 			} else {
 				if ($post['file'])
@@ -2125,7 +2127,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 					$post['id'], $thread->id, $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
 					$post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 					$post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
-					$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'])
+					$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'], $post['anon_thread'])
 				);
 			}
 		}
