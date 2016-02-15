@@ -161,11 +161,19 @@ if (!$post['op']) {
     if ($thread['locked'] && !hasPermission('postinlocked', $board['uri']))
         error($config['error']['locked']);
 
-    $thread['cyclic'] = (stripos($thread['body'], '<span class="hashtag">#cyclic</span>') !== FALSE);
+    preg_match('/<span class="hashtag">#cyclic(?:=(\d+))?<\/span>/i', $thread['body'], $m);
+    $thread['cyclic'] = $m ?
+        ($m[1] ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
     $thread['no_image_reposts'] = (stripos($thread['body'], '<span class="hashtag">#pic</span>') !== FALSE);
 
-    if ($thread['cyclic']) {
-        cyclicThreadCleanup($post['thread']);
+    if ($thread['cyclic'] !== null) {
+        if ($thread['cyclic'] < 1) {
+            error($config['error']['Cyclic value too low']);
+        }
+
+        // subtract 1 because we're (probably) going to be adding a new post to
+        // the thread momentarily.
+        cyclicThreadCleanup($post['thread'], $thread['cyclic']-1);
 
         // this gets used later elsewhere
         $numposts = numPosts($post['thread']);
