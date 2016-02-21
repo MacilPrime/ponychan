@@ -6,10 +6,10 @@
 <input type="hidden" name="making_a_post" value="1">
 {{ antibot.html()|raw }}
 {% if mod %}<input type="hidden" name="mod" value="1">{% endif %}
+	{% set bypass_field_disable = (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}
 	<table>
 		{% set name_enabled = not config.field_disable_name and not (id and thread.anon_thread) %}
-		{% set bypass_disabled_name = (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}
-		{% if name_enabled or bypass_disabled_name %}
+		{% if name_enabled or bypass_field_disable %}
 			<tr>
 			<th>
 				{% trans %}Name{% endtrans %}
@@ -41,9 +41,14 @@
 				</article>
 			</td>
 		</tr>{% endif %}
-		{% if not config.field_disable_email or (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}<tr>
+		<tr>
 			<th>
-				{% trans %}Email{% endtrans %}
+				{% set email_enabled = not config.field_disable_email and not (id and thread.anon_thread) %}
+				{% if name_enabled or bypass_field_disable %}
+					{% trans %}Email{% endtrans %}
+				{% else %}
+					{% trans %}Options{% endtrans %}
+				{% endif %}
 				{{ antibot.html()|raw }}
 			</th>
 			<td>
@@ -69,9 +74,11 @@
 						as a link to a username on skype itself, which is <em>skype:&lsaquo;username&rsaquo;</em></p>
 				</article>
 			</td>
-		</tr>{% endif %}
+		</tr>
 		<tr>
-			{% if not (config.field_disable_subject or (id and config.field_disable_reply_subject)) or (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}<th>
+			{% set subject_enabled = not config.field_disable_subject and not (id and thread.anon_thread) %}
+			{% if subject_enabled or bypass_field_disable %}
+			<th>
 				{% trans %}Subject{% endtrans %}
 				{{ antibot.html()|raw }}
 			</th>

@@ -113,20 +113,6 @@ if ($config['enable_embedding'] && isset($_POST['embed']) && !empty($_POST['embe
     }
 }
 
-if (!hasPermission('bypass_field_disable', $board['uri'])) {
-    if ($config['field_disable_name'])
-        $_POST['name'] = $config['anonymous']; // "forced anonymous"
-
-    if ($config['field_disable_email'])
-        $_POST['email'] = '';
-
-    if ($config['field_disable_password'])
-        $_POST['password'] = '';
-
-    if ($config['field_disable_subject'] || (!$post['op'] && $config['field_disable_reply_subject']))
-        $_POST['subject'] = '';
-}
-
 // Check for a file
 if ($post['op'] && $config['force_image_op'] && !isset($post['no_longer_require_an_image_for_op'])) {
     if (!isset($_FILES['file']['tmp_name']) || $_FILES['file']['tmp_name'] == '')
@@ -258,14 +244,30 @@ if ($skypeMatch) {
 }
 
 $post['anon_thread'] = $post['op'] && stripos($post['body'], '[#anon]') !== false;
-if (($post['op'] ? $post['anon_thread'] : $thread['anon_thread']) &&
-    !hasPermission('bypass_field_disable', $board['uri'])) {
-    $post['name'] = $config['anonymous'];
-    $post['trip'] = '';
-    $post['email'] = '';
-    if (!$post['op']) {
-        $post['subject'] = '';
+
+if (!hasPermission('bypass_field_disable', $board['uri'])) {
+    if ($post['op'] ? $post['anon_thread'] : $thread['anon_thread']) {
+        $post['name'] = $config['anonymous'];
+        $post['trip'] = '';
+        $post['email'] = '';
+        if (!$post['op']) {
+            $post['subject'] = '';
+        }
     }
+
+    if ($config['field_disable_name']) {
+        $post['name'] = $config['anonymous'];
+        $post['trip'] = '';
+    }
+
+    if ($config['field_disable_password'])
+        $post['password'] = '';
+
+    if ($config['field_disable_email'])
+        $post['email'] = '';
+
+    if ($config['field_disable_subject'] || (!$post['op'] && $config['field_disable_reply_subject']))
+        $post['subject'] = '';
 }
 
 $post['mature'] = $post['op'] ? false : $thread['mature'];
