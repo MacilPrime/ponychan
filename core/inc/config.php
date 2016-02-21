@@ -316,6 +316,11 @@
 	// Cyclic thread reply limit (old replies are removed as this is hit)
 	$config['cyclic_reply_limit'] = 500;
 
+	// Cyclic lock: thread that doesn't have a cyclic count below this number may
+	// not be edited by the OP to have a cyclic count below this number. Prevents
+	// OPs from using it to delete a thread's replies later.
+	$config['cyclic_lock'] = 200;
+
 	// A random number between these two values will be calculated for every
 	// thread, and recalculated when the thread is bumped.
 	// If a thread past its bump reply_limit hasn't been bumped for this amount

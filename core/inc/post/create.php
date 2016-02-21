@@ -152,33 +152,20 @@ if (!$post['op']) {
         (isset($m[1]) ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
     $thread['no_image_reposts'] = (stripos($thread['body'], '<span class="hashtag">#pic</span>') !== FALSE);
 
-    if ($thread['cyclic'] !== null) {
-        if ($thread['cyclic'] < 1) {
-            error('Cyclic value too low');
-        }
-
+    if ($thread['cyclic'] !== null && $thread['cyclic'] >= 2) {
         // subtract 1 because we're (probably) going to be adding a new post to
         // the thread momentarily.
         cyclicThreadCleanup($post['thread'], $thread['cyclic']-1);
-
-        // this gets used later elsewhere
-        $numposts = numPosts($post['thread']);
-    } else {
-        $numposts = numPosts($post['thread']);
-
-        if ($config['reply_hard_limit'] != 0 && $config['reply_hard_limit'] <= $numposts['replies'])
-            error($config['error']['reply_hard_limit']);
-
-        if ($post['has_file'] && $config['image_hard_limit'] != 0 && $config['image_hard_limit'] <= $numposts['images'])
-            error($config['error']['image_hard_limit']);
     }
-} else {
-    preg_match('/\[#cyclic=(\d+)\]/i', $post['body'], $m);
-    $cyclic_limit = $m ?
-        (isset($m[1]) ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
-    if ($cyclic_limit !== null && $cyclic_limit < 1) {
-        error('Cyclic value too low');
-    }
+
+    // this gets used later elsewhere
+    $numposts = numPosts($post['thread']);
+
+    if ($config['reply_hard_limit'] != 0 && $config['reply_hard_limit'] <= $numposts['replies'])
+        error($config['error']['reply_hard_limit']);
+
+    if ($post['has_file'] && $config['image_hard_limit'] != 0 && $config['image_hard_limit'] <= $numposts['images'])
+        error($config['error']['image_hard_limit']);
 }
 
 $post['capcode'] = false;

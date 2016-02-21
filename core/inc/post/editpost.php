@@ -14,7 +14,7 @@ if (!openBoard($_POST['board']))
 // Check if banned
 checkBan($board['uri']);
 
-$query = prepare(sprintf("SELECT `name`,`trip`,`email`,`subject`,`filename`,`userhash`,`thread`,`time`,`password`,`file`,`embed` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
+$query = prepare(sprintf("SELECT `name`,`trip`,`email`,`subject`,`filename`,`userhash`,`thread`,`time`,`password`,`file`,`embed`,`body_nomarkup` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
 $query->bindValue(':id', $id, PDO::PARAM_INT);
 $query->execute() or error(db_error($query));
 
@@ -62,6 +62,8 @@ if (isset($password)) {
 if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
     error($config['error']['referer']);
 
+$old_body_nomarkup = $post['body_nomarkup'];
+
 $post['board'] = $_POST['board'];
 $post['ip'] = $_SERVER['REMOTE_ADDR'];
 $post['op'] = !$post['thread'];
@@ -81,11 +83,22 @@ if (!$mod && mb_strlen($post['body']) > $config['max_body'])
 wordfilters($post['body']);
 
 if ($post['op']) {
-    preg_match('/\[#cyclic=(\d+)\]/i', $post['body'], $m);
-    $cyclic_limit = $m ?
-        (isset($m[1]) ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
-    if ($cyclic_limit !== null && $cyclic_limit < 1) {
-        error('Cyclic value too low');
+    function getCyclicCount($body) {
+        global $config;
+        preg_match('/\[#cyclic(?:=(\d+))?\]/i', $body, $m);
+        return $m ?
+            (isset($m[1]) ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
+    }
+
+    $old_cyclic = getCyclicCount($old_body_nomarkup);
+    $new_cyclic = getCyclicCount($post['body']);
+
+    if (
+        !$mod &&
+        $new_cyclic !== null && $new_cyclic < $config['cyclic_lock'] &&
+        ($old_cyclic === null || $old_cyclic >= $config['cyclic_lock'])
+    ) {
+        error('A thread without a low cyclic count may not have a low cyclic count edited in.');
     }
 }
 
