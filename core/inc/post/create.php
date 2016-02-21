@@ -250,7 +250,6 @@ if ($skypeMatch) {
 }
 $post['anon_thread'] = false;
 if ($post['op']) {
-    error_log(json_encode(['anon_thread_test', stripos($post['body'], '[#anon]') !== false]));
     if (stripos($post['body'], '[#anon]') !== false) {
         $post['anon_thread'] = true;
         if (!hasPermission('bypass_field_disable', $board['uri'])) {
