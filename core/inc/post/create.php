@@ -248,20 +248,14 @@ $post['email_protocol'] = $skypeMatch ? 'skype' : null;
 if ($skypeMatch) {
     $post['email'] = $skypeMatch[1];
 }
-$post['anon_thread'] = false;
-if ($post['op']) {
-    if (stripos($post['body'], '[#anon]') !== false) {
-        $post['anon_thread'] = true;
-        if (!hasPermission('bypass_field_disable', $board['uri'])) {
-            $post['name'] = $config['anonymous'];
-            $post['trip'] = '';
-        }
-    }
-} elseif (!hasPermission('bypass_field_disable', $board['uri'])
-    && $thread['anon_thread']) {
-        $post['name'] = $config['anonymous'];
-        $post['trip'] = '';
+
+$post['anon_thread'] = $post['op'] && stripos($post['body'], '[#anon]') !== false;
+if (($post['op'] ? $post['anon_thread'] : $thread['anon_thread']) &&
+    !hasPermission('bypass_field_disable', $board['uri'])) {
+    $post['name'] = $config['anonymous'];
+    $post['trip'] = '';
 }
+
 $post['mature'] = $post['op'] ? false : $thread['mature'];
 
 if (isset($_POST['mature'])) {
