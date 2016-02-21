@@ -400,6 +400,7 @@ $(document).ready(function(){
 
 	QR.clear = function() {
 		$comment.val("");
+		$subject.val("");
 		resetFileInput();
 		$file.change();
 		$QRwarning.text("");
