@@ -257,13 +257,10 @@ if ($post['op']) {
             $post['trip'] = '';
         }
     }
-} else {
-    $post['anon_thread'] = $thread['anon_thread'];
-    if (!hasPermission('bypass_field_disable', $board['uri'])
-        && $thread['anon_thread']) {
+} elseif (!hasPermission('bypass_field_disable', $board['uri'])
+    && $thread['anon_thread']) {
         $post['name'] = $config['anonymous'];
         $post['trip'] = '';
-    }
 }
 $post['mature'] = $post['op'] ? false : $thread['mature'];
 
