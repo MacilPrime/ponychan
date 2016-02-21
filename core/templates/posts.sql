@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `sage` int(1) NOT NULL,
   `embed` text,
   `mature` int(1) NOT NULL,
+  `anon_thread` int(1) NOT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `thread_id` (`thread`, `id`),
   KEY `userhash` (`userhash`),

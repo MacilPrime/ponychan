@@ -85,7 +85,7 @@ if (!$post['mod']) {
 
 //Check if thread exists
 if (!$post['op']) {
-    $query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`bump`,`mature`,`body` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
+    $query = prepare(sprintf("SELECT `sticky`,`locked`,`sage`,`bump`,`mature`,`anon_thread`,`body` FROM `posts_%s` WHERE `id` = :id AND `thread` IS NULL LIMIT 1", $board['uri']));
     $query->bindValue(':id', $post['thread'], PDO::PARAM_INT);
     $query->execute() or error(db_error());
 
@@ -161,11 +161,19 @@ if (!$post['op']) {
     if ($thread['locked'] && !hasPermission('postinlocked', $board['uri']))
         error($config['error']['locked']);
 
-    $thread['cyclic'] = (stripos($thread['body'], '<span class="hashtag">#cyclic</span>') !== FALSE);
+    preg_match('/<span class="hashtag">#cyclic(?:=(\d+))?<\/span>/i', $thread['body'], $m);
+    $thread['cyclic'] = $m ?
+        ($m[1] ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
     $thread['no_image_reposts'] = (stripos($thread['body'], '<span class="hashtag">#pic</span>') !== FALSE);
 
-    if ($thread['cyclic']) {
-        cyclicThreadCleanup($post['thread']);
+    if ($thread['cyclic'] !== null) {
+        if ($thread['cyclic'] < 1) {
+            error($config['error']['Cyclic value too low']);
+        }
+
+        // subtract 1 because we're (probably) going to be adding a new post to
+        // the thread momentarily.
+        cyclicThreadCleanup($post['thread'], $thread['cyclic']-1);
 
         // this gets used later elsewhere
         $numposts = numPosts($post['thread']);
@@ -247,6 +255,13 @@ preg_match('/^skype:([a-z][a-z0-9\.,\-_]{5,31})$/i', $post['email'], $skypeMatch
 $post['email_protocol'] = $skypeMatch ? 'skype' : null;
 if ($skypeMatch) {
     $post['email'] = $skypeMatch[1];
+}
+
+$post['anon_thread'] = $post['op'] && stripos($post['body'], '[#anon]') !== false;
+if (($post['op'] ? $post['anon_thread'] : $thread['anon_thread']) &&
+    !hasPermission('bypass_field_disable', $board['uri'])) {
+    $post['name'] = $config['anonymous'];
+    $post['trip'] = '';
 }
 
 $post['mature'] = $post['op'] ? false : $thread['mature'];

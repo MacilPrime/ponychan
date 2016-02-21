@@ -310,6 +310,12 @@ $migration_procedures = [
 		query('ALTER TABLE `bans`
 			ADD KEY `range` (`range_type`, `range_start`, `range_end`)')
 		or error(db_error());
+	},
+	'anon-threads' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query(sprintf("ALTER TABLE `posts_%s` ADD `anon_thread` INT(1) NOT NULL AFTER `mature`", $board['uri'])) or error(db_error());
+		}
 	}
 ];
 

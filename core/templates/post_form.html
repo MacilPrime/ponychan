@@ -7,7 +7,10 @@
 {{ antibot.html()|raw }}
 {% if mod %}<input type="hidden" name="mod" value="1">{% endif %}
 	<table>
-		{% if not config.field_disable_name or (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}<tr>
+		{% set name_enabled = not config.field_disable_name and not (id and thread.anon_thread) %}
+		{% set bypass_disabled_name = (mod and post.mod|hasPermission('bypass_field_disable', board.uri)) %}
+		{% if name_enabled or bypass_disabled_name %}
+			<tr>
 			<th>
 				{% trans %}Name{% endtrans %}
 				{{ antibot.html()|raw }}
@@ -252,6 +255,6 @@
 			</td>
 		</tr>{% endif %}
 	</table>
-{{ antibot.html(true) }}
+{{ antibot.html(true)|raw }}
 <input type="hidden" name="hash" value="{{ antibot.hash() }}">
 </form>

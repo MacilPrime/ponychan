@@ -66,6 +66,7 @@ $post['board'] = $_POST['board'];
 $post['ip'] = $_SERVER['REMOTE_ADDR'];
 $post['op'] = !$post['thread'];
 $post['body'] = $_POST['body'];
+$post['anon_thread'] = ($post['op'] && (stripos($post['body'], '[#anon]') !== false));
 
 if (!($post['file'] || isset($post['embed'])) || (($post['op'] && $config['force_body_op']) || (!$post['op'] && $config['force_body']))) {
     $stripped_whitespace = preg_replace('/[\s]/u', '', $post['body']);
@@ -101,10 +102,11 @@ if ($error = event('post-edit', $post)) {
 }
 $post = (array)$post;
 
-$query = prepare(sprintf("UPDATE `posts_%s` SET `body` = :body, `body_nomarkup` = :body_nomarkup WHERE `id` = :id", $board['uri']));
+$query = prepare(sprintf("UPDATE `posts_%s` SET `body` = :body, `body_nomarkup` = :body_nomarkup, `anon_thread` = :anon_thread WHERE `id` = :id", $board['uri']));
 $query->bindValue(':id', $id, PDO::PARAM_INT);
 $query->bindValue(':body', $post['body'], PDO::PARAM_STR);
 $query->bindValue(':body_nomarkup', $post['body_nomarkup'], PDO::PARAM_STR);
+$query->bindValue(':anon_thread', $post['anon_thread'] ? 1 : 0, PDO::PARAM_INT);
 $query->execute() or error(db_error($query));
 
 $query = prepare("DELETE FROM `cites` WHERE `board` = :board AND `post` = :id");
