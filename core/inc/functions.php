@@ -1588,7 +1588,7 @@ function index($page, $mod=false, $oldbump=false) {
 				$po['id'], $th['id'], $po['subject'], $po['email'], $po['email_protocol'], $po['name'], $po['trip'], $po['capcode'], $po['body'], $po['time'],
 				$po['thumb'], $po['thumb_uri'], $po['thumbwidth'], $po['thumbheight'], $po['file'], $po['file_uri'],
 				$po['filewidth'], $po['fileheight'], $po['filesize'],
-				$po['filename'], $po['ip'], $po['embed'], $mod ? '?/' : $config['root'], $mod, $po['mature'], $po['anon_thread'])
+				$po['filename'], $po['ip'], $po['embed'], $mod ? '?/' : $config['root'], $mod, $po['mature'])
 			);
 		}
 
@@ -2059,7 +2059,7 @@ function buildThread($id, $return=false, $mod=false) {
 				$post['id'], $thread->id, $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
 				$post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 				$post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
-				$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'], $post['anon_thread'])
+				$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'])
 			);
 		}
 	}
@@ -2127,7 +2127,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 					$post['id'], $thread->id, $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
 					$post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 					$post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
-					$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'], $post['anon_thread'])
+					$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'])
 				);
 			}
 		}

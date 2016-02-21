@@ -311,7 +311,7 @@ function embed_html($link) {
 }
 
 class Post {
-	public function __construct($id, $thread, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false, $anon_thread=false) {
+	public function __construct($id, $thread, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -341,7 +341,6 @@ class Post {
 		$this->root = $root;
 		$this->mod = $mod;
 		$this->mature = $mature;
-		$this->anon_thread = $anon_thread;
 
 		$file_ext = strtolower(substr($this->file, strrpos($this->file, '.') + 1));
 		if (in_array($file_ext, $config['allowed_image_types'])) {

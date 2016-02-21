@@ -648,7 +648,7 @@ function mod_page_ip($mask_url) {
 					$post['id'], $post['thread'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'],
 					$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 					$post['file'], $post['file_uri'], $post['filewidth'],
-					$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature'], $post['anon_thread']
+					$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
 				);
 			}
 
@@ -2198,7 +2198,7 @@ function mod_reports() {
 				$post['id'], $post['thread'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'],
 				$post['body'], $post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
 				$post['file'], $post['file_uri'], $post['filewidth'],
-				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature'], $post['anon_thread']
+				$post['fileheight'], $post['filesize'], $post['filename'], $post['ip'],  $post['embed'], '?/', $mod, $post['mature']
 			);
 		}
 
