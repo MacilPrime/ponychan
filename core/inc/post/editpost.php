@@ -80,6 +80,15 @@ if (!$mod && mb_strlen($post['body']) > $config['max_body'])
 
 wordfilters($post['body']);
 
+if ($post['op']) {
+    preg_match('/\[#cyclic=(\d+)\]/i', $post['body'], $m);
+    $cyclic_limit = $m ?
+        (isset($m[1]) ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
+    if ($cyclic_limit !== null && $cyclic_limit < 1) {
+        error('Cyclic value too low');
+    }
+}
+
 $post['body_nomarkup'] = $post['body'];
 
 if (!($mod && isset($post['raw']) && $post['raw']))

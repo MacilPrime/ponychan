@@ -154,7 +154,7 @@ if (!$post['op']) {
 
     if ($thread['cyclic'] !== null) {
         if ($thread['cyclic'] < 1) {
-            error($config['error']['Cyclic value too low']);
+            error('Cyclic value too low');
         }
 
         // subtract 1 because we're (probably) going to be adding a new post to
@@ -171,6 +171,13 @@ if (!$post['op']) {
 
         if ($post['has_file'] && $config['image_hard_limit'] != 0 && $config['image_hard_limit'] <= $numposts['images'])
             error($config['error']['image_hard_limit']);
+    }
+} else {
+    preg_match('/\[#cyclic=(\d+)\]/i', $post['body'], $m);
+    $cyclic_limit = $m ?
+        (isset($m[1]) ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
+    if ($cyclic_limit !== null && $cyclic_limit < 1) {
+        error('Cyclic value too low');
     }
 }
 
