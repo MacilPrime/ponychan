@@ -163,7 +163,7 @@ if (!$post['op']) {
 
     preg_match('/<span class="hashtag">#cyclic(?:=(\d+))?<\/span>/i', $thread['body'], $m);
     $thread['cyclic'] = $m ?
-        ($m[1] ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
+        (isset($m[1]) ? (int)$m[1] : $config['cyclic_reply_limit']) : null;
     $thread['no_image_reposts'] = (stripos($thread['body'], '<span class="hashtag">#pic</span>') !== FALSE);
 
     if ($thread['cyclic'] !== null) {
