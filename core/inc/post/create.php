@@ -262,6 +262,10 @@ if (($post['op'] ? $post['anon_thread'] : $thread['anon_thread']) &&
     !hasPermission('bypass_field_disable', $board['uri'])) {
     $post['name'] = $config['anonymous'];
     $post['trip'] = '';
+    $post['email'] = '';
+    if (!$post['op']) {
+        $post['subject'] = '';
+    }
 }
 
 $post['mature'] = $post['op'] ? false : $thread['mature'];
