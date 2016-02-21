@@ -14,7 +14,7 @@ if (!openBoard($_POST['board']))
 // Check if banned
 checkBan($board['uri']);
 
-$query = prepare(sprintf("SELECT `thread`,`time`,`password`,`file`,`embed` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
+$query = prepare(sprintf("SELECT `name`,`trip`,`email`,`subject`,`filename`,`userhash`,`thread`,`time`,`password`,`file`,`embed` FROM `posts_%s` WHERE `id` = :id", $board['uri']));
 $query->bindValue(':id', $id, PDO::PARAM_INT);
 $query->execute() or error(db_error($query));
 
