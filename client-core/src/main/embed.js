@@ -47,8 +47,9 @@ $(document).ready(function(){
 				var $embedbtn = $("<a/>")
 					.addClass("embedbtn")
 					.text("Embed")
-					.attr("href", "javascript:;")
-					.click(function() {
+					.attr("href", href)
+					.click(event => {
+						event.preventDefault();
 						if ($embed) {
 							$embed.remove();
 							$embed = null;
@@ -72,7 +73,7 @@ $(document).ready(function(){
 		});
 	}
 
-	init( $(".thread") );
+	init(document.body);
 	$(document).on('new_post.embed', function(e, post) {
 		init(post);
 	});
