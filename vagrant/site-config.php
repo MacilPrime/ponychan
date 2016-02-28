@@ -50,8 +50,8 @@
   }
 
   $config['action_log'] = $LOGDIR . '/action.log';
-  //$config['antibot_log'] = $LOGDIR . '/antibot.log';
-  //$config['timing_log'] = $LOGDIR . '/timing.log';
+  // $config['antibot_log'] = $LOGDIR . '/antibot.log';
+  // $config['timing_log'] = $LOGDIR . '/timing.log';
   $config['error_log'] = $LOGDIR . '/error.log';
   $config['js_usage_log'] = $LOGDIR . '/js_usage.log';
   $config['js_error_log'] = $LOGDIR . '/js_error.log';

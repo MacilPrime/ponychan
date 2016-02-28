@@ -344,7 +344,7 @@ function timing_detail($name, $val) {
 function timing_end() {
 	global $config, $userhash, $timings, $timing_details;
 
-	if (isset($config) && isset($config['timing_log']) && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+	if (isset($config) && isset($config['timing_log']) && count($timings) > 1) {
 		timing_mark('end');
 
 		$logdata = array();

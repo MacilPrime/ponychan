@@ -1597,12 +1597,16 @@ function mod_deletebyip($boardName, $post, $global = false) {
 	if ($global && !hasPermission('deletebyip_global', $boardName))
 		error($config['error']['noaccess']);
 
+	timing_mark('deletebyip:start');
+
 	// Find IP address
 	$query = prepare(sprintf('SELECT `ip_type`, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE `id` = :id', $boardName));
 	$query->bindValue(':id', $post);
 	$query->execute() or error(db_error($query));
 	if (!$result = $query->fetch(PDO::FETCH_ASSOC))
 		error($config['error']['invalidpost']);
+
+	timing_mark('deletebyip:found ip');
 
 	$ip = $result['ip'];
 	$ip_type = $result['ip_type'];
@@ -1620,8 +1624,12 @@ function mod_deletebyip($boardName, $post, $global = false) {
 	$query->bindValue(':ip_type', $ip_type);
 	$query->execute() or error(db_error($query));
 
+	timing_mark('deletebyip:executed posts query');
+
 	if ($query->rowCount() < 1)
 		error($config['error']['invalidpost']);
+
+	timing_mark('deletebyip:after row count');
 
 	set_time_limit($config['mod']['rebuild_timelimit']);
 
@@ -1630,11 +1638,19 @@ function mod_deletebyip($boardName, $post, $global = false) {
 		$posts_to_delete[$post['board']][] = $post['id'];
 	}
 
+	timing_mark('deletebyip:all fetched');
+
 	foreach ($posts_to_delete as $_board => $_ids) {
 		openBoard($_board);
+		timing_mark("deletebyip:opened [$_board]");
 		deletePosts($_ids, false, true);
+		timing_mark("deletebyip:deleted posts [$_board]");
 		buildIndex();
+		timing_mark("deletebyip:built index [$_board]");
 	}
+
+	timing_mark('deletebyip:all deleted');
+	error_log('fooDONE');
 
 	if ($global) {
 		$board = false;
