@@ -37,7 +37,11 @@
 		public function build($settings) {
 			global $config, $board;
 
+			timing_mark('build_catalog:start');
+
 			$query = query(sprintf("SELECT *, INET6_NTOA(`ip_data`) AS `ip`, `id` AS `thread_id`, (SELECT COUNT(*) FROM `posts_%s` WHERE `thread` = `thread_id`) AS `reply_count` FROM `posts_%s` WHERE `thread` IS NULL ORDER BY `bump` DESC", $board['uri'], $board['uri'])) or error(db_error());
+
+			timing_mark('build_catalog:query ran');
 
 			$threads = array();
 
@@ -55,6 +59,8 @@
 				$thread->omitted = $thread->reply_count = $post['reply_count'];
 				$threads[] = $thread;
 			}
+
+			timing_mark('build_catalog:fetching complete');
 
 			file_write($board['dir'] . 'catalog.html', Element('themes/catalog/catalog.html', Array(
 				'config' => $config,
