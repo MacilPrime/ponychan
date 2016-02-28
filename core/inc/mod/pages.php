@@ -1545,6 +1545,7 @@ function mod_delete($board, $post) {
 	modLog("Deleted post #{$post}");
 	// Rebuild board
 	buildIndex();
+	rebuildThemes('post');
 
 	// Redirect
 	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
@@ -1566,6 +1567,7 @@ function mod_deletefile($board, $post) {
 
 	// Rebuild board
 	buildIndex();
+	rebuildThemes('post');
 
 	// Redirect
 	header('Location: ?/' . sprintf($config['board_path'], $board), true, $config['redirect_http']);
@@ -1650,7 +1652,10 @@ function mod_deletebyip($boardName, $post, $global = false) {
 	}
 
 	timing_mark('deletebyip:all deleted');
-	error_log('fooDONE');
+
+	rebuildThemes('post');
+
+	timing_mark('deletebyip:rebuilt themes');
 
 	if ($global) {
 		$board = false;
