@@ -284,7 +284,8 @@ class ImageConvert extends ImageBase {
 					error('Failed to resize image!');
 			}
 		} else {
-			if (shell_exec("convert -background transparent -filter Point -scale {$this->width}x{$this->height}\! +antialias -quality {$quality} " .
+			$grayscalePNG = $this->format == 'png' ? '-define png:format=png32 ' : '';
+			if (shell_exec("convert -background transparent -filter Point -scale {$this->width}x{$this->height}\! +antialias -quality {$quality} {$grayscalePNG}" .
 				escapeshellarg($this->src . '[0]') . " " . escapeshellarg($this->temp)) || !file_exists($this->temp))
 				error('Failed to resize image!');
 		}
