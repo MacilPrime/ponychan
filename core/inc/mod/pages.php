@@ -1598,22 +1598,26 @@ function mod_deletebyip($boardName, $post, $global = false) {
 		error($config['error']['noaccess']);
 
 	// Find IP address
-	$query = prepare(sprintf('SELECT INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE `id` = :id', $boardName));
+	$query = prepare(sprintf('SELECT `ip_type`, INET6_NTOA(`ip_data`) AS `ip` FROM `posts_%s` WHERE `id` = :id', $boardName));
 	$query->bindValue(':id', $post);
 	$query->execute() or error(db_error($query));
-	if (!$ip = $query->fetchColumn(0))
+	if (!$result = $query->fetch(PDO::FETCH_ASSOC))
 		error($config['error']['invalidpost']);
+
+	$ip = $result['ip'];
+	$ip_type = $result['ip_type'];
 
 	$boards = $global ? listBoards() : array(array('uri' => $boardName));
 
 	$query = '';
 	foreach ($boards as $_board) {
-		$query .= sprintf("SELECT `thread`, `id`, '%s' AS `board` FROM `posts_%s` WHERE `ip_data` = INET6_ATON(:ip) UNION ALL ", $_board['uri'], $_board['uri']);
+		$query .= sprintf("SELECT `thread`, `id`, '%s' AS `board` FROM `posts_%s` WHERE `ip_type` = :ip_type AND `ip_data` = INET6_ATON(:ip) UNION ALL ", $_board['uri'], $_board['uri']);
 	}
 	$query = preg_replace('/UNION ALL $/', '', $query);
 
 	$query = prepare($query);
 	$query->bindValue(':ip', $ip);
+	$query->bindValue(':ip_type', $ip_type);
 	$query->execute() or error(db_error($query));
 
 	if ($query->rowCount() < 1)
