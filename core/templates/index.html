@@ -4,6 +4,10 @@
 
 {% block main_body %}
 
+	<div class="boardlinks">
+		<a href="{{ config.root }}{{ board.dir }}catalog.html">[{% trans %}Catalog{% endtrans %}]</a>
+	</div>
+
 	{% include 'post_form.html' %}
 
 	{% if config.blotter %}<hr /><div class="blotter">{{ config.blotter|raw }}</div>{% endif %}

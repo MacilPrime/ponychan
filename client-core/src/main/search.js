@@ -15,25 +15,22 @@ $(document).ready(function() {
 	if ($('div.banner').length)
 		return;
 
-	var $controlsform = $("form[name='postcontrols']");
-	var $catalog = $(".catalog");
+	const $controlsform = $("form[name='postcontrols']");
+	let $catalog = $(".catalog");
 
 	// Only run if we're on the catalog or board index
 	if (!$catalog.length && !$controlsform.length)
 		return;
 
-	var $searchdiv = $("<div/>")
-		.addClass("searchblock")
-		.insertAfter($("header").first());
-	var $status = $("<span/>")
-		.addClass("searchstatus")
-		.appendTo($searchdiv);
-	var $textbox = $("<input/>")
+	const $boardlinks = $(".boardlinks");
+	const $textbox = $("<input/>")
 		.attr("id", "threadsearchbox")
 		.attr("type", "text")
-		.attr("placeholder", "Search")
-		.attr("maxlength", 75)
-		.appendTo($searchdiv);
+		.attr("placeholder", "Search OPs")
+		.attr("maxlength", 75);
+	const $status = $("<div/>")
+		.addClass("searchstatus");
+	$boardlinks.append(' ', $textbox, $status);
 
 	// Stores the string of the currently rendered search.
 	// Is falsey if there is no current search.
