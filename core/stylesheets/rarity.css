@@ -85,6 +85,9 @@ div.banner {
     background: rgb(177, 211, 237);
     color: rgb(255, 255, 255);
 }
+div.banner a:hover {
+    color: rgb(157, 114, 235);
+}
 body > header h1 {
     font-family: "Dancing Script", cursive;
     text-shadow: 0 0 3px rgb(77, 24, 111);
