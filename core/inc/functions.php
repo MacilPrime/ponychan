@@ -930,7 +930,7 @@ function checkFlood($post) {
 		return true;
 
 	$query = prepare(sprintf(
-		"SELECT * FROM `posts_%s` WHERE (`ip_data` = INET6_ATON(:ip) AND `time` >= :floodtime) OR (`ip_data` = INET6_ATON(:ip) AND `body` != '' AND `body` = :body AND `time` >= :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` >= :floodsametime) LIMIT 1",
+		"SELECT * FROM `posts_%s` WHERE (`ip_data` = INET6_ATON(:ip) AND `time` > :floodtime) OR (`ip_data` = INET6_ATON(:ip) AND `body` != '' AND `body` = :body AND `time` > :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` > :floodsametime) LIMIT 1",
 		$board['uri']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
 	$query->bindValue(':body', $post['body']);
