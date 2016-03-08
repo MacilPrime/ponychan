@@ -221,6 +221,11 @@ $(document).ready(function(){
 			$file.click();
 		})
 		.appendTo($buttonrow);
+	var $fileRemove = $("<button />")
+		.html('&#10006;')
+		.attr('title', 'Remove image from reply')
+		.attr('id', 'qrfileremove')
+		.appendTo($buttonrow);
 	var $submit = $("<input/>")
 		.attr("id", "qrsubmit")
 		.attr("type", "submit")
@@ -560,6 +565,7 @@ $(document).ready(function(){
 					}
 				}
 			}
+			toggleFileCloseButton();
 		};
 		this.select = function() {
 			$("#qrthumbselected").removeAttr("id");
@@ -574,6 +580,7 @@ $(document).ready(function(){
 				.on("input.selectedreply change.selectedreply", function() {
 					selectedreply.comment = $comment.val();
 				});
+			toggleFileCloseButton();
 		};
 		this.rmfile = function(dontResetFileInput) {
 			if (this.file != null) {
@@ -588,6 +595,7 @@ $(document).ready(function(){
 			if (!dontResetFileInput && selectedreply === this) {
 				resetFileInput();
 			}
+			toggleFileCloseButton();
 		};
 		this.rm = function() {
 			this.rmfile();
@@ -604,17 +612,43 @@ $(document).ready(function(){
 			// comment field and such gets reset.
 			if (selectedreply === this)
 				replies[0].select();
+			toggleCloseButton();
+			toggleFileCloseButton();
 		};
 	}
-
+	function toggleCloseButton() {
+		if (replies.length === 1) {
+			replies[0].el.addClass('qr-only-post');
+		} else {
+			replies.forEach(replyItem => {
+				replyItem.el.removeClass('qr-only-post');
+			});
+		}
+	}
+	function toggleFileCloseButton() {
+		if (selectedreply.file) {
+			$filebutton.text('File Selected...');
+			$fileRemove.removeClass('hide-file-close');
+		} else {
+			$filebutton.text('Browse...');
+			$fileRemove.addClass('hide-file-close');
+		}
+	}
 	function addReply() {
 		selectedreply = new reply();
 		selectedreply.select();
 		replies.push(selectedreply);
+		toggleCloseButton();
 	}
 
 	var selectedreply = null;
 	addReply();
+	toggleFileCloseButton();
+
+	$fileRemove.click(evt => {
+		evt.preventDefault();
+		selectedreply.rmfile();
+	});
 
 	var max_filesize = $oldFile.attr("data-max-filesize");
 	var max_video_filesize = $oldFile.attr("data-max-video-filesize");
@@ -803,7 +837,7 @@ $(document).ready(function(){
 		$subject.remove();
 
 	function setQRFormDisabled(disabled) {
-		$("input, textarea", $QRForm).prop("disabled", disabled);
+		$("input, textarea, button", $QRForm).prop("disabled", disabled);
 		if (!disabled)
 			checkNameDisable();
 	}

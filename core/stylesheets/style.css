@@ -790,9 +790,17 @@ table.recaptchatable {
 	padding: 2px;
 	min-height: 26px;
 }
-
+.qr-only-post .qrremovethumb, .hide-file-close {
+	display: none;
+}
 #qrfile {
 	width: 70%;
+}
+#qrfileremove {
+	background: none;
+	margin-left: 0.5ch;
+	border: none;
+	cursor: pointer;
 }
 #qr.noQueuing #qrfilebutton {
 	display: none;
@@ -805,10 +813,15 @@ table.recaptchatable {
 	display: none;
 }
 #qrfilebutton {
+	min-width: 16ch;
+}
+#qrfilebutton, #qr.queuing #qrsubmit {
+	min-width: 16ch;
 	width: 30%;
+	padding-left: 1ch;
+	padding-right: 1ch;
 }
 #qr.queuing #qrsubmit {
-	width: 30%;
 	float: right;
 }
 
