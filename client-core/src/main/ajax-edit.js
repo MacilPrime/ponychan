@@ -83,6 +83,15 @@ $(document).ready(function() {
         var $editForm = $('<div />')
           .addClass("edit-form")
           .fadeIn("fast")
+          .keypress(e => {
+            if (
+              !$submit.prop("disabled") &&
+              (e.key === 'Enter' || e.which === 10 || e.which === 13) &&
+              (e.ctrlKey || e.metaKey)
+            ) {
+              $submit.click();
+            }
+          })
           .insertBefore(get_post_body($post));
 
         var $message = $('<textarea />')
@@ -98,6 +107,7 @@ $(document).ready(function() {
         var $submit = $('<input />')
           .attr("value", "Submit")
           .attr("type", "button")
+          .attr("title", "Submit (Ctrl-Enter)")
           .on("click", sendRevision)
           .appendTo($editControls);
 
