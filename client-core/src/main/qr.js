@@ -230,7 +230,7 @@ $(document).ready(function(){
 		.attr("id", "qrsubmit")
 		.attr("type", "submit")
 		.attr("name", "post")
-		.attr("accesskey", "s")
+		.attr("title", "Post (Ctrl-Enter)")
 		.appendTo($buttonrow);
 	var $row = $("<div/>")
         .attr("class", "qr-options")
@@ -353,6 +353,16 @@ $(document).ready(function(){
 			$maturelabel.show();
 	}
 	init_mature_button();
+
+	$QR.keypress(e => {
+		if (
+			!$submit.prop("disabled") &&
+			(e.key === 'Enter' || e.which === 10 || e.which === 13) &&
+			(e.ctrlKey || e.metaKey)
+		) {
+			$submit.click();
+		}
+	});
 
 	var QRInputNames = {};
 	$("input, textarea", $QRForm).each(function() {
