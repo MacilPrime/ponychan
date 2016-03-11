@@ -13,28 +13,19 @@ if a user is suspected of being a bot (first time user, making a thread)
 - flag them such that they must solve a captcha before being able to post again
 rotating captcha
 
-handle thread being moved multiple times to a board
-change filters to allow multiple conditions of same type
 selenium tests
 put "last edited timestamp" column in posts tables
 fix "nothing to edit" message when trying to edit ancient post
-settings table
-posts table
+site settings table
+one posts table instead of one table per board
 better ban screen
 [rawhtml]
 let (mod?) editing (un)spoiler a post. (need to generate/remove thumbnail)
 mod controls on IP page? need progress indicator
 [D++] is slow
 how do post updates work with previews?
-use natural npm package for a spam filter
-make watcher appear for all mods.
-when you make a post, it can appear as [Removed] on the next refresh
 #unread is broken on mature threads
 keep mods logged in
-
-- improved post rate limiting: user currently can't make two posts in under 10
-  seconds. Should be able to configure additional limits such as a limit for how
-  many threads can be made in an hour, etc.
 
 - separate out tinyboard code and all instance files (config files, cache, board
   html and image files) so deploys can finally be as easy as rsyncing the core/
@@ -49,41 +40,25 @@ timed deletion board. (Threads that haven't been bumped in a set amount of time 
 make moving a thread to a board it already exists on cause an error
 
 # mod tools
-remove the board sorting of posts on IP page
+allow disabling the board sorting of posts on IP page
 Search by name/trip/filename pagination
 page showing posts by new users
-Name/trip/file bans
 Mods having access to the blotter
-mod actions without leaving page
-view deleted posts
-- image filename is renamed so old URL stops working
 
 investigate antibot
 fix cache consistency
-fix android bug
-separate name cookie on anon
-fix thread move bug:
-    PHP message: PHP Warning:  link(): No such file or directory in /var/www/inc/mod/pages.php on line 1151" while reading response header from upstream, client: 2601:8:b001:c023:e4b3:5846:afc2:370a, server: www.ponychan.net, request: "POST /mod.php?/gala/move/1879419 HTTP/1.1", upstream: "fastcgi://unix:///var/run/php5-fpm.sock:", host: "www.ponychan.net", referrer: "http://www.ponychan.net/mod.php?/gala/move/1879419"
 
 fix moving thread resetting thread bump date to OP date (?)
-make hide blocks not animate on page load
 make reply queuing a toggleable setting that defaults to off
-noko setting
-fix bans.status_range index
-staff: replace "promote"/"demote" buttons with a simple radio button menu on user edit page.
-
--themes
 
 post drop-down buttons
 
-#mature posts
-
+view deleted posts
+- image filename is renamed so old URL stops working
 persist deleted threads and posts
 - allow mods to see (with [deleted] in the post header bright red maybe)
 - allow mods to revert
 - include threads that were recently pushed off of the board
-
-ban appeals
 
 /all/
 - json api
@@ -91,6 +66,7 @@ ban appeals
 
 thread tags and board thread filter toggle buttons
 
+separate name cookie on anon
 /anon/: make name field default to blank
 - dropdown for remembered names+trips? https://helgesverre.com/blog/textbox-dropdown-html5/
 
