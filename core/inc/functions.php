@@ -1613,7 +1613,7 @@ function getPageButtons($pages, $mod=false) {
 	global $config, $board;
 
 	$btn = array();
-	$root = ($mod ? '?/' : $config['root']) . $board['dir'];
+	$root = $config['root'] . ($mod ? 'mod.php?/' : '') . $board['uri'] . '/';
 
 	foreach ($pages as $num => $page) {
 		if (isset($page['selected'])) {
@@ -1622,33 +1622,25 @@ function getPageButtons($pages, $mod=false) {
 				// There is no previous page.
 				$btn['prev'] = _('Previous');
 			} else {
-				$loc = ($mod ? '?/' . $board['uri'] . '/' : '') .
+				$loc = $root .
 					($num == 1 ?
 						''
 					:
 						sprintf($config['file_page'], $num)
 					);
 
-				$btn['prev'] = '<form action="' . ($mod ? '' : $root . $loc) . '" method="get">' .
-					($mod ?
-						'<input type="hidden" name="status" value="301" />' .
-						'<input type="hidden" name="r" value="' . htmlentities($loc) . '" />'
-					:'') .
-				'<input type="submit" value="' . _('Previous') . '" /></form>';
+				$btn['prev'] = '<a href="' . utf8tohtml($loc) . '">' .
+					'<button>' . utf8tohtml(_('Previous')) . '</button></a>';
 			}
 
 			if ($num == count($pages) - 1) {
 				// There is no next page.
 				$btn['next'] = _('Next');
 			} else {
-				$loc = ($mod ? '?/' . $board['uri'] . '/' : '') . sprintf($config['file_page'], $num + 2);
+				$loc = $root . sprintf($config['file_page'], $num + 2);
 
-				$btn['next'] = '<form action="' . ($mod ? '' : $root . $loc) . '" method="get">' .
-					($mod ?
-						'<input type="hidden" name="status" value="301" />' .
-						'<input type="hidden" name="r" value="' . htmlentities($loc) . '" />'
-					:'') .
-				'<input type="submit" value="' . _('Next') . '" /></form>';
+				$btn['next'] = '<a href="' . utf8tohtml($loc) . '">' .
+					'<button>' . utf8tohtml(_('Next')) . '</button></a>';
 			}
 		}
 	}
