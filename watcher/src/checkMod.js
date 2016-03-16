@@ -16,7 +16,7 @@ export default function checkMod(req: Object, res: Object, next: Function) {
       'SELECT `id`, `type`, `boards`, `password`, `signed_name`, `signed_trip` FROM `mods` WHERE `username` = ? LIMIT 1',
       [username]
     );
-    if (result.length == 0) {
+    if (result[0].length == 0) {
       return;
     }
     const {id, type, boards, password, signed_name, signed_trip} = result[0][0];
