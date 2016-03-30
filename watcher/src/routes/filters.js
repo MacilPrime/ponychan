@@ -169,6 +169,7 @@ export async function previewStart(req: Object, res: Object, next: Function): an
     if (conditions.length === 0) {
       throw new Error("At least one condition must be given");
     }
+    // TODO return a list of conditions which weren't respected
 
     const taskUrl = await startTask(req.userhash, () => previewTask(conditions));
     res.set('Location', taskUrl).sendStatus(202);
