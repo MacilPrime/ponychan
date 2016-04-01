@@ -25,7 +25,7 @@ app.post('/markov/autocomplete', bodyParser.json(), async (req, res, next) => {
     const parts = sentence.split(/\s+/).filter(Boolean);
     const rest = m.predictSentence(parts);
     const response = `${sentence} ${rest}`;
-    res.send({response});
+    res.send({response, rest});
   } catch(err) {
     next(err);
   }

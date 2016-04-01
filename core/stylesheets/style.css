@@ -733,6 +733,21 @@ table.recaptchatable {
 #updateIntervalField {
 	width: 3em;
 }
+.autocomplete_row {
+	margin-top: 2px !important;
+}
+.autocomplete_row::before {
+	content: ' ';
+	background: url(../static/derpy.png) no-repeat center/cover;
+	display: inline-block;
+	vertical-align: middle;
+	width: 18px;
+	height: 18px;
+	margin-right: 2px;
+}
+.autocomplete_button {
+	font-size: 0.9em;
+}
 /* qr */
 #qrtoggleoptions {
  	text-align: center;

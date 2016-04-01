@@ -23,6 +23,8 @@ import {log_error} from './logger';
 import * as util from './util';
 import * as state from './state';
 
+import {MARKOV_END_STREAM, markov} from './markov';
+
 settings.newSetting("use_QR", "bool", false, "Use Quick Reply dialog for posting", 'posting', {moredetails:"Lets you post without refreshing the page. Q is the quick keyboard shortcut.", orderhint:1});
 settings.newSetting("QR_persistent", "bool", false, "Persistent QR (Don't close after posting)", 'posting', {orderhint:2});
 settings.newSetting(
@@ -55,6 +57,26 @@ $(document).ready(function(){
 
 	if ($oldForm.length == 0)
 		return;
+
+	{
+		const $textarea = $oldForm.find('textarea[name=body]');
+		const $autocomplete = $("<button/>")
+			.addClass('autocomplete_button')
+			.text("Autocomplete Sentence")
+			.click(() => {
+				markov($autocomplete, $textarea);
+			})
+			.attr("type", "button");
+
+		const $autocomplete_row = $("<div/>")
+			.addClass('autocomplete_row')
+			.html($autocomplete)
+			.appendTo($textarea.parent());
+
+		MARKOV_END_STREAM.onValue(() => {
+			$autocomplete_row.remove();
+		});
+	}
 
 	$("#qrtoggleoptions").remove();
 	var $QRToggleOptions = $("<div/>")
@@ -232,6 +254,26 @@ $(document).ready(function(){
 		.attr("name", "post")
 		.attr("title", "Post (Ctrl-Enter)")
 		.appendTo($buttonrow);
+
+	{
+		const $autocomplete = $("<button/>")
+			.addClass('autocomplete_button')
+			.text("Autocomplete Sentence")
+			.click(() => {
+				markov($autocomplete, $comment);
+			})
+			.attr("type", "button");
+
+		const $autocomplete_row = $("<div/>")
+			.addClass('autocomplete_row')
+			.html($autocomplete)
+			.appendTo($buttonrow);
+
+		MARKOV_END_STREAM.onValue(() => {
+			$autocomplete_row.remove();
+		});
+	}
+
 	var $row = $("<div/>")
         .attr("class", "qr-options")
 		.css("min-width", "100%")
