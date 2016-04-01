@@ -44,6 +44,7 @@ export async function markov($button, $textarea) {
       const afterInsert = selectionStart + space.length + rest.length;
       $textarea.focus();
       $textarea[0].setSelectionRange(afterInsert, afterInsert);
+      $textarea.trigger('input');
     }
   } catch(err) {
     log_error(err);
