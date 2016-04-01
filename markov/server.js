@@ -22,8 +22,8 @@ app.post('/markov/autocomplete', bodyParser.json(), async (req, res, next) => {
     if (typeof sentence !== 'string') {
       throw new Error("Missing sentence parameter");
     }
-    const parts = sentence.split(/\s+/).filter(Boolean);
-    const rest = m.predictSentence(parts);
+    const parts = sentence.match(/[\w'`~:;\|\+\/\\\-_=@#$%^&\*]+/g);
+    const rest = m.predictSentence(parts || []);
     const response = `${sentence} ${rest}`;
     res.send({response, rest});
     console.log(JSON.stringify({ip: req.ip, start: sentence, rest}));
