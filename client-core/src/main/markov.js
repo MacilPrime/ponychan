@@ -18,7 +18,11 @@ export async function markov($button, $textarea) {
     const selectionStart = $textarea[0].selectionStart || text.length;
 
     const before = text.slice(0, selectionStart);
-    const m = before.match(/[^>.!?\n]*$/);
+
+    const beforeLineM = before.match(/[^>\r\n]*$/);
+    const beforeLine = beforeLineM && beforeLineM[0] || '';
+
+    const m = before.match(/[^>.!?\r\n]*$/);
     const sentence = m && m[0] || '';
 
     const {rest} = await $.ajax({
@@ -31,7 +35,7 @@ export async function markov($button, $textarea) {
     if (!rest) {
       alert("Couldn't determine how to finish the sentence.");
     } else {
-      const space = (!sentence.length || sentence[sentence.length-1] === ' ') ?
+      const space = (!beforeLine.length || sentence[sentence.length-1] === ' ') ?
         '' : ' ';
       $textarea.val(
         text.slice(0, selectionStart) + space + rest +
