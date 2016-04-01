@@ -26,6 +26,7 @@ app.post('/markov/autocomplete', bodyParser.json(), async (req, res, next) => {
     const rest = m.predictSentence(parts);
     const response = `${sentence} ${rest}`;
     res.send({response, rest});
+    console.log(JSON.stringify({ip: req.ip, start: sentence, rest}));
   } catch(err) {
     next(err);
   }
