@@ -1,0 +1,6 @@
+{
+  "presets": ["es2015", "stage-1"],
+  "plugins": [
+    "transform-runtime", "transform-flow-strip-types",
+  ]
+}

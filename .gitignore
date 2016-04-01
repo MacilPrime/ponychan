@@ -16,3 +16,5 @@ Thumbs.db
 /*/node_modules
 /.vagrant
 /watcher/config.json
+
+/markov/dat
