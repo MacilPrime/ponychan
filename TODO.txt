@@ -1,3 +1,4 @@
+fix post editing causing hover replies to float forever
 make inline editing user server endpoint which checks userhash, not password
 
 filter edit page
