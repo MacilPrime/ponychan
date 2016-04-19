@@ -10,7 +10,8 @@ var _ = require('lodash');
 var $ = require('jquery');
 var RSVP = require('rsvp');
 import Immutable from 'immutable';
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { footer } from './footer-utils';
 import {log_error} from './logger';
 import {make_thread_url, make_thread50_url} from './lib/url';
@@ -256,11 +257,12 @@ function populate_watcher_screen() {
 	var pr;
 	if ($watcherScreen[0]) {
 		pr = new RSVP.Promise((resolve, reject) => {
-			React.render(
-				React.createElement(WatcherMenu, {
-					threads, mod,
-					onRemove: remove_watch
-				}),
+			ReactDOM.render(
+				<WatcherMenu
+					threads={threads}
+					mod={mod}
+					onRemove={remove_watch}
+				/>,
 				$watcherScreen[0],
 				resolve
 			);

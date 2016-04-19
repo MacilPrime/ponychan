@@ -1,5 +1,5 @@
 import 'console-polyfill';
-import 'babel/polyfill';
+import 'babel-polyfill';
 import 'webstorage-polyfill';
 
 import './legacy/visibility.min.js';
@@ -53,7 +53,8 @@ window.ponychan = {
   _dbg_require: require,
   libs: {
     Kefir: require('kefir'),
-    React: require('react/addons'),
+    React: require('react'),
+    ReactDOM: require('react-dom'),
     Immutable: require('immutable'),
     RSVP: require('rsvp'),
     $: require('jquery'),

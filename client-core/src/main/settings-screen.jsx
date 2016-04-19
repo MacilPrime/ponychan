@@ -7,7 +7,8 @@
  */
 
 import Immutable from 'immutable';
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import settings from './settings';
 
@@ -88,7 +89,7 @@ function setup() {
 
 	settings.getAllSettingsMetadata().onValue(
 		function({settingsMetadata, settingsValues, settingsSectionsList}) {
-			React.render(
+			ReactDOM.render(
 				<SettingsWindow
 					closeWindow={hideWindow}
 					metadata={settingsMetadata}

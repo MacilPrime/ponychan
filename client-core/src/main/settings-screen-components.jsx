@@ -1,15 +1,13 @@
 import cx from 'classnames';
 import Immutable from 'immutable';
-import React from 'react/addons';
-const PureRenderMixin = React.addons.PureRenderMixin;
+import React from 'react';
 
 import settings from './settings';
 
 const isModPage = (document.location.pathname == SITE_DATA.siteroot+'mod.php');
 const isSettingsPage = (document.location.pathname == SITE_DATA.siteroot+'settings.html');
 
-const InvalidItem = React.createClass({
-	mixins: [PureRenderMixin],
+class InvalidItem extends React.Component {
 	render() {
 		const {value, setting} = this.props;
 		const name = setting.get('name');
@@ -18,10 +16,15 @@ const InvalidItem = React.createClass({
 			<div>{name}, unsupported type: {type}</div>
 		);
 	}
-});
 
-const SelectItem = React.createClass({
-	mixins: [PureRenderMixin],
+	shouldComponentUpdate(prevProps) {
+		return prevProps.value !== this.props.value ||
+			prevProps.setting !== this.props.setting ||
+			prevProps.disabled !== this.props.disabled;
+	}
+}
+
+class SelectItem extends React.Component {
 	render() {
 		const {value, setting, disabled} = this.props;
 		const name = setting.get('name');
@@ -48,10 +51,15 @@ const SelectItem = React.createClass({
 			</div>
 		);
 	}
-});
 
-const CheckboxItem = React.createClass({
-	mixins: [PureRenderMixin],
+	shouldComponentUpdate(prevProps) {
+		return prevProps.value !== this.props.value ||
+			prevProps.setting !== this.props.setting ||
+			prevProps.disabled !== this.props.disabled;
+	}
+}
+
+class CheckboxItem extends React.Component {
 	render() {
 		const {value, setting, disabled} = this.props;
 		const name = setting.get('name');
@@ -68,10 +76,15 @@ const CheckboxItem = React.createClass({
 			</label>
 		);
 	}
-});
 
-const SettingSaveButton = React.createClass({
-	mixins: [PureRenderMixin],
+	shouldComponentUpdate(prevProps) {
+		return prevProps.value !== this.props.value ||
+			prevProps.setting !== this.props.setting ||
+			prevProps.disabled !== this.props.disabled;
+	}
+}
+
+class SettingSaveButton extends React.Component {
 	render() {
 		const {valid, onSave, onUndo, disabled} = this.props;
 		return (
@@ -81,19 +94,25 @@ const SettingSaveButton = React.createClass({
 			</span>
 		);
 	}
-});
 
-const TextAreaItem = React.createClass({
-	mixins: [PureRenderMixin],
-	getInitialState() {
-		return {value: this.props.value};
-	},
+	shouldComponentUpdate(prevProps) {
+		return prevProps.value !== this.props.value ||
+			prevProps.setting !== this.props.setting ||
+			prevProps.disabled !== this.props.disabled;
+	}
+}
+
+class TextAreaItem extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {value: props.value};
+	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({value: nextProps.value});
-	},
+	}
 	reset() {
 		this.componentWillReceiveProps(this.props);
-	},
+	}
 	render() {
 		const {setting, disabled} = this.props;
 		const name = setting.get('name');
@@ -105,7 +124,7 @@ const TextAreaItem = React.createClass({
 		} catch(e) {}
 
 		const onChange = event => {
-			const value = React.findDOMNode(this.refs.input).value;
+			const value = this.refs.input.value;
 			this.setState({value});
 		};
 		const onSave = event => {
@@ -120,24 +139,31 @@ const TextAreaItem = React.createClass({
 				<div style={{visibility:this.props.value===this.state.value?'hidden':'visible'}}>
 					<SettingSaveButton
 						disabled={disabled} valid={valid}
-						onSave={onSave} onUndo={this.reset} />
+						onSave={onSave} onUndo={()=>this.reset()} />
 				</div>
 			</div>
 		);
 	}
-});
 
-const NumberItem = React.createClass({
-	mixins: [PureRenderMixin],
-	getInitialState() {
-		return {value: this.props.value};
-	},
+	shouldComponentUpdate(prevProps, prevState) {
+		return prevProps.value !== this.props.value ||
+			prevProps.setting !== this.props.setting ||
+			prevProps.disabled !== this.props.disabled ||
+			prevState.value !== this.state.value;
+	}
+}
+
+class NumberItem extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {value: props.value};
+	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({value: nextProps.value});
-	},
+	}
 	reset() {
 		this.componentWillReceiveProps(this.props);
-	},
+	}
 	render() {
 		const {setting, disabled} = this.props;
 		const name = setting.get('name');
@@ -149,7 +175,7 @@ const NumberItem = React.createClass({
 		} catch(e) {}
 
 		const onChange = event => {
-			const value = parseInt(React.findDOMNode(this.refs.input).value);
+			const value = parseInt(this.refs.input.value);
 			this.setState({value});
 		};
 		const onSave = event => {
@@ -164,15 +190,20 @@ const NumberItem = React.createClass({
 				<span style={{visibility:this.props.value===this.state.value?'hidden':'visible'}}>
 					<SettingSaveButton
 						disabled={disabled} valid={valid}
-						onSave={onSave} onUndo={this.reset} />
+						onSave={onSave} onUndo={()=>this.reset()} />
 				</span>
 			</div>
 		);
 	}
-});
+	shouldComponentUpdate(prevProps, prevState) {
+		return prevProps.value !== this.props.value ||
+			prevProps.setting !== this.props.setting ||
+			prevProps.disabled !== this.props.disabled ||
+			prevState.value !== this.state.value;
+	}
+}
 
-const SettingItem = React.createClass({
-	mixins: [PureRenderMixin],
+class SettingItem extends React.Component {
 	render() {
 		const {setting, value} = this.props;
 		const name = setting.get('name');
@@ -225,10 +256,13 @@ const SettingItem = React.createClass({
 			</div>
 		);
 	}
-});
+	shouldComponentUpdate(prevProps) {
+		return prevProps.value !== this.props.value ||
+			prevProps.setting !== this.props.setting;
+	}
+}
 
-const SettingsSection = React.createClass({
-	mixins: [PureRenderMixin],
+class SettingsSection extends React.Component {
 	render() {
 		const {metadata, values, section} = this.props;
 		const items = section.get('settings')
@@ -249,10 +283,14 @@ const SettingsSection = React.createClass({
 			</section>
 		);
 	}
-});
+	shouldComponentUpdate(prevProps) {
+		return prevProps.metadata !== this.props.metadata ||
+			prevProps.values !== this.props.values ||
+			prevProps.section !== this.props.section;
+	}
+}
 
-const SettingsCloseButton = React.createClass({
-	mixins: [PureRenderMixin],
+class SettingsCloseButton extends React.Component {
 	render() {
 		return (
 			<button
@@ -264,10 +302,12 @@ const SettingsCloseButton = React.createClass({
 			</button>
 		);
 	}
-});
+	shouldComponentUpdate(prevProps) {
+		return prevProps.onClick !== this.props.onClick;
+	}
+}
 
-export const SettingsWindow = React.createClass({
-	mixins: [PureRenderMixin],
+export class SettingsWindow extends React.Component {
   render() {
 		const {closeWindow, metadata, values, sections} = this.props;
 		const sectionNodes = sections
@@ -291,4 +331,10 @@ export const SettingsWindow = React.createClass({
 			</div>
     );
   }
-});
+	shouldComponentUpdate(prevProps) {
+		return prevProps.closeWindow !== this.props.closeWindow ||
+			prevProps.metadata !== this.props.metadata ||
+			prevProps.values !== this.props.values ||
+			prevProps.sections !== this.props.sections;
+	}
+}

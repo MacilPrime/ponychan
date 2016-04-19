@@ -20,7 +20,9 @@ var args = stdio.getopt({
   'minify': {key: 'm', description: 'Minify build'}
 });
 
-process.env.NODE_ENV = args.minify ? 'production' : 'development';
+process.env.NODE_ENV = args.minify ?
+  'production' :
+  args.hot ? 'development-hmr' : 'development';
 
 function copyTask(name, paths) {
   var setWatch = _.once(function() {
@@ -62,25 +64,9 @@ function browserifyTask(name, entry, destname) {
         entry
       ],
       noparse: ['jquery', 'moment', 'rsvp'],
-      cache: {}, packageCache: {}, fullPaths: args.watch
+      cache: {}, packageCache: {}
     });
-    bundler.transform(babelify, args.hot ? {
-      "plugins": ["react-transform"],
-      "extra": {
-        "react-transform": {
-          "transforms": [
-            {
-              "transform": "react-transform-hmr",
-              "imports": ["react"],
-              "locals": ["module"]
-            }, {
-              "transform": "react-transform-catch-errors",
-              "imports": ["react", "redbox-react"]
-            }
-          ]
-        }
-      }
-    } : null);
+    bundler.transform(babelify);
     bundler.transform(envify({
       VERSION: getVersion(),
       NODE_ENV: process.env.NODE_ENV
