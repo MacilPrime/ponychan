@@ -19,12 +19,8 @@ settings.newSetting(
   {orderhint: 1, selectOptions: styleChoices, defpriority: 0});
 
 function getStyleURI(stylename) {
-  if (Array.isArray(global.SITE_DATA.styles)) {
-    const entry = _.find(global.SITE_DATA.styles, entry => entry.name === stylename);
-    return !entry ? null : entry.uri;
-  } else {
-    return global.SITE_DATA.styles[stylename];
-  }
+  const entry = _.find(global.SITE_DATA.styles, entry => entry.name === stylename);
+  return !entry ? null : entry.uri;
 }
 
 function apply(stylename) {
