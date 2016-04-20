@@ -1,12 +1,10 @@
-const _ = require('lodash');
-const $ = require('jquery');
-const asap = require('asap');
-const Kefir = require('kefir');
+import $ from 'jquery';
+import asap from 'asap';
 import {Metadata} from './post-previewer/url-metadata';
 import {filterStart, newViewablePosts} from './post-hiding';
 import udKefir from 'ud-kefir';
 import {get_post_id} from './lib/post-info';
-import {documentReady, newPosts} from './lib/events';
+import {newPosts} from './lib/events';
 import {markParentLinks} from './post-previewer/link-utils';
 
 const update = udKefir(module, null).changes().take(1).toProperty();
@@ -48,7 +46,7 @@ function parsePage() {
 
 function parsePost(post) {
   const $post = $(post);
-  if ($post.attr("data-filtered")) return;
+  if ($post.attr('data-filtered')) return;
   const postid = get_post_id($post);
   $post.find('> .body a.postlink').each(function() {
     const metadata = new Metadata($(this).attr('href'), global.board_id);
@@ -90,7 +88,7 @@ function placeBacklinksOnPost(post) {
       return;
     }
     $('<a/>')
-      .addClass(`postlink backlink`)
+      .addClass('postlink backlink')
       .attr('href', href)
       .text(`>>${backlinknum}`)
       .appendTo($mentioned);

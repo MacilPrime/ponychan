@@ -157,26 +157,6 @@ $(document).ready(function() {
 	}
 });
 
-window.get_url_params = function get_url_params(url, includeHash) {
-	function decode (s) {
-		return decodeURIComponent(s.replace(/\+/g, ' '));
-	}
-
-	if (!includeHash)
-		url = url.replace(/#.*/, '');
-	var params = {};
-	var match_params = /[?#](.*)$/.exec(url);
-	if (match_params) {
-		var params_part = match_params[1];
-		var search = /([^&#=]+)=?([^&#]*)/g;
-		var match;
-		while ((match = search.exec(params_part))) {
-			params[decode(match[1])] = decode(match[2]);
-		}
-	}
-	return params;
-};
-
 window.RecaptchaOptions = {
 	theme : 'clean'
 };

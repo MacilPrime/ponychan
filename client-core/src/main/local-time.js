@@ -6,46 +6,45 @@
  *
  */
 
-import moment from "moment";
-import Kefir from 'kefir';
+import moment from 'moment';
 import udKefir from 'ud-kefir';
 import $ from 'jquery';
 import {documentReady, newPosts} from './lib/events';
 import settings from './settings';
 
-settings.newSetting("time_casual", "bool", true, "12 hour time display", 'pagestyle', {orderhint: 4});
+settings.newSetting('time_casual', 'bool', true, '12 hour time display', 'pagestyle', {orderhint: 4});
 
 const update = udKefir(module, null).changes().take(1).toProperty();
 
 documentReady.takeUntilBy(update).onValue(() => {
-	var time_casual, time_format_string;
+  let time_casual, time_format_string;
 
-	function init() {
-		time_casual = settings.getSetting("time_casual");
+  function init() {
+    time_casual = settings.getSetting('time_casual');
 
-		if (time_casual)
-			time_format_string = "D MMM YYYY h:mm:ss A";
-		else
-			time_format_string = "D MMM YYYY HH:mm:ss";
+    if (time_casual)
+      time_format_string = 'D MMM YYYY h:mm:ss A';
+    else
+    time_format_string = 'D MMM YYYY HH:mm:ss';
 
-		formatTimeElements(document.body);
-	}
-	init();
+    formatTimeElements(document.body);
+  }
+  init();
 
-	settings.getSettingStream('time_casual')
-		.changes()
-		.takeUntilBy(update)
-		.onValue(init);
+  settings.getSettingStream('time_casual')
+    .changes()
+    .takeUntilBy(update)
+    .onValue(init);
 
-	function formatTimeElements(context) {
-		$("time", context).each(function() {
-			var $t = $(this);
-			$t.text(moment($t.attr('datetime')).format(time_format_string));
-		});
-	}
+  function formatTimeElements(context) {
+    $('time', context).each(function() {
+      const $t = $(this);
+      $t.text(moment($t.attr('datetime')).format(time_format_string));
+    });
+  }
 
-	// allow to work with auto-reload.js, etc.
-	newPosts
-		.takeUntilBy(update)
-		.onValue(formatTimeElements);
+  // allow to work with auto-reload.js, etc.
+  newPosts
+    .takeUntilBy(update)
+    .onValue(formatTimeElements);
 });

@@ -5,29 +5,29 @@ import settings from './settings';
 $(document).ready(function() {
   if ($('div.banner').length === 0) return;
 
-  $(document).on("click", "a.post_no.citelink", function(event) {
+  $(document).on('click', 'a.post_no.citelink', function(event) {
     event.preventDefault();
-    const id = +$(event.target).attr("href").match(/\d+$/)[0];
+    const id = +$(event.target).attr('href').match(/\d+$/)[0];
     citeReply(id);
   });
 });
 
 function maybe_get_post_num(el) {
-  const $post = $(el).parents(".post");
+  const $post = $(el).parents('.post');
   return $post.length ? get_post_num($post) : null;
 }
 
 export default function citeReply(id) {
   let $message;
-  if (settings.getSetting("use_QR")) {
-    $message = $("#qrcomment");
-    QR.open();
+  if (settings.getSetting('use_QR')) {
+    $message = $('#qrcomment');
+    global.QR.open();
   } else {
-    $message = $("#body");
+    $message = $('#body');
     if (document.forms.post.scrollIntoView)
       document.forms.post.scrollIntoView();
   }
-  let cited = ">>" + id + "\n";
+  let cited = '>>' + id + '\n';
 
   // select the content of the post first.
   if (window.getSelection) {
@@ -40,22 +40,23 @@ export default function citeReply(id) {
     if (id == startID && id == endID) {
       const text = sel.toString().trim();
       if (text.length > 0) {
-        const lines = text.split("\n");
+        const lines = text.split('\n');
         let hasStarted = false;
         lines.forEach(line => {
           const newQuote = line.trim();
           if (hasStarted || newQuote.length > 0) {
             hasStarted = true;
-            cited += ">" + newQuote + "\n";
+            cited += '>' + newQuote + '\n';
           }
         });
       }
     }
   }
 
-  if ("selectionStart" in $message.get(0)) {
+  const message = $message.val();
+
+  if ('selectionStart' in $message.get(0)) {
     // if something is selected in the message box, replace it.
-    const message = $message.val();
     const start = $message.get(0).selectionStart;
     const end = $message.get(0).selectionEnd;
     $message.val(
@@ -69,5 +70,5 @@ export default function citeReply(id) {
     $message.val(message + cited);
   }
   $message.focus();
-  $message.trigger("input");
+  $message.trigger('input');
 }

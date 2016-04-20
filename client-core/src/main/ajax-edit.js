@@ -5,9 +5,9 @@
  *
  */
 
-import $ from "jquery";
-import {footer} from "./footer-utils";
-import myPosts from "./my-posts";
+import $ from 'jquery';
+import {footer} from './footer-utils';
+import myPosts from './my-posts';
 import {get_post_num, get_thread_num, get_post_board, get_post_id, get_post_body} from './lib/post-info';
 import * as state from './state';
 import config  from './config';
@@ -18,18 +18,18 @@ $(document).ready(function() {
   function init() {
     $('.edit-form').remove();
 
-    $(".post").each(function() {
+    $('.post').each(function() {
       giveEditControls($(this));
     });
 
-    $(document).on("new_post", function(e, post) {
+    $(document).on('new_post', function(e, post) {
       giveEditControls($(post));
     });
   }
 
   function giveEditControls($post) {
     function getEditForm() {
-      return $post.find(".edit-form");
+      return $post.find('.edit-form');
     }
 
     function getPostTime() {
@@ -44,35 +44,35 @@ $(document).ready(function() {
       return;
     }
 
-    footer($post).addItem("Edit", function(evt) {
+    footer($post).addItem('Edit', function(evt) {
       const $footerEditButton = $(evt.target);
 
-      const password = $("#password").val();
+      const password = $('#password').val();
       if (getEditForm().length > 0) {
         // the post body is hidden with css.
         closeForm();
       } else {
         // ajax the edit post form first
-        $footerEditButton.text("Editing...");
-        var editRequest = new FormData();
-        editRequest.append("board", get_post_board($post));
-        editRequest.append("delete_" + get_post_num($post), "true");
-        editRequest.append("password", password);
-        editRequest.append("edit", "Edit");
+        $footerEditButton.text('Editing...');
+        const editRequest = new FormData();
+        editRequest.append('board', get_post_board($post));
+        editRequest.append('delete_' + get_post_num($post), 'true');
+        editRequest.append('password', password);
+        editRequest.append('edit', 'Edit');
 
         // TODO make some nice JSON api for this to use.
         $.ajax({
-          url: SITE_DATA.siteroot + "post.php",
+          url: global.SITE_DATA.siteroot + 'post.php',
           data: editRequest,
           cache: false,
           contentType: false,
           processData: false,
           type: 'POST',
           success: function(data) {
-            var $data = $($.parseHTML(data));
-            buildForm($data.find("#body").text());
+            const $data = $($.parseHTML(data));
+            buildForm($data.find('#body').text());
           },
-          error: function(xhr, textStatus, exception) {
+          error: function(xhr) {
             handleConnectionError(xhr);
             closeForm();
           }
@@ -80,12 +80,12 @@ $(document).ready(function() {
       }
 
       function buildForm(postContent) {
-        var $editForm = $('<div />')
-          .addClass("edit-form")
-          .fadeIn("fast")
+        const $editForm = $('<div />')
+          .addClass('edit-form')
+          .fadeIn('fast')
           .keypress(e => {
             if (
-              !$submit.prop("disabled") &&
+              !$submit.prop('disabled') &&
               (e.key === 'Enter' || e.which === 10 || e.which === 13) &&
               (e.ctrlKey || e.metaKey)
             ) {
@@ -94,65 +94,65 @@ $(document).ready(function() {
           })
           .insertBefore(get_post_body($post));
 
-        var $message = $('<textarea />')
+        const $message = $('<textarea />')
           .text(postContent)
-          .attr("name", "body")
+          .attr('name', 'body')
           .addClass('edit-body')
           .appendTo($editForm);
 
-        var $editControls = $('<div />')
-          .addClass("edit-controls")
+        const $editControls = $('<div />')
+          .addClass('edit-controls')
           .appendTo($editForm);
 
-        var $submit = $('<input />')
-          .attr("value", "Submit")
-          .attr("type", "button")
-          .attr("title", "Submit (Ctrl-Enter)")
-          .on("click", sendRevision)
+        const $submit = $('<input />')
+          .attr('value', 'Submit')
+          .attr('type', 'button')
+          .attr('title', 'Submit (Ctrl-Enter)')
+          .on('click', sendRevision)
           .appendTo($editControls);
 
         $('<input />')
-          .attr("value", "Cancel")
-          .attr("type", "button")
-          .on("click", closeForm)
+          .attr('value', 'Cancel')
+          .attr('type', 'button')
+          .on('click', closeForm)
           .appendTo($editControls);
 
         // DOM setup over
 
-        function sendRevision(evt) {
-          $submit.val("Posting...");
+        function sendRevision() {
+          $submit.val('Posting...');
           $editForm
-            .find("input, textarea")
-            .prop("disabled", true);
+            .find('input, textarea')
+            .prop('disabled', true);
 
           // create form data first.
-          var revision = new FormData();
-          revision.append("editpost", "1");
-          revision.append("board", get_post_board($post));
-          revision.append("id", get_post_num($post));
-          revision.append("password", password);
-          revision.append("mod", "0");
+          const revision = new FormData();
+          revision.append('editpost', '1');
+          revision.append('board', get_post_board($post));
+          revision.append('id', get_post_num($post));
+          revision.append('password', password);
+          revision.append('mod', '0');
           // maybe we'll deal with the mod stuff later
           // or just totally skip it.
-          revision.append("body", $message.val());
+          revision.append('body', $message.val());
 
           // send request
           $.ajax({
-            url: SITE_DATA.siteroot + "post.php",
+            url: global.SITE_DATA.siteroot + 'post.php',
             data: revision,
             cache: false,
             contentType: false,
             processData: false,
             type: 'POST',
-            success: function(data) {
+            success: function() {
               retrieveRevision();
             },
-            error: function(xhr, textStatus, exception) {
+            error: function(xhr) {
               handleConnectionError(xhr);
-              $submit.val("Submit");
+              $submit.val('Submit');
               $editForm
-                .find("input, textarea")
-                .prop("disabled", false);
+                .find('input, textarea')
+                .prop('disabled', false);
             }
           });
         }
@@ -161,42 +161,42 @@ $(document).ready(function() {
           // We always have to go to the full thread to retrieve
           // the post. What if the post drops off the current page?
           function buildURL() {
-            var root;
+            let root;
 
             // 1. Figure out if you need the page with mod controls.
-            const modPage = SITE_DATA.siteroot + "mod.php";
+            const modPage = global.SITE_DATA.siteroot + 'mod.php';
             if (document.location.pathname === modPage) {
-              root = modPage + "?/";
+              root = modPage + '?/';
             } else {
-              root = SITE_DATA.siteroot;
+              root = global.SITE_DATA.siteroot;
             }
 
             // 2. Get thread page
-            return root + get_post_board($post) + "/res/" +
-              get_thread_num($post) + ".html";
+            return root + get_post_board($post) + '/res/' +
+              get_thread_num($post) + '.html';
           }
 
           $.ajax({
             url: buildURL(),
             cache: false,
             success: function(data) {
-              var $newPost = $(data)
-                .find(".post_" + get_post_num($post));
+              const $newPost = $(data)
+                .find('.post_' + get_post_num($post));
               if ($newPost) {
                 $post.html($post.html()); // erase all events.
-                var $newBody = get_post_body($newPost);
+                const $newBody = get_post_body($newPost);
                 get_post_body($post).replaceWith($newBody);
                 closeForm();
                 $footerEditButton.remove();
-                $(document).trigger("new_post", $post);
+                $(document).trigger('new_post', $post);
                 $newBody.hide();
                 $newBody.fadeIn('fast');
               } else {
-                alert("Error: Failed to refresh post.");
+                alert('Error: Failed to refresh post.');
                 closeForm();
               }
             },
-            error: function(xhr, textStatus, exception) {
+            error: function(xhr) {
               handleConnectionError(xhr);
               closeForm();
             }
@@ -205,16 +205,16 @@ $(document).ready(function() {
       }
 
       function handleConnectionError(xhr) {
-        var $data = $($.parseHTML(xhr.responseText));
-        var title = $data.filter('title').first().text();
+        const $data = $($.parseHTML(xhr.responseText));
+        const title = $data.filter('title').first().text();
         if (title && /Error/.test(title)) {
-          alert("Error: " + $data.find("h2").first().text());
+          alert('Error: ' + $data.find('h2').first().text());
         } else if (title && /Banned/.test(title)) {
-          var pageState = {title: 'Ban', banpage: xhr.responseText};
+          const pageState = {title: 'Ban', banpage: xhr.responseText};
           state.newState(pageState);
         } else {
-          console.log("Ajax Error", xhr);
-          alert("Error: Connection failed");
+          console.error('Ajax Error', xhr); //eslint-disable-line no-console
+          alert('Error: Connection failed');
         }
       }
 
@@ -223,7 +223,7 @@ $(document).ready(function() {
         if ($editForm.length > 0) {
           $editForm.remove();
         }
-        $footerEditButton.text("Edit");
+        $footerEditButton.text('Edit');
       }
     });
   }

@@ -1,6 +1,6 @@
-var assert = require('assert');
-var RSVP = require('rsvp');
-var util = require('../src/main/util.js');
+import assert from 'assert';
+import RSVP from 'rsvp';
+import * as util from '../src/main/util.js';
 
 describe('util', function() {
   describe('wait', function() {
@@ -16,7 +16,7 @@ describe('util', function() {
     });
     it('should pass errors', function() {
       return util.wait(1, RSVP.reject('failtime')).then(function() {
-        throw new Error("Should not happen");
+        throw new Error('Should not happen');
       }, function(err) {
         assert.equal(err, 'failtime');
       });
@@ -31,16 +31,16 @@ describe('util', function() {
     });
     it('should pass errors', function() {
       return util.timeout(20, RSVP.reject('failtime')).then(function() {
-        throw new Error("Should not happen");
+        throw new Error('Should not happen');
       }, function(err) {
         assert.equal(err, 'failtime');
       });
     });
     it('should timeout', function() {
       return util.timeout(1, util.wait(20, 'beep')).then(function() {
-        throw new Error("Should not happen");
+        throw new Error('Should not happen');
       }, function(err) {
-        assert.equal(err.message, "promise timed out");
+        assert.equal(err.message, 'promise timed out');
       });
     });
   });

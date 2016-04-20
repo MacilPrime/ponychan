@@ -6,45 +6,41 @@
  *
  * Puts bbcode at the cursor position on specific key combos.
  *
- * Usage:
- *   $config['additional_javascript'][] = 'js/jquery.min.js';
- *   $config['additional_javascript'][] = 'js/tags.js';
- *
  */
 
 import $ from 'jquery';
 
-$(document).ready(function(){
-	$(document).keydown(function(event) {
-		if(!/TEXTAREA/.test(event.target.nodeName))
-			return true;
+$(document).ready(function() {
+  $(document).keydown(function(event) {
+    if (!/TEXTAREA/.test(event.target.nodeName))
+      return true;
 
-		if(!event.ctrlKey || event.shiftKey)
-			return true;
+    if (!event.ctrlKey || event.shiftKey)
+      return true;
 
-		var tag;
-		switch(event.which) {
-		case 66: tag = 'b'; break; // b
-		case 72: tag = 'h'; break; // h
-		case 73: tag = 'i'; break; // i
-		case 75: tag = 'rcv'; break; // k
-		case 82: tag = 's'; break; // r
-		case 83: tag = '?'; break; // s
-		case 85: tag = 'u'; break; // u
-		default:
-			return true;
-		}
+    let tag;
+    switch (event.which) {
+    case 66: tag = 'b'; break; // b
+    case 72: tag = 'h'; break; // h
+    case 73: tag = 'i'; break; // i
+    case 75: tag = 'rcv'; break; // k
+    case 82: tag = 's'; break; // r
+    case 83: tag = '?'; break; // s
+    case 85: tag = 'u'; break; // u
+    default:
+      return true;
+    }
 
-		if(typeof event.target.selectionStart == "undefined" || event.target.selectionStart == null)
-			return true;
+    if (typeof event.target.selectionStart == 'undefined' || event.target.selectionStart == null)
+      return true;
 
-		var text = $(event.target).val();
-		var start = event.target.selectionStart;
-		var end = event.target.selectionEnd;
-		text = text.slice(0,start) + '['+tag+']' + text.slice(start,end) + '[/'+tag+']' + text.slice(end);
-		$(event.target).val(text);
-		var afterInsert = end + ('['+tag+']').length;
-		event.target.setSelectionRange(afterInsert, afterInsert);
-		return false;
-	});
+    let text = $(event.target).val();
+    const start = event.target.selectionStart;
+    const end = event.target.selectionEnd;
+    text = text.slice(0,start) + '['+tag+']' + text.slice(start,end) + '[/'+tag+']' + text.slice(end);
+    $(event.target).val(text);
+    const afterInsert = end + ('['+tag+']').length;
+    event.target.setSelectionRange(afterInsert, afterInsert);
+    return false;
+  });
 });

@@ -4,7 +4,7 @@ let BOARD_DATA;
 try {
   // This is populated by getBoardConfig() in functions.php
   BOARD_DATA = JSON.parse(document.getElementById('config').getAttribute('data-board-config'));
-} catch(err) {
+} catch (err) {
   log_error(err);
   BOARD_DATA = {};
 }

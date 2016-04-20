@@ -6,38 +6,38 @@
  *
  */
 
-var $ = require('jquery');
-var _ = require('lodash');
+import $ from 'jquery';
+import _ from 'lodash';
 
-var supportsDownloadAttr = _.once(function() {
-	var link = document.createElement('a');
-	return 'download' in link;
+const supportsDownloadAttr = _.once(function() {
+  const link = document.createElement('a');
+  return 'download' in link;
 });
 
 $(document).ready(function() {
-	function filename_expander(context) {
-		$(".post-filename[data-fn-fullname]", context).each(function() {
-			var $fn = $(this);
-			var shortname = $fn.attr("data-fn-shortname") || $fn.text();
-			var fullname = $fn.attr("data-fn-fullname");
-			$fn
-				.attr("data-fn-shortname", shortname)
-				.attr("data-fn-fullname", fullname)
-				.text(shortname)
-				.hover(function() {
-					$fn.text(fullname);
-				}, function() {
-					$fn.text(shortname);
-				});
-		});
+  function filename_expander(context) {
+    $('.post-filename[data-fn-fullname]', context).each(function() {
+      const $fn = $(this);
+      const shortname = $fn.attr('data-fn-shortname') || $fn.text();
+      const fullname = $fn.attr('data-fn-fullname');
+      $fn
+        .attr('data-fn-shortname', shortname)
+        .attr('data-fn-fullname', fullname)
+        .text(shortname)
+        .hover(function() {
+          $fn.text(fullname);
+        }, function() {
+          $fn.text(shortname);
+        });
+    });
 
-		if (!supportsDownloadAttr()) {
-			$("a.post-filename[title][download]", context).removeAttr('title');
-		}
-	}
+    if (!supportsDownloadAttr()) {
+      $('a.post-filename[title][download]', context).removeAttr('title');
+    }
+  }
 
-	filename_expander(document);
-	$(document).on('new_post.showfn', function(e, post) {
-		filename_expander(post);
-	});
+  filename_expander(document);
+  $(document).on('new_post.showfn', function(e, post) {
+    filename_expander(post);
+  });
 });

@@ -1,20 +1,20 @@
-var gulp = require('gulp');
-var browserify = require('browserify');
-var watchify = require('watchify');
-var source = require('vinyl-source-stream');
-var _ = require('lodash');
-var streamify = require('gulp-streamify');
-var sourcemaps = require('gulp-sourcemaps');
-var stdio = require('stdio');
-var uglify = require('gulp-uglify');
-var envify = require('envify/custom');
-var gulpif = require('gulp-if');
-var gutil = require('gulp-util');
-var babelify = require('babelify');
-var RSVP = require('./test/lib/rsvp');
-var exec = require('./src/build/exec');
+import gulp from 'gulp';
+import browserify from 'browserify';
+import watchify from 'watchify';
+import source from 'vinyl-source-stream';
+import _ from 'lodash';
+import streamify from 'gulp-streamify';
+import sourcemaps from 'gulp-sourcemaps';
+import stdio from 'stdio';
+import uglify from 'gulp-uglify';
+import envify from 'envify/custom';
+import gulpif from 'gulp-if';
+import gutil from 'gulp-util';
+import babelify from 'babelify';
+import RSVP from './test/lib/rsvp';
+import exec from './src/build/exec';
 
-var args = stdio.getopt({
+const args = stdio.getopt({
   'watch': {key: 'w', description: 'Automatic rebuild'},
   'hot': {key: 'h', description: 'Hot module replacement'},
   'minify': {key: 'm', description: 'Minify build'}
@@ -25,7 +25,7 @@ process.env.NODE_ENV = args.minify ?
   args.hot ? 'development-hmr' : 'development';
 
 function copyTask(name, paths) {
-  var setWatch = _.once(function() {
+  const setWatch = _.once(function() {
     if (args.watch) {
       gulp.watch(paths, [name]);
     }
@@ -38,8 +38,8 @@ function copyTask(name, paths) {
 }
 
 // TODO make getVersion return a promise instead.
-var getVersion = function() {
-  throw new Error("can only be called after getVersion task is run");
+let getVersion = function() {
+  throw new Error('can only be called after getVersion task is run');
 };
 
 gulp.task('getVersion', function() {
@@ -47,10 +47,10 @@ gulp.task('getVersion', function() {
     exec('git rev-parse HEAD'),
     exec('git status --porcelain')
   ]).then(function(parts) {
-    var commit = parts[0].trim().slice(0, 16);
-    var status = parts[1];
-    var isModified = /^\s*M/m.test(status);
-    var version = commit + (isModified ? '-MODIFIED' : '');
+    const commit = parts[0].trim().slice(0, 16);
+    const status = parts[1];
+    const isModified = /^\s*M/m.test(status);
+    const version = commit + (isModified ? '-MODIFIED' : '');
 
     getVersion = _.constant(version);
   });
@@ -58,7 +58,7 @@ gulp.task('getVersion', function() {
 
 function browserifyTask(name, entry, destname) {
   gulp.task(name, ['getVersion'], function() {
-    var bundler = browserify({
+    let bundler = browserify({
       debug: true,
       entries: [
         entry
@@ -81,8 +81,8 @@ function browserifyTask(name, entry, destname) {
     }
 
     function buildBundle(isRebuild) {
-      var bundle = bundler.bundle();
-      var result = bundle
+      const bundle = bundler.bundle();
+      const result = bundle
         .pipe(source(destname))
         .pipe(streamify(sourcemaps.init({loadMaps:true})))
         .pipe(gulpif(args.minify, streamify(uglify())))
@@ -90,11 +90,11 @@ function browserifyTask(name, entry, destname) {
         .pipe(gulp.dest('../core/js/'));
 
       if (isRebuild) {
-        var wasError = false;
+        let wasError = false;
         gutil.log("Rebuilding '"+gutil.colors.cyan(name)+"'");
         bundle.on('error', function(err) {
           wasError = true;
-          gutil.log(gutil.colors.red("Error")+" rebuilding '"+gutil.colors.cyan(name)+"':"+err.message);
+          gutil.log(gutil.colors.red('Error')+" rebuilding '"+gutil.colors.cyan(name)+"':"+err.message);
           result.end();
         });
         result.on('end', function() {

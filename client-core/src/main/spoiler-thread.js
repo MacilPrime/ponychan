@@ -3,10 +3,10 @@ import Kefir from 'kefir';
 import {documentReady, newPosts} from './lib/events';
 import settings from './settings';
 
-settings.newSetting("reveal_spoiler_threads", "bool", false, "Always reveal spoiler threads", 'pagestyle',
+settings.newSetting('reveal_spoiler_threads', 'bool', false, 'Always reveal spoiler threads', 'pagestyle',
   {orderhint: 2.5});
 
-const SPOILER_IMAGE = SITE_DATA.siteroot+'static/spoiler.png';
+const SPOILER_IMAGE = global.SITE_DATA.siteroot+'static/spoiler.png';
 
 documentReady.onValue(() => {
   if ($('div.banner').length) return;
@@ -20,14 +20,15 @@ documentReady.onValue(() => {
       if ($thread.hasClass('spoileredThread')) {
         $op.find('img.postimg[data-spoiled-src]').each(function() {
           const $img = $(this);
-          $img.attr({
-            src: $img.attr('data-spoiled-src')
-          }).css({
-            width: $img.attr('data-spoiled-width'),
-            height: $img.attr('data-spoiled-height')
-          }).removeAttr('data-spoiled-src')
-          .removeAttr('data-spoiled-width')
-          .removeAttr('data-spoiled-height');
+          $img
+            .attr({
+              src: $img.attr('data-spoiled-src')
+            }).css({
+              width: $img.attr('data-spoiled-width'),
+              height: $img.attr('data-spoiled-height')
+            }).removeAttr('data-spoiled-src')
+            .removeAttr('data-spoiled-width')
+            .removeAttr('data-spoiled-height');
         });
         $thread.find('.spoileredThreadControls').remove();
         $thread.removeClass('spoileredThread');
@@ -42,9 +43,9 @@ documentReady.onValue(() => {
           const $img = $op.find('img.postimg');
           if ($img.length) {
             $img.attr({
-              "data-spoiled-width": $img.css('width'),
-              "data-spoiled-height": $img.css('height'),
-              "data-spoiled-src": $img.attr('src'),
+              'data-spoiled-width': $img.css('width'),
+              'data-spoiled-height': $img.css('height'),
+              'data-spoiled-src': $img.attr('src'),
               src: SPOILER_IMAGE
             }).css({
               width: '', height: ''
@@ -60,7 +61,7 @@ documentReady.onValue(() => {
                 .addClass('revealer')
                 .attr('type', 'button')
                 .text('Reveal')
-                .click(function(e) {
+                .click(function() {
                   process(true, $thread);
                 })
             )

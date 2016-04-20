@@ -9,28 +9,28 @@ import {Metadata} from './post-previewer/url-metadata';
 import pageHasFocus from './lib/page-has-focus';
 
 settings.newSetting(
-  "desktop_notifications",
-  "bool",
+  'desktop_notifications',
+  'bool',
   false,
-  "Enable Reply Desktop Notifications",
+  'Enable Reply Desktop Notifications',
   'links', {
     orderhint: 8,
-    moredetails: "Shows a desktop notification when you get a reply in an open " +
+    moredetails: 'Shows a desktop notification when you get a reply in an open ' +
       "thread while you don't have the thread's window focused.",
-    testButton: {label: "Test notification", fn: buttonEvent},
+    testButton: {label: 'Test notification', fn: buttonEvent},
     notSupported: !window.Notification
   }
 );
 
 function buttonEvent() {
   Notification.requestPermission(function() {
-    if (Notification.permission == "granted") {
-      var note = new Notification("Board settings - Ponychan", {
-        body: "This is a test",
-        tag: "desktop_test",
-        icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
+    if (Notification.permission == 'granted') {
+      const note = new Notification('Board settings - Ponychan', {
+        body: 'This is a test',
+        tag: 'desktop_test',
+        icon: global.SITE_DATA.siteroot + 'static/mlpchanlogo.png'
       });
-      setTimeout(function() {
+      setTimeout(() => {
         note.close();
       }, 3000);
     }
@@ -39,20 +39,19 @@ function buttonEvent() {
 
 function canNotify() {
   return window.Notification && Notification.permission == 'granted' &&
-    !pageHasFocus() && settings.getSetting("desktop_notifications");
+    !pageHasFocus() && settings.getSetting('desktop_notifications');
 }
 
 function init() {
   if (window.Notification) {
-    if (settings.getSetting("desktop_notifications")) {
+    if (settings.getSetting('desktop_notifications')) {
       Notification.requestPermission();
     }
     $(document).on('setting_change', function(e, setting) {
-      if (setting == "desktop_notifications")
+      if (setting == 'desktop_notifications')
         Notification.requestPermission();
     }).on('new_unseen_post', function(e, post) {
       const $post = $(post);
-      const postid = get_post_id($post);
       const postLinksToMe = _.any($post.find('> .body a.postlink'), postlink => {
         const m = new Metadata(postlink.getAttribute('href'), global.board_id);
         return myPosts.contains(m.postid);
@@ -69,8 +68,8 @@ function makeNote($post) {
   const postId = get_post_id($post);
   const note = new Notification(makeHeadLine($post), {
     body: getBody($post),
-    tag: "desktop_" + postId,
-    icon: SITE_DATA.siteroot + "static/mlpchanlogo.png"
+    tag: 'desktop_' + postId,
+    icon: global.SITE_DATA.siteroot + 'static/mlpchanlogo.png'
   });
 
   const noteClicks = Kefir.fromEvents(note, 'click');
@@ -91,20 +90,20 @@ function makeNote($post) {
 }
 
 function makeHeadLine(postEl) {
-  var $intro = $('.intro', postEl).first();
-  var subject = $intro.find('.subject').first().text();
+  const $intro = $('.intro', postEl).first();
+  let subject = $intro.find('.subject').first().text();
   if (subject.length)
     subject += ' — ';
-  var name = $intro.find('.namepart').first().text();
+  let name = $intro.find('.namepart').first().text();
   return subject + name;
 }
 
 function getBody(postEl) {
   // TODO this should be moved to some general function that gets text
   // from an element while attempting to respect newlines.
-  var $body = $(".body", postEl).first().clone();
-  $body.html($body.html().replace(/<br\b[^>]*>/g, "; "));
-  var text = $body.text().replace(/^(; )+/, '');
+  const $body = $('.body', postEl).first().clone();
+  $body.html($body.html().replace(/<br\b[^>]*>/g, '; '));
+  let text = $body.text().replace(/^(; )+/, '');
   if (text.length > 120)
     text = text.substr(0, 120) + '…';
   return text;

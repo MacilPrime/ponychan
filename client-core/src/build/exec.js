@@ -1,5 +1,5 @@
-var RSVP = require('rsvp');
-var cproc = require('child_process');
+import RSVP from 'rsvp';
+import cproc from 'child_process';
 
 module.exports = function exec(command) {
   return new RSVP.Promise(function(resolve, reject) {

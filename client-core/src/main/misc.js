@@ -6,38 +6,38 @@
 import $ from 'jquery';
 import {log_error} from './logger';
 
-$(document).ready(function(){
-	var $secondLine = $("footer .unimportant").slice(1,2);
-	var $targetLink = $("footer .unimportant a").slice(1,2);
+$(document).ready(function() {
+  const $secondLine = $('footer .unimportant').slice(1,2);
+  const $targetLink = $('footer .unimportant a').slice(1,2);
 
-	var oldLink = $targetLink.attr("href");
-	var newLink = SITE_DATA.siteroot+"mod.php";
+  const oldLink = $targetLink.attr('href');
+  const newLink = global.SITE_DATA.siteroot+'mod.php';
 
-	var unprepTimer = null;
-	$secondLine.dblclick(function() {
-		clearTimeout(unprepTimer);
-		$targetLink.attr("href", newLink);
-		unprepTimer = setTimeout(function() {
-			$targetLink.attr("href", oldLink);
-		}, 5*1000);
-	});
+  let unprepTimer = null;
+  $secondLine.dblclick(function() {
+    clearTimeout(unprepTimer);
+    $targetLink.attr('href', newLink);
+    unprepTimer = setTimeout(function() {
+      $targetLink.attr('href', oldLink);
+    }, 5*1000);
+  });
 
-	function betterName() {
-		var $h = $("header h1").first();
-		if ($h.text().trim().indexOf('/oat/ ') == 0)
-			$h.text('/goat/ - Goatmeal');
-	}
+  function betterName() {
+    const $h = $('header h1').first();
+    if ($h.text().trim().indexOf('/oat/ ') == 0)
+      $h.text('/goat/ - Goatmeal');
+  }
 
-	if (Math.random() < 0.0014)
-		betterName();
+  if (Math.random() < 0.0014)
+    betterName();
 
-	if (window.localStorage) {
-		try {
-			localStorage.removeItem("event_saw_nightmare");
-			localStorage.removeItem("event_saw_gc");
-			localStorage.removeItem("saw_proposal");
-		} catch (e) {
-			log_error(e);
-		}
-	}
+  if (window.localStorage) {
+    try {
+      localStorage.removeItem('event_saw_nightmare');
+      localStorage.removeItem('event_saw_gc');
+      localStorage.removeItem('saw_proposal');
+    } catch (e) {
+      log_error(e);
+    }
+  }
 });
