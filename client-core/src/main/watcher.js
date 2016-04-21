@@ -10,6 +10,7 @@ import $ from 'jquery';
 import RSVP from 'rsvp';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import config from './config';
 import { footer } from './footer-utils';
 import {log_error} from './logger';
 import {make_thread_url, make_thread50_url} from './lib/url';
@@ -18,7 +19,7 @@ import {get_post_id, get_post_class} from './lib/post-info';
 import './settings-screen.js'; // has to come after this
 import {WatcherMenu} from './watcher-components';
 
-const isModPage = (document.location.pathname == global.SITE_DATA.siteroot+'mod.php');
+const isModPage = (document.location.pathname == config.site.siteroot+'mod.php');
 
 const max_watched_threads = 70;
 const watcher_poll_time = 30 * 1000;
@@ -127,7 +128,7 @@ function refresh_watched_threads(callback) {
 
   const request_date = new Date();
   watcher_query = $.ajax({
-    url: global.SITE_DATA.siteroot+'watcher/threads',
+    url: config.site.siteroot+'watcher/threads',
     data: {ids: Object.keys(watched_threads).sort()},
     dataType: 'json',
     success(data) {
@@ -334,7 +335,7 @@ function init_watcher_menu() {
     const $watcherButton = $('<a/>')
       .addClass('watcherButton')
       .text('watcher')
-      .attr('href', global.SITE_DATA.siteroot+'watcher/')
+      .attr('href', config.site.siteroot+'watcher/')
       .prependTo( $('.top .settingsSection') );
 
     $('<div/>')

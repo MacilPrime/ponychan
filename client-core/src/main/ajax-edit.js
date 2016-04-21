@@ -10,7 +10,7 @@ import {footer} from './footer-utils';
 import myPosts from './my-posts';
 import {get_post_num, get_thread_num, get_post_board, get_post_id, get_post_body} from './lib/post-info';
 import * as state from './state';
-import config  from './config';
+import config from './config';
 
 $(document).ready(function() {
   init();
@@ -62,7 +62,7 @@ $(document).ready(function() {
 
         // TODO make some nice JSON api for this to use.
         $.ajax({
-          url: global.SITE_DATA.siteroot + 'post.php',
+          url: config.site.siteroot + 'post.php',
           data: editRequest,
           cache: false,
           contentType: false,
@@ -138,7 +138,7 @@ $(document).ready(function() {
 
           // send request
           $.ajax({
-            url: global.SITE_DATA.siteroot + 'post.php',
+            url: config.site.siteroot + 'post.php',
             data: revision,
             cache: false,
             contentType: false,
@@ -164,11 +164,11 @@ $(document).ready(function() {
             let root;
 
             // 1. Figure out if you need the page with mod controls.
-            const modPage = global.SITE_DATA.siteroot + 'mod.php';
+            const modPage = config.site.siteroot + 'mod.php';
             if (document.location.pathname === modPage) {
               root = modPage + '?/';
             } else {
-              root = global.SITE_DATA.siteroot;
+              root = config.site.siteroot;
             }
 
             // 2. Get thread page

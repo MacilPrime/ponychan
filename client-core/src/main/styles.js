@@ -8,18 +8,19 @@
 
 import _ from 'lodash';
 import $ from 'jquery';
+import config from './config';
 import settings from './settings';
 
-const styleChoices = global.SITE_DATA.styles.map(({name, displayName}) => ({value: name, displayName}));
+const styleChoices = config.site.styles.map(({name, displayName}) => ({value: name, displayName}));
 
 settings.newSetting(
   'style', 'select',
-  global.SITE_DATA.default_stylesheet,
+  config.site.default_stylesheet,
   'Theme', 'pagestyle',
   {orderhint: 1, selectOptions: styleChoices, defpriority: 0});
 
 function getStyleURI(stylename) {
-  const entry = _.find(global.SITE_DATA.styles, entry => entry.name === stylename);
+  const entry = _.find(config.site.styles, entry => entry.name === stylename);
   return !entry ? null : entry.uri;
 }
 

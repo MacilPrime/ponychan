@@ -10,6 +10,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';
+import config from './config';
 import settings from './settings';
 import setCss from './set-css';
 import {documentReady, newPosts} from './lib/events';
@@ -110,13 +111,13 @@ documentReady.onValue(() => {
     const expires = new Date();
     if (show_mature) {
       expires.setTime((new Date()).getTime()+60480000000);
-      document.cookie = 'show_mature=true; expires='+expires.toGMTString()+'; path='+global.SITE_DATA.siteroot;
+      document.cookie = 'show_mature=true; expires='+expires.toGMTString()+'; path='+config.site.siteroot;
 
       $('.mature_warning').hide();
       $('.mature_thread, .mature_post_button').show();
     } else {
       expires.setTime((new Date()).getTime()-50000);
-      document.cookie = 'show_mature=false; expires='+expires.toGMTString()+'; path='+global.SITE_DATA.siteroot;
+      document.cookie = 'show_mature=false; expires='+expires.toGMTString()+'; path='+config.site.siteroot;
 
       $('.mature_warning').show();
       $('.mature_thread, .mature_post_button').hide();

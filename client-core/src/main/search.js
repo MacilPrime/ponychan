@@ -9,6 +9,7 @@
 import $ from 'jquery';
 import RSVP from 'rsvp';
 import _ from 'lodash';
+import config from './config';
 
 $(document).ready(function() {
   // don't run inside threads
@@ -57,7 +58,7 @@ $(document).ready(function() {
     return new RSVP.Promise(function(resolve, reject) {
       if (!$catalog.length) {
         $.ajax({
-          url: global.SITE_DATA.siteroot+global.board_id+'/catalog.html',
+          url: config.site.siteroot+global.board_id+'/catalog.html',
           success(data) {
             const $html = $($.parseHTML(data));
             $catalog = $html.filter('.catalog').add( $html.find('.catalog') )

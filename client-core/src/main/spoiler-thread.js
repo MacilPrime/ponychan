@@ -1,12 +1,13 @@
 import $ from 'jquery';
 import Kefir from 'kefir';
 import {documentReady, newPosts} from './lib/events';
+import config from './config';
 import settings from './settings';
 
 settings.newSetting('reveal_spoiler_threads', 'bool', false, 'Always reveal spoiler threads', 'pagestyle',
   {orderhint: 2.5});
 
-const SPOILER_IMAGE = global.SITE_DATA.siteroot+'static/spoiler.png';
+const SPOILER_IMAGE = config.site.siteroot+'static/spoiler.png';
 
 documentReady.onValue(() => {
   if ($('div.banner').length) return;

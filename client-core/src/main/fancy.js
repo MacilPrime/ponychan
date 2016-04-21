@@ -14,6 +14,7 @@
 
 import $ from 'jquery';
 import Kefir from 'kefir';
+import config from './config';
 import settings from './settings';
 
 {
@@ -74,10 +75,10 @@ $(document).ready(function() {
           const $post = $img.parent().parent();
           const $body = $post.find('> .body').first();
           const hatleft = (($img.outerWidth()-65) * 0.5)-$img.outerWidth()-parseInt($img.css('margin-right'));
-          $body.before('<img class="fancy hat" style="position:absolute;margin-top:-22px;margin-left:'+hatleft+'px;padding:0;height:56px;width:65px;" src="'+global.SITE_DATA.siteroot+'static/tophat.png">');
+          $body.before('<img class="fancy hat" style="position:absolute;margin-top:-22px;margin-left:'+hatleft+'px;padding:0;height:56px;width:65px;" src="'+config.site.siteroot+'static/tophat.png">');
           const monoheight = ($img.outerHeight()-25) * 0.4;
           const monoleft = (($img.outerWidth()-30) * 0.8)-$img.outerWidth()-parseInt($img.css('margin-right'));
-          $body.before('<img class="fancy monocle" style="position:absolute;margin-top:'+monoheight+'px;margin-left:'+monoleft+'px;padding:0;height:75px;width:30px;" src="'+global.SITE_DATA.siteroot+'static/monocle.png">');
+          $body.before('<img class="fancy monocle" style="position:absolute;margin-top:'+monoheight+'px;margin-left:'+monoleft+'px;padding:0;height:75px;width:30px;" src="'+config.site.siteroot+'static/monocle.png">');
         }
         if (i == 0) {
           addfancy();

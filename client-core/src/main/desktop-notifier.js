@@ -1,6 +1,7 @@
 const _ = require('lodash');
 import $ from 'jquery';
 import Kefir from 'kefir';
+import config from './config';
 import settings from './settings';
 import {jumpToPost} from './lib/post-utils';
 import {get_post_id} from './lib/post-info';
@@ -28,7 +29,7 @@ function buttonEvent() {
       const note = new Notification('Board settings - Ponychan', {
         body: 'This is a test',
         tag: 'desktop_test',
-        icon: global.SITE_DATA.siteroot + 'static/mlpchanlogo.png'
+        icon: config.site.siteroot + 'static/mlpchanlogo.png'
       });
       setTimeout(() => {
         note.close();
@@ -69,7 +70,7 @@ function makeNote($post) {
   const note = new Notification(makeHeadLine($post), {
     body: getBody($post),
     tag: 'desktop_' + postId,
-    icon: global.SITE_DATA.siteroot + 'static/mlpchanlogo.png'
+    icon: config.site.siteroot + 'static/mlpchanlogo.png'
   });
 
   const noteClicks = Kefir.fromEvents(note, 'click');

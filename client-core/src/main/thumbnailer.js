@@ -10,6 +10,7 @@
  */
 
 import RSVP from 'rsvp';
+import config from './config';
 
 function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
   const scalex = max_x / orig_width;
@@ -74,7 +75,7 @@ function thumbnailer_fancy(image, max_x, max_y, lobes=3) {
       let imageCPA = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const imagedata = Array.prototype.slice.call(imageCPA.data);
 
-      const worker = new Worker(global.SITE_DATA.siteroot+'js/thumbnailer-worker.js?v=10');
+      const worker = new Worker(config.site.siteroot+'js/thumbnailer-worker.js?v=10');
       worker.onmessage = function worker_onmessage(event) {
         if (event.data.result) {
           worker.terminate();

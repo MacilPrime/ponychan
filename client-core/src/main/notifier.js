@@ -10,6 +10,7 @@
 
 import _ from 'lodash';
 import $ from 'jquery';
+import config from './config';
 import settings from './settings';
 import myPosts from './my-posts';
 import {Metadata} from './post-previewer/url-metadata';
@@ -53,12 +54,12 @@ function prepareNotifySound() {
   $au.append(
   $('<source/>')
     .attr({
-      src: `${global.SITE_DATA.siteroot}static/chimes/${soundName}.ogg`,
+      src: `${config.site.siteroot}static/chimes/${soundName}.ogg`,
       type: 'audio/ogg'
     }),
   $('<source/>')
     .attr({
-      src: `${global.SITE_DATA.siteroot}static/chimes/${soundName}.mp3`,
+      src: `${config.site.siteroot}static/chimes/${soundName}.mp3`,
       type:'audio/mpeg'
     })
 );

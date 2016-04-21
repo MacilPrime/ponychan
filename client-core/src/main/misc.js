@@ -5,13 +5,14 @@
 
 import $ from 'jquery';
 import {log_error} from './logger';
+import config from './config';
 
 $(document).ready(function() {
   const $secondLine = $('footer .unimportant').slice(1,2);
   const $targetLink = $('footer .unimportant a').slice(1,2);
 
   const oldLink = $targetLink.attr('href');
-  const newLink = global.SITE_DATA.siteroot+'mod.php';
+  const newLink = config.site.siteroot+'mod.php';
 
   let unprepTimer = null;
   $secondLine.dblclick(function() {
