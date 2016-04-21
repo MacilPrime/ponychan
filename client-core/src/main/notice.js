@@ -22,13 +22,14 @@ export function pop(text, time = 30) {
     .fadeIn('fast')
     .addClass('popnotice')
     .css('top', () =>
-    // calculate navbar height + all existing bubble heights.
-    $('.boardlist.top')
-      .first()
-      .height()
-    + $('.popnotice')
-      .map((i, el) => $(el).outerHeight()).get()
-      .reduce((a, b) => a + b + bubbleSpacing, 0))
+      // calculate navbar height + all existing bubble heights.
+      $('.boardlist.top')
+        .first()
+        .height()
+      + $('.popnotice')
+        .map((i, el) => $(el).outerHeight()).get()
+        .reduce((a, b) => a + b + bubbleSpacing, 0)
+    )
     .appendTo(document.body);
 
   return new RSVP.Promise(resolve => {
@@ -42,15 +43,16 @@ export function pop(text, time = 30) {
     .onValue(() => $pop.fadeOut(seconds(1), resolve));
   }).then(() => {
     $pop.nextAll('.popnotice')
-    .each((i, el) =>
-    // All bubbles stacked under the removed bubble
-    // have to take its place.
-    $(el).css({
-      top: parseInt($(el)
-        .css('top')
-        .match(/^\d+/)
-        .pop()) - $pop.outerHeight() - bubbleSpacing
-    }));
+      .each((i, el) =>
+        // All bubbles stacked under the removed bubble
+        // have to take its place.
+        $(el).css({
+          top: parseInt($(el)
+            .css('top')
+            .match(/^\d+/)
+            .pop()) - $pop.outerHeight() - bubbleSpacing
+        }
+      ));
     $pop.remove();
   });
 }

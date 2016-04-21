@@ -15,8 +15,8 @@ import {log_error} from './logger';
 import {make_thread_url, make_thread50_url} from './lib/url';
 import {jumpToPost} from './lib/post-utils';
 import {get_post_id, get_post_class} from './lib/post-info';
-import './settings-screen.jsx'; // has to come after this
-import {WatcherMenu} from './watcher-components.jsx';
+import './settings-screen.js'; // has to come after this
+import {WatcherMenu} from './watcher-components';
 
 const isModPage = (document.location.pathname == global.SITE_DATA.siteroot+'mod.php');
 

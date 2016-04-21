@@ -82,7 +82,13 @@ const send_maxQueued = 7;
 const malformed_errors = {};
 
 function error_to_object(error) {
-  const newError = {message: error.message, url: error.fileName, lineNumber: error.lineNumber, columnNumber: error.columnNumber, stack: error.stack};
+  const newError = {
+    message: error.message,
+    url: error.fileName,
+    lineNumber: error.lineNumber,
+    columnNumber: error.columnNumber,
+    stack: error.stack
+  };
   if (error.constructor && error.constructor.name)
     newError.type = error.constructor.name;
   // get anything missed. For some reason error.message doesn't show up in this pass.

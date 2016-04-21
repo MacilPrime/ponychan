@@ -109,7 +109,7 @@ function submitAction(url, $form) {
           if ('disabled' in $input.data()) {
             $input.prop('disabled', $input.data('disabled'))
               .removeData('disabled');
-              // Restore the original value and erase the cached data.
+            // Restore the original value and erase the cached data.
           } else {
             $input.prop('disabled', 'false');
             // No data given. Always enable.
@@ -126,9 +126,9 @@ function submitAction(url, $form) {
 
 function openInlineBanForm(url, $post) {
   submitAction(url).then($data => {
-  // Load the ban form. Both the form and the path of the submitted ban
-  // have the same path. They're interpreted differently depending on what's in
-  // their request headers.
+    // Load the ban form. Both the form and the path of the submitted ban
+    // have the same path. They're interpreted differently depending on what's in
+    // their request headers.
     const $banForm = $data.filter('.banform').first();
     const $existingFields = $post.find('.ban-fields');
     if ($banForm.length == 0) {
@@ -136,7 +136,7 @@ function openInlineBanForm(url, $post) {
       return;
     }
     const andDelete = $banForm.find('[name="delete"]').val();
-  // 'andDelete' is a string of value 0 or 1.
+    // 'andDelete' is a string of value 0 or 1.
     if ($post
       .find(".banform [name='delete']")
       .filter((i, input) => input.value == andDelete)

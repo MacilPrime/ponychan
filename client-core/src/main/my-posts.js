@@ -41,7 +41,7 @@ function loadMyPosts() {
     const smyposts = window.sessionStorage && sessionStorage.getItem('myposts');
     if (smyposts) {
       parts.push(JSON.parse(smyposts).map(post => {
-      // little bit of backwards-compatibility
+        // little bit of backwards-compatibility
         if (typeof post === 'string') {
           return {id: post, timestamp: Date.now()-1};
         } else {

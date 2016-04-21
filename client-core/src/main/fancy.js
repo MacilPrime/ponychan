@@ -27,16 +27,16 @@ import settings from './settings';
     Kefir.merge([
       settings.getSettingStream('fancy_mode').filter(Boolean),
       Kefir.fromEvents(document, 'keydown')
-      .filter(event =>
-        event.which == 70 && !event.ctrlKey && !event.altKey &&
-        !event.shiftKey && !event.metaKey
-      )
-      .filter(event => !/TEXTAREA|INPUT/.test(event.target.nodeName))
-      .filter(() => $('.settingsScreen').is(':visible'))
-      .map(event => {
-        event.preventDefault();
-        return event;
-      })
+        .filter(event =>
+          event.which == 70 && !event.ctrlKey && !event.altKey &&
+          !event.shiftKey && !event.metaKey
+        )
+        .filter(event => !/TEXTAREA|INPUT/.test(event.target.nodeName))
+        .filter(() => $('.settingsScreen').is(':visible'))
+        .map(event => {
+          event.preventDefault();
+          return event;
+        })
     ])
   );
 }

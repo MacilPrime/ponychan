@@ -16,13 +16,13 @@ function init() {
     $('.new-editmsg').remove();
 
     Kefir.fromEvents($(document), 'thread_reloaded', (evt, data) => data)
-    .takeUntilBy(update)
-    .onValue(data => {
-      const $data = $('<div />').append(data);
-      const currentPosts = getPostsByIdInContext(document);
-      const newPosts = getPostsByIdInContext($data);
-      processChanges(currentPosts, newPosts);
-    });
+      .takeUntilBy(update)
+      .onValue(data => {
+        const $data = $('<div />').append(data);
+        const currentPosts = getPostsByIdInContext(document);
+        const newPosts = getPostsByIdInContext($data);
+        processChanges(currentPosts, newPosts);
+      });
   });
 }
 
@@ -50,9 +50,10 @@ function processChanges(currentPosts, newPosts) {
       const $intro = $post.find('.intro').first();
       $intro.find('input').prop('disabled', true);
       $intro.find('.citelink').after(
-      ' ', $('<span />')
-        .addClass('removedpost')
-        .text('[Removed]')
+        ' ',
+        $('<span />')
+          .addClass('removedpost')
+          .text('[Removed]')
       );
       $post.children('.controls')
         .addClass('dead-buttons')
@@ -74,8 +75,8 @@ function processChanges(currentPosts, newPosts) {
         // selector from wrongly selecting an inline post.
 
         if ($currentEditTime.length > 0) {
-        // We're presented with an existing edit. Does the
-        // new page present an even newer edit?
+          // We're presented with an existing edit. Does the
+          // new page present an even newer edit?
           const oldTS = Date.parse($currentEditTime.attr('datetime'));
           const newTS = Date.parse($newPostEditTime.attr('datetime'));
           if (newTS > oldTS)
@@ -97,18 +98,18 @@ function presentNewEdit($oldPost, $newPost) {
   $oldBody.find('.new-editmsg').remove();
   if (hasSeen($oldPost)) {
     $('<div />')
-    .addClass('editmsg new-editmsg')
-    .append(
-      'This post has a new edit.',
-      $('<button />')
-        .attr('type', 'button')
-        .text('Load')
-        .addClass('edit-revealer')
-        .click(evt => {
-          evt.preventDefault();
-          reveal();
-        })
-    ).appendTo($oldBody);
+      .addClass('editmsg new-editmsg')
+      .append(
+        'This post has a new edit.',
+        $('<button />')
+          .attr('type', 'button')
+          .text('Load')
+          .addClass('edit-revealer')
+          .click(evt => {
+            evt.preventDefault();
+            reveal();
+          })
+      ).appendTo($oldBody);
   } else {
     reveal();
   }

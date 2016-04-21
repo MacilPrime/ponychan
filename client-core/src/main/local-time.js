@@ -25,7 +25,7 @@ documentReady.takeUntilBy(update).onValue(() => {
     if (time_casual)
       time_format_string = 'D MMM YYYY h:mm:ss A';
     else
-    time_format_string = 'D MMM YYYY HH:mm:ss';
+      time_format_string = 'D MMM YYYY HH:mm:ss';
 
     formatTimeElements(document.body);
   }

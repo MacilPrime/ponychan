@@ -46,7 +46,7 @@ import './desktop-notifier.js';
 import './hide-trip.js';
 import './show-backlinks.js';
 
-import './settings-screen.jsx';
+import './settings-screen.js';
 
 // for debugging and inline scripts
 window.ponychan = {

@@ -22,12 +22,12 @@ $(document).ready(function() {
         $button = $buttonP.find('.hidetogglebutton');
       } else {
         $buttonP = $('<span/>')
-        .addClass('hidetogglebuttonP')
-        .insertBefore($text);
+          .addClass('hidetogglebuttonP')
+          .insertBefore($text);
         $button = $('<button/>')
-        .addClass('hidetogglebutton')
-        .attr('type', 'button')
-        .appendTo($buttonP);
+          .addClass('hidetogglebutton')
+          .attr('type', 'button')
+          .appendTo($buttonP);
       }
 
       $text.css('transition', 'none');

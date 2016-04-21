@@ -23,24 +23,24 @@ export function footer($post) {
       function getFooter() {
         let $f = $post.children('.postfooter');
         return $f.length > 0 ? $f : $('<ul />')
-        .addClass('postfooter')
-        .appendTo($post);
+          .addClass('postfooter')
+          .appendTo($post);
       }
 
       getFooter()
         .filter(':not(.dead-buttons)')
         .append(
-        $('<li />')
-          .addClass('footer-item')
-          .attr('data-footer', name.toLowerCase())
-          .append(
-          // Text can be changed without damaging its functionality.
-          $('<a />')
-            .text(name)
-            .click(callback)
-            .attr('href', 'javascript:;')
-        )
-      );
+          $('<li />')
+            .addClass('footer-item')
+            .attr('data-footer', name.toLowerCase())
+            .append(
+              // Text can be changed without damaging its functionality.
+              $('<a />')
+                .text(name)
+                .click(callback)
+                .attr('href', 'javascript:;')
+            )
+        );
 
     },
     removeItem(name) {
@@ -48,10 +48,10 @@ export function footer($post) {
       if ($footer.hasClass('dead-buttons'))
         return;
       $footer
-      .children(`[data-footer="${name.toLowerCase()}"]`)
-      .remove();
+        .children(`[data-footer="${name.toLowerCase()}"]`)
+        .remove();
 
-    // erase the footer if there are no more items
+      // erase the footer if there are no more items
       if ($footer.children().length == 0) {
         $footer.remove();
       }
@@ -59,8 +59,8 @@ export function footer($post) {
     kill() {
       let $footer = $post.children('.postfooter');
       $footer
-      .addClass('dead-buttons')
-      .text($footer.text());
+        .addClass('dead-buttons')
+        .text($footer.text());
     }
   };
 }

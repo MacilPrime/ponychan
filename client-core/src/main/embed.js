@@ -46,24 +46,24 @@ $(document).ready(() => {
 
         let $embed = null;
         const $embedbtn = $('<a/>')
-        .addClass('embedbtn')
-        .text('Embed')
-        .attr('href', href)
-        .click(event => {
-          event.preventDefault();
-          if ($embed) {
-            $embed.remove();
-            $embed = null;
-          } else {
-            $embed = $('<iframe allowfullscreen></iframe>')
-              .addClass('embed')
-              .addClass('youtube-embed')
-              .attr('width', 420)
-              .attr('height', 315)
-              .attr('src', embedsrc)
-              .appendTo($embedbtnspan);
-          }
-        });
+          .addClass('embedbtn')
+          .text('Embed')
+          .attr('href', href)
+          .click(event => {
+            event.preventDefault();
+            if ($embed) {
+              $embed.remove();
+              $embed = null;
+            } else {
+              $embed = $('<iframe allowfullscreen></iframe>')
+                .addClass('embed')
+                .addClass('youtube-embed')
+                .attr('width', 420)
+                .attr('height', 315)
+                .attr('src', embedsrc)
+                .appendTo($embedbtnspan);
+            }
+          });
         const $embedbtnspan = $('<span/>')
           .addClass('embedbtnspan')
           .text(' [')

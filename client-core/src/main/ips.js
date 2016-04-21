@@ -19,19 +19,20 @@ $(document).ready(function() {
 
   function processIPs(context) {
     if (obscure_ips) {
-      $('.posterip a', context).each(function() {
-        const $this = $(this);
-        if (!$this.attr('data-old-text'))
-          $this.attr('data-old-text', $this.text());
-      }).text('IP')
-      .addClass('ip-hidden')
-      .on('mouseenter.iphider', function() {
-        const $this = $(this);
-        $this.text($this.attr('data-old-text'));
-      })
-      .on('mouseleave.iphider', function() {
-        $(this).text('IP');
-      });
+      $('.posterip a', context)
+        .each(function() {
+          const $this = $(this);
+          if (!$this.attr('data-old-text'))
+            $this.attr('data-old-text', $this.text());
+        }).text('IP')
+        .addClass('ip-hidden')
+        .on('mouseenter.iphider', function() {
+          const $this = $(this);
+          $this.text($this.attr('data-old-text'));
+        })
+        .on('mouseleave.iphider', function() {
+          $(this).text('IP');
+        });
     } else {
       $('a.ip-hidden', context).each(function() {
         const $this = $(this);
