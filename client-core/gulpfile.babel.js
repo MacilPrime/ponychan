@@ -24,19 +24,6 @@ process.env.NODE_ENV = args.minify ?
   'production' :
   args.hot ? 'development-hmr' : 'development';
 
-function copyTask(name, paths) {
-  const setWatch = _.once(function() {
-    if (args.watch) {
-      gulp.watch(paths, [name]);
-    }
-  });
-  gulp.task(name, function() {
-    setWatch();
-    return gulp.src(paths)
-      .pipe(gulp.dest('../core/js/'));
-  });
-}
-
 // TODO make getVersion return a promise instead.
 let getVersion = function() {
   throw new Error('can only be called after getVersion task is run');
@@ -118,7 +105,6 @@ function browserifyTask(name, entry, destname) {
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['client-js-extra', 'main-js']);
+gulp.task('build', ['main-js']);
 
-copyTask('client-js-extra', './src/extra/**.js');
 browserifyTask('main-js', './src/main/', 'main.js');

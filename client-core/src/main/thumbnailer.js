@@ -10,7 +10,6 @@
  */
 
 import RSVP from 'rsvp';
-import config from './config';
 
 function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
   const scalex = max_x / orig_width;
@@ -20,26 +19,6 @@ function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
   const dest_height = Math.min(max_y, Math.round(scale*orig_height));
 
   return {width: dest_width, height: dest_height};
-}
-
-export function thumbnailer(image, max_x, max_y) {
-  return new RSVP.Promise(function(resolve, reject) {
-    const dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
-
-    if (dest.width >= image.width || dest.height >= image.height) {
-      reject(new Error('image already small enough'));
-    } else {
-      const quick_x = max_x * 3;
-      const quick_y = max_y * 3;
-      if (image.width > quick_x || image.height > quick_y) {
-        resolve(thumbnailer_simple(image, quick_x, quick_y).then(function(canvas) {
-          return thumbnailer_fancy(canvas, max_x, max_y);
-        }));
-      } else {
-        resolve(thumbnailer_fancy(image, max_x, max_y));
-      }
-    }
-  });
 }
 
 export function thumbnailer_simple(image, max_x, max_y) {
@@ -55,52 +34,6 @@ export function thumbnailer_simple(image, max_x, max_y) {
       const ctx = canvas.getContext('2d');
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
       resolve(canvas);
-    }
-  });
-}
-
-function thumbnailer_fancy(image, max_x, max_y, lobes=3) {
-  return new RSVP.Promise(function(resolve, reject) {
-    const dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
-
-    if (dest.width >= image.width || dest.height >= image.height) {
-      reject(new Error('image already small enough'));
-    } else {
-      const canvas = document.createElement('canvas');
-      canvas.width = image.width;
-      canvas.height = image.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(image, 0, 0);
-
-      let imageCPA = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const imagedata = Array.prototype.slice.call(imageCPA.data);
-
-      const worker = new Worker(config.site.siteroot+'js/thumbnailer-worker.js?v=10');
-      worker.onmessage = function worker_onmessage(event) {
-        if (event.data.result) {
-          worker.terminate();
-          canvas.width = dest.width;
-          canvas.height = dest.height;
-          imageCPA = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          for (let i = 0; i < event.data.result.length; i++) {
-            imageCPA.data[i] = event.data.result[i];
-          }
-          ctx.putImageData(imageCPA, 0, 0);
-          resolve(canvas);
-        } else if (event.data.message) {
-          console.log('worker message: '+event.data.message); //eslint-disable-line no-console
-        }
-      };
-      worker.onerror = reject;
-
-      worker.postMessage({
-        dest_width: dest.width,
-        dest_height: dest.height,
-        orig_width: image.width,
-        orig_height: image.height,
-        orig_data: imagedata,
-        lobes: lobes
-      });
     }
   });
 }
