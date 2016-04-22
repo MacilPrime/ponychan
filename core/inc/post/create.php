@@ -129,7 +129,7 @@ $post['password'] = hashPostPassword($_POST['password']);
 $post['has_file'] = !isset($post['embed']) && (($post['op'] && !isset($post['no_longer_require_an_image_for_op']) && $config['force_image_op']) || (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != ''));
 
 if ($post['has_file']) {
-    $post['filename'] = urldecode($_FILES['file']['name']);
+    $post['filename'] = $_FILES['file']['name'];
     $post['filehash'] = $config['file_hash']($_FILES['file']['tmp_name']);
     $post['filesize'] = filesize($_FILES['file']['tmp_name']);
 }
