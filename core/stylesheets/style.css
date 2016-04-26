@@ -998,8 +998,8 @@ table.recaptchatable {
 	max-width: 95%;
 	overflow: auto;
 }
-#watcherPage #watcherScreen,
-#watcherPage .watcherMenu {
+#scriptBasePage[data-page-id=watcher] #watcherScreen,
+#scriptBasePage[data-page-id=watcher] .watcherMenu {
 	background: none;
 	box-shadow: none;
 	border: none;

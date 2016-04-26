@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+  <div id="scriptBasePage" data-page-id="{{ pageId }}">
+    <div class="homeblock">
+      (Loading... )
+      <noscript>
+        <p>Error: You must have javascript enabled to access this page!
+      </noscript>
+    </div>
+  </div>
+{% endblock %}

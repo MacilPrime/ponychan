@@ -57,14 +57,25 @@ app.post('*', (req, res, next) => {
   }
 });
 
-app.all('/api/v1/mod/*', (req, res, next) => {
+function modOnly(req, res, next) {
   res.setHeader("Cache-Control", "private");
   if (!req.mod) {
     res.sendStatus(403);
   } else {
     next();
   }
-});
+}
+
+function scriptBasePage(pageId: string, title: string) {
+  return (req, res) => {
+    res.render('scriptBasePage.html', {pageId, title});
+  };
+}
+
+app.all('/mod/*', modOnly);
+app.all('/api/v1/mod/*', modOnly);
+
+app.get('/mod/filters/*', scriptBasePage('modFilters', 'Filters'));
 
 app.post('/api/v1/mod/filters/previews/', bodyParser.json(), filters.previewStart);
 app.get ('/api/v1/mod/filters/previews/:id', filters.previewGet);
@@ -80,10 +91,10 @@ app.delete('/api/v1/tasks/:id', tasks.del);
 app.post('/bans/:id/appeal', bodyParser.urlencoded({extended: false}), bans.appeal);
 app.post('/bans/:id/modappeal', bodyParser.urlencoded({extended: false}), bans.modappeal);
 
-app.get('/watcher/', (req, res) => {
+app.get('/watcher/', (req, res, next) => {
   res.setHeader("Cache-Control", "public, max-age=120");
-  res.render('watcher.html');
-});
+  next();
+}, scriptBasePage('watcher', 'Watcher'));
 app.get('/watcher/threads', watcher);
 app.get('/poll/', poll);
 

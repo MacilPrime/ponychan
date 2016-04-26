@@ -324,10 +324,14 @@ function end_watcher_refresher() {
 function init_watcher_menu() {
   $('.watcherButton, #watcherScreen').remove();
 
-  const watcherPage = document.getElementById('watcherPage');
+  const watcherPage = document.querySelector('#scriptBasePage[data-page-id=watcher]');
 
   if (watcherPage) {
-    $(watcherPage).html( $('<div/>').attr('id', 'watcherScreen') );
+    $(watcherPage).html(
+      $('<div class="homeblock"/>').append(
+        $('<div/>').attr('id', 'watcherScreen')
+      )
+    );
   } else {
     if (!shouldShowWatcher())
       return;
