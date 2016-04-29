@@ -773,6 +773,9 @@ table.recaptchatable {
 	-moz-box-sizing: border-box;
 	position: fixed;
 }
+#qr button, input[type=submit] {
+	font-size: 12px;
+}
 #qr input[type='text'], #qr textarea {
 	min-width: 100%;
 	max-width: 100%;
