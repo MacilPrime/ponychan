@@ -45,6 +45,7 @@ import './search.js';
 import './desktop-notifier.js';
 import './hide-trip.js';
 import './show-backlinks.js';
+import './react';
 
 import './settings-screen.js';
 

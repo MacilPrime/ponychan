@@ -324,7 +324,8 @@ function end_watcher_refresher() {
 function init_watcher_menu() {
   $('.watcherButton, #watcherScreen').remove();
 
-  const watcherPage = document.querySelector('#scriptBasePage[data-page-id=watcher]');
+  // TODO fix
+  const watcherPage = document.querySelector('XXX#scriptBasePage[data-page-id=watcher]');
 
   if (watcherPage) {
     $(watcherPage).html(
@@ -339,7 +340,7 @@ function init_watcher_menu() {
     const $watcherButton = $('<a/>')
       .addClass('watcherButton')
       .text('watcher')
-      .attr('href', config.site.siteroot+'watcher/')
+      .attr('href', config.site.siteroot+'watcher')
       .prependTo( $('.top .settingsSection') );
 
     $('<div/>')

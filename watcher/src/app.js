@@ -91,7 +91,7 @@ app.delete('/api/v1/tasks/:id', tasks.del);
 app.post('/bans/:id/appeal', bodyParser.urlencoded({extended: false}), bans.appeal);
 app.post('/bans/:id/modappeal', bodyParser.urlencoded({extended: false}), bans.modappeal);
 
-app.get('/watcher/', (req, res, next) => {
+app.get('/watcher', (req, res, next) => {
   res.setHeader("Cache-Control", "public, max-age=120");
   next();
 }, scriptBasePage('watcher', 'Watcher'));
