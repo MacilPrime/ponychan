@@ -13,30 +13,43 @@ import routes from './routes';
 import createStore from './store/createStore';
 import {documentReady} from '../lib/events';
 
+const DevTools = process.env.NODE_ENV === 'production' ? null : createDevTools(
+  <DockMonitor defaultIsVisible={false} toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">
+    <LogMonitor theme="tomorrow" preserveScrollTop={false} />
+  </DockMonitor>
+);
+
+const store = createStore(
+  undefined, browserHistory, DevTools
+);
+
+//TODO
+//watcherMenu(store);
+
 documentReady.onValue(() => {
   const element = document.getElementById('scriptBasePage');
-  if (!element) return;
+  if (element) {
+    const history = syncHistoryWithStore(browserHistory, store);
 
-  const DevTools = process.env.NODE_ENV === 'production' ? null : createDevTools(
-    <DockMonitor defaultIsVisible={false} toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">
-      <LogMonitor theme="tomorrow" preserveScrollTop={false} />
-    </DockMonitor>
-  );
-
-  const store = createStore(
-    undefined, browserHistory, DevTools
-  );
-  const history = syncHistoryWithStore(browserHistory, store);
-
-  ReactDOM.render(
-    <Provider store={store}>
-      <div>
-        <Router history={history}>
-          {routes}
-        </Router>
-        {DevTools && <DevTools />}
-      </div>
-    </Provider>,
-    element
-  );
+    ReactDOM.render(
+      <Provider store={store}>
+        <div>
+          <Router history={history}>
+            {routes}
+          </Router>
+          {DevTools && <DevTools />}
+        </div>
+      </Provider>,
+      element
+    );
+  } else if (DevTools) {
+    const mount = document.createElement('div');
+    document.body.appendChild(mount);
+    ReactDOM.render(
+      <Provider store={store}>
+        <DevTools />
+      </Provider>,
+      mount
+    );
+  }
 });

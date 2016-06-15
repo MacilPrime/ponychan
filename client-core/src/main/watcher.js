@@ -17,7 +17,7 @@ import {make_thread_url, make_thread50_url} from './lib/url';
 import {jumpToPost} from './lib/post-utils';
 import {get_post_id, get_post_class} from './lib/post-info';
 import './settings-screen.js'; // has to come after this
-import {WatcherMenu} from './watcher-components';
+import WatcherMenu from './react/watcher/Menu';
 
 const isModPage = (document.location.pathname == config.site.siteroot+'mod.php');
 
@@ -43,13 +43,13 @@ function save_watched_threads() {
   localStorage.setItem('watched_threads', JSON.stringify(watched_threads));
 }
 
-function add_watch($post) {
+function add_watch(store, $post) {
   const postid = get_post_id($post);
-  let updated = RSVP.Promise.resolve();
 
-  load_watched_threads();
   if (!watched_threads.hasOwnProperty(postid)) {
-    if (Object.keys(watched_threads).length >= max_watched_threads) {
+
+    //TODO move
+    if (Object.keys(store.getState().watchedThreads).length >= max_watched_threads) {
       alert('Maximum number of threads watched already!');
       return;
     }
@@ -75,14 +75,10 @@ function add_watch($post) {
     if ($('.watcherButton').length == 0) {
       init_watcher_menu();
     } else {
-      updated = populate_watcher_screen();
+      populate_watcher_screen();
       run_watcher_refresher();
     }
   }
-
-  updated.then(() => {
-    alert('Thread watched');
-  });
 }
 
 function remove_watch(postid) {
@@ -268,11 +264,11 @@ function populate_watcher_screen() {
   } else {
     pr = Promise.resolve();
   }
-  watcher_alerts(alerts);
+  renderWatcherAlerts(alerts);
   return pr;
 }
 
-function watcher_alerts(count) {
+function renderWatcherAlerts(count) {
   let $watcherAlerts = $('#watcherAlerts');
   if (count == 0) {
     $watcherAlerts.remove();
@@ -286,8 +282,7 @@ function watcher_alerts(count) {
   }
 }
 
-let watcher_refresher_running = false;
-let watcher_refresher_timer = null;
+//TODO
 function run_watcher_refresher() {
   end_watcher_refresher();
 
@@ -308,17 +303,6 @@ function run_watcher_refresher() {
     watcher_refresher_timer = setTimeout(refresh_watched_threads, watcher_poll_time * multiplier, runner);
   }
   refresh_watched_threads(runner);
-}
-
-function end_watcher_refresher() {
-  if (watcher_refresher_running) {
-    if (watcher_refresher_timer)
-      clearTimeout(watcher_refresher_timer);
-    watcher_refresher_timer = null;
-    if (watcher_query)
-      watcher_query.abort();
-    watcher_refresher_running = false;
-  }
 }
 
 function init_watcher_menu() {

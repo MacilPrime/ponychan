@@ -26,6 +26,10 @@ server {
 		return 403;
 	}
 
+	location ~ ^/js/maps/.*-MODIFIED/.*\.map$ {
+		expires 1s;
+	}
+
 	location ~ ^/templates/themes/.*/thumb\.png$ {
 	}
 

@@ -21,7 +21,6 @@ import './post-previewer/post-hover.js';
 import './post-previewer/post-inline.js';
 import './my-posts.js';
 import './ajax-edit.js';
-import './watcher.js';
 import './notifier.js';
 import './show-filenames.js';
 import './legacy/inline-expanding.js';
