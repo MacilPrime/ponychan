@@ -1005,6 +1005,7 @@ function ago($timestamp) {
 
 define('FULL_BAN', 0);
 define('IMAGE_BAN', 1);
+define('THREAD_START_BAN', 2);
 
 define('BAN_STATUS_ACTIVE', 0);
 define('BAN_STATUS_EXPIRED', 1);
@@ -1043,6 +1044,15 @@ function displayBan($ban) {
 	}
 
 	die($banhtml);
+}
+
+function ban_type_name($type) {
+	switch($type) {
+		case FULL_BAN: return 'Full ban';
+		case IMAGE_BAN: return 'Image ban';
+		case THREAD_START_BAN: return 'Thread starting';
+		default: return "Unknown type $type";
+	}
 }
 
 function checkBan($board = 0, $types = null) {

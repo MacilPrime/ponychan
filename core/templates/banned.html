@@ -6,10 +6,10 @@
 	{% else %}
 		<h2>{% trans %}You are banned! ;_;{% endtrans %}</h2>
 	{% endif %}
-	{% if ban.ban_type == constant('FULL_BAN') %}
-		<img class="banscreenimg" src="{{ config.root }}static/ban.png" style="margin:4px;" />
-	{% elseif ban.ban_type == constant('IMAGE_BAN') %}
+	{% if ban.ban_type == constant('IMAGE_BAN') %}
 		<img class="banscreenimg" src="{{ config.root }}static/imageban.png" style="margin:4px;" />
+	{% else %}
+		<img class="banscreenimg" src="{{ config.root }}static/ban.png" style="margin:4px;" />
 	{% endif %}
 	<p>
 		{% if ban.expires and time() >= ban.expires %}
@@ -19,6 +19,8 @@
 		{% endif %}
 		{% if ban.ban_type == constant('IMAGE_BAN') %}
 			 {% trans %}posting images on{% endtrans %}
+	  {% elseif ban.ban_type == constant('THREAD_START_BAN') %}
+			 {% trans %}creating threads on{% endtrans %}
 		{% endif %}
 			{% if ban.board %}
 				 <strong>{{ config.board_abbreviation|sprintf(ban.board) }}</strong>
@@ -36,10 +38,16 @@
 			{{ ban.reason|raw }}
 		</p>
 	{% endif %}
-	{% if ban.ban_type == constant('IMAGE_BAN') %}
-		<p>
-			{% trans %}You can still post text-only messages.{% endtrans %}
-		</p>
+	{% if not (ban.expires and time() >= ban.expires) %}
+		{% if ban.ban_type == constant('IMAGE_BAN') %}
+			<p>
+				{% trans %}You can still post text-only messages.{% endtrans %}
+			</p>
+		{% elseif ban.ban_type == constant('THREAD_START_BAN') %}
+			<p>
+				{% trans %}You can still reply to threads.{% endtrans %}
+			</p>
+		{% endif %}
 	{% endif %}
 	{% if ban.signed_name or ban.signed_trip %}
 	<p>

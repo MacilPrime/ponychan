@@ -40,6 +40,8 @@ if (!openBoard($post['board']))
 $ban_types = array(FULL_BAN);
 if (isset($_FILES['file']) && $_FILES['file']['tmp_name'] != '')
     $ban_types[] = IMAGE_BAN;
+if ($post['op'])
+    $ban_types[] = THREAD_START_BAN;
 checkBan($board['uri'], $ban_types);
 
 // Check for CAPTCHA right after opening the board so the "return" link is in there

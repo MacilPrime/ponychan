@@ -42,12 +42,10 @@
 							{{ config.board_abbreviation|sprintf(ban.board) }}
 						{% else %}
 							<em>{% trans 'all boards' %}</em>
-						{% endif %}					
+						{% endif %}
 					</td>
 					<td style="white-space: nowrap">
-						{% if ban.ban_type == constant('FULL_BAN') %}{% trans 'Full ban' %}
-						{% elseif ban.ban_type == constant('IMAGE_BAN') %}{% trans 'Image ban' %}
-						{% endif %}
+						{{ ban.ban_type|ban_type_name }}
 					</td>
 					<td style="white-space: nowrap">
 						<span title="{{ ban.set|date(config.post_date) }}">
@@ -86,7 +84,7 @@
 								{% if mod|hasPermission('view_banquestionmark') %}
 									<em>?</em>
 								{% else %}
-							
+
 								{% endif %}
 							{% endif %}
 						{% elseif ban.mod == -1 %}
@@ -104,8 +102,7 @@
 {% if count > ban_history|count %}
 	<p class="unimportant" style="text-align:center;word-wrap:break-word">
 		{% for i in range(0, (count - 1) / config.mod.banhistory_page) %}
-			<a href="?/banhistory/{{ mask|mask_url }}/{{ i + 1 }}">[{{ i + 1 }}]</a> 
+			<a href="?/banhistory/{{ mask|mask_url }}/{{ i + 1 }}">[{{ i + 1 }}]</a>
 		{% endfor %}
 	</p>
 {% endif %}
-

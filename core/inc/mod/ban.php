@@ -66,7 +66,11 @@ function ban($mask, $reason, $length, $board, $ban_type, $sign) {
 	}
 
 	$ban_type = (int)$ban_type;
-	if ($ban_type !== FULL_BAN && $ban_type !== IMAGE_BAN) {
+	if (
+		$ban_type !== FULL_BAN &&
+		$ban_type !== IMAGE_BAN &&
+		$ban_type !== THREAD_START_BAN
+	) {
 		error(sprintf($config['error']['invalidfield'], 'ban_type'));
 	}
 
@@ -98,9 +102,15 @@ function ban($mask, $reason, $length, $board, $ban_type, $sign) {
 	$query->execute() or error(db_error($query));
 
 	$mask_url = str_replace('/', '^', $mask);
+
+	$typeStr = '';
+	if ($ban_type !== FULL_BAN) {
+		$typeStr = ' (type: ' . ban_type_name($ban_type) . ')';
+	}
+
 	modLog('Created a new ' .
 		($length > 0 ? preg_replace('/^(\d+) (\w+?)s?$/', '$1-$2', until($length)) : 'permanent') .
-		($ban_type == IMAGE_BAN ? ' image' : '') .
+		$typeStr .
 		' ban (<small>#' . $pdo->lastInsertId() . "</small>) for <a href=\"?/IP/$mask_url\">$mask</a> with " .
 		($reason ? 'reason: ' . utf8tohtml($reason) . '' : 'no reason'));
 }
