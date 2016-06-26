@@ -45,7 +45,7 @@ function log_filter_hit(array $post, $filter_id, $blocked) {
 		$query->bindValue(':filehash', isset($post['filehash']) ? $post['filehash'] : null);
 		$query->bindValue(':userhash', $post['userhash']);
 		$query->bindValue(':successful_post_id', isset($post['id']) ? $post['id'] : null);
-		$query->bindValue(':thread', $post['thread']);
+		$query->bindValue(':thread', isset($post['thread']) ? $post['thread'] : null);
 		$query->bindValue(':board', $board['uri']);
 		$query->bindValue(':ip', $post['ip']);
 		$query->bindValue(':ip_type', ipType($post['ip']));
