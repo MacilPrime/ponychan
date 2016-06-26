@@ -30,7 +30,8 @@ class TwigExt_Tinyboard extends Twig_Extension
 			new Twig_SimpleFilter('addslashes', 'addslashes'),
 			new Twig_SimpleFilter('ipToUserRange', 'ipToUserRange'),
 			new Twig_SimpleFilter('mask', 'render_mask'),
-			new Twig_SimpleFilter('mask_url', 'mask_url')
+			new Twig_SimpleFilter('mask_url', 'mask_url'),
+			new Twig_SimpleFilter('ban_type_name', 'ban_type_name')
 		);
 	}
 

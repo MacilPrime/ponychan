@@ -72,16 +72,16 @@
 			<td>
 				<ul style="list-style:none;padding:2px 5px">
 					<li>
-						<input type="radio" name="board" value="*" id="ban-allboards" checked>&nbsp;
-						<label style="display:inline" for="ban-allboards">
+						<label>
+							<input type="radio" name="board" value="*" checked>&nbsp;
 							<em>{% trans 'all boards' %}</em>
 						</label>
 					</li>
 
 					{% for board in boards %}
 						<li>
-							<input type="radio" name="board" value="{{ board.uri }}" id="ban-board-{{ board.uri }}">&nbsp;
-							<label style="display:inline" for="ban-board-{{ board.uri }}">
+							<label>
+								<input type="radio" name="board" value="{{ board.uri }}">&nbsp;
 								{{ config.board_abbreviation|sprintf(board.uri) }} - {{ board.title }}
 							</label>
 						</li>
@@ -94,15 +94,21 @@
 			<td>
 				<ul style="padding:0 5px;list-style:none">
 					<li>
-						<input type="radio" id="bantype-fullban" name="ban_type" value="0" checked>
-						<label style="display:inline" for="bantype-fullban">
+						<label>
+							<input type="radio" name="ban_type" value="0" checked>&nbsp;
 							{% trans 'Full ban' %}
 						</label>
 					</li>
 					<li>
-						<input type="radio" id="bantype-imageban" name="ban_type" value="1">
-						<label style="display:inline" for="bantype-imageban">
+						<label>
+							<input type="radio" name="ban_type" value="1">&nbsp;
 							{% trans 'Image ban' %}
+						</label>
+					</li>
+					<li>
+						<label>
+							<input type="radio" name="ban_type" value="2">&nbsp;
+							{% trans 'Thread starting ban' %}
 						</label>
 					</li>
 				</ul>

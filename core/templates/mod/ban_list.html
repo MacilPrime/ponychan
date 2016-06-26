@@ -38,7 +38,7 @@
 							-
 						{% endif %}
 					</td>
-					<td  style="white-space: nowrap">
+					<td style="white-space: nowrap">
 						{% if ban.board %}
 							{{ config.board_abbreviation|sprintf(ban.board) }}
 						{% else %}
@@ -46,9 +46,7 @@
 						{% endif %}
 					</td>
 					<td style="white-space: nowrap">
-						{% if ban.ban_type == constant('FULL_BAN') %}{% trans 'Full ban' %}
-						{% elseif ban.ban_type == constant('IMAGE_BAN') %}{% trans 'Image ban' %}
-						{% endif %}
+						{{ ban.ban_type|ban_type_name }}
 					</td>
 					<td style="white-space: nowrap">
 						<span title="{{ ban.set|date(config.post_date) }}">

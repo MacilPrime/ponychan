@@ -462,7 +462,7 @@ function cleanAndVerifyConditions(conditions: any): Array<Condition> {
 
 function cleanAndVerifyAction(action: any): Action {
   if (!action || typeof action !== 'object') {
-    throw new Error("action must be array");
+    throw new Error("action must be object");
   }
   switch (action.type) {
     case 'reject':

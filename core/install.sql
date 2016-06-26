@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `lifted` int(11) DEFAULT NULL,
   `reason` text,
   `board` varchar(120) DEFAULT NULL,
-  `ban_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:full, 1:image only',
+  `ban_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0:full, 1:image only, 2:thread starting',
   `seen` tinyint(1) NOT NULL,
   `signed_name` VARCHAR(75) NULL,
   `signed_trip` VARCHAR(25) NULL,
