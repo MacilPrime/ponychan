@@ -56,24 +56,28 @@ function createID() {
 }
 
 let userid;
-if (typeof localStorage != 'undefined' && !!localStorage) {
+if (global.localStorage) {
   userid = localStorage.getItem('userid');
 }
 if (!userid || userid.length != 32) {
   userid = createID();
-  try {
-    localStorage.setItem('userid', userid);
-  } catch (e) {
-    console.error(e); //eslint-disable-line no-console
+  if (global.localStorage) {
+    try {
+      localStorage.setItem('userid', userid);
+    } catch (e) {
+      console.error(e); //eslint-disable-line no-console
+    }
   }
 }
 
 const expires = new Date();
 expires.setTime((new Date()).getTime()+60480000000);
-document.cookie = 'userid='+escape(userid)+'; expires='+expires.toGMTString()+'; path='+global.SITE_DATA.siteroot;
+if (global.document && global.SITE_DATA) {
+  document.cookie = 'userid='+escape(userid)+'; expires='+expires.toGMTString()+'; path='+global.SITE_DATA.siteroot;
+}
 
 const maxRetryTime = 3*60*1000;
-const logger_url = global.SITE_DATA.siteroot + 'logger.php';
+const logger_url = (global.SITE_DATA ? global.SITE_DATA.siteroot : '/') + 'logger.php';
 
 let noSendBefore = 0;
 let noSendDelay = 10;
@@ -170,40 +174,44 @@ function send_error(error, retryTime) {
 
 export function log_error(error) {
   console.error(error);
-  send_error(error);
+  if (global.document) {
+    send_error(error);
+  }
 }
 
 RSVP.on('error', e => {
   log_error(e);
 });
 
-const old_onerror = window.onerror;
+if (global.window) {
+  const old_onerror = window.onerror;
+  let error_handler_nest_count = 0;
 
-let error_handler_nest_count = 0;
-window.onerror = function(errorMsg, url, lineNumber, columnNumber, error) {
-  if (error_handler_nest_count <= 1) {
-    error_handler_nest_count++;
+  window.onerror = function(errorMsg, url, lineNumber, columnNumber, error) {
+    if (error_handler_nest_count <= 1) {
+      error_handler_nest_count++;
 
-    if (error) {
-      error.caughtBy = 'window.onerror with error object';
-      send_error(error);
-    } else {
-      const errorObj = {
-        message: errorMsg,
-        url: url,
-        lineNumber: lineNumber,
-        columnNumber: columnNumber,
-        caughtBy: 'window.onerror'
-      };
-      send_error(errorObj);
+      if (error) {
+        error.caughtBy = 'window.onerror with error object';
+        send_error(error);
+      } else {
+        const errorObj = {
+          message: errorMsg,
+          url: url,
+          lineNumber: lineNumber,
+          columnNumber: columnNumber,
+          caughtBy: 'window.onerror'
+        };
+        send_error(errorObj);
+      }
+
+      error_handler_nest_count--;
     }
-
-    error_handler_nest_count--;
-  }
-  if (old_onerror)
-    return old_onerror.apply(this, arguments);
-  return false;
-};
+    if (old_onerror)
+      return old_onerror.apply(this, arguments);
+    return false;
+  };
+}
 
 function send_usage(retryTime) {
 
@@ -231,7 +239,7 @@ function send_usage(retryTime) {
 
   // usage object construction end
 
-  const last_usage_hash_key = 'last_usage_data:'+global.SITE_DATA.siteroot;
+  const last_usage_hash_key = 'last_usage_data:'+(global.SITE_DATA ? global.SITE_DATA.siteroot : '');
 
   const usageHash = hashCode(userid + hashCode(usage));
   if (usageHash == localStorage.getItem(last_usage_hash_key))
@@ -316,6 +324,8 @@ export function misc_log_rapid(data) {
   }
 }
 
-$(document).ready(function() {
-  setTimeout(send_usage, 300);
-});
+if (global.document) {
+  $(document).ready(function() {
+    setTimeout(send_usage, 300);
+  });
+}

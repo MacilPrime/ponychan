@@ -2773,6 +2773,11 @@
         }
       }
     },
+    "mock-webstorage": {
+      "version": "1.0.2",
+      "from": "mock-webstorage@latest",
+      "resolved": "https://registry.npmjs.org/mock-webstorage/-/mock-webstorage-1.0.2.tgz"
+    },
     "module-deps": {
       "version": "4.0.7",
       "from": "module-deps@>=4.0.2 <5.0.0",

@@ -6,17 +6,20 @@ import {log_error} from '../../logger';
 import delay from '../../lib/delay';
 import * as actions from './actions';
 
-export function* loadWatchedThreads() {
+export function* loadWatchedThreads(storage) {
   let watchedThreads = {};
   try {
-    watchedThreads = JSON.parse(localStorage.getItem('watched_threads'));
+    const loaded = JSON.parse(storage.getItem('watched_threads'));
+    if (loaded) {
+      watchedThreads = loaded;
+    }
   } catch (err) {
     console.error("Couldn't read localStorage", err); //eslint-disable-line
   }
   yield put(actions.setWatchedThreads(watchedThreads));
 }
 
-function requestWatcher(watchedThreads) {
+export function requestWatcher(watchedThreads) {
   return Promise.resolve($.ajax({
     url: config.site.siteroot+'watcher/threads',
     data: {ids: Object.keys(watchedThreads).sort()},
@@ -55,8 +58,8 @@ export function* refresher() {
   }
 }
 
-export default function* root() {
-  yield* loadWatchedThreads();
+export default function* root(storage=localStorage) {
+  yield* loadWatchedThreads(storage);
 
   yield [
     fork(refresher)
