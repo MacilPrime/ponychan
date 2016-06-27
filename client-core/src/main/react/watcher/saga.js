@@ -75,9 +75,7 @@ export default function* root(storage=localStorage) {
   let lastTask = yield fork(refresher);
   while (true) {
     yield take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD, actions.UNWATCH_THREAD]);
-    if (lastTask) {
-      yield cancel(lastTask);
-    }
+    yield cancel(lastTask);
     lastTask = yield fork(refresher);
   }
 }
