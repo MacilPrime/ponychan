@@ -1,6 +1,7 @@
 import 'console-polyfill';
 import 'babel-polyfill';
 import 'webstorage-polyfill';
+import 'whatwg-fetch';
 
 import './legacy/visibility.min.js';
 

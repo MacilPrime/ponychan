@@ -1,5 +1,5 @@
 import config from '../../config';
-import $ from 'jquery';
+import {stringify} from 'querystring';
 import {call, put, fork, select} from 'redux-saga/effects';
 
 import {log_error} from '../../logger';
@@ -20,11 +20,17 @@ export function* loadWatchedThreads(storage) {
 }
 
 export function requestWatcher(watchedThreads) {
-  return Promise.resolve($.ajax({
-    url: config.site.siteroot+'watcher/threads',
-    data: {ids: Object.keys(watchedThreads).sort()},
-    dataType: 'json'
-  })).then(data => {
+  return fetch(
+    `${config.site.siteroot}watcher/threads?${stringify({ids: Object.keys(watchedThreads).sort()})}`
+  ).then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  }).then(data => {
     if (data.error) {
       throw new Error(data.error);
     }
