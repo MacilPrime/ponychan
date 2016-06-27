@@ -13,6 +13,8 @@ import routes from './routes';
 import createStore from './store/createStore';
 import {documentReady} from '../lib/events';
 
+import setupWatcherButton from './watcher/setupWatcherButton';
+
 const DevTools = process.env.NODE_ENV === 'production' ? null : createDevTools(
   <DockMonitor defaultIsVisible={false} toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">
     <LogMonitor theme="tomorrow" preserveScrollTop={false} />
@@ -22,9 +24,6 @@ const DevTools = process.env.NODE_ENV === 'production' ? null : createDevTools(
 const store = createStore(
   undefined, browserHistory, DevTools
 );
-
-//TODO
-//watcherMenu(store);
 
 documentReady.onValue(() => {
   const element = document.getElementById('scriptBasePage');
@@ -52,4 +51,6 @@ documentReady.onValue(() => {
       mount
     );
   }
+
+  setupWatcherButton(store);
 });

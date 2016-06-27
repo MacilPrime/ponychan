@@ -1,16 +1,19 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
+import {unwatchThread} from './actions';
+
+import watchedThreadsStateToList from './watchedThreadsStateToList';
 import Thread from './Thread';
 
 export default class Menu extends React.Component {
-  static propTypes = {
-    mod: React.PropTypes.object,
-    threads: React.PropTypes.array.isRequired,
-    onRemove: React.PropTypes.func.isRequired
-  };
   render() {
-    const {mod, threads, onRemove} = this.props;
-    const threadComponents = threads.map(thread => <Thread key={thread.id} thread={thread} onRemove={onRemove} />);
+    const {watcher, unwatchThread} = this.props;
+    const threads = watchedThreadsStateToList(watcher.watchedThreads);
+    const mod = watcher && watcher.lastResponse ? watcher.lastResponse.mod : null;
+
+    const threadComponents = threads.map(thread => <Thread key={thread.id} thread={thread} onRemove={unwatchThread} />);
 
     const modSection = mod ? <section className="wmod">
       <h2>Moderator</h2>
@@ -31,3 +34,13 @@ export default class Menu extends React.Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {watcher: state.watcher};
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({unwatchThread}, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
