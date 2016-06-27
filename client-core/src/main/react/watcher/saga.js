@@ -67,7 +67,5 @@ export function* refresher() {
 export default function* root(storage=localStorage) {
   yield* loadWatchedThreads(storage);
 
-  yield [
-    fork(refresher)
-  ];
+  yield fork(refresher);
 }

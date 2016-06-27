@@ -6,6 +6,8 @@
  *
  */
 
+/* eslint-disable */
+
 import $ from 'jquery';
 import RSVP from 'rsvp';
 import React from 'react';
