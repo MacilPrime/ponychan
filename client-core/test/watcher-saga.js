@@ -1,5 +1,6 @@
 import assert from 'assert';
-import {call, put, fork} from 'redux-saga/effects';
+import {call, put, take, cancel, fork} from 'redux-saga/effects';
+import {createMockTask} from 'redux-saga/utils';
 import MockWebStorage from 'mock-webstorage';
 import delay from '../src/main/lib/delay';
 
@@ -43,20 +44,59 @@ describe('watcher saga', function() {
       const {value} = s.next();
       assert.deepEqual(value, fork(refresher));
     }
+    const task1 = createMockTask();
+    {
+      const {value} = s.next(task1);
+      assert.deepEqual(value, take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD, actions.UNWATCH_THREAD]));
+    }
+    {
+      const {value} = s.next();
+      assert.deepEqual(value, cancel(task1));
+    }
+    {
+      const {value} = s.next();
+      assert.deepEqual(value, fork(refresher));
+    }
+    const task2 = createMockTask();
+    {
+      const {value} = s.next(task2);
+      assert.deepEqual(value, take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD, actions.UNWATCH_THREAD]));
+    }
+    {
+      const {value} = s.next();
+      assert.deepEqual(value, cancel(task2));
+    }
+    {
+      const {value} = s.next();
+      assert.deepEqual(value, fork(refresher));
+    }
+  });
+
+  it('refresher does nothing if given no threads', function() {
+    const s = refresher();
+
+    {
+      const {value} = s.next();
+      assert(value.SELECT);
+    }
+    {
+      const {done} = s.next({});
+      assert(done);
+    }
   });
 
   it('refresher refreshes thread continually', function() {
     const watched_threads = {'b:651': 'FOOBAR'};
     const s = refresher();
+
+    {
+      const {value} = s.next();
+      assert(value.SELECT);
+    }
+    let {value} = s.next(watched_threads);
+
     for (let i=0; i<3; i++) {
-      {
-        const {value} = s.next();
-        assert(value.SELECT);
-      }
-      {
-        const {value} = s.next(watched_threads);
-        assert.deepEqual(value, call(requestWatcher, watched_threads));
-      }
+      assert.deepEqual(value, call(requestWatcher, watched_threads));
       {
         const {value} = s.next({'foo': 'bar'});
         assert.deepEqual(value, put(actions.requestComplete({'foo': 'bar'})));
@@ -65,6 +105,7 @@ describe('watcher saga', function() {
         const {value} = s.next();
         assert.deepEqual(value, call(delay, 30*1000));
       }
+      value = s.next().value;
     }
   });
 });

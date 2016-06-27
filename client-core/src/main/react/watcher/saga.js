@@ -1,6 +1,6 @@
 import config from '../../config';
 import {stringify} from 'querystring';
-import {call, put, fork, select} from 'redux-saga/effects';
+import {call, put, select, take, cancel, fork} from 'redux-saga/effects';
 
 import {log_error} from '../../logger';
 import delay from '../../lib/delay';
@@ -39,9 +39,14 @@ export function requestWatcher(watchedThreads) {
 }
 
 export function* refresher() {
+  const watchedThreads = yield select(s => s.watcher.watchedThreads);
+  const count = Object.keys(watchedThreads).length;
+  if (!count) {
+    return;
+  }
+
   while (true) {
     try {
-      const watchedThreads = yield select(s => s.watcher.watchedThreads);
       const data = yield call(requestWatcher, watchedThreads);
 
       if (data.scripts) {
@@ -67,5 +72,12 @@ export function* refresher() {
 export default function* root(storage=localStorage) {
   yield* loadWatchedThreads(storage);
 
-  yield fork(refresher);
+  let lastTask = yield fork(refresher);
+  while (true) {
+    yield take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD, actions.UNWATCH_THREAD]);
+    if (lastTask) {
+      yield cancel(lastTask);
+    }
+    lastTask = yield fork(refresher);
+  }
 }
