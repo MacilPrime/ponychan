@@ -40,13 +40,13 @@ export function requestWatcher(watchedThreads) {
 
 export function* refresher() {
   while (true) {
-    try {
-      const watchedThreads = yield select(s => s.watcher.watchedThreads);
-      const count = Object.keys(watchedThreads).length;
-      if (!count) {
-        return;
-      }
+    const watchedThreads = yield select(s => s.watcher.watchedThreads);
+    const count = Object.keys(watchedThreads).length;
+    if (!count) {
+      return;
+    }
 
+    try {
       const data = yield call(requestWatcher, watchedThreads);
 
       if (data.scripts) {
