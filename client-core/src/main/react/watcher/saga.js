@@ -39,14 +39,14 @@ export function requestWatcher(watchedThreads) {
 }
 
 export function* refresher() {
-  const watchedThreads = yield select(s => s.watcher.watchedThreads);
-  const count = Object.keys(watchedThreads).length;
-  if (!count) {
-    return;
-  }
-
   while (true) {
     try {
+      const watchedThreads = yield select(s => s.watcher.watchedThreads);
+      const count = Object.keys(watchedThreads).length;
+      if (!count) {
+        return;
+      }
+
       const data = yield call(requestWatcher, watchedThreads);
 
       if (data.scripts) {
@@ -74,7 +74,7 @@ export default function* root(storage=localStorage) {
 
   let lastTask = yield fork(refresher);
   while (true) {
-    yield take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD, actions.UNWATCH_THREAD]);
+    yield take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD]);
     yield cancel(lastTask);
     lastTask = yield fork(refresher);
   }

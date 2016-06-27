@@ -47,7 +47,7 @@ describe('watcher saga', function() {
     const task1 = createMockTask();
     {
       const {value} = s.next(task1);
-      assert.deepEqual(value, take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD, actions.UNWATCH_THREAD]));
+      assert.deepEqual(value, take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD]));
     }
     {
       const {value} = s.next();
@@ -60,7 +60,7 @@ describe('watcher saga', function() {
     const task2 = createMockTask();
     {
       const {value} = s.next(task2);
-      assert.deepEqual(value, take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD, actions.UNWATCH_THREAD]));
+      assert.deepEqual(value, take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD]));
     }
     {
       const {value} = s.next();
@@ -89,14 +89,15 @@ describe('watcher saga', function() {
     const watched_threads = {'b:651': 'FOOBAR'};
     const s = refresher();
 
-    {
-      const {value} = s.next();
-      assert(value.SELECT);
-    }
-    let {value} = s.next(watched_threads);
-
     for (let i=0; i<3; i++) {
-      assert.deepEqual(value, call(requestWatcher, watched_threads));
+      {
+        const {value} = s.next();
+        assert(value.SELECT);
+      }
+      {
+        const {value} = s.next(watched_threads);
+        assert.deepEqual(value, call(requestWatcher, watched_threads));
+      }
       {
         const {value} = s.next({'foo': 'bar'});
         assert.deepEqual(value, put(actions.requestComplete({'foo': 'bar'})));
@@ -105,7 +106,6 @@ describe('watcher saga', function() {
         const {value} = s.next();
         assert.deepEqual(value, call(delay, 30*1000));
       }
-      value = s.next().value;
     }
   });
 });
