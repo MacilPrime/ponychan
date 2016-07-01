@@ -1,7 +1,15 @@
+export const SET_WATCHER_MOD_STATUS = 'SET_WATCHER_MOD_STATUS';
 export const SET_WATCHED_THREADS = 'SET_WATCHED_THREADS';
 export const WATCH_THREAD = 'WATCH_THREAD';
 export const UNWATCH_THREAD = 'UNWATCH_THREAD';
 export const WATCHER_REQUEST_COMPLETE = 'WATCHER_REQUEST_COMPLETE';
+
+export function setWatcherModStatus(isMod) {
+  return {
+    type: SET_WATCHER_MOD_STATUS,
+    payload: isMod
+  };
+}
 
 export function setWatchedThreads(payload) {
   return {

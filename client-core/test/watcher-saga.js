@@ -80,6 +80,10 @@ describe('watcher saga', function() {
       assert(value.SELECT);
     }
     {
+      const {value} = s.next(false);
+      assert(value.SELECT);
+    }
+    {
       const {done} = s.next({});
       assert(done);
     }
@@ -92,6 +96,10 @@ describe('watcher saga', function() {
     for (let i=0; i<3; i++) {
       {
         const {value} = s.next();
+        assert(value.SELECT);
+      }
+      {
+        const {value} = s.next(false);
         assert(value.SELECT);
       }
       {

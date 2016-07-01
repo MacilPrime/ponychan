@@ -6,6 +6,14 @@ import {log_error} from '../../logger';
 import delay from '../../lib/delay';
 import * as actions from './actions';
 
+export function* setModStatus() {
+  const isModPage = global.document &&
+    document.location.pathname == config.site.siteroot+'mod.php';
+  if (isModPage) {
+    yield put(actions.setWatcherModStatus(isModPage));
+  }
+}
+
 export function* loadWatchedThreads(storage) {
   let watchedThreads = {};
   try {
@@ -21,7 +29,8 @@ export function* loadWatchedThreads(storage) {
 
 export function requestWatcher(watchedThreads) {
   return fetch(
-    `${config.site.siteroot}watcher/threads?${stringify({ids: Object.keys(watchedThreads).sort()})}`
+    `${config.site.siteroot}watcher/threads?${stringify({ids: Object.keys(watchedThreads).sort()})}`,
+    {credentials: 'same-origin'}
   ).then(response => {
     if (response.ok) {
       return response.json();
@@ -40,9 +49,9 @@ export function requestWatcher(watchedThreads) {
 
 export function* refresher() {
   while (true) {
+    const isMod = yield select(s => s.watcher.isMod);
     const watchedThreads = yield select(s => s.watcher.watchedThreads);
-    const count = Object.keys(watchedThreads).length;
-    if (!count) {
+    if (!isMod && Object.keys(watchedThreads).length == 0) {
       return;
     }
 
@@ -70,6 +79,7 @@ export function* refresher() {
 }
 
 export default function* root(storage=localStorage) {
+  yield* setModStatus();
   yield* loadWatchedThreads(storage);
 
   let lastTask = yield fork(refresher);

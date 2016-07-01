@@ -2,6 +2,7 @@ import _ from 'lodash';
 import * as actions from './actions';
 
 const initialState = {
+  isMod: false,
   watchedThreads: {},
   lastResponse: null,
   alerts: 0
@@ -35,10 +36,17 @@ function countAlerts(watchedThreads, lastResponse) {
 
 export default function reducer(state=initialState, action) {
   switch (action.type) {
+  case actions.SET_WATCHER_MOD_STATUS: {
+    return {
+      ...state,
+      isMod: action.payload
+    };
+  }
   case actions.SET_WATCHED_THREADS: {
     const watchedThreads = action.payload;
     const alerts = countAlerts(watchedThreads, null);
     return {
+      ...state,
       watchedThreads,
       alerts,
       lastResponse: state.lastResponse
@@ -60,6 +68,7 @@ export default function reducer(state=initialState, action) {
     });
     const alerts = countAlerts(watchedThreads, response);
     return {
+      ...state,
       watchedThreads,
       alerts,
       lastResponse: response
@@ -80,6 +89,7 @@ export default function reducer(state=initialState, action) {
     delete watchedThreads[id];
     const alerts = countAlerts(watchedThreads, lastResponse);
     return {
+      ...state,
       watchedThreads,
       alerts,
       lastResponse
