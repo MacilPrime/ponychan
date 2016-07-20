@@ -38,7 +38,7 @@ export function* saveWatchedThreads(storage) {
 
 export function requestWatcher(watchedThreads) {
   return fetch(
-    `${config.site.siteroot}watcher/threads?${stringify({ids: Object.keys(watchedThreads).sort()})}`,
+    `${config.site.siteroot}watcher/threads?${stringify({'ids[]': Object.keys(watchedThreads).sort()})}`,
     {credentials: 'same-origin'}
   ).then(response => {
     if (response.ok) {
