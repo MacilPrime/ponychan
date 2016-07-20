@@ -60,6 +60,27 @@ describe('watcher saga', function() {
     const task2 = createMockTask();
     {
       const {value} = s.next(task2);
+      assert(value.SELECT);
+    }
+    const new_watched_threads = {
+      ...watched_threads,
+      'b:777': {
+        'subject':'aaa',
+        'opname':'foo',
+        'optrip':'!Ep8pui8Vw2',
+        'seen_reply_count':0,
+        'known_reply_count':0,
+        'last_seen_time':1461210236,
+        'last_known_time':1461210236,
+        'post':'bar'
+      }
+    };
+    {
+      const {value} = s.next(new_watched_threads);
+      assert.deepEqual(
+        JSON.parse(localStorage.getItem('watched_threads')),
+        new_watched_threads
+      );
       assert.deepEqual(value, take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD]));
     }
     {

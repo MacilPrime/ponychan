@@ -27,6 +27,15 @@ export function* loadWatchedThreads(storage) {
   yield put(actions.setWatchedThreads(watchedThreads));
 }
 
+export function* saveWatchedThreads(storage) {
+  const watchedThreads = yield select(s => s.watcher.watchedThreads);
+  try {
+    storage.setItem('watched_threads', JSON.stringify(watchedThreads));
+  } catch (err) {
+    console.error("Couldn't write to localStorage", err); //eslint-disable-line
+  }
+}
+
 export function requestWatcher(watchedThreads) {
   return fetch(
     `${config.site.siteroot}watcher/threads?${stringify({ids: Object.keys(watchedThreads).sort()})}`,
@@ -87,5 +96,6 @@ export default function* root(storage=localStorage) {
     yield take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD]);
     yield cancel(lastTask);
     lastTask = yield fork(refresher);
+    yield* saveWatchedThreads(storage);
   }
 }
