@@ -3,18 +3,20 @@ import * as actions from './actions';
 
 const initialState = {
   isMod: false,
+  currentThreadId: null,
   watchedThreads: {},
   lastResponse: null,
   alerts: 0
 };
 
-function countAlerts(watchedThreads, lastResponse) {
+function countAlerts(watchedThreads, lastResponse, currentThreadId) {
   let alerts = 0;
 
   Object.keys(watchedThreads).forEach(id => {
     const thread = watchedThreads[id];
     if (
       thread.known_reply_count != null &&
+      id !== currentThreadId &&
       thread.last_known_time > thread.last_seen_time
     ) {
       alerts++;
@@ -36,6 +38,12 @@ function countAlerts(watchedThreads, lastResponse) {
 
 export default function reducer(state=initialState, action) {
   switch (action.type) {
+  case actions.SET_CURRENT_THREAD_ID: {
+    return {
+      ...state,
+      currentThreadId: action.payload.threadId
+    };
+  }
   case actions.SET_WATCHER_MOD_STATUS: {
     return {
       ...state,
@@ -44,7 +52,7 @@ export default function reducer(state=initialState, action) {
   }
   case actions.SET_WATCHED_THREADS: {
     const watchedThreads = action.payload;
-    const alerts = countAlerts(watchedThreads, null);
+    const alerts = countAlerts(watchedThreads, null, state.currentThreadId);
     return {
       ...state,
       watchedThreads,
@@ -84,7 +92,7 @@ export default function reducer(state=initialState, action) {
       }
       return data;
     });
-    const alerts = countAlerts(watchedThreads, response);
+    const alerts = countAlerts(watchedThreads, response, state.currentThreadId);
     return {
       ...state,
       watchedThreads,
@@ -101,11 +109,11 @@ export default function reducer(state=initialState, action) {
     };
   }
   case actions.UNWATCH_THREAD: {
-    const {lastResponse} = state;
+    const {lastResponse, currentThreadId} = state;
     const {id} = action.payload;
     const watchedThreads = {...state.watchedThreads};
     delete watchedThreads[id];
-    const alerts = countAlerts(watchedThreads, lastResponse);
+    const alerts = countAlerts(watchedThreads, lastResponse, currentThreadId);
     return {
       ...state,
       watchedThreads,

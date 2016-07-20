@@ -14,11 +14,13 @@ const max_watched_threads = 70;
 export default function setupWatcherButton(store) {
   if (!window.localStorage) return;
 
-  // TODO
-  // if ($('div.banner').length && $('.thread .post.op').length) {
-  //   page_thread_id = get_post_id($('.thread .post.op').first());
-  // }
-  //
+  const $threadOp = $('div.banner').length ?
+    $('.thread .post.op').first() : null;
+  if ($threadOp && $threadOp.length) {
+    const currentThreadId = get_post_id($threadOp);
+    store.dispatch(actions.setCurrentThreadId(currentThreadId));
+  }
+
   // if ($('div.banner').length && window.location.hash == '#unread') {
   //   jump_to_first_unread_post();
   // }
