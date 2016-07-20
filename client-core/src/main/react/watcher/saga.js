@@ -16,16 +16,19 @@ export function* setModStatus() {
 }
 
 export function* loadWatchedThreads(storage) {
-  let watchedThreads = {};
+  const currentWatchedThreads = yield select(s => s.watcher.watchedThreads);
+  let loadedWatchedThreads = currentWatchedThreads;
   try {
     const loaded = JSON.parse(storage.getItem('watched_threads'));
     if (loaded) {
-      watchedThreads = loaded;
+      loadedWatchedThreads = loaded;
     }
   } catch (err) {
     console.error("Couldn't read localStorage", err); //eslint-disable-line
   }
-  yield put(actions.setWatchedThreads(watchedThreads));
+  if (!isEqual(currentWatchedThreads, loadedWatchedThreads)) {
+    yield put(actions.setWatchedThreads(loadedWatchedThreads));
+  }
 }
 
 export function* saveWatchedThreads(storage) {

@@ -12,8 +12,12 @@ describe('watcher saga', function() {
     const localStorage = new MockWebStorage();
 
     const s = saga(localStorage);
-    const {value} = s.next();
-    assert.deepEqual(value, put(actions.setWatchedThreads({})));
+    let value = s.next().value;
+    assert(value.SELECT);
+    value = s.next({}).value;
+    assert.deepEqual(value, fork(saver, localStorage));
+    value = s.next().value;
+    assert.deepEqual(value, fork(refresher, localStorage));
   });
 
   it('works with watched_threads set', function() {
@@ -35,6 +39,8 @@ describe('watcher saga', function() {
 
     const s = saga(localStorage);
     let value = s.next().value;
+    assert(value.SELECT);
+    value = s.next({}).value;
     assert.deepEqual(value, put(actions.setWatchedThreads(watched_threads)));
     value = s.next().value;
     assert.deepEqual(value, fork(saver, localStorage));
