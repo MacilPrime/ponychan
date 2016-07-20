@@ -982,7 +982,7 @@ table.recaptchatable {
 .boardlist.top .watcherButton.open {
 	background: #404040;
 }
-#watcherAlerts {
+.watcherAlerts {
 	color: red;
 	margin-right: 0.3em;
 }

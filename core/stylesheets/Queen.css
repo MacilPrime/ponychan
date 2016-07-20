@@ -283,7 +283,7 @@ fieldset {
 	box-shadow: 1px 1px 2px #4AB84A ;
 }
 
-#watcherAlerts, span.wnewposts{
+.watcherAlerts, span.wnewposts{
 	color: #C56E8B;
 	text-shadow: none;
 }

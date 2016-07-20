@@ -5,7 +5,11 @@ import config from '../../config';
 
 class ButtonLabel extends React.Component {
   render() {
-    const {onClick, opened} = this.props;
+    const {onClick, opened, watcher} = this.props;
+
+    const watcherAlerts = watcher.alerts ?
+      <span className="watcherAlerts">({watcher.alerts})</span>
+      : null;
 
     return (
       <a
@@ -13,7 +17,7 @@ class ButtonLabel extends React.Component {
         href={config.site.siteroot+'watcher'}
         onClick={onClick}
         >
-        watcher
+        {watcherAlerts}watcher
       </a>
     );
   }
