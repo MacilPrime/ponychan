@@ -5,6 +5,11 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import Menu from './Menu';
 import ButtonLabel from './ButtonLabel';
+import {footer} from '../../footer-utils';
+import {get_post_id} from '../../lib/post-info';
+import * as actions from './actions';
+
+const max_watched_threads = 70;
 
 export default function setupWatcherButton(store) {
   if (!window.localStorage) return;
@@ -22,23 +27,93 @@ export default function setupWatcherButton(store) {
   asap(() => { // Currently needs to run after settings button is present.
     init_watcher_menu(store);
   });
-  // add_watch_buttons( $('.post.op') );
+  add_watch_buttons(store, $('.post.op'));
 
   // let watcher_ack_pending = false;
-  // $(document).on('new_post', function(e, post) {
-  //   const $post = $(post);
-  //   if ($post.is('.op')) {
-  //     add_watch_buttons($post);
-  //   }
-  //
-  //   if (!watcher_ack_pending) {
-  //     watcher_ack_pending = true;
-  //     setTimeout(function() {
-  //       watcher_ack_pending = false;
-  //       watcher_acknowledge_page();
-  //     }, 50);
-  //   }
-  // });
+  $(document).on('new_post', (e, post) => {
+    const $post = $(post);
+    if ($post.is('.op')) {
+      add_watch_buttons(store, $post);
+    }
+
+    // if (!watcher_ack_pending) {
+    //   watcher_ack_pending = true;
+    //   setTimeout(function() {
+    //     watcher_ack_pending = false;
+    //     watcher_acknowledge_page();
+    //   }, 50);
+    // }
+  });
+}
+
+function add_watch(store, $post) {
+  const watchedThreads = store.getState().watcher.watchedThreads;
+
+  if (Object.keys(watchedThreads).length >= max_watched_threads) {
+    alert('Maximum number of threads watched already!');
+    return;
+  }
+
+  const postid = get_post_id($post);
+  const $intro = $post.find('.intro:first');
+  const thread_data = {
+    subject: $intro.find('.subject').text(),
+    opname: $intro.find('.name').text(),
+    optrip: $intro.find('.trip').text(),
+    seen_reply_count: null,
+    known_reply_count: null,
+    last_seen_time: null,
+    last_known_time: null,
+    post: $post.find('.body:first:not(.post-inline-container)').text()
+  };
+  if (thread_data.post.length > 80) {
+    thread_data.post = thread_data.post.slice(0,80)+'…';
+  }
+
+  store.dispatch(actions.watchThread(postid, thread_data));
+
+  setTimeout(() => {
+    alert('Thread watched.');
+  }, 30);
+}
+
+function remove_watch(store, postid) {
+  store.dispatch(actions.unwatchThread(postid));
+  setTimeout(() => {
+    alert('Thread unwatched.');
+  }, 30);
+}
+
+function add_watch_buttons(store, $posts) {
+  $posts.each(function() {
+    const $post = $(this);
+    const postid = get_post_id($post);
+
+    let watchedThreads = store.getState().watcher.watchedThreads;
+
+    function updateButton() {
+      if (Object.prototype.hasOwnProperty.call(watchedThreads, postid)) {
+        footer($post).removeItem('Watch');
+        footer($post).addItem('Unwatch', () => {
+          remove_watch(store, postid);
+        });
+      } else {
+        footer($post).removeItem('Unwatch');
+        footer($post).addItem('Watch', () => {
+          add_watch(store, $post);
+        });
+      }
+    }
+
+    updateButton();
+    store.subscribe(() => {
+      const newWatchedThreads = store.getState().watcher.watchedThreads;
+      if (watchedThreads !== newWatchedThreads) {
+        watchedThreads = newWatchedThreads;
+        updateButton();
+      }
+    });
+  });
 }
 
 function init_watcher_menu(store) {
