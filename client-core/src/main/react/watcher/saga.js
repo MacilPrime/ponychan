@@ -87,15 +87,22 @@ export function* refresher() {
   }
 }
 
+export function* saver(storage) {
+  while (true) {
+    yield take([actions.WATCH_THREAD, actions.UNWATCH_THREAD]);
+    yield* saveWatchedThreads(storage);
+  }
+}
+
 export default function* root(storage=localStorage) {
   yield* setModStatus();
   yield* loadWatchedThreads(storage);
+  yield fork(saver, storage);
 
   let lastTask = yield fork(refresher);
   while (true) {
     yield take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD]);
     yield cancel(lastTask);
     lastTask = yield fork(refresher);
-    yield* saveWatchedThreads(storage);
   }
 }
