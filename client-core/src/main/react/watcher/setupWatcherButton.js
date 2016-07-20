@@ -50,6 +50,7 @@ export default function setupWatcherButton(store) {
 }
 
 function add_watch(store, $post) {
+  store.dispatch(actions.reloadWatchedThreads());
   const watchedThreads = store.getState().watcher.watchedThreads;
 
   if (Object.keys(watchedThreads).length >= max_watched_threads) {
@@ -81,6 +82,7 @@ function add_watch(store, $post) {
 }
 
 function remove_watch(store, postid) {
+  store.dispatch(actions.reloadWatchedThreads());
   store.dispatch(actions.unwatchThread(postid));
   setTimeout(() => {
     alert('Thread unwatched.');

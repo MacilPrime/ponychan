@@ -81,6 +81,7 @@ export function* refresher(storage) {
         }
       }
 
+      yield* loadWatchedThreads(storage);
       yield put(actions.requestComplete(data));
     } catch (err) {
       console.error("Failed to refresh watched threads", err); //eslint-disable-line
@@ -95,6 +96,13 @@ export function* refresher(storage) {
   }
 }
 
+export function* reloader(storage) {
+  while (true) {
+    yield take(actions.RELOAD_WATCHED_THREADS);
+    yield* loadWatchedThreads(storage);
+  }
+}
+
 export function* saver(storage) {
   while (true) {
     yield take([actions.WATCH_THREAD, actions.UNWATCH_THREAD]);
@@ -105,6 +113,7 @@ export function* saver(storage) {
 export default function* root(storage=localStorage) {
   yield* setModStatus();
   yield* loadWatchedThreads(storage);
+  yield fork(reloader, storage);
   yield fork(saver, storage);
 
   let lastTask = yield fork(refresher, storage);

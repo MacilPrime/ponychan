@@ -4,7 +4,7 @@ import {createMockTask} from 'redux-saga/utils';
 import MockWebStorage from 'mock-webstorage';
 import delay from '../src/main/lib/delay';
 
-import saga, {saver, refresher, requestWatcher} from '../src/main/react/watcher/saga';
+import saga, {reloader, saver, refresher, requestWatcher} from '../src/main/react/watcher/saga';
 import * as actions from '../src/main/react/watcher/actions';
 
 describe('watcher saga', function() {
@@ -15,6 +15,8 @@ describe('watcher saga', function() {
     let value = s.next().value;
     assert(value.SELECT);
     value = s.next({}).value;
+    assert.deepEqual(value, fork(reloader, localStorage));
+    value = s.next().value;
     assert.deepEqual(value, fork(saver, localStorage));
     value = s.next().value;
     assert.deepEqual(value, fork(refresher, localStorage));
@@ -42,6 +44,8 @@ describe('watcher saga', function() {
     assert(value.SELECT);
     value = s.next({}).value;
     assert.deepEqual(value, put(actions.setWatchedThreads(watched_threads)));
+    value = s.next().value;
+    assert.deepEqual(value, fork(reloader, localStorage));
     value = s.next().value;
     assert.deepEqual(value, fork(saver, localStorage));
     value = s.next().value;
@@ -87,6 +91,8 @@ describe('watcher saga', function() {
       value = s.next(watched_threads).value;
       assert.deepEqual(value, call(requestWatcher, watched_threads));
       value = s.next({'foo': 'bar'}).value;
+      assert(value.SELECT);
+      value = s.next(watched_threads).value;
       assert.deepEqual(value, put(actions.requestComplete({'foo': 'bar'})));
       if (i == 1) {
         watched_threads = {...watched_threads, 'c:1': 'blah'};
