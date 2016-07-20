@@ -32,9 +32,9 @@ export function unwatchThread(id) {
   };
 }
 
-export function requestComplete(payload) {
+export function requestComplete(response, timestamp=Date.now()) {
   return {
     type: WATCHER_REQUEST_COMPLETE,
-    payload
+    payload: {response, timestamp}
   };
 }

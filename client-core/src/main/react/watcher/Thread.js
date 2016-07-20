@@ -12,7 +12,13 @@ export default class Thread extends React.Component {
   render() {
     const {thread} = this.props;
     let postCounter;
-    if (thread.known_reply_count == null) {
+    if (thread.seen_reply_count == null && thread.known_reply_count == null) {
+      postCounter = (
+        <span className="wpostcounter">
+          (Not loaded yet)
+        </span>
+      );
+    } else if (thread.known_reply_count == null) {
       postCounter = (
         <span className="wpostcounter">
           (<span className="wcounterror">Thread not found</span>)

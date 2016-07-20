@@ -53,18 +53,36 @@ export default function reducer(state=initialState, action) {
     };
   }
   case actions.WATCHER_REQUEST_COMPLETE: {
-    const response = action.payload;
+    const {response, timestamp} = action.payload;
     const watchedThreads = _.mapValues(state.watchedThreads, (data, id) => {
       const responseThread = response.threads[id];
       if (responseThread) {
-        return {
-          ...data,
-          known_reply_count: responseThread.reply_count,
-          last_known_time: responseThread.last_reply_time
-        };
-      } else {
-        return data;
+        // If we've never viewed the thread since watching it, assume we've
+        // already seen all of its posts.
+        // Only decrease the seen_reply_count value if the latest post seen
+        // locally was more than two minutes ago (The server may cache old
+        // values for a short amount of time), or if the last reported reply
+        // time is more recent than the last seen reply.
+        if (
+          data.seen_reply_count == null ||
+          (data.seen_reply_count > responseThread.reply_count &&
+           responseThread.reply_count != null &&
+           (data.last_seen_time + 2*60 < timestamp/1000 ||
+            data.last_seen_time < responseThread.last_reply_time))
+        ) {
+          data = {...data, seen_reply_count: responseThread.reply_count};
+        }
+        if (data.last_seen_time == null) {
+          data = {...data, last_seen_time: responseThread.last_reply_time};
+        }
+        if (data.known_reply_count != responseThread.reply_count) {
+          data = {...data, known_reply_count: responseThread.reply_count};
+        }
+        if (data.last_known_time != responseThread.last_reply_time) {
+          data = {...data, last_known_time: responseThread.last_reply_time};
+        }
       }
+      return data;
     });
     const alerts = countAlerts(watchedThreads, response);
     return {
