@@ -7,6 +7,7 @@ import Menu from './Menu';
 import ButtonLabel from './ButtonLabel';
 import {footer} from '../../footer-utils';
 import {get_post_id} from '../../lib/post-info';
+import {jumpToPost} from '../../lib/post-utils';
 import * as actions from './actions';
 
 const max_watched_threads = 70;
@@ -19,12 +20,11 @@ export default function setupWatcherButton(store) {
   if ($threadOp && $threadOp.length) {
     const currentThreadId = get_post_id($threadOp);
     store.dispatch(actions.setCurrentThreadId(currentThreadId));
+    if (window.location.hash == '#unread') {
+      jump_to_first_unread_post(store);
+    }
   }
 
-  // if ($('div.banner').length && window.location.hash == '#unread') {
-  //   jump_to_first_unread_post();
-  // }
-  //
   // watcher_acknowledge_page();
   asap(() => {
     // Currently needs to run after settings button is present.
@@ -50,6 +50,28 @@ export default function setupWatcherButton(store) {
     });
   });
 }
+
+function jump_to_first_unread_post(store) {
+  const {watchedThreads, currentThreadId} = store.getState().watcher;
+  if (!currentThreadId)
+    return;
+  if (!Object.prototype.hasOwnProperty.call(watchedThreads, currentThreadId))
+    return;
+  const {last_seen_time} = watchedThreads[currentThreadId];
+  if (last_seen_time == null)
+    return;
+  $('.thread .reply').each(function() {
+    const $post = $(this);
+    const post_time = (
+      new Date($post.find('.intro:first time:first').attr('datetime'))
+    ).getTime()/1000;
+    if (post_time > last_seen_time) {
+      jumpToPost(get_post_id($post));
+      return false;
+    }
+  });
+}
+
 
 function add_watch(store, $post) {
   store.dispatch(actions.reloadWatchedThreads());
