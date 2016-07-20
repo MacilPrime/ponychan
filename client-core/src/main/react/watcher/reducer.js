@@ -65,7 +65,7 @@ export default function reducer(state=initialState, action) {
     const watchedThread = state.watchedThreads[id];
     if (!watchedThread) return state;
     const watchedThreads = {
-      ...watchedThreads,
+      ...state.watchedThreads,
       [id]: {
         ...watchedThread,
         seen_reply_count,
