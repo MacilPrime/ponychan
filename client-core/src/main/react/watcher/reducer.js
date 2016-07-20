@@ -60,6 +60,23 @@ export default function reducer(state=initialState, action) {
       lastResponse: state.lastResponse
     };
   }
+  case actions.UPDATE_WATCHED_THREAD: {
+    const {id, seen_reply_count, last_seen_time} = action.payload;
+    const watchedThread = state.watchedThreads[id];
+    if (!watchedThread) return state;
+    const watchedThreads = {
+      ...watchedThreads,
+      [id]: {
+        ...watchedThread,
+        seen_reply_count,
+        last_seen_time
+      }
+    };
+    return {
+      ...state,
+      watchedThreads
+    };
+  }
   case actions.WATCHER_REQUEST_COMPLETE: {
     const {response, timestamp} = action.payload;
     const watchedThreads = _.mapValues(state.watchedThreads, (data, id) => {

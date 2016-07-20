@@ -120,7 +120,11 @@ describe('watcher saga', function() {
 
     let value = s.next().value;
     for (let i=0; i<3; i++) {
-      assert.deepEqual(value, take([actions.WATCH_THREAD, actions.UNWATCH_THREAD]));
+      assert.deepEqual(value, take([
+        actions.WATCH_THREAD,
+        actions.UNWATCH_THREAD,
+        actions.UPDATE_WATCHED_THREAD
+      ]));
       value = s.next(false).value;
       assert(value.SELECT);
       watched_threads = {...watched_threads, [`b:${i}`]: `blah ${i}`};

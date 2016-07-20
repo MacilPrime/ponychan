@@ -2,6 +2,7 @@ import $ from 'jquery';
 import asap from 'asap';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Kefir from 'kefir';
 import {Provider} from 'react-redux';
 import Menu from './Menu';
 import ButtonLabel from './ButtonLabel';
@@ -25,7 +26,13 @@ export default function setupWatcherButton(store) {
     }
   }
 
-  // watcher_acknowledge_page();
+  Kefir.fromEvents($(document), 'new_post')
+    .toProperty(() => null)
+    .throttle(200)
+    .onValue(() => {
+      watcher_acknowledge_page(store);
+    });
+
   asap(() => {
     // Currently needs to run after settings button is present.
     init_watcher_menu(store);
@@ -33,22 +40,44 @@ export default function setupWatcherButton(store) {
     // Needs to run after footer-utils has removed any leftover footers.
     add_watch_buttons(store, $('.post.op'));
 
-    // let watcher_ack_pending = false;
     $(document).on('new_post', (e, post) => {
       const $post = $(post);
       if ($post.is('.op')) {
         add_watch_buttons(store, $post);
       }
-
-      // if (!watcher_ack_pending) {
-      //   watcher_ack_pending = true;
-      //   setTimeout(function() {
-      //     watcher_ack_pending = false;
-      //     watcher_acknowledge_page();
-      //   }, 50);
-      // }
     });
   });
+}
+
+function watcher_acknowledge_page(store) {
+  const {watchedThreads, currentThreadId} = store.getState().watcher;
+  if (currentThreadId === null) return;
+  const watchedThread = watchedThreads[currentThreadId];
+  if (!watchedThread) return;
+
+  let reply_count = $('.thread .reply:not(.post-inline)').length;
+  $('.thread .omitted').each(function() {
+    const text = $(this).text();
+    const match = /^(\d+) posts/.exec(text);
+    if (match)
+      reply_count += parseInt(match[1]);
+  });
+
+  let last_seen_time = 0;
+  const $lastPost = $('.thread .post:not(.post-inline)').last();
+  if ($lastPost.length) {
+    last_seen_time = (
+      new Date($lastPost.find('.intro:first time').attr('datetime'))
+    ).getTime()/1000;
+  }
+
+  if (
+    watchedThread.seen_reply_count != reply_count ||
+    watchedThread.last_seen_time != last_seen_time
+  ) {
+    store.dispatch(actions.reloadWatchedThreads());
+    store.dispatch(actions.updateWatchedThread(currentThreadId, reply_count, last_seen_time));
+  }
 }
 
 function jump_to_first_unread_post(store) {

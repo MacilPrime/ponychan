@@ -105,7 +105,11 @@ export function* reloader(storage) {
 
 export function* saver(storage) {
   while (true) {
-    yield take([actions.WATCH_THREAD, actions.UNWATCH_THREAD]);
+    yield take([
+      actions.WATCH_THREAD,
+      actions.UNWATCH_THREAD,
+      actions.UPDATE_WATCHED_THREAD
+    ]);
     yield* saveWatchedThreads(storage);
   }
 }
