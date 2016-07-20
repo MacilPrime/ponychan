@@ -24,25 +24,28 @@ export default function setupWatcherButton(store) {
   // }
   //
   // watcher_acknowledge_page();
-  asap(() => { // Currently needs to run after settings button is present.
+  asap(() => {
+    // Currently needs to run after settings button is present.
     init_watcher_menu(store);
-  });
-  add_watch_buttons(store, $('.post.op'));
 
-  // let watcher_ack_pending = false;
-  $(document).on('new_post', (e, post) => {
-    const $post = $(post);
-    if ($post.is('.op')) {
-      add_watch_buttons(store, $post);
-    }
+    // Needs to run after footer-utils has removed any leftover footers.
+    add_watch_buttons(store, $('.post.op'));
 
-    // if (!watcher_ack_pending) {
-    //   watcher_ack_pending = true;
-    //   setTimeout(function() {
-    //     watcher_ack_pending = false;
-    //     watcher_acknowledge_page();
-    //   }, 50);
-    // }
+    // let watcher_ack_pending = false;
+    $(document).on('new_post', (e, post) => {
+      const $post = $(post);
+      if ($post.is('.op')) {
+        add_watch_buttons(store, $post);
+      }
+
+      // if (!watcher_ack_pending) {
+      //   watcher_ack_pending = true;
+      //   setTimeout(function() {
+      //     watcher_ack_pending = false;
+      //     watcher_acknowledge_page();
+      //   }, 50);
+      // }
+    });
   });
 }
 
