@@ -7,6 +7,10 @@ class ButtonLabel extends React.Component {
   render() {
     const {onClick, opened, watcher} = this.props;
 
+    if (!watcher.isMod && Object.keys(watcher.watchedThreads).length == 0) {
+      return null;
+    }
+
     const watcherAlerts = watcher.alerts ?
       <span className="watcherAlerts">({watcher.alerts})</span>
       : null;
