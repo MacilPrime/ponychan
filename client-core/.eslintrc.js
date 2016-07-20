@@ -30,6 +30,7 @@ module.exports = {
     "no-whitespace-before-property": ["error"],
     "space-before-blocks": ["error", "always"],
     "keyword-spacing": ["error"],
-    "react/prop-types": ["off"]
+    "react/prop-types": ["off"],
+    "no-constant-condition": ["off"]
   }
 };

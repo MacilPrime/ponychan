@@ -56,7 +56,7 @@ export function footer($post) {
         $footer.remove();
       }
     },
-    kill() {
+    kill() { // used when a post is deleted and the footer is treated as read-only
       let $footer = $post.children('.postfooter');
       $footer
         .addClass('dead-buttons')

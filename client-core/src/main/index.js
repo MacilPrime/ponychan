@@ -1,6 +1,7 @@
 import 'console-polyfill';
 import 'babel-polyfill';
 import 'webstorage-polyfill';
+import 'whatwg-fetch';
 
 import './legacy/visibility.min.js';
 
@@ -21,7 +22,6 @@ import './post-previewer/post-hover.js';
 import './post-previewer/post-inline.js';
 import './my-posts.js';
 import './ajax-edit.js';
-import './watcher.js';
 import './notifier.js';
 import './show-filenames.js';
 import './legacy/inline-expanding.js';
@@ -45,6 +45,7 @@ import './search.js';
 import './desktop-notifier.js';
 import './hide-trip.js';
 import './show-backlinks.js';
+import './react';
 
 import './settings-screen.js';
 

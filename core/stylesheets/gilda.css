@@ -369,6 +369,6 @@ div.pages {
 .recent_post {
 	flex: 1 0 auto;
 }
-#watcherAlerts {
+.watcherAlerts {
 	animation: notification 3.5s;
 }
