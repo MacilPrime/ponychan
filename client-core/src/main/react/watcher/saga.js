@@ -1,4 +1,5 @@
 import config from '../../config';
+import isEqual from 'lodash/lang/isEqual';
 import {stringify} from 'querystring';
 import {call, put, select, take, cancel, fork} from 'redux-saga/effects';
 
@@ -56,7 +57,7 @@ export function requestWatcher(watchedThreads) {
   });
 }
 
-export function* refresher() {
+export function* refresher(storage) {
   while (true) {
     const isMod = yield select(s => s.watcher.isMod);
     const watchedThreads = yield select(s => s.watcher.watchedThreads);
@@ -81,6 +82,10 @@ export function* refresher() {
     } catch (err) {
       console.error("Failed to refresh watched threads", err); //eslint-disable-line
     }
+    const newWatchedThreads = yield select(s => s.watcher.watchedThreads);
+    if (!isEqual(watchedThreads, newWatchedThreads)) {
+      yield* saveWatchedThreads(storage);
+    }
 
     //TODO scale this up when errors or inactivity happens
     yield call(delay, 30*1000);
@@ -99,10 +104,10 @@ export default function* root(storage=localStorage) {
   yield* loadWatchedThreads(storage);
   yield fork(saver, storage);
 
-  let lastTask = yield fork(refresher);
+  let lastTask = yield fork(refresher, storage);
   while (true) {
     yield take([actions.SET_WATCHED_THREADS, actions.WATCH_THREAD]);
     yield cancel(lastTask);
-    lastTask = yield fork(refresher);
+    lastTask = yield fork(refresher, storage);
   }
 }
