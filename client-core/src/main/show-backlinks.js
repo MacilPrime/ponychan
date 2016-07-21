@@ -14,23 +14,7 @@ const update = udKefir(module, null).changes().take(1).toProperty();
 const postsToBacklinks = new Map();
 
 let renderIsScheduled = true;
-const postsThatBacklinksRendered = new Set();
-
-function addBacklinkToPost(backlinkid, postid) {
-  let backlinks = postsToBacklinks.get(postid);
-  if (!backlinks) {
-    backlinks = new Set();
-    postsToBacklinks.set(postid, backlinks);
-  }
-  if (!backlinks.has(backlinkid)) {
-    backlinks.add(backlinkid);
-    postsThatBacklinksRendered.add(postid);
-    if (!renderIsScheduled) {
-      renderIsScheduled = true;
-      asap(renderUpdatedBacklinks);
-    }
-  }
-}
+const postsThatNeedBacklinksRendered = new Set();
 
 function start() {
   // Possible room for improvement: incrementally process the page.
@@ -54,18 +38,34 @@ function parsePost(post) {
   });
 }
 
+function addBacklinkToPost(backlinkid, postid) {
+  let backlinks = postsToBacklinks.get(postid);
+  if (!backlinks) {
+    backlinks = new Set();
+    postsToBacklinks.set(postid, backlinks);
+  }
+  if (!backlinks.has(backlinkid)) {
+    backlinks.add(backlinkid);
+    postsThatNeedBacklinksRendered.add(postid);
+    if (!renderIsScheduled) {
+      renderIsScheduled = true;
+      asap(renderUpdatedBacklinks);
+    }
+  }
+}
+
 function renderUpdatedBacklinks() {
-  postsThatBacklinksRendered.forEach(postid => {
+  postsThatNeedBacklinksRendered.forEach(postid => {
     const [board, postnum] = postid.split(':');
     $(`.post_${board}-${postnum}`).each(function() {
-      placeBacklinksOnPost(this);
+      renderBacklinksOnPost(this);
     });
   });
-  postsThatBacklinksRendered.clear();
+  postsThatNeedBacklinksRendered.clear();
   renderIsScheduled = false;
 }
 
-function placeBacklinksOnPost(post) {
+function renderBacklinksOnPost(post) {
   const $post = $(post);
   const postid = get_post_id($post);
   const backlinks = postsToBacklinks.get(postid);
@@ -109,4 +109,4 @@ newViewablePosts
 
 newPosts
   .takeUntilBy(update)
-  .onValue(placeBacklinksOnPost);
+  .onValue(renderBacklinksOnPost);
