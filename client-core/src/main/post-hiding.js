@@ -247,7 +247,7 @@ documentReady.onValue(() => {
 
   function process_posts(context, postFilter) {
     let threads_needed = 0;
-    const $posts = $(context).filter('.post').add( $('.post', context) );
+    const $posts = $([...$(context).filter('.post'), ...$('.post', context)]);
     const isThreadPage = $('div.banner').length > 0;
     $posts.each(function() {
       const $post = $(this);
