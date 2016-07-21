@@ -3640,6 +3640,11 @@
       "from": "restore-cursor@>=1.0.1 <2.0.0",
       "resolved": "https://registry.npmjs.org/restore-cursor/-/restore-cursor-1.0.1.tgz"
     },
+    "ric-shim": {
+      "version": "1.0.0",
+      "from": "ric-shim@latest",
+      "resolved": "https://registry.npmjs.org/ric-shim/-/ric-shim-1.0.0.tgz"
+    },
     "right-align": {
       "version": "0.1.3",
       "from": "right-align@>=0.1.1 <0.2.0",
