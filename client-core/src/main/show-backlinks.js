@@ -19,7 +19,7 @@ const postsThatNeedBacklinksRendered = new Set();
 function start() {
   // Possible room for improvement: incrementally process the page.
   parsePage();
-  renderUpdatedBacklinks();
+  renderUpdatedBacklinks(true);
 }
 
 function parsePage() {
@@ -54,13 +54,20 @@ function addBacklinkToPost(backlinkid, postid) {
   }
 }
 
-function renderUpdatedBacklinks() {
-  postsThatNeedBacklinksRendered.forEach(postid => {
-    const [board, postnum] = postid.split(':');
-    $(`.post_${board}-${postnum}`).each(function() {
-      renderBacklinksOnPost(this);
+function renderUpdatedBacklinks(everyPost=false) {
+  let selector;
+  if (everyPost) {
+    selector = '.post';
+  } else {
+    const selectorParts = [];
+    postsThatNeedBacklinksRendered.forEach(postid => {
+      const [board, postnum] = postid.split(':');
+      selectorParts.push(`.post_${board}-${postnum}`);
     });
-  });
+    selector = selectorParts.join(',');
+  }
+  const posts = document.querySelectorAll(selector);
+  Array.prototype.forEach.call(posts, renderBacklinksOnPost);
   postsThatNeedBacklinksRendered.clear();
   renderIsScheduled = false;
 }
@@ -73,26 +80,34 @@ function renderBacklinksOnPost(post) {
 
   const $intro = $post.find('> .intro, > .opMain > .intro');
   let $mentioned = $intro.find('.mentioned').first();
+  let needToInsertMentioned = false;
   if (!$mentioned.length) {
     $mentioned = $('<span/>')
-      .addClass('mentioned')
-      .appendTo($intro);
+      .addClass('mentioned');
+    needToInsertMentioned = true;
   }
+  const newLinkElements = [];
   Array.from(backlinks).sort().forEach(backlinkid => {
     const [backlinkboard, backlinknum] = backlinkid.split(':');
     const href = `#${backlinknum}`;
     if (
       global.board_id !== backlinkboard ||
+      !needToInsertMentioned ||
       $mentioned.find(`a.backlink[href="${href}"]`).length
     ) {
       return;
     }
-    $('<a/>')
-      .addClass('postlink backlink')
-      .attr('href', href)
-      .text(`>>${backlinknum}`)
-      .appendTo($mentioned);
+    newLinkElements.push(
+      $('<a/>')
+        .addClass('postlink backlink')
+        .attr('href', href)
+        .text(`>>${backlinknum}`)
+    );
   });
+  $mentioned.append(newLinkElements);
+  if (needToInsertMentioned) {
+    $mentioned.appendTo($intro);
+  }
   const parentid = $post.attr('data-parentid');
   if (parentid) {
     markParentLinks($post, parentid);
