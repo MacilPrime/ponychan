@@ -13,7 +13,7 @@ $(document).ready(function() {
 });
 
 function maybe_get_post_num(el) {
-  const $post = $(el).parents('.post');
+  const $post = $(el).closest('.post');
   return $post.length ? get_post_num($post) : null;
 }
 

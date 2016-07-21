@@ -83,7 +83,7 @@ documentReady.onValue(() => {
     )
     .onValue(([post, reveal_spoiler_threads]) => {
       if ($(post).hasClass('op')) {
-        process(reveal_spoiler_threads, $(post).parents('.thread').first());
+        process(reveal_spoiler_threads, $(post).closest('.thread'));
       }
     });
 });

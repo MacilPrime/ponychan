@@ -79,7 +79,7 @@ function descLinks() {
   if ($(this).hasClass('thread'))
     $thread = $(this);
   else
-    $thread = $(this).parents('.thread').first();
+    $thread = $(this).closest('.thread');
 
   if (!$thread.length) {
     const $pageThread = $('.thread');

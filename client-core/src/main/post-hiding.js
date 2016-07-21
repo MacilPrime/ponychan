@@ -234,13 +234,13 @@ documentReady.onValue(() => {
   }
 
   function hide_this_post() {
-    const $pc = $(this).parents('.postContainer').first();
+    const $pc = $(this).closest('.postContainer');
     const postnum = /replyC_(\d+)/.exec($pc.attr('id'))[1];
     hide_post(get_post_board($pc.children('.post')), postnum);
   }
 
   function show_this_post() {
-    const $pc = $(this).parents('.postContainer').first();
+    const $pc = $(this).closest('.postContainer');
     const postnum = /replyC_(\d+)/.exec($pc.attr('id'))[1];
     show_post(get_post_board($pc.children('.post')), postnum);
   }
@@ -274,7 +274,7 @@ documentReady.onValue(() => {
       if (!$pc.length || !$pc.hasClass('postContainer'))
         return;
 
-      const $thread = $pc.parents('.thread').first();
+      const $thread = $pc.closest('.thread');
 
       place_button($post);
       const postnum = get_post_num($post);
