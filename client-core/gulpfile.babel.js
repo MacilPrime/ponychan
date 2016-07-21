@@ -37,7 +37,10 @@ gulp.task('getVersion', function() {
     const commit = parts[0].trim().slice(0, 16);
     const status = parts[1];
     const isModified = /^\s*M/m.test(status);
-    const version = commit + (isModified ? '-MODIFIED' : '');
+    const version = commit +
+      (!args.minify ? '-DEV' : '') +
+      (args.watch ? '-WATCH' : '') +
+      (isModified ? '-MODIFIED' : '');
 
     getVersion = _.constant(version);
   });
