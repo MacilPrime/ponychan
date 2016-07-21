@@ -17,7 +17,7 @@ class ButtonLabel extends React.Component {
 
     return (
       <a
-        className={cx('watcherButton', opened)}
+        className={cx('watcherButton', {open: opened})}
         href={config.site.siteroot+'watcher'}
         onClick={onClick}
         >
