@@ -92,8 +92,7 @@ function renderBacklinksOnPost(post) {
     const href = `#${backlinknum}`;
     if (
       global.board_id !== backlinkboard ||
-      !needToInsertMentioned ||
-      $mentioned.find(`a.backlink[href="${href}"]`).length
+      (!needToInsertMentioned && $mentioned.find(`a.backlink[href="${href}"]`).length>0)
     ) {
       return;
     }
