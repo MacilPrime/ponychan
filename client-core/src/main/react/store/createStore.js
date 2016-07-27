@@ -7,13 +7,13 @@ import reducers from './reducers';
 
 export default (initialState = {}, history, DevTools) => {
   const sagaMiddleware = createSagaMiddleware();
-  let middleware = applyMiddleware(sagaMiddleware, routerMiddleware(history));
+  let enhancer = applyMiddleware(sagaMiddleware, routerMiddleware(history));
 
   if (DevTools) {
-    middleware = compose(middleware, DevTools.instrument());
+    enhancer = compose(enhancer, DevTools.instrument());
   }
 
-  const store = createStore(reducers, initialState, middleware);
+  const store = createStore(reducers, initialState, enhancer);
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
