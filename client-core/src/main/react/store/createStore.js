@@ -1,16 +1,19 @@
 import {compose, createStore, applyMiddleware} from 'redux';
 import {routerMiddleware} from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
+import {createActionLog} from 'redux-action-log';
 
 import saga from './saga';
 import reducers from './reducers';
 
 export default (initialState = {}, history, DevTools) => {
+  const actionLog = createActionLog({limit: 100});
+
   const sagaMiddleware = createSagaMiddleware();
   let enhancer = applyMiddleware(sagaMiddleware, routerMiddleware(history));
 
   if (DevTools) {
-    enhancer = compose(enhancer, DevTools.instrument());
+    enhancer = compose(enhancer, actionLog.enhancer, DevTools.instrument());
   }
 
   const store = createStore(reducers, initialState, enhancer);
@@ -25,5 +28,5 @@ export default (initialState = {}, history, DevTools) => {
 
   sagaMiddleware.run(saga);
 
-  return store;
+  return {store, actionLog};
 };

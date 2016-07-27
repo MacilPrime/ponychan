@@ -21,7 +21,7 @@ const DevTools = process.env.NODE_ENV === 'production' ? null : createDevTools(
   </DockMonitor>
 );
 
-const store = createStore(
+export const {store, actionLog} = createStore(
   undefined, browserHistory, DevTools
 );
 

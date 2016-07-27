@@ -45,7 +45,7 @@ import './search.js';
 import './desktop-notifier.js';
 import './hide-trip.js';
 import './show-backlinks.js';
-import './react';
+import {store, actionLog} from './react';
 
 import './settings-screen.js';
 
@@ -62,7 +62,9 @@ window.ponychan = {
     _: require('lodash'),
     moment: require('moment')
   },
-  settings: settings
+  settings,
+  store,
+  actionLog
 };
 
 window.$ = window.ponychan.$;
