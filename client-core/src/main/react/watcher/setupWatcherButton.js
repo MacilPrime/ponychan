@@ -75,7 +75,6 @@ function watcher_acknowledge_page(store) {
     watchedThread.seen_reply_count != reply_count ||
     watchedThread.last_seen_time != last_seen_time
   ) {
-    store.dispatch(actions.reloadWatchedThreads());
     store.dispatch(actions.updateWatchedThread(currentThreadId, reply_count, last_seen_time));
   }
 }
@@ -103,7 +102,6 @@ function jump_to_first_unread_post(store) {
 
 
 function add_watch(store, $post) {
-  store.dispatch(actions.reloadWatchedThreads());
   const watchedThreads = store.getState().watcher.watchedThreads;
 
   if (Object.keys(watchedThreads).length >= max_watched_threads) {
@@ -135,7 +133,6 @@ function add_watch(store, $post) {
 }
 
 function remove_watch(store, postid) {
-  store.dispatch(actions.reloadWatchedThreads());
   store.dispatch(actions.unwatchThread(postid));
   setTimeout(() => {
     alert('Thread unwatched.');

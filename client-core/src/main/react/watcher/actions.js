@@ -1,4 +1,3 @@
-export const RELOAD_WATCHED_THREADS = 'RELOAD_WATCHED_THREADS';
 export const SET_CURRENT_THREAD_ID = 'SET_CURRENT_THREAD_ID';
 export const SET_WATCHER_MOD_STATUS = 'SET_WATCHER_MOD_STATUS';
 export const SET_WATCHED_THREADS = 'SET_WATCHED_THREADS';
@@ -6,12 +5,6 @@ export const UPDATE_WATCHED_THREAD = 'UPDATE_WATCHED_THREAD';
 export const WATCH_THREAD = 'WATCH_THREAD';
 export const UNWATCH_THREAD = 'UNWATCH_THREAD';
 export const WATCHER_REQUEST_COMPLETE = 'WATCHER_REQUEST_COMPLETE';
-
-export function reloadWatchedThreads() {
-  return {
-    type: RELOAD_WATCHED_THREADS
-  };
-}
 
 export function setCurrentThreadId(threadId) {
   return {

@@ -1,3 +1,4 @@
+import Kefir from 'kefir';
 import config from '../../config';
 import isEqual from 'lodash/lang/isEqual';
 import {stringify} from 'querystring';
@@ -81,14 +82,14 @@ export function* refresher(storage) {
         }
       }
 
-      yield* loadWatchedThreads(storage);
+      const watchedThreadsBefore = yield select(s => s.watcher.watchedThreads);
       yield put(actions.requestComplete(data));
+      const watchedThreadsAfter = yield select(s => s.watcher.watchedThreads);
+      if (!isEqual(watchedThreadsBefore, watchedThreadsAfter)) {
+        yield* saveWatchedThreads(storage);
+      }
     } catch (err) {
       console.error("Failed to refresh watched threads", err); //eslint-disable-line
-    }
-    const newWatchedThreads = yield select(s => s.watcher.watchedThreads);
-    if (!isEqual(watchedThreads, newWatchedThreads)) {
-      yield* saveWatchedThreads(storage);
     }
 
     //TODO scale this up when errors or inactivity happens
@@ -96,9 +97,9 @@ export function* refresher(storage) {
   }
 }
 
-export function* reloader(storage) {
+export function* reloader(storage, storageEvents) {
   while (true) {
-    yield take(actions.RELOAD_WATCHED_THREADS);
+    yield call(() => storageEvents.take(1).toPromise());
     yield* loadWatchedThreads(storage);
   }
 }
@@ -114,10 +115,17 @@ export function* saver(storage) {
   }
 }
 
-export default function* root(storage=localStorage) {
+function defaultStorageEvents() {
+  return Kefir.fromEvents(window, 'storage')
+    .filter(({key}) => key === 'watched_threads');
+}
+
+export default function* root(
+  storage=localStorage, storageEvents=defaultStorageEvents()
+) {
   yield* setModStatus();
   yield* loadWatchedThreads(storage);
-  yield fork(reloader, storage);
+  yield fork(reloader, storage, storageEvents);
   yield fork(saver, storage);
 
   let lastTask = yield fork(refresher, storage);

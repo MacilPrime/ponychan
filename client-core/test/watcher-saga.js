@@ -1,4 +1,5 @@
 import assert from 'assert';
+import Kefir from 'kefir';
 import {call, put, take, cancel, fork} from 'redux-saga/effects';
 import {createMockTask} from 'redux-saga/utils';
 import MockWebStorage from 'mock-webstorage';
@@ -11,11 +12,12 @@ describe('watcher saga', function() {
   it('works with empty localStorage', function() {
     const localStorage = new MockWebStorage();
 
-    const s = saga(localStorage);
+    const storageEvents = Kefir.never();
+    const s = saga(localStorage, storageEvents);
     let value = s.next().value;
     assert(value.SELECT);
     value = s.next({}).value;
-    assert.deepEqual(value, fork(reloader, localStorage));
+    assert.deepEqual(value, fork(reloader, localStorage, storageEvents));
     value = s.next().value;
     assert.deepEqual(value, fork(saver, localStorage));
     value = s.next().value;
@@ -39,13 +41,14 @@ describe('watcher saga', function() {
     const localStorage = new MockWebStorage();
     localStorage.setItem('watched_threads', JSON.stringify(watched_threads));
 
-    const s = saga(localStorage);
+    const storageEvents = Kefir.never();
+    const s = saga(localStorage, storageEvents);
     let value = s.next().value;
     assert(value.SELECT);
     value = s.next({}).value;
     assert.deepEqual(value, put(actions.setWatchedThreads(watched_threads)));
     value = s.next().value;
-    assert.deepEqual(value, fork(reloader, localStorage));
+    assert.deepEqual(value, fork(reloader, localStorage, storageEvents));
     value = s.next().value;
     assert.deepEqual(value, fork(saver, localStorage));
     value = s.next().value;
