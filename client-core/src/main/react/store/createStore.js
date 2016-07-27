@@ -12,8 +12,10 @@ export default (initialState = {}, history, DevTools) => {
   const sagaMiddleware = createSagaMiddleware();
   let enhancer = applyMiddleware(sagaMiddleware, routerMiddleware(history));
 
+  enhancer = compose(enhancer, actionLog.enhancer);
+
   if (DevTools) {
-    enhancer = compose(enhancer, actionLog.enhancer, DevTools.instrument());
+    enhancer = compose(enhancer, DevTools.instrument());
   }
 
   const store = createStore(reducers, initialState, enhancer);
