@@ -10,5 +10,5 @@ import $ from 'jquery';
 // Synchronize the 'public message' checkbox with its text field.
 $(document).on('change', '[name="public_message"]', event => {
   $(event.target).nextAll('[name="message"]')
-		.prop('disabled', !event.target.checked);
+    .prop('disabled', !event.target.checked);
 });

@@ -27,8 +27,8 @@ export const findPost = ud.defn(module, function findPost(url) {
         return message([
           $('<p />').text('This post is from a spoilered thread.'),
           $('<a />').text('[View thread]')
-          .addClass('spoilerviewlink')
-          .attr('href', url)
+            .addClass('spoilerviewlink')
+            .attr('href', url)
         ]);
 
       if ($clone.data('filtered'))

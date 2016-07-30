@@ -39,8 +39,9 @@ export function pop(text, time = 30) {
     Kefir.merge([
       Kefir.fromEvents($pop, 'click'),
       Kefir.later(seconds(time))
-    ]).take(1)
-    .onValue(() => $pop.fadeOut(seconds(1), resolve));
+    ])
+      .take(1)
+      .onValue(() => $pop.fadeOut(seconds(1), resolve));
   }).then(() => {
     $pop.nextAll('.popnotice')
       .each((i, el) =>

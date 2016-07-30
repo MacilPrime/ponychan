@@ -202,14 +202,15 @@ function openInlineBanForm(url, $post) {
                 updateThreadNow(true);
               }).catch(showError);
           })
-        ).appendTo($post)
-        .hide()
-        .animate({
-          margin: 'show',
-          padding: 'show',
-          height: 'show',
-          opacity: 'show'
-        });
+      )
+      .appendTo($post)
+      .hide()
+      .animate({
+        margin: 'show',
+        padding: 'show',
+        height: 'show',
+        opacity: 'show'
+      });
   }).catch(showError);
 
   function retract($target) {

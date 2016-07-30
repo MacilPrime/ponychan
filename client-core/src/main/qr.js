@@ -485,7 +485,7 @@ $(document).ready(function() {
           }
         }
       })
-    .insertBefore($QRAddImageButton);
+      .insertBefore($QRAddImageButton);
     $('<a/>')
       .attr('class', 'qrremovethumb')
       .attr('title', 'Remove reply')

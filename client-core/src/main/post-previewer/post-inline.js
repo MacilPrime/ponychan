@@ -103,9 +103,9 @@ function toggleInline($link) {
             let $intro = $(e.currentTarget).find('.intro').first();
             $intro.find('.threadviewlink').remove();
             $intro.append($('<a />')
-            .text('[View]')
-            .attr('href', $link.attr('href'))
-            .addClass('threadviewlink'));
+              .text('[View]')
+              .attr('href', $link.attr('href'))
+              .addClass('threadviewlink'));
           }
         }
       }).prependTo(getOrCreateWrap());

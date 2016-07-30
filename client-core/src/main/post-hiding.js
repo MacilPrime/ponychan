@@ -101,11 +101,11 @@ documentReady.onValue(() => {
     settings.getSettingStream('show_mature'),
     settings.getSettingStream('mature_as_spoiler')
   ])
-  .onValue(([show_mature]) => {
-    if (show_mature) {
-      prep_mature_images(document.body);
-    }
-  });
+    .onValue(([show_mature]) => {
+      if (show_mature) {
+        prep_mature_images(document.body);
+      }
+    });
 
   settings.getSettingStream('show_mature').onValue(show_mature => {
     const expires = new Date();
@@ -354,8 +354,8 @@ documentReady.onValue(() => {
     let $hide_button = $hider.find('a');
     if (!$hide_button.length) {
       $hide_button = $('<a/>')
-      .attr('href', 'javascript:void(0);')
-      .prependTo($hider);
+        .attr('href', 'javascript:void(0);')
+        .prependTo($hider);
     }
     $hide_button
       .text('[ - ]')
