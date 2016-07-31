@@ -70,7 +70,7 @@ function makeMatcherFromText(text) {
       }
       return input => input.indexOf(line) !== -1;
     }).value();
-  return _.extend(input => _.any(filterFns, fn => fn(input)), {count: filterFns.length});
+  return _.extend(input => _.some(filterFns, fn => fn(input)), {count: filterFns.length});
 }
 
 const nameMatcherStream = settings.getSettingStream('filtered_names').map(makeMatcherFromText);

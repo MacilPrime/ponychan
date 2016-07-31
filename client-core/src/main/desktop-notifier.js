@@ -53,7 +53,7 @@ function init() {
         Notification.requestPermission();
     }).on('new_unseen_post', function(e, post) {
       const $post = $(post);
-      const postLinksToMe = _.any($post.find('> .body a.postlink'), postlink => {
+      const postLinksToMe = _.some($post.find('> .body a.postlink'), postlink => {
         const m = new Metadata(postlink.getAttribute('href'), global.board_id);
         return myPosts.contains(m.postid);
       });

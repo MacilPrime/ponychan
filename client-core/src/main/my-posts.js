@@ -28,7 +28,7 @@ settings.newSetting('link_show_you', 'bool', true, 'Show "(You)" on links to you
 
 function normalizePosts(posts) {
   return _.chain(posts)
-    .uniq(post => post.id)
+    .uniqBy(post => post.id)
     .sortBy(post => post.timestamp)
     .takeRight(REMEMBER_LIMIT)
     .value();
