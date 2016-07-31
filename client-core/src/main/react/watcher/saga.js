@@ -1,6 +1,6 @@
 import Kefir from 'kefir';
 import config from '../../config';
-import isEqual from 'lodash/lang/isEqual';
+import isEqual from 'lodash/isEqual';
 import {stringify} from 'querystring';
 import {call, put, select, take, cancel, fork} from 'redux-saga/effects';
 
