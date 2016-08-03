@@ -10,6 +10,7 @@ import {footer} from '../../footer-utils';
 import {get_post_id} from '../../lib/post-info';
 import {jumpToPost} from '../../lib/post-utils';
 import * as actions from './actions';
+import {settingsMenuButtonReady} from '../../settings-screen';
 
 const max_watched_threads = 70;
 
@@ -33,7 +34,7 @@ export default function setupWatcherButton(store) {
       watcher_acknowledge_page(store);
     });
 
-  asap(() => {
+  settingsMenuButtonReady.onValue(() => {
     // Currently needs to run after settings button is present.
     init_watcher_menu(store);
 

@@ -54,7 +54,7 @@ $(document).ready(function(){
 				.addClass('image-hover')
 				.attr('src', imageurl)
 				.appendTo(document.body)
-				.load(function() {
+				.on('load', function() {
 					$(this).trigger('mousemove');
 				});
 			$image.trigger('mousemove');

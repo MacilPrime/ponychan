@@ -69,7 +69,7 @@ $(document).ready(function(){
 					$img
 						.addClass('expanded')
 						.addClass('loading')
-						.load(function() {
+						.on('load', function() {
 							$(this).removeClass('loading');
 						});
 				}

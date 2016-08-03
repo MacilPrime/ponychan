@@ -8,6 +8,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import kefirStopper from 'kefir-stopper';
 
 import config from './config';
 import settings from './settings';
@@ -15,6 +16,8 @@ import settings from './settings';
 const isSettingsPage = (document.location.pathname == config.site.siteroot+'settings.html');
 
 import {SettingsWindow} from './settings-screen-components';
+
+export const settingsMenuButtonReady = kefirStopper();
 
 function shouldDoCompatSettingsPage() {
   // Returns true if we don't think the normal settings
@@ -85,6 +88,8 @@ function setup() {
         .attr('href', config.site.siteroot+'settings.html')
         .click(showWindow);
     }
+
+    settingsMenuButtonReady.destroy();
   });
 
   settings.getAllSettingsMetadata().onValue(
