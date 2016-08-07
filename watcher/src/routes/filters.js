@@ -467,12 +467,12 @@ function cleanAndVerifyAction(action: any): Action {
   switch (action.type) {
     case 'reject':
       return {
-        type: action.type,
+        type: 'reject',
         message: typeof action.message === 'string' ? action.message : null
       };
     case 'captcha':
       return {
-        type: action.type
+        type: 'captcha'
       };
     case 'ban':
       if (typeof action.reason !== 'string') {
