@@ -225,7 +225,7 @@ async function previewTask(conditions: Condition[]): Promise<string> {
   const allBoardUris = (await getBoards()).map(x => x.uri);
   const boardsToSearch = _.intersection(allBoardUris, ...boardLists);
   const wherePart = clauses.map(x => x.sql).join(' AND ');
-  const values = _.chain(clauses).map(x => x.values).flatten().value();
+  const values = _.flatMap(clauses, x => x.values);
   let count = 0;
   const resultsLists = [];
   for (let board of boardsToSearch) {

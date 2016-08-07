@@ -70,7 +70,7 @@ const configExists = (function() {
   }
 })();
 if (configExists) {
-  _.merge(
+  _.mergeWith(
     config,
     JSON.parse(fs.readFileSync(CONFIG_FILENAME, 'utf8')),
     (a, b) => Array.isArray(b) ? b : undefined
