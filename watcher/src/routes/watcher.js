@@ -2,10 +2,9 @@
 //jshint ignore:start
 
 import _ from 'lodash';
-import crypto from 'crypto';
 import RSVP from 'rsvp';
 
-import {credis, predis, mysql, mysql_query, c_get} from '../database';
+import {credis, mysql_query, c_get} from '../database';
 import config from '../config';
 
 function getThreadCount(thread: string): Promise<{reply_count: ?number, last_reply_time: ?number}> {
@@ -90,16 +89,16 @@ export default async function watcher(req: Object, res: Object, next: Function):
     const threadIds = req.query.ids || [];
     if (!Array.isArray(threadIds)) {
       res.status(400);
-      res.send({error: "Thread list not given!"});
+      res.send({error: 'Thread list not given!'});
       return;
     }
     if (threadIds.length > config.max_watched_threads) {
       res.status(400);
-      res.send({error: "Too many threads requested!"});
+      res.send({error: 'Too many threads requested!'});
       return;
     }
 
-    res.setHeader("Cache-Control", "private, max-age="+config.http_cache_time);
+    res.setHeader('Cache-Control', 'private, max-age='+config.http_cache_time);
 
     const threads = await getThreadCounts(threadIds);
     const scripts = await getScripts(req.userhash);
@@ -115,7 +114,7 @@ export default async function watcher(req: Object, res: Object, next: Function):
       };
     }
     res.send(response);
-  } catch(err) {
+  } catch (err) {
     next(err);
   }
 }

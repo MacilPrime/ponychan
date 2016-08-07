@@ -2,7 +2,6 @@
 //jshint ignore:start
 
 import _ from 'lodash';
-import crypto from 'crypto';
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
@@ -58,7 +57,7 @@ app.post('*', (req, res, next) => {
 });
 
 function modOnly(req, res, next) {
-  res.setHeader("Cache-Control", "private");
+  res.setHeader('Cache-Control', 'private');
   if (!req.mod) {
     res.sendStatus(403);
   } else {
@@ -78,21 +77,21 @@ app.all('/api/v1/mod/*', modOnly);
 app.get('/mod/filters/*', scriptBasePage('modFilters', 'Filters'));
 
 app.post('/api/v1/mod/filters/previews/', bodyParser.json(), filters.previewStart);
-app.get ('/api/v1/mod/filters/previews/:id', filters.previewGet);
+app.get('/api/v1/mod/filters/previews/:id', filters.previewGet);
 
-app.get ('/api/v1/mod/filters/', filters.getList);
+app.get('/api/v1/mod/filters/', filters.getList);
 app.post('/api/v1/mod/filters/', bodyParser.json(), filters.create);
-app.get ('/api/v1/mod/filters/:id', filters.getOne);
+app.get('/api/v1/mod/filters/:id', filters.getOne);
 app.post('/api/v1/mod/filters/:id', bodyParser.json(), filters.update);
 
-app.get   ('/api/v1/tasks/:id', tasks.get);
+app.get('/api/v1/tasks/:id', tasks.get);
 app.delete('/api/v1/tasks/:id', tasks.del);
 
 app.post('/bans/:id/appeal', bodyParser.urlencoded({extended: false}), bans.appeal);
 app.post('/bans/:id/modappeal', bodyParser.urlencoded({extended: false}), bans.modappeal);
 
 app.get('/watcher', (req, res, next) => {
-  res.setHeader("Cache-Control", "public, max-age=120");
+  res.setHeader('Cache-Control', 'public, max-age=120');
   next();
 }, scriptBasePage('watcher', 'Watcher'));
 app.get('/watcher/threads', watcher);

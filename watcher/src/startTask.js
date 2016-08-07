@@ -13,7 +13,10 @@ export default async function startTask(
   await new Promise((resolve, reject) => {
     predis.setex(key, config.task_cache_time, JSON.stringify({
       userhash, status: 'RUNNING'
-    }), (err) => { if (err) reject(err); else resolve(); });
+    }), (err) => {
+      if (err) reject(err);
+      else resolve();
+    });
   });
 
   (async () => {
@@ -22,16 +25,22 @@ export default async function startTask(
       await new Promise((resolve, reject) => {
         predis.setex(key, config.task_cache_time, JSON.stringify({
           userhash, status: 'COMPLETE', url
-        }), (err) => { if (err) reject(err); else resolve(); });
+        }), (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
       });
-    } catch(err) {
+    } catch (err) {
       // TODO unified error logging
       console.error(err);
       console.error(err.stack);
       await new Promise((resolve, reject) => {
         predis.setex(key, config.task_cache_time, JSON.stringify({
           userhash, status: 'ERROR', message: err.message
-        }), (err) => { if (err) reject(err); else resolve(); });
+        }), (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
       });
     }
   })();

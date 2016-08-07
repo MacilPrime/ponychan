@@ -1,7 +1,6 @@
 /* @flow */
 //jshint ignore:start
 
-import config from './config';
 import * as db from './database';
 import modHash from './modHash';
 

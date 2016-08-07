@@ -4,7 +4,7 @@
 import crypto from 'crypto';
 
 export default function setUserhash(req: Object, res: Object, next: Function) {
-  var userid = req.cookies.userid;
+  let userid = req.cookies.userid;
   if (typeof userid === 'string' && /^[0-9a-f]{32}$/.exec(userid))
     req.userhash = useridhash(userid);
   else

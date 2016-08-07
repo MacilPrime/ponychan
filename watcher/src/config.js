@@ -14,7 +14,7 @@ const config = {
     port: 4000
   },
   core: {
-    path: "../core"
+    path: '../core'
   },
   redis: {
     prefix: 'watcher_',
@@ -65,7 +65,7 @@ const configExists = (function() {
   try {
     fs.statSync(CONFIG_FILENAME);
     return true;
-  } catch(e) {
+  } catch (e) {
     return false;
   }
 })();
