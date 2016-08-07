@@ -48,11 +48,11 @@ app
   .use(checkMod);
 
 app.post('*', (req, res, next) => {
-  const refererRegex = new RegExp(`^https?://${_.escapeRegExp(req.headers.host)}/`);
-  if (!refererRegex.test(req.headers.referer)) {
-    res.status(403).send('Invalid Referer header');
-  } else {
+  const refererRegex = new RegExp(`^https?://${_.escapeRegExp(req.headers.host)}($|/)`);
+  if (refererRegex.test(req.headers.origin) || refererRegex.test(req.headers.referer)) {
     next();
+  } else {
+    res.status(403).send('Valid Origin or Referer header required');
   }
 });
 
