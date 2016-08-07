@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import asap from 'asap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Kefir from 'kefir';
