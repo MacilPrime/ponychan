@@ -1,3 +1,5 @@
+/* @flow */
+
 const Kefir = require('kefir');
 import $ from 'jquery';
 import udKefir from 'ud-kefir';

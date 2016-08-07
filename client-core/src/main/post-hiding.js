@@ -1,4 +1,4 @@
-/*
+/* @flow
  * qr.js
  *
  * Released under the MIT license
@@ -111,13 +111,13 @@ documentReady.onValue(() => {
     const expires = new Date();
     if (show_mature) {
       expires.setTime((new Date()).getTime()+60480000000);
-      document.cookie = 'show_mature=true; expires='+expires.toGMTString()+'; path='+config.site.siteroot;
+      document.cookie = 'show_mature=true; expires='+expires.toUTCString()+'; path='+config.site.siteroot;
 
       $('.mature_warning').hide();
       $('.mature_thread, .mature_post_button').show();
     } else {
       expires.setTime((new Date()).getTime()-50000);
-      document.cookie = 'show_mature=false; expires='+expires.toGMTString()+'; path='+config.site.siteroot;
+      document.cookie = 'show_mature=false; expires='+expires.toUTCString()+'; path='+config.site.siteroot;
 
       $('.mature_warning').show();
       $('.mature_thread, .mature_post_button').hide();
@@ -150,7 +150,7 @@ documentReady.onValue(() => {
   let hidden_posts = [];
   function load_hidden_posts() {
     if (typeof localStorage != 'undefined' && localStorage && !localStorage.POLYFILLED) {
-      const try_hidden_posts = JSON.parse(localStorage.getItem('hidden_posts'));
+      const try_hidden_posts = JSON.parse(localStorage.getItem('hidden_posts') || 'null');
       if (try_hidden_posts)
         hidden_posts = try_hidden_posts;
     }

@@ -1,4 +1,6 @@
-export default function getUrlParams(url, includeHash) {
+/* @flow */
+
+export default function getUrlParams(url: string, includeHash: boolean): {[name:string]: string} {
   function decode (s) {
     return decodeURIComponent(s.replace(/\+/g, ' '));
   }

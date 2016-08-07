@@ -1,4 +1,4 @@
-/*
+/* @flow
  * hide-toggle.js
  *
  * Released under the WTFPLv2 license

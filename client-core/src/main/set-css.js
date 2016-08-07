@@ -1,6 +1,8 @@
+/* @flow */
+
 import $ from 'jquery';
 
-export default function setCss(key, css) {
+export default function setCss(key: string, css: string) {
   let $style = $('style.setcss#setcss_'+key);
   if (!$style.length && css) {
     $style = $('<style/>')

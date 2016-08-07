@@ -1,4 +1,4 @@
-/*
+/* @flow
  * ips.js
  *
  * Released under the WTFPLv2 license

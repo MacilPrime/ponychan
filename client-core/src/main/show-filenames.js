@@ -1,4 +1,4 @@
-/*
+/* @flow
  * show-filenames.js
  *
  * Released under the MIT license

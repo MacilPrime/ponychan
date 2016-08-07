@@ -1,3 +1,5 @@
+/* @flow */
+
 import $ from 'jquery';
 
 $(document).ready(function() {
@@ -13,9 +15,9 @@ $(document).ready(function() {
  * @method removeItem - Deletes footer links.
  */
 
-export function footer($post) {
+export function footer($post: any) {
   return {
-    addItem(name, callback) {
+    addItem(name: string, callback: Function) {
     // before we do anything, we need to remove the clones
       this.removeItem(name);
 
@@ -43,7 +45,7 @@ export function footer($post) {
         );
 
     },
-    removeItem(name) {
+    removeItem(name: string) {
       let $footer = $post.children('.postfooter');
       if ($footer.hasClass('dead-buttons'))
         return;

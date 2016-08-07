@@ -1,4 +1,4 @@
-/*
+/* @flow
  * logger.js
  *
  * Released under the MIT license
@@ -23,7 +23,7 @@ function basicStringHash(string, prevHash) {
   return hash;
 }
 
-function hashCode(x, prevHash) {
+function hashCode(x: any, prevHash: ?number): number {
   if (typeof x === 'object' && x !== null) {
     let hash = 0;
     if (prevHash)
@@ -73,7 +73,7 @@ if (!userid || userid.length != 32) {
 const expires = new Date();
 expires.setTime((new Date()).getTime()+60480000000);
 if (global.document && global.SITE_DATA) {
-  document.cookie = 'userid='+escape(userid)+'; expires='+expires.toGMTString()+'; path='+global.SITE_DATA.siteroot;
+  document.cookie = 'userid='+encodeURIComponent(userid)+'; expires='+expires.toUTCString()+'; path='+global.SITE_DATA.siteroot;
 }
 
 const maxRetryTime = 3*60*1000;
@@ -85,12 +85,11 @@ let send_queued = 0;
 const send_maxQueued = 7;
 const malformed_errors = {};
 
-function error_to_object(error) {
-  const newError = {
+function error_to_object(error: Error): Object {
+  const newError: Object = {
     message: error.message,
-    url: error.fileName,
-    lineNumber: error.lineNumber,
-    columnNumber: error.columnNumber,
+    url: (error:any).fileName,
+    lineNumber: (error:any).lineNumber,
     stack: error.stack
   };
   if (error.constructor && error.constructor.name)
@@ -103,16 +102,19 @@ function error_to_object(error) {
       newProp = 'url';
     else
       newProp = prop;
-    newError[newProp] = error[prop];
+    newError[newProp] = (error:any)[prop];
   }
   return newError;
 }
 
-function send_error(error, retryTime) {
-  if (typeof error === 'string')
-    error = {message: error};
-  else if (error instanceof Error)
-    error = error_to_object(error);
+function send_error(_error, retryTime=3*1000) {
+  let error;
+  if (typeof _error === 'string')
+    error = ({message: _error}: Object);
+  else if (_error instanceof Error)
+    error = error_to_object(_error);
+  else
+    error = (_error: Object);
 
   error.pageurl = document.location.href;
   error.version = process.env.VERSION;
@@ -139,9 +141,7 @@ function send_error(error, retryTime) {
     return;
   }
 
-  if (!retryTime)
-    retryTime = 3*1000;
-  else if (retryTime > maxRetryTime)
+  if (retryTime > maxRetryTime)
     retryTime = maxRetryTime;
 
   noSendBefore = now + noSendDelay;
@@ -172,7 +172,7 @@ function send_error(error, retryTime) {
   });
 }
 
-export function log_error(error) {
+export function log_error(error: any) {
   console.error(error);
   if (global.document) {
     send_error(error);
@@ -223,25 +223,25 @@ function send_usage(retryTime) {
 
   usage.settings = settings.getAllSettingValues(true);
 
-  usage.supportFile = typeof FileReader != 'undefined' && !!FileReader;
-  usage.supportFormData = typeof FormData != 'undefined' && !!FormData;
-  usage.supportPostMessage = typeof window.postMessage != 'undefined' && !!window.postMessage;
-  usage.supportWorker = typeof Worker != 'undefined' && !!Worker;
-  usage.supportSharedWorker = typeof SharedWorker != 'undefined' && !!SharedWorker;
-  usage.supportWindowScrollTo = typeof window.scrollTo != 'undefined' && !!window.scrollTo;
+  usage.supportFile = !!window.FileReader;
+  usage.supportFormData = !!window.FormData;
+  usage.supportPostMessage = !!window.postMessage;
+  usage.supportWorker = !!window.Worker;
+  usage.supportSharedWorker = !!window.SharedWorker;
+  usage.supportWindowScrollTo = !!window.scrollTo;
   usage.supportCanvas = !!window.HTMLCanvasElement;
   usage.supportVisibility = global.Visibility.isSupported();
 
   const wURL = window.URL || window.webkitURL;
   usage.supportwURL = typeof wURL != 'undefined' && !!wURL;
 
-  usage.supportGetSelection = typeof window.getSelection != 'undefined' && !!window.getSelection;
+  usage.supportGetSelection = !!window.getSelection;
 
   // usage object construction end
 
   const last_usage_hash_key = 'last_usage_data:'+(global.SITE_DATA ? global.SITE_DATA.siteroot : '');
 
-  const usageHash = hashCode(userid + hashCode(usage));
+  const usageHash = String(hashCode(userid + hashCode(usage)));
   if (usageHash == localStorage.getItem(last_usage_hash_key))
     return;
 
@@ -276,17 +276,13 @@ function send_usage(retryTime) {
   });
 }
 
-function send_misc(misc, retryTime) {
-  if (typeof misc !== 'object') {
-    misc = {value: misc};
-  }
+function send_misc(_misc: any, retryTime: number=3*1000) {
+  const misc: Object = (_misc && typeof _misc === 'object') ? _misc : {value: _misc};
   misc.pageurl = document.location.href;
   const miscString = JSON.stringify(misc);
   const data = {type: 'misc', userid: userid, data: miscString};
 
-  if (!retryTime)
-    retryTime = 3*1000;
-  else if (retryTime > maxRetryTime)
+  if (retryTime > maxRetryTime)
     retryTime = maxRetryTime;
 
   $.ajax({
@@ -312,7 +308,7 @@ function send_misc(misc, retryTime) {
 
 let _misc_log_rapid_data = [];
 let _misc_log_rapid_timer = null;
-export function misc_log_rapid(data) {
+export function misc_log_rapid(data: any) {
   _misc_log_rapid_data.push([Date.now(), data]);
 
   if (!_misc_log_rapid_timer) {

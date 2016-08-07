@@ -1,3 +1,5 @@
+/* @flow */
+
 const _ = require('lodash');
 import $ from 'jquery';
 import Kefir from 'kefir';
@@ -24,9 +26,9 @@ settings.newSetting(
 );
 
 function buttonEvent() {
-  Notification.requestPermission(function() {
-    if (Notification.permission == 'granted') {
-      const note = new Notification('Board settings - Ponychan', {
+  window.Notification.requestPermission(function() {
+    if (window.Notification.permission == 'granted') {
+      const note = new window.Notification('Board settings - Ponychan', {
         body: 'This is a test',
         tag: 'desktop_test',
         icon: config.site.siteroot + 'static/mlpchanlogo.png'
@@ -39,18 +41,18 @@ function buttonEvent() {
 }
 
 function canNotify() {
-  return window.Notification && Notification.permission == 'granted' &&
+  return window.Notification && window.Notification.permission == 'granted' &&
     !pageHasFocus() && settings.getSetting('desktop_notifications');
 }
 
 function init() {
   if (window.Notification) {
     if (settings.getSetting('desktop_notifications')) {
-      Notification.requestPermission();
+      window.Notification.requestPermission();
     }
     $(document).on('setting_change', function(e, setting) {
       if (setting == 'desktop_notifications')
-        Notification.requestPermission();
+        window.Notification.requestPermission();
     }).on('new_unseen_post', function(e, post) {
       const $post = $(post);
       const postLinksToMe = _.some($post.find('> .body a.postlink'), postlink => {
@@ -67,7 +69,7 @@ function init() {
 
 function makeNote($post) {
   const postId = get_post_id($post);
-  const note = new Notification(makeHeadLine($post), {
+  const note = new window.Notification(makeHeadLine($post), {
     body: getBody($post),
     tag: 'desktop_' + postId,
     icon: config.site.siteroot + 'static/mlpchanlogo.png'

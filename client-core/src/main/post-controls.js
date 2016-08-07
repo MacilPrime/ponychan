@@ -1,4 +1,4 @@
-/**
+/* @flow
  * post-controls
  *
  * Events binded to default tinyboard moderation controls.
@@ -69,10 +69,9 @@ $(document).on('click', '.controls a', evt => {
 });
 
 function submitAction(url, $form) {
-  const hasForm = $form instanceof $;
   // If the 2nd (optional) parameter is specified, it sends a POST request.
   const serialized = (() => {
-    if (hasForm) {
+    if ($form) {
       return $form.serialize() + $form
         .find('input[type="submit"], input[type="button"]')
         // jQuery's serialize() doesn't include buttons:
@@ -86,9 +85,9 @@ function submitAction(url, $form) {
     return null;
   })();
   return new RSVP.Promise((resolve, reject) => {
-    if (hasForm) toggleFormControls(false);
+    if ($form) toggleFormControls(false);
     $.ajax(url, {
-      method: hasForm ? 'POST' : 'GET',
+      method: $form ? 'POST' : 'GET',
       data: serialized,
       cache: true,
       // FIXME Setting this to 'false' triggers an invalid security token error
@@ -98,11 +97,12 @@ function submitAction(url, $form) {
         resolve($($.parseHTML(data)));
       },
       error(xhr, status, err) {
-        if (hasForm) toggleFormControls(true);
+        if ($form) toggleFormControls(true);
         reject(new Error('Fatal: '+xhr.status+' '+err));
       }
     });
     function toggleFormControls(enable) {
+      if (!$form) return;
       $form.find(':input').each((i, input) => {
         const $input = $(input);
         if (enable) {

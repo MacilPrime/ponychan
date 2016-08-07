@@ -1,4 +1,4 @@
-/*
+/* @flow
  * Adds " (OP)" to >>X links when the OP is quoted.
  * Adds " (You)" to >>X links when the user is quoted.
  *
@@ -17,7 +17,7 @@ const REMEMBER_LIMIT = 1000;
 let myposts = [];
 
 const myPosts = {
-  contains(id) {
+  contains(id: string) {
     // TODO use a map
     return !!_.find(myposts, post => post.id === id);
   }

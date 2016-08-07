@@ -1,3 +1,5 @@
+/* @flow */
+
 /**
  * link-metadata
  *
@@ -10,7 +12,12 @@
  */
 
 export class Metadata {
-  constructor (url, defaultBoard=null) {
+  board: any;
+  thread: any;
+  post: any;
+  postid: any;
+
+  constructor (url: string, defaultBoard: ?string=null) {
     if ((/^#(\d+)$/).test(url)) {
       this.board = defaultBoard;
       this.post = parseInt(url.replace('#', ''), 10);
@@ -21,22 +28,24 @@ export class Metadata {
       if (parts[3])
         this.post = parseInt(parts[3], 10);
     }
-    if (this.board) {
+    if (this.board && this.post) {
       this.postid = `${this.board}:${this.post}`;
     }
   }
   toQuerySelector() {
     const start = '.post';
-  // What if two posts from two different boards share the same number?
-    if (this.board && this.thread && !(this.post)) {
+    // What if two posts from two different boards share the same number?
+    if (this.board && this.thread && !this.post) {
     // For thread selectors
       throw new Error('This method does not support thread selectors.');
-    } else if (this.board) {
+    } else if (this.board && this.post) {
       // Board and post specific. URL contained a board name here.
       return start+'_'+this.board+'-'+this.post;
-    } else {
+    } else if (this.post) {
       // Only post specific. URL was just a hash.
       return start+'_'+this.post;
+    } else {
+      throw new Error('Should not happen');
     }
   }
 }

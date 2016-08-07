@@ -1,8 +1,10 @@
+/* @flow */
+
 const _ = require('lodash');
 const $ = require('jquery');
 
 // Disables all img, audio, video, and script tags in some html
-export function mogrifyHTML(html) {
+export function mogrifyHTML(html: string): string {
   function mogrifier(text) {
     return '<span class="mogrifier" data-data="' + _.escape(text) + '"></span>';
   }
@@ -16,7 +18,7 @@ export function mogrifyHTML(html) {
 }
 
 // Re-enables mogrified tags in an element
-export function demogrifyEl($el) {
+export function demogrifyEl($el: any) {
   $el.find('.mogrifier').each(function() {
     const $mog = $(this);
     const html = $mog.attr('data-data');

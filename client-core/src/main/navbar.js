@@ -1,4 +1,4 @@
-/*
+/* @flow
  * navbar.js
  *
  * Released under the MIT license

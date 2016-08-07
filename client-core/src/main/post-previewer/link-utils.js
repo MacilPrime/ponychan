@@ -1,8 +1,10 @@
+/* @flow */
+
 const $ = require('jquery');
 const Kefir = require('kefir');
 import {Metadata} from './url-metadata';
 
-export function onPostLinkEvent(evtName) {
+export function onPostLinkEvent(evtName: string) {
   return Kefir.stream(emitter => {
     function listener(event) {
       emitter.emit({
@@ -17,7 +19,7 @@ export function onPostLinkEvent(evtName) {
   });
 }
 
-export function markParentLinks($post, parentid) {
+export function markParentLinks($post: any, parentid: string) {
   // give the proper links the dashed underline
   $post.attr('data-parentid', parentid);
   $post.find('a.postlink').filter((i, anchor) => {

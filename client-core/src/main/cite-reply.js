@@ -1,3 +1,5 @@
+/* @flow */
+
 import $ from 'jquery';
 import {get_post_num} from './lib/post-info';
 import settings from './settings';
@@ -7,7 +9,7 @@ $(document).ready(function() {
 
   $(document).on('click', 'a.post_no.citelink', function(event) {
     event.preventDefault();
-    const id = +$(event.target).attr('href').match(/\d+$/)[0];
+    const id = $(event.target).attr('href').match(/\d+$/)[0];
     citeReply(id);
   });
 });
@@ -17,14 +19,14 @@ function maybe_get_post_num(el) {
   return $post.length ? get_post_num($post) : null;
 }
 
-export default function citeReply(id) {
+export default function citeReply(id: string) {
   let $message;
   if (settings.getSetting('use_QR')) {
     $message = $('#qrcomment');
     global.QR.open();
   } else {
     $message = $('#body');
-    if (document.forms.post.scrollIntoView)
+    if (document.forms.post && document.forms.post.scrollIntoView)
       document.forms.post.scrollIntoView();
   }
   let cited = '>>' + id + '\n';
@@ -34,8 +36,8 @@ export default function citeReply(id) {
     const sel = window.getSelection();
     // we want to find if the highlighted selection overlaps
     // multiple posts. If it does, we'll ignore it.
-    const startID = maybe_get_post_num(sel.anchorNode);
-    const endID = maybe_get_post_num(sel.focusNode);
+    const startID = String(maybe_get_post_num(sel.anchorNode));
+    const endID = String(maybe_get_post_num(sel.focusNode));
 
     if (id == startID && id == endID) {
       const text = sel.toString().trim();

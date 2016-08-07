@@ -1,17 +1,10 @@
-/*
- * settings.js
- *
- * Released under the MIT license
- * Copyright (c) 2015 Macil Tech <maciltech@gmail.com>
- *
- */
-
+/* @flow */
 /* eslint-disable no-console */
 
 import $ from 'jquery';
 import _ from 'lodash';
 import kefirBus from 'kefir-bus';
-import Immutable from 'immutable';
+import * as Immutable from 'immutable';
 
 let settingsMetadata = Immutable.Map();
 let settingsValues = Immutable.Map();
@@ -26,7 +19,7 @@ const getSettingStream = _.memoize(name =>
 );
 
 // Throws an error if the given value isn't valid for the named setting.
-function checkSettingValue(setting, value) {
+function checkSettingValue(setting: string, value: any) {
   const settingData = settingsMetadata.get(setting);
   const type = settingData.get('type');
   switch (type) {
@@ -57,7 +50,7 @@ function checkSettingValue(setting, value) {
   }
 }
 
-function _readSetting(name) {
+function _readSetting(name: string): any {
   const settingData = settingsMetadata.get(name);
 
   if (!settingData)
@@ -78,13 +71,14 @@ function _readSetting(name) {
       // const type = settingData.get('type');
       let rawVal = localStorage.getItem(id);
       try {
-        localVal = JSON.parse(rawVal);
+        localVal = JSON.parse(rawVal || 'null');
         if (!Array.isArray(localVal) || localVal.length != 2 || typeof localVal[1] !== 'number') {
           console.error('localVal has bad format:', localVal);
           localVal = null;
         }
         // setting type checking
         try {
+          if (!localVal) throw new Error('localVal was falsey');
           checkSettingValue(name, localVal[0]);
         } catch (e) {
           console.warn(e);
@@ -106,7 +100,7 @@ function _readSetting(name) {
   return null;
 }
 
-function getSetting(name, noDefault=false) {
+function getSetting(name: string, noDefault: boolean=false): any {
   const settingData = settingsMetadata.get(name);
   const settingValue = settingsValues.get(name);
 
@@ -122,7 +116,7 @@ function getSetting(name, noDefault=false) {
   }
 }
 
-function setSetting(name, value, notquiet=false) {
+function setSetting(name: string, value: any, notquiet: boolean=false) {
   const id = 'setting_'+name;
   const settingData = settingsMetadata.get(name);
 
@@ -164,7 +158,7 @@ function setSetting(name, value, notquiet=false) {
   $(document).trigger('setting_change', name);
 }
 
-function bindCheckbox($checkbox, name) {
+function bindCheckbox($checkbox: any, name: string) {
   let changeGuard = false;
   const settingData = settingsMetadata.get(name);
   const type = settingData.get('type');
@@ -190,7 +184,7 @@ function bindCheckbox($checkbox, name) {
   });
 }
 
-function newSection(name, displayName, orderhint, modOnly=false) {
+function newSection(name: string, displayName: string, orderhint: number, modOnly: boolean=false) {
   settingsSectionsList = settingsSectionsList.push(Immutable.Map({
     name, displayName, orderhint, modOnly,
     settings: Immutable.List()
@@ -222,7 +216,7 @@ function newSection(name, displayName, orderhint, modOnly=false) {
 //   validator: Function to validate the value of the setting when it's loaded or
 //              changed. Should throw an exception with an error message if the value is
 //              not deemed valid.
-function newSetting(name, type, defval, description, section, extra={}) {
+function newSetting(name: string, type: string, defval: any, description: string, section: string, extra: Object={}) {
   const moredetails = extra.moredetails;
   const selectOptions = extra.selectOptions && Immutable.fromJS(extra.selectOptions);
   const testButton = extra.testButton && Immutable.fromJS(extra.testButton);
@@ -278,7 +272,7 @@ function newSetting(name, type, defval, description, section, extra={}) {
   }
 }
 
-function getAllSettingValues(noDefault=false) {
+function getAllSettingValues(noDefault: boolean=false) {
   if (noDefault) {
     return settingsValues.toJS();
   } else {

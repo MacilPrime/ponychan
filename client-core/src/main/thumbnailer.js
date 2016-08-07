@@ -1,4 +1,4 @@
-/*
+/* @flow
  * thumbnailer.js
  *
  * Released under the MIT license
@@ -21,7 +21,7 @@ function determine_thumbnail_res(orig_width, orig_height, max_x, max_y) {
   return {width: dest_width, height: dest_height};
 }
 
-export function thumbnailer_simple(image, max_x, max_y) {
+export function thumbnailer_simple(image: Image, max_x: number, max_y: number) {
   return new RSVP.Promise(function(resolve, reject) {
     const dest = determine_thumbnail_res(image.width, image.height, max_x, max_y);
 
@@ -32,6 +32,7 @@ export function thumbnailer_simple(image, max_x, max_y) {
       canvas.width = dest.width;
       canvas.height = dest.height;
       const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Should not happen');
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
       resolve(canvas);
     }

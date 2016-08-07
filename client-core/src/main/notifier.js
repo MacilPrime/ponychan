@@ -1,4 +1,4 @@
-/*
+/* @flow
  * notifier.js
  *
  * Notifies user of replies to them in open threads

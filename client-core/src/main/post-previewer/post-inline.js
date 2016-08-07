@@ -1,3 +1,5 @@
+/* @flow */
+
 import $ from 'jquery';
 import * as ud from 'ud';
 import udKefir from 'ud-kefir';
@@ -112,7 +114,7 @@ function toggleInline($link) {
   }
 }
 
-export function clearAllInline($context) {
+export function clearAllInline($context: any) {
   $('.inlined', $context).removeClass('inlined');
   $('.inline-wrap', $context).remove();
 }

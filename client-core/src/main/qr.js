@@ -1,4 +1,4 @@
-/*
+/* @flow
  * qr.js
  *
  * Released under the MIT license
@@ -21,13 +21,13 @@ settings.newSetting(
   'QR_flexstyle', 'bool', true, 'Use small persona fields on QR', 'posting',
   {
     orderhint:3,
-    notSupported: !(window.CSS && CSS.supports && CSS.supports('display','flex'))
+    notSupported: !(window.CSS && window.CSS.supports && window.CSS.supports('display','flex'))
   }
 );
 
 $(document).ready(function() {
-  const useFile = typeof FileReader != 'undefined' && !!FileReader;
-  const useFormData = typeof FormData != 'undefined' && !!FormData;
+  const useFile = !!window.FileReader;
+  const useFormData = !!window.FormData;
   const useCanvas = !!window.HTMLCanvasElement;
   const useWorker = !!window.Worker;
   let usewURL = false;
@@ -508,16 +508,17 @@ $(document).ready(function() {
         this.fileurl = wURL.createObjectURL(file);
 
         if (file.type && /^video\//.test(file.type)) {
-          const video = document.createElement('video');
+          const video: HTMLVideoElement = document.createElement('video');
           if (video.canPlayType && video.canPlayType(file.type)) {
             video.muted = true;
-            video.src = this.fileurl;
+            video.src = String(this.fileurl);
             video.addEventListener('playing', function() {
               video.pause();
               const canvas = document.createElement('canvas');
               canvas.width = video.videoWidth; //|| 100;
               canvas.height = video.videoHeight; //|| 100;
               const context = canvas.getContext('2d');
+              if (!context) throw new Error('Should not happen');
               context.fillRect(0, 0, canvas.width, canvas.height);
               context.drawImage(video, 0, 0, canvas.width, canvas.height);
               video.removeAttribute('src');
@@ -566,7 +567,7 @@ $(document).ready(function() {
                 });
               }
             };
-            fileimg.src = this.fileurl;
+            fileimg.src = String(this.fileurl);
           }
         }
       }
@@ -646,7 +647,7 @@ $(document).ready(function() {
     toggleCloseButton();
   }
 
-  let selectedreply = null;
+  let selectedreply: any = null;
   addReply();
   toggleFileCloseButton();
 
@@ -878,34 +879,34 @@ $(document).ready(function() {
 
   function loadQRposition() {
     setTopY();
-    if (!window.localStorage || localStorage.qrX == null || localStorage.qrY == null)
+    if (!window.localStorage || localStorage.getItem('qrX') == null || localStorage.getItem('qrY') == null)
       return false;
     let newX;
-    if (localStorage.qrX == Infinity)
+    if (localStorage.getItem('qrX') == 'Infinity')
       newX = Infinity;
     else
-      newX = parseInt(localStorage.qrX);
+      newX = parseInt(localStorage.getItem('qrX'));
     let newY;
-    if (localStorage.qrY == Infinity)
+    if (localStorage.getItem('qrY') == 'Infinity')
       newY = Infinity;
     else
-      newY = parseInt(localStorage.qrY);
+      newY = parseInt(localStorage.getItem('qrY'));
     positionQR(newX, newY);
   }
 
   function saveQRposition() {
     if (!window.localStorage) return;
     if ($QR.css('right')=='0px')
-      localStorage.qrX = Infinity;
+      localStorage.setItem('qrX', 'Infinity');
     else
-    localStorage.qrX = parseInt($QR.css('left'));
+      localStorage.setItem('qrX', String(parseInt($QR.css('left'))));
 
     if ($QR.data('at top'))
-      localStorage.qrY = 0;
+      localStorage.setItem('qrY', '0');
     else if ($QR.css('bottom')=='0px')
-      localStorage.qrY = Infinity;
-  else
-    localStorage.qrY = parseInt($QR.css('top'));
+      localStorage.setItem('qrY', 'Infinity');
+    else
+      localStorage.setItem('qrY', String(parseInt($QR.css('top'))));
   }
 
   $QRmove.mousedown(function(event) {
@@ -913,12 +914,12 @@ $(document).ready(function() {
       return;
     event.preventDefault();
     setTopY();
-    let sLeft, sTop;
+    let sLeft = $(window).scrollLeft();
+    let sTop = $(window).scrollTop();
     function calibrateScroll() {
       sLeft = $(window).scrollLeft();
       sTop = $(window).scrollTop();
     }
-    calibrateScroll();
     const startPos = $QR.position();
     const xoff = event.pageX - sLeft - startPos.left;
     const yoff = event.pageY - sTop - startPos.top;

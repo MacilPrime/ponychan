@@ -1,4 +1,4 @@
-/*
+/* @flow
  * styles.js
  *
  * Released under the MIT license
@@ -24,7 +24,7 @@ function getStyleURI(stylename) {
   return !entry ? null : entry.uri;
 }
 
-function apply(stylename) {
+function apply(stylename: string) {
   const uri = getStyleURI(stylename);
   if (uri == null) {
     console.log('Unknown style:', stylename); //eslint-disable-line no-console

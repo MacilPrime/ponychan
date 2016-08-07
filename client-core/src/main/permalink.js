@@ -1,4 +1,4 @@
-/*
+/* @flow
  * permalink.js
  *
  * Released under the MIT license

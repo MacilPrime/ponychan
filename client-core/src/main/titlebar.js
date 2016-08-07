@@ -1,4 +1,4 @@
-/*
+/* @flow
  * titlebar.js
  *
  * Released under the MIT license
@@ -14,7 +14,7 @@ import {newViewablePosts} from './post-hiding';
 let flash = {};
 let flashmessage = '';
 const unseenPosts = new Map();
-export function hasSeen($post) {
+export function hasSeen($post: any): boolean {
   let id = get_post_id($post);
   return !unseenPosts.has(id);
 }
@@ -30,12 +30,12 @@ function updateTitleFlash() {
   updateTitle();
 }
 
-export function setTitleFlash(key, message) {
+export function setTitleFlash(key: string, message: string) {
   flash[key] = message;
   updateTitleFlash();
 }
 
-export function removeTitleFlash(key) {
+export function removeTitleFlash(key: string) {
   delete flash[key];
   updateTitleFlash();
 }
@@ -98,10 +98,11 @@ $(document).ready(function() {
 
     const seenPosts = [];
     for (let id of Array.from(unseenPosts.keys()).sort()) {
-      let $post = unseenPosts.get(id);
+      const $post = unseenPosts.get(id);
+      if (!$post) throw new Error('Should not happen');
       if ($post.is(':visible')) {
-        let postBottom = $post.offset().top + $post.height();
-        let screenBottom = $(window).scrollTop() + $(window).height();
+        const postBottom = $post.offset().top + $post.height();
+        const screenBottom = $(window).scrollTop() + $(window).height();
         if (postBottom > screenBottom)
           break;
       }

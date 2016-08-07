@@ -1,3 +1,5 @@
+/* @flow */
+
 import cx from 'classnames';
 import React from 'react';
 
@@ -7,7 +9,15 @@ import settings from './settings';
 const isModPage = (document.location.pathname == config.site.siteroot+'mod.php');
 const isSettingsPage = (document.location.pathname == config.site.siteroot+'settings.html');
 
+type ItemProps = {
+  setting: Object;
+  value: any;
+  disabled: boolean;
+};
+
 class InvalidItem extends React.Component {
+  props: ItemProps;
+
   render() {
     const {setting} = this.props;
     const name = setting.get('name');
@@ -25,6 +35,8 @@ class InvalidItem extends React.Component {
 }
 
 class SelectItem extends React.Component {
+  props: ItemProps;
+
   render() {
     const {value, setting, disabled} = this.props;
     const name = setting.get('name');
@@ -60,6 +72,8 @@ class SelectItem extends React.Component {
 }
 
 class CheckboxItem extends React.Component {
+  props: ItemProps;
+
   render() {
     const {value, setting, disabled} = this.props;
     const name = setting.get('name');
@@ -84,7 +98,14 @@ class CheckboxItem extends React.Component {
   }
 }
 
-class SettingSaveButton extends React.Component {
+class SettingSaveButton extends React.PureComponent {
+  props: {
+    valid: boolean;
+    onSave: Function;
+    onUndo: Function;
+    disabled: boolean;
+  };
+
   render() {
     const {valid, onSave, onUndo, disabled} = this.props;
     return (
@@ -94,15 +115,14 @@ class SettingSaveButton extends React.Component {
       </span>
     );
   }
-
-  shouldComponentUpdate(prevProps) {
-    return prevProps.value !== this.props.value ||
-      prevProps.setting !== this.props.setting ||
-      prevProps.disabled !== this.props.disabled;
-  }
 }
 
 class TextAreaItem extends React.Component {
+  props: ItemProps;
+  state: {
+    value: string;
+  }
+
   constructor(props) {
     super(props);
     this.state = {value: props.value};
@@ -156,6 +176,11 @@ class TextAreaItem extends React.Component {
 }
 
 class NumberItem extends React.Component {
+  props: ItemProps;
+  state: {
+    value: number;
+  };
+
   constructor(props) {
     super(props);
     this.state = {value: props.value};
@@ -208,6 +233,11 @@ class NumberItem extends React.Component {
 }
 
 class SettingItem extends React.Component {
+  props: {
+    setting: Object;
+    value: any;
+  };
+
   render() {
     const {setting} = this.props;
     const name = setting.get('name');
@@ -267,6 +297,11 @@ class SettingItem extends React.Component {
 }
 
 class SettingsSection extends React.Component {
+  props: {
+    metadata: Object;
+    values: Object;
+    section: Object;
+  };
   render() {
     const {metadata, values, section} = this.props;
     const items = section.get('settings')
@@ -311,7 +346,14 @@ class SettingsCloseButton extends React.Component {
   }
 }
 
-export class SettingsWindow extends React.Component {
+export class SettingsWindow extends React.PureComponent {
+  props: {
+    closeWindow: Function;
+    metadata: Object;
+    values: Object;
+    sections: Object;
+  };
+
   render() {
     const {closeWindow, metadata, values, sections} = this.props;
     const sectionNodes = sections
@@ -334,11 +376,5 @@ export class SettingsWindow extends React.Component {
         {sectionNodes}
       </div>
     );
-  }
-  shouldComponentUpdate(prevProps) {
-    return prevProps.closeWindow !== this.props.closeWindow ||
-      prevProps.metadata !== this.props.metadata ||
-      prevProps.values !== this.props.values ||
-      prevProps.sections !== this.props.sections;
   }
 }

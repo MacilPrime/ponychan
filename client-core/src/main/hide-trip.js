@@ -1,4 +1,4 @@
-/*
+/* @flow
  * hide-trip.js
  *
  * Released under the WTFPLv2 license

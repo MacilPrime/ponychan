@@ -1,3 +1,5 @@
+/* @flow */
+
 import $ from 'jquery';
 import RSVP from 'rsvp';
 import _ from 'lodash';
@@ -7,7 +9,7 @@ import {clearAllInline} from './post-inline';
 import settings from '../settings';
 import {mogrifyHTML} from '../mogrify';
 
-export const findPost = ud.defn(module, function findPost(url) {
+export const findPost = ud.defn(module, function findPost(url: string) {
   const message = text => $('<div />').addClass('body bodynote').append(text);
   const $container = $('<div/>')
     .data('dummy', 'loading')
@@ -56,7 +58,7 @@ export const findPost = ud.defn(module, function findPost(url) {
 
 
 const threadCache = new Map();
-// Later, this populates with jquery ajax objects.
+// Later, this is populated with jquery ajax objects.
 
 const loadPost = _.memoize(function(targetURL) {
   // 1. Will attempt to query the document to get your post first.
@@ -74,15 +76,16 @@ const loadPost = _.memoize(function(targetURL) {
 
     const threadURL = targetURL.replace(/#.*$/, '');
 
-    if (!threadCache.has(threadURL)) {
+    let jqPromise = threadCache.get(threadURL);
+    if (!jqPromise) {
       // When it's undefined, it's a page we haven't loaded yet.
-
-      threadCache.set(threadURL, $.Deferred(
+      jqPromise = $.Deferred(
         dfr => $.ajax(threadURL, {cache: false}).then(dfr.resolve, dfr.reject)
-      ).promise());
+      ).promise();
+      threadCache.set(threadURL, jqPromise);
     }
 
-    threadCache.get(threadURL).done((data) => {
+    jqPromise.done((data) => {
       const $postC = $($.parseHTML(mogrifyHTML(data))).find('#replyC_'+meta.post);
 
       if ($postC.length == 0) {

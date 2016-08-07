@@ -1,4 +1,4 @@
-/*
+/* @flow
  * mc.js
  *
  * Released under the MIT license

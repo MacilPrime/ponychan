@@ -1,6 +1,8 @@
+/* @flow */
+
 import {log_error} from './logger';
 
-let BOARD_DATA = {};
+let BOARD_DATA: Object = {};
 if (global.document) {
   try {
     // This is populated by getBoardConfig() in functions.php

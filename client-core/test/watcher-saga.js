@@ -1,3 +1,5 @@
+/* @flow */
+
 import assert from 'assert';
 import Kefir from 'kefir';
 import {call, put, take, cancel, fork} from 'redux-saga/effects';
@@ -10,7 +12,7 @@ import * as actions from '../src/main/react/watcher/actions';
 
 describe('watcher saga', function() {
   it('works with empty localStorage', function() {
-    const localStorage = new MockWebStorage();
+    const localStorage: any = new MockWebStorage();
 
     const storageEvents = Kefir.never();
     const s = saga(localStorage, storageEvents);
@@ -38,7 +40,7 @@ describe('watcher saga', function() {
       }
     };
 
-    const localStorage = new MockWebStorage();
+    const localStorage: any = new MockWebStorage();
     localStorage.setItem('watched_threads', JSON.stringify(watched_threads));
 
     const storageEvents = Kefir.never();
@@ -70,7 +72,8 @@ describe('watcher saga', function() {
   });
 
   it('refresher does nothing if given no threads', function() {
-    const s = refresher();
+    const localStorage: any = new MockWebStorage();
+    const s = refresher(localStorage);
 
     let value = s.next().value;
     assert(value.SELECT);
@@ -82,7 +85,7 @@ describe('watcher saga', function() {
 
   it('refresher refreshes thread continually', function() {
     let watched_threads = {'b:651': 'FOOBAR'};
-    const localStorage = new MockWebStorage();
+    const localStorage: any = new MockWebStorage();
     localStorage.setItem('watched_threads', JSON.stringify(watched_threads));
     const s = refresher(localStorage);
     let value;
@@ -107,7 +110,7 @@ describe('watcher saga', function() {
         assert(value.SELECT);
         value = s.next(watched_threads).value;
         assert.deepEqual(
-          JSON.parse(localStorage.getItem('watched_threads')),
+          JSON.parse(localStorage.getItem('watched_threads')||'null'),
           watched_threads
         );
       }
@@ -117,7 +120,7 @@ describe('watcher saga', function() {
 
   it('saves when user watches or unwatches thread', function() {
     let watched_threads = {'b:651': 'FOOBAR'};
-    const localStorage = new MockWebStorage();
+    const localStorage: any = new MockWebStorage();
     localStorage.setItem('watched_threads', JSON.stringify(watched_threads));
     const s = saver(localStorage);
 
@@ -133,7 +136,7 @@ describe('watcher saga', function() {
       watched_threads = {...watched_threads, [`b:${i}`]: `blah ${i}`};
       value = s.next(watched_threads).value;
       assert.deepEqual(
-        JSON.parse(localStorage.getItem('watched_threads')),
+        JSON.parse(localStorage.getItem('watched_threads')||'null'),
         watched_threads
       );
     }

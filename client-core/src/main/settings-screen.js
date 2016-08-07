@@ -1,4 +1,4 @@
-/*
+/* @flow
  * settings
  *
  * Released under the MIT license

@@ -1,4 +1,4 @@
-/*
+/* @flow
  * state.js
  *
  * Released under the MIT license
@@ -14,7 +14,7 @@ if (typeof history != 'undefined' && history && history.state) {
   applyState(history.state);
 }
 
-export function newState(state, url) {
+export function newState(state: Object, url: ?string) {
   applyState(state);
 
   if (typeof history != 'undefined' && history && history.pushState) {

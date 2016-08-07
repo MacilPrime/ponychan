@@ -1,4 +1,4 @@
-/*
+/* @flow
  * local-time.js
  *
  * Released under the MIT license

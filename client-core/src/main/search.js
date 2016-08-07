@@ -1,4 +1,4 @@
-/*
+/* @flow
  * search.js
  *
  * Released under the MIT license

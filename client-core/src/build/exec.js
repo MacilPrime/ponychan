@@ -1,9 +1,11 @@
+/* @flow */
+
 import RSVP from 'rsvp';
 import cproc from 'child_process';
 
-module.exports = function exec(command) {
-  return new RSVP.Promise(function(resolve, reject) {
-    cproc.exec(command, function(error, stdout, stderr) {
+export default function exec(command: string): Promise<string> {
+  return new RSVP.Promise((resolve, reject) => {
+    cproc.exec(command, (error, stdout, stderr) => {
       if (stderr) {
         process.stderr.write(stderr);
       }
@@ -14,4 +16,4 @@ module.exports = function exec(command) {
       }
     });
   });
-};
+}

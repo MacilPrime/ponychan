@@ -1,4 +1,4 @@
-/*
+/* @flow
  * notice.js
  *
  * Released under the MIT license
@@ -10,11 +10,11 @@ import $ from 'jquery';
 import RSVP from 'rsvp';
 import Kefir from 'kefir';
 
-export function settingsAd(text, time) {
+export function settingsAd(text: string, time: number) {
   return pop(text+' \u2191', time);
 }
 
-export function pop(text, time = 30) {
+export function pop(text: string, time: number=30): Promise<void> {
   const bubbleSpacing = 5;
   const $pop = $('<div />')
     .hide()

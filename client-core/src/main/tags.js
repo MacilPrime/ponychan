@@ -1,4 +1,4 @@
-/*
+/* @flow
  * tags.js
  *
  * Released under the MIT license

@@ -1,3 +1,5 @@
+/* @flow */
+
 import $ from 'jquery';
 import Kefir from 'kefir';
 import {documentReady, newPosts} from './lib/events';

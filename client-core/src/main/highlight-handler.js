@@ -1,3 +1,5 @@
+/* @flow */
+
 const $ = require('jquery');
 import {highlightPost} from './lib/post-utils';
 

@@ -1,3 +1,5 @@
+/* @flow */
+
 import $ from 'jquery';
 import asap from 'asap';
 import {Metadata} from './post-previewer/url-metadata';

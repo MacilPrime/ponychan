@@ -1,3 +1,5 @@
+/* @flow */
+
 export default function pageHasFocus() {
   if (document.hasFocus)
     return document.hasFocus();

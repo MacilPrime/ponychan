@@ -1,3 +1,5 @@
+/* @flow */
+
 import gulp from 'gulp';
 import browserify from 'browserify';
 import watchify from 'watchify';

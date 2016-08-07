@@ -1,3 +1,5 @@
+/* @flow */
+
 const $ = require('jquery');
 const Kefir = require('kefir');
 

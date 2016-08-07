@@ -1,3 +1,5 @@
+/* @flow */
+
 import 'console-polyfill';
 import 'babel-polyfill';
 import 'webstorage-polyfill';
@@ -67,5 +69,4 @@ window.ponychan = {
   actionLog
 };
 
-window.$ = window.ponychan.$;
 window.settings = window.ponychan.settings;
