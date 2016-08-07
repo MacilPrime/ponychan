@@ -88,7 +88,7 @@
 			<li><a href="?/search">{% trans 'Search' %}</a></li>
 		{% endif %}
 		{% if mod|hasPermission('managefilters') %}
-			<li><a href="?/users">{% trans 'Manage post filters' %}</a></li>
+			<li><a href="/mod/filters/">{% trans 'Manage post filters' %}</a></li>
 		{% endif %}
 		{% if mod|hasPermission('manageusers') %}
 			<li><a href="?/users">{% trans 'Manage users' %}</a></li>

@@ -6,7 +6,6 @@ import React from 'react';
 import config from './config';
 import settings from './settings';
 
-const isModPage = (document.location.pathname == config.site.siteroot+'mod.php');
 const isSettingsPage = (document.location.pathname == config.site.siteroot+'settings.html');
 
 type ItemProps = {
@@ -357,7 +356,7 @@ export class SettingsWindow extends React.PureComponent {
   render() {
     const {closeWindow, metadata, values, sections} = this.props;
     const sectionNodes = sections
-      .filter(section => isModPage || !section.get('modOnly'))
+      .filter(section => config.isMod || !section.get('modOnly'))
       .map(section =>
         <SettingsSection
           metadata={metadata}

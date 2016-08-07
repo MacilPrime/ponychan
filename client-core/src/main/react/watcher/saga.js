@@ -11,10 +11,8 @@ import delay from '../../lib/delay';
 import * as actions from './actions';
 
 export function* setModStatus(): any {
-  const isModPage = global.document &&
-    document.location.pathname == config.site.siteroot+'mod.php';
-  if (isModPage) {
-    yield put(actions.setWatcherModStatus(isModPage));
+  if (config.isMod) {
+    yield put(actions.setWatcherModStatus(config.isMod));
   }
 }
 
