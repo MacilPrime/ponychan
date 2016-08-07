@@ -37,7 +37,8 @@ const config = {
   board: {
     cookies_salt: 'test value',
     permissions: {
-      reports: 0
+      reports: 0,
+      managefilters: 1
     },
     boardlist: ([['b'], ['pone', 'cool']]: Array<Array<string>>)
   },

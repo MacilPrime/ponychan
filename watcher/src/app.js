@@ -65,6 +65,16 @@ function modOnly(req, res, next) {
   }
 }
 
+function modPermissionCheck(permission: string) {
+  return function(req, res, next) {
+    if (req.mod && req.mod.type >= config.board.permissions[permission]) {
+      next();
+    } else {
+      res.sendStatus(403);
+    }
+  };
+}
+
 function scriptBasePage(pageId: string, title: string) {
   return (req, res) => {
     res.render('scriptBasePage.html', {pageId, title});
@@ -74,11 +84,12 @@ function scriptBasePage(pageId: string, title: string) {
 app.all('/mod/*', modOnly);
 app.all('/api/v1/mod/*', modOnly);
 
-app.get('/mod/filters/*', scriptBasePage('modFilters', 'Filters'));
+app.get('/mod/filters/*', modPermissionCheck('managefilters'), scriptBasePage('modFilters', 'Filters'));
 
 app.post('/api/v1/mod/filters/previews/', bodyParser.json(), filters.previewStart);
 app.get('/api/v1/mod/filters/previews/:id', filters.previewGet);
 
+app.all('/api/v1/mod/filters/*', modPermissionCheck('managefilters'));
 app.get('/api/v1/mod/filters/', filters.getList);
 app.post('/api/v1/mod/filters/', bodyParser.json(), filters.create);
 app.get('/api/v1/mod/filters/:id', filters.getOne);
