@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -7,7 +9,7 @@ import {unwatchThread} from './actions';
 import watchedThreadsStateToList from './watchedThreadsStateToList';
 import Thread from './Thread';
 
-export default class Menu extends React.Component {
+class Menu extends React.Component {
   render() {
     const {watcher, unwatchThread} = this.props;
     const threads = watchedThreadsStateToList(watcher.watchedThreads);

@@ -1,3 +1,5 @@
+/* @flow */
+
 import _ from 'lodash';
 import * as actions from './actions';
 
@@ -36,7 +38,7 @@ function countAlerts(watchedThreads, lastResponse, currentThreadId) {
   return alerts;
 }
 
-export default function reducer(state=initialState, action) {
+export default function reducer(state: any=initialState, action: Object) {
   switch (action.type) {
   case actions.SET_CURRENT_THREAD_ID: {
     return {

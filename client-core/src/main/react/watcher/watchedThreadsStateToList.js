@@ -1,6 +1,8 @@
+/* @flow */
+
 import {make_thread_url, make_thread50_url} from '../../lib/url';
 
-export default function watchedThreadsStateToList(state) {
+export default function watchedThreadsStateToList(state: Object) {
   return Object.keys(state).map(id => {
     const watchedThread = state[id];
 

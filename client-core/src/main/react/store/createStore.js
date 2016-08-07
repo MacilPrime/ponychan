@@ -1,3 +1,5 @@
+/* @flow */
+
 import {compose, createStore, applyMiddleware} from 'redux';
 import {routerMiddleware} from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
@@ -6,7 +8,7 @@ import {createActionLog} from 'redux-action-log';
 import saga from './saga';
 import reducers from './reducers';
 
-export default (initialState = {}, history, DevTools) => {
+export default (initialState: any = {}, history: any, DevTools: any) => {
   const actionLog = createActionLog({limit: 100});
 
   const sagaMiddleware = createSagaMiddleware();

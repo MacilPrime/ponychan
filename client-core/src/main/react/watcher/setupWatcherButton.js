@@ -1,3 +1,5 @@
+/* @flow */
+
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -13,7 +15,7 @@ import {settingsMenuButtonReady} from '../../settings-screen';
 
 const max_watched_threads = 70;
 
-export default function setupWatcherButton(store) {
+export default function setupWatcherButton(store: Object) {
   if (!window.localStorage) return;
 
   const $threadOp = $('div.banner').length ?

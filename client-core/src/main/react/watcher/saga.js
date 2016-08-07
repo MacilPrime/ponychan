@@ -1,3 +1,5 @@
+/* @flow */
+
 import Kefir from 'kefir';
 import config from '../../config';
 import isEqual from 'lodash/isEqual';
@@ -8,7 +10,7 @@ import {log_error} from '../../logger';
 import delay from '../../lib/delay';
 import * as actions from './actions';
 
-export function* setModStatus() {
+export function* setModStatus(): any {
   const isModPage = global.document &&
     document.location.pathname == config.site.siteroot+'mod.php';
   if (isModPage) {
@@ -16,23 +18,23 @@ export function* setModStatus() {
   }
 }
 
-export function* loadWatchedThreads(storage) {
+export function* loadWatchedThreads(storage: Storage): any {
   const currentWatchedThreads = yield select(s => s.watcher.watchedThreads);
   let loadedWatchedThreads = currentWatchedThreads;
   try {
-    const loaded = JSON.parse(storage.getItem('watched_threads'));
+    const loaded = JSON.parse(storage.getItem('watched_threads') || 'null');
     if (loaded) {
       loadedWatchedThreads = loaded;
     }
   } catch (err) {
     console.error("Couldn't read localStorage", err); //eslint-disable-line
   }
-  if (!isEqual(currentWatchedThreads, loadedWatchedThreads)) {
+  if (loadedWatchedThreads && !isEqual(currentWatchedThreads, loadedWatchedThreads)) {
     yield put(actions.setWatchedThreads(loadedWatchedThreads));
   }
 }
 
-export function* saveWatchedThreads(storage) {
+export function* saveWatchedThreads(storage: Storage): any {
   const watchedThreads = yield select(s => s.watcher.watchedThreads);
   try {
     storage.setItem('watched_threads', JSON.stringify(watchedThreads));
@@ -41,7 +43,7 @@ export function* saveWatchedThreads(storage) {
   }
 }
 
-export function requestWatcher(watchedThreads) {
+export function requestWatcher(watchedThreads: Object): any {
   return fetch(
     `${config.site.siteroot}watcher/threads?${stringify({'ids[]': Object.keys(watchedThreads).sort()})}`,
     {credentials: 'same-origin'}
@@ -50,7 +52,7 @@ export function requestWatcher(watchedThreads) {
       return response.json();
     } else {
       const error = new Error(response.statusText);
-      error.response = response;
+      (error:any).response = response;
       throw error;
     }
   }).then(data => {
@@ -61,21 +63,21 @@ export function requestWatcher(watchedThreads) {
   });
 }
 
-export function* refresher(storage) {
+export function* refresher(storage: Storage): any {
   while (true) {
     const isMod = yield select(s => s.watcher.isMod);
-    const watchedThreads = yield select(s => s.watcher.watchedThreads);
+    const watchedThreads: any = yield select(s => s.watcher.watchedThreads);
     if (!isMod && Object.keys(watchedThreads).length == 0) {
       return;
     }
 
     try {
-      const data = yield call(requestWatcher, watchedThreads);
+      const data: any = yield call(requestWatcher, watchedThreads);
 
       if (data.scripts) {
         for (let i=0; i<data.scripts.length; i++) {
           try {
-            Function(data.scripts[i])();
+            new Function(data.scripts[i])();
           } catch (e) {
             log_error(e);
           }
@@ -97,14 +99,14 @@ export function* refresher(storage) {
   }
 }
 
-export function* reloader(storage, storageEvents) {
+export function* reloader(storage: Storage, storageEvents: Object): any {
   while (true) {
     yield call(() => storageEvents.take(1).toPromise());
     yield* loadWatchedThreads(storage);
   }
 }
 
-export function* saver(storage) {
+export function* saver(storage: Storage): any {
   while (true) {
     yield take([
       actions.WATCH_THREAD,
@@ -121,8 +123,8 @@ function defaultStorageEvents() {
 }
 
 export default function* root(
-  storage=localStorage, storageEvents=defaultStorageEvents()
-) {
+  storage: Storage=localStorage, storageEvents:Object=defaultStorageEvents()
+): any {
   yield* setModStatus();
   yield* loadWatchedThreads(storage);
   yield fork(reloader, storage, storageEvents);

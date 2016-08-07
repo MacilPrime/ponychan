@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, {Children, PropTypes} from 'react';
 import withSideEffect from 'react-side-effect';
 
