@@ -1,11 +1,12 @@
 /* @flow */
 
+import _ from 'lodash';
 import * as actions from './actions';
 
 const initialState = {
   filterListRequestRunning: false,
   filterListLastError: null,
-  filterList: []
+  filtersById: {}
 };
 export type State = typeof initialState;
 
@@ -19,10 +20,14 @@ export default function reducer(state: State=initialState, action: Object): Stat
   }
   case actions.FETCH_LIST_SUCCESS: {
     const {filterList} = action.payload;
+    const filtersById = _.chain(filterList)
+      .map(filter => [filter.id, filter])
+      .fromPairs()
+      .value();
     return {
       ...state,
       filterListRequestRunning: false,
-      filterList
+      filtersById
     };
   }
   case actions.FETCH_LIST_FAIL: {

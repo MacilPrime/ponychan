@@ -1,8 +1,12 @@
 /* @flow */
 
+import _ from 'lodash';
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 import {bindActionCreators} from 'redux';
+import moment from 'moment';
+import filterModeName from './filterModeName';
 
 import {fetchListRequest} from './actions';
 
@@ -12,17 +16,41 @@ class FilterList extends React.PureComponent {
   }
 
   render() {
-    const list = this.props.modFilters.filterList.map(filter =>
-      <tr key={filter.id}>
-        <td>foo</td>
-        <td><pre>{ JSON.stringify(filter,null,2) }</pre></td>
-      </tr>
-    );
+    const filters = _.chain(this.props.modFilters.filtersById)
+      .values()
+      .sortBy(filter => filter.id)
+      .value();
+    const list = filters.map(filter => {
+      const t = moment(filter.timestamp);
+      return (
+        <tr key={filter.id}>
+          <td>[+]</td>
+          <td><Link to={`/mod/filters/${filter.id}`}>{'->'}</Link></td>
+          <td title={t.format()}>{t.format('Y-MM-DD')}</td>
+          <td>{filter.author_name}</td>
+          <td>{filterModeName(filter.mode)}</td>
+          <td>TODO</td>
+          <td>{filter.action.type}</td>
+          <td>TODO</td>
+        </tr>
+      );
+    });
 
     return (
       <div>
         [Filter List]
         <table>
+          <thead>
+            <tr>
+              <td colSpan={2}></td>
+              <td>Date</td>
+              <td>Author</td>
+              <td>Mode</td>
+              <td>Hits</td>
+              <td>Action</td>
+              <td>Conditions</td>
+            </tr>
+          </thead>
           <tbody>
             {list}
           </tbody>
