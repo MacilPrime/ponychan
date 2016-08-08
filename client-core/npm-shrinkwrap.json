@@ -3681,7 +3681,7 @@
     },
     "react-addons-update": {
       "version": "15.3.0",
-      "from": "react-addons-update@>=15.0.0 <16.0.0",
+      "from": "react-addons-update@>=15.3.0 <16.0.0",
       "resolved": "https://registry.npmjs.org/react-addons-update/-/react-addons-update-15.3.0.tgz"
     },
     "react-deep-force-update": {
