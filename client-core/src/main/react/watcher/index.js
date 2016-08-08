@@ -5,7 +5,7 @@ import React from 'react';
 import Title from '../common/Title';
 import Menu from './Menu';
 
-export default class Watcher extends React.Component {
+export default class Watcher extends React.PureComponent {
   render() {
     return (
       <Title title="Watcher">
@@ -14,9 +14,5 @@ export default class Watcher extends React.Component {
         </div>
       </Title>
     );
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 }

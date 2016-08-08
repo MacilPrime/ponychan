@@ -4,13 +4,12 @@ import React from 'react';
 import {Link} from 'react-router';
 import Title from '../common/Title';
 
-export default class ModFilters extends React.Component {
+export default class Dashboard extends React.PureComponent {
   render() {
     return (
       <Title title="Filters Dashboard">
         <div>
-          Mod-Filters stuff here<br />
-          <Link to="/watcher">watcher</Link>
+          <Link to="/mod/filters/list">Filter List</Link>
         </div>
       </Title>
     );
