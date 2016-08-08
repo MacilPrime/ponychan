@@ -1,10 +1,11 @@
 /* @flow */
 
 import * as actions from './actions';
-import {takeLatest} from 'redux-saga';
+import {takeEvery, takeLatest} from 'redux-saga';
 import {call, put, fork} from 'redux-saga/effects';
+import errorFromResponse from '../../lib/errorFromResponse';
 
-export async function fetchList(): Promise<any> {
+export async function fetchList(): Promise<Object> {
   const response = await fetch(
     '/api/v1/mod/filters/',
     {credentials: 'same-origin'}
@@ -12,13 +13,19 @@ export async function fetchList(): Promise<any> {
   if (response.ok) {
     return await response.json();
   } else {
-    const error = new Error(response.statusText);
-    (error:any).details = {
-      status: response.status,
-      statusText: response.statusText,
-      text: await response.text()
-    };
-    throw error;
+    throw await errorFromResponse(response);
+  }
+}
+
+export async function fetchFilter(id: number): Promise<Object> {
+  const response = await fetch(
+    `/api/v1/mod/filters/${id}`,
+    {credentials: 'same-origin'}
+  );
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw await errorFromResponse(response);
   }
 }
 
@@ -39,6 +46,26 @@ export function* listRefresher(): any {
   });
 }
 
+export function* filterFetcher(): any {
+  yield* takeEvery(actions.FETCH_FILTER_REQUEST, function*(action) {
+    const {id} = action.payload;
+    try {
+      const response: any = yield call(fetchFilter, id);
+      yield put(actions.fetchFilterSuccess(response));
+    } catch (err) {
+      const {details} = err;
+      if (details) {
+        yield put(actions.fetchFilterFail(id, details.status, details.text));
+      } else {
+        yield put(actions.fetchFilterFail(id, 0, err.message));
+      }
+    }
+  });
+}
+
 export default function* root(): any {
-  yield fork(listRefresher);
+  yield [
+    fork(listRefresher),
+    fork(filterFetcher)
+  ];
 }
