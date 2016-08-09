@@ -106,7 +106,7 @@ export async function getOne(req: Object, res: Object, next: Function): any {
     }));
 
     const [hitResults] = await mysql_query(
-      `SELECT timestamp,
+      `SELECT id, timestamp,
       INET6_NTOA(ip_data) AS ip,
       blocked, board, thread, successful_post_id,
       name, trip, capcode, email, subject,
@@ -116,6 +116,7 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       ORDER BY timestamp DESC LIMIT 100`, [id]);
 
     filter.hits = hitResults.map(hit => ({
+      id: hit.id,
       timestamp: hit.timestamp,
       ip: hit.ip,
       blocked: !!hit.blocked,

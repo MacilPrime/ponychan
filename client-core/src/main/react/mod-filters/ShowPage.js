@@ -5,9 +5,17 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Title from '../common/Title';
 
+import About from './show/About';
+import Edit from './show/Edit';
+import Hits from './show/Hits';
+
 import {fetchFilterRequest} from './actions';
 
 class ShowPage extends React.PureComponent {
+  state = {
+    page: 'about'
+  };
+
   componentDidMount() {
     const id = +this.props.params.id;
     this.props.fetchFilterRequest(id);
@@ -36,15 +44,40 @@ class ShowPage extends React.PureComponent {
       );
     }
 
+    const {page} = this.state;
+
     return (
       <Title title="Filter">
         <div>
-          foo {filter.id} {filter.author_name}<br />
-          <pre>{JSON.stringify(filter,null,2)}</pre>
+          <div>
+            <button type="button" onClick={()=>this.setState({page:'about'})}
+              style={{fontWeight: page === 'about' ? 'bold' : ''}}>
+              About
+            </button>
+            <button type="button" onClick={()=>this.setState({page:'edit'})}
+              style={{fontWeight: page === 'edit' ? 'bold' : ''}}>
+              View/Edit
+            </button>
+            <button type="button" onClick={()=>this.setState({page:'hits'})}
+              style={{fontWeight: page === 'hits' ? 'bold' : ''}}>
+              Hits
+            </button>
+          </div>
+          {
+            page === 'about' ? <About filter={filter} /> :
+            page === 'edit' ? <Edit initialFilter={filter} onCreate={this._onCreate} /> :
+            page === 'hits' ? <Hits filter={filter} /> :
+            null
+          }
         </div>
       </Title>
     );
   }
+
+  _onCreate = (filter) => {
+    filter;
+    alert('TODO support creating filters');
+  };
 }
 
 function mapStateToProps(state, ownProps) {
