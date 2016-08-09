@@ -26,12 +26,13 @@ type Action =
     message?: ?string;
   };
 
-function rowToFilter(row: Object): Object {
-  const {id, timestamp, mode, parent, parent_timestamp, author, author_name} = row;
+function rowToFilter(row: Object) {
+  const {id, timestamp, mode, parent, parent_timestamp, author, author_name, hit_count} = row;
   const {conditions, action} = JSON.parse(row.filter_json);
   return {
     id, timestamp, mode, conditions, action,
-    parent, parent_timestamp, author, author_name
+    parent, parent_timestamp, author, author_name,
+    hit_count
   };
 }
 
@@ -51,11 +52,13 @@ export async function getList(req: Object, res: Object, next: Function): any {
     }
 
     const [results] = await mysql_query(
-      `SELECT post_filters.id, timestamp, mode, parent, author,
+      `SELECT post_filters.id, post_filters.timestamp, mode, parent, author,
       filter_json,
-      mods.username AS author_name
+      mods.username AS author_name,
+      COUNT(post_filter_hits.id) AS hit_count
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id
+      LEFT JOIN post_filter_hits ON post_filter_hits.filter_id = post_filters.id
       ${where}
       ORDER BY post_filters.id ASC`);
     const filters = results.map(rowToFilter);
@@ -79,9 +82,11 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       `SELECT post_filters.id, post_filters.timestamp, post_filters.mode,
       post_filters.author, post_filters.filter_json,
       mods.username AS author_name,
-      post_filters.parent, parents.timestamp AS parent_timestamp
+      post_filters.parent, parents.timestamp AS parent_timestamp,
+      COUNT(post_filter_hits.id) AS hit_count
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id
+      LEFT JOIN post_filter_hits ON post_filter_hits.filter_id = post_filters.id
       LEFT JOIN post_filters AS parents ON post_filters.parent = parents.id
       WHERE post_filters.id = ?`, [id]);
     if (filterResults.length == 0) {

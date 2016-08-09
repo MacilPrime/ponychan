@@ -29,7 +29,7 @@ class FilterList extends React.PureComponent {
           <td title={t.format()}>{t.format('Y-MM-DD')}</td>
           <td>{filter.author_name}</td>
           <td>{filterModeName(filter.mode)}</td>
-          <td>TODO</td>
+          <td>{filter.hit_count}</td>
           <td>{filter.action.type}</td>
           <td>TODO</td>
         </tr>
