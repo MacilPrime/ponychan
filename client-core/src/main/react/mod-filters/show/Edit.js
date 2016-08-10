@@ -109,6 +109,19 @@ export default class Edit extends React.PureComponent {
         </section>
         <section>
           <h3>Mode</h3>
+          <div>
+            <select value={filter.mode}
+              onChange={event => {
+                this.setState({
+                  filter: {...filter, mode: +event.target.value}
+                });
+              }}
+              >
+              <option value="0">Disabled</option>
+              <option value="1">Audit</option>
+              <option value="2">Enforce</option>
+            </select>
+          </div>
         </section>
         <div>
           <button type="button" onClick={this._onCreate}>
