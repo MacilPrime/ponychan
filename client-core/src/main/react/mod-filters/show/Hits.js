@@ -25,7 +25,15 @@ export default class Edit extends React.PureComponent {
 
     return (
       <div>
-        {entries}
+        <div>
+          Total hits: {filter.hit_count}
+        </div>
+        <div style={{display: filter.hit_count === filter.hits.length ? 'none' : ''}}>
+          Showing {filter.hits.length}
+        </div>
+        <ul>
+          {entries}
+        </ul>
       </div>
     );
   }
