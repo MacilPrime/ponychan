@@ -156,6 +156,7 @@ export default class Action extends React.PureComponent {
       );
       break;
     case 'captcha':
+      configureArea = null;
       break;
     }
 
