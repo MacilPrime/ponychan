@@ -28,7 +28,7 @@ export default class ConditionRow extends React.PureComponent {
     condition: ConditionValue;
     onRemove(): void;
     onMove(direction: 'up'|'down'): void;
-    onChange(value: ConditionValue): void;
+    onChange(condition: ConditionValue): void;
   };
 
   _stringInput() {

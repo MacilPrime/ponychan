@@ -3,7 +3,9 @@
 import _ from 'lodash';
 import React from 'react';
 import update from 'react-addons-update';
+
 import ConditionRow from './edit/ConditionRow';
+import Action from './edit/Action';
 
 type Props = {
   initialFilter: Object;
@@ -96,6 +98,14 @@ export default class Edit extends React.PureComponent {
         </section>
         <section>
           <h3>Action</h3>
+          <Action
+            action={filter.action}
+            onChange={action => {
+              this.setState({
+                filter: {...filter, action}
+              });
+            }}
+            />
         </section>
         <section>
           <h3>Mode</h3>
