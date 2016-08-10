@@ -3,9 +3,23 @@
 import React from 'react';
 
 type ConditionValue = {type: string, value: any};
-const STRING_TYPES = new Set(['name', 'trip', 'email', 'subject', 'body', 'filename', 'ip', 'board']);
-const BOOLEAN_TYPES = new Set(['op', 'has_file', 'first_time_poster']);
-const NUMBER_TYPES = new Set(['has_not_solved_captcha_in_x_minutes']);
+
+const filterTypes: {[type:string]: {valueType: string, defaultValue: any}} = {
+  'name': {valueType: 'string', defaultValue: ''},
+  'trip': {valueType: 'string', defaultValue: ''},
+  'email': {valueType: 'string', defaultValue: ''},
+  'subject': {valueType: 'string', defaultValue: ''},
+  'body': {valueType: 'string', defaultValue: ''},
+  'filename': {valueType: 'string', defaultValue: ''},
+  'ip': {valueType: 'string', defaultValue: ''},
+  'board': {valueType: 'string', defaultValue: ''},
+
+  'op': {valueType: 'boolean', defaultValue: true},
+  'has_file': {valueType: 'boolean', defaultValue: true},
+  'first_time_poster': {valueType: 'boolean', defaultValue: true},
+
+  'has_not_solved_captcha_in_x_minutes': {valueType: 'number', defaultValue: 60},
+};
 
 export default class ConditionRow extends React.PureComponent {
   props: {
@@ -56,9 +70,18 @@ export default class ConditionRow extends React.PureComponent {
   render() {
     const {isFirst, isLast, condition} = this.props;
 
-    const input = STRING_TYPES.has(condition.type) ? this._stringInput() :
-      BOOLEAN_TYPES.has(condition.type) ? this._booleanInput() :
-      NUMBER_TYPES.has(condition.type) ? this._numberInput() : null;
+    let input;
+    switch (filterTypes[condition.type].valueType) {
+    case 'string':
+      input = this._stringInput();
+      break;
+    case 'boolean':
+      input = this._booleanInput();
+      break;
+    case 'number':
+      input = this._numberInput();
+      break;
+    }
 
     return (
       <tr>
@@ -80,9 +103,7 @@ export default class ConditionRow extends React.PureComponent {
             onChange={event => {
               this.props.onChange({
                 type: event.target.value,
-                value: STRING_TYPES.has(event.target.value) ? '' :
-                  BOOLEAN_TYPES.has(event.target.value) ? false :
-                  NUMBER_TYPES.has(event.target.value) ? 0 : null
+                value: filterTypes[event.target.value].defaultValue
               });
             }}
             >
@@ -97,7 +118,7 @@ export default class ConditionRow extends React.PureComponent {
             <option value="op">OP</option>
             <option value="has_file">Has File</option>
             <option value="first_time_poster">First Time Poster</option>
-            <option value="has_not_solved_captcha_in_x_minutes">Time since CAPTCHA</option>
+            <option value="has_not_solved_captcha_in_x_minutes">Minutes since CAPTCHA</option>
           </select>
         </td>
         <td>
