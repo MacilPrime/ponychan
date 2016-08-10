@@ -3,6 +3,7 @@
 import * as actions from './actions';
 import {takeEvery, takeLatest} from 'redux-saga';
 import {call, put, fork} from 'redux-saga/effects';
+import delay from '../../lib/delay';
 import errorFromResponse from '../../lib/errorFromResponse';
 
 export async function fetchList(): Promise<Object> {
@@ -24,6 +25,44 @@ export async function fetchFilter(id: number): Promise<Object> {
   );
   if (response.ok) {
     return await response.json();
+  } else {
+    throw await errorFromResponse(response);
+  }
+}
+
+export async function fetchPreviewStart(conditions: Object[]): Promise<{taskUrl: string}> {
+  const headers = new Headers();
+  headers.set('Content-Type', 'application/json');
+  const response = await fetch(
+    '/api/v1/mod/filters/previews/',
+    {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        conditions
+      })
+    }
+  );
+  if (response.status === 202) {
+    const taskUrl = response.headers.get('Location');
+    return {taskUrl};
+  } else {
+    throw await errorFromResponse(response);
+  }
+}
+
+export async function fetchTaskStatus(taskUrl: string): Promise<{taskResults: ?Object}> {
+  const response = await fetch(
+    taskUrl,
+    {credentials: 'same-origin'}
+  );
+  if (response.ok) {
+    if (response.url.endsWith(taskUrl)) {
+      return {taskResults: null};
+    } else {
+      return {taskResults: await response.json()};
+    }
   } else {
     throw await errorFromResponse(response);
   }
@@ -63,9 +102,38 @@ export function* filterFetcher(): any {
   });
 }
 
+export function* previewFetcher(): any {
+  yield* takeLatest([
+    actions.PREVIEW_FILTER_REQUEST, actions.CLEAR_PREVIEWED_FILTER
+  ], function*(action) {
+    if (action.type === actions.PREVIEW_FILTER_REQUEST) {
+      const {conditions} = action.payload;
+      try {
+        const response: any = yield call(fetchPreviewStart, conditions);
+        const {taskUrl} = response;
+        let taskResults = null;
+        while (!taskResults) {
+          yield call(delay, 1*1000);
+          const taskStatusResponse: any = yield call(fetchTaskStatus, taskUrl);
+          taskResults = taskStatusResponse.taskResults;
+        }
+        yield put(actions.previewFilterSuccess(taskResults));
+      } catch (err) {
+        const {details} = err;
+        if (details) {
+          yield put(actions.previewFilterFail(details.status, details.text));
+        } else {
+          yield put(actions.previewFilterFail(0, err.message));
+        }
+      }
+    }
+  });
+}
+
 export default function* root(): any {
   yield [
     fork(listRefresher),
-    fork(filterFetcher)
+    fork(filterFetcher),
+    fork(previewFetcher),
   ];
 }

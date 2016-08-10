@@ -91,7 +91,8 @@ export default function reducer(state: State=initialState, action: Object): Stat
     return {
       ...state,
       previewFilterRequestRunning: true,
-      previewFilterLastError: null
+      previewFilterLastError: null,
+      previewFilterResponse: null
     };
   }
   case actions.PREVIEW_FILTER_SUCCESS: {
