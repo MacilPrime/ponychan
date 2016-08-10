@@ -11,9 +11,15 @@ export type FetchError = {
 const initialState = {
   fetchListRequestRunning: false,
   fetchListLastError: (null: ?FetchError),
+
   fetchFilterRequestsRunning: ([]: Array<number>),
   fetchFilterLastErrors: ({}: {[id:number]: FetchError}),
-  filtersById: {}
+
+  filtersById: {},
+
+  previewFilterRequestRunning: false,
+  previewFilterResponse: null,
+  previewFilterLastError: (null: ?FetchError),
 };
 export type State = typeof initialState;
 
@@ -22,7 +28,8 @@ export default function reducer(state: State=initialState, action: Object): Stat
   case actions.FETCH_LIST_REQUEST: {
     return {
       ...state,
-      fetchListRequestRunning: true
+      fetchListRequestRunning: true,
+      fetchListLastError: null
     };
   }
   case actions.FETCH_LIST_SUCCESS: {
@@ -44,12 +51,18 @@ export default function reducer(state: State=initialState, action: Object): Stat
       fetchListLastError: action.payload
     };
   }
+
   case actions.FETCH_FILTER_REQUEST: {
     const {id} = action.payload;
     return {
       ...state,
       fetchFilterRequestsRunning:
-        state.fetchFilterRequestsRunning.filter(x => x !== id).concat([id])
+        state.fetchFilterRequestsRunning.filter(x => x !== id).concat([id]),
+      fetchFilterLastErrors: _.chain(state.fetchFilterLastErrors)
+        .toPairs()
+        .filter(([x]) => x !== id)
+        .fromPairs()
+        .value()
     };
   }
   case actions.FETCH_FILTER_SUCCESS: {
@@ -73,6 +86,38 @@ export default function reducer(state: State=initialState, action: Object): Stat
       }
     };
   }
+
+  case actions.PREVIEW_FILTER_REQUEST: {
+    return {
+      ...state,
+      previewFilterRequestRunning: true,
+      previewFilterLastError: null
+    };
+  }
+  case actions.PREVIEW_FILTER_SUCCESS: {
+    const {response} = action.payload;
+    return {
+      ...state,
+      previewFilterRequestRunning: false,
+      previewFilterResponse: response
+    };
+  }
+  case actions.PREVIEW_FILTER_FAIL: {
+    return {
+      ...state,
+      previewFilterRequestRunning: false,
+      previewFilterLastError: action.payload
+    };
+  }
+  case actions.CLEAR_PREVIEWED_FILTER: {
+    return {
+      ...state,
+      previewFilterRequestRunning: false,
+      previewFilterLastError: null,
+      previewFilterResponse: null
+    };
+  }
+
   default:
     return state;
   }
