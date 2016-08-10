@@ -29,7 +29,9 @@ export default class Edit extends React.PureComponent {
 
   render() {
     const {filter, initialFilter} = this.state;
+    const newFilter = false;
     const dirty = !_.isEqual(filter, initialFilter);
+    const onlyModeChanged = dirty && _.isEqual({...filter, mode: initialFilter.mode}, initialFilter);
 
     const conditionRows = filter.conditions.map((condition, i) =>
       <ConditionRow
@@ -123,9 +125,15 @@ export default class Edit extends React.PureComponent {
             </select>
           </div>
         </section>
-        <div>
-          <button type="button" onClick={this._onCreate}>
-            Create Filter
+        <div style={{margin: '16px 0'}}>
+          <button type="button">
+            Preview Filter
+          </button>
+          <button type="button" disabled={!dirty} onClick={this._onCreate}>
+            {
+              newFilter ? 'Create Filter' :
+              onlyModeChanged ? 'Update Filter' : 'Replace Filter'
+            }
           </button>
         </div>
       </div>
