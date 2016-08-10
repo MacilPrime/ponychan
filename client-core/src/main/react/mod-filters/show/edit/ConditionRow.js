@@ -9,6 +9,8 @@ const NUMBER_TYPES = new Set(['has_not_solved_captcha_in_x_minutes']);
 
 export default class ConditionRow extends React.PureComponent {
   props: {
+    isFirst: ?boolean;
+    isLast: ?boolean;
     condition: ConditionValue;
     onRemove(): void;
     onMove(direction: 'up'|'down'): void;
@@ -52,7 +54,7 @@ export default class ConditionRow extends React.PureComponent {
   }
 
   render() {
-    const {condition} = this.props;
+    const {isFirst, isLast, condition} = this.props;
 
     const input = STRING_TYPES.has(condition.type) ? this._stringInput() :
       BOOLEAN_TYPES.has(condition.type) ? this._booleanInput() :
@@ -64,10 +66,14 @@ export default class ConditionRow extends React.PureComponent {
           <button type="button" onClick={()=>this.props.onRemove()}>[X]</button>
         </td>
         <td>
-          <button type="button" onClick={()=>this.props.onMove('up')}>[up]</button>
+          <button
+            style={{visibility: isFirst ? 'hidden' : 'visible'}}
+            type="button" onClick={()=>this.props.onMove('up')}>[up]</button>
         </td>
         <td>
-          <button type="button" onClick={()=>this.props.onMove('down')}>[down]</button>
+          <button
+            style={{visibility: isLast ? 'hidden' : 'visible'}}
+            type="button" onClick={()=>this.props.onMove('down')}>[down]</button>
         </td>
         <td>
           <select value={condition.type}

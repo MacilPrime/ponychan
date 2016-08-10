@@ -32,6 +32,8 @@ export default class Edit extends React.PureComponent {
     const conditionRows = filter.conditions.map((condition, i) =>
       <ConditionRow
         key={i}
+        isFirst={i === 0}
+        isLast={i === filter.conditions.length-1}
         condition={condition}
         onRemove={() => {
           this.setState({
