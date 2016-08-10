@@ -8,6 +8,7 @@ import ConditionRow from './edit/ConditionRow';
 import Action from './edit/Action';
 
 type Props = {
+  isNewFilter: boolean;
   initialFilter: Object;
   onCreate: (filter: Object) => void;
 };
@@ -28,8 +29,8 @@ export default class Edit extends React.PureComponent {
   }
 
   render() {
+    const {isNewFilter} = this.props;
     const {filter, initialFilter} = this.state;
-    const newFilter = false;
     const dirty = !_.isEqual(filter, initialFilter);
     const onlyModeChanged = dirty && _.isEqual({...filter, mode: initialFilter.mode}, initialFilter);
 
@@ -131,7 +132,7 @@ export default class Edit extends React.PureComponent {
           </button>
           <button type="button" disabled={!dirty} onClick={this._onCreate}>
             {
-              newFilter ? 'Create Filter' :
+              isNewFilter ? 'Create Filter' :
               onlyModeChanged ? 'Update Filter' : 'Replace Filter'
             }
           </button>

@@ -65,7 +65,11 @@ class ShowPage extends React.PureComponent {
           </div>
           {
             page === 'about' ? <About filter={filter} /> :
-            page === 'edit' ? <Edit initialFilter={filter} onCreate={this._onCreate} /> :
+            page === 'edit' ?
+              <Edit
+                isNewFilter={false} initialFilter={filter}
+                onCreate={this._onCreate}
+                /> :
             page === 'hits' ? <Hits filter={filter} /> :
             null
           }
