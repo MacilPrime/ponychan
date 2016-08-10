@@ -113,7 +113,7 @@ export default class ConditionRow extends React.PureComponent {
             <option value="subject">Subject</option>
             <option value="body">Body</option>
             <option value="filename">Filename</option>
-            <option value="ip">IP</option>
+            <option value="ip" disabled={true}>IP</option>
             <option value="board">Board</option>
             <option value="op">OP</option>
             <option value="has_file">Has File</option>
