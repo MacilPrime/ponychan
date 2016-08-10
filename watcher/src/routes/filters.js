@@ -185,6 +185,7 @@ export async function previewStart(req: Object, res: Object, next: Function): an
 
 async function previewTask(conditions: Condition[]): Promise<string> {
   const boardLists = [];
+  const ignoredConditionTypes = [];
   const clauses = conditions.map((condition:any) => {
     switch (condition.type) {
     case 'name':
@@ -203,6 +204,7 @@ async function previewTask(conditions: Condition[]): Promise<string> {
       return regexClause('filename', condition.value);
     case 'ip':
       // TODO
+      ignoredConditionTypes.push(condition.type);
       break;
     case 'board':
       boardLists.push(condition.value.split(','));
@@ -218,13 +220,13 @@ async function previewTask(conditions: Condition[]): Promise<string> {
         values: []
       };
     case 'first_time_poster':
-      // TODO
+    case 'has_not_solved_captcha_in_x_minutes':
+      ignoredConditionTypes.push(condition.type);
       break;
     default:
       throw new Error('Invalid condition type');
     }
-    return {sql: '1=1', values: []};
-  }).filter(x => x.sql !== '1=1');
+  }).filter(Boolean);
   if (clauses.length === 0) {
     throw new Error('No supported conditions given');
   }
@@ -255,10 +257,14 @@ async function previewTask(conditions: Condition[]): Promise<string> {
   const results = _.flatten(resultsLists);
   const resultsUuid = uuid.v4();
 
+  const response = {
+    results, ignoredConditionTypes
+  };
+
   await new Promise((resolve, reject) => {
     predis.setex(
       `filter_preview_${resultsUuid}`,
-      config.task_cache_time, JSON.stringify(results),
+      config.task_cache_time, JSON.stringify(response),
       (err) => {
         if (err) reject(err);
         else resolve();
