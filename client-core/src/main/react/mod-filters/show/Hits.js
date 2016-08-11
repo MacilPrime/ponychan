@@ -17,7 +17,7 @@ export default class Edit extends React.PureComponent {
 
     const entries = hits.map(hit =>
       <li key={hit.id}>
-        <pre>
+        <pre style={{whiteSpace:'pre-wrap'}}>
           {JSON.stringify(hit,null,2)}
         </pre>
       </li>

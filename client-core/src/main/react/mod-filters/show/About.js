@@ -12,7 +12,7 @@ export default class About extends React.PureComponent {
     return (
       <div>
         <div>Author: {filter.author_name}</div>
-        <pre>{JSON.stringify(filter,null,2)}</pre>
+        <pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(filter,null,2)}</pre>
       </div>
     );
   }

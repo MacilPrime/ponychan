@@ -240,7 +240,7 @@ class Edit extends React.PureComponent {
             </div>
           }
           <div style={{color: 'red'}}>
-            <pre>
+            <pre style={{whiteSpace:'pre-wrap'}}>
               {previewFilterLastError && JSON.stringify(previewFilterLastError,null,2)}
               {updateRequestId && updateRequestsErrors[updateRequestId] && JSON.stringify(updateRequestsErrors[updateRequestId],null,2)}
             </pre>
@@ -258,7 +258,7 @@ class Edit extends React.PureComponent {
                 <ul>
                   {previewFilterResponse.results.map(result =>
                     <li key={`${result.board}_${result.id}`}>
-                      <pre>
+                      <pre style={{whiteSpace:'pre-wrap'}}>
                         {JSON.stringify(result,null,2)}
                       </pre>
                     </li>
