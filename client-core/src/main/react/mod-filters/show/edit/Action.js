@@ -63,7 +63,9 @@ export default class Action extends React.PureComponent {
                     onChange={event => {
                       // should use null instead of empty string here
                       onChange({
-                        ...action, message: event.target.value.trim() || null
+                        ...action,
+                        message: event.target.value.trim() ?
+                          event.target.value : null
                       });
                     }}
                     />
