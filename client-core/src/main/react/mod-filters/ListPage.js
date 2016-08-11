@@ -15,6 +15,9 @@ export default class ListPage extends React.PureComponent {
           </div>
           <div>
             <FilterList />
+            <div>
+              <Link to="/mod/filters/create">+ Create new</Link>
+            </div>
           </div>
         </div>
       </Title>
