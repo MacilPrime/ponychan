@@ -54,7 +54,7 @@ class ShowPage extends React.PureComponent {
     const {page} = this.state;
 
     return (
-      <Title title="Filter">
+      <Title title={`Filter ${filter.id}`}>
         <div>
           <div>
             <Link to="/mod/filters/">Back to Filters Dashboard</Link>
