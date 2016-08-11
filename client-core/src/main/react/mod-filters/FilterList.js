@@ -38,7 +38,6 @@ class FilterList extends React.PureComponent {
 
     return (
       <div>
-        [Filter List]
         <table>
           <thead>
             <tr>
