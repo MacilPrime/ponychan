@@ -360,7 +360,7 @@ export async function create(req: Object, res: Object, next: Function): any {
     }
 
     await c_del('active_post_filters');
-    res.send({success: true, id});
+    res.send({id});
   } catch (err) {
     next(err);
   }
@@ -404,7 +404,7 @@ export async function update(req: Object, res: Object, next: Function): any {
       throw err;
     }
     await c_del('active_post_filters');
-    res.send({success: true});
+    res.send({id});
   } catch (err) {
     next(err);
   }
