@@ -23,6 +23,8 @@ import Action from './edit/Action';
 // * These tabs probably should be routes.
 // * Doesn't warn if you try to navigate away. Which would require it to be a route.
 // * Too much local state? Probably should be handled more in redux.
+// * this.state.{filter,initialFilter} shouldn't be the full filter object, but
+//   both just {mode, conditions, action}. And the original id somewhere.
 type Props = {
   isNewFilter: boolean;
   initialFilter: Object;
