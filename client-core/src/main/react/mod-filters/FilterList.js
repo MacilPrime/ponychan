@@ -24,7 +24,7 @@ class FilterList extends React.PureComponent {
       const t = moment(filter.timestamp);
       return (
         <tr key={filter.id}>
-          <td>[+]</td>
+          <td>{ null/*'[+]' TODO expand button here */}</td>
           <td><Link to={`/mod/filters/${filter.id}`}>{'->'}</Link></td>
           <td title={t.format()}>{t.format('Y-MM-DD')}</td>
           <td>{filter.author_name}</td>
