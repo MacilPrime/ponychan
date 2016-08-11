@@ -61,7 +61,7 @@ export async function getList(req: Object, res: Object, next: Function): any {
       LEFT JOIN post_filter_hits ON post_filter_hits.filter_id = post_filters.id
       GROUP BY post_filters.id
       ${where}
-      ORDER BY post_filters.id ASC`);
+      ORDER BY post_filters.id DESC`);
     const filters = results.map(rowToFilter);
     // TODO pagination in Link header
     res.send({

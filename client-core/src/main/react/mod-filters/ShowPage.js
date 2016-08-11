@@ -3,6 +3,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {Link} from 'react-router';
 import Title from '../common/Title';
 
 import About from './show/About';
@@ -55,6 +56,9 @@ class ShowPage extends React.PureComponent {
     return (
       <Title title="Filter">
         <div>
+          <div>
+            <Link to="/mod/filters/">Back to Filters Dashboard</Link>
+          </div>
           <div>
             <button type="button" onClick={()=>this.setState({page:'about'})}
               style={{fontWeight: page === 'about' ? 'bold' : ''}}>

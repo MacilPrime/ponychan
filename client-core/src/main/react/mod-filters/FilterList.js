@@ -18,7 +18,7 @@ class FilterList extends React.PureComponent {
   render() {
     const filters = _.chain(this.props.modFilters.filtersById)
       .values()
-      .sortBy(filter => filter.id)
+      .sortBy(filter => -filter.id)
       .value();
     const list = filters.map(filter => {
       const t = moment(filter.timestamp);
