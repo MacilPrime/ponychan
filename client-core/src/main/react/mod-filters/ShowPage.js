@@ -21,6 +21,12 @@ class ShowPage extends React.PureComponent {
     this.props.fetchFilterRequest(id);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.params.id != nextProps.params.id) {
+      this.props.fetchFilterRequest(nextProps.params.id);
+    }
+  }
+
   render() {
     const id = +this.props.params.id;
     if (isNaN(id)) {
@@ -68,7 +74,6 @@ class ShowPage extends React.PureComponent {
             page === 'edit' ?
               <Edit
                 isNewFilter={false} initialFilter={filter}
-                onCreate={this._onCreate}
                 /> :
             page === 'hits' ? <Hits filter={filter} /> :
             null
@@ -77,11 +82,6 @@ class ShowPage extends React.PureComponent {
       </Title>
     );
   }
-
-  _onCreate = (filter) => {
-    filter;
-    alert('TODO support creating filters');
-  };
 }
 
 function mapStateToProps(state, ownProps) {

@@ -76,3 +76,28 @@ export function previewFilterFail(status: number, response: ?Object) {
 export function clearPreviewedFilter() {
   return {type: CLEAR_PREVIEWED_FILTER};
 }
+
+export const UPDATE_FILTER_REQUEST = 'UPDATE_FILTER_REQUEST';
+export const UPDATE_FILTER_SUCCESS = 'UPDATE_FILTER_SUCCESS';
+export const UPDATE_FILTER_FAIL = 'UPDATE_FILTER_FAIL';
+
+export function updateFilterRequest(requestId: string, data: {type:'update', id:number, mode:number}|{type:'create', filter:Object}) {
+  return {
+    type: UPDATE_FILTER_REQUEST,
+    payload: {requestId, data}
+  };
+}
+
+export function updateFilterSuccess(requestId: string, id: number) {
+  return {
+    type: UPDATE_FILTER_SUCCESS,
+    payload: {requestId, id}
+  };
+}
+
+export function updateFilterFail(requestId: string, status: number, response: ?Object) {
+  return {
+    type: UPDATE_FILTER_FAIL,
+    payload: {requestId, status, response}
+  };
+}

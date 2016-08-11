@@ -20,6 +20,10 @@ const initialState = {
   previewFilterRequestRunning: false,
   previewFilterResponse: null,
   previewFilterLastError: (null: ?FetchError),
+
+  updateRequestsRunning: ([]: Array<string>),
+  updateRequestsResponses: ({}: {[requestId:string]: Object}),
+  updateRequestsErrors: ({}: {[requestId:string]: FetchError}),
 };
 export type State = typeof initialState;
 
@@ -116,6 +120,31 @@ export default function reducer(state: State=initialState, action: Object): Stat
       previewFilterRequestRunning: false,
       previewFilterLastError: null,
       previewFilterResponse: null
+    };
+  }
+
+  case actions.UPDATE_FILTER_REQUEST: {
+    const {requestId} = action.payload;
+    return {
+      ...state,
+      updateRequestsRunning: [requestId],
+      updateRequestsErrors: {}
+    };
+  }
+  case actions.UPDATE_FILTER_SUCCESS: {
+    const {requestId, id} = action.payload;
+    return {
+      ...state,
+      updateRequestsRunning: [],
+      updateRequestsResponses: {[requestId]: {id}}
+    };
+  }
+  case actions.UPDATE_FILTER_FAIL: {
+    const {requestId, status, response} = action.payload;
+    return {
+      ...state,
+      updateRequestsRunning: [],
+      updateRequestsErrors: {[requestId]: {status, response}}
     };
   }
 

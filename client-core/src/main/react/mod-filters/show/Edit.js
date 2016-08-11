@@ -2,9 +2,17 @@
 
 import _ from 'lodash';
 import React from 'react';
+import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {previewFilterRequest, clearPreviewedFilter} from '../actions';
+import * as uuid from 'uuid';
+import {
+  fetchFilterRequest,
+  previewFilterRequest,
+  clearPreviewedFilter,
+  updateFilterRequest,
+} from '../actions';
+import type {State as RState} from '../reducer';
 
 import update from 'react-addons-update';
 
@@ -14,17 +22,24 @@ import Action from './edit/Action';
 type Props = {
   isNewFilter: boolean;
   initialFilter: Object;
-  onCreate: (filter: Object) => void;
 
-  previewFilterRequestRunning: boolean;
-  previewFilterResponse: ?Object;
-  previewFilterLastError: ?Object;
-  previewFilterRequest(condtions: Object[]): void;
-  clearPreviewedFilter(): void;
+  previewFilterRequestRunning: RState.previewFilterRequestRunning;
+  previewFilterResponse: RState.previewFilterResponse;
+  previewFilterLastError: RState.previewFilterLastError;
+  updateRequestsRunning: RState.updateRequestsRunning;
+  updateRequestsResponses: RState.updateRequestsResponses;
+  updateRequestsErrors: RState.updateRequestsErrors;
+  fetchFilterRequest: typeof fetchFilterRequest,
+  previewFilterRequest: typeof previewFilterRequest,
+  clearPreviewedFilter: typeof clearPreviewedFilter,
+  updateFilterRequest: typeof updateFilterRequest,
+
+  router: Object;
 };
 type State = {
   initialFilter: Object;
   filter: Object;
+  updateRequestId: ?string;
 };
 class Edit extends React.PureComponent {
   props: Props;
@@ -34,7 +49,8 @@ class Edit extends React.PureComponent {
     super(props);
     this.state = {
       initialFilter: props.initialFilter,
-      filter: props.initialFilter
+      filter: props.initialFilter,
+      updateRequestId: null
     };
   }
 
@@ -47,16 +63,58 @@ class Edit extends React.PureComponent {
     }
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    const {updateRequestId} = this.state;
+    const updateResponse = updateRequestId &&
+      nextProps.updateRequestsResponses[updateRequestId];
+    if (updateResponse) {
+      if (updateResponse.id != this.props.initialFilter.id) {
+        this.props.router.push(`/mod/filters/${updateResponse.id}`);
+      } else {
+        this.props.fetchFilterRequest(updateResponse.id);
+      }
+      this.setState({updateRequestId: null});
+    }
+
+    if (
+      this.props.initialFilter !== nextProps.initialFilter &&
+      this.state.filter.mode === nextProps.initialFilter.mode &&
+      _.isEqual(this.state.filter.action, nextProps.initialFilter.action) &&
+      _.isEqual(this.state.filter.conditions, nextProps.initialFilter.conditions)
+    ) {
+      this.setState({
+        filter: nextProps.initialFilter,
+        initialFilter: nextProps.initialFilter
+      });
+    }
+  }
+
+  _getDirtyType(): 'clean'|'mode'|'all' {
+    const {filter, initialFilter} = this.state;
+    if (
+      this.props.isNewFilter ||
+      !_.isEqual(filter.action, initialFilter.action) ||
+      !_.isEqual(filter.conditions, initialFilter.conditions)
+    ) {
+      return 'all';
+    }
+    if (filter.mode !== initialFilter.mode) {
+      return 'mode';
+    }
+    return 'clean';
+  }
+
   render() {
     const {
       isNewFilter,
       previewFilterRequestRunning,
       previewFilterResponse,
       previewFilterLastError,
+      updateRequestsRunning,
+      updateRequestsErrors,
     } = this.props;
-    const {filter, initialFilter} = this.state;
-    const dirty = !_.isEqual(filter, initialFilter);
-    const onlyModeChanged = dirty && _.isEqual({...filter, mode: initialFilter.mode}, initialFilter);
+    const {filter, updateRequestId} = this.state;
+    const dirtyType = this._getDirtyType();
 
     const conditionRows = filter.conditions.map((condition, i) =>
       <ConditionRow
@@ -96,7 +154,7 @@ class Edit extends React.PureComponent {
 
     return (
       <div style={{marginBottom: '50px'}}>
-        <div style={{visibility: dirty ? 'visible' : 'hidden', color: 'red'}}>
+        <div style={{visibility: dirtyType !== 'clean' ? 'visible' : 'hidden', color: 'red'}}>
           There are unsaved changes that will be lost if you leave this section.
         </div>
         <section>
@@ -158,10 +216,15 @@ class Edit extends React.PureComponent {
             >
             Preview Filter
           </button>
-          <button type="button" disabled={!dirty} onClick={this._onCreate}>
+          <button type="button"
+            disabled={
+              dirtyType==='clean' || (updateRequestId&&updateRequestsRunning.includes(updateRequestId))
+            }
+            onClick={this._onCreate}
+            >
             {
               isNewFilter ? 'Create Filter' :
-              onlyModeChanged ? 'Update Filter' : 'Replace Filter'
+              dirtyType === 'mode' ? 'Update Filter' : 'Replace Filter'
             }
           </button>
         </div>
@@ -174,6 +237,7 @@ class Edit extends React.PureComponent {
           <div style={{color: 'red'}}>
             <pre>
               {previewFilterLastError && JSON.stringify(previewFilterLastError,null,2)}
+              {updateRequestId && updateRequestsErrors[updateRequestId] && JSON.stringify(updateRequestsErrors[updateRequestId],null,2)}
             </pre>
           </div>
           {previewFilterResponse &&
@@ -204,7 +268,23 @@ class Edit extends React.PureComponent {
   }
 
   _onCreate = () => {
-    this.props.onCreate(this.state.filter);
+    const {updateFilterRequest, initialFilter} = this.props;
+    const {filter} = this.state;
+    const dirtyType = this._getDirtyType();
+    let updateRequestId = uuid.v4();
+    if (dirtyType === 'mode') {
+      updateFilterRequest(updateRequestId, {
+        type: 'update',
+        id: filter.id,
+        mode: filter.mode
+      });
+    } else {
+      updateFilterRequest(updateRequestId, {
+        type: 'create',
+        filter: {...filter, id: undefined, parent: initialFilter.id}
+      });
+    }
+    this.setState({updateRequestId});
   };
 }
 
@@ -212,17 +292,33 @@ function mapStateToProps(state) {
   const {
     previewFilterRequestRunning,
     previewFilterResponse,
-    previewFilterLastError
+    previewFilterLastError,
+
+    updateRequestsRunning,
+    updateRequestsResponses,
+    updateRequestsErrors,
   } = state.modFilters;
   return {
     previewFilterRequestRunning,
     previewFilterResponse,
-    previewFilterLastError
+    previewFilterLastError,
+
+    updateRequestsRunning,
+    updateRequestsResponses,
+    updateRequestsErrors,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({previewFilterRequest, clearPreviewedFilter}, dispatch);
+  return bindActionCreators(
+    {
+      fetchFilterRequest,
+      previewFilterRequest,
+      clearPreviewedFilter,
+      updateFilterRequest,
+    },
+    dispatch
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Edit);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Edit));

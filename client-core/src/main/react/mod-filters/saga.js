@@ -68,6 +68,40 @@ export async function fetchTaskStatus(taskUrl: string): Promise<{taskResults: ?O
   }
 }
 
+export async function fetchUpdate(data: {type:'update', id:number, mode:number}|{type:'create', filter:Object}): Promise<{id: number}> {
+  const headers = new Headers();
+  headers.set('Content-Type', 'application/json');
+  let response;
+  if (data.type === 'update') {
+    response = await fetch(
+      `/api/v1/mod/filters/${data.id}`,
+      {
+        credentials: 'same-origin',
+        method: 'POST',
+        headers,
+        body: JSON.stringify({mode: data.mode})
+      }
+    );
+  } else if (data.type === 'create') {
+    response = await fetch(
+      '/api/v1/mod/filters/',
+      {
+        credentials: 'same-origin',
+        method: 'POST',
+        headers,
+        body: JSON.stringify(data.filter)
+      }
+    );
+  } else {
+    throw new Error(`Should not happen: type ${data.type}`);
+  }
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw await errorFromResponse(response);
+  }
+}
+
 export function* listRefresher(): any {
   yield* takeLatest(actions.FETCH_LIST_REQUEST, function*() {
     try {
@@ -130,10 +164,28 @@ export function* previewFetcher(): any {
   });
 }
 
+export function* updateHandler(): any {
+  yield* takeEvery(actions.UPDATE_FILTER_REQUEST, function*(action) {
+    const {requestId, data} = action.payload;
+    try {
+      const response: any = yield call(fetchUpdate, data);
+      yield put(actions.updateFilterSuccess(requestId, response.id));
+    } catch (err) {
+      const {details} = err;
+      if (details) {
+        yield put(actions.updateFilterFail(requestId, details.status, details.text));
+      } else {
+        yield put(actions.updateFilterFail(requestId, 0, err.message));
+      }
+    }
+  });
+}
+
 export default function* root(): any {
   yield [
     fork(listRefresher),
     fork(filterFetcher),
     fork(previewFetcher),
+    fork(updateHandler),
   ];
 }
