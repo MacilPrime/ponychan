@@ -19,6 +19,10 @@ import update from 'react-addons-update';
 import ConditionRow from './edit/ConditionRow';
 import Action from './edit/Action';
 
+// TODO Some notes about what's not pretty about this:
+// * These tabs probably should be routes.
+// * Doesn't warn if you try to navigate away. Which would require it to be a route.
+// * Too much local state? Probably should be handled more in redux.
 type Props = {
   isNewFilter: boolean;
   initialFilter: Object;
@@ -92,7 +96,6 @@ class Edit extends React.PureComponent {
   _getDirtyType(): 'clean'|'mode'|'all' {
     const {filter, initialFilter} = this.state;
     if (
-      this.props.isNewFilter ||
       !_.isEqual(filter.action, initialFilter.action) ||
       !_.isEqual(filter.conditions, initialFilter.conditions)
     ) {
@@ -218,7 +221,7 @@ class Edit extends React.PureComponent {
           </button>
           <button type="button"
             disabled={
-              dirtyType==='clean' || (updateRequestId&&updateRequestsRunning.includes(updateRequestId))
+              (!this.props.isNewFilter && dirtyType==='clean') || (updateRequestId&&updateRequestsRunning.includes(updateRequestId))
             }
             onClick={this._onCreate}
             >
