@@ -59,6 +59,7 @@ export async function getList(req: Object, res: Object, next: Function): any {
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id
       LEFT JOIN post_filter_hits ON post_filter_hits.filter_id = post_filters.id
+      GROUP BY post_filters.id
       ${where}
       ORDER BY post_filters.id ASC`);
     const filters = results.map(rowToFilter);
@@ -88,7 +89,9 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       LEFT JOIN mods ON post_filters.author = mods.id
       LEFT JOIN post_filter_hits ON post_filter_hits.filter_id = post_filters.id
       LEFT JOIN post_filters AS parents ON post_filters.parent = parents.id
-      WHERE post_filters.id = ?`, [id]);
+      WHERE post_filters.id = ?
+      GROUP BY post_filters.id
+      `, [id]);
     if (filterResults.length == 0) {
       res.sendStatus(404);
       return;
