@@ -71,6 +71,7 @@
     "stdio": "^0.2.7",
     "ud": "^3.0.1",
     "ud-kefir": "^2.0.2",
+    "uuid": "https://registry.npmjs.org/uuid/-/uuid-2.0.2.tgz",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^3.7.0",
     "webstorage-polyfill": "^1.0.0",
