@@ -24,7 +24,7 @@ export default function checkMod(req: Object, res: Object, next: Function) {
     }
     return {id, type, boards, signed_name, signed_trip};
   })().then(mod => {
-    req.mod = mod ? mod : null;
+    res.locals.mod = req.mod = mod ? mod : null;
     next();
   }, next);
 }

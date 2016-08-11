@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-<head>
+<head {% if mod %}data-is-mod="true"{% endif %}>
 	<meta charset="utf-8">
 	<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}?v={{ 'stylesheets/style.css'|filemtime }}">
 	{% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.url_favicon }}">{% endif %}

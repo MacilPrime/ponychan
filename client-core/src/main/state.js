@@ -9,7 +9,6 @@
 import $ from 'jquery';
 import {demogrifyEl} from './mogrify';
 
-const original_page_title = document.title;
 if (typeof history != 'undefined' && history && history.state) {
   applyState(history.state);
 }
@@ -27,11 +26,6 @@ export function newState(state: Object, url: ?string) {
 
 function applyState(state) {
   $(document).ready(function() {
-    if (state && state.hasOwnProperty('title')) {
-      document.title = state.title;
-    } else {
-      document.title = original_page_title;
-    }
     if (state && state.hasOwnProperty('banpage')) {
       const $banbody = $($.parseHTML(state.banpage)).filter('.ban');
       $('.ban').remove();

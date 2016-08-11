@@ -10,6 +10,7 @@ const initialState = {
   lastResponse: null,
   alerts: 0
 };
+export type State = typeof initialState;
 
 function countAlerts(watchedThreads, lastResponse, currentThreadId) {
   let alerts = 0;
@@ -38,7 +39,7 @@ function countAlerts(watchedThreads, lastResponse, currentThreadId) {
   return alerts;
 }
 
-export default function reducer(state: any=initialState, action: Object) {
+export default function reducer(state: State=initialState, action: Object): State {
   switch (action.type) {
   case actions.SET_CURRENT_THREAD_ID: {
     return {

@@ -1155,6 +1155,8 @@
 	$config['permissions']['manageboards'] = ADMIN;
 	// Delete a board
 	$config['permissions']['deleteboard'] = ADMIN;
+	// Edit post filters
+	$config['permissions']['managefilters'] = MOD;
 	// List/manage users
 	$config['permissions']['manageusers'] = MOD;
 	// Promote/demote users

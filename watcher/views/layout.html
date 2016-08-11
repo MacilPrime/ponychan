@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-<head>
+<head {% if mod %}data-is-mod="true"{% endif %}>
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com">
   <title>{% block title %}Untitled Page{% endblock %}</title>
@@ -19,7 +19,7 @@
     {% for boardlistpart in boardlist %}
     <div class="boardlistpart">
       {% for item in boardlistpart %}
-      <a href="/{{ item }}/">{{ item }}</a>
+      <a href="{% if mod %}/mod.php?{% endif %}/{{ item }}/">{{ item }}</a>
       {% endfor %}
     </div>
     {% endfor %}

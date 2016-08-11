@@ -14,7 +14,9 @@ if (global.document) {
 
 const config = {
   site: global.SITE_DATA,
-  board: BOARD_DATA
+  board: BOARD_DATA,
+  isMod: global.document ?
+    document.head.getAttribute('data-is-mod') === 'true' : false
 };
 
 export default config;

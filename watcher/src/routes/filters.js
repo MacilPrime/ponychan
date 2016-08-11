@@ -26,12 +26,13 @@ type Action =
     message?: ?string;
   };
 
-function rowToFilter(row: Object): Object {
-  const {id, timestamp, mode, parent, parent_timestamp, author, author_name} = row;
+function rowToFilter(row: Object) {
+  const {id, timestamp, mode, parent, parent_timestamp, author, author_name, hit_count} = row;
   const {conditions, action} = JSON.parse(row.filter_json);
   return {
     id, timestamp, mode, conditions, action,
-    parent, parent_timestamp, author, author_name
+    parent, parent_timestamp, author, author_name,
+    hit_count
   };
 }
 
@@ -51,13 +52,16 @@ export async function getList(req: Object, res: Object, next: Function): any {
     }
 
     const [results] = await mysql_query(
-      `SELECT post_filters.id, timestamp, mode, parent, author,
+      `SELECT post_filters.id, post_filters.timestamp, mode, parent, author,
       filter_json,
-      mods.username AS author_name
+      mods.username AS author_name,
+      COUNT(post_filter_hits.id) AS hit_count
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id
+      LEFT JOIN post_filter_hits ON post_filter_hits.filter_id = post_filters.id
+      GROUP BY post_filters.id
       ${where}
-      ORDER BY post_filters.id ASC`);
+      ORDER BY post_filters.id DESC`);
     const filters = results.map(rowToFilter);
     // TODO pagination in Link header
     res.send({
@@ -79,11 +83,15 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       `SELECT post_filters.id, post_filters.timestamp, post_filters.mode,
       post_filters.author, post_filters.filter_json,
       mods.username AS author_name,
-      post_filters.parent, parents.timestamp AS parent_timestamp
+      post_filters.parent, parents.timestamp AS parent_timestamp,
+      COUNT(post_filter_hits.id) AS hit_count
       FROM post_filters
       LEFT JOIN mods ON post_filters.author = mods.id
+      LEFT JOIN post_filter_hits ON post_filter_hits.filter_id = post_filters.id
       LEFT JOIN post_filters AS parents ON post_filters.parent = parents.id
-      WHERE post_filters.id = ?`, [id]);
+      WHERE post_filters.id = ?
+      GROUP BY post_filters.id
+      `, [id]);
     if (filterResults.length == 0) {
       res.sendStatus(404);
       return;
@@ -101,7 +109,7 @@ export async function getOne(req: Object, res: Object, next: Function): any {
     }));
 
     const [hitResults] = await mysql_query(
-      `SELECT timestamp,
+      `SELECT id, timestamp,
       INET6_NTOA(ip_data) AS ip,
       blocked, board, thread, successful_post_id,
       name, trip, capcode, email, subject,
@@ -111,6 +119,7 @@ export async function getOne(req: Object, res: Object, next: Function): any {
       ORDER BY timestamp DESC LIMIT 100`, [id]);
 
     filter.hits = hitResults.map(hit => ({
+      id: hit.id,
       timestamp: hit.timestamp,
       ip: hit.ip,
       blocked: !!hit.blocked,
@@ -179,6 +188,7 @@ export async function previewStart(req: Object, res: Object, next: Function): an
 
 async function previewTask(conditions: Condition[]): Promise<string> {
   const boardLists = [];
+  const ignoredConditionTypes = [];
   const clauses = conditions.map((condition:any) => {
     switch (condition.type) {
     case 'name':
@@ -197,6 +207,7 @@ async function previewTask(conditions: Condition[]): Promise<string> {
       return regexClause('filename', condition.value);
     case 'ip':
       // TODO
+      ignoredConditionTypes.push(condition.type);
       break;
     case 'board':
       boardLists.push(condition.value.split(','));
@@ -212,13 +223,13 @@ async function previewTask(conditions: Condition[]): Promise<string> {
         values: []
       };
     case 'first_time_poster':
-      // TODO
+    case 'has_not_solved_captcha_in_x_minutes':
+      ignoredConditionTypes.push(condition.type);
       break;
     default:
       throw new Error('Invalid condition type');
     }
-    return {sql: '1=1', values: []};
-  }).filter(x => x.sql !== '1=1');
+  }).filter(Boolean);
   if (clauses.length === 0) {
     throw new Error('No supported conditions given');
   }
@@ -249,10 +260,14 @@ async function previewTask(conditions: Condition[]): Promise<string> {
   const results = _.flatten(resultsLists);
   const resultsUuid = uuid.v4();
 
+  const response = {
+    results, ignoredConditionTypes
+  };
+
   await new Promise((resolve, reject) => {
     predis.setex(
       `filter_preview_${resultsUuid}`,
-      config.task_cache_time, JSON.stringify(results),
+      config.task_cache_time, JSON.stringify(response),
       (err) => {
         if (err) reject(err);
         else resolve();
@@ -348,7 +363,7 @@ export async function create(req: Object, res: Object, next: Function): any {
     }
 
     await c_del('active_post_filters');
-    res.send({success: true, id});
+    res.send({id});
   } catch (err) {
     next(err);
   }
@@ -392,7 +407,7 @@ export async function update(req: Object, res: Object, next: Function): any {
       throw err;
     }
     await c_del('active_post_filters');
-    res.send({success: true});
+    res.send({id});
   } catch (err) {
     next(err);
   }

@@ -24,7 +24,8 @@ function reducePropsToState(propsList) {
   }
 }
 
-function handleStateChangeOnClient(title='') {
+function handleStateChangeOnClient(title: ?string) {
+  if (title == null) return;
   document.title = title;
   const headerEl = document.querySelector('header h1');
   if (headerEl) {
