@@ -1305,10 +1305,16 @@ function bumpThread($id) {
 	$query->execute() or error(db_error($query));
 }
 
+$_userHasPosts_cache = [];
 function userHasPosts($ip, $userhash) {
 	global $board;
 
-	$parsed_ip = parse_mask(ipToUserRange($ip));
+	$ip_mask = ipToUserRange($ip);
+	if (isset($_userHasPosts_cache[$ip_mask])) {
+		return $_userHasPosts_cache[$ip_mask];
+	}
+
+	$parsed_ip = parse_mask($ip_mask);
 
 	$checkForPostsInBoard = function($boarduri) use ($parsed_ip, $userhash) {
 		$query = prepare("SELECT id FROM `posts_${boarduri}` WHERE
@@ -1333,6 +1339,8 @@ function userHasPosts($ip, $userhash) {
 			if ($hasPosts) break;
 		}
 	}
+
+	$_userHasPosts_cache[$ip_mask] = $hasPosts;
 	return $hasPosts;
 }
 
