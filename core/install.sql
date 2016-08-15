@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 -- Used to store posts that need a CAPTCHA
 CREATE TABLE IF NOT EXISTS `review_queue` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uuid` char(36) NOT NULL,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
   `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',

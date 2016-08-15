@@ -316,6 +316,11 @@ $migration_procedures = [
 		foreach ($boards as $board) {
 			query(sprintf("ALTER TABLE `posts_%s` ADD `anon_thread` INT(1) NOT NULL AFTER `mature`", $board['uri'])) or error(db_error());
 		}
+	},
+	'review-queue-uuid' => function() {
+		query('ALTER TABLE `review_queue`
+			ADD `uuid` char(36) NOT NULL')
+		or error(db_error());
 	}
 ];
 
