@@ -22,7 +22,7 @@ export default class CreatePage extends React.PureComponent {
               ],
               action: {
                 type: 'reject',
-                message: 'Spammer no spamming'
+                message: null
               }
             }}
             />
