@@ -32,36 +32,6 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Used to store posts that need a CAPTCHA
-CREATE TABLE IF NOT EXISTS `review_queue` (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `uuid` char(36) NOT NULL,
-  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `ip_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
-  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-  `board` varchar(120) NOT NULL,
-  `thread` int(11) DEFAULT NULL,
-  `subject` varchar(100) DEFAULT NULL,
-  `email` varchar(254) DEFAULT NULL,
-  `name` varchar(75) DEFAULT NULL,
-  `trip` varchar(25) DEFAULT NULL,
-  `capcode` varchar(50) DEFAULT NULL,
-  `body_nomarkup` text DEFAULT NULL,
-  `file` varchar(50) DEFAULT NULL,
-  `filename` text DEFAULT NULL,
-  `filehash` text DEFAULT NULL,
-  `password` char(40) DEFAULT NULL,
-  `userhash` char(40) DEFAULT NULL,
-  `rawhtml` int(1) NOT NULL,
-  `spoiler` int(1) NOT NULL,
-  `mature` int(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `board_thread_time` (`board`, `thread`, `timestamp`),
-  KEY `userhash` (`userhash`),
-  KEY `ip_type_data` (`ip_type`, `ip_data`),
-  KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
-
 --
 -- Table structure for table `bans`
 --
@@ -268,31 +238,33 @@ CREATE TABLE IF NOT EXISTS `captchas` (
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `question` text NOT NULL,
   `answers` text NOT NULL COMMENT 'json array',
+  `enabled` int(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 INSERT INTO `captchas` (`question`, `answers`) VALUES
   ('Please type the word "apple".', '["apple"]'),
-  ('What is 3+5?', '["8","eight"]');
+  ('What is 3+5?', '["8",{"type":"md5","value":"24d27c169c2c881eb09a065116f2aa5c"}]');
 
-CREATE TABLE IF NOT EXISTS `captcha_attempts` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `needs_captcha` (
+  `uuid` char(36) NOT NULL,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `userhash` char(40) DEFAULT NULL,
   `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
   `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-  `captcha_id` int UNSIGNED DEFAULT NULL,
-  `correct` int(1) NOT NULL,
-  `answer` varchar(75) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userhash_time` (`userhash`, `timestamp`),
   KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
-  KEY `captcha_time` (`captcha_id`, `timestamp`),
   KEY `timestamp` (`timestamp`),
-  FOREIGN KEY (captcha_id)
-    REFERENCES captchas(id)
-    ON DELETE SET NULL
+  PRIMARY KEY (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `solved_captcha` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  PRIMARY KEY (`id`),
+  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
+  KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `post_filters` (

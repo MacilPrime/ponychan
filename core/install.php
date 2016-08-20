@@ -321,6 +321,30 @@ $migration_procedures = [
 		query('ALTER TABLE `review_queue`
 			ADD `uuid` char(36) NOT NULL')
 		or error(db_error());
+	},
+	'captcha-take-two' => function() {
+		query("CREATE TABLE IF NOT EXISTS `needs_captcha` (
+		  `uuid` char(36) NOT NULL,
+		  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+		  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+		  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
+		  KEY `timestamp` (`timestamp`),
+		  PRIMARY KEY (`uuid`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+		query("CREATE TABLE IF NOT EXISTS `solved_captcha` (
+		  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+		  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+		  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+		  PRIMARY KEY (`id`),
+		  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
+		  KEY `timestamp` (`timestamp`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+		query('ALTER TABLE `captchas`
+			ADD `enabled` int(1) NOT NULL DEFAULT 1')
+		or error(db_error());
+		query("DROP TABLE `review_queue`") or error(db_error());
 	}
 ];
 
