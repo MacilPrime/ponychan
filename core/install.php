@@ -345,6 +345,10 @@ $migration_procedures = [
 			ADD `enabled` int(1) NOT NULL DEFAULT 1')
 		or error(db_error());
 		query("DROP TABLE `review_queue`") or error(db_error());
+	},
+	'drop-text-captchas' => function() {
+		query("DROP TABLE `captcha_attempts`") or error(db_error());
+		query("DROP TABLE `captchas`") or error(db_error());
 	}
 ];
 

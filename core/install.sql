@@ -232,21 +232,6 @@ CREATE TABLE IF NOT EXISTS `theme_settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-
-CREATE TABLE IF NOT EXISTS `captchas` (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `question` text NOT NULL,
-  `answers` text NOT NULL COMMENT 'json array',
-  `enabled` int(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`),
-  KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
-
-INSERT INTO `captchas` (`question`, `answers`) VALUES
-  ('Please type the word "apple".', '["apple"]'),
-  ('What is 3+5?', '["8",{"type":"md5","value":"24d27c169c2c881eb09a065116f2aa5c"}]');
-
 CREATE TABLE IF NOT EXISTS `needs_captcha` (
   `uuid` char(36) NOT NULL,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
