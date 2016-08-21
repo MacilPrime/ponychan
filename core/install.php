@@ -341,14 +341,27 @@ $migration_procedures = [
 		  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
 		  KEY `timestamp` (`timestamp`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
-		query('ALTER TABLE `captchas`
-			ADD `enabled` int(1) NOT NULL DEFAULT 1')
+		query("ALTER TABLE `captchas`
+			ADD `enabled` int(1) NOT NULL DEFAULT 1")
 		or error(db_error());
 		query("DROP TABLE `review_queue`") or error(db_error());
 	},
 	'drop-text-captchas' => function() {
 		query("DROP TABLE `captcha_attempts`") or error(db_error());
 		query("DROP TABLE `captchas`") or error(db_error());
+	},
+	'redo-needs-captcha' => function() {
+		query("DROP TABLE `needs_captcha`") or error(db_error());
+		query("CREATE TABLE IF NOT EXISTS `needs_captcha` (
+		  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+		  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		  `range_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+		  `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+		  `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+		  KEY `range` (`range_type`, `range_start`, `range_end`, `timestamp`),
+		  KEY `timestamp` (`timestamp`),
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
 	}
 ];
 

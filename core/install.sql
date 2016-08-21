@@ -233,13 +233,14 @@ CREATE TABLE IF NOT EXISTS `theme_settings` (
 
 
 CREATE TABLE IF NOT EXISTS `needs_captcha` (
-  `uuid` char(36) NOT NULL,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `ip_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
-  `ip_data` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-  KEY `ip_type_data` (`ip_type`, `ip_data`, `timestamp`),
+  `range_type` int NOT NULL COMMENT '0:ipv4, 1:ipv6',
+  `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
+  KEY `range` (`range_type`, `range_start`, `range_end`, `timestamp`),
   KEY `timestamp` (`timestamp`),
-  PRIMARY KEY (`uuid`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `solved_captcha` (
