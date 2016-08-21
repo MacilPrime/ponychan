@@ -26,7 +26,7 @@ export default class Action extends React.PureComponent {
               onChange({
                 type: 'ban',
                 reason: '',
-                length: 0,
+                length: null,
                 single_board: false,
                 ban_type: 0
               });
@@ -95,9 +95,12 @@ export default class Action extends React.PureComponent {
                 <th>Length (seconds)</th>
                 <td>
                   <input type="number"
-                    value={action.length || 0}
+                    placeholder="(Empty means permanent)"
+                    value={action.length == null ? '' : action.length}
                     onChange={event => {
-                      onChange({...action, length: +event.target.value});
+                      onChange({...action, length: event.target.value.trim() ?
+                        +event.target.value : null
+                      });
                     }}
                     />
                 </td>
