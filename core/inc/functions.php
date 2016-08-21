@@ -1344,6 +1344,25 @@ function userHasPosts($ip, $userhash) {
 	return $hasPosts;
 }
 
+function userHasNotSolvedCaptchaInLastMinutes($ip, $minutes) {
+	$ip_mask = ipToUserRange($ip);
+	$parsed_ip = parse_mask($ip_mask);
+
+	$query = prepare("SELECT id FROM `solved_captcha` WHERE
+		`ip_type` = :ip_type AND
+		`ip_data` >= INET6_ATON(:range_start) AND
+		`ip_data` <= INET6_ATON(:range_end) AND
+		`timestamp` >= NOW() - INTERVAL :minutes MINUTE
+		LIMIT 1");
+	$query->bindValue(':ip_type', $parsed_ip['range_type']);
+	$query->bindValue(':range_start', $parsed_ip['range_start']);
+	$query->bindValue(':range_end', $parsed_ip['range_end']);
+	$query->bindValue(':minutes', $minutes, PDO::PARAM_INT);
+	$query->execute() or error(db_error($query));
+
+	return $query->rowCount() === 0;
+}
+
 // Remove file from post
 function deleteFile($id, $remove_entirely_if_already=true, $rebuild_after=true) {
 	global $board, $config;

@@ -141,8 +141,7 @@ function postMatchesCondition($condition, array $post) {
 		case 'first_time_poster':
 			return $condition['value'] !== userHasPosts($post['ip'], $post['userhash']);
 		case 'has_not_solved_captcha_in_x_minutes':
-			// TODO
-			return true;
+			return userHasNotSolvedCaptchaInLastMinutes($post['ip'], $condition['value']);
 		default:
 			error_log('Unknown filter condition: ' . $condition['type']);
 	}
