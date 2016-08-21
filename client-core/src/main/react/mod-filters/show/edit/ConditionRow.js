@@ -18,7 +18,7 @@ const filterTypes: {[type:string]: {valueType: string, defaultValue: any}} = {
   'has_file': {valueType: 'boolean', defaultValue: true},
   'first_time_poster': {valueType: 'boolean', defaultValue: true},
 
-  'has_not_solved_captcha_in_x_minutes': {valueType: 'number', defaultValue: 60},
+  'has_not_solved_captcha_in_x_minutes': {valueType: 'number', defaultValue: 1440},
 };
 
 export default class ConditionRow extends React.PureComponent {
