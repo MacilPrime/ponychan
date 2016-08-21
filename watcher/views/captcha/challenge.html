@@ -1,0 +1,22 @@
+{% extends "../layout.html" %}
+
+{% block extraScriptSrc %} https://*.google.com https://*.gstatic.com{% endblock %}
+{% block extraHead %}<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
+
+{% block title %}CAPTCHA{% endblock %}
+
+{% block content %}
+  <div class="homeblock">
+    <div>
+      You need to verify that you're not a bot in order to post here. Users
+      generally do not have to do this often.
+    </div>
+    <div>
+      <form method="POST">
+        <div class="g-recaptcha" data-sitekey="{{ recaptcha.site_key }}"></div>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1103,7 +1103,8 @@ function checkCaptcha() {
 	$query = prepare("SELECT `id` FROM `needs_captcha`
 		WHERE `range_type` = :ip_type AND
 		`range_start` <= INET6_ATON(:ip) AND
-		INET6_ATON(:ip) <= `range_end`"
+		INET6_ATON(:ip) <= `range_end`
+		LIMIT 1"
 	);
 	$query->bindValue(':ip_type', ipType($_SERVER['REMOTE_ADDR']));
 	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);

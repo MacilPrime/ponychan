@@ -2,7 +2,7 @@
 <html>
 <head {% if mod %}data-is-mod="true"{% endif %}>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com{% block extraScriptSrc %}{% endblock %}">
   <title>{% block title %}Untitled Page{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
   <link rel="shortcut icon" href="/static/flutter-icon.png">
@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" id="stylesheet" href="{{ "/stylesheets/colgate.css"|cachebust }}">
   <script type="text/javascript" id="config" src="{{ "/instance.js"|cachebust }}"></script>
   <script type="text/javascript" src="{{ "/js/main.js"|cachebust }}"></script>
+  {% block extraHead %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
   <div class="boardlist top">

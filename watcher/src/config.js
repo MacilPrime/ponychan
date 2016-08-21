@@ -34,6 +34,10 @@ const config = {
       db: 1
     }
   },
+  recaptcha: {
+    site_key: 'UNSET',
+    secret_key: 'UNSET'
+  },
   board: {
     cookies_salt: 'test value',
     permissions: {

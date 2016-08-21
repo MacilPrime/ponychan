@@ -1,5 +1,4 @@
 /* @flow */
-//jshint ignore:start
 
 import _ from 'lodash';
 import express from 'express';
@@ -18,6 +17,7 @@ import cachebust from './util/cachebust';
 import * as bans from './routes/bans';
 import watcher from './routes/watcher';
 import poll from './routes/poll';
+import * as captcha from './routes/captcha';
 import * as tasks from './routes/tasks';
 import * as filters from './routes/filters';
 
@@ -100,6 +100,9 @@ app.delete('/api/v1/tasks/:id', tasks.del);
 
 app.post('/bans/:id/appeal', bodyParser.urlencoded({extended: false}), bans.appeal);
 app.post('/bans/:id/modappeal', bodyParser.urlencoded({extended: false}), bans.modappeal);
+
+app.get('/captcha', captcha.get);
+app.post('/captcha', bodyParser.urlencoded({extended: false}), captcha.post);
 
 app.get('/watcher', (req, res, next) => {
   res.setHeader('Cache-Control', 'public, max-age=120');
