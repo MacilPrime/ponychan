@@ -1099,6 +1099,21 @@ function checkBan($board = 0, $types = null) {
 	}
 }
 
+function checkCaptcha() {
+	$query = prepare("SELECT `id` FROM `needs_captcha`
+		WHERE `range_type` = :ip_type AND
+		`range_start` <= INET6_ATON(:ip) AND
+		INET6_ATON(:ip) <= `range_end`"
+	);
+	$query->bindValue(':ip_type', ipType($_SERVER['REMOTE_ADDR']));
+	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
+	$query->execute() or error(db_error($query));
+
+	if ($query->rowCount() > 0) {
+		error('You need to <a href="/captcha" target="_blank">complete a CAPTCHA</a> before you can post.');
+	}
+}
+
 function threadLocked($id) {
 	global $board;
 

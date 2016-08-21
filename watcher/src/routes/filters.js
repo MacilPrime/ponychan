@@ -317,9 +317,6 @@ export async function create(req: Object, res: Object, next: Function): any {
       throw new Error('At least one condition must be given');
     }
     const action = cleanAndVerifyAction(req.body.action);
-    if (action.type === 'captcha') {
-      throw new Error('captcha action not supported yet');
-    }
     const filter_json = JSON.stringify({conditions, action});
 
     const conn = await new Promise((resolve, reject) => {

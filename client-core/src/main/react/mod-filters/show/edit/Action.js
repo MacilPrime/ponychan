@@ -41,7 +41,7 @@ export default class Action extends React.PureComponent {
           >
           <option value="reject">Reject</option>
           <option value="ban">Ban</option>
-          <option value="captcha" disabled={true}>CAPTCHA</option>
+          <option value="captcha">CAPTCHA</option>
         </select>
       </div>
     );

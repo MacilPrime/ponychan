@@ -44,6 +44,9 @@ if ($post['op'])
     $ban_types[] = THREAD_START_BAN;
 checkBan($board['uri'], $ban_types);
 
+checkCaptcha();
+
+// TODO remove old captcha code
 // Check for CAPTCHA right after opening the board so the "return" link is in there
 if ($config['recaptcha']) {
     if (!isset($_POST['recaptcha_challenge_field']) || !isset($_POST['recaptcha_response_field']))

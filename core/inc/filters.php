@@ -155,8 +155,16 @@ function applyFilterAction($action) {
 		case 'reject':
 			error((isset($action['message']) && $action['message'] !== null) ?
 				$action['message'] : 'Posting throttled by flood filter.');
+			break;
 		case 'captcha':
-			// TODO
+			$range = parse_mask(ipToUserRange($_SERVER['REMOTE_ADDR']));
+			$query = prepare("INSERT INTO `needs_captcha` (`range_type`,`range_start`,`range_end`) VALUES (:range_type, INET6_ATON(:range_start), INET6_ATON(:range_end))");
+			$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+			$query->bindValue(':range_start', $range['range_start']);
+			$query->bindValue(':range_end', $range['range_end']);
+			$query->execute() or error(db_error($query));
+			checkCaptcha();
+			error('This should not happen');
 			break;
 		case 'ban':
 			if (!isset($action['reason']))
@@ -208,6 +216,7 @@ function applyFilterAction($action) {
 
 			checkBan($board['uri']);
 			error('This should not happen');
+			break;
 		default:
 			error('Unknown filter action: ' . $action['type']);
 	}
