@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import ipToUserRange from '../../../lib/ipToUserRange';
+
 export default class Edit extends React.PureComponent {
   props: {
     filter: Object;
@@ -17,6 +19,9 @@ export default class Edit extends React.PureComponent {
 
     const entries = hits.map(hit =>
       <li key={hit.id}>
+        <div>
+          <a href={`/mod.php?/IP/${ipToUserRange(hit.ip)}`}>{hit.ip}</a>
+        </div>
         <pre style={{whiteSpace:'pre-wrap'}}>
           {JSON.stringify(hit,null,2)}
         </pre>
