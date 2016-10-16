@@ -3,7 +3,7 @@
 import * as actions from './actions';
 import {takeEvery, takeLatest} from 'redux-saga';
 import {call, put, fork} from 'redux-saga/effects';
-import delay from '../../lib/delay';
+import delay from 'pdelay';
 import errorFromResponse from '../../lib/errorFromResponse';
 
 export async function fetchList(): Promise<Object> {

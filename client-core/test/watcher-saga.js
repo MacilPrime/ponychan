@@ -5,7 +5,7 @@ import Kefir from 'kefir';
 import {call, put, take, cancel, fork} from 'redux-saga/effects';
 import {createMockTask} from 'redux-saga/utils';
 import MockWebStorage from 'mock-webstorage';
-import delay from '../src/main/lib/delay';
+import delay from 'pdelay';
 
 import saga, {reloader, saver, refresher, requestWatcher} from '../src/main/react/watcher/saga';
 import * as actions from '../src/main/react/watcher/actions';
