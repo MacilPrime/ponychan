@@ -15,7 +15,8 @@ module.exports = {
     "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "flowtype"
   ],
   "rules": {
     "indent": ["error", 2],
@@ -33,6 +34,7 @@ module.exports = {
     "react/prop-types": ["off"],
     "no-constant-condition": ["off"],
     "no-console": ["off"],
-    "require-yield": ["off"]
+    "require-yield": ["off"],
+    "flowtype/define-flow-type": 1,
   }
 };

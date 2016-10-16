@@ -775,6 +775,11 @@
         }
       }
     },
+    "eslint-plugin-flowtype": {
+      "version": "2.20.0",
+      "from": "eslint-plugin-flowtype@latest",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-flowtype/-/eslint-plugin-flowtype-2.20.0.tgz"
+    },
     "eslint-plugin-react": {
       "version": "6.4.1",
       "from": "eslint-plugin-react@>=6.0.0 <7.0.0",
