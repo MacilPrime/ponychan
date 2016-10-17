@@ -23,7 +23,7 @@ export default (initialState: any = {}, history: any, DevTools: any) => {
   const store = createStore(reducers, initialState, enhancer);
 
   if (module.hot) {
-    module.hot.accept('./reducers', () => {
+    (module:any).hot.accept('./reducers', () => {
       const reducers = require('./reducers').default;
 
       store.replaceReducer(reducers);

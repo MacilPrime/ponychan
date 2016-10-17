@@ -2,7 +2,7 @@ module.exports = {
   "parser": "babel-eslint",
   "env": {
     "browser": true,
-    "mocha": true,
+    "jest": true,
     "node": true,
     "es6": true
   },
@@ -15,7 +15,8 @@ module.exports = {
     "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "flowtype"
   ],
   "rules": {
     "indent": ["error", 2],
@@ -31,6 +32,7 @@ module.exports = {
     "space-before-blocks": ["error", "always"],
     "keyword-spacing": ["error"],
     "react/prop-types": ["off"],
-    "no-constant-condition": ["off"]
+    "no-constant-condition": ["off"],
+    "flowtype/define-flow-type": 1,
   }
 };

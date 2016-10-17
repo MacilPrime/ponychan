@@ -29,12 +29,12 @@ type Props = {
   isNewFilter: boolean;
   initialFilter: Object;
 
-  previewFilterRequestRunning: RState.previewFilterRequestRunning;
-  previewFilterResponse: RState.previewFilterResponse;
-  previewFilterLastError: RState.previewFilterLastError;
-  updateRequestsRunning: RState.updateRequestsRunning;
-  updateRequestsResponses: RState.updateRequestsResponses;
-  updateRequestsErrors: RState.updateRequestsErrors;
+  previewFilterRequestRunning: $PropertyType<RState, 'previewFilterRequestRunning'>;
+  previewFilterResponse: $PropertyType<RState, 'previewFilterResponse'>;
+  previewFilterLastError: $PropertyType<RState, 'previewFilterLastError'>;
+  updateRequestsRunning: $PropertyType<RState, 'updateRequestsRunning'>;
+  updateRequestsResponses: $PropertyType<RState, 'updateRequestsResponses'>;
+  updateRequestsErrors: $PropertyType<RState, 'updateRequestsErrors'>;
   fetchFilterRequest: typeof fetchFilterRequest,
   previewFilterRequest: typeof previewFilterRequest,
   clearPreviewedFilter: typeof clearPreviewedFilter,
@@ -293,7 +293,7 @@ class Edit extends React.PureComponent {
   };
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Object) {
   const {
     previewFilterRequestRunning,
     previewFilterResponse,

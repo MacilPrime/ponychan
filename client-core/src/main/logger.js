@@ -174,7 +174,7 @@ function send_error(_error, retryTime=3*1000) {
 
 export function log_error(error: any) {
   console.error(error);
-  if (global.document) {
+  if (global.document && process.env.NODE_ENV !== 'test') {
     send_error(error);
   }
 }
@@ -320,7 +320,7 @@ export function misc_log_rapid(data: any) {
   }
 }
 
-if (global.document) {
+if (global.document && process.env.NODE_ENV !== 'test') {
   $(document).ready(function() {
     setTimeout(send_usage, 300);
   });

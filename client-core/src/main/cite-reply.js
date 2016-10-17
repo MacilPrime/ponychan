@@ -26,7 +26,7 @@ export default function citeReply(id: string) {
     global.QR.open();
   } else {
     $message = $('#body');
-    if (document.forms.post && document.forms.post.scrollIntoView)
+    if (document.forms.post && typeof document.forms.post.scrollIntoView === 'function')
       document.forms.post.scrollIntoView();
   }
   let cited = '>>' + id + '\n';

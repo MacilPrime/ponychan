@@ -82,8 +82,9 @@ $(document).ready(function() {
   if ($('.mcplayercount').length == 0)
     return;
 
-  if (window.sessionStorage && sessionStorage.mc_online_players != null) {
-    const mc_online_players = JSON.parse(sessionStorage.mc_online_players);
+  const sVal = sessionStorage.getItem('mc_online_players');
+  if (sVal != null) {
+    const mc_online_players = JSON.parse(sVal);
     if (Date.now() - mc_online_players.time < MC_MAX_CACHE_TIME) {
       updateMessage(mc_online_players.count);
     }

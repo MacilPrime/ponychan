@@ -7,7 +7,7 @@ import {stringify} from 'querystring';
 import {call, put, select, take, cancel, fork} from 'redux-saga/effects';
 
 import {log_error} from '../../logger';
-import delay from '../../lib/delay';
+import delay from 'pdelay';
 import * as actions from './actions';
 
 export function* setModStatus(): any {
