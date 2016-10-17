@@ -13,7 +13,6 @@ import envify from 'envify/custom';
 import gulpif from 'gulp-if';
 import gutil from 'gulp-util';
 import babelify from 'babelify';
-import RSVP from './test/lib/rsvp';
 import exec from './src/build/exec';
 
 const args = stdio.getopt({
@@ -32,7 +31,7 @@ let getVersion = function() {
 };
 
 gulp.task('getVersion', function() {
-  return RSVP.Promise.all([
+  return Promise.all([
     exec('git rev-parse HEAD'),
     exec('git status --porcelain')
   ]).then(function(parts) {
@@ -96,7 +95,7 @@ function browserifyTask(name, entry, destname) {
         });
       }
 
-      return new RSVP.Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         bundle.on('error', reject);
         result.on('error', reject);
         result.on('end', resolve);

@@ -29,7 +29,7 @@ class ButtonLabel extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Object) {
   return {watcher: state.watcher};
 }
 

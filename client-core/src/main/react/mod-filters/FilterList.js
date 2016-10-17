@@ -59,7 +59,7 @@ class FilterList extends React.PureComponent {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Object) {
   return {modFilters: state.modFilters};
 }
 

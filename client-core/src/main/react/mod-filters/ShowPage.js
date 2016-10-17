@@ -88,7 +88,7 @@ class ShowPage extends React.PureComponent {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps) {
   const id = +ownProps.params.id;
   return {
     filter: state.modFilters.filtersById[id]

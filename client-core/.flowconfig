@@ -1,11 +1,9 @@
 [ignore]
 .*/node_modules/fbjs/.*
-.*/node_modules/react-motion/.*
 
 [include]
 
 [libs]
-flow-libs/
 
 [options]
 unsafe.enable_getters_and_setters=true

@@ -3,7 +3,7 @@
 import {log_error} from './logger';
 
 let BOARD_DATA: Object = {};
-if (global.document) {
+if (global.document && process.env.NODE_ENV !== 'test') {
   try {
     // This is populated by getBoardConfig() in functions.php
     BOARD_DATA = JSON.parse(document.getElementById('config').getAttribute('data-board-config'));
