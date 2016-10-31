@@ -1,5 +1,6 @@
 body {
 	background:
+		url("img/nightmare/pinkie.png") no-repeat bottom 150px right,
 		url("img/nightmare/bggradient.png") repeat-x bottom fixed,
 		url("img/nightmare/moon.png") no-repeat 100px 70px,
 		url("img/nightmare/eyes.png"),
