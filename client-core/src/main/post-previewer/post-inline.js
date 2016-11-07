@@ -22,6 +22,7 @@ function init() {
   onPostLinkEvent('click')
     .takeUntilBy(update)
     .filter(({event}) => event.which === 1 && !event.ctrlKey && !event.shiftKey && !event.metaKey)
+    .filter(({$link}) => $link.text().match(/^>>\d+/))
     .onValue(({event, $link}) => {
       const url = $link.attr('href');
       const meta = new Metadata(url);

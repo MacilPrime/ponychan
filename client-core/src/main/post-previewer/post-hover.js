@@ -20,6 +20,7 @@ function init() {
     .takeUntilBy(update)
     .filter(() => settings.getSetting('preview_hover'))
     .filter(({$link}) => !$link.hasClass('inlined'))
+    .filter(({$link}) => $link.text().match(/^>>\d+/))
     .onValue(({$link}) => {
       const $post = findPost($link.attr('href'));
       startHover($link, $post);
