@@ -51,6 +51,7 @@ function mod_login() {
 			setCookies();
 
 			header('Location: ?/', true, $config['redirect_http']);
+			exit;
 		}
 	}
 
