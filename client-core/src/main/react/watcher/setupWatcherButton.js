@@ -179,6 +179,8 @@ function init_watcher_menu(store) {
   const $watcherContainer = $('<span/>')
     .prependTo( $('.top .settingsSection') );
 
+  if ($watcherContainer.length === 0) return;
+
   const $watcherScreen = $('<div/>')
     .attr('id', 'watcherScreen')
     .appendTo(document.body)
