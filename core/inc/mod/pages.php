@@ -36,7 +36,7 @@ function mod_login() {
 
 	if (isset($_POST['login'])) {
 		// Check if inputs are set and not empty
-		if (!isset($_POST['username'], $_POST['password']) || $_POST['username'] == '' || $_POST['password'] == '') {
+		if (!isset($_POST['username'], $_POST['password']) || !is_string($_POST['username']) || !is_string($_POST['password']) || $_POST['username'] == '' || $_POST['password'] == '') {
 			$args['error'] = $config['error']['invalid'];
 		} elseif (!login($_POST['username'], $_POST['password'])) {
 			if ($config['syslog'])
