@@ -69,6 +69,7 @@ $post['ip'] = $_SERVER['REMOTE_ADDR'];
 $post['op'] = !$post['thread'];
 $post['body'] = $_POST['body'];
 $post['anon_thread'] = ($post['op'] && (stripos($post['body'], '[#anon]') !== false));
+$post['has_file'] = !!$post['file'];
 
 if (!($post['file'] || isset($post['embed'])) || (($post['op'] && $config['force_body_op']) || (!$post['op'] && $config['force_body']))) {
     $stripped_whitespace = preg_replace('/[\s]/u', '', $post['body']);
