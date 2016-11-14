@@ -4,6 +4,7 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import kefirBus from 'kefir-bus';
+import Kefir from 'kefir';
 import * as Immutable from 'immutable';
 
 let settingsMetadata = Immutable.Map();
@@ -12,7 +13,7 @@ let settingsSectionsList = Immutable.List();
 
 const refresher = kefirBus();
 
-const getSettingStream = _.memoize(name =>
+const getSettingStream: (name: string) => Kefir.Observable<any> = _.memoize(name =>
   settingsMetadata.get(name).get('bus')
     .toProperty(()=>null)
     .map(() => getSetting(name))
