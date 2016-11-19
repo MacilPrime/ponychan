@@ -316,8 +316,8 @@ if (!($mod && isset($post['raw']) && $post['raw'])) {
 }
 
 // Check for a flood
-if (!hasPermission('flood', $board['uri']) && checkFlood($post)) {
-    error($config['error']['flood']);
+if (!hasPermission('flood', $board['uri'])) {
+  checkFlood($post);
 }
 
 require_once 'inc/filters.php';

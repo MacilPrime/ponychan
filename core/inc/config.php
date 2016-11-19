@@ -808,6 +808,7 @@
 	$config['error']['image_hard_limit']	= _('Thread has reached its maximum image limit.');
 	$config['error']['nopost']		= _('You didn\'t make a post.');
 	$config['error']['flood']		= _('Flood detected; Post discarded.');
+	$config['error']['flood_threads']		= _('You must wait before creating more threads.');
 	$config['error']['spam']		= _('Your request looks automated; Post discarded.');
 	$config['error']['dnsbl']		= _('Your IP address is listed in %s.');
 	$config['error']['toomanylinks']	= _('Too many links; flood detected.');

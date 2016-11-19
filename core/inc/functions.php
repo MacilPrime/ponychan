@@ -926,8 +926,9 @@ function mask_url($mask) {
 function checkFlood($post) {
 	global $board, $config;
 
-	if (event('check-flood', $post))
-		return true;
+	if (event('check-flood', $post)) {
+		error($config['error']['flood']);
+	}
 
 	$query = prepare(sprintf(
 		"SELECT 1 FROM `posts_%s` WHERE (`ip_data` = INET6_ATON(:ip) AND `time` > :floodtime) OR (`ip_data` = INET6_ATON(:ip) AND `body` != '' AND `body` = :body AND `time` > :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` > :floodsametime) LIMIT 1",
@@ -940,7 +941,7 @@ function checkFlood($post) {
 	$query->execute() or error(db_error($query));
 
 	if ((bool)$query->fetch()) {
-		return true;
+		error($config['error']['flood']);
 	}
 
 	if ($post['op'] && count($config['flood_time_op']) > 0) {
@@ -967,12 +968,10 @@ function checkFlood($post) {
 				return $post['time'] > $start_time;
 			}));
 			if ($threads_in_time >= $count) {
-				return true;
+				error($config['error']['flood_threads']);
 			}
 		}
 	}
-
-	return false;
 }
 
 // Triggers an error if the file isn't suitable to be posted.
