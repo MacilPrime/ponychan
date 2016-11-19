@@ -169,6 +169,12 @@
 	$config['flood_time_ip'] = 120;
 	// Same as above but different IP address
 	$config['flood_time_same'] = 30;
+	// Rate-limits for thread creation. List of [number of threads, second] pairs.
+	$config['flood_time_op'] = [
+		[2, 5*60],
+		[3, 3*60*60], // 3 in 3 hours
+		[5, 3*24*60*60] // 5 in 3 days
+	];
 
 	// DNS blacklists (DNSBL) http://tinyboard.org/docs/?p=Config/DNSBL
 

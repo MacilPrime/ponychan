@@ -930,18 +930,49 @@ function checkFlood($post) {
 		return true;
 
 	$query = prepare(sprintf(
-		"SELECT * FROM `posts_%s` WHERE (`ip_data` = INET6_ATON(:ip) AND `time` > :floodtime) OR (`ip_data` = INET6_ATON(:ip) AND `body` != '' AND `body` = :body AND `time` > :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` > :floodsametime) LIMIT 1",
+		"SELECT 1 FROM `posts_%s` WHERE (`ip_data` = INET6_ATON(:ip) AND `time` > :floodtime) OR (`ip_data` = INET6_ATON(:ip) AND `body` != '' AND `body` = :body AND `time` > :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` > :floodsametime) LIMIT 1",
 		$board['uri']));
-	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
+	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']); // TODO check range
 	$query->bindValue(':body', $post['body']);
 	$query->bindValue(':floodtime', time()-$config['flood_time'], PDO::PARAM_INT);
 	$query->bindValue(':floodsameiptime', time()-$config['flood_time_ip'], PDO::PARAM_INT);
 	$query->bindValue(':floodsametime', time()-$config['flood_time_same'], PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 
-	$flood = (bool)$query->fetch();
+	if ((bool)$query->fetch()) {
+		return true;
+	}
 
-	return $flood;
+	if ($post['op'] && count($config['flood_time_op']) > 0) {
+		$max_count = max(array_map(function($pair) {
+			return $pair[0];
+		}, $config['flood_time_op']));
+		$max_time = max(array_map(function($pair) {
+			return $pair[1];
+		}, $config['flood_time_op']));
+		$query = prepare(sprintf(
+			"SELECT `time` FROM `posts_%s` WHERE `thread` IS NULL AND `ip_data` = INET6_ATON(:ip) AND `time` > :start_time LIMIT :max_count",
+			$board['uri']));
+		$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']); // TODO check range
+		$query->bindValue(':max_count', $max_count, PDO::PARAM_INT);
+		$query->bindValue(':start_time', time()-$max_time, PDO::PARAM_INT);
+		$query->execute() or error(db_error($query));
+
+		$thread_times = $query->fetchAll(PDO::FETCH_ASSOC);
+
+		foreach ($config['flood_time_op'] as $limitPair) {
+			list($count, $time) = $limitPair;
+			$start_time = time()-$time;
+			$threads_in_time = count(array_filter($thread_times, function($post) use ($start_time) {
+				return $post['time'] > $start_time;
+			}));
+			if ($threads_in_time >= $count) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 // Triggers an error if the file isn't suitable to be posted.
