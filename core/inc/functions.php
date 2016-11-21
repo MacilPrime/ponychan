@@ -930,10 +930,23 @@ function checkFlood($post) {
 		error($config['error']['flood']);
 	}
 
+	$range = parse_mask(ipToUserRange($_SERVER['REMOTE_ADDR']));
+
 	$query = prepare(sprintf(
-		"SELECT 1 FROM `posts_%s` WHERE (`ip_data` = INET6_ATON(:ip) AND `time` > :floodtime) OR (`ip_data` = INET6_ATON(:ip) AND `body` != '' AND `body` = :body AND `time` > :floodsameiptime) OR (`body` != ''  AND `body` = :body AND `time` > :floodsametime) LIMIT 1",
+		"SELECT 1 FROM `posts_%s` WHERE (
+			`ip_type` = :range_type AND
+			`ip_data` >= INET6_ATON(:range_start) AND
+			`ip_data` <= INET6_ATON(:range_end) AND (
+				`time` > :floodtime OR
+				(`body` != '' AND `body` = :body AND `time` > :floodsameiptime)
+			)
+		) OR (
+			`body` != ''  AND `body` = :body AND `time` > :floodsametime
+		) LIMIT 1",
 		$board['uri']));
-	$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']); // TODO check range
+	$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+	$query->bindValue(':range_start', $range['range_start']);
+	$query->bindValue(':range_end', $range['range_end']);
 	$query->bindValue(':body', $post['body']);
 	$query->bindValue(':floodtime', time()-$config['flood_time'], PDO::PARAM_INT);
 	$query->bindValue(':floodsameiptime', time()-$config['flood_time_ip'], PDO::PARAM_INT);
@@ -952,9 +965,17 @@ function checkFlood($post) {
 			return $pair[1];
 		}, $config['flood_time_op']));
 		$query = prepare(sprintf(
-			"SELECT `time` FROM `posts_%s` WHERE `thread` IS NULL AND `ip_data` = INET6_ATON(:ip) AND `time` > :start_time LIMIT :max_count",
+			"SELECT `time` FROM `posts_%s` WHERE
+				`thread` IS NULL AND
+				`ip_type` = :range_type AND
+				`ip_data` >= INET6_ATON(:range_start) AND
+				`ip_data` <= INET6_ATON(:range_end) AND
+				`time` > :start_time
+				LIMIT :max_count",
 			$board['uri']));
-		$query->bindValue(':ip', $_SERVER['REMOTE_ADDR']); // TODO check range
+		$query->bindValue(':range_type', $range['range_type'], PDO::PARAM_INT);
+		$query->bindValue(':range_start', $range['range_start']);
+		$query->bindValue(':range_end', $range['range_end']);
 		$query->bindValue(':max_count', $max_count, PDO::PARAM_INT);
 		$query->bindValue(':start_time', time()-$max_time, PDO::PARAM_INT);
 		$query->execute() or error(db_error($query));
