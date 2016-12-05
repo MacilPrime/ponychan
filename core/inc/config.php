@@ -173,7 +173,7 @@
 	$config['flood_time_op'] = [
 		[2, 5*60],
 		[3, 3*60*60], // 3 in 3 hours
-		[5, 3*24*60*60] // 5 in 3 days
+		[5, 1*24*60*60] // 5 in 1 day
 	];
 
 	// DNS blacklists (DNSBL) http://tinyboard.org/docs/?p=Config/DNSBL
