@@ -314,8 +314,8 @@ function mapStateToProps(state: Object) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
+function mapDispatchToProps(dispatch: Function) {
+  return (bindActionCreators:any)(
     {
       fetchFilterRequest,
       previewFilterRequest,

@@ -63,7 +63,7 @@ function mapStateToProps(state: Object) {
   return {modFilters: state.modFilters};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function) {
   return bindActionCreators({fetchListRequest}, dispatch);
 }
 

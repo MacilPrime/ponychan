@@ -13,6 +13,11 @@ import Hits from './show/Hits';
 import {fetchFilterRequest} from './actions';
 
 class ShowPage extends React.PureComponent {
+  props: {
+    params: Object;
+    fetchFilterRequest: *;
+    filter: *;
+  };
   state = {
     page: 'about'
   };
@@ -95,8 +100,8 @@ function mapStateToProps(state: Object, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchFilterRequest}, dispatch);
+function mapDispatchToProps(dispatch: Function) {
+  return (bindActionCreators:any)({fetchFilterRequest}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowPage);

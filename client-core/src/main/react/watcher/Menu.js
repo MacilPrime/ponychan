@@ -41,7 +41,7 @@ function mapStateToProps(state: Object) {
   return {watcher: state.watcher};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function) {
   return bindActionCreators({unwatchThread}, dispatch);
 }
 
