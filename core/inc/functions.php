@@ -1162,7 +1162,7 @@ function checkCaptcha() {
 	$query->execute() or error(db_error($query));
 
 	if ($query->rowCount() > 0) {
-		error('You need to <a href="/captcha" target="_blank">complete a CAPTCHA</a> before you can post.');
+		error('You need to <a href="/captcha" target="_blank">complete a CAPTCHA</a> before you can post. <a href="/captcha" target="_blank">Click here to receive a CAPTCHA.</a>');
 	}
 }
 
