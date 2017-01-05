@@ -742,7 +742,7 @@ function mod_ban() {
 		header('Location: ?/', true, $config['redirect_http']);
 }
 
-function mod_bans($mask_url, $page = null) {
+function mod_bans($mask_url, $page = null, $no_system = null) {
 	global $config;
 
 	if ($page === null)
@@ -784,6 +784,7 @@ function mod_bans($mask_url, $page = null) {
 			$url .= "/$page";
 		}
 		header("Location: $url", true, $config['redirect_http']);
+		return;
 	}
 
 	expire_old_bans();
@@ -798,6 +799,10 @@ function mod_bans($mask_url, $page = null) {
 		if ($range === null)
 			error('Invalid IP range.');
 		$range_query = "`range_type` = :range_type AND `range_start` <= INET6_ATON(:range_end) AND `range_end` >= INET6_ATON(:range_start)";
+	}
+
+	if ($no_system) {
+		$range_query .= ' AND `mod` != -1';
 	}
 
 	$query = prepare(sprintf('SELECT `bans`.*, INET6_NTOA(`range_start`) AS `range_start`, INET6_NTOA(`range_end`) AS `range_end`,`username`,
@@ -830,11 +835,11 @@ function mod_bans($mask_url, $page = null) {
 	$query->execute() or error(db_error($query));
 	$count = $query->fetchColumn(0);
 
-	mod_page($mask ? sprintf(_('Bans for %s'), $mask) :_('Ban list'), 'mod/ban_list.html', array('bans' => $bans, 'count' => $count, 'mask' => $mask));
+	mod_page($mask ? sprintf(_('Bans for %s'), $mask) :_('Ban list'), 'mod/ban_list.html', array('bans' => $bans, 'count' => $count, 'mask' => $mask, 'no_system' => $no_system));
 }
 
-function mod_all_bans($page_no = 1) {
-	mod_bans('', $page_no);
+function mod_all_bans($no_system = null, $page_no = 1) {
+	mod_bans('', $page_no, $no_system);
 }
 
 function mod_ban_history($mask_url, $page = null) {
@@ -1002,6 +1007,7 @@ function mod_notes($mask_url, $page = null) {
 			$url .= "/$page";
 		}
 		header("Location: $url", true, $config['redirect_http']);
+		return;
 	}
 
 	$mask = str_replace('^', '/', $mask_url);

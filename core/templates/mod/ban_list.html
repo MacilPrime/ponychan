@@ -2,6 +2,14 @@
 	<header><div class="subtitle"><p><a href="?/IP/{{ mask|mask_url }}">Return to IP page</a></p></div></header>
 {% endif %}
 
+<p style="text-align:center">
+{% if no_system %}
+	<a href="?/bans">View all bans (Currently hiding system bans)</a>
+{% else %}
+	<a href="?/bans_no_system">Hide system bans</a>
+{% endif %}
+</p>
+
 {% if bans|count == 0 %}
 	<p style="text-align:center" class="unimportant">
 	{% if mask %}
@@ -116,7 +124,7 @@
 {% if count > bans|count %}
 	<p class="unimportant" style="text-align:center;word-wrap:break-word">
 		{% for i in range(0, (count - 1) / config.mod.banlist_page) %}
-			<a href="?/bans{% if mask %}/{{ mask|mask_url }}{% endif %}/{{ i + 1 }}">[{{ i + 1 }}]</a>
+			<a href="?/bans{% if no_system %}_no_system{% endif %}{% if mask %}/{{ mask|mask_url }}{% endif %}/{{ i + 1 }}">[{{ i + 1 }}]</a>
 		{% endfor %}
 	</p>
 {% endif %}

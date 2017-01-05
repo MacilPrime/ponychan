@@ -58,8 +58,8 @@ $pages = array(
 
 	'/IP/([\w.:*^]+)'			=> 'ip',		// view ip address
 	'/IP/([\w.:*^]+)/remove_note/(\d+)'	=> 'ip_remove_note',	// remove note from ip address
-	'/bans'					=> 'all_bans',		// ban list
-	'/bans/(\d+)'				=> 'all_bans',		// ban list
+	'/bans(_no_system)?'					=> 'all_bans',		// ban list
+	'/bans(_no_system)?/(\d+)'				=> 'all_bans',		// ban list
 	'/bans/([\w.:*^]+)'			=> 'bans',		// ip ban list
 	'/bans/([\w.:*^]+)/(\d+)'		=> 'bans',		// ip ban list
 	'/banhistory/([\w.:*^]+)'		=> 'ban_history',	// ip ban history list
