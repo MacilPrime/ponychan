@@ -116,9 +116,7 @@ function loadConfig() {
 
 	if (!isset($config['referer_match']))
 		if (isset($_SERVER['HTTP_HOST'])) {
-			$config['referer_match'] = '/^' .
-				(preg_match($config['url_regex'], $config['root']) ? '' :
-					'https?:\/\/' . preg_quote($_SERVER['HTTP_HOST'], '/')) . '\/.*/';
+			$config['referer_match'] = '/^https?:\/\/' . preg_quote($_SERVER['HTTP_HOST'], '/') . '($|\/)/';
 		} else {
 			// CLI mode
 			$config['referer_match'] = '//';
@@ -399,7 +397,10 @@ function cyclicThreadCleanup($thread, $limit) {
 function checkCsrf() {
 	global $config;
 
-	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER'])) {
+	if (
+		(!isset($_SERVER['HTTP_ORIGIN']) || !preg_match($config['referer_match'], $_SERVER['HTTP_ORIGIN'])) &&
+		(!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
+	) {
 		error($config['error']['referer'], true, 400);
 	}
 }
