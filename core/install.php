@@ -362,6 +362,12 @@ $migration_procedures = [
 		  KEY `timestamp` (`timestamp`),
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1") or error(db_error());
+	},
+	'add-filetype-column' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query(sprintf("ALTER TABLE `posts_%s` ADD `filetype` ENUM('image', 'video', 'silentvideo', 'audio', 'file') DEFAULT NULL AFTER `file`", $board['uri'])) or error(db_error());
+		}
 	}
 ];
 
