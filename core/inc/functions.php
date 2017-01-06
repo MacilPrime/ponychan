@@ -400,7 +400,7 @@ function checkCsrf() {
 	global $config;
 
 	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER'])) {
-		error($config['error']['referer']);
+		error($config['error']['referer'], true, 400);
 	}
 }
 
