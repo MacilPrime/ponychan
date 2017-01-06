@@ -393,6 +393,17 @@ function cyclicThreadCleanup($thread, $limit) {
 	deletePosts($ids, false, false);
 }
 
+// This should be done on any state-changing requests such as posts or mod actions.
+// TODO all state-changing requests should be POST requests, and this should be
+// done on all POST requests.
+function checkCsrf() {
+	global $config;
+
+	if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER'])) {
+		error($config['error']['referer']);
+	}
+}
+
 function create_antibot($board, $thread = null) {
 	require_once dirname(__FILE__) . '/anti-bot.php';
 

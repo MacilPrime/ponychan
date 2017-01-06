@@ -26,9 +26,7 @@ if (isset($_POST['thread'])) {
 } else
     $post['op'] = true;
 
-// Check the referrer
-if (!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], $_SERVER['HTTP_REFERER']))
-    error($config['error']['referer']);
+checkCsrf();
 
 checkDNSBL();
 

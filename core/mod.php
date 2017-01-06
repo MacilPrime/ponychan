@@ -126,6 +126,7 @@ foreach ($pages as $uri => $handler) {
 		if (preg_match('/^secure(_POST)? /', $handler, $m)) {
 			$secure_post_only = isset($m[1]);
 			function hasCsrfHeader() {
+				// TODO combine this stuff with the checkCsrf() function.
 				// You can't csrf with extra headers against your target.
 				return (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) &&
 					strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
