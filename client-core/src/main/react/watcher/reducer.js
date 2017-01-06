@@ -42,9 +42,12 @@ function countAlerts(watchedThreads, lastResponse, currentThreadId) {
 export default function reducer(state: State=initialState, action: Object): State {
   switch (action.type) {
   case actions.SET_CURRENT_THREAD_ID: {
+    const currentThreadId = action.payload.threadId;
+    const alerts = countAlerts(state.watchedThreads, null, currentThreadId);
     return {
       ...state,
-      currentThreadId: action.payload.threadId
+      alerts,
+      currentThreadId
     };
   }
   case actions.SET_WATCHER_MOD_STATUS: {
@@ -75,8 +78,10 @@ export default function reducer(state: State=initialState, action: Object): Stat
         last_seen_time
       }
     };
+    const alerts = countAlerts(watchedThreads, null, state.currentThreadId);
     return {
       ...state,
+      alerts,
       watchedThreads
     };
   }
