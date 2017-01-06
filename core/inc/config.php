@@ -1249,15 +1249,6 @@
 	// Keep the Google Analytics cookies to one domain -- ga._setDomainName()
 	// $config['google_analytics_domain'] = 'www.example.org';
 
-	// If you use Varnish, Squid, or any similar caching reverse-proxy in front of Tinyboard,
-	// you can configure Tinyboard to PURGE files when they're written to
-	//$config['purge'] = array(
-	//	array('127.0.0.1', 80)
-	//	array('127.0.0.1', 80, 'example.org')
-	//);
-	// Connection timeout, in seconds
-	$config['purge_timeout'] = 3;
-
 	// Remote server definitions
 	//$config['remote']['static'] = array(
 	//	'host' => 'static.example.org',

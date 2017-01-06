@@ -546,35 +546,7 @@ function boardTitle($uri) {
 	return false;
 }
 
-function purge($uri) {
-	global $config, $debug;
-
-	if (preg_match($config['referer_match'], $config['root']) && isset($_SERVER['REQUEST_URI'])) {
-		$uri = (str_replace('\\', '/', dirname($_SERVER['REQUEST_URI'])) == '/' ? '/' : str_replace('\\', '/', dirname($_SERVER['REQUEST_URI'])) . '/') . $uri;
-	} else {
-		$uri = $config['root'] . $uri;
-	}
-
-	if ($config['debug']) {
-		$debug['purge'][] = $uri;
-	}
-
-	foreach ($config['purge'] as &$purge) {
-		$host = &$purge[0];
-		$port = &$purge[1];
-		$http_host = isset($purge[2]) ? $purge[2] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
-		$request = "PURGE {$uri} HTTP/1.1\r\nHost: {$http_host}\r\nUser-Agent: Tinyboard\r\nConnection: Close\r\n\r\n";
-		if ($fp = fsockopen($host, $port, $errno, $errstr, $config['purge_timeout'])) {
-			fwrite($fp, $request);
-			fclose($fp);
-		} else {
-			// Cannot connect?
-			error('Could not PURGE for ' . $host);
-		}
-	}
-}
-
-function file_write($path, $data, $simple = false, $skip_purge = false) {
+function file_write($path, $data, $simple = false) {
 	global $config;
 
 	if (preg_match('/^remote:\/\/(.+)\:(.+)$/', $path, $m)) {
@@ -641,21 +613,6 @@ function file_write($path, $data, $simple = false, $skip_purge = false) {
 			error('Unable to move file: ' . $tpath);
 	}
 
-	if (!$skip_purge && isset($config['purge'])) {
-		// Purge cache
-		if (basename($path) == $config['file_index']) {
-			// Index file (/index.html); purge "/" as well
-			$uri = dirname($path);
-			// root
-			if ($uri == '.')
-				$uri = '';
-			else
-				$uri .= '/';
-			purge($uri);
-		}
-		purge($path);
-	}
-
 	event('write', $path);
 }
 
@@ -669,20 +626,6 @@ function file_unlink($path) {
 	}
 
 	$ret = @unlink($path);
-	if (isset($config['purge']) && $path[0] != '/' && isset($_SERVER['HTTP_HOST'])) {
-		// Purge cache
-		if (basename($path) == $config['file_index']) {
-			// Index file (/index.html); purge "/" as well
-			$uri = dirname($path);
-			// root
-			if ($uri == '.')
-				$uri = '';
-			else
-				$uri .= '/';
-			purge($uri);
-		}
-		purge($path);
-	}
 
 	event('unlink', $path);
 
