@@ -1190,11 +1190,11 @@ function post(array $post) {
 	$query = prepare(sprintf(
 		'INSERT INTO `posts_%s` (`id`, `thread`, `subject`, `email`, `email_protocol`, `name`, ' .
 		'`trip`, `capcode`, `body`, `body_nomarkup`, `time`, `bump`, `thumb`, `thumb_uri`, ' .
-		'`thumbwidth`, `thumbheight`, `file`, `file_uri`, `filewidth`, `fileheight`, ' .
+		'`thumbwidth`, `thumbheight`, `file`, `filetype`, `file_uri`, `filewidth`, `fileheight`, ' .
 		'`filesize`, `filename`, `filehash`, `password`, `userhash`, `ip_type`, `ip_data`, `sticky`, ' .
 		'`locked`, `sage`, `embed`, `mature`, `anon_thread`) VALUES ( NULL, :thread, :subject, ' .
 		':email, :email_protocol, :name, :trip, :capcode, :body, :body_nomarkup, :time, :time, ' .
-		':thumb, :thumb_uri, :thumbwidth, :thumbheight, :file, :file_uri, :width, :height, :filesize, ' .
+		':thumb, :thumb_uri, :thumbwidth, :thumbheight, :file, :filetype, :file_uri, :width, :height, :filesize, ' .
 		':filename, :filehash, :password, :userhash, :ip_type, INET6_ATON(:ip), :sticky, :locked, 0, :embed, ' .
 		':mature, :anon_thread)', $board['uri']));
 
@@ -1270,6 +1270,7 @@ function post(array $post) {
 		$query->bindValue(':thumbwidth', $post['thumbwidth'], PDO::PARAM_INT);
 		$query->bindValue(':thumbheight', $post['thumbheight'], PDO::PARAM_INT);
 		$query->bindValue(':file', $post['file']);
+		$query->bindValue(':filetype', $post['filetype']);
 
 		if (isset($post['width'], $post['height'])) {
 			$query->bindValue(':width', $post['width'], PDO::PARAM_INT);
@@ -1287,6 +1288,7 @@ function post(array $post) {
 		$query->bindValue(':thumbwidth', null, PDO::PARAM_NULL);
 		$query->bindValue(':thumbheight', null, PDO::PARAM_NULL);
 		$query->bindValue(':file', null, PDO::PARAM_NULL);
+		$query->bindValue(':filetype', null, PDO::PARAM_NULL);
 		$query->bindValue(':width', null, PDO::PARAM_NULL);
 		$query->bindValue(':height', null, PDO::PARAM_NULL);
 		$query->bindValue(':filesize', null, PDO::PARAM_NULL);

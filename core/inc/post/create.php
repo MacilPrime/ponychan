@@ -504,14 +504,15 @@ if ($post['has_file']) {
             ));
         }
     }
-}
 
-// Remove board directories before inserting them into the database.
-if ($post['has_file']) {
+    // Remove board directories before inserting them into the database.
     $post['file_path'] = $post['file'];
     $post['file'] = substr_replace($post['file'], '', 0, mb_strlen($board['dir'] . $config['dir']['img']));
-    if (($file_type === 'image' || $file_type === 'video') && $post['thumb'] != 'spoiler')
+    if (($file_type === 'image' || $file_type === 'video') && $post['thumb'] != 'spoiler') {
         $post['thumb'] = substr_replace($post['thumb'], '', 0, mb_strlen($board['dir'] . $config['dir']['thumb']));
+    }
+
+    $post['filetype'] = $file_type === 'video' ? 'silentvideo' : $file_type;
 }
 
 $post = (object)$post;
