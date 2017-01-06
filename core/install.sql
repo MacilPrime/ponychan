@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `bans` (
   `range_type` int(11) NOT NULL COMMENT '0:ipv4, 1:ipv6',
   `range_start` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
   `range_end` varbinary(16) NOT NULL COMMENT 'INET6_ATON() address data',
-  `mod` int(11) NOT NULL COMMENT 'which mod made the ban',
+  `mod` int(11) NOT NULL COMMENT 'which mod made the ban. -1: system',
   `set` int(11) NOT NULL COMMENT 'when the ban was set',
   `expires` int(11) DEFAULT NULL,
   `lifted` int(11) DEFAULT NULL,
