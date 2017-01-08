@@ -43,8 +43,8 @@ This is a mature content thread. You must have viewing mature content enabled in
 		{% endif %}
 	)
 	</span></p>
-<a href="{{ post.file_uri }}" target="_blank"{% if post.thumb == 'file' %} class="file"{% endif %}>
-<img class="postimg{% if post.filetype == 'silentvideo' %} silentvideo{% endif %}{% if post.filetype == 'video' %} video_with_audio{% endif %}{% if post.filetype == 'video' or post.filetype == 'silentvideo' %} video{% endif %}" src="
+<a href="{{ post.file_uri }}" target="_blank" class="thumbContainer{% if post.thumb == 'file' %} file{% elseif post.filetype == 'silentvideo' %} silentvideo{% elseif post.filetype == 'video' %} video{% endif %}">
+<img class="postimg" src="
 	{% if post.thumb == 'file' %}
 		{{ config.root }}
 		{% if config.file_icons[post.filename|extension] %}

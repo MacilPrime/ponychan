@@ -26,8 +26,8 @@ $(document).ready(function(){
 			$img
 				.attr({src: $img.attr('data-old-src')})
 				.removeAttr('data-old-src')
-				.removeClass('expanded').removeClass('loading')
-				.show();
+				.removeClass('expanded').removeClass('loading');
+			$img.parent().show().removeClass('expanded');
 			$img.next('video').each(function() {
 				if (this.pause) {
 					this.pause();
@@ -40,33 +40,36 @@ $(document).ready(function(){
 			if(!image_expand_enabled || e.which == 2 || e.ctrlKey || e.altKey)
 				return true;
 
-			var $img = $(this);
-			var $a = $img.parent();
+			const $img = $(this);
+			const $a = $img.parent();
 
-			if(!$img.attr('data-old-src')) {
-				$img
-					.attr({
-						'data-old-src': $img.attr('src'),
-						src: $a.attr('href'),
-					});
-				if ($img.hasClass('video')) {
-					$img.hide();
+			if (!$img.parent().hasClass('expanded')) {
+				$img.parent().addClass('expanded');
+				if ($img.parent().hasClass('video') || $img.parent().hasClass('silentvideo')) {
+					$img.parent().hide();
 					$('<video/>')
 						.addClass('postimg')
 						.addClass('expanded')
-						.attr({
+						.prop({
 							src: $a.attr('href'),
 							loop: true,
-							muted: true,
+							controls: true,
 							autoplay: true
 						})
 						.click(function(e) {
-							e.preventDefault();
-							$img.click();
+							if (e.offsetY < 40 || this.offsetHeight - e.offsetY > 40) {
+								e.preventDefault();
+								$(this).remove();
+								$img.click();
+							}
 						})
-						.insertAfter($img);
+						.insertAfter($img.parent());
 				} else {
 					$img
+						.attr({
+							'data-old-src': $img.attr('src'),
+							src: $a.attr('href'),
+						})
 						.addClass('expanded')
 						.addClass('loading')
 						.on('load', function() {
@@ -77,8 +80,8 @@ $(document).ready(function(){
 				$img
 					.attr({src: $img.attr('data-old-src')})
 					.removeAttr('data-old-src')
-					.removeClass('expanded').removeClass('loading')
-					.show();
+					.removeClass('expanded').removeClass('loading');
+				$img.parent().show().removeClass('expanded');
 				$img.next('video').remove();
 			}
 			e.stopPropagation();
