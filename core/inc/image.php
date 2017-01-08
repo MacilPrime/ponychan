@@ -522,11 +522,13 @@ function getUploadSize($file, $file_type, $mime_type) {
 		$result = shell_exec("avprobe " . escapeshellarg($file) . " 2>&1");
 		if (!$result)
 			return NULL;
-		if (preg_match('/^\s+Stream[^:]+: Audio:/im', $result))
-			error($config['error']['noisy_video']);
+		$type = 'silentvideo';
+		if (preg_match('/^\s+Stream[^:]+: Audio:/im', $result)) {
+			$type = 'video';
+		}
 		if (!preg_match('/^\s+Stream[^:]+: Video:.* (\d+)x(\d+)/im', $result, $matches))
 			return NULL;
-		return array(intval($matches[1]), intval($matches[2]));
+		return array(intval($matches[1]), intval($matches[2]), $type);
 	}
 	return null;
 }

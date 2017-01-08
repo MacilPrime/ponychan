@@ -362,8 +362,18 @@ if ($post['has_file']) {
             error($config['error']['invalid_file']);
         }
 
-        if ($size[0] > $config['max_width'] || $size[1] > $config['max_height']) {
-            error($config['error']['maxsize']);
+        if ($file_type === 'image') {
+            if ($size[0] > $config['max_width'] || $size[1] > $config['max_height']) {
+                error($config['error']['maxsize']);
+            }
+        } elseif ($file_type === 'video') {
+            $file_type = $size[2]; // may be 'video' or 'silentvideo'
+            if ($file_type === 'video' && !$config['allow_video_with_audio']) {
+                error($config['error']['noisy_video']);
+            }
+            if ($size[0] > $config['max_video_resolution'] || $size[1] > $config['max_video_resolution']) {
+                error($config['error']['maxsize']);
+            }
         }
 
         if ($mime_type === 'image/jpeg') {
@@ -390,7 +400,7 @@ if ($post['has_file']) {
 
             $post['width'] = $image->size->width;
             $post['height'] = $image->size->height;
-        } elseif ($file_type === 'video') {
+        } elseif ($file_type === 'video' || $file_type === 'silentvideo') {
             $post['width'] = $size[0];
             $post['height'] = $size[1];
         } else {
@@ -424,7 +434,7 @@ if ($post['has_file']) {
                     $post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
                 );
                 timing_mark('thumb_resize_end');
-            } elseif ($file_type === 'video') {
+            } elseif ($file_type === 'video' || $file_type === 'silentvideo') {
                 timing_mark('video_resize_start');
                 $newRes = computeResize(
                     $size[0], $size[1],
@@ -457,7 +467,7 @@ if ($post['has_file']) {
                 $dont_copy_file = true;
             }
             $image->destroy();
-        } elseif ($file_type === 'video') {
+        } elseif ($file_type === 'video' || $file_type === 'silentvideo') {
             // Nothing else needs to be done here.
         } else {
             die("should not happen, invalid file_type $file_type");
@@ -508,11 +518,11 @@ if ($post['has_file']) {
     // Remove board directories before inserting them into the database.
     $post['file_path'] = $post['file'];
     $post['file'] = substr_replace($post['file'], '', 0, mb_strlen($board['dir'] . $config['dir']['img']));
-    if (($file_type === 'image' || $file_type === 'video') && $post['thumb'] != 'spoiler') {
+    if (($file_type === 'image' || $file_type === 'video' || $file_type === 'silentvideo') && $post['thumb'] != 'spoiler') {
         $post['thumb'] = substr_replace($post['thumb'], '', 0, mb_strlen($board['dir'] . $config['dir']['thumb']));
     }
 
-    $post['filetype'] = $file_type === 'video' ? 'silentvideo' : $file_type;
+    $post['filetype'] = $file_type;
 }
 
 $post = (object)$post;
