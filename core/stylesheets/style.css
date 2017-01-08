@@ -132,9 +132,13 @@ img.banner {
 	margin: 0 auto;
 	max-width: 95%;
 }
-.postimg {
+.thumbContainer {
 	display: block;
 	float: left;
+	position: relative;
+}
+.postimg {
+	display: block;
 	margin: 5px 20px 0 0;
 	padding: 5px;
 	border: none;
@@ -160,8 +164,8 @@ img.expanded, video.expanded {
 	height: 24px;
 	display: block;
 	position: absolute;
-	bottom: 12px;
-	left: 22px;
+	bottom: 6px;
+	left: 8px;
 	pointer-events: none;
 }
 .image-hover {
