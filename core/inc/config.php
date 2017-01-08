@@ -539,9 +539,15 @@
 	$config['file_hash'] = 'sha1_file';
 
 	// Maximum image upload size in bytes
-	$config['max_filesize'] = 10*1024*1024; // 10MB
+	$config['max_filesize'] = 5*1024*1024; // 5MB
 	// Maximum video upload size in bytes
-	$config['max_video_filesize'] = 3*1024*1024; // 3MB
+	$config['max_video_filesize'] = 4*1024*1024; // 4MB
+	// Maximum video resolution (width or height)
+	$config['max_video_resolution'] = 2048;
+	// Maximum video length in seconds
+	$config['max_video_length'] = 5*60; // 5 minutes
+	// Allow audio in videos
+	$config['allow_video_with_audio'] = true;
 	// Maximum thumbnail upload size in bytes
 	$config['max_thumb_filesize'] = 256*1024; // 256KB
 	// Maximum image dimensions

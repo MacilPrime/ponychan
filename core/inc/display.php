@@ -311,7 +311,7 @@ function embed_html($link) {
 }
 
 class Post {
-	public function __construct($id, $thread, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
+	public function __construct($id, $thread, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $filetype, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -331,6 +331,7 @@ class Post {
 		$this->thumbx = $thumbx;
 		$this->thumby = $thumby;
 		$this->file = $file;
+		$this->filetype = $filetype;
 		$this->file_uri = $file_uri ? $file_uri : ($file ? $config['uri_img'] . $file : null);
 		$this->filex = $filex;
 		$this->filey = $filey;
@@ -341,15 +342,6 @@ class Post {
 		$this->root = $root;
 		$this->mod = $mod;
 		$this->mature = $mature;
-
-		$file_ext = strtolower(substr($this->file, strrpos($this->file, '.') + 1));
-		if (in_array($file_ext, $config['allowed_image_types'])) {
-			$this->filetype = 'image';
-		} elseif (in_array($file_ext, $config['allowed_video_types'])) {
-			$this->filetype = 'video';
-		} else {
-			$this->filetype = null;
-		}
 
 		if ($this->embed)
 			$this->embed = embed_html($this->embed);
@@ -417,7 +409,7 @@ class Post {
 };
 
 class Thread {
-	public function __construct($id, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $file_uri, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false, $anon_thread=false) {
+	public function __construct($id, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $filetype, $file_uri, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false, $anon_thread=false) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -436,6 +428,7 @@ class Thread {
 		$this->thumbx = $thumbx;
 		$this->thumby = $thumby;
 		$this->file = $file;
+		$this->filetype = $filetype;
 		$this->file_uri = $file_uri ? $file_uri : ($file ? $config['uri_img'] . $file : null);
 		$this->filex = $filex;
 		$this->filey = $filey;
@@ -454,15 +447,6 @@ class Thread {
 		$this->hr = $hr;
 		$this->mature = $mature;
 		$this->anon_thread = $anon_thread;
-
-		$file_ext = strtolower(substr($this->file, strrpos($this->file, '.') + 1));
-		if (in_array($file_ext, $config['allowed_image_types'])) {
-			$this->filetype = 'image';
-		} elseif (in_array($file_ext, $config['allowed_video_types'])) {
-			$this->filetype = 'video';
-		} else {
-			$this->filetype = null;
-		}
 
 		if ($this->embed)
 			$this->embed = embed_html($this->embed);

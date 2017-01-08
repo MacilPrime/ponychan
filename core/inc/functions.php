@@ -1611,7 +1611,7 @@ function index($page, $mod=false, $oldbump=false) {
 		}
 		$thread = new Thread(
 			$th['id'], $th['subject'], $th['email'], $th['email_protocol'], $th['name'], $th['trip'], $th['capcode'], $th['body'], $th['time'], $th['thumb'],
-			$th['thumb_uri'], $th['thumbwidth'], $th['thumbheight'], $th['file'], $th['file_uri'], $th['filewidth'], $th['fileheight'], $th['filesize'], $th['filename'], $th['ip'],
+			$th['thumb_uri'], $th['thumbwidth'], $th['thumbheight'], $th['file'], $th['filetype'], $th['file_uri'], $th['filewidth'], $th['fileheight'], $th['filesize'], $th['filename'], $th['ip'],
 			$th['sticky'], $th['locked'], $th['sage'], $th['embed'], $mod ? '?/' : $config['root'], $mod, true, $th['mature'], $th['anon_thread']
 		);
 
@@ -1647,7 +1647,7 @@ function index($page, $mod=false, $oldbump=false) {
 
 			$thread->add(new Post(
 				$po['id'], $th['id'], $po['subject'], $po['email'], $po['email_protocol'], $po['name'], $po['trip'], $po['capcode'], $po['body'], $po['time'],
-				$po['thumb'], $po['thumb_uri'], $po['thumbwidth'], $po['thumbheight'], $po['file'], $po['file_uri'],
+				$po['thumb'], $po['thumb_uri'], $po['thumbwidth'], $po['thumbheight'], $po['file'], $po['filetype'], $po['file_uri'],
 				$po['filewidth'], $po['fileheight'], $po['filesize'],
 				$po['filename'], $po['ip'], $po['embed'], $mod ? '?/' : $config['root'], $mod, $po['mature'])
 			);
@@ -2104,14 +2104,14 @@ function buildThread($id, $return=false, $mod=false) {
 		if (!isset($thread)) {
 			$thread = new Thread(
 				$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
-				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filetype'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature'], $post['anon_thread']
 			);
 		} else {
 			$thread->add(new Post(
 				$post['id'], $thread->id, $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
 				$post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
-				$post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
+				$post['file'], $post['filetype'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
 				$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'])
 			);
 		}
@@ -2169,7 +2169,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 			if (!isset($thread)) {
 				$thread = new Thread(
 				$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
-				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+				$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filetype'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 				$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $mod ? '?/' : $config['root'], $mod, true, $post['mature'], $post['anon_thread']
 				);
 			} else {
@@ -2179,7 +2179,7 @@ function buildThread50($id, $return=false, $mod=false, $thread=null) {
 				$thread->add(new Post(
 					$post['id'], $thread->id, $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'],
 					$post['time'], $post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'],
-					$post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
+					$post['file'], $post['filetype'], $post['file_uri'], $post['filewidth'], $post['fileheight'],
 					$post['filesize'], $post['filename'], $post['ip'], $post['embed'], $mod ? '?/' : $config['root'], $mod, $post['mature'])
 				);
 			}

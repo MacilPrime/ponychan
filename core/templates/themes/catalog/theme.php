@@ -53,7 +53,7 @@
 				}
 				$thread = new Thread(
 					$post['id'], $post['subject'], $post['email'], $post['email_protocol'], $post['name'], $post['trip'], $post['capcode'], $post['body'], $post['time'],
-					$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
+					$post['thumb'], $post['thumb_uri'], $post['thumbwidth'], $post['thumbheight'], $post['file'], $post['filetype'], $post['file_uri'], $post['filewidth'], $post['fileheight'], $post['filesize'],
 					$post['filename'], $post['ip'], $post['sticky'], $post['locked'], $post['sage'], $post['embed'], $config['root'], false, false, $post['mature'], $post['anon_thread']
 				);
 				$thread->omitted = $thread->reply_count = $post['reply_count'];
