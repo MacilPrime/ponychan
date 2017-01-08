@@ -21,14 +21,14 @@ $(document).ready(function(){
 	});
 
 	function init_expand_image() {
-		var $img = $(this);
-		if ($img.attr('data-old-src')) {
+		const $img = $(this);
+		if ($img.parent().hasClass('expanded')) {
 			$img
 				.attr({src: $img.attr('data-old-src')})
 				.removeAttr('data-old-src')
 				.removeClass('expanded').removeClass('loading');
 			$img.parent().show().removeClass('expanded');
-			$img.next('video').each(function() {
+			$img.parent().next('video').each(function() {
 				if (this.pause) {
 					this.pause();
 				}
@@ -43,10 +43,10 @@ $(document).ready(function(){
 			const $img = $(this);
 			const $a = $img.parent();
 
-			if (!$img.parent().hasClass('expanded')) {
-				$img.parent().addClass('expanded');
+			if (!$a.hasClass('expanded')) {
+				$a.addClass('expanded');
 				if ($img.parent().hasClass('video') || $img.parent().hasClass('silentvideo')) {
-					$img.parent().hide();
+					$a.hide();
 					$('<video/>')
 						.addClass('postimg')
 						.addClass('expanded')

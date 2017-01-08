@@ -40,9 +40,8 @@ export const findPost = ud.defn(module, function findPost(url: string) {
     }).addClass($clone.attr('class'))
       .removeClass('post-loading post-preview dummy highlighted')
       .removeAttr('id')
-      .find('[id], .expanded')
-      .removeAttr('id')
-      .removeClass('expanded');
+      .find('[id]')
+      .removeAttr('id');
 
     // Clear out inline containers from the clone.
     clearAllInline($container);
@@ -70,7 +69,7 @@ const loadPost = _.memoize(function(targetURL) {
     const meta = new Metadata(targetURL);
     const $foundPost = $('.thread > .postContainer > '+meta.toQuerySelector()).first();
     if ($foundPost.length > 0) {
-      resolve($foundPost.clone());
+      resolve($foundPost);
       return;
     }
 
