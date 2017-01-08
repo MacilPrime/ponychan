@@ -29,9 +29,7 @@ $(document).ready(function(){
 				.removeClass('expanded').removeClass('loading');
 			$img.parent().show().removeClass('expanded');
 			$img.parent().next('video').each(function() {
-				if (this.pause) {
-					this.pause();
-				}
+				if (this.pause) this.pause();
 				this.removeAttribute("src");
 			}).remove();
 		}
@@ -60,6 +58,8 @@ $(document).ready(function(){
 						.click(function(e) {
 							if (e.offsetY < 40 || this.offsetHeight - e.offsetY > 40) {
 								e.preventDefault();
+								if (this.pause) this.pause();
+								this.removeAttribute("src");
 								$(this).remove();
 								$img.click();
 							}
