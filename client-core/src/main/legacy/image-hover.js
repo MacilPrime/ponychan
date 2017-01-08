@@ -22,6 +22,16 @@ settings.newSetting('video_with_audio_hover_behavior', 'select', 'nothing', 'Hov
 	notSupported: !document.createElement('audio').canPlayType,
 	defpriority: 0
 });
+settings.newSetting('file_default_volume', 'number', 10, 'Default volume of post audio (0-10)', 'links', {
+	orderhint: 5.6,
+	notSupported: !document.createElement('audio').canPlayType,
+	defpriority: 0,
+	validator(value) {
+		if(value < 0 || value > 10) {
+			throw new Error("Volume must be a number from 0 to 10");
+		}
+	}
+})
 
 $(document).ready(() => {
 	let image_hover_enabled = settings.getSetting("image_hover_enabled");
@@ -66,6 +76,7 @@ $(document).ready(() => {
 				$newImage = $("<video/>").prop({
 					loop: true,
 					muted: video_with_audio_hover_behavior !== 'play-with-audio',
+					volume: settings.getSetting('file_default_volume') / 10,
 					autoplay: true
 				});
 			} else {

@@ -54,6 +54,7 @@ $(document).ready(function(){
 							src: $a.attr('href'),
 							loop: true,
 							controls: true,
+							volume: settings.getSetting('file_default_volume') / 10,
 							autoplay: true
 						})
 						.click(function(e) {
