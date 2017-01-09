@@ -153,8 +153,10 @@ img.loading {
 img.expanded, video.expanded {
 	width: auto !important;
 	height: auto !important;
-	max-width: 95%;
-	max-height: 95%;
+	max-width: 85%;
+	max-height: 85%;
+	max-width: 85vw;
+	max-height: 85vh;
 }
 .thumbContainer.video::before {
 	content: "";
@@ -173,7 +175,9 @@ img.expanded, video.expanded {
 	margin: 0;
 	padding: 0;
 	max-width: 75%;
-	max-height: 95%;
+	max-height: 90%;
+	max-width: 75vw;
+	max-height: 90vh;
 	z-index: 10;
 	pointer-events: none;
 }
