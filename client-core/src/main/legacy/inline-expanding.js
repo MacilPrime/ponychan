@@ -20,8 +20,7 @@ $(document).ready(function(){
 			image_expand_enabled = settings.getSetting("image_expand_enabled");
 	});
 
-	function init_expand_image() {
-		const $img = $(this);
+	function remove_inlined_content($img) {
 		if ($img.parent().hasClass('expanded')) {
 			$img
 				.attr({src: $img.attr('data-old-src')})
@@ -33,6 +32,11 @@ $(document).ready(function(){
 				this.removeAttribute("src");
 			}).remove();
 		}
+	}
+
+	function init_expand_image() {
+		const $img = $(this);
+		remove_inlined_content($img);
 
 		$img.click(function(e) {
 			if(!image_expand_enabled || e.which == 2 || e.ctrlKey || e.altKey)
@@ -92,7 +96,12 @@ $(document).ready(function(){
 	}
 
 	$('a:not([class="file"]) > img.postimg').each(init_expand_image);
-	$(document).on('new_post', function(e, post) {
+	$(document).on('new_post', (e, post) => {
 		$(post).find('> a:not([class="file"]) > img.postimg').each(init_expand_image);
+	});
+	$(document).on('removing_post', (e) => {
+		$('a:not([class="file"]) > img.postimg', e.target).each(function() {
+			remove_inlined_content($(this));
+		});
 	});
 });

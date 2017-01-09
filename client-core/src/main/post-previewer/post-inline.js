@@ -117,7 +117,9 @@ function toggleInline($link) {
 
 export function clearAllInline($context: any) {
   $('.inlined', $context).removeClass('inlined');
-  $('.inline-wrap', $context).remove();
+  $($('.inline-wrap', $context).get().reverse())
+    .trigger('removing_post')
+    .remove();
 }
 
 init();
