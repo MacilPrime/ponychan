@@ -44,9 +44,10 @@ $(document).ready(() => {
 	});
 
 	function init_image_hover() {
-		var $image = $(this);
-		var hovered_at;
-		$image.hover(function(e) {
+		const $image = $(this);
+		const $a = $image.parent();
+		let hovered_at;
+		$a.hover(function(e) {
 			const is_spoilered = /\/static\/spoiler\.\w+$/.test($image.attr("src"));
 			const imageurl = $image.parent().attr("href");
 			if(is_spoilered) {
@@ -112,7 +113,7 @@ $(document).ready(() => {
 
 			$hover.css('left', (e.pageX ? e.pageX : hovered_at.x) + 20).css('top', top);
 		}).click(function() {
-			$image.trigger('mouseleave');
+			$a.trigger('mouseleave');
 		});
 	}
 

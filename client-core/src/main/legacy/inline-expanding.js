@@ -36,14 +36,15 @@ $(document).ready(function(){
 
 	function init_expand_image() {
 		const $img = $(this);
+		const $a = $img.parent();
 		remove_inlined_content($img);
 
-		$img.click(function(e) {
+		$a.click(function(e) {
 			if(!image_expand_enabled || e.which == 2 || e.ctrlKey || e.altKey)
 				return true;
 
-			const $img = $(this);
-			const $a = $img.parent();
+			const $a = $(this);
+			const $img = $a.children('img');
 
 			if (!$a.hasClass('expanded')) {
 				$a.addClass('expanded');
@@ -65,7 +66,7 @@ $(document).ready(function(){
 								if (this.pause) this.pause();
 								this.removeAttribute("src");
 								$(this).remove();
-								$img.click();
+								$a.click();
 							}
 						})
 						.insertAfter($img.parent());
