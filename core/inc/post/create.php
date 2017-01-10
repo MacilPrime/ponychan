@@ -404,7 +404,8 @@ if ($post['has_file']) {
             $post['width'] = $size[0];
             $post['height'] = $size[1];
         } else {
-            die("should not happen, invalid file_type $file_type");
+            error_log("should not happen, invalid file_type $file_type");
+            error('Error processing file');
         }
 
         if ($config['spoiler_images'] && isset($_POST['spoiler'])) {
@@ -441,16 +442,21 @@ if ($post['has_file']) {
                     $post['op'] ? $config['thumb_op_width'] : $config['thumb_width'],
                     $post['op'] ? $config['thumb_op_height'] : $config['thumb_height']
                 );
-                exec('avconv -ss 00:00:00 -i ' . escapeshellarg($upload) .
+                exec('avconv -loglevel error -ss 00:00:00 -i ' .
+                    escapeshellarg($upload) .
                     ' -filter:v scale=' . $newRes['width'] . ':' . $newRes['height'] .
-                    ' -vframes 1 ' . escapeshellarg($post['thumb']), $__ignore, $ret);
-                if ($ret !== 0)
-                    die('video thumbnailing error');
+                    ' -vframes 1 ' . escapeshellarg($post['thumb']) .
+                    ' 2>&1', $output, $ret);
+                if ($ret !== 0) {
+                    error_log("avconv error. Return: $ret, output:\n" . implode("\n", $output));
+                    error('Error thumbnailing video. The video file may be corrupt.');
+                }
                 $thumb = new Image($post['thumb'], $config['video_thumb_ext']);
                 $thumb = $thumb->image;
                 timing_mark('video_resize_end');
             } else {
-                die("should not happen, invalid file_type $file_type");
+                error_log("should not happen, invalid file_type $file_type");
+                error('Error processing file');
             }
 
             $thumb->to($post['thumb']);
@@ -470,16 +476,18 @@ if ($post['has_file']) {
         } elseif ($file_type === 'video' || $file_type === 'silentvideo') {
             // Nothing else needs to be done here.
         } else {
-            die("should not happen, invalid file_type $file_type");
+            error_log("should not happen, invalid file_type $file_type");
+            error('Error processing file');
         }
     } else {
         // not an image
-        die("file not really supported, extension is wrong");
-        $post['thumb'] = 'file';
-
-        $thumb_size = @getimagesize($config['file_thumb']);
-        $post['thumbwidth'] = $thumb_size[0];
-        $post['thumbheight'] = $thumb_size[1];
+        error_log("should not happen, invalid file_type $file_type");
+        error('Error processing file');
+        // $post['thumb'] = 'file';
+        //
+        // $thumb_size = @getimagesize($config['file_thumb']);
+        // $post['thumbwidth'] = $thumb_size[0];
+        // $post['thumbheight'] = $thumb_size[1];
     }
 
     if (!isset($dont_copy_file) || !$dont_copy_file) {
