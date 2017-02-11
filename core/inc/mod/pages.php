@@ -1256,6 +1256,8 @@ function mod_move($originBoard, $postID) {
 
 		// indicate that the post is a thread
 		$post['op'] = true;
+		// bump the thread to the top
+		$post['bump'] = time();
 
 		if ($post['file']) {
 			$post['has_file'] = true;
