@@ -89,7 +89,7 @@ function renderBacklinksOnPost(post) {
     needToInsertMentioned = true;
   }
   const newLinkElements = [];
-  Array.from(backlinks).sort().forEach(backlinkid => {
+  Array.from(backlinks).sort((a,b) => a-b).forEach(backlinkid => {
     const [backlinkboard, backlinknum] = backlinkid.split(':');
     const href = `#${backlinknum}`;
     if (
