@@ -14,7 +14,7 @@
 
 {% block main_body %}
 
-	{% if config.blotter %}<hr /><div class="blotter">{{ config.blotter }}</div>{% endif %}
+	{% if config.blotter %}<hr /><div class="blotter">{{ config.blotter|raw }}</div>{% endif %}
 	<hr />
 
 	<div class="catalog">
