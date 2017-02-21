@@ -139,8 +139,6 @@ This is a mature content thread. You must have viewing mature content enabled in
 	<div class="body">
 		{% endfilter %}{% if index %}{{ post.body|truncate_body(post.link)|raw }}{% else %}{{ post.body|raw }}{% endif %}{% filter remove_whitespace %}
 	</div>
-{% if not index %}
-{% endif %}
 </div></div></div>{% endfilter %}
 {% if post.omitted or post.omitted_images %}
 <div class="omitted">
