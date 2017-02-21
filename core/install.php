@@ -374,6 +374,14 @@ $migration_procedures = [
 		foreach ($boards as $board) {
 			query(sprintf("UPDATE `posts_%s` SET `filetype`=CASE WHEN RIGHT(`file`, 4) IN ('.jpg', '.bmp', '.gif', '.png') OR RIGHT(file,5)='.jpeg' THEN 'image' WHEN RIGHT(`file`,5)='.webm' THEN 'silentvideo' ELSE NULL END WHERE `filetype` IS NULL AND `file` IS NOT NULL", $board['uri'])) or error(db_error());
 		}
+	},
+	'add-scheduled_deletion-column' => function() {
+		global $boards;
+		foreach ($boards as $board) {
+			query(sprintf("ALTER TABLE `posts_%s`
+				ADD `scheduled_deletion` TIMESTAMP NULL DEFAULT NULL AFTER `anon_thread`,
+				ADD KEY `scheduled_deletion` (`scheduled_deletion`)", $board['uri'])) or error(db_error());
+		}
 	}
 ];
 

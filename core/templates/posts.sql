@@ -35,9 +35,11 @@ CREATE TABLE IF NOT EXISTS `posts_{{ board }}` (
   `embed` text,
   `mature` int(1) NOT NULL,
   `anon_thread` int(1) NOT NULL,
+  `scheduled_deletion` TIMESTAMP NULL DEFAULT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `thread_id` (`thread`, `id`),
   KEY `userhash` (`userhash`),
   KEY `ip_type_data` (`ip_type`, `ip_data`),
-  KEY `time` (`time`)
+  KEY `time` (`time`),
+  KEY `scheduled_deletion` (`scheduled_deletion`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
