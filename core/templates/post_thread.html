@@ -139,6 +139,11 @@ This is a mature content thread. You must have viewing mature content enabled in
 	<div class="body">
 		{% endfilter %}{% if index %}{{ post.body|truncate_body(post.link)|raw }}{% else %}{{ post.body|raw }}{% endif %}{% filter remove_whitespace %}
 	</div>
+	{% if post.mod and post.scheduled_deletion %}
+	<div class="post-staff-note">
+		This post is scheduled for deletion at <time datetime="{{ post.scheduled_deletion|date('%Y-%m-%dT%H:%M:%S') }}{{ timezone() }}">{{ post.scheduled_deletion|date(config.post_date) }}</time>
+	</div>
+	{% endif %}
 </div></div></div>{% endfilter %}
 {% if post.omitted or post.omitted_images %}
 <div class="omitted">

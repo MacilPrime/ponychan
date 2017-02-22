@@ -284,6 +284,15 @@ span.orangetext, .founderCapcode {
 	font-size: 0.6rem;
 	text-transform: lowercase;
 }
+.post-staff-note {
+	background: gray;
+	color: black;
+	border-radius: 3px;
+	display: inline-block;
+}
+.post-staff-note::before {
+	content: '(Staff only) ';
+}
 span.omitted {
 	display: block;
 	margin-top: 1em;

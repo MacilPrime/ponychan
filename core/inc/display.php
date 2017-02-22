@@ -342,7 +342,7 @@ class Post {
 		$this->root = $root;
 		$this->mod = $mod;
 		$this->mature = $mature;
-		$this->scheduled_deletion = $scheduled_deletion;
+		$this->scheduled_deletion = $scheduled_deletion ? strtotime($scheduled_deletion.' UTC') : null;
 
 		if ($this->embed)
 			$this->embed = embed_html($this->embed);
@@ -448,7 +448,7 @@ class Thread {
 		$this->hr = $hr;
 		$this->mature = $mature;
 		$this->anon_thread = $anon_thread;
-		$this->scheduled_deletion = $scheduled_deletion;
+		$this->scheduled_deletion = $scheduled_deletion ? strtotime($scheduled_deletion.' UTC') : null;
 
 		if ($this->embed)
 			$this->embed = embed_html($this->embed);
