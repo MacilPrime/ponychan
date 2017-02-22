@@ -311,7 +311,7 @@ function embed_html($link) {
 }
 
 class Post {
-	public function __construct($id, $thread, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $filetype, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false) {
+	public function __construct($id, $thread, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $filetype, $file_uri, $filex, $filey, $filesize, $filename, $ip, $embed, $root=null, $mod=false, $mature=false, $scheduled_deletion=null) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -342,6 +342,7 @@ class Post {
 		$this->root = $root;
 		$this->mod = $mod;
 		$this->mature = $mature;
+		$this->scheduled_deletion = $scheduled_deletion;
 
 		if ($this->embed)
 			$this->embed = embed_html($this->embed);
@@ -409,7 +410,7 @@ class Post {
 };
 
 class Thread {
-	public function __construct($id, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $filetype, $file_uri, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false, $anon_thread=false) {
+	public function __construct($id, $subject, $email, $email_protocol, $name, $trip, $capcode, $body, $time, $thumb, $thumb_uri, $thumbx, $thumby, $file, $filetype, $file_uri, $filex, $filey, $filesize, $filename, $ip, $sticky, $locked, $bumplocked, $embed, $root=null, $mod=false, $hr=true, $mature=false, $anon_thread=false, $scheduled_deletion=null) {
 		global $config;
 		if (!isset($root))
 			$root = &$config['root'];
@@ -447,6 +448,7 @@ class Thread {
 		$this->hr = $hr;
 		$this->mature = $mature;
 		$this->anon_thread = $anon_thread;
+		$this->scheduled_deletion = $scheduled_deletion;
 
 		if ($this->embed)
 			$this->embed = embed_html($this->embed);
