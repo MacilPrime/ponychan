@@ -1,6 +1,7 @@
 /* @flow */
 
 import $ from 'jquery';
+import sortBy from 'lodash/sortBy'
 import asap from 'asap';
 import {Metadata} from './post-previewer/url-metadata';
 import {filterStart, newViewablePosts} from './post-hiding';
@@ -89,7 +90,11 @@ function renderBacklinksOnPost(post) {
     needToInsertMentioned = true;
   }
   const newLinkElements = [];
-  Array.from(backlinks).sort((a,b) => a-b).forEach(backlinkid => {
+  const sortedBacklinks = sortBy(Array.from(backlinks), [
+    s => s.split(':')[0],
+    s => +s.split(':')[1]
+  ]);
+  sortedBacklinks.forEach(backlinkid => {
     const [backlinkboard, backlinknum] = backlinkid.split(':');
     const href = `#${backlinknum}`;
     if (
