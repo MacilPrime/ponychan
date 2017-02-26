@@ -1,7 +1,7 @@
 /* @flow */
 
 import $ from 'jquery';
-import sortBy from 'lodash/sortBy'
+import sortBy from 'lodash/sortBy';
 import asap from 'asap';
 import {Metadata} from './post-previewer/url-metadata';
 import {filterStart, newViewablePosts} from './post-hiding';
