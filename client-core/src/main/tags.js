@@ -12,7 +12,7 @@ import $ from 'jquery';
 
 $(document).ready(function() {
   $(document).keydown(function(event) {
-    if (!/TEXTAREA/.test(event.target.nodeName))
+    if (event.target.nodeName !== 'TEXTAREA')
       return true;
 
     if (!event.ctrlKey || event.shiftKey)
