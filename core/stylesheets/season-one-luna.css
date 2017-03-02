@@ -48,7 +48,7 @@ body > header h1 {
 
 
 /* Navigation bar */
-.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
+.boardlist.top .boardlistpart a {
     padding-left: 0.3em;
     padding-right: 0.3em;
     border-top-color: rgb(91,108,172);

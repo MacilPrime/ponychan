@@ -57,8 +57,15 @@ div.post.reply, .help-details, .watcherMenu, .post-hover, div.pages, .catathread
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, #qrmove a, #qrmove a:visited {
     color: #203f0c;
 }
-.boardlist.top .boardlistpart a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
+.boardlist.top .boardlistpart a:hover,
+#qrmove a:hover,
+.top .boardlistactive,
+.top .boardlistactive:visited {
     color: rgb(32, 63, 12);
+}
+.boardlist.top .boardlistpart a:hover,
+#qrmove a:hover,
+.top .boardlistactive {
     box-shadow: inset 0 0 1em rgba(0,0,0,0.3);
 }
 

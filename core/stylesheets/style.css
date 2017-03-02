@@ -10,8 +10,10 @@ body {
 table * {
 	margin: 0;
 }
-a, a:visited {
+a {
 	text-decoration: underline;
+}
+a, a:visited {
 	color: #34345C;
 }
 a:hover, p.intro a.post_no:hover {
@@ -605,15 +607,18 @@ body { padding-top: 48px; }
 	padding-left: 6px;
 	float: left;
 }
-.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
+.boardlist.top .boardlistpart a {
 	display: inline-block;
-	color: #ddd;
 	padding: 6px 3px;
 	margin: 0 1px;
 	font-size: 16px;
 	visibility: visible;
 }
-.boardlist .modboardlistpart a, .boardlist .modboardlistpart a:visited {
+.boardlist.top .boardlistpart a,
+.boardlist.top .boardlistpart a:visited {
+	color: #ddd;
+}
+.boardlist .modboardlistpart a {
 	opacity: 0.65;
 }
 .boardlist.top .boardlistpart a[href="/"] {

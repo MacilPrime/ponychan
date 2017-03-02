@@ -148,9 +148,14 @@ fieldset, div.ban {
         border-bottom: 2px solid #838AA8;
 	background: none;
 }
-.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, .boardlist.top .boardlistpart a[href="/"] {
-	padding: 5px 0 5px 0;
+.boardlist.top .boardlistpart a,
+.boardlist.top .boardlistpart a:visited,
+.boardlist.top .boardlistpart a[href="/"] {
 	color: #FAF9AF;
+}
+.boardlist.top .boardlistpart a,
+.boardlist.top .boardlistpart a[href="/"] {
+	padding: 5px 0 5px 0;
 	font-size: 12pt;
 	letter-spacing: 1px;
 }

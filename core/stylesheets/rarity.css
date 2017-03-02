@@ -8,8 +8,10 @@ body {
     background: #eef2f5;
 }
 a, a:visited, a.bodylink {
-    font-family: 'Goudy Bookletter 1911', serif;
     color: rgb(46, 97, 152);
+}
+a, a.bodylink {
+    font-family: 'Goudy Bookletter 1911', serif;
 }
 a:hover {
     color: rgb(157, 114, 235);

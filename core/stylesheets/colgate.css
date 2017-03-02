@@ -29,9 +29,15 @@ h1, h2, h3, h4, h5, h6, header h1 {
     background-color: #152051;
     color: white;
 }
-.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited,
-.boardlist.top .boardlistpart a[href="/"], #qrmove a {
+.boardlist.top .boardlistpart a,
+.boardlist.top .boardlistpart a:visited,
+.boardlist.top .boardlistpart a[href="/"],
+#qrmove a {
     color: #c0c0ff;
+}
+.boardlist.top .boardlistpart a,
+.boardlist.top .boardlistpart a[href="/"],
+#qrmove a {
     border-color: #45a;
 }
 .boardlist.top .boardlistpart a:hover, #qrmove a:hover {

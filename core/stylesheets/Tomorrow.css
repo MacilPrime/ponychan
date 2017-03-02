@@ -77,12 +77,14 @@ div.pages {
     box-shadow: 0 -1px 5px rgb(150, 150, 150);
 }
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
+    color: rgb(75, 90, 110);
+}
+.boardlist.top .boardlistpart a {
     font-size: 14px;
     padding-top: 0;
     padding-bottom: 0;
     border-top: 2px solid transparent;
     border-bottom: 2px solid transparent;
-    color: rgb(75, 90, 110);
 }
 .boardlist.top .boardlistpart a[href="/"] {
     padding-top: 0;

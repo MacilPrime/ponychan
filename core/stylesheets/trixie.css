@@ -76,6 +76,8 @@ h1, h2, h3, h4, h5, h6, header h1, .heading {
 /* Head bar links on hover */
 .boardlist.top .boardlistpart a:hover, #qrmove a:hover, .top .boardlistactive, .top .boardlistactive:visited {
 	color: rgb(212, 240, 251);
+}
+.boardlist.top .boardlistpart a:hover, #qrmove a:hover, .top .boardlistactive {
 	box-shadow: inset 0 0 14px rgba(0,0,0,0.2);
 }
 

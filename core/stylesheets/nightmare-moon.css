@@ -42,6 +42,8 @@ form table tr th, table.tableform tr th, .ban h2 {
 }
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, #qrmove a {
     color: rgb(204, 204, 221);
+}
+.boardlist.top .boardlistpart a, #qrmove a {
     border-color: rgb(69, 69, 137);
 }
 .boardlist.top .boardlistpart a:hover, #qrmove a:hover {

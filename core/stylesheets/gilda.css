@@ -94,6 +94,8 @@ h1, h2, h3, h4, h5, h6 {
 /* Head bar links */
 .boardlist.top a, .top a:visited, #qrmove a, #qrmove a:visited {
 	color: rgb(54, 46, 25);
+}
+.boardlist.top a, #qrmove a {
 	transition: background-color 0.2s ease-in-out,
 				color 0.1s ease-in-out;
 }

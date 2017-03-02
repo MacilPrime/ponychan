@@ -24,6 +24,8 @@ body {
 /* All links, including the ref-links inside the post body. */
 a, a:visited, a.bodylink {
 	color: rgb(192, 207, 228);
+}
+a, a.bodylink {
 	font-family: "Molengo", sans-serif;
 }
 
@@ -95,7 +97,7 @@ div.post.reply, .help-details, .blotter, .hashtag, #watcherScreen, .post-hover, 
 }
 
 /* -- Navigation bar -- */
-.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited {
+.boardlist.top .boardlistpart a {
 	border-top-color: rgb(50, 78, 127);
 	border-top-style: solid;
 	padding-top: 3px;

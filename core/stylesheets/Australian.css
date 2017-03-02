@@ -77,7 +77,6 @@ div.pages {
 .boardlist.top {
   padding: 0; }
   .boardlist.top .boardlistpart a,
-  .boardlist.top .boardlistpart a:visited,
   .boardlist.top .boardlistpart a[href="/"] {
     font-family: sans-serif;
     font-size: 16px;
@@ -110,7 +109,13 @@ a.bodylink,
 div.banner a,
 #qrDisplayButton {
   color: #873826;
-  text-decoration: none; }
+}
+a,
+a.bodylink,
+div.banner a,
+#qrDisplayButton {
+  text-decoration: none;
+}
   a:hover,
   a:visited:hover,
   a.bodylink:hover,

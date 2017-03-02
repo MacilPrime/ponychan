@@ -36,7 +36,7 @@ a#qrDisplayButton {
 	color: #db73ad;
 }
 #qrmove {
-        background-color: #66cccc 
+        background-color: #66cccc;
 }
 #qrmove a {
         color: #f7fd77
@@ -164,8 +164,10 @@ fieldset, div.ban {
 	background: none;
 }
 .boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a:visited, .boardlist.top .boardlistpart a[href="/"] {
-	padding: 5px 0 5px 0;
 	color: #FFFFB8;
+}
+.boardlist.top .boardlistpart a, .boardlist.top .boardlistpart a[href="/"] {
+	padding: 5px 0 5px 0;
 	font-size: 12pt;
 	letter-spacing: 1px;
 }
