@@ -34,13 +34,21 @@ $(document).ready(function() {
     if (event.target.selectionStart == null)
       return true;
 
-    let text = $(event.target).val();
+    const text = $(event.target).val();
     const start = event.target.selectionStart;
     const end = event.target.selectionEnd;
-    text = text.slice(0,start) + '['+tag+']' + text.slice(start,end) + '[/'+tag+']' + text.slice(end);
-    $(event.target).val(text);
+
+    document.execCommand('insertText', false, '['+tag+']' + text.slice(start,end) + '[/'+tag+']');
+
+    if ($(event.target).val() === text) {
+      // insertText did nothing. This case happens in browsers other than Chrome.
+      const newText = text.slice(0,start) + '['+tag+']' + text.slice(start,end) + '[/'+tag+']' + text.slice(end);
+      $(event.target).val(newText);
+    }
+
     const afterInsert = end + ('['+tag+']').length;
     event.target.setSelectionRange(afterInsert, afterInsert);
+
     return false;
   });
 });
