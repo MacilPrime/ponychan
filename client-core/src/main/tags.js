@@ -31,7 +31,7 @@ $(document).ready(function() {
       return true;
     }
 
-    if (typeof event.target.selectionStart == 'undefined' || event.target.selectionStart == null)
+    if (event.target.selectionStart == null)
       return true;
 
     let text = $(event.target).val();
