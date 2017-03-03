@@ -38,7 +38,13 @@ $(document).ready(function() {
     const start = event.target.selectionStart;
     const end = event.target.selectionEnd;
 
-    document.execCommand('insertText', false, '['+tag+']' + text.slice(start,end) + '[/'+tag+']');
+    if (document.execCommand) {
+      try {
+        document.execCommand('insertText', false, '['+tag+']' + text.slice(start,end) + '[/'+tag+']');
+      } catch (err) {
+        // browser doesn't support it, ignore
+      }
+    }
 
     if ($(event.target).val() === text) {
       // insertText did nothing. This case happens in browsers other than Chrome.
