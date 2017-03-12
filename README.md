@@ -1,3 +1,14 @@
+This is the code that ran Ponychan, at least to the point I stepped down.
+
+It's based off of Tinyboard. I used to merge in changes from Tinyboard, but I
+stopped and fully forked when Tinyboard development slowed down, and when the
+site-specific content was becoming hard to keep fully separated in the
+codebase.
+
+Originally this codebase ran a site called MLPchan. That site eventually merged
+with the pre-existing Ponychan site, and then this codebase was used for the
+merged Ponychan site.
+
 Ponychan's code is split into several different interdependent modules.
 
 * core is based on Tinyboard, contains PHP code, and is placed in the
@@ -9,8 +20,22 @@ Ponychan's code is split into several different interdependent modules.
   are automatically placed into core/js/ when built.
 
 * watcher contains the server side code for the /watcher/threads endpoint.
-  Nodejs and babel are used. If you don't run this module, then the thread
-  watcher will not work.
+  Nodejs, babel, and Flow are used. If you don't run this module, then the
+  thread watcher will not work.
+
+My intention was that server-side functionality would migrate over to the
+watcher codebase over time. The watcher codebase is written in Flow-typed
+Javascript, so you actually get real type safety there, and it has some unit
+tests. There's a few design warts from the old Tinyboard code I was also kinda
+trying to get away from, and also the fact that it's almost-MIT licensed (you
+have to keep the Tinyboard footer in place). I wanted to quarantine all of the
+original Tinyboard code and slowly replace all of it.
+
+# LICENSE
+
+All of the original Tinyboard code under core/ is under the almost-MIT license
+in `core/LICENSE-Tinyboard.md`. The rest of the code is under the MIT license
+in `core/LICENSE-Macil.txt`.
 
 ## Quick Development Start
 

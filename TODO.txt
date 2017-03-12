@@ -1,18 +1,11 @@
+make deploying changes not suck. Deploys are manual and dumb. Make sure not to
+overwrite instance-config.php when sending changes over! lol fml. Was kinda
+thinking of using Docker.
+
 fix post editing causing hover replies to float forever
 make inline editing user server endpoint which checks userhash, not password
 
-filter edit page
-- show stats about number of times the filter has been hit
-- maybe show some post bodies of posts blocked by the filter
-- during edit:
-  - show current posts which would have been affected by the filter
-  - have a post form that people can test filters against
-
 - add separate column storing whether an image is a spoiler or deleted
-if a user is suspected of being a bot (first time user, making a thread)
-- put their post in the queue if they have no posts in the queue
-- flag them such that they must solve a captcha before being able to post again
-rotating captcha
 
 selenium tests
 put "last edited timestamp" column in posts tables
@@ -49,7 +42,6 @@ Mods having access to the blotter
 investigate antibot
 fix cache consistency
 
-fix moving thread resetting thread bump date to OP date (?)
 make reply queuing a toggleable setting that defaults to off
 
 post drop-down buttons
@@ -74,6 +66,7 @@ separate name cookie on anon
 Remove [D+] button, rename [D++] to [D+]
 - "Delete all posts by IP on one board" is not useful enough to exist and take
   screen space on every post.
+- Maybe the delete buttons should be moved into a dropdown menu on posts
 
 themes page for users to see screenshots of all themes at once
 - maybe just iframes of the actual site showing the themes. (Can you use css to
