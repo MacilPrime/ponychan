@@ -1,4 +1,5 @@
-This is the code that ran Ponychan, at least to the point I stepped down.
+This is the code that ran Ponychan, at least to the point I was last 
+involved.
 
 It's based off of Tinyboard. I used to merge in changes from Tinyboard, but I
 stopped and fully forked when Tinyboard development slowed down, and when the
@@ -31,7 +32,7 @@ trying to get away from, and also the fact that it's almost-MIT licensed (you
 have to keep the Tinyboard footer in place). I wanted to quarantine all of the
 original Tinyboard code and slowly replace all of it.
 
-# LICENSE
+## LICENSE
 
 All of the original Tinyboard code under core/ is under the almost-MIT license
 in `core/LICENSE-Tinyboard.md`. The rest of the code is under the MIT license
