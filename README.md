@@ -82,6 +82,10 @@ option to make gulp continue running and automatically rebuild the javascript
 when any of the source files change, and the `--hot` (`-h`) option to make
 changes to supported files be applied immediately in running browsers.
 
+Use `gulp -m` to make a minified production build. The file "main.js" and a
+"maps" directory will be created under core/js. These should be uploaded to the
+server.
+
 The javascript codebase was only recently transitioned to Browserify, and many
 modules still rely on global variables exposed by other modules. The
 CommonJS/ES6 module style should be used going further.
